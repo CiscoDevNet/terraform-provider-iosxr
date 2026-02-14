@@ -2,6 +2,7 @@
 name: Netconf Agent TTY
 path: Cisco-IOS-XR-um-xml-agent-cfg:/netconf/agent/tty
 doc_category: Management
+no_delete: true
 attributes:
   - yang_name: throttle/process-rate
     description: "Process rate in tags per second (1000-30000)"

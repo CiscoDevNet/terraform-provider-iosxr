@@ -116,7 +116,7 @@ func (data Banner) toBodyXML(ctx context.Context) string {
 func (data *Banner) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "line"); value.Exists() && !data.Line.IsNull() {
 		data.Line = types.StringValue(value.String())
-	} else {
+	} else if data.Line.IsNull() {
 		data.Line = types.StringNull()
 	}
 }
@@ -126,12 +126,12 @@ func (data *Banner) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *Banner) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/banner-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/banner-type"); value.Exists() {
 		data.BannerType = types.StringValue(value.String())
 	} else if data.BannerType.IsNull() {
 		data.BannerType = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/line"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() {
 		data.Line = types.StringValue(value.String())
 	} else if data.Line.IsNull() {
 		data.Line = types.StringNull()
@@ -147,6 +147,10 @@ func (data *Banner) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "line"); value.Exists() {
 		data.Line = types.StringValue(value.String())
 	}
@@ -157,9 +161,14 @@ func (data *Banner) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *BannerData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "line"); value.Exists() {
 		data.Line = types.StringValue(value.String())
@@ -171,7 +180,7 @@ func (data *BannerData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Banner) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/line"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() {
 		data.Line = types.StringValue(value.String())
 	}
 }
@@ -181,7 +190,7 @@ func (data *Banner) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *BannerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/line"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() {
 		data.Line = types.StringValue(value.String())
 	}
 }

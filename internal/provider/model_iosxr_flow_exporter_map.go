@@ -273,107 +273,108 @@ func (data FlowExporterMap) toBodyXML(ctx context.Context) string {
 func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "destination.ipv4-address"); value.Exists() && !data.DestinationIpv4Address.IsNull() {
 		data.DestinationIpv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.DestinationIpv4Address.IsNull() {
 		data.DestinationIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "destination.ipv6-address"); value.Exists() && !data.DestinationIpv6Address.IsNull() {
 		data.DestinationIpv6Address = types.StringValue(value.String())
-	} else {
+	} else if data.DestinationIpv6Address.IsNull() {
 		data.DestinationIpv6Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "destination.vrf"); value.Exists() && !data.DestinationVrf.IsNull() {
 		data.DestinationVrf = types.StringValue(value.String())
-	} else {
+	} else if data.DestinationVrf.IsNull() {
 		data.DestinationVrf = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "source"); value.Exists() && !data.Source.IsNull() {
 		data.Source = types.StringValue(value.String())
-	} else {
+	} else if data.Source.IsNull() {
 		data.Source = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "source-address.ipv4-address"); value.Exists() && !data.SourceAddressIpv4Address.IsNull() {
 		data.SourceAddressIpv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.SourceAddressIpv4Address.IsNull() {
 		data.SourceAddressIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "source-address.ipv6-address"); value.Exists() && !data.SourceAddressIpv6Address.IsNull() {
 		data.SourceAddressIpv6Address = types.StringValue(value.String())
-	} else {
+	} else if data.SourceAddressIpv6Address.IsNull() {
 		data.SourceAddressIpv6Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv4-address"); value.Exists() && !data.RouterIdIpv4Address.IsNull() {
 		data.RouterIdIpv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.RouterIdIpv4Address.IsNull() {
 		data.RouterIdIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv6-address"); value.Exists() && !data.RouterIdIpv6Address.IsNull() {
 		data.RouterIdIpv6Address = types.StringValue(value.String())
-	} else {
+	} else if data.RouterIdIpv6Address.IsNull() {
 		data.RouterIdIpv6Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "dscp"); value.Exists() && !data.Dscp.IsNull() {
 		data.Dscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.Dscp.IsNull() {
 		data.Dscp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "transport.udp"); value.Exists() && !data.TransportUdp.IsNull() {
 		data.TransportUdp = types.Int64Value(value.Int())
-	} else {
+	} else if data.TransportUdp.IsNull() {
 		data.TransportUdp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "packet-length"); value.Exists() && !data.PacketLength.IsNull() {
 		data.PacketLength = types.Int64Value(value.Int())
-	} else {
+	} else if data.PacketLength.IsNull() {
 		data.PacketLength = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dfbit.set"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DfbitSet.IsNull() {
 			data.DfbitSet = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DfbitSet.IsNull() {
 			data.DfbitSet = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "version.export-format"); value.Exists() && !data.VersionExportFormat.IsNull() {
 		data.VersionExportFormat = types.StringValue(value.String())
-	} else {
+	} else if data.VersionExportFormat.IsNull() {
 		data.VersionExportFormat = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "version.template.data.timeout"); value.Exists() && !data.VersionTemplateDataTimeout.IsNull() {
 		data.VersionTemplateDataTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.VersionTemplateDataTimeout.IsNull() {
 		data.VersionTemplateDataTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "version.template.options.timeout"); value.Exists() && !data.VersionTemplateOptionsTimeout.IsNull() {
 		data.VersionTemplateOptionsTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.VersionTemplateOptionsTimeout.IsNull() {
 		data.VersionTemplateOptionsTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "version.template.timeout"); value.Exists() && !data.VersionTemplateTimeout.IsNull() {
 		data.VersionTemplateTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.VersionTemplateTimeout.IsNull() {
 		data.VersionTemplateTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "version.options.interface-table.timeout"); value.Exists() && !data.VersionOptionsInterfaceTableTimeout.IsNull() {
 		data.VersionOptionsInterfaceTableTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.VersionOptionsInterfaceTableTimeout.IsNull() {
 		data.VersionOptionsInterfaceTableTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "version.options.sampler-table.timeout"); value.Exists() && !data.VersionOptionsSamplerTableTimeout.IsNull() {
 		data.VersionOptionsSamplerTableTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.VersionOptionsSamplerTableTimeout.IsNull() {
 		data.VersionOptionsSamplerTableTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "version.options.class-table.timeout"); value.Exists() && !data.VersionOptionsClassTableTimeout.IsNull() {
 		data.VersionOptionsClassTableTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.VersionOptionsClassTableTimeout.IsNull() {
 		data.VersionOptionsClassTableTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "version.options.vrf-table.timeout"); value.Exists() && !data.VersionOptionsVrfTableTimeout.IsNull() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.VersionOptionsVrfTableTimeout.IsNull() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Null()
 	}
 }
@@ -383,110 +384,113 @@ func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *FlowExporterMap) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exporter-map-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/exporter-map-name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/destination/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination/ipv4-address"); value.Exists() {
 		data.DestinationIpv4Address = types.StringValue(value.String())
 	} else if data.DestinationIpv4Address.IsNull() {
 		data.DestinationIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/destination/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination/ipv6-address"); value.Exists() {
 		data.DestinationIpv6Address = types.StringValue(value.String())
 	} else if data.DestinationIpv6Address.IsNull() {
 		data.DestinationIpv6Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/destination/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination/vrf"); value.Exists() {
 		data.DestinationVrf = types.StringValue(value.String())
 	} else if data.DestinationVrf.IsNull() {
 		data.DestinationVrf = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source"); value.Exists() {
 		data.Source = types.StringValue(value.String())
 	} else if data.Source.IsNull() {
 		data.Source = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-address/ipv4-address"); value.Exists() {
 		data.SourceAddressIpv4Address = types.StringValue(value.String())
 	} else if data.SourceAddressIpv4Address.IsNull() {
 		data.SourceAddressIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-address/ipv6-address"); value.Exists() {
 		data.SourceAddressIpv6Address = types.StringValue(value.String())
 	} else if data.SourceAddressIpv6Address.IsNull() {
 		data.SourceAddressIpv6Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id/router-id-address/ipv4-address"); value.Exists() {
 		data.RouterIdIpv4Address = types.StringValue(value.String())
 	} else if data.RouterIdIpv4Address.IsNull() {
 		data.RouterIdIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id/router-id-address/ipv6-address"); value.Exists() {
 		data.RouterIdIpv6Address = types.StringValue(value.String())
 	} else if data.RouterIdIpv6Address.IsNull() {
 		data.RouterIdIpv6Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	} else if data.Dscp.IsNull() {
 		data.Dscp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/udp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	} else if data.TransportUdp.IsNull() {
 		data.TransportUdp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/packet-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/packet-length"); value.Exists() {
 		data.PacketLength = types.Int64Value(value.Int())
 	} else if data.PacketLength.IsNull() {
 		data.PacketLength = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dfbit/set"); value.Exists() {
-		data.DfbitSet = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dfbit/set"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DfbitSet.IsNull() {
+			data.DfbitSet = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DfbitSet.IsNull() {
 			data.DfbitSet = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/export-format"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/export-format"); value.Exists() {
 		data.VersionExportFormat = types.StringValue(value.String())
 	} else if data.VersionExportFormat.IsNull() {
 		data.VersionExportFormat = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/template/data/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/template/data/timeout"); value.Exists() {
 		data.VersionTemplateDataTimeout = types.Int64Value(value.Int())
 	} else if data.VersionTemplateDataTimeout.IsNull() {
 		data.VersionTemplateDataTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/template/options/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/template/options/timeout"); value.Exists() {
 		data.VersionTemplateOptionsTimeout = types.Int64Value(value.Int())
 	} else if data.VersionTemplateOptionsTimeout.IsNull() {
 		data.VersionTemplateOptionsTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/template/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/template/timeout"); value.Exists() {
 		data.VersionTemplateTimeout = types.Int64Value(value.Int())
 	} else if data.VersionTemplateTimeout.IsNull() {
 		data.VersionTemplateTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/interface-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/interface-table/timeout"); value.Exists() {
 		data.VersionOptionsInterfaceTableTimeout = types.Int64Value(value.Int())
 	} else if data.VersionOptionsInterfaceTableTimeout.IsNull() {
 		data.VersionOptionsInterfaceTableTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/sampler-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/sampler-table/timeout"); value.Exists() {
 		data.VersionOptionsSamplerTableTimeout = types.Int64Value(value.Int())
 	} else if data.VersionOptionsSamplerTableTimeout.IsNull() {
 		data.VersionOptionsSamplerTableTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/class-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/class-table/timeout"); value.Exists() {
 		data.VersionOptionsClassTableTimeout = types.Int64Value(value.Int())
 	} else if data.VersionOptionsClassTableTimeout.IsNull() {
 		data.VersionOptionsClassTableTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/vrf-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/vrf-table/timeout"); value.Exists() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
 	} else if data.VersionOptionsVrfTableTimeout.IsNull() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Null()
@@ -501,6 +505,10 @@ func (data *FlowExporterMap) fromBody(ctx context.Context, res gjson.Result) {
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "destination.ipv4-address"); value.Exists() {
 		data.DestinationIpv4Address = types.StringValue(value.String())
@@ -537,8 +545,9 @@ func (data *FlowExporterMap) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "dfbit.set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
-	} else {
-		data.DfbitSet = types.BoolNull()
+	} else if !data.DfbitSet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DfbitSet = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "version.export-format"); value.Exists() {
 		data.VersionExportFormat = types.StringValue(value.String())
@@ -571,9 +580,14 @@ func (data *FlowExporterMap) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *FlowExporterMapData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "destination.ipv4-address"); value.Exists() {
 		data.DestinationIpv4Address = types.StringValue(value.String())
@@ -611,7 +625,7 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res gjson.Result)
 	if value := res.Get(prefix + "dfbit.set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
 	} else {
-		data.DfbitSet = types.BoolNull()
+		data.DfbitSet = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "version.export-format"); value.Exists() {
 		data.VersionExportFormat = types.StringValue(value.String())
@@ -644,66 +658,66 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res gjson.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *FlowExporterMap) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/destination/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination/ipv4-address"); value.Exists() {
 		data.DestinationIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/destination/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination/ipv6-address"); value.Exists() {
 		data.DestinationIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/destination/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination/vrf"); value.Exists() {
 		data.DestinationVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source"); value.Exists() {
 		data.Source = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-address/ipv4-address"); value.Exists() {
 		data.SourceAddressIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-address/ipv6-address"); value.Exists() {
 		data.SourceAddressIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id/router-id-address/ipv4-address"); value.Exists() {
 		data.RouterIdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id/router-id-address/ipv6-address"); value.Exists() {
 		data.RouterIdIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/udp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/packet-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/packet-length"); value.Exists() {
 		data.PacketLength = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dfbit/set"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dfbit/set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
 	} else {
-		data.DfbitSet = types.BoolNull()
+		data.DfbitSet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/export-format"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/export-format"); value.Exists() {
 		data.VersionExportFormat = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/template/data/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/template/data/timeout"); value.Exists() {
 		data.VersionTemplateDataTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/template/options/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/template/options/timeout"); value.Exists() {
 		data.VersionTemplateOptionsTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/template/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/template/timeout"); value.Exists() {
 		data.VersionTemplateTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/interface-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/interface-table/timeout"); value.Exists() {
 		data.VersionOptionsInterfaceTableTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/sampler-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/sampler-table/timeout"); value.Exists() {
 		data.VersionOptionsSamplerTableTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/class-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/class-table/timeout"); value.Exists() {
 		data.VersionOptionsClassTableTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/vrf-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/vrf-table/timeout"); value.Exists() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
 	}
 }
@@ -713,66 +727,66 @@ func (data *FlowExporterMap) fromBodyXML(ctx context.Context, res xmldot.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *FlowExporterMapData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/destination/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination/ipv4-address"); value.Exists() {
 		data.DestinationIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/destination/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination/ipv6-address"); value.Exists() {
 		data.DestinationIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/destination/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/destination/vrf"); value.Exists() {
 		data.DestinationVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source"); value.Exists() {
 		data.Source = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-address/ipv4-address"); value.Exists() {
 		data.SourceAddressIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-address/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-address/ipv6-address"); value.Exists() {
 		data.SourceAddressIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id/router-id-address/ipv4-address"); value.Exists() {
 		data.RouterIdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id/router-id-address/ipv6-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id/router-id-address/ipv6-address"); value.Exists() {
 		data.RouterIdIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/udp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/udp"); value.Exists() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/packet-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/packet-length"); value.Exists() {
 		data.PacketLength = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dfbit/set"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dfbit/set"); value.Exists() {
 		data.DfbitSet = types.BoolValue(true)
 	} else {
 		data.DfbitSet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/export-format"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/export-format"); value.Exists() {
 		data.VersionExportFormat = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/template/data/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/template/data/timeout"); value.Exists() {
 		data.VersionTemplateDataTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/template/options/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/template/options/timeout"); value.Exists() {
 		data.VersionTemplateOptionsTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/template/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/template/timeout"); value.Exists() {
 		data.VersionTemplateTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/interface-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/interface-table/timeout"); value.Exists() {
 		data.VersionOptionsInterfaceTableTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/sampler-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/sampler-table/timeout"); value.Exists() {
 		data.VersionOptionsSamplerTableTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/class-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/class-table/timeout"); value.Exists() {
 		data.VersionOptionsClassTableTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version/options/vrf-table/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/vrf-table/timeout"); value.Exists() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
 	}
 }

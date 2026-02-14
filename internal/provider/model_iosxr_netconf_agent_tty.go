@@ -40,7 +40,6 @@ import (
 type NetconfAgentTTY struct {
 	Device                types.String `tfsdk:"device"`
 	Id                    types.String `tfsdk:"id"`
-	DeleteMode            types.String `tfsdk:"delete_mode"`
 	ThrottleProcessRate   types.Int64  `tfsdk:"throttle_process_rate"`
 	ThrottleMemory        types.Int64  `tfsdk:"throttle_memory"`
 	ThrottleOffloadMemory types.Int64  `tfsdk:"throttle_offload_memory"`
@@ -107,22 +106,22 @@ func (data NetconfAgentTTY) toBody(ctx context.Context) string {
 func (data *NetconfAgentTTY) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "throttle.process-rate"); value.Exists() && !data.ThrottleProcessRate.IsNull() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThrottleProcessRate.IsNull() {
 		data.ThrottleProcessRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "throttle.memory"); value.Exists() && !data.ThrottleMemory.IsNull() {
 		data.ThrottleMemory = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThrottleMemory.IsNull() {
 		data.ThrottleMemory = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "throttle.offload-memory"); value.Exists() && !data.ThrottleOffloadMemory.IsNull() {
 		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThrottleOffloadMemory.IsNull() {
 		data.ThrottleOffloadMemory = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "session.timeout"); value.Exists() && !data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Null()
 	}
 }
@@ -155,22 +154,22 @@ func (data NetconfAgentTTY) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *NetconfAgentTTY) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle/process-rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/process-rate"); value.Exists() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
 	} else if data.ThrottleProcessRate.IsNull() {
 		data.ThrottleProcessRate = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle/memory"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/memory"); value.Exists() {
 		data.ThrottleMemory = types.Int64Value(value.Int())
 	} else if data.ThrottleMemory.IsNull() {
 		data.ThrottleMemory = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle/offload-memory"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/offload-memory"); value.Exists() {
 		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
 	} else if data.ThrottleOffloadMemory.IsNull() {
 		data.ThrottleOffloadMemory = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/timeout"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	} else if data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Null()
@@ -184,6 +183,10 @@ func (data *NetconfAgentTTY) fromBody(ctx context.Context, res gjson.Result) {
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "throttle.process-rate"); value.Exists() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
@@ -203,9 +206,14 @@ func (data *NetconfAgentTTY) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *NetconfAgentTTYData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "throttle.process-rate"); value.Exists() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
@@ -225,16 +233,16 @@ func (data *NetconfAgentTTYData) fromBody(ctx context.Context, res gjson.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *NetconfAgentTTY) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle/process-rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/process-rate"); value.Exists() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle/memory"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/memory"); value.Exists() {
 		data.ThrottleMemory = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle/offload-memory"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/offload-memory"); value.Exists() {
 		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/timeout"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
 }
@@ -243,16 +251,16 @@ func (data *NetconfAgentTTY) fromBodyXML(ctx context.Context, res xmldot.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *NetconfAgentTTYData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle/process-rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/process-rate"); value.Exists() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle/memory"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/memory"); value.Exists() {
 		data.ThrottleMemory = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle/offload-memory"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/offload-memory"); value.Exists() {
 		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/session/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/timeout"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
 }

@@ -95,7 +95,7 @@ func iosxrRouterMLDVRFImportStateIdFunc(resourceName string) resource.ImportStat
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterMLDVRFPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-mld-cfg:/router/mld"
 	attributes = {
 	}
@@ -111,7 +111,7 @@ func testAccIosxrRouterMLDVRFConfig_minimum() string {
 	config := `resource "iosxr_router_mld_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	version = "2"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -144,7 +144,7 @@ func testAccIosxrRouterMLDVRFConfig_all() string {
 	config += `	missed_packets_grp_spec_query = 5000` + "\n"
 	config += `	missed_packets_ssm_query = 5000` + "\n"
 	config += `	missed_packets_member_report = 5000` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

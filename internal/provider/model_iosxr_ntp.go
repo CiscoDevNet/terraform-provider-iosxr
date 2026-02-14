@@ -26,7 +26,6 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -565,7 +564,6 @@ func (data NTP) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "interfaces.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
 			}
 			if len(item.Interfaces) > 0 {
-				body, _ = sjson.Set(body, "interfaces.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "interfaces.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -726,7 +724,6 @@ func (data NTP) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
 			}
 			if len(item.Ipv4PeersServers) > 0 {
-				body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv4.ipv4-peer-server", []interface{}{})
 				for cindex, citem := range item.Ipv4PeersServers {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv4.ipv4-peer-server"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -767,7 +764,6 @@ func (data NTP) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Ipv6PeersServers) > 0 {
-				body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv6.ipv6-peer-server", []interface{}{})
 				for cindex, citem := range item.Ipv6PeersServers {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv6.ipv6-peer-server"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -811,7 +807,6 @@ func (data NTP) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.HostnamePeersServers) > 0 {
-				body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server", []interface{}{})
 				for cindex, citem := range item.HostnamePeersServers {
 					if !citem.FqdnHostname.IsNull() && !citem.FqdnHostname.IsUnknown() {
 						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"fqdn-hostname", citem.FqdnHostname.ValueString())
@@ -882,62 +877,62 @@ func (data NTP) toBody(ctx context.Context) string {
 func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv4.precedence"); value.Exists() && !data.Ipv4Precedence.IsNull() {
 		data.Ipv4Precedence = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv4Precedence.IsNull() {
 		data.Ipv4Precedence = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv6.precedence"); value.Exists() && !data.Ipv6Precedence.IsNull() {
 		data.Ipv6Precedence = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv6Precedence.IsNull() {
 		data.Ipv6Precedence = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-group.ipv6.peer"); value.Exists() && !data.AccessGroupIpv6Peer.IsNull() {
 		data.AccessGroupIpv6Peer = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroupIpv6Peer.IsNull() {
 		data.AccessGroupIpv6Peer = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-group.ipv6.query-only"); value.Exists() && !data.AccessGroupIpv6QueryOnly.IsNull() {
 		data.AccessGroupIpv6QueryOnly = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroupIpv6QueryOnly.IsNull() {
 		data.AccessGroupIpv6QueryOnly = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-group.ipv6.serve"); value.Exists() && !data.AccessGroupIpv6Serve.IsNull() {
 		data.AccessGroupIpv6Serve = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroupIpv6Serve.IsNull() {
 		data.AccessGroupIpv6Serve = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-group.ipv6.serve-only"); value.Exists() && !data.AccessGroupIpv6ServeOnly.IsNull() {
 		data.AccessGroupIpv6ServeOnly = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroupIpv6ServeOnly.IsNull() {
 		data.AccessGroupIpv6ServeOnly = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-group.ipv4.peer"); value.Exists() && !data.AccessGroupIpv4Peer.IsNull() {
 		data.AccessGroupIpv4Peer = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroupIpv4Peer.IsNull() {
 		data.AccessGroupIpv4Peer = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-group.ipv4.query-only"); value.Exists() && !data.AccessGroupIpv4QueryOnly.IsNull() {
 		data.AccessGroupIpv4QueryOnly = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroupIpv4QueryOnly.IsNull() {
 		data.AccessGroupIpv4QueryOnly = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-group.ipv4.serve"); value.Exists() && !data.AccessGroupIpv4Serve.IsNull() {
 		data.AccessGroupIpv4Serve = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroupIpv4Serve.IsNull() {
 		data.AccessGroupIpv4Serve = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-group.ipv4.serve-only"); value.Exists() && !data.AccessGroupIpv4ServeOnly.IsNull() {
 		data.AccessGroupIpv4ServeOnly = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroupIpv4ServeOnly.IsNull() {
 		data.AccessGroupIpv4ServeOnly = types.StringNull()
 	}
 	for i := range data.AccessGroupVrfs {
@@ -1010,11 +1005,12 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	if value := gjson.GetBytes(res, "authenticate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Authenticate.IsNull() {
 			data.Authenticate = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Authenticate.IsNull() {
 			data.Authenticate = types.BoolNull()
 		}
@@ -1137,87 +1133,94 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "broadcastdelay"); value.Exists() && !data.Broadcastdelay.IsNull() {
 		data.Broadcastdelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.Broadcastdelay.IsNull() {
 		data.Broadcastdelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "drift.aging.time"); value.Exists() && !data.DriftAgingTime.IsNull() {
 		data.DriftAgingTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.DriftAgingTime.IsNull() {
 		data.DriftAgingTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "drift.file.bootflash"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileBootflash.IsNull() {
 			data.DriftFileBootflash = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileBootflash.IsNull() {
 			data.DriftFileBootflash = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "drift.file.compactflash"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileCompactflash.IsNull() {
 			data.DriftFileCompactflash = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileCompactflash.IsNull() {
 			data.DriftFileCompactflash = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "drift.file.usb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileUsb.IsNull() {
 			data.DriftFileUsb = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileUsb.IsNull() {
 			data.DriftFileUsb = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "drift.file.disk0"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileDisk0.IsNull() {
 			data.DriftFileDisk0 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileDisk0.IsNull() {
 			data.DriftFileDisk0 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "drift.file.disk1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileDisk1.IsNull() {
 			data.DriftFileDisk1 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileDisk1.IsNull() {
 			data.DriftFileDisk1 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "drift.file.disk2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileDisk2.IsNull() {
 			data.DriftFileDisk2 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileDisk2.IsNull() {
 			data.DriftFileDisk2 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "drift.file.harddisk"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileHarddisk.IsNull() {
 			data.DriftFileHarddisk = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileHarddisk.IsNull() {
 			data.DriftFileHarddisk = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "drift.file.file-name"); value.Exists() && !data.DriftFilename.IsNull() {
 		data.DriftFilename = types.StringValue(value.String())
-	} else {
+	} else if data.DriftFilename.IsNull() {
 		data.DriftFilename = types.StringNull()
 	}
 	for i := range data.Interfaces {
@@ -1249,21 +1252,15 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("broadcast-client"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].BroadcastClient.IsNull() && !data.Interfaces[i].BroadcastClient.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].BroadcastClient = types.BoolValue(false)
-			} else if !data.Interfaces[i].BroadcastClient.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].BroadcastClient.IsNull() {
 				data.Interfaces[i].BroadcastClient = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Interfaces[i].BroadcastClient.IsNull() {
 				data.Interfaces[i].BroadcastClient = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].BroadcastClient = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("broadcast.destination"); value.Exists() && !data.Interfaces[i].BroadcastDestination.IsNull() {
@@ -1282,21 +1279,15 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].BroadcastVersion = types.Int64Null()
 		}
 		if value := r.Get("disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].Disable.IsNull() && !data.Interfaces[i].Disable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].Disable = types.BoolValue(false)
-			} else if !data.Interfaces[i].Disable.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].Disable = types.BoolValue(false)
 			}
 		}
 	}
@@ -1328,78 +1319,90 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.InterfaceVrfs[i].VrfName = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("interface"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.InterfaceVrfs[i].Interfaces
-			data.InterfaceVrfs[i].Interfaces = make([]NTPInterfaceVrfsInterfaces, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := NTPInterfaceVrfsInterfaces{}
-				if cValue := cr.Get("interface-name"); cValue.Exists() {
-					citem.InterfaceName = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("broadcast-client"); cValue.Exists() {
-					citem.BroadcastClient = types.BoolValue(true)
-				} else {
-					citem.BroadcastClient = types.BoolValue(false)
-				}
-				if cValue := cr.Get("broadcast.destination"); cValue.Exists() {
-					citem.BroadcastDestination = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("broadcast.key"); cValue.Exists() {
-					citem.BroadcastKey = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("broadcast.version"); cValue.Exists() {
-					citem.BroadcastVersion = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("disable"); cValue.Exists() {
-					citem.Disable = types.BoolValue(true)
-				} else {
-					citem.Disable = types.BoolValue(false)
-				}
+		for ci := range data.InterfaceVrfs[i].Interfaces {
+			keys := [...]string{"interface-name"}
+			keyValues := [...]string{data.InterfaceVrfs[i].Interfaces[ci].InterfaceName.ValueString()}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
-						if !citem.BroadcastClient.ValueBool() && existingItem.BroadcastClient.ValueBool() == false {
-							citem.BroadcastClient = existingItem.BroadcastClient
+			var cr gjson.Result
+			r.Get("interface").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
-						if !citem.Disable.ValueBool() && existingItem.Disable.ValueBool() == false {
-							citem.Disable = existingItem.Disable
-						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("interface-name"); value.Exists() && !data.InterfaceVrfs[i].Interfaces[ci].InterfaceName.IsNull() {
+				data.InterfaceVrfs[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
+			} else {
+				data.InterfaceVrfs[i].Interfaces[ci].InterfaceName = types.StringNull()
+			}
+			if value := cr.Get("broadcast-client"); value.Exists() {
+				if !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() {
+					data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient = types.BoolValue(true)
 				}
-
-				data.InterfaceVrfs[i].Interfaces = append(data.InterfaceVrfs[i].Interfaces, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() {
+					data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient = types.BoolNull()
+				}
+			}
+			if value := cr.Get("broadcast.destination"); value.Exists() && !data.InterfaceVrfs[i].Interfaces[ci].BroadcastDestination.IsNull() {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastDestination = types.StringValue(value.String())
+			} else {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastDestination = types.StringNull()
+			}
+			if value := cr.Get("broadcast.key"); value.Exists() && !data.InterfaceVrfs[i].Interfaces[ci].BroadcastKey.IsNull() {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastKey = types.Int64Value(value.Int())
+			} else {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastKey = types.Int64Null()
+			}
+			if value := cr.Get("broadcast.version"); value.Exists() && !data.InterfaceVrfs[i].Interfaces[ci].BroadcastVersion.IsNull() {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastVersion = types.Int64Value(value.Int())
+			} else {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastVersion = types.Int64Null()
+			}
+			if value := cr.Get("disable"); value.Exists() {
+				if !data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() {
+					data.InterfaceVrfs[i].Interfaces[ci].Disable = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() {
+					data.InterfaceVrfs[i].Interfaces[ci].Disable = types.BoolNull()
+				}
+			}
 		}
 	}
 	if value := gjson.GetBytes(res, "primary.stratum-number"); value.Exists() && !data.PrimaryStratumNumber.IsNull() {
 		data.PrimaryStratumNumber = types.Int64Value(value.Int())
-	} else {
+	} else if data.PrimaryStratumNumber.IsNull() {
 		data.PrimaryStratumNumber = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "primary.primary-reference-clock"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrimaryReferenceClock.IsNull() {
 			data.PrimaryReferenceClock = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrimaryReferenceClock.IsNull() {
 			data.PrimaryReferenceClock = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "max-associations"); value.Exists() && !data.MaxAssociations.IsNull() {
 		data.MaxAssociations = types.Int64Value(value.Int())
-	} else {
+	} else if data.MaxAssociations.IsNull() {
 		data.MaxAssociations = types.Int64Null()
 	}
 	for i := range data.Ipv4PeersServers {
@@ -1456,57 +1459,39 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv4PeersServers[i].Maxpoll = types.Int64Null()
 		}
 		if value := r.Get("prefer"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Ipv4PeersServers[i].Prefer.IsNull() && !data.Ipv4PeersServers[i].Prefer.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Ipv4PeersServers[i].Prefer = types.BoolValue(false)
-			} else if !data.Ipv4PeersServers[i].Prefer.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv4PeersServers[i].Prefer.IsNull() {
 				data.Ipv4PeersServers[i].Prefer = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Ipv4PeersServers[i].Prefer.IsNull() {
 				data.Ipv4PeersServers[i].Prefer = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Ipv4PeersServers[i].Prefer = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("burst"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Ipv4PeersServers[i].Burst.IsNull() && !data.Ipv4PeersServers[i].Burst.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Ipv4PeersServers[i].Burst = types.BoolValue(false)
-			} else if !data.Ipv4PeersServers[i].Burst.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv4PeersServers[i].Burst.IsNull() {
 				data.Ipv4PeersServers[i].Burst = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Ipv4PeersServers[i].Burst.IsNull() {
 				data.Ipv4PeersServers[i].Burst = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Ipv4PeersServers[i].Burst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("iburst"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Ipv4PeersServers[i].Iburst.IsNull() && !data.Ipv4PeersServers[i].Iburst.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Ipv4PeersServers[i].Iburst = types.BoolValue(false)
-			} else if !data.Ipv4PeersServers[i].Iburst.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv4PeersServers[i].Iburst.IsNull() {
 				data.Ipv4PeersServers[i].Iburst = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Ipv4PeersServers[i].Iburst.IsNull() {
 				data.Ipv4PeersServers[i].Iburst = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Ipv4PeersServers[i].Iburst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("source"); value.Exists() && !data.Ipv4PeersServers[i].Source.IsNull() {
@@ -1569,57 +1554,39 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv6PeersServers[i].Maxpoll = types.Int64Null()
 		}
 		if value := r.Get("prefer"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Ipv6PeersServers[i].Prefer.IsNull() && !data.Ipv6PeersServers[i].Prefer.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Ipv6PeersServers[i].Prefer = types.BoolValue(false)
-			} else if !data.Ipv6PeersServers[i].Prefer.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv6PeersServers[i].Prefer.IsNull() {
 				data.Ipv6PeersServers[i].Prefer = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Ipv6PeersServers[i].Prefer.IsNull() {
 				data.Ipv6PeersServers[i].Prefer = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Ipv6PeersServers[i].Prefer = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("burst"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Ipv6PeersServers[i].Burst.IsNull() && !data.Ipv6PeersServers[i].Burst.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Ipv6PeersServers[i].Burst = types.BoolValue(false)
-			} else if !data.Ipv6PeersServers[i].Burst.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv6PeersServers[i].Burst.IsNull() {
 				data.Ipv6PeersServers[i].Burst = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Ipv6PeersServers[i].Burst.IsNull() {
 				data.Ipv6PeersServers[i].Burst = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Ipv6PeersServers[i].Burst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("iburst"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Ipv6PeersServers[i].Iburst.IsNull() && !data.Ipv6PeersServers[i].Iburst.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Ipv6PeersServers[i].Iburst = types.BoolValue(false)
-			} else if !data.Ipv6PeersServers[i].Iburst.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv6PeersServers[i].Iburst.IsNull() {
 				data.Ipv6PeersServers[i].Iburst = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Ipv6PeersServers[i].Iburst.IsNull() {
 				data.Ipv6PeersServers[i].Iburst = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Ipv6PeersServers[i].Iburst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("source"); value.Exists() && !data.Ipv6PeersServers[i].Source.IsNull() {
@@ -1687,57 +1654,39 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.HostnamePeersServers[i].Maxpoll = types.Int64Null()
 		}
 		if value := r.Get("prefer"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.HostnamePeersServers[i].Prefer.IsNull() && !data.HostnamePeersServers[i].Prefer.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.HostnamePeersServers[i].Prefer = types.BoolValue(false)
-			} else if !data.HostnamePeersServers[i].Prefer.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.HostnamePeersServers[i].Prefer.IsNull() {
 				data.HostnamePeersServers[i].Prefer = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.HostnamePeersServers[i].Prefer.IsNull() {
 				data.HostnamePeersServers[i].Prefer = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.HostnamePeersServers[i].Prefer = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("burst"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.HostnamePeersServers[i].Burst.IsNull() && !data.HostnamePeersServers[i].Burst.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.HostnamePeersServers[i].Burst = types.BoolValue(false)
-			} else if !data.HostnamePeersServers[i].Burst.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.HostnamePeersServers[i].Burst.IsNull() {
 				data.HostnamePeersServers[i].Burst = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.HostnamePeersServers[i].Burst.IsNull() {
 				data.HostnamePeersServers[i].Burst = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.HostnamePeersServers[i].Burst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("iburst"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.HostnamePeersServers[i].Iburst.IsNull() && !data.HostnamePeersServers[i].Iburst.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.HostnamePeersServers[i].Iburst = types.BoolValue(false)
-			} else if !data.HostnamePeersServers[i].Iburst.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.HostnamePeersServers[i].Iburst.IsNull() {
 				data.HostnamePeersServers[i].Iburst = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.HostnamePeersServers[i].Iburst.IsNull() {
 				data.HostnamePeersServers[i].Iburst = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.HostnamePeersServers[i].Iburst = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("source"); value.Exists() && !data.HostnamePeersServers[i].Source.IsNull() {
@@ -1774,227 +1723,277 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.PeersServersVrfs[i].VrfName = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("ipv4.ipv4-peer-server"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.PeersServersVrfs[i].Ipv4PeersServers
-			data.PeersServersVrfs[i].Ipv4PeersServers = make([]NTPPeersServersVrfsIpv4PeersServers, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := NTPPeersServersVrfsIpv4PeersServers{}
-				if cValue := cr.Get("address"); cValue.Exists() {
-					citem.Address = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("type"); cValue.Exists() {
-					citem.Type = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("version"); cValue.Exists() {
-					citem.Version = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("key"); cValue.Exists() {
-					citem.Key = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("minpoll"); cValue.Exists() {
-					citem.Minpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("maxpoll"); cValue.Exists() {
-					citem.Maxpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("prefer"); cValue.Exists() {
-					citem.Prefer = types.BoolValue(true)
-				} else {
-					citem.Prefer = types.BoolValue(false)
-				}
-				if cValue := cr.Get("burst"); cValue.Exists() {
-					citem.Burst = types.BoolValue(true)
-				} else {
-					citem.Burst = types.BoolValue(false)
-				}
-				if cValue := cr.Get("iburst"); cValue.Exists() {
-					citem.Iburst = types.BoolValue(true)
-				} else {
-					citem.Iburst = types.BoolValue(false)
-				}
-				if cValue := cr.Get("source"); cValue.Exists() {
-					citem.Source = types.StringValue(cValue.String())
-				}
+		for ci := range data.PeersServersVrfs[i].Ipv4PeersServers {
+			keys := [...]string{"address", "type"}
+			keyValues := [...]string{data.PeersServersVrfs[i].Ipv4PeersServers[ci].Address.ValueString(), data.PeersServersVrfs[i].Ipv4PeersServers[ci].Type.ValueString()}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.Address.ValueString() != citem.Address.ValueString() {
-						match = false
-					}
-					if existingItem.Type.ValueString() != citem.Type.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
-						if !citem.Prefer.ValueBool() && existingItem.Prefer.ValueBool() == false {
-							citem.Prefer = existingItem.Prefer
+			var cr gjson.Result
+			r.Get("ipv4.ipv4-peer-server").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
-						if !citem.Burst.ValueBool() && existingItem.Burst.ValueBool() == false {
-							citem.Burst = existingItem.Burst
-						}
-						if !citem.Iburst.ValueBool() && existingItem.Iburst.ValueBool() == false {
-							citem.Iburst = existingItem.Iburst
-						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("address"); value.Exists() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Address.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Address = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Address = types.StringNull()
+			}
+			if value := cr.Get("type"); value.Exists() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Type.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Type = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Type = types.StringNull()
+			}
+			if value := cr.Get("version"); value.Exists() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Version.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Version = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Version = types.Int64Null()
+			}
+			if value := cr.Get("key"); value.Exists() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Key.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Key = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Key = types.Int64Null()
+			}
+			if value := cr.Get("minpoll"); value.Exists() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Minpoll.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Minpoll = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Minpoll = types.Int64Null()
+			}
+			if value := cr.Get("maxpoll"); value.Exists() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Maxpoll.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Maxpoll = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Maxpoll = types.Int64Null()
+			}
+			if value := cr.Get("prefer"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer = types.BoolValue(true)
 				}
-
-				data.PeersServersVrfs[i].Ipv4PeersServers = append(data.PeersServersVrfs[i].Ipv4PeersServers, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer = types.BoolNull()
+				}
+			}
+			if value := cr.Get("burst"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst = types.BoolNull()
+				}
+			}
+			if value := cr.Get("iburst"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst = types.BoolNull()
+				}
+			}
+			if value := cr.Get("source"); value.Exists() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Source.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Source = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Source = types.StringNull()
+			}
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("ipv6.ipv6-peer-server"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.PeersServersVrfs[i].Ipv6PeersServers
-			data.PeersServersVrfs[i].Ipv6PeersServers = make([]NTPPeersServersVrfsIpv6PeersServers, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := NTPPeersServersVrfsIpv6PeersServers{}
-				if cValue := cr.Get("address"); cValue.Exists() {
-					citem.Address = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("type"); cValue.Exists() {
-					citem.Type = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("version"); cValue.Exists() {
-					citem.Version = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("key"); cValue.Exists() {
-					citem.Key = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("minpoll"); cValue.Exists() {
-					citem.Minpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("maxpoll"); cValue.Exists() {
-					citem.Maxpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("prefer"); cValue.Exists() {
-					citem.Prefer = types.BoolValue(true)
-				} else {
-					citem.Prefer = types.BoolValue(false)
-				}
-				if cValue := cr.Get("burst"); cValue.Exists() {
-					citem.Burst = types.BoolValue(true)
-				} else {
-					citem.Burst = types.BoolValue(false)
-				}
-				if cValue := cr.Get("iburst"); cValue.Exists() {
-					citem.Iburst = types.BoolValue(true)
-				} else {
-					citem.Iburst = types.BoolValue(false)
-				}
-				if cValue := cr.Get("source"); cValue.Exists() {
-					citem.Source = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("ipv6-address"); cValue.Exists() {
-					citem.Ipv6Address = types.StringValue(cValue.String())
-				}
+		for ci := range data.PeersServersVrfs[i].Ipv6PeersServers {
+			keys := [...]string{"address", "type"}
+			keyValues := [...]string{data.PeersServersVrfs[i].Ipv6PeersServers[ci].Address.ValueString(), data.PeersServersVrfs[i].Ipv6PeersServers[ci].Type.ValueString()}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.Address.ValueString() != citem.Address.ValueString() {
-						match = false
-					}
-					if existingItem.Type.ValueString() != citem.Type.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
-						if !citem.Prefer.ValueBool() && existingItem.Prefer.ValueBool() == false {
-							citem.Prefer = existingItem.Prefer
+			var cr gjson.Result
+			r.Get("ipv6.ipv6-peer-server").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
-						if !citem.Burst.ValueBool() && existingItem.Burst.ValueBool() == false {
-							citem.Burst = existingItem.Burst
-						}
-						if !citem.Iburst.ValueBool() && existingItem.Iburst.ValueBool() == false {
-							citem.Iburst = existingItem.Iburst
-						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("address"); value.Exists() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Address.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Address = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Address = types.StringNull()
+			}
+			if value := cr.Get("type"); value.Exists() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Type.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Type = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Type = types.StringNull()
+			}
+			if value := cr.Get("version"); value.Exists() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Version.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Version = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Version = types.Int64Null()
+			}
+			if value := cr.Get("key"); value.Exists() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Key.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Key = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Key = types.Int64Null()
+			}
+			if value := cr.Get("minpoll"); value.Exists() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Minpoll.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Minpoll = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Minpoll = types.Int64Null()
+			}
+			if value := cr.Get("maxpoll"); value.Exists() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Maxpoll.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Maxpoll = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Maxpoll = types.Int64Null()
+			}
+			if value := cr.Get("prefer"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer = types.BoolValue(true)
 				}
-
-				data.PeersServersVrfs[i].Ipv6PeersServers = append(data.PeersServersVrfs[i].Ipv6PeersServers, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer = types.BoolNull()
+				}
+			}
+			if value := cr.Get("burst"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst = types.BoolNull()
+				}
+			}
+			if value := cr.Get("iburst"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst = types.BoolNull()
+				}
+			}
+			if value := cr.Get("source"); value.Exists() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Source.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Source = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Source = types.StringNull()
+			}
+			if value := cr.Get("ipv6-address"); value.Exists() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Ipv6Address.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Ipv6Address = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Ipv6Address = types.StringNull()
+			}
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("hostname.hostname-peer-server"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.PeersServersVrfs[i].HostnamePeersServers
-			data.PeersServersVrfs[i].HostnamePeersServers = make([]NTPPeersServersVrfsHostnamePeersServers, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := NTPPeersServersVrfsHostnamePeersServers{}
-				if cValue := cr.Get("fqdn-hostname"); cValue.Exists() {
-					citem.FqdnHostname = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("type"); cValue.Exists() {
-					citem.Type = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("version"); cValue.Exists() {
-					citem.Version = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("key"); cValue.Exists() {
-					citem.Key = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("minpoll"); cValue.Exists() {
-					citem.Minpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("maxpoll"); cValue.Exists() {
-					citem.Maxpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("prefer"); cValue.Exists() {
-					citem.Prefer = types.BoolValue(true)
-				} else {
-					citem.Prefer = types.BoolValue(false)
-				}
-				if cValue := cr.Get("burst"); cValue.Exists() {
-					citem.Burst = types.BoolValue(true)
-				} else {
-					citem.Burst = types.BoolValue(false)
-				}
-				if cValue := cr.Get("iburst"); cValue.Exists() {
-					citem.Iburst = types.BoolValue(true)
-				} else {
-					citem.Iburst = types.BoolValue(false)
-				}
-				if cValue := cr.Get("source"); cValue.Exists() {
-					citem.Source = types.StringValue(cValue.String())
-				}
+		for ci := range data.PeersServersVrfs[i].HostnamePeersServers {
+			keys := [...]string{"fqdn-hostname", "type"}
+			keyValues := [...]string{data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname.ValueString(), data.PeersServersVrfs[i].HostnamePeersServers[ci].Type.ValueString()}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.FqdnHostname.ValueString() != citem.FqdnHostname.ValueString() {
-						match = false
-					}
-					if existingItem.Type.ValueString() != citem.Type.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
-						if !citem.Prefer.ValueBool() && existingItem.Prefer.ValueBool() == false {
-							citem.Prefer = existingItem.Prefer
+			var cr gjson.Result
+			r.Get("hostname.hostname-peer-server").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
-						if !citem.Burst.ValueBool() && existingItem.Burst.ValueBool() == false {
-							citem.Burst = existingItem.Burst
-						}
-						if !citem.Iburst.ValueBool() && existingItem.Iburst.ValueBool() == false {
-							citem.Iburst = existingItem.Iburst
-						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("fqdn-hostname"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname = types.StringNull()
+			}
+			if value := cr.Get("type"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Type.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Type = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Type = types.StringNull()
+			}
+			if value := cr.Get("version"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Version.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Version = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Version = types.Int64Null()
+			}
+			if value := cr.Get("key"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Key.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Key = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Key = types.Int64Null()
+			}
+			if value := cr.Get("minpoll"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll = types.Int64Null()
+			}
+			if value := cr.Get("maxpoll"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll = types.Int64Value(value.Int())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll = types.Int64Null()
+			}
+			if value := cr.Get("prefer"); value.Exists() {
+				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolValue(true)
 				}
-
-				data.PeersServersVrfs[i].HostnamePeersServers = append(data.PeersServersVrfs[i].HostnamePeersServers, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolNull()
+				}
+			}
+			if value := cr.Get("burst"); value.Exists() {
+				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolNull()
+				}
+			}
+			if value := cr.Get("iburst"); value.Exists() {
+				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolNull()
+				}
+			}
+			if value := cr.Get("source"); value.Exists() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Source.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Source = types.StringValue(value.String())
+			} else {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Source = types.StringNull()
+			}
 		}
 	}
 	for i := range data.TrustedKeys {
@@ -2027,38 +2026,41 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	if value := gjson.GetBytes(res, "update-calendar"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.UpdateCalendar.IsNull() {
 			data.UpdateCalendar = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.UpdateCalendar.IsNull() {
 			data.UpdateCalendar = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "log-internal-sync"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LogInternalSync.IsNull() {
 			data.LogInternalSync = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LogInternalSync.IsNull() {
 			data.LogInternalSync = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "passive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Passive.IsNull() {
 			data.Passive = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Passive.IsNull() {
 			data.Passive = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "source.interface-name"); value.Exists() && !data.SourceInterfaceName.IsNull() {
 		data.SourceInterfaceName = types.StringValue(value.String())
-	} else {
+	} else if data.SourceInterfaceName.IsNull() {
 		data.SourceInterfaceName = types.StringNull()
 	}
 	for i := range data.SourceVrfs {
@@ -2097,50 +2099,53 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "admin-plane.version"); value.Exists() && !data.AdminPlaneVersion.IsNull() {
 		data.AdminPlaneVersion = types.Int64Value(value.Int())
-	} else {
+	} else if data.AdminPlaneVersion.IsNull() {
 		data.AdminPlaneVersion = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "admin-plane.key"); value.Exists() && !data.AdminPlaneKey.IsNull() {
 		data.AdminPlaneKey = types.Int64Value(value.Int())
-	} else {
+	} else if data.AdminPlaneKey.IsNull() {
 		data.AdminPlaneKey = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "admin-plane.minpoll"); value.Exists() && !data.AdminPlaneMinpoll.IsNull() {
 		data.AdminPlaneMinpoll = types.Int64Value(value.Int())
-	} else {
+	} else if data.AdminPlaneMinpoll.IsNull() {
 		data.AdminPlaneMinpoll = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "admin-plane.maxpoll"); value.Exists() && !data.AdminPlaneMaxpoll.IsNull() {
 		data.AdminPlaneMaxpoll = types.Int64Value(value.Int())
-	} else {
+	} else if data.AdminPlaneMaxpoll.IsNull() {
 		data.AdminPlaneMaxpoll = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "admin-plane.prefer"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AdminPlanePrefer.IsNull() {
 			data.AdminPlanePrefer = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AdminPlanePrefer.IsNull() {
 			data.AdminPlanePrefer = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "admin-plane.burst"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AdminPlaneBurst.IsNull() {
 			data.AdminPlaneBurst = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AdminPlaneBurst.IsNull() {
 			data.AdminPlaneBurst = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "admin-plane.iburst"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AdminPlaneIburst.IsNull() {
 			data.AdminPlaneIburst = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AdminPlaneIburst.IsNull() {
 			data.AdminPlaneIburst = types.BoolNull()
 		}
@@ -2189,38 +2194,35 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/access-group/ipv4/serve-only", data.AccessGroupIpv4ServeOnly.ValueString())
 	}
 	if len(data.AccessGroupVrfs) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AccessGroupVrfs {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/access-group/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "vrf-name", item.VrfName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
 			if !item.Ipv6Peer.IsNull() && !item.Ipv6Peer.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv6/peer", item.Ipv6Peer.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv6/peer", item.Ipv6Peer.ValueString())
 			}
 			if !item.Ipv6QueryOnly.IsNull() && !item.Ipv6QueryOnly.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv6/query-only", item.Ipv6QueryOnly.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv6/query-only", item.Ipv6QueryOnly.ValueString())
 			}
 			if !item.Ipv6Serve.IsNull() && !item.Ipv6Serve.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv6/serve", item.Ipv6Serve.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv6/serve", item.Ipv6Serve.ValueString())
 			}
 			if !item.Ipv6ServeOnly.IsNull() && !item.Ipv6ServeOnly.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv6/serve-only", item.Ipv6ServeOnly.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv6/serve-only", item.Ipv6ServeOnly.ValueString())
 			}
 			if !item.Ipv4Peer.IsNull() && !item.Ipv4Peer.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4/peer", item.Ipv4Peer.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4/peer", item.Ipv4Peer.ValueString())
 			}
 			if !item.Ipv4QueryOnly.IsNull() && !item.Ipv4QueryOnly.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4/query-only", item.Ipv4QueryOnly.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4/query-only", item.Ipv4QueryOnly.ValueString())
 			}
 			if !item.Ipv4Serve.IsNull() && !item.Ipv4Serve.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4/serve", item.Ipv4Serve.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4/serve", item.Ipv4Serve.ValueString())
 			}
 			if !item.Ipv4ServeOnly.IsNull() && !item.Ipv4ServeOnly.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4/serve-only", item.Ipv4ServeOnly.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4/serve-only", item.Ipv4ServeOnly.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"access-group/vrfs/vrf", cBody.Res())
 		}
 	}
 	if !data.Authenticate.IsNull() && !data.Authenticate.IsUnknown() {
@@ -2229,59 +2231,47 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.AuthenticationKeys) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AuthenticationKeys {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/authentication-keys/authentication-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
 			if !item.Md5Encrypted.IsNull() && !item.Md5Encrypted.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "md5/encrypted", item.Md5Encrypted.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/md5/encrypted", item.Md5Encrypted.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"authentication-keys/authentication-key", cBody.Res())
 		}
 	}
 	if len(data.CmacAuthenticationKeys) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.CmacAuthenticationKeys {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/cmac-authentication-keys/cmac-authentication-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
 			if !item.CmacEncrypted.IsNull() && !item.CmacEncrypted.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "cmac/encrypted", item.CmacEncrypted.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/cmac/encrypted", item.CmacEncrypted.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"cmac-authentication-keys/cmac-authentication-key", cBody.Res())
 		}
 	}
 	if len(data.HmacSha1AuthenticationKeys) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.HmacSha1AuthenticationKeys {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/hmac-sha1-authentication-keys/hmac-sha1-authentication-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
 			if !item.HmacSha1Encrypted.IsNull() && !item.HmacSha1Encrypted.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "hmac-sha1/encrypted", item.HmacSha1Encrypted.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/hmac-sha1/encrypted", item.HmacSha1Encrypted.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"hmac-sha1-authentication-keys/hmac-sha1-authentication-key", cBody.Res())
 		}
 	}
 	if len(data.HmacSha2AuthenticationKeys) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.HmacSha2AuthenticationKeys {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/hmac-sha2-authentication-keys/hmac-sha2-authentication-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
 			if !item.HmacSha2Encrypted.IsNull() && !item.HmacSha2Encrypted.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "hmac-sha2/encrypted", item.HmacSha2Encrypted.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/hmac-sha2/encrypted", item.HmacSha2Encrypted.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"hmac-sha2-authentication-keys/hmac-sha2-authentication-key", cBody.Res())
 		}
 	}
 	if !data.Broadcastdelay.IsNull() && !data.Broadcastdelay.IsUnknown() {
@@ -2329,72 +2319,65 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/drift/file/file-name", data.DriftFilename.ValueString())
 	}
 	if len(data.Interfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Interfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.BroadcastClient.IsNull() && !item.BroadcastClient.IsUnknown() {
 				if item.BroadcastClient.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "broadcast-client", "")
+					body = helpers.SetFromXPath(body, basePath+"/broadcast-client", "")
 				}
 			}
 			if !item.BroadcastDestination.IsNull() && !item.BroadcastDestination.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "broadcast/destination", item.BroadcastDestination.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/broadcast/destination", item.BroadcastDestination.ValueString())
 			}
 			if !item.BroadcastKey.IsNull() && !item.BroadcastKey.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "broadcast/key", strconv.FormatInt(item.BroadcastKey.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/broadcast/key", strconv.FormatInt(item.BroadcastKey.ValueInt64(), 10))
 			}
 			if !item.BroadcastVersion.IsNull() && !item.BroadcastVersion.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "broadcast/version", strconv.FormatInt(item.BroadcastVersion.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/broadcast/version", strconv.FormatInt(item.BroadcastVersion.ValueInt64(), 10))
 			}
 			if !item.Disable.IsNull() && !item.Disable.IsUnknown() {
 				if item.Disable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/disable", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"interfaces/interface", cBody.Res())
 		}
 	}
 	if len(data.InterfaceVrfs) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.InterfaceVrfs {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/interfaces/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "vrf-name", item.VrfName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
 			if len(item.Interfaces) > 0 {
 				for _, citem := range item.Interfaces {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/interface[interface-name='" + citem.InterfaceName.ValueString() + "']"
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "interface-name", citem.InterfaceName.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/interface-name", citem.InterfaceName.ValueString())
 					}
 					if !citem.BroadcastClient.IsNull() && !citem.BroadcastClient.IsUnknown() {
 						if citem.BroadcastClient.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "broadcast-client", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/broadcast-client", "")
 						}
 					}
 					if !citem.BroadcastDestination.IsNull() && !citem.BroadcastDestination.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "broadcast/destination", citem.BroadcastDestination.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/broadcast/destination", citem.BroadcastDestination.ValueString())
 					}
 					if !citem.BroadcastKey.IsNull() && !citem.BroadcastKey.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "broadcast/key", strconv.FormatInt(citem.BroadcastKey.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/broadcast/key", strconv.FormatInt(citem.BroadcastKey.ValueInt64(), 10))
 					}
 					if !citem.BroadcastVersion.IsNull() && !citem.BroadcastVersion.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "broadcast/version", strconv.FormatInt(citem.BroadcastVersion.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/broadcast/version", strconv.FormatInt(citem.BroadcastVersion.ValueInt64(), 10))
 					}
 					if !citem.Disable.IsNull() && !citem.Disable.IsUnknown() {
 						if citem.Disable.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "disable", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/disable", "")
 						}
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "interface", ccBody.Res())
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"interfaces/vrfs/vrf", cBody.Res())
 		}
 	}
 	if !data.PrimaryStratumNumber.IsNull() && !data.PrimaryStratumNumber.IsUnknown() {
@@ -2409,289 +2392,271 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/max-associations", strconv.FormatInt(data.MaxAssociations.ValueInt64(), 10))
 	}
 	if len(data.Ipv4PeersServers) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Ipv4PeersServers {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/peer-server/ipv4/ipv4-peer-server[address='" + item.Address.ValueString() + "' and type='" + item.Type.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.Type.IsNull() && !item.Type.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type", item.Type.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type", item.Type.ValueString())
 			}
 			if !item.Version.IsNull() && !item.Version.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "version", strconv.FormatInt(item.Version.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/version", strconv.FormatInt(item.Version.ValueInt64(), 10))
 			}
 			if !item.Key.IsNull() && !item.Key.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key", strconv.FormatInt(item.Key.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/key", strconv.FormatInt(item.Key.ValueInt64(), 10))
 			}
 			if !item.Minpoll.IsNull() && !item.Minpoll.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "minpoll", strconv.FormatInt(item.Minpoll.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/minpoll", strconv.FormatInt(item.Minpoll.ValueInt64(), 10))
 			}
 			if !item.Maxpoll.IsNull() && !item.Maxpoll.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "maxpoll", strconv.FormatInt(item.Maxpoll.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/maxpoll", strconv.FormatInt(item.Maxpoll.ValueInt64(), 10))
 			}
 			if !item.Prefer.IsNull() && !item.Prefer.IsUnknown() {
 				if item.Prefer.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "prefer", "")
+					body = helpers.SetFromXPath(body, basePath+"/prefer", "")
 				}
 			}
 			if !item.Burst.IsNull() && !item.Burst.IsUnknown() {
 				if item.Burst.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "burst", "")
+					body = helpers.SetFromXPath(body, basePath+"/burst", "")
 				}
 			}
 			if !item.Iburst.IsNull() && !item.Iburst.IsUnknown() {
 				if item.Iburst.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "iburst", "")
+					body = helpers.SetFromXPath(body, basePath+"/iburst", "")
 				}
 			}
 			if !item.Source.IsNull() && !item.Source.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "source", item.Source.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/source", item.Source.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"peer-server/ipv4/ipv4-peer-server", cBody.Res())
 		}
 	}
 	if len(data.Ipv6PeersServers) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Ipv6PeersServers {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/peer-server/ipv6/ipv6-peer-server[address='" + item.Address.ValueString() + "' and type='" + item.Type.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.Type.IsNull() && !item.Type.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type", item.Type.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type", item.Type.ValueString())
 			}
 			if !item.Version.IsNull() && !item.Version.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "version", strconv.FormatInt(item.Version.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/version", strconv.FormatInt(item.Version.ValueInt64(), 10))
 			}
 			if !item.Key.IsNull() && !item.Key.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key", strconv.FormatInt(item.Key.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/key", strconv.FormatInt(item.Key.ValueInt64(), 10))
 			}
 			if !item.Minpoll.IsNull() && !item.Minpoll.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "minpoll", strconv.FormatInt(item.Minpoll.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/minpoll", strconv.FormatInt(item.Minpoll.ValueInt64(), 10))
 			}
 			if !item.Maxpoll.IsNull() && !item.Maxpoll.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "maxpoll", strconv.FormatInt(item.Maxpoll.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/maxpoll", strconv.FormatInt(item.Maxpoll.ValueInt64(), 10))
 			}
 			if !item.Prefer.IsNull() && !item.Prefer.IsUnknown() {
 				if item.Prefer.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "prefer", "")
+					body = helpers.SetFromXPath(body, basePath+"/prefer", "")
 				}
 			}
 			if !item.Burst.IsNull() && !item.Burst.IsUnknown() {
 				if item.Burst.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "burst", "")
+					body = helpers.SetFromXPath(body, basePath+"/burst", "")
 				}
 			}
 			if !item.Iburst.IsNull() && !item.Iburst.IsUnknown() {
 				if item.Iburst.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "iburst", "")
+					body = helpers.SetFromXPath(body, basePath+"/iburst", "")
 				}
 			}
 			if !item.Source.IsNull() && !item.Source.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "source", item.Source.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/source", item.Source.ValueString())
 			}
 			if !item.Ipv6Address.IsNull() && !item.Ipv6Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv6-address", item.Ipv6Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv6-address", item.Ipv6Address.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"peer-server/ipv6/ipv6-peer-server", cBody.Res())
 		}
 	}
 	if len(data.HostnamePeersServers) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.HostnamePeersServers {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/peer-server/hostname/hostname-peer-server[fqdn-hostname='" + item.FqdnHostname.ValueString() + "' and type='" + item.Type.ValueString() + "']"
 			if !item.FqdnHostname.IsNull() && !item.FqdnHostname.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "fqdn-hostname", item.FqdnHostname.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/fqdn-hostname", item.FqdnHostname.ValueString())
 			}
 			if !item.Type.IsNull() && !item.Type.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type", item.Type.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type", item.Type.ValueString())
 			}
 			if !item.Version.IsNull() && !item.Version.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "version", strconv.FormatInt(item.Version.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/version", strconv.FormatInt(item.Version.ValueInt64(), 10))
 			}
 			if !item.Key.IsNull() && !item.Key.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key", strconv.FormatInt(item.Key.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/key", strconv.FormatInt(item.Key.ValueInt64(), 10))
 			}
 			if !item.Minpoll.IsNull() && !item.Minpoll.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "minpoll", strconv.FormatInt(item.Minpoll.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/minpoll", strconv.FormatInt(item.Minpoll.ValueInt64(), 10))
 			}
 			if !item.Maxpoll.IsNull() && !item.Maxpoll.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "maxpoll", strconv.FormatInt(item.Maxpoll.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/maxpoll", strconv.FormatInt(item.Maxpoll.ValueInt64(), 10))
 			}
 			if !item.Prefer.IsNull() && !item.Prefer.IsUnknown() {
 				if item.Prefer.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "prefer", "")
+					body = helpers.SetFromXPath(body, basePath+"/prefer", "")
 				}
 			}
 			if !item.Burst.IsNull() && !item.Burst.IsUnknown() {
 				if item.Burst.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "burst", "")
+					body = helpers.SetFromXPath(body, basePath+"/burst", "")
 				}
 			}
 			if !item.Iburst.IsNull() && !item.Iburst.IsUnknown() {
 				if item.Iburst.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "iburst", "")
+					body = helpers.SetFromXPath(body, basePath+"/iburst", "")
 				}
 			}
 			if !item.Source.IsNull() && !item.Source.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "source", item.Source.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/source", item.Source.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"peer-server/hostname/hostname-peer-server", cBody.Res())
 		}
 	}
 	if len(data.PeersServersVrfs) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.PeersServersVrfs {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/peer-server/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "vrf-name", item.VrfName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
 			if len(item.Ipv4PeersServers) > 0 {
 				for _, citem := range item.Ipv4PeersServers {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/ipv4/ipv4-peer-server[address='" + citem.Address.ValueString() + "' and type='" + citem.Type.ValueString() + "']"
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
 					}
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "type", citem.Type.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/type", citem.Type.ValueString())
 					}
 					if !citem.Version.IsNull() && !citem.Version.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "version", strconv.FormatInt(citem.Version.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/version", strconv.FormatInt(citem.Version.ValueInt64(), 10))
 					}
 					if !citem.Key.IsNull() && !citem.Key.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "key", strconv.FormatInt(citem.Key.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/key", strconv.FormatInt(citem.Key.ValueInt64(), 10))
 					}
 					if !citem.Minpoll.IsNull() && !citem.Minpoll.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "minpoll", strconv.FormatInt(citem.Minpoll.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/minpoll", strconv.FormatInt(citem.Minpoll.ValueInt64(), 10))
 					}
 					if !citem.Maxpoll.IsNull() && !citem.Maxpoll.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "maxpoll", strconv.FormatInt(citem.Maxpoll.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/maxpoll", strconv.FormatInt(citem.Maxpoll.ValueInt64(), 10))
 					}
 					if !citem.Prefer.IsNull() && !citem.Prefer.IsUnknown() {
 						if citem.Prefer.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "prefer", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/prefer", "")
 						}
 					}
 					if !citem.Burst.IsNull() && !citem.Burst.IsUnknown() {
 						if citem.Burst.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "burst", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/burst", "")
 						}
 					}
 					if !citem.Iburst.IsNull() && !citem.Iburst.IsUnknown() {
 						if citem.Iburst.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "iburst", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/iburst", "")
 						}
 					}
 					if !citem.Source.IsNull() && !citem.Source.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "source", citem.Source.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/source", citem.Source.ValueString())
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "ipv4/ipv4-peer-server", ccBody.Res())
 				}
 			}
 			if len(item.Ipv6PeersServers) > 0 {
 				for _, citem := range item.Ipv6PeersServers {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/ipv6/ipv6-peer-server[address='" + citem.Address.ValueString() + "' and type='" + citem.Type.ValueString() + "']"
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
 					}
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "type", citem.Type.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/type", citem.Type.ValueString())
 					}
 					if !citem.Version.IsNull() && !citem.Version.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "version", strconv.FormatInt(citem.Version.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/version", strconv.FormatInt(citem.Version.ValueInt64(), 10))
 					}
 					if !citem.Key.IsNull() && !citem.Key.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "key", strconv.FormatInt(citem.Key.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/key", strconv.FormatInt(citem.Key.ValueInt64(), 10))
 					}
 					if !citem.Minpoll.IsNull() && !citem.Minpoll.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "minpoll", strconv.FormatInt(citem.Minpoll.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/minpoll", strconv.FormatInt(citem.Minpoll.ValueInt64(), 10))
 					}
 					if !citem.Maxpoll.IsNull() && !citem.Maxpoll.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "maxpoll", strconv.FormatInt(citem.Maxpoll.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/maxpoll", strconv.FormatInt(citem.Maxpoll.ValueInt64(), 10))
 					}
 					if !citem.Prefer.IsNull() && !citem.Prefer.IsUnknown() {
 						if citem.Prefer.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "prefer", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/prefer", "")
 						}
 					}
 					if !citem.Burst.IsNull() && !citem.Burst.IsUnknown() {
 						if citem.Burst.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "burst", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/burst", "")
 						}
 					}
 					if !citem.Iburst.IsNull() && !citem.Iburst.IsUnknown() {
 						if citem.Iburst.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "iburst", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/iburst", "")
 						}
 					}
 					if !citem.Source.IsNull() && !citem.Source.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "source", citem.Source.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/source", citem.Source.ValueString())
 					}
 					if !citem.Ipv6Address.IsNull() && !citem.Ipv6Address.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "ipv6-address", citem.Ipv6Address.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/ipv6-address", citem.Ipv6Address.ValueString())
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "ipv6/ipv6-peer-server", ccBody.Res())
 				}
 			}
 			if len(item.HostnamePeersServers) > 0 {
 				for _, citem := range item.HostnamePeersServers {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/hostname/hostname-peer-server[fqdn-hostname='" + citem.FqdnHostname.ValueString() + "' and type='" + citem.Type.ValueString() + "']"
 					if !citem.FqdnHostname.IsNull() && !citem.FqdnHostname.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "fqdn-hostname", citem.FqdnHostname.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/fqdn-hostname", citem.FqdnHostname.ValueString())
 					}
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "type", citem.Type.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/type", citem.Type.ValueString())
 					}
 					if !citem.Version.IsNull() && !citem.Version.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "version", strconv.FormatInt(citem.Version.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/version", strconv.FormatInt(citem.Version.ValueInt64(), 10))
 					}
 					if !citem.Key.IsNull() && !citem.Key.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "key", strconv.FormatInt(citem.Key.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/key", strconv.FormatInt(citem.Key.ValueInt64(), 10))
 					}
 					if !citem.Minpoll.IsNull() && !citem.Minpoll.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "minpoll", strconv.FormatInt(citem.Minpoll.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/minpoll", strconv.FormatInt(citem.Minpoll.ValueInt64(), 10))
 					}
 					if !citem.Maxpoll.IsNull() && !citem.Maxpoll.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "maxpoll", strconv.FormatInt(citem.Maxpoll.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/maxpoll", strconv.FormatInt(citem.Maxpoll.ValueInt64(), 10))
 					}
 					if !citem.Prefer.IsNull() && !citem.Prefer.IsUnknown() {
 						if citem.Prefer.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "prefer", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/prefer", "")
 						}
 					}
 					if !citem.Burst.IsNull() && !citem.Burst.IsUnknown() {
 						if citem.Burst.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "burst", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/burst", "")
 						}
 					}
 					if !citem.Iburst.IsNull() && !citem.Iburst.IsUnknown() {
 						if citem.Iburst.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "iburst", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/iburst", "")
 						}
 					}
 					if !citem.Source.IsNull() && !citem.Source.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "source", citem.Source.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/source", citem.Source.ValueString())
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "hostname/hostname-peer-server", ccBody.Res())
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"peer-server/vrfs/vrf", cBody.Res())
 		}
 	}
 	if len(data.TrustedKeys) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.TrustedKeys {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/trusted-keys/trusted-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"trusted-keys/trusted-key", cBody.Res())
 		}
 	}
 	if !data.UpdateCalendar.IsNull() && !data.UpdateCalendar.IsUnknown() {
@@ -2713,17 +2678,14 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/source/interface-name", data.SourceInterfaceName.ValueString())
 	}
 	if len(data.SourceVrfs) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.SourceVrfs {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/source/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "vrf-name", item.VrfName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"source/vrfs/vrf", cBody.Res())
 		}
 	}
 	if !data.AdminPlaneVersion.IsNull() && !data.AdminPlaneVersion.IsUnknown() {
@@ -2764,62 +2726,62 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
 		data.Ipv4Precedence = types.StringValue(value.String())
 	} else if data.Ipv4Precedence.IsNull() {
 		data.Ipv4Precedence = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
 		data.Ipv6Precedence = types.StringValue(value.String())
 	} else if data.Ipv6Precedence.IsNull() {
 		data.Ipv6Precedence = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/peer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/peer"); value.Exists() {
 		data.AccessGroupIpv6Peer = types.StringValue(value.String())
 	} else if data.AccessGroupIpv6Peer.IsNull() {
 		data.AccessGroupIpv6Peer = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/query-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/query-only"); value.Exists() {
 		data.AccessGroupIpv6QueryOnly = types.StringValue(value.String())
 	} else if data.AccessGroupIpv6QueryOnly.IsNull() {
 		data.AccessGroupIpv6QueryOnly = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/serve"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/serve"); value.Exists() {
 		data.AccessGroupIpv6Serve = types.StringValue(value.String())
 	} else if data.AccessGroupIpv6Serve.IsNull() {
 		data.AccessGroupIpv6Serve = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/serve-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/serve-only"); value.Exists() {
 		data.AccessGroupIpv6ServeOnly = types.StringValue(value.String())
 	} else if data.AccessGroupIpv6ServeOnly.IsNull() {
 		data.AccessGroupIpv6ServeOnly = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/peer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/peer"); value.Exists() {
 		data.AccessGroupIpv4Peer = types.StringValue(value.String())
 	} else if data.AccessGroupIpv4Peer.IsNull() {
 		data.AccessGroupIpv4Peer = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/query-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/query-only"); value.Exists() {
 		data.AccessGroupIpv4QueryOnly = types.StringValue(value.String())
 	} else if data.AccessGroupIpv4QueryOnly.IsNull() {
 		data.AccessGroupIpv4QueryOnly = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/serve"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/serve"); value.Exists() {
 		data.AccessGroupIpv4Serve = types.StringValue(value.String())
 	} else if data.AccessGroupIpv4Serve.IsNull() {
 		data.AccessGroupIpv4Serve = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/serve-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/serve-only"); value.Exists() {
 		data.AccessGroupIpv4ServeOnly = types.StringValue(value.String())
 	} else if data.AccessGroupIpv4ServeOnly.IsNull() {
 		data.AccessGroupIpv4ServeOnly = types.StringNull()
@@ -2829,7 +2791,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.AccessGroupVrfs[i].VrfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2893,8 +2855,11 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.AccessGroupVrfs[i].Ipv4ServeOnly = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authenticate"); value.Exists() {
-		data.Authenticate = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authenticate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Authenticate.IsNull() {
+			data.Authenticate = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Authenticate.IsNull() {
@@ -2906,7 +2871,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.AuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication-keys/authentication-key").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication-keys/authentication-key").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2935,7 +2900,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.CmacAuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/cmac-authentication-keys/cmac-authentication-key").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cmac-authentication-keys/cmac-authentication-key").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2964,7 +2929,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.HmacSha1AuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/hmac-sha1-authentication-keys/hmac-sha1-authentication-key").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hmac-sha1-authentication-keys/hmac-sha1-authentication-key").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2993,7 +2958,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.HmacSha2AuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/hmac-sha2-authentication-keys/hmac-sha2-authentication-key").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hmac-sha2-authentication-keys/hmac-sha2-authentication-key").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3017,73 +2982,94 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.HmacSha2AuthenticationKeys[i].KeyNumber = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/broadcastdelay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/broadcastdelay"); value.Exists() {
 		data.Broadcastdelay = types.Int64Value(value.Int())
 	} else if data.Broadcastdelay.IsNull() {
 		data.Broadcastdelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/aging/time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/aging/time"); value.Exists() {
 		data.DriftAgingTime = types.Int64Value(value.Int())
 	} else if data.DriftAgingTime.IsNull() {
 		data.DriftAgingTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/bootflash"); value.Exists() {
-		data.DriftFileBootflash = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/bootflash"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DriftFileBootflash.IsNull() {
+			data.DriftFileBootflash = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileBootflash.IsNull() {
 			data.DriftFileBootflash = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/compactflash"); value.Exists() {
-		data.DriftFileCompactflash = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/compactflash"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DriftFileCompactflash.IsNull() {
+			data.DriftFileCompactflash = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileCompactflash.IsNull() {
 			data.DriftFileCompactflash = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/usb"); value.Exists() {
-		data.DriftFileUsb = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/usb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DriftFileUsb.IsNull() {
+			data.DriftFileUsb = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileUsb.IsNull() {
 			data.DriftFileUsb = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/disk0"); value.Exists() {
-		data.DriftFileDisk0 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/disk0"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DriftFileDisk0.IsNull() {
+			data.DriftFileDisk0 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileDisk0.IsNull() {
 			data.DriftFileDisk0 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/disk1"); value.Exists() {
-		data.DriftFileDisk1 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/disk1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DriftFileDisk1.IsNull() {
+			data.DriftFileDisk1 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileDisk1.IsNull() {
 			data.DriftFileDisk1 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/disk2"); value.Exists() {
-		data.DriftFileDisk2 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/disk2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DriftFileDisk2.IsNull() {
+			data.DriftFileDisk2 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileDisk2.IsNull() {
 			data.DriftFileDisk2 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/harddisk"); value.Exists() {
-		data.DriftFileHarddisk = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/harddisk"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DriftFileHarddisk.IsNull() {
+			data.DriftFileHarddisk = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DriftFileHarddisk.IsNull() {
 			data.DriftFileHarddisk = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/file-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/file-name"); value.Exists() {
 		data.DriftFilename = types.StringValue(value.String())
 	} else if data.DriftFilename.IsNull() {
 		data.DriftFilename = types.StringNull()
@@ -3093,7 +3079,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3117,7 +3103,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "broadcast-client"); value.Exists() {
-			data.Interfaces[i].BroadcastClient = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].BroadcastClient.IsNull() {
+				data.Interfaces[i].BroadcastClient = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3141,7 +3130,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Interfaces[i].BroadcastVersion = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "disable"); value.Exists() {
-			data.Interfaces[i].Disable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].Disable.IsNull() {
+				data.Interfaces[i].Disable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3155,7 +3147,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.InterfaceVrfs[i].VrfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3178,79 +3170,90 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.InterfaceVrfs[i].VrfName.IsNull() {
 			data.InterfaceVrfs[i].VrfName = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "interface"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.InterfaceVrfs[i].Interfaces
-			data.InterfaceVrfs[i].Interfaces = make([]NTPInterfaceVrfsInterfaces, 0)
+		for ci := range data.InterfaceVrfs[i].Interfaces {
+			keys := [...]string{"interface-name"}
+			keyValues := [...]string{data.InterfaceVrfs[i].Interfaces[ci].InterfaceName.ValueString()}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := NTPInterfaceVrfsInterfaces{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "interface-name"); cValue.Exists() {
-					citem.InterfaceName = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "broadcast-client"); cValue.Exists() {
-					citem.BroadcastClient = types.BoolValue(true)
-				} else {
-					citem.BroadcastClient = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "broadcast/destination"); cValue.Exists() {
-					citem.BroadcastDestination = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "broadcast/key"); cValue.Exists() {
-					citem.BroadcastKey = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "broadcast/version"); cValue.Exists() {
-					citem.BroadcastVersion = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "disable"); cValue.Exists() {
-					citem.Disable = types.BoolValue(true)
-				} else {
-					citem.Disable = types.BoolValue(false)
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.InterfaceName.ValueString() != citem.InterfaceName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.BroadcastClient.ValueBool() && existingItem.BroadcastClient.ValueBool() == false {
-							citem.BroadcastClient = existingItem.BroadcastClient
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "interface").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Disable.ValueBool() && existingItem.Disable.ValueBool() == false {
-							citem.Disable = existingItem.Disable
-						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "interface-name"); value.Exists() {
+				data.InterfaceVrfs[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "broadcast-client"); value.Exists() {
+				if !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() {
+					data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient = types.BoolValue(true)
 				}
-
-				data.InterfaceVrfs[i].Interfaces = append(data.InterfaceVrfs[i].Interfaces, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() {
+					data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "broadcast/destination"); value.Exists() {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastDestination = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "broadcast/key"); value.Exists() {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastKey = types.Int64Value(value.Int())
+			} else if data.InterfaceVrfs[i].Interfaces[ci].BroadcastKey.IsNull() {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastKey = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "broadcast/version"); value.Exists() {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastVersion = types.Int64Value(value.Int())
+			} else if data.InterfaceVrfs[i].Interfaces[ci].BroadcastVersion.IsNull() {
+				data.InterfaceVrfs[i].Interfaces[ci].BroadcastVersion = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "disable"); value.Exists() {
+				if !data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() {
+					data.InterfaceVrfs[i].Interfaces[ci].Disable = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() {
+					data.InterfaceVrfs[i].Interfaces[ci].Disable = types.BoolNull()
+				}
+			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/stratum-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/stratum-number"); value.Exists() {
 		data.PrimaryStratumNumber = types.Int64Value(value.Int())
 	} else if data.PrimaryStratumNumber.IsNull() {
 		data.PrimaryStratumNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/primary-reference-clock"); value.Exists() {
-		data.PrimaryReferenceClock = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/primary-reference-clock"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrimaryReferenceClock.IsNull() {
+			data.PrimaryReferenceClock = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrimaryReferenceClock.IsNull() {
 			data.PrimaryReferenceClock = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/max-associations"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-associations"); value.Exists() {
 		data.MaxAssociations = types.Int64Value(value.Int())
 	} else if data.MaxAssociations.IsNull() {
 		data.MaxAssociations = types.Int64Null()
@@ -3260,7 +3263,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.Ipv4PeersServers[i].Address.ValueString(), data.Ipv4PeersServers[i].Type.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/ipv4/ipv4-peer-server").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/ipv4/ipv4-peer-server").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3309,7 +3312,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Ipv4PeersServers[i].Maxpoll = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "prefer"); value.Exists() {
-			data.Ipv4PeersServers[i].Prefer = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv4PeersServers[i].Prefer.IsNull() {
+				data.Ipv4PeersServers[i].Prefer = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3318,7 +3324,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "burst"); value.Exists() {
-			data.Ipv4PeersServers[i].Burst = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv4PeersServers[i].Burst.IsNull() {
+				data.Ipv4PeersServers[i].Burst = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3327,7 +3336,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "iburst"); value.Exists() {
-			data.Ipv4PeersServers[i].Iburst = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv4PeersServers[i].Iburst.IsNull() {
+				data.Ipv4PeersServers[i].Iburst = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3346,7 +3358,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.Ipv6PeersServers[i].Address.ValueString(), data.Ipv6PeersServers[i].Type.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/ipv6/ipv6-peer-server").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/ipv6/ipv6-peer-server").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3395,7 +3407,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Ipv6PeersServers[i].Maxpoll = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "prefer"); value.Exists() {
-			data.Ipv6PeersServers[i].Prefer = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv6PeersServers[i].Prefer.IsNull() {
+				data.Ipv6PeersServers[i].Prefer = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3404,7 +3419,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "burst"); value.Exists() {
-			data.Ipv6PeersServers[i].Burst = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv6PeersServers[i].Burst.IsNull() {
+				data.Ipv6PeersServers[i].Burst = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3413,7 +3431,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "iburst"); value.Exists() {
-			data.Ipv6PeersServers[i].Iburst = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Ipv6PeersServers[i].Iburst.IsNull() {
+				data.Ipv6PeersServers[i].Iburst = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3437,7 +3458,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.HostnamePeersServers[i].FqdnHostname.ValueString(), data.HostnamePeersServers[i].Type.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/hostname/hostname-peer-server").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/hostname/hostname-peer-server").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3486,7 +3507,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.HostnamePeersServers[i].Maxpoll = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "prefer"); value.Exists() {
-			data.HostnamePeersServers[i].Prefer = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.HostnamePeersServers[i].Prefer.IsNull() {
+				data.HostnamePeersServers[i].Prefer = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3495,7 +3519,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "burst"); value.Exists() {
-			data.HostnamePeersServers[i].Burst = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.HostnamePeersServers[i].Burst.IsNull() {
+				data.HostnamePeersServers[i].Burst = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3504,7 +3531,10 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "iburst"); value.Exists() {
-			data.HostnamePeersServers[i].Iburst = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.HostnamePeersServers[i].Iburst.IsNull() {
+				data.HostnamePeersServers[i].Iburst = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3523,7 +3553,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.PeersServersVrfs[i].VrfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3546,245 +3576,287 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.PeersServersVrfs[i].VrfName.IsNull() {
 			data.PeersServersVrfs[i].VrfName = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "ipv4/ipv4-peer-server"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.PeersServersVrfs[i].Ipv4PeersServers
-			data.PeersServersVrfs[i].Ipv4PeersServers = make([]NTPPeersServersVrfsIpv4PeersServers, 0)
+		for ci := range data.PeersServersVrfs[i].Ipv4PeersServers {
+			keys := [...]string{"address", "type"}
+			keyValues := [...]string{data.PeersServersVrfs[i].Ipv4PeersServers[ci].Address.ValueString(), data.PeersServersVrfs[i].Ipv4PeersServers[ci].Type.ValueString()}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := NTPPeersServersVrfsIpv4PeersServers{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
-					citem.Address = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "type"); cValue.Exists() {
-					citem.Type = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "version"); cValue.Exists() {
-					citem.Version = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "key"); cValue.Exists() {
-					citem.Key = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "minpoll"); cValue.Exists() {
-					citem.Minpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "maxpoll"); cValue.Exists() {
-					citem.Maxpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "prefer"); cValue.Exists() {
-					citem.Prefer = types.BoolValue(true)
-				} else {
-					citem.Prefer = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "burst"); cValue.Exists() {
-					citem.Burst = types.BoolValue(true)
-				} else {
-					citem.Burst = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "iburst"); cValue.Exists() {
-					citem.Iburst = types.BoolValue(true)
-				} else {
-					citem.Iburst = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "source"); cValue.Exists() {
-					citem.Source = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.Address.ValueString() != citem.Address.ValueString() {
-						match = false
-					}
-					if existingItem.Type.ValueString() != citem.Type.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Prefer.ValueBool() && existingItem.Prefer.ValueBool() == false {
-							citem.Prefer = existingItem.Prefer
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "ipv4/ipv4-peer-server").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Burst.ValueBool() && existingItem.Burst.ValueBool() == false {
-							citem.Burst = existingItem.Burst
-						}
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Iburst.ValueBool() && existingItem.Iburst.ValueBool() == false {
-							citem.Iburst = existingItem.Iburst
-						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "type"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Type = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "version"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Version = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Version.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Version = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "key"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Key = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Key.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Key = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "minpoll"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Minpoll = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Minpoll.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Minpoll = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "maxpoll"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Maxpoll = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Maxpoll.IsNull() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Maxpoll = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "prefer"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer = types.BoolValue(true)
 				}
-
-				data.PeersServersVrfs[i].Ipv4PeersServers = append(data.PeersServersVrfs[i].Ipv4PeersServers, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "burst"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "iburst"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "source"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv4PeersServers[ci].Source = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "ipv6/ipv6-peer-server"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.PeersServersVrfs[i].Ipv6PeersServers
-			data.PeersServersVrfs[i].Ipv6PeersServers = make([]NTPPeersServersVrfsIpv6PeersServers, 0)
+		for ci := range data.PeersServersVrfs[i].Ipv6PeersServers {
+			keys := [...]string{"address", "type"}
+			keyValues := [...]string{data.PeersServersVrfs[i].Ipv6PeersServers[ci].Address.ValueString(), data.PeersServersVrfs[i].Ipv6PeersServers[ci].Type.ValueString()}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := NTPPeersServersVrfsIpv6PeersServers{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
-					citem.Address = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "type"); cValue.Exists() {
-					citem.Type = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "version"); cValue.Exists() {
-					citem.Version = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "key"); cValue.Exists() {
-					citem.Key = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "minpoll"); cValue.Exists() {
-					citem.Minpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "maxpoll"); cValue.Exists() {
-					citem.Maxpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "prefer"); cValue.Exists() {
-					citem.Prefer = types.BoolValue(true)
-				} else {
-					citem.Prefer = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "burst"); cValue.Exists() {
-					citem.Burst = types.BoolValue(true)
-				} else {
-					citem.Burst = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "iburst"); cValue.Exists() {
-					citem.Iburst = types.BoolValue(true)
-				} else {
-					citem.Iburst = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "source"); cValue.Exists() {
-					citem.Source = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "ipv6-address"); cValue.Exists() {
-					citem.Ipv6Address = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.Address.ValueString() != citem.Address.ValueString() {
-						match = false
-					}
-					if existingItem.Type.ValueString() != citem.Type.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Prefer.ValueBool() && existingItem.Prefer.ValueBool() == false {
-							citem.Prefer = existingItem.Prefer
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "ipv6/ipv6-peer-server").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Burst.ValueBool() && existingItem.Burst.ValueBool() == false {
-							citem.Burst = existingItem.Burst
-						}
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Iburst.ValueBool() && existingItem.Iburst.ValueBool() == false {
-							citem.Iburst = existingItem.Iburst
-						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "type"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Type = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "version"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Version = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Version.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Version = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "key"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Key = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Key.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Key = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "minpoll"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Minpoll = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Minpoll.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Minpoll = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "maxpoll"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Maxpoll = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Maxpoll.IsNull() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Maxpoll = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "prefer"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer = types.BoolValue(true)
 				}
-
-				data.PeersServersVrfs[i].Ipv6PeersServers = append(data.PeersServersVrfs[i].Ipv6PeersServers, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "burst"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "iburst"); value.Exists() {
+				if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "source"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Source = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "ipv6-address"); value.Exists() {
+				data.PeersServersVrfs[i].Ipv6PeersServers[ci].Ipv6Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "hostname/hostname-peer-server"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.PeersServersVrfs[i].HostnamePeersServers
-			data.PeersServersVrfs[i].HostnamePeersServers = make([]NTPPeersServersVrfsHostnamePeersServers, 0)
+		for ci := range data.PeersServersVrfs[i].HostnamePeersServers {
+			keys := [...]string{"fqdn-hostname", "type"}
+			keyValues := [...]string{data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname.ValueString(), data.PeersServersVrfs[i].HostnamePeersServers[ci].Type.ValueString()}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := NTPPeersServersVrfsHostnamePeersServers{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "fqdn-hostname"); cValue.Exists() {
-					citem.FqdnHostname = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "type"); cValue.Exists() {
-					citem.Type = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "version"); cValue.Exists() {
-					citem.Version = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "key"); cValue.Exists() {
-					citem.Key = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "minpoll"); cValue.Exists() {
-					citem.Minpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "maxpoll"); cValue.Exists() {
-					citem.Maxpoll = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "prefer"); cValue.Exists() {
-					citem.Prefer = types.BoolValue(true)
-				} else {
-					citem.Prefer = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "burst"); cValue.Exists() {
-					citem.Burst = types.BoolValue(true)
-				} else {
-					citem.Burst = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "iburst"); cValue.Exists() {
-					citem.Iburst = types.BoolValue(true)
-				} else {
-					citem.Iburst = types.BoolValue(false)
-				}
-				if cValue := helpers.GetFromXPath(cr, "source"); cValue.Exists() {
-					citem.Source = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.FqdnHostname.ValueString() != citem.FqdnHostname.ValueString() {
-						match = false
-					}
-					if existingItem.Type.ValueString() != citem.Type.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Prefer.ValueBool() && existingItem.Prefer.ValueBool() == false {
-							citem.Prefer = existingItem.Prefer
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "hostname/hostname-peer-server").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Burst.ValueBool() && existingItem.Burst.ValueBool() == false {
-							citem.Burst = existingItem.Burst
-						}
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Iburst.ValueBool() && existingItem.Iburst.ValueBool() == false {
-							citem.Iburst = existingItem.Iburst
-						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "fqdn-hostname"); value.Exists() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].FqdnHostname = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "type"); value.Exists() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Type = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "version"); value.Exists() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Version = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].HostnamePeersServers[ci].Version.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Version = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "key"); value.Exists() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Key = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].HostnamePeersServers[ci].Key.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Key = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "minpoll"); value.Exists() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Minpoll = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "maxpoll"); value.Exists() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll = types.Int64Value(value.Int())
+			} else if data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll.IsNull() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Maxpoll = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "prefer"); value.Exists() {
+				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolValue(true)
 				}
-
-				data.PeersServersVrfs[i].HostnamePeersServers = append(data.PeersServersVrfs[i].HostnamePeersServers, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "burst"); value.Exists() {
+				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "iburst"); value.Exists() {
+				if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() {
+					data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "source"); value.Exists() {
+				data.PeersServersVrfs[i].HostnamePeersServers[ci].Source = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
 		}
 	}
 	for i := range data.TrustedKeys {
@@ -3792,7 +3864,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/trusted-keys/trusted-key").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/trusted-keys/trusted-key").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3816,31 +3888,40 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.TrustedKeys[i].KeyNumber = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update-calendar"); value.Exists() {
-		data.UpdateCalendar = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update-calendar"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UpdateCalendar.IsNull() {
+			data.UpdateCalendar = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.UpdateCalendar.IsNull() {
 			data.UpdateCalendar = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log-internal-sync"); value.Exists() {
-		data.LogInternalSync = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log-internal-sync"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogInternalSync.IsNull() {
+			data.LogInternalSync = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LogInternalSync.IsNull() {
 			data.LogInternalSync = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/passive"); value.Exists() {
-		data.Passive = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/passive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Passive.IsNull() {
+			data.Passive = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Passive.IsNull() {
 			data.Passive = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/interface-name"); value.Exists() {
 		data.SourceInterfaceName = types.StringValue(value.String())
 	} else if data.SourceInterfaceName.IsNull() {
 		data.SourceInterfaceName = types.StringNull()
@@ -3850,7 +3931,7 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.SourceVrfs[i].VrfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3879,44 +3960,53 @@ func (data *NTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.SourceVrfs[i].InterfaceName = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/version"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/version"); value.Exists() {
 		data.AdminPlaneVersion = types.Int64Value(value.Int())
 	} else if data.AdminPlaneVersion.IsNull() {
 		data.AdminPlaneVersion = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/key"); value.Exists() {
 		data.AdminPlaneKey = types.Int64Value(value.Int())
 	} else if data.AdminPlaneKey.IsNull() {
 		data.AdminPlaneKey = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/minpoll"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/minpoll"); value.Exists() {
 		data.AdminPlaneMinpoll = types.Int64Value(value.Int())
 	} else if data.AdminPlaneMinpoll.IsNull() {
 		data.AdminPlaneMinpoll = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/maxpoll"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/maxpoll"); value.Exists() {
 		data.AdminPlaneMaxpoll = types.Int64Value(value.Int())
 	} else if data.AdminPlaneMaxpoll.IsNull() {
 		data.AdminPlaneMaxpoll = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/prefer"); value.Exists() {
-		data.AdminPlanePrefer = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/prefer"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AdminPlanePrefer.IsNull() {
+			data.AdminPlanePrefer = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AdminPlanePrefer.IsNull() {
 			data.AdminPlanePrefer = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/burst"); value.Exists() {
-		data.AdminPlaneBurst = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/burst"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AdminPlaneBurst.IsNull() {
+			data.AdminPlaneBurst = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AdminPlaneBurst.IsNull() {
 			data.AdminPlaneBurst = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/iburst"); value.Exists() {
-		data.AdminPlaneIburst = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/iburst"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AdminPlaneIburst.IsNull() {
+			data.AdminPlaneIburst = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AdminPlaneIburst.IsNull() {
@@ -3932,6 +4022,10 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
@@ -4006,8 +4100,9 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "authenticate"); value.Exists() {
 		data.Authenticate = types.BoolValue(true)
-	} else {
-		data.Authenticate = types.BoolNull()
+	} else if !data.Authenticate.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Authenticate = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "authentication-keys.authentication-key"); value.Exists() {
 		data.AuthenticationKeys = make([]NTPAuthenticationKeys, 0)
@@ -4061,38 +4156,45 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "drift.file.bootflash"); value.Exists() {
 		data.DriftFileBootflash = types.BoolValue(true)
-	} else {
-		data.DriftFileBootflash = types.BoolNull()
+	} else if !data.DriftFileBootflash.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DriftFileBootflash = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.compactflash"); value.Exists() {
 		data.DriftFileCompactflash = types.BoolValue(true)
-	} else {
-		data.DriftFileCompactflash = types.BoolNull()
+	} else if !data.DriftFileCompactflash.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DriftFileCompactflash = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.usb"); value.Exists() {
 		data.DriftFileUsb = types.BoolValue(true)
-	} else {
-		data.DriftFileUsb = types.BoolNull()
+	} else if !data.DriftFileUsb.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DriftFileUsb = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.disk0"); value.Exists() {
 		data.DriftFileDisk0 = types.BoolValue(true)
-	} else {
-		data.DriftFileDisk0 = types.BoolNull()
+	} else if !data.DriftFileDisk0.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DriftFileDisk0 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.disk1"); value.Exists() {
 		data.DriftFileDisk1 = types.BoolValue(true)
-	} else {
-		data.DriftFileDisk1 = types.BoolNull()
+	} else if !data.DriftFileDisk1.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DriftFileDisk1 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.disk2"); value.Exists() {
 		data.DriftFileDisk2 = types.BoolValue(true)
-	} else {
-		data.DriftFileDisk2 = types.BoolNull()
+	} else if !data.DriftFileDisk2.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DriftFileDisk2 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.harddisk"); value.Exists() {
 		data.DriftFileHarddisk = types.BoolValue(true)
-	} else {
-		data.DriftFileHarddisk = types.BoolNull()
+	} else if !data.DriftFileHarddisk.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DriftFileHarddisk = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.file-name"); value.Exists() {
 		data.DriftFilename = types.StringValue(value.String())
@@ -4106,8 +4208,9 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("broadcast-client"); cValue.Exists() {
 				item.BroadcastClient = types.BoolValue(true)
-			} else {
-				item.BroadcastClient = types.BoolNull()
+			} else if !item.BroadcastClient.IsNull() {
+				// Only set to false if it was previously set
+				item.BroadcastClient = types.BoolValue(false)
 			}
 			if cValue := v.Get("broadcast.destination"); cValue.Exists() {
 				item.BroadcastDestination = types.StringValue(cValue.String())
@@ -4120,8 +4223,9 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
-			} else {
-				item.Disable = types.BoolNull()
+			} else if !item.Disable.IsNull() {
+				// Only set to false if it was previously set
+				item.Disable = types.BoolValue(false)
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true
@@ -4143,8 +4247,9 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					}
 					if ccValue := cv.Get("broadcast-client"); ccValue.Exists() {
 						cItem.BroadcastClient = types.BoolValue(true)
-					} else {
-						cItem.BroadcastClient = types.BoolNull()
+					} else if !cItem.BroadcastClient.IsNull() {
+						// Only set to false if it was previously set
+						cItem.BroadcastClient = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("broadcast.destination"); ccValue.Exists() {
 						cItem.BroadcastDestination = types.StringValue(ccValue.String())
@@ -4157,8 +4262,9 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					}
 					if ccValue := cv.Get("disable"); ccValue.Exists() {
 						cItem.Disable = types.BoolValue(true)
-					} else {
-						cItem.Disable = types.BoolNull()
+					} else if !cItem.Disable.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Disable = types.BoolValue(false)
 					}
 					item.Interfaces = append(item.Interfaces, cItem)
 					return true
@@ -4173,8 +4279,9 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "primary.primary-reference-clock"); value.Exists() {
 		data.PrimaryReferenceClock = types.BoolValue(true)
-	} else {
-		data.PrimaryReferenceClock = types.BoolNull()
+	} else if !data.PrimaryReferenceClock.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrimaryReferenceClock = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "max-associations"); value.Exists() {
 		data.MaxAssociations = types.Int64Value(value.Int())
@@ -4203,18 +4310,21 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("prefer"); cValue.Exists() {
 				item.Prefer = types.BoolValue(true)
-			} else {
-				item.Prefer = types.BoolNull()
+			} else if !item.Prefer.IsNull() {
+				// Only set to false if it was previously set
+				item.Prefer = types.BoolValue(false)
 			}
 			if cValue := v.Get("burst"); cValue.Exists() {
 				item.Burst = types.BoolValue(true)
-			} else {
-				item.Burst = types.BoolNull()
+			} else if !item.Burst.IsNull() {
+				// Only set to false if it was previously set
+				item.Burst = types.BoolValue(false)
 			}
 			if cValue := v.Get("iburst"); cValue.Exists() {
 				item.Iburst = types.BoolValue(true)
-			} else {
-				item.Iburst = types.BoolNull()
+			} else if !item.Iburst.IsNull() {
+				// Only set to false if it was previously set
+				item.Iburst = types.BoolValue(false)
 			}
 			if cValue := v.Get("source"); cValue.Exists() {
 				item.Source = types.StringValue(cValue.String())
@@ -4247,18 +4357,21 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("prefer"); cValue.Exists() {
 				item.Prefer = types.BoolValue(true)
-			} else {
-				item.Prefer = types.BoolNull()
+			} else if !item.Prefer.IsNull() {
+				// Only set to false if it was previously set
+				item.Prefer = types.BoolValue(false)
 			}
 			if cValue := v.Get("burst"); cValue.Exists() {
 				item.Burst = types.BoolValue(true)
-			} else {
-				item.Burst = types.BoolNull()
+			} else if !item.Burst.IsNull() {
+				// Only set to false if it was previously set
+				item.Burst = types.BoolValue(false)
 			}
 			if cValue := v.Get("iburst"); cValue.Exists() {
 				item.Iburst = types.BoolValue(true)
-			} else {
-				item.Iburst = types.BoolNull()
+			} else if !item.Iburst.IsNull() {
+				// Only set to false if it was previously set
+				item.Iburst = types.BoolValue(false)
 			}
 			if cValue := v.Get("source"); cValue.Exists() {
 				item.Source = types.StringValue(cValue.String())
@@ -4294,18 +4407,21 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("prefer"); cValue.Exists() {
 				item.Prefer = types.BoolValue(true)
-			} else {
-				item.Prefer = types.BoolNull()
+			} else if !item.Prefer.IsNull() {
+				// Only set to false if it was previously set
+				item.Prefer = types.BoolValue(false)
 			}
 			if cValue := v.Get("burst"); cValue.Exists() {
 				item.Burst = types.BoolValue(true)
-			} else {
-				item.Burst = types.BoolNull()
+			} else if !item.Burst.IsNull() {
+				// Only set to false if it was previously set
+				item.Burst = types.BoolValue(false)
 			}
 			if cValue := v.Get("iburst"); cValue.Exists() {
 				item.Iburst = types.BoolValue(true)
-			} else {
-				item.Iburst = types.BoolNull()
+			} else if !item.Iburst.IsNull() {
+				// Only set to false if it was previously set
+				item.Iburst = types.BoolValue(false)
 			}
 			if cValue := v.Get("source"); cValue.Exists() {
 				item.Source = types.StringValue(cValue.String())
@@ -4345,18 +4461,21 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					}
 					if ccValue := cv.Get("prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
-					} else {
-						cItem.Prefer = types.BoolNull()
+					} else if !cItem.Prefer.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
-					} else {
-						cItem.Burst = types.BoolNull()
+					} else if !cItem.Burst.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
-					} else {
-						cItem.Iburst = types.BoolNull()
+					} else if !cItem.Iburst.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -4389,18 +4508,21 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					}
 					if ccValue := cv.Get("prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
-					} else {
-						cItem.Prefer = types.BoolNull()
+					} else if !cItem.Prefer.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
-					} else {
-						cItem.Burst = types.BoolNull()
+					} else if !cItem.Burst.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
-					} else {
-						cItem.Iburst = types.BoolNull()
+					} else if !cItem.Iburst.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -4436,18 +4558,21 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 					}
 					if ccValue := cv.Get("prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
-					} else {
-						cItem.Prefer = types.BoolNull()
+					} else if !cItem.Prefer.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
-					} else {
-						cItem.Burst = types.BoolNull()
+					} else if !cItem.Burst.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
-					} else {
-						cItem.Iburst = types.BoolNull()
+					} else if !cItem.Iburst.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -4473,18 +4598,21 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "update-calendar"); value.Exists() {
 		data.UpdateCalendar = types.BoolValue(true)
-	} else {
-		data.UpdateCalendar = types.BoolNull()
+	} else if !data.UpdateCalendar.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UpdateCalendar = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "log-internal-sync"); value.Exists() {
 		data.LogInternalSync = types.BoolValue(true)
-	} else {
-		data.LogInternalSync = types.BoolNull()
+	} else if !data.LogInternalSync.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LogInternalSync = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "passive"); value.Exists() {
 		data.Passive = types.BoolValue(true)
-	} else {
-		data.Passive = types.BoolNull()
+	} else if !data.Passive.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Passive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "source.interface-name"); value.Exists() {
 		data.SourceInterfaceName = types.StringValue(value.String())
@@ -4517,18 +4645,21 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "admin-plane.prefer"); value.Exists() {
 		data.AdminPlanePrefer = types.BoolValue(true)
-	} else {
-		data.AdminPlanePrefer = types.BoolNull()
+	} else if !data.AdminPlanePrefer.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AdminPlanePrefer = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "admin-plane.burst"); value.Exists() {
 		data.AdminPlaneBurst = types.BoolValue(true)
-	} else {
-		data.AdminPlaneBurst = types.BoolNull()
+	} else if !data.AdminPlaneBurst.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AdminPlaneBurst = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "admin-plane.iburst"); value.Exists() {
 		data.AdminPlaneIburst = types.BoolValue(true)
-	} else {
-		data.AdminPlaneIburst = types.BoolNull()
+	} else if !data.AdminPlaneIburst.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AdminPlaneIburst = types.BoolValue(false)
 	}
 }
 
@@ -4536,9 +4667,14 @@ func (data *NTP) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
@@ -4614,7 +4750,7 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "authenticate"); value.Exists() {
 		data.Authenticate = types.BoolValue(true)
 	} else {
-		data.Authenticate = types.BoolNull()
+		data.Authenticate = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "authentication-keys.authentication-key"); value.Exists() {
 		data.AuthenticationKeys = make([]NTPAuthenticationKeys, 0)
@@ -4681,37 +4817,37 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "drift.file.bootflash"); value.Exists() {
 		data.DriftFileBootflash = types.BoolValue(true)
 	} else {
-		data.DriftFileBootflash = types.BoolNull()
+		data.DriftFileBootflash = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.compactflash"); value.Exists() {
 		data.DriftFileCompactflash = types.BoolValue(true)
 	} else {
-		data.DriftFileCompactflash = types.BoolNull()
+		data.DriftFileCompactflash = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.usb"); value.Exists() {
 		data.DriftFileUsb = types.BoolValue(true)
 	} else {
-		data.DriftFileUsb = types.BoolNull()
+		data.DriftFileUsb = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.disk0"); value.Exists() {
 		data.DriftFileDisk0 = types.BoolValue(true)
 	} else {
-		data.DriftFileDisk0 = types.BoolNull()
+		data.DriftFileDisk0 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.disk1"); value.Exists() {
 		data.DriftFileDisk1 = types.BoolValue(true)
 	} else {
-		data.DriftFileDisk1 = types.BoolNull()
+		data.DriftFileDisk1 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.disk2"); value.Exists() {
 		data.DriftFileDisk2 = types.BoolValue(true)
 	} else {
-		data.DriftFileDisk2 = types.BoolNull()
+		data.DriftFileDisk2 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.harddisk"); value.Exists() {
 		data.DriftFileHarddisk = types.BoolValue(true)
 	} else {
-		data.DriftFileHarddisk = types.BoolNull()
+		data.DriftFileHarddisk = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "drift.file.file-name"); value.Exists() {
 		data.DriftFilename = types.StringValue(value.String())
@@ -4726,7 +4862,7 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("broadcast-client"); cValue.Exists() {
 				item.BroadcastClient = types.BoolValue(true)
 			} else {
-				item.BroadcastClient = types.BoolNull()
+				item.BroadcastClient = types.BoolValue(false)
 			}
 			if cValue := v.Get("broadcast.destination"); cValue.Exists() {
 				item.BroadcastDestination = types.StringValue(cValue.String())
@@ -4740,7 +4876,7 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolNull()
+				item.Disable = types.BoolValue(false)
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true
@@ -4763,7 +4899,7 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("broadcast-client"); ccValue.Exists() {
 						cItem.BroadcastClient = types.BoolValue(true)
 					} else {
-						cItem.BroadcastClient = types.BoolNull()
+						cItem.BroadcastClient = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("broadcast.destination"); ccValue.Exists() {
 						cItem.BroadcastDestination = types.StringValue(ccValue.String())
@@ -4777,7 +4913,7 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("disable"); ccValue.Exists() {
 						cItem.Disable = types.BoolValue(true)
 					} else {
-						cItem.Disable = types.BoolNull()
+						cItem.Disable = types.BoolValue(false)
 					}
 					item.Interfaces = append(item.Interfaces, cItem)
 					return true
@@ -4793,7 +4929,7 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "primary.primary-reference-clock"); value.Exists() {
 		data.PrimaryReferenceClock = types.BoolValue(true)
 	} else {
-		data.PrimaryReferenceClock = types.BoolNull()
+		data.PrimaryReferenceClock = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "max-associations"); value.Exists() {
 		data.MaxAssociations = types.Int64Value(value.Int())
@@ -4823,17 +4959,17 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("prefer"); cValue.Exists() {
 				item.Prefer = types.BoolValue(true)
 			} else {
-				item.Prefer = types.BoolNull()
+				item.Prefer = types.BoolValue(false)
 			}
 			if cValue := v.Get("burst"); cValue.Exists() {
 				item.Burst = types.BoolValue(true)
 			} else {
-				item.Burst = types.BoolNull()
+				item.Burst = types.BoolValue(false)
 			}
 			if cValue := v.Get("iburst"); cValue.Exists() {
 				item.Iburst = types.BoolValue(true)
 			} else {
-				item.Iburst = types.BoolNull()
+				item.Iburst = types.BoolValue(false)
 			}
 			if cValue := v.Get("source"); cValue.Exists() {
 				item.Source = types.StringValue(cValue.String())
@@ -4867,17 +5003,17 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("prefer"); cValue.Exists() {
 				item.Prefer = types.BoolValue(true)
 			} else {
-				item.Prefer = types.BoolNull()
+				item.Prefer = types.BoolValue(false)
 			}
 			if cValue := v.Get("burst"); cValue.Exists() {
 				item.Burst = types.BoolValue(true)
 			} else {
-				item.Burst = types.BoolNull()
+				item.Burst = types.BoolValue(false)
 			}
 			if cValue := v.Get("iburst"); cValue.Exists() {
 				item.Iburst = types.BoolValue(true)
 			} else {
-				item.Iburst = types.BoolNull()
+				item.Iburst = types.BoolValue(false)
 			}
 			if cValue := v.Get("source"); cValue.Exists() {
 				item.Source = types.StringValue(cValue.String())
@@ -4914,17 +5050,17 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("prefer"); cValue.Exists() {
 				item.Prefer = types.BoolValue(true)
 			} else {
-				item.Prefer = types.BoolNull()
+				item.Prefer = types.BoolValue(false)
 			}
 			if cValue := v.Get("burst"); cValue.Exists() {
 				item.Burst = types.BoolValue(true)
 			} else {
-				item.Burst = types.BoolNull()
+				item.Burst = types.BoolValue(false)
 			}
 			if cValue := v.Get("iburst"); cValue.Exists() {
 				item.Iburst = types.BoolValue(true)
 			} else {
-				item.Iburst = types.BoolNull()
+				item.Iburst = types.BoolValue(false)
 			}
 			if cValue := v.Get("source"); cValue.Exists() {
 				item.Source = types.StringValue(cValue.String())
@@ -4965,17 +5101,17 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
 					} else {
-						cItem.Prefer = types.BoolNull()
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
 					} else {
-						cItem.Burst = types.BoolNull()
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
 					} else {
-						cItem.Iburst = types.BoolNull()
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -5009,17 +5145,17 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
 					} else {
-						cItem.Prefer = types.BoolNull()
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
 					} else {
-						cItem.Burst = types.BoolNull()
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
 					} else {
-						cItem.Iburst = types.BoolNull()
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -5056,17 +5192,17 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 					if ccValue := cv.Get("prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
 					} else {
-						cItem.Prefer = types.BoolNull()
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
 					} else {
-						cItem.Burst = types.BoolNull()
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
 					} else {
-						cItem.Iburst = types.BoolNull()
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -5093,17 +5229,17 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "update-calendar"); value.Exists() {
 		data.UpdateCalendar = types.BoolValue(true)
 	} else {
-		data.UpdateCalendar = types.BoolNull()
+		data.UpdateCalendar = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "log-internal-sync"); value.Exists() {
 		data.LogInternalSync = types.BoolValue(true)
 	} else {
-		data.LogInternalSync = types.BoolNull()
+		data.LogInternalSync = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "passive"); value.Exists() {
 		data.Passive = types.BoolValue(true)
 	} else {
-		data.Passive = types.BoolNull()
+		data.Passive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "source.interface-name"); value.Exists() {
 		data.SourceInterfaceName = types.StringValue(value.String())
@@ -5137,17 +5273,17 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "admin-plane.prefer"); value.Exists() {
 		data.AdminPlanePrefer = types.BoolValue(true)
 	} else {
-		data.AdminPlanePrefer = types.BoolNull()
+		data.AdminPlanePrefer = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "admin-plane.burst"); value.Exists() {
 		data.AdminPlaneBurst = types.BoolValue(true)
 	} else {
-		data.AdminPlaneBurst = types.BoolNull()
+		data.AdminPlaneBurst = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "admin-plane.iburst"); value.Exists() {
 		data.AdminPlaneIburst = types.BoolValue(true)
 	} else {
-		data.AdminPlaneIburst = types.BoolNull()
+		data.AdminPlaneIburst = types.BoolValue(false)
 	}
 }
 
@@ -5155,43 +5291,43 @@ func (data *NTPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *NTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
 		data.Ipv4Precedence = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
 		data.Ipv6Precedence = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/peer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/peer"); value.Exists() {
 		data.AccessGroupIpv6Peer = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/query-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/query-only"); value.Exists() {
 		data.AccessGroupIpv6QueryOnly = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/serve"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/serve"); value.Exists() {
 		data.AccessGroupIpv6Serve = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/serve-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/serve-only"); value.Exists() {
 		data.AccessGroupIpv6ServeOnly = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/peer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/peer"); value.Exists() {
 		data.AccessGroupIpv4Peer = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/query-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/query-only"); value.Exists() {
 		data.AccessGroupIpv4QueryOnly = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/serve"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/serve"); value.Exists() {
 		data.AccessGroupIpv4Serve = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/serve-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/serve-only"); value.Exists() {
 		data.AccessGroupIpv4ServeOnly = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/vrfs/vrf"); value.Exists() {
 		data.AccessGroupVrfs = make([]NTPAccessGroupVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPAccessGroupVrfs{}
@@ -5226,660 +5362,12 @@ func (data *NTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authenticate"); value.Exists() {
-		data.Authenticate = types.BoolValue(true)
-	} else {
-		data.Authenticate = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication-keys/authentication-key"); value.Exists() {
-		data.AuthenticationKeys = make([]NTPAuthenticationKeys, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPAuthenticationKeys{}
-			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
-				item.KeyNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "md5/encrypted"); cValue.Exists() {
-				item.Md5Encrypted = types.StringValue(cValue.String())
-			}
-			data.AuthenticationKeys = append(data.AuthenticationKeys, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cmac-authentication-keys/cmac-authentication-key"); value.Exists() {
-		data.CmacAuthenticationKeys = make([]NTPCmacAuthenticationKeys, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPCmacAuthenticationKeys{}
-			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
-				item.KeyNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "cmac/encrypted"); cValue.Exists() {
-				item.CmacEncrypted = types.StringValue(cValue.String())
-			}
-			data.CmacAuthenticationKeys = append(data.CmacAuthenticationKeys, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hmac-sha1-authentication-keys/hmac-sha1-authentication-key"); value.Exists() {
-		data.HmacSha1AuthenticationKeys = make([]NTPHmacSha1AuthenticationKeys, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPHmacSha1AuthenticationKeys{}
-			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
-				item.KeyNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "hmac-sha1/encrypted"); cValue.Exists() {
-				item.HmacSha1Encrypted = types.StringValue(cValue.String())
-			}
-			data.HmacSha1AuthenticationKeys = append(data.HmacSha1AuthenticationKeys, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hmac-sha2-authentication-keys/hmac-sha2-authentication-key"); value.Exists() {
-		data.HmacSha2AuthenticationKeys = make([]NTPHmacSha2AuthenticationKeys, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPHmacSha2AuthenticationKeys{}
-			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
-				item.KeyNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "hmac-sha2/encrypted"); cValue.Exists() {
-				item.HmacSha2Encrypted = types.StringValue(cValue.String())
-			}
-			data.HmacSha2AuthenticationKeys = append(data.HmacSha2AuthenticationKeys, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/broadcastdelay"); value.Exists() {
-		data.Broadcastdelay = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/aging/time"); value.Exists() {
-		data.DriftAgingTime = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/bootflash"); value.Exists() {
-		data.DriftFileBootflash = types.BoolValue(true)
-	} else {
-		data.DriftFileBootflash = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/compactflash"); value.Exists() {
-		data.DriftFileCompactflash = types.BoolValue(true)
-	} else {
-		data.DriftFileCompactflash = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/usb"); value.Exists() {
-		data.DriftFileUsb = types.BoolValue(true)
-	} else {
-		data.DriftFileUsb = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/disk0"); value.Exists() {
-		data.DriftFileDisk0 = types.BoolValue(true)
-	} else {
-		data.DriftFileDisk0 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/disk1"); value.Exists() {
-		data.DriftFileDisk1 = types.BoolValue(true)
-	} else {
-		data.DriftFileDisk1 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/disk2"); value.Exists() {
-		data.DriftFileDisk2 = types.BoolValue(true)
-	} else {
-		data.DriftFileDisk2 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/harddisk"); value.Exists() {
-		data.DriftFileHarddisk = types.BoolValue(true)
-	} else {
-		data.DriftFileHarddisk = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/file-name"); value.Exists() {
-		data.DriftFilename = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
-		data.Interfaces = make([]NTPInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "broadcast-client"); cValue.Exists() {
-				item.BroadcastClient = types.BoolValue(true)
-			} else {
-				item.BroadcastClient = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "broadcast/destination"); cValue.Exists() {
-				item.BroadcastDestination = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "broadcast/key"); cValue.Exists() {
-				item.BroadcastKey = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "broadcast/version"); cValue.Exists() {
-				item.BroadcastVersion = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "disable"); cValue.Exists() {
-				item.Disable = types.BoolValue(true)
-			} else {
-				item.Disable = types.BoolNull()
-			}
-			data.Interfaces = append(data.Interfaces, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/vrfs/vrf"); value.Exists() {
-		data.InterfaceVrfs = make([]NTPInterfaceVrfs, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPInterfaceVrfs{}
-			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "interface"); cValue.Exists() {
-				item.Interfaces = make([]NTPInterfaceVrfsInterfaces, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := NTPInterfaceVrfsInterfaces{}
-					if ccValue := helpers.GetFromXPath(cv, "interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "broadcast-client"); ccValue.Exists() {
-
-						cItem.BroadcastClient = types.BoolValue(true)
-
-					} else {
-						cItem.BroadcastClient = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "broadcast/destination"); ccValue.Exists() {
-						cItem.BroadcastDestination = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "broadcast/key"); ccValue.Exists() {
-						cItem.BroadcastKey = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "broadcast/version"); ccValue.Exists() {
-						cItem.BroadcastVersion = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "disable"); ccValue.Exists() {
-
-						cItem.Disable = types.BoolValue(true)
-
-					} else {
-						cItem.Disable = types.BoolValue(false)
-					}
-
-					item.Interfaces = append(item.Interfaces, cItem)
-					return true
-				})
-			}
-			data.InterfaceVrfs = append(data.InterfaceVrfs, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/stratum-number"); value.Exists() {
-		data.PrimaryStratumNumber = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/primary-reference-clock"); value.Exists() {
-		data.PrimaryReferenceClock = types.BoolValue(true)
-	} else {
-		data.PrimaryReferenceClock = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/max-associations"); value.Exists() {
-		data.MaxAssociations = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/ipv4/ipv4-peer-server"); value.Exists() {
-		data.Ipv4PeersServers = make([]NTPIpv4PeersServers, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPIpv4PeersServers{}
-			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type"); cValue.Exists() {
-				item.Type = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "version"); cValue.Exists() {
-				item.Version = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "key"); cValue.Exists() {
-				item.Key = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "minpoll"); cValue.Exists() {
-				item.Minpoll = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "maxpoll"); cValue.Exists() {
-				item.Maxpoll = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "prefer"); cValue.Exists() {
-				item.Prefer = types.BoolValue(true)
-			} else {
-				item.Prefer = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "burst"); cValue.Exists() {
-				item.Burst = types.BoolValue(true)
-			} else {
-				item.Burst = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "iburst"); cValue.Exists() {
-				item.Iburst = types.BoolValue(true)
-			} else {
-				item.Iburst = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "source"); cValue.Exists() {
-				item.Source = types.StringValue(cValue.String())
-			}
-			data.Ipv4PeersServers = append(data.Ipv4PeersServers, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/ipv6/ipv6-peer-server"); value.Exists() {
-		data.Ipv6PeersServers = make([]NTPIpv6PeersServers, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPIpv6PeersServers{}
-			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type"); cValue.Exists() {
-				item.Type = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "version"); cValue.Exists() {
-				item.Version = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "key"); cValue.Exists() {
-				item.Key = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "minpoll"); cValue.Exists() {
-				item.Minpoll = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "maxpoll"); cValue.Exists() {
-				item.Maxpoll = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "prefer"); cValue.Exists() {
-				item.Prefer = types.BoolValue(true)
-			} else {
-				item.Prefer = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "burst"); cValue.Exists() {
-				item.Burst = types.BoolValue(true)
-			} else {
-				item.Burst = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "iburst"); cValue.Exists() {
-				item.Iburst = types.BoolValue(true)
-			} else {
-				item.Iburst = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "source"); cValue.Exists() {
-				item.Source = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv6-address"); cValue.Exists() {
-				item.Ipv6Address = types.StringValue(cValue.String())
-			}
-			data.Ipv6PeersServers = append(data.Ipv6PeersServers, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/hostname/hostname-peer-server"); value.Exists() {
-		data.HostnamePeersServers = make([]NTPHostnamePeersServers, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPHostnamePeersServers{}
-			if cValue := helpers.GetFromXPath(v, "fqdn-hostname"); cValue.Exists() {
-				item.FqdnHostname = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type"); cValue.Exists() {
-				item.Type = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "version"); cValue.Exists() {
-				item.Version = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "key"); cValue.Exists() {
-				item.Key = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "minpoll"); cValue.Exists() {
-				item.Minpoll = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "maxpoll"); cValue.Exists() {
-				item.Maxpoll = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "prefer"); cValue.Exists() {
-				item.Prefer = types.BoolValue(true)
-			} else {
-				item.Prefer = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "burst"); cValue.Exists() {
-				item.Burst = types.BoolValue(true)
-			} else {
-				item.Burst = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "iburst"); cValue.Exists() {
-				item.Iburst = types.BoolValue(true)
-			} else {
-				item.Iburst = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "source"); cValue.Exists() {
-				item.Source = types.StringValue(cValue.String())
-			}
-			data.HostnamePeersServers = append(data.HostnamePeersServers, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/vrfs/vrf"); value.Exists() {
-		data.PeersServersVrfs = make([]NTPPeersServersVrfs, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPPeersServersVrfs{}
-			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv4/ipv4-peer-server"); cValue.Exists() {
-				item.Ipv4PeersServers = make([]NTPPeersServersVrfsIpv4PeersServers, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := NTPPeersServersVrfsIpv4PeersServers{}
-					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "type"); ccValue.Exists() {
-						cItem.Type = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "version"); ccValue.Exists() {
-						cItem.Version = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "key"); ccValue.Exists() {
-						cItem.Key = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "minpoll"); ccValue.Exists() {
-						cItem.Minpoll = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "maxpoll"); ccValue.Exists() {
-						cItem.Maxpoll = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "prefer"); ccValue.Exists() {
-
-						cItem.Prefer = types.BoolValue(true)
-
-					} else {
-						cItem.Prefer = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "burst"); ccValue.Exists() {
-
-						cItem.Burst = types.BoolValue(true)
-
-					} else {
-						cItem.Burst = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "iburst"); ccValue.Exists() {
-
-						cItem.Iburst = types.BoolValue(true)
-
-					} else {
-						cItem.Iburst = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
-						cItem.Source = types.StringValue(ccValue.String())
-					}
-					item.Ipv4PeersServers = append(item.Ipv4PeersServers, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv6/ipv6-peer-server"); cValue.Exists() {
-				item.Ipv6PeersServers = make([]NTPPeersServersVrfsIpv6PeersServers, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := NTPPeersServersVrfsIpv6PeersServers{}
-					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "type"); ccValue.Exists() {
-						cItem.Type = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "version"); ccValue.Exists() {
-						cItem.Version = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "key"); ccValue.Exists() {
-						cItem.Key = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "minpoll"); ccValue.Exists() {
-						cItem.Minpoll = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "maxpoll"); ccValue.Exists() {
-						cItem.Maxpoll = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "prefer"); ccValue.Exists() {
-
-						cItem.Prefer = types.BoolValue(true)
-
-					} else {
-						cItem.Prefer = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "burst"); ccValue.Exists() {
-
-						cItem.Burst = types.BoolValue(true)
-
-					} else {
-						cItem.Burst = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "iburst"); ccValue.Exists() {
-
-						cItem.Iburst = types.BoolValue(true)
-
-					} else {
-						cItem.Iburst = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
-						cItem.Source = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "ipv6-address"); ccValue.Exists() {
-						cItem.Ipv6Address = types.StringValue(ccValue.String())
-					}
-					item.Ipv6PeersServers = append(item.Ipv6PeersServers, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "hostname/hostname-peer-server"); cValue.Exists() {
-				item.HostnamePeersServers = make([]NTPPeersServersVrfsHostnamePeersServers, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := NTPPeersServersVrfsHostnamePeersServers{}
-					if ccValue := helpers.GetFromXPath(cv, "fqdn-hostname"); ccValue.Exists() {
-						cItem.FqdnHostname = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "type"); ccValue.Exists() {
-						cItem.Type = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "version"); ccValue.Exists() {
-						cItem.Version = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "key"); ccValue.Exists() {
-						cItem.Key = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "minpoll"); ccValue.Exists() {
-						cItem.Minpoll = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "maxpoll"); ccValue.Exists() {
-						cItem.Maxpoll = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "prefer"); ccValue.Exists() {
-
-						cItem.Prefer = types.BoolValue(true)
-
-					} else {
-						cItem.Prefer = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "burst"); ccValue.Exists() {
-
-						cItem.Burst = types.BoolValue(true)
-
-					} else {
-						cItem.Burst = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "iburst"); ccValue.Exists() {
-
-						cItem.Iburst = types.BoolValue(true)
-
-					} else {
-						cItem.Iburst = types.BoolValue(false)
-					}
-
-					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
-						cItem.Source = types.StringValue(ccValue.String())
-					}
-					item.HostnamePeersServers = append(item.HostnamePeersServers, cItem)
-					return true
-				})
-			}
-			data.PeersServersVrfs = append(data.PeersServersVrfs, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trusted-keys/trusted-key"); value.Exists() {
-		data.TrustedKeys = make([]NTPTrustedKeys, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPTrustedKeys{}
-			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
-				item.KeyNumber = types.Int64Value(cValue.Int())
-			}
-			data.TrustedKeys = append(data.TrustedKeys, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update-calendar"); value.Exists() {
-		data.UpdateCalendar = types.BoolValue(true)
-	} else {
-		data.UpdateCalendar = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log-internal-sync"); value.Exists() {
-		data.LogInternalSync = types.BoolValue(true)
-	} else {
-		data.LogInternalSync = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/passive"); value.Exists() {
-		data.Passive = types.BoolValue(true)
-	} else {
-		data.Passive = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/interface-name"); value.Exists() {
-		data.SourceInterfaceName = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/vrfs/vrf"); value.Exists() {
-		data.SourceVrfs = make([]NTPSourceVrfs, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPSourceVrfs{}
-			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			data.SourceVrfs = append(data.SourceVrfs, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/version"); value.Exists() {
-		data.AdminPlaneVersion = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/key"); value.Exists() {
-		data.AdminPlaneKey = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/minpoll"); value.Exists() {
-		data.AdminPlaneMinpoll = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/maxpoll"); value.Exists() {
-		data.AdminPlaneMaxpoll = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/prefer"); value.Exists() {
-		data.AdminPlanePrefer = types.BoolValue(true)
-	} else {
-		data.AdminPlanePrefer = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/burst"); value.Exists() {
-		data.AdminPlaneBurst = types.BoolValue(true)
-	} else {
-		data.AdminPlaneBurst = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/iburst"); value.Exists() {
-		data.AdminPlaneIburst = types.BoolValue(true)
-	} else {
-		data.AdminPlaneIburst = types.BoolNull()
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
-		data.Ipv4Dscp = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
-		data.Ipv4Precedence = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
-		data.Ipv6Dscp = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
-		data.Ipv6Precedence = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/peer"); value.Exists() {
-		data.AccessGroupIpv6Peer = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/query-only"); value.Exists() {
-		data.AccessGroupIpv6QueryOnly = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/serve"); value.Exists() {
-		data.AccessGroupIpv6Serve = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv6/serve-only"); value.Exists() {
-		data.AccessGroupIpv6ServeOnly = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/peer"); value.Exists() {
-		data.AccessGroupIpv4Peer = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/query-only"); value.Exists() {
-		data.AccessGroupIpv4QueryOnly = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/serve"); value.Exists() {
-		data.AccessGroupIpv4Serve = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/ipv4/serve-only"); value.Exists() {
-		data.AccessGroupIpv4ServeOnly = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group/vrfs/vrf"); value.Exists() {
-		data.AccessGroupVrfs = make([]NTPAccessGroupVrfs, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := NTPAccessGroupVrfs{}
-			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv6/peer"); cValue.Exists() {
-				item.Ipv6Peer = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv6/query-only"); cValue.Exists() {
-				item.Ipv6QueryOnly = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv6/serve"); cValue.Exists() {
-				item.Ipv6Serve = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv6/serve-only"); cValue.Exists() {
-				item.Ipv6ServeOnly = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv4/peer"); cValue.Exists() {
-				item.Ipv4Peer = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv4/query-only"); cValue.Exists() {
-				item.Ipv4QueryOnly = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv4/serve"); cValue.Exists() {
-				item.Ipv4Serve = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ipv4/serve-only"); cValue.Exists() {
-				item.Ipv4ServeOnly = types.StringValue(cValue.String())
-			}
-			data.AccessGroupVrfs = append(data.AccessGroupVrfs, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authenticate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authenticate"); value.Exists() {
 		data.Authenticate = types.BoolValue(true)
 	} else {
 		data.Authenticate = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication-keys/authentication-key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication-keys/authentication-key"); value.Exists() {
 		data.AuthenticationKeys = make([]NTPAuthenticationKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPAuthenticationKeys{}
@@ -5893,7 +5381,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cmac-authentication-keys/cmac-authentication-key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cmac-authentication-keys/cmac-authentication-key"); value.Exists() {
 		data.CmacAuthenticationKeys = make([]NTPCmacAuthenticationKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPCmacAuthenticationKeys{}
@@ -5907,7 +5395,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hmac-sha1-authentication-keys/hmac-sha1-authentication-key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hmac-sha1-authentication-keys/hmac-sha1-authentication-key"); value.Exists() {
 		data.HmacSha1AuthenticationKeys = make([]NTPHmacSha1AuthenticationKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPHmacSha1AuthenticationKeys{}
@@ -5921,7 +5409,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hmac-sha2-authentication-keys/hmac-sha2-authentication-key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hmac-sha2-authentication-keys/hmac-sha2-authentication-key"); value.Exists() {
 		data.HmacSha2AuthenticationKeys = make([]NTPHmacSha2AuthenticationKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPHmacSha2AuthenticationKeys{}
@@ -5935,51 +5423,51 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/broadcastdelay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/broadcastdelay"); value.Exists() {
 		data.Broadcastdelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/aging/time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/aging/time"); value.Exists() {
 		data.DriftAgingTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/bootflash"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/bootflash"); value.Exists() {
 		data.DriftFileBootflash = types.BoolValue(true)
 	} else {
 		data.DriftFileBootflash = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/compactflash"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/compactflash"); value.Exists() {
 		data.DriftFileCompactflash = types.BoolValue(true)
 	} else {
 		data.DriftFileCompactflash = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/usb"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/usb"); value.Exists() {
 		data.DriftFileUsb = types.BoolValue(true)
 	} else {
 		data.DriftFileUsb = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/disk0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/disk0"); value.Exists() {
 		data.DriftFileDisk0 = types.BoolValue(true)
 	} else {
 		data.DriftFileDisk0 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/disk1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/disk1"); value.Exists() {
 		data.DriftFileDisk1 = types.BoolValue(true)
 	} else {
 		data.DriftFileDisk1 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/disk2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/disk2"); value.Exists() {
 		data.DriftFileDisk2 = types.BoolValue(true)
 	} else {
 		data.DriftFileDisk2 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/harddisk"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/harddisk"); value.Exists() {
 		data.DriftFileHarddisk = types.BoolValue(true)
 	} else {
 		data.DriftFileHarddisk = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/drift/file/file-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/file-name"); value.Exists() {
 		data.DriftFilename = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
 		data.Interfaces = make([]NTPInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPInterfaces{}
@@ -6009,7 +5497,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/vrfs/vrf"); value.Exists() {
 		data.InterfaceVrfs = make([]NTPInterfaceVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPInterfaceVrfs{}
@@ -6026,6 +5514,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					if ccValue := helpers.GetFromXPath(cv, "broadcast-client"); ccValue.Exists() {
 						cItem.BroadcastClient = types.BoolValue(true)
 					} else {
+						cItem.BroadcastClient = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "broadcast/destination"); ccValue.Exists() {
 						cItem.BroadcastDestination = types.StringValue(ccValue.String())
@@ -6039,6 +5528,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					if ccValue := helpers.GetFromXPath(cv, "disable"); ccValue.Exists() {
 						cItem.Disable = types.BoolValue(true)
 					} else {
+						cItem.Disable = types.BoolValue(false)
 					}
 					item.Interfaces = append(item.Interfaces, cItem)
 					return true
@@ -6048,18 +5538,18 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/stratum-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/stratum-number"); value.Exists() {
 		data.PrimaryStratumNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/primary-reference-clock"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/primary-reference-clock"); value.Exists() {
 		data.PrimaryReferenceClock = types.BoolValue(true)
 	} else {
 		data.PrimaryReferenceClock = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/max-associations"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-associations"); value.Exists() {
 		data.MaxAssociations = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/ipv4/ipv4-peer-server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/ipv4/ipv4-peer-server"); value.Exists() {
 		data.Ipv4PeersServers = make([]NTPIpv4PeersServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPIpv4PeersServers{}
@@ -6103,7 +5593,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/ipv6/ipv6-peer-server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/ipv6/ipv6-peer-server"); value.Exists() {
 		data.Ipv6PeersServers = make([]NTPIpv6PeersServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPIpv6PeersServers{}
@@ -6150,7 +5640,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/hostname/hostname-peer-server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/hostname/hostname-peer-server"); value.Exists() {
 		data.HostnamePeersServers = make([]NTPHostnamePeersServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPHostnamePeersServers{}
@@ -6194,7 +5684,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/peer-server/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/vrfs/vrf"); value.Exists() {
 		data.PeersServersVrfs = make([]NTPPeersServersVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPPeersServersVrfs{}
@@ -6226,14 +5716,17 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					if ccValue := helpers.GetFromXPath(cv, "prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
 					} else {
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
 					} else {
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
 					} else {
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -6267,14 +5760,17 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					if ccValue := helpers.GetFromXPath(cv, "prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
 					} else {
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
 					} else {
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
 					} else {
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -6311,14 +5807,17 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					if ccValue := helpers.GetFromXPath(cv, "prefer"); ccValue.Exists() {
 						cItem.Prefer = types.BoolValue(true)
 					} else {
+						cItem.Prefer = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "burst"); ccValue.Exists() {
 						cItem.Burst = types.BoolValue(true)
 					} else {
+						cItem.Burst = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "iburst"); ccValue.Exists() {
 						cItem.Iburst = types.BoolValue(true)
 					} else {
+						cItem.Iburst = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
 						cItem.Source = types.StringValue(ccValue.String())
@@ -6331,7 +5830,7 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trusted-keys/trusted-key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/trusted-keys/trusted-key"); value.Exists() {
 		data.TrustedKeys = make([]NTPTrustedKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPTrustedKeys{}
@@ -6342,25 +5841,25 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update-calendar"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update-calendar"); value.Exists() {
 		data.UpdateCalendar = types.BoolValue(true)
 	} else {
 		data.UpdateCalendar = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log-internal-sync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log-internal-sync"); value.Exists() {
 		data.LogInternalSync = types.BoolValue(true)
 	} else {
 		data.LogInternalSync = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/passive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/passive"); value.Exists() {
 		data.Passive = types.BoolValue(true)
 	} else {
 		data.Passive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/interface-name"); value.Exists() {
 		data.SourceInterfaceName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/vrfs/vrf"); value.Exists() {
 		data.SourceVrfs = make([]NTPSourceVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := NTPSourceVrfs{}
@@ -6374,29 +5873,644 @@ func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/version"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/version"); value.Exists() {
 		data.AdminPlaneVersion = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/key"); value.Exists() {
 		data.AdminPlaneKey = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/minpoll"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/minpoll"); value.Exists() {
 		data.AdminPlaneMinpoll = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/maxpoll"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/maxpoll"); value.Exists() {
 		data.AdminPlaneMaxpoll = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/prefer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/prefer"); value.Exists() {
 		data.AdminPlanePrefer = types.BoolValue(true)
 	} else {
 		data.AdminPlanePrefer = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/burst"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/burst"); value.Exists() {
 		data.AdminPlaneBurst = types.BoolValue(true)
 	} else {
 		data.AdminPlaneBurst = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/admin-plane/iburst"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/iburst"); value.Exists() {
+		data.AdminPlaneIburst = types.BoolValue(true)
+	} else {
+		data.AdminPlaneIburst = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *NTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/precedence"); value.Exists() {
+		data.Ipv4Precedence = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/precedence"); value.Exists() {
+		data.Ipv6Precedence = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/peer"); value.Exists() {
+		data.AccessGroupIpv6Peer = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/query-only"); value.Exists() {
+		data.AccessGroupIpv6QueryOnly = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/serve"); value.Exists() {
+		data.AccessGroupIpv6Serve = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv6/serve-only"); value.Exists() {
+		data.AccessGroupIpv6ServeOnly = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/peer"); value.Exists() {
+		data.AccessGroupIpv4Peer = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/query-only"); value.Exists() {
+		data.AccessGroupIpv4QueryOnly = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/serve"); value.Exists() {
+		data.AccessGroupIpv4Serve = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/ipv4/serve-only"); value.Exists() {
+		data.AccessGroupIpv4ServeOnly = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group/vrfs/vrf"); value.Exists() {
+		data.AccessGroupVrfs = make([]NTPAccessGroupVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPAccessGroupVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/peer"); cValue.Exists() {
+				item.Ipv6Peer = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/query-only"); cValue.Exists() {
+				item.Ipv6QueryOnly = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/serve"); cValue.Exists() {
+				item.Ipv6Serve = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/serve-only"); cValue.Exists() {
+				item.Ipv6ServeOnly = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/peer"); cValue.Exists() {
+				item.Ipv4Peer = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/query-only"); cValue.Exists() {
+				item.Ipv4QueryOnly = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/serve"); cValue.Exists() {
+				item.Ipv4Serve = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/serve-only"); cValue.Exists() {
+				item.Ipv4ServeOnly = types.StringValue(cValue.String())
+			}
+			data.AccessGroupVrfs = append(data.AccessGroupVrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authenticate"); value.Exists() {
+		data.Authenticate = types.BoolValue(true)
+	} else {
+		data.Authenticate = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication-keys/authentication-key"); value.Exists() {
+		data.AuthenticationKeys = make([]NTPAuthenticationKeys, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPAuthenticationKeys{}
+			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "md5/encrypted"); cValue.Exists() {
+				item.Md5Encrypted = types.StringValue(cValue.String())
+			}
+			data.AuthenticationKeys = append(data.AuthenticationKeys, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cmac-authentication-keys/cmac-authentication-key"); value.Exists() {
+		data.CmacAuthenticationKeys = make([]NTPCmacAuthenticationKeys, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPCmacAuthenticationKeys{}
+			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "cmac/encrypted"); cValue.Exists() {
+				item.CmacEncrypted = types.StringValue(cValue.String())
+			}
+			data.CmacAuthenticationKeys = append(data.CmacAuthenticationKeys, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hmac-sha1-authentication-keys/hmac-sha1-authentication-key"); value.Exists() {
+		data.HmacSha1AuthenticationKeys = make([]NTPHmacSha1AuthenticationKeys, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPHmacSha1AuthenticationKeys{}
+			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "hmac-sha1/encrypted"); cValue.Exists() {
+				item.HmacSha1Encrypted = types.StringValue(cValue.String())
+			}
+			data.HmacSha1AuthenticationKeys = append(data.HmacSha1AuthenticationKeys, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hmac-sha2-authentication-keys/hmac-sha2-authentication-key"); value.Exists() {
+		data.HmacSha2AuthenticationKeys = make([]NTPHmacSha2AuthenticationKeys, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPHmacSha2AuthenticationKeys{}
+			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "hmac-sha2/encrypted"); cValue.Exists() {
+				item.HmacSha2Encrypted = types.StringValue(cValue.String())
+			}
+			data.HmacSha2AuthenticationKeys = append(data.HmacSha2AuthenticationKeys, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/broadcastdelay"); value.Exists() {
+		data.Broadcastdelay = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/aging/time"); value.Exists() {
+		data.DriftAgingTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/bootflash"); value.Exists() {
+		data.DriftFileBootflash = types.BoolValue(true)
+	} else {
+		data.DriftFileBootflash = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/compactflash"); value.Exists() {
+		data.DriftFileCompactflash = types.BoolValue(true)
+	} else {
+		data.DriftFileCompactflash = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/usb"); value.Exists() {
+		data.DriftFileUsb = types.BoolValue(true)
+	} else {
+		data.DriftFileUsb = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/disk0"); value.Exists() {
+		data.DriftFileDisk0 = types.BoolValue(true)
+	} else {
+		data.DriftFileDisk0 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/disk1"); value.Exists() {
+		data.DriftFileDisk1 = types.BoolValue(true)
+	} else {
+		data.DriftFileDisk1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/disk2"); value.Exists() {
+		data.DriftFileDisk2 = types.BoolValue(true)
+	} else {
+		data.DriftFileDisk2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/harddisk"); value.Exists() {
+		data.DriftFileHarddisk = types.BoolValue(true)
+	} else {
+		data.DriftFileHarddisk = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/drift/file/file-name"); value.Exists() {
+		data.DriftFilename = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]NTPInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "broadcast-client"); cValue.Exists() {
+				item.BroadcastClient = types.BoolValue(true)
+			} else {
+				item.BroadcastClient = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "broadcast/destination"); cValue.Exists() {
+				item.BroadcastDestination = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "broadcast/key"); cValue.Exists() {
+				item.BroadcastKey = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "broadcast/version"); cValue.Exists() {
+				item.BroadcastVersion = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "disable"); cValue.Exists() {
+				item.Disable = types.BoolValue(true)
+			} else {
+				item.Disable = types.BoolValue(false)
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/vrfs/vrf"); value.Exists() {
+		data.InterfaceVrfs = make([]NTPInterfaceVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPInterfaceVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "interface"); cValue.Exists() {
+				item.Interfaces = make([]NTPInterfaceVrfsInterfaces, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := NTPInterfaceVrfsInterfaces{}
+					if ccValue := helpers.GetFromXPath(cv, "interface-name"); ccValue.Exists() {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "broadcast-client"); ccValue.Exists() {
+						cItem.BroadcastClient = types.BoolValue(true)
+					} else {
+						cItem.BroadcastClient = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "broadcast/destination"); ccValue.Exists() {
+						cItem.BroadcastDestination = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "broadcast/key"); ccValue.Exists() {
+						cItem.BroadcastKey = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "broadcast/version"); ccValue.Exists() {
+						cItem.BroadcastVersion = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "disable"); ccValue.Exists() {
+						cItem.Disable = types.BoolValue(true)
+					} else {
+						cItem.Disable = types.BoolValue(false)
+					}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
+			data.InterfaceVrfs = append(data.InterfaceVrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/stratum-number"); value.Exists() {
+		data.PrimaryStratumNumber = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/primary-reference-clock"); value.Exists() {
+		data.PrimaryReferenceClock = types.BoolValue(true)
+	} else {
+		data.PrimaryReferenceClock = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-associations"); value.Exists() {
+		data.MaxAssociations = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/ipv4/ipv4-peer-server"); value.Exists() {
+		data.Ipv4PeersServers = make([]NTPIpv4PeersServers, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPIpv4PeersServers{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "version"); cValue.Exists() {
+				item.Version = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "key"); cValue.Exists() {
+				item.Key = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "minpoll"); cValue.Exists() {
+				item.Minpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "maxpoll"); cValue.Exists() {
+				item.Maxpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "prefer"); cValue.Exists() {
+				item.Prefer = types.BoolValue(true)
+			} else {
+				item.Prefer = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "burst"); cValue.Exists() {
+				item.Burst = types.BoolValue(true)
+			} else {
+				item.Burst = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "iburst"); cValue.Exists() {
+				item.Iburst = types.BoolValue(true)
+			} else {
+				item.Iburst = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "source"); cValue.Exists() {
+				item.Source = types.StringValue(cValue.String())
+			}
+			data.Ipv4PeersServers = append(data.Ipv4PeersServers, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/ipv6/ipv6-peer-server"); value.Exists() {
+		data.Ipv6PeersServers = make([]NTPIpv6PeersServers, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPIpv6PeersServers{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "version"); cValue.Exists() {
+				item.Version = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "key"); cValue.Exists() {
+				item.Key = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "minpoll"); cValue.Exists() {
+				item.Minpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "maxpoll"); cValue.Exists() {
+				item.Maxpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "prefer"); cValue.Exists() {
+				item.Prefer = types.BoolValue(true)
+			} else {
+				item.Prefer = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "burst"); cValue.Exists() {
+				item.Burst = types.BoolValue(true)
+			} else {
+				item.Burst = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "iburst"); cValue.Exists() {
+				item.Iburst = types.BoolValue(true)
+			} else {
+				item.Iburst = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "source"); cValue.Exists() {
+				item.Source = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6-address"); cValue.Exists() {
+				item.Ipv6Address = types.StringValue(cValue.String())
+			}
+			data.Ipv6PeersServers = append(data.Ipv6PeersServers, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/hostname/hostname-peer-server"); value.Exists() {
+		data.HostnamePeersServers = make([]NTPHostnamePeersServers, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPHostnamePeersServers{}
+			if cValue := helpers.GetFromXPath(v, "fqdn-hostname"); cValue.Exists() {
+				item.FqdnHostname = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "version"); cValue.Exists() {
+				item.Version = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "key"); cValue.Exists() {
+				item.Key = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "minpoll"); cValue.Exists() {
+				item.Minpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "maxpoll"); cValue.Exists() {
+				item.Maxpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "prefer"); cValue.Exists() {
+				item.Prefer = types.BoolValue(true)
+			} else {
+				item.Prefer = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "burst"); cValue.Exists() {
+				item.Burst = types.BoolValue(true)
+			} else {
+				item.Burst = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "iburst"); cValue.Exists() {
+				item.Iburst = types.BoolValue(true)
+			} else {
+				item.Iburst = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "source"); cValue.Exists() {
+				item.Source = types.StringValue(cValue.String())
+			}
+			data.HostnamePeersServers = append(data.HostnamePeersServers, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/peer-server/vrfs/vrf"); value.Exists() {
+		data.PeersServersVrfs = make([]NTPPeersServersVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPPeersServersVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv4/ipv4-peer-server"); cValue.Exists() {
+				item.Ipv4PeersServers = make([]NTPPeersServersVrfsIpv4PeersServers, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := NTPPeersServersVrfsIpv4PeersServers{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "type"); ccValue.Exists() {
+						cItem.Type = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version"); ccValue.Exists() {
+						cItem.Version = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "key"); ccValue.Exists() {
+						cItem.Key = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "minpoll"); ccValue.Exists() {
+						cItem.Minpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "maxpoll"); ccValue.Exists() {
+						cItem.Maxpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "prefer"); ccValue.Exists() {
+						cItem.Prefer = types.BoolValue(true)
+					} else {
+						cItem.Prefer = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "burst"); ccValue.Exists() {
+						cItem.Burst = types.BoolValue(true)
+					} else {
+						cItem.Burst = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "iburst"); ccValue.Exists() {
+						cItem.Iburst = types.BoolValue(true)
+					} else {
+						cItem.Iburst = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
+						cItem.Source = types.StringValue(ccValue.String())
+					}
+					item.Ipv4PeersServers = append(item.Ipv4PeersServers, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "ipv6/ipv6-peer-server"); cValue.Exists() {
+				item.Ipv6PeersServers = make([]NTPPeersServersVrfsIpv6PeersServers, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := NTPPeersServersVrfsIpv6PeersServers{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "type"); ccValue.Exists() {
+						cItem.Type = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version"); ccValue.Exists() {
+						cItem.Version = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "key"); ccValue.Exists() {
+						cItem.Key = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "minpoll"); ccValue.Exists() {
+						cItem.Minpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "maxpoll"); ccValue.Exists() {
+						cItem.Maxpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "prefer"); ccValue.Exists() {
+						cItem.Prefer = types.BoolValue(true)
+					} else {
+						cItem.Prefer = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "burst"); ccValue.Exists() {
+						cItem.Burst = types.BoolValue(true)
+					} else {
+						cItem.Burst = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "iburst"); ccValue.Exists() {
+						cItem.Iburst = types.BoolValue(true)
+					} else {
+						cItem.Iburst = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
+						cItem.Source = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "ipv6-address"); ccValue.Exists() {
+						cItem.Ipv6Address = types.StringValue(ccValue.String())
+					}
+					item.Ipv6PeersServers = append(item.Ipv6PeersServers, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "hostname/hostname-peer-server"); cValue.Exists() {
+				item.HostnamePeersServers = make([]NTPPeersServersVrfsHostnamePeersServers, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := NTPPeersServersVrfsHostnamePeersServers{}
+					if ccValue := helpers.GetFromXPath(cv, "fqdn-hostname"); ccValue.Exists() {
+						cItem.FqdnHostname = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "type"); ccValue.Exists() {
+						cItem.Type = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version"); ccValue.Exists() {
+						cItem.Version = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "key"); ccValue.Exists() {
+						cItem.Key = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "minpoll"); ccValue.Exists() {
+						cItem.Minpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "maxpoll"); ccValue.Exists() {
+						cItem.Maxpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "prefer"); ccValue.Exists() {
+						cItem.Prefer = types.BoolValue(true)
+					} else {
+						cItem.Prefer = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "burst"); ccValue.Exists() {
+						cItem.Burst = types.BoolValue(true)
+					} else {
+						cItem.Burst = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "iburst"); ccValue.Exists() {
+						cItem.Iburst = types.BoolValue(true)
+					} else {
+						cItem.Iburst = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source"); ccValue.Exists() {
+						cItem.Source = types.StringValue(ccValue.String())
+					}
+					item.HostnamePeersServers = append(item.HostnamePeersServers, cItem)
+					return true
+				})
+			}
+			data.PeersServersVrfs = append(data.PeersServersVrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/trusted-keys/trusted-key"); value.Exists() {
+		data.TrustedKeys = make([]NTPTrustedKeys, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPTrustedKeys{}
+			if cValue := helpers.GetFromXPath(v, "key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			data.TrustedKeys = append(data.TrustedKeys, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update-calendar"); value.Exists() {
+		data.UpdateCalendar = types.BoolValue(true)
+	} else {
+		data.UpdateCalendar = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log-internal-sync"); value.Exists() {
+		data.LogInternalSync = types.BoolValue(true)
+	} else {
+		data.LogInternalSync = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/passive"); value.Exists() {
+		data.Passive = types.BoolValue(true)
+	} else {
+		data.Passive = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/interface-name"); value.Exists() {
+		data.SourceInterfaceName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/vrfs/vrf"); value.Exists() {
+		data.SourceVrfs = make([]NTPSourceVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := NTPSourceVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.SourceVrfs = append(data.SourceVrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/version"); value.Exists() {
+		data.AdminPlaneVersion = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/key"); value.Exists() {
+		data.AdminPlaneKey = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/minpoll"); value.Exists() {
+		data.AdminPlaneMinpoll = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/maxpoll"); value.Exists() {
+		data.AdminPlaneMaxpoll = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/prefer"); value.Exists() {
+		data.AdminPlanePrefer = types.BoolValue(true)
+	} else {
+		data.AdminPlanePrefer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/burst"); value.Exists() {
+		data.AdminPlaneBurst = types.BoolValue(true)
+	} else {
+		data.AdminPlaneBurst = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/admin-plane/iburst"); value.Exists() {
 		data.AdminPlaneIburst = types.BoolValue(true)
 	} else {
 		data.AdminPlaneIburst = types.BoolValue(false)
@@ -7702,9 +7816,10 @@ func (data *NTP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/admin-plane/version", data.getPath()))
 	}
 	for i := range data.SourceVrfs {
-		keyValues := [...]string{data.SourceVrfs[i].VrfName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.SourceVrfs[i].VrfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 	if !data.SourceInterfaceName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/interface-name", data.getPath()))
@@ -7719,29 +7834,37 @@ func (data *NTP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/update-calendar", data.getPath()))
 	}
 	for i := range data.TrustedKeys {
-		keyValues := [...]string{strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/trusted-keys/trusted-key=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[key-number=" + strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/trusted-keys/trusted-key%v", data.getPath(), keyPath))
 	}
 	for i := range data.PeersServersVrfs {
-		keyValues := [...]string{data.PeersServersVrfs[i].VrfName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.PeersServersVrfs[i].VrfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 	for i := range data.HostnamePeersServers {
-		keyValues := [...]string{data.HostnamePeersServers[i].FqdnHostname.ValueString(), data.HostnamePeersServers[i].Type.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[fqdn-hostname=" + data.HostnamePeersServers[i].FqdnHostname.ValueString() + "]"
+		keyPath += "[type=" + data.HostnamePeersServers[i].Type.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/hostname/hostname-peer-server%v", data.getPath(), keyPath))
 	}
 	for i := range data.Ipv6PeersServers {
-		keyValues := [...]string{data.Ipv6PeersServers[i].Address.ValueString(), data.Ipv6PeersServers[i].Type.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/ipv6/ipv6-peer-server=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.Ipv6PeersServers[i].Address.ValueString() + "]"
+		keyPath += "[type=" + data.Ipv6PeersServers[i].Type.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/ipv6/ipv6-peer-server%v", data.getPath(), keyPath))
 	}
 	for i := range data.Ipv4PeersServers {
-		keyValues := [...]string{data.Ipv4PeersServers[i].Address.ValueString(), data.Ipv4PeersServers[i].Type.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/ipv4/ipv4-peer-server=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.Ipv4PeersServers[i].Address.ValueString() + "]"
+		keyPath += "[type=" + data.Ipv4PeersServers[i].Type.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-server/ipv4/ipv4-peer-server%v", data.getPath(), keyPath))
 	}
 	if !data.MaxAssociations.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-associations", data.getPath()))
@@ -7753,14 +7876,16 @@ func (data *NTP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/stratum-number", data.getPath()))
 	}
 	for i := range data.InterfaceVrfs {
-		keyValues := [...]string{data.InterfaceVrfs[i].VrfName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.InterfaceVrfs[i].VrfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 	for i := range data.Interfaces {
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.Interfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	if !data.DriftFilename.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/drift/file", data.getPath()))
@@ -7793,32 +7918,37 @@ func (data *NTP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/broadcastdelay", data.getPath()))
 	}
 	for i := range data.HmacSha2AuthenticationKeys {
-		keyValues := [...]string{strconv.FormatInt(data.HmacSha2AuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hmac-sha2-authentication-keys/hmac-sha2-authentication-key=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[key-number=" + strconv.FormatInt(data.HmacSha2AuthenticationKeys[i].KeyNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hmac-sha2-authentication-keys/hmac-sha2-authentication-key%v", data.getPath(), keyPath))
 	}
 	for i := range data.HmacSha1AuthenticationKeys {
-		keyValues := [...]string{strconv.FormatInt(data.HmacSha1AuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hmac-sha1-authentication-keys/hmac-sha1-authentication-key=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[key-number=" + strconv.FormatInt(data.HmacSha1AuthenticationKeys[i].KeyNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hmac-sha1-authentication-keys/hmac-sha1-authentication-key%v", data.getPath(), keyPath))
 	}
 	for i := range data.CmacAuthenticationKeys {
-		keyValues := [...]string{strconv.FormatInt(data.CmacAuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cmac-authentication-keys/cmac-authentication-key=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[key-number=" + strconv.FormatInt(data.CmacAuthenticationKeys[i].KeyNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cmac-authentication-keys/cmac-authentication-key%v", data.getPath(), keyPath))
 	}
 	for i := range data.AuthenticationKeys {
-		keyValues := [...]string{strconv.FormatInt(data.AuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication-keys/authentication-key=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[key-number=" + strconv.FormatInt(data.AuthenticationKeys[i].KeyNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication-keys/authentication-key%v", data.getPath(), keyPath))
 	}
 	if !data.Authenticate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authenticate", data.getPath()))
 	}
 	for i := range data.AccessGroupVrfs {
-		keyValues := [...]string{data.AccessGroupVrfs[i].VrfName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/access-group/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.AccessGroupVrfs[i].VrfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/access-group/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 	if !data.AccessGroupIpv4ServeOnly.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/access-group/ipv4/serve-only", data.getPath()))

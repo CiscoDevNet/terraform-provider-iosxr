@@ -35,21 +35,13 @@ attributes:
       - yang_name: view
         example: VIEW1
       - yang_name: ro
-        type: Bool
         example: true
-        type_yang_bool: empty-leaf
       - yang_name: rw
-        type: Bool
         example: false
-        type_yang_bool: empty-leaf
       - yang_name: sdrowner
-        type: Bool
         example: false
-        type_yang_bool: empty-leaf
       - yang_name: systemowner
-        type: Bool
         example: true
-        type_yang_bool: empty-leaf
       - yang_name: ipv4
         example: ACL1
       - yang_name: ipv6
@@ -497,8 +489,6 @@ attributes:
         id: true
         example: GROUP12
       - yang_name: v1
-        type: Bool
-        type_yang_bool: presence
         example: true
         exclude_test: true
       - yang_name: v1/read
@@ -520,8 +510,6 @@ attributes:
         example: ACL1
         exclude_test: true
       - yang_name: v2c
-        type: Bool
-        type_yang_bool: presence
         example: true
         exclude_test: true
       - yang_name: v2c/read
@@ -543,8 +531,6 @@ attributes:
         example: ACL1
         exclude_test: true
       - yang_name: v3/priv
-        type: Bool
-        type_yang_bool: presence
         example: true
       - yang_name: v3/read
         example: VIEW1
@@ -585,8 +571,6 @@ attributes:
         example: GROUP1
       - yang_name: v1
         example: true
-        type: Bool
-        type_yang_bool: presence
         exclude_test: true
       - yang_name: v1/ipv4
         example: ACL1
@@ -595,13 +579,10 @@ attributes:
         example: ACL1
         exclude_test: true
       - yang_name: v1/systemowner
-        type: Bool
         example: true
         exclude_test: true
       - yang_name: v2c
         example: true
-        type: Bool
-        type_yang_bool: presence
         exclude_test: true
       - yang_name: v2c/ipv4
         example: ACL1
@@ -610,13 +591,10 @@ attributes:
         example: ACL1
         exclude_test: true
       - yang_name: v2c/systemowner
-        type: Bool
         example: true
         exclude_test: true
       - yang_name: v3
         example: true
-        type: Bool
-        type_yang_bool: presence
       - yang_name: v3/auth/md5/encryption-aes
         sensitive: true
         write_only: true
@@ -691,7 +669,6 @@ attributes:
       - yang_name: v3/ipv6
         example: ACL1
       - yang_name: v3/systemowner
-        type: Bool
         example: true
   - yang_name: oid-poll-stats
     tf_name: oid_poll_stats

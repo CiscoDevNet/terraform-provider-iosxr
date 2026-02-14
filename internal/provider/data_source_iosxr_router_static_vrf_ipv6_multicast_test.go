@@ -101,7 +101,7 @@ func TestAccDataSourceIosxrRouterStaticVRFIPv6Multicast(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterStaticVRFIPv6MulticastPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]"
 	attributes = {
 		"vrf-name" = "VRF2"
@@ -191,7 +191,7 @@ func testAccDataSourceIosxrRouterStaticVRFIPv6MulticastConfig() string {
 	config += `			metric = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

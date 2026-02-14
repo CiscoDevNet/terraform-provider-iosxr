@@ -99,7 +99,7 @@ func iosxrMPLSLDPAddressFamilyImportStateIdFunc(resourceName string) resource.Im
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrMPLSLDPAddressFamilyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
 	attributes = {
 	}
@@ -114,7 +114,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrMPLSLDPAddressFamilyConfig_minimum() string {
 	config := `resource "iosxr_mpls_ldp_address_family" "test" {` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -161,7 +161,7 @@ func testAccIosxrMPLSLDPAddressFamilyConfig_all() string {
 	config += `		label_space_id = 0` + "\n"
 	config += `		for = "ACL1"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

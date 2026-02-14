@@ -166,7 +166,6 @@ attributes:
             example: VRF1
   - yang_name: suppress/duplicates
     example: true
-    type_yang_bool: presence
   - yang_name: format/rfc5424
     example: true
   - yang_name: format/bsd
@@ -254,8 +253,6 @@ attributes:
         id: true
         example: "MATCH1"
   - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/display-location
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/level
     example: informational

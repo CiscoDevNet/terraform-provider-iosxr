@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -190,13 +190,47 @@ func TestAccIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrL2VPNBridgeGroupBridgeDomainImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		BridgeGroupName := primary.Attributes["bridge_group_name"]
+		BridgeDomainName := primary.Attributes["bridge_domain_name"]
+
+		return fmt.Sprintf("%s,%s", BridgeGroupName, BridgeDomainName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	attributes = {
+	}
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]"
+	attributes = {
+		"group-name" = "BG123"
+	}
+	depends_on = [iosxr_yang.PreReq0, ]
+}
+
+`
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {` + "\n"
 	config += `	bridge_group_name = "BG123"` + "\n"
 	config += `	bridge_domain_name = "BD123"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -347,41 +381,9 @@ func testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all() string {
 	config += `			next_hop = "10.1.1.3"` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrL2VPNBridgeGroupBridgeDomainImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		BridgeGroupName := primary.Attributes["bridge_group_name"]
-		BridgeDomainName := primary.Attributes["bridge_domain_name"]
-
-		return fmt.Sprintf("%s,%s", BridgeGroupName, BridgeDomainName), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
-	attributes = {
-	}
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]"
-	attributes = {
-		"group-name" = "BG123"
-	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
-}
-
-`
-
-// End of section. //template:end testPrerequisites

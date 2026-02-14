@@ -9,5 +9,4 @@ attributes:
   - yang_name: rpl-community-set
     tf_name: rpl
     description: "Configures a community set"
-    read_raw: true
     example: "community-set TEST11\\nend-set\\n"

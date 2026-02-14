@@ -150,27 +150,27 @@ func (data RouterVRRPInterface) toBodyXML(ctx context.Context) string {
 func (data *RouterVRRPInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mac-refresh"); value.Exists() && !data.MacRefresh.IsNull() {
 		data.MacRefresh = types.Int64Value(value.Int())
-	} else {
+	} else if data.MacRefresh.IsNull() {
 		data.MacRefresh = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay.minimum"); value.Exists() && !data.DelayMinimum.IsNull() {
 		data.DelayMinimum = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayMinimum.IsNull() {
 		data.DelayMinimum = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay.reload"); value.Exists() && !data.DelayReload.IsNull() {
 		data.DelayReload = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayReload.IsNull() {
 		data.DelayReload = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
 	}
 }
@@ -180,32 +180,32 @@ func (data *RouterVRRPInterface) updateFromBody(ctx context.Context, res []byte)
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterVRRPInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interface-name"); value.Exists() {
 		data.InterfaceName = types.StringValue(value.String())
 	} else if data.InterfaceName.IsNull() {
 		data.InterfaceName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-refresh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	} else if data.MacRefresh.IsNull() {
 		data.MacRefresh = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/minimum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	} else if data.DelayMinimum.IsNull() {
 		data.DelayMinimum = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/reload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	} else if data.DelayReload.IsNull() {
 		data.DelayReload = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
@@ -219,6 +219,10 @@ func (data *RouterVRRPInterface) fromBody(ctx context.Context, res gjson.Result)
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
@@ -241,9 +245,14 @@ func (data *RouterVRRPInterface) fromBody(ctx context.Context, res gjson.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
@@ -266,19 +275,19 @@ func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterVRRPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-refresh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/minimum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/reload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
@@ -287,19 +296,19 @@ func (data *RouterVRRPInterface) fromBodyXML(ctx context.Context, res xmldot.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterVRRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-refresh"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/minimum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/minimum"); value.Exists() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/reload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/reload"); value.Exists() {
 		data.DelayReload = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }

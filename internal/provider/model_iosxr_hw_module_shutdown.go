@@ -105,21 +105,23 @@ func (data HWModuleShutdown) toBody(ctx context.Context) string {
 
 func (data *HWModuleShutdown) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "shut"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Shut.IsNull() {
 			data.Shut = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Shut.IsNull() {
 			data.Shut = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "unshut"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Unshut.IsNull() {
 			data.Unshut = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Unshut.IsNull() {
 			data.Unshut = types.BoolNull()
 		}
@@ -155,21 +157,27 @@ func (data HWModuleShutdown) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *HWModuleShutdown) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/location-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/location-name"); value.Exists() {
 		data.LocationName = types.StringValue(value.String())
 	} else if data.LocationName.IsNull() {
 		data.LocationName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shut"); value.Exists() {
-		data.Shut = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shut"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Shut.IsNull() {
+			data.Shut = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Shut.IsNull() {
 			data.Shut = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unshut"); value.Exists() {
-		data.Unshut = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unshut"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Unshut.IsNull() {
+			data.Unshut = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Unshut.IsNull() {
@@ -186,15 +194,21 @@ func (data *HWModuleShutdown) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "shut"); value.Exists() {
 		data.Shut = types.BoolValue(true)
-	} else {
-		data.Shut = types.BoolNull()
+	} else if !data.Shut.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Shut = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "unshut"); value.Exists() {
 		data.Unshut = types.BoolValue(true)
-	} else {
-		data.Unshut = types.BoolNull()
+	} else if !data.Unshut.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Unshut = types.BoolValue(false)
 	}
 }
 
@@ -202,19 +216,24 @@ func (data *HWModuleShutdown) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *HWModuleShutdownData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "shut"); value.Exists() {
 		data.Shut = types.BoolValue(true)
 	} else {
-		data.Shut = types.BoolNull()
+		data.Shut = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "unshut"); value.Exists() {
 		data.Unshut = types.BoolValue(true)
 	} else {
-		data.Unshut = types.BoolNull()
+		data.Unshut = types.BoolValue(false)
 	}
 }
 
@@ -222,15 +241,15 @@ func (data *HWModuleShutdownData) fromBody(ctx context.Context, res gjson.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *HWModuleShutdown) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shut"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shut"); value.Exists() {
 		data.Shut = types.BoolValue(true)
 	} else {
-		data.Shut = types.BoolNull()
+		data.Shut = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unshut"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unshut"); value.Exists() {
 		data.Unshut = types.BoolValue(true)
 	} else {
-		data.Unshut = types.BoolNull()
+		data.Unshut = types.BoolValue(false)
 	}
 }
 
@@ -238,12 +257,12 @@ func (data *HWModuleShutdown) fromBodyXML(ctx context.Context, res xmldot.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *HWModuleShutdownData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shut"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shut"); value.Exists() {
 		data.Shut = types.BoolValue(true)
 	} else {
 		data.Shut = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unshut"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unshut"); value.Exists() {
 		data.Unshut = types.BoolValue(true)
 	} else {
 		data.Unshut = types.BoolValue(false)

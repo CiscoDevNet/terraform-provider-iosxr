@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -76,13 +76,40 @@ func TestAccIosxrRouterHSRPInterfaceIPv4GroupV1(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterHSRPInterfaceIPv4GroupV1ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceName := primary.Attributes["interface_name"]
+		GroupId := primary.Attributes["group_id"]
+
+		return fmt.Sprintf("%s,%s", InterfaceName, GroupId), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrRouterHSRPInterfaceIPv4GroupV1PrerequisitesConfig = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrRouterHSRPInterfaceIPv4GroupV1Config_minimum() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv4_group_v1" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	group_id = 123` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -116,34 +143,9 @@ func testAccIosxrRouterHSRPInterfaceIPv4GroupV1Config_all() string {
 	config += `	name = "NAME11"` + "\n"
 	config += `	bfd_fast_detect_peer_ipv4 = "44.44.4.4"` + "\n"
 	config += `	bfd_fast_detect_peer_interface = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrRouterHSRPInterfaceIPv4GroupV1ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		InterfaceName := primary.Attributes["interface_name"]
-		GroupId := primary.Attributes["group_id"]
-
-		return fmt.Sprintf("%s,%s", InterfaceName, GroupId), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrRouterHSRPInterfaceIPv4GroupV1PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
-	attributes = {
-		"interface-name" = "GigabitEthernet0/0/0/1"
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites

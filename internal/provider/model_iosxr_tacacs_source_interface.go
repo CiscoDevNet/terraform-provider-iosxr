@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -110,7 +109,7 @@ func (data TACACSSourceInterface) toBody(ctx context.Context) string {
 func (data *TACACSSourceInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
-	} else {
+	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
 	}
 	for i := range data.SourceInterfaces {
@@ -158,17 +157,14 @@ func (data TACACSSourceInterface) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/source-interface", data.SourceInterface.ValueString())
 	}
 	if len(data.SourceInterfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.SourceInterfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/vrfs/vrf[vrf-name='" + item.Vrf.ValueString() + "']"
 			if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "vrf-name", item.Vrf.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.Vrf.ValueString())
 			}
 			if !item.Interface.IsNull() && !item.Interface.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "source-interface", item.Interface.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/source-interface", item.Interface.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"vrfs/vrf", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -182,7 +178,7 @@ func (data TACACSSourceInterface) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *TACACSSourceInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
@@ -192,7 +188,7 @@ func (data *TACACSSourceInterface) updateFromBodyXML(ctx context.Context, res xm
 		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -231,6 +227,10 @@ func (data *TACACSSourceInterface) fromBody(ctx context.Context, res gjson.Resul
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
@@ -254,9 +254,14 @@ func (data *TACACSSourceInterface) fromBody(ctx context.Context, res gjson.Resul
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *TACACSSourceInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
@@ -281,10 +286,10 @@ func (data *TACACSSourceInterfaceData) fromBody(ctx context.Context, res gjson.R
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TACACSSourceInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
 		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TACACSSourceInterfaceSourceInterfaces{}
@@ -304,10 +309,10 @@ func (data *TACACSSourceInterface) fromBodyXML(ctx context.Context, res xmldot.R
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TACACSSourceInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrfs/vrf"); value.Exists() {
 		data.SourceInterfaces = make([]TACACSSourceInterfaceSourceInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TACACSSourceInterfaceSourceInterfaces{}
@@ -389,9 +394,10 @@ func (data *TACACSSourceInterface) getEmptyLeafsDelete(ctx context.Context, stat
 func (data *TACACSSourceInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.SourceInterfaces {
-		keyValues := [...]string{data.SourceInterfaces[i].Vrf.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.SourceInterfaces[i].Vrf.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 	if !data.SourceInterface.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interface", data.getPath()))

@@ -110,11 +110,12 @@ func (data MPLSTrafficEng) toBodyXML(ctx context.Context) string {
 
 func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TrafficEng.IsNull() {
 			data.TrafficEng = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TrafficEng.IsNull() {
 			data.TrafficEng = types.BoolNull()
 		}
@@ -126,8 +127,11 @@ func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MPLSTrafficEng) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng"); value.Exists() {
-		data.TrafficEng = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TrafficEng.IsNull() {
+			data.TrafficEng = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TrafficEng.IsNull() {
@@ -144,10 +148,15 @@ func (data *MPLSTrafficEng) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
-	} else {
-		data.TrafficEng = types.BoolNull()
+	} else if !data.TrafficEng.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TrafficEng = types.BoolValue(false)
 	}
 }
 
@@ -155,14 +164,19 @@ func (data *MPLSTrafficEng) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
-		data.TrafficEng = types.BoolNull()
+		data.TrafficEng = types.BoolValue(false)
 	}
 }
 
@@ -170,10 +184,10 @@ func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res gjson.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MPLSTrafficEng) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
-		data.TrafficEng = types.BoolNull()
+		data.TrafficEng = types.BoolValue(false)
 	}
 }
 
@@ -181,7 +195,7 @@ func (data *MPLSTrafficEng) fromBodyXML(ctx context.Context, res xmldot.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MPLSTrafficEngData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/traffic-eng"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
 		data.TrafficEng = types.BoolValue(false)

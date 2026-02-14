@@ -26,7 +26,6 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -694,296 +693,314 @@ func (data PTPProfile) toBody(ctx context.Context) string {
 
 func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "port.state.subordinate-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PortStateSlaveOnly.IsNull() {
 			data.PortStateSlaveOnly = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PortStateSlaveOnly.IsNull() {
 			data.PortStateSlaveOnly = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "port.state.primary-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PortStateMasterOnly.IsNull() {
 			data.PortStateMasterOnly = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PortStateMasterOnly.IsNull() {
 			data.PortStateMasterOnly = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "port.state.any"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PortStateAny.IsNull() {
 			data.PortStateAny = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PortStateAny.IsNull() {
 			data.PortStateAny = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "source.ipv4.address"); value.Exists() && !data.SourceIpv4Address.IsNull() {
 		data.SourceIpv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.SourceIpv4Address.IsNull() {
 		data.SourceIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "source.ipv6.address"); value.Exists() && !data.SourceIpv6Address.IsNull() {
 		data.SourceIpv6Address = types.StringValue(value.String())
-	} else {
+	} else if data.SourceIpv6Address.IsNull() {
 		data.SourceIpv6Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "multicast"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Multicast.IsNull() {
 			data.Multicast = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Multicast.IsNull() {
 			data.Multicast = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "multicast.mixed"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastMixed.IsNull() {
 			data.MulticastMixed = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastMixed.IsNull() {
 			data.MulticastMixed = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "multicast.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastDisable.IsNull() {
 			data.MulticastDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastDisable.IsNull() {
 			data.MulticastDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "multicast.target-address.ethernet.mac-address-01-1b-19-00-00-00"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
 			data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
 			data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "multicast.target-address.ethernet.mac-address-01-80-c2-00-00-0e"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
 			data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
 			data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "transport.ipv4"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TransportIpv4.IsNull() {
 			data.TransportIpv4 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TransportIpv4.IsNull() {
 			data.TransportIpv4 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "transport.ipv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TransportIpv6.IsNull() {
 			data.TransportIpv6 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TransportIpv6.IsNull() {
 			data.TransportIpv6 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "transport.ethernet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TransportEthernet.IsNull() {
 			data.TransportEthernet = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TransportEthernet.IsNull() {
 			data.TransportEthernet = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.operation.one-step"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockOperationOneStep.IsNull() {
 			data.ClockOperationOneStep = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockOperationOneStep.IsNull() {
 			data.ClockOperationOneStep = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.operation.two-step"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockOperationTwoStep.IsNull() {
 			data.ClockOperationTwoStep = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockOperationTwoStep.IsNull() {
 			data.ClockOperationTwoStep = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "announce.interval"); value.Exists() && !data.AnnounceInterval.IsNull() {
 		data.AnnounceInterval = types.StringValue(value.String())
-	} else {
+	} else if data.AnnounceInterval.IsNull() {
 		data.AnnounceInterval = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "announce.frequency"); value.Exists() && !data.AnnounceFrequency.IsNull() {
 		data.AnnounceFrequency = types.StringValue(value.String())
-	} else {
+	} else if data.AnnounceFrequency.IsNull() {
 		data.AnnounceFrequency = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "announce.timeout"); value.Exists() && !data.AnnounceTimeout.IsNull() {
 		data.AnnounceTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.AnnounceTimeout.IsNull() {
 		data.AnnounceTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "announce.grant-duration"); value.Exists() && !data.AnnounceGrantDuration.IsNull() {
 		data.AnnounceGrantDuration = types.Int64Value(value.Int())
-	} else {
+	} else if data.AnnounceGrantDuration.IsNull() {
 		data.AnnounceGrantDuration = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sync.interval"); value.Exists() && !data.SyncInterval.IsNull() {
 		data.SyncInterval = types.StringValue(value.String())
-	} else {
+	} else if data.SyncInterval.IsNull() {
 		data.SyncInterval = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "sync.frequency"); value.Exists() && !data.SyncFrequency.IsNull() {
 		data.SyncFrequency = types.StringValue(value.String())
-	} else {
+	} else if data.SyncFrequency.IsNull() {
 		data.SyncFrequency = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "sync.grant-duration"); value.Exists() && !data.SyncGrantDuration.IsNull() {
 		data.SyncGrantDuration = types.Int64Value(value.Int())
-	} else {
+	} else if data.SyncGrantDuration.IsNull() {
 		data.SyncGrantDuration = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sync.timeout"); value.Exists() && !data.SyncTimeout.IsNull() {
 		data.SyncTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.SyncTimeout.IsNull() {
 		data.SyncTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay-request.interval"); value.Exists() && !data.DelayRequestInterval.IsNull() {
 		data.DelayRequestInterval = types.StringValue(value.String())
-	} else {
+	} else if data.DelayRequestInterval.IsNull() {
 		data.DelayRequestInterval = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "delay-request.frequency"); value.Exists() && !data.DelayRequestFrequency.IsNull() {
 		data.DelayRequestFrequency = types.StringValue(value.String())
-	} else {
+	} else if data.DelayRequestFrequency.IsNull() {
 		data.DelayRequestFrequency = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "cos"); value.Exists() && !data.Cos.IsNull() {
 		data.Cos = types.Int64Value(value.Int())
-	} else {
+	} else if data.Cos.IsNull() {
 		data.Cos = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "event-cos"); value.Exists() && !data.CosEvent.IsNull() {
 		data.CosEvent = types.Int64Value(value.Int())
-	} else {
+	} else if data.CosEvent.IsNull() {
 		data.CosEvent = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "general-cos"); value.Exists() && !data.CosGeneral.IsNull() {
 		data.CosGeneral = types.Int64Value(value.Int())
-	} else {
+	} else if data.CosGeneral.IsNull() {
 		data.CosGeneral = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dscp"); value.Exists() && !data.Dscp.IsNull() {
 		data.Dscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.Dscp.IsNull() {
 		data.Dscp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "event-dscp"); value.Exists() && !data.DscpEvent.IsNull() {
 		data.DscpEvent = types.Int64Value(value.Int())
-	} else {
+	} else if data.DscpEvent.IsNull() {
 		data.DscpEvent = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "general-dscp"); value.Exists() && !data.DscpGeneral.IsNull() {
 		data.DscpGeneral = types.Int64Value(value.Int())
-	} else {
+	} else if data.DscpGeneral.IsNull() {
 		data.DscpGeneral = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv4-ttl"); value.Exists() && !data.Ipv4Ttl.IsNull() {
 		data.Ipv4Ttl = types.Int64Value(value.Int())
-	} else {
+	} else if data.Ipv4Ttl.IsNull() {
 		data.Ipv4Ttl = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv6-hop-limit"); value.Exists() && !data.Ipv6HopLimit.IsNull() {
 		data.Ipv6HopLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.Ipv6HopLimit.IsNull() {
 		data.Ipv6HopLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay-asymmetry"); value.Exists() && !data.DelayAsymmetryValue.IsNull() {
 		data.DelayAsymmetryValue = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayAsymmetryValue.IsNull() {
 		data.DelayAsymmetryValue = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "nanoseconds"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DelayAsymmetryUnitNanoseconds.IsNull() {
 			data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DelayAsymmetryUnitNanoseconds.IsNull() {
 			data.DelayAsymmetryUnitNanoseconds = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "microseconds"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DelayAsymmetryUnitMicroseconds.IsNull() {
 			data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DelayAsymmetryUnitMicroseconds.IsNull() {
 			data.DelayAsymmetryUnitMicroseconds = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "milliseconds"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DelayAsymmetryUnitMilliseconds.IsNull() {
 			data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DelayAsymmetryUnitMilliseconds.IsNull() {
 			data.DelayAsymmetryUnitMilliseconds = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "delay-response.grant-duration"); value.Exists() && !data.DelayResponseGrantDuration.IsNull() {
 		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayResponseGrantDuration.IsNull() {
 		data.DelayResponseGrantDuration = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay-response.timeout"); value.Exists() && !data.DelayResponseTimeout.IsNull() {
 		data.DelayResponseTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayResponseTimeout.IsNull() {
 		data.DelayResponseTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "unicast-grant.invalid-request.reduce"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.UnicastGrantInvalidRequestReduce.IsNull() {
 			data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.UnicastGrantInvalidRequestReduce.IsNull() {
 			data.UnicastGrantInvalidRequestReduce = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "unicast-grant.invalid-request.deny"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.UnicastGrantInvalidRequestDeny.IsNull() {
 			data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.UnicastGrantInvalidRequestDeny.IsNull() {
 			data.UnicastGrantInvalidRequestDeny = types.BoolNull()
 		}
@@ -1017,21 +1034,15 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.SlaveIpv4s[i].Address = types.StringNull()
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.SlaveIpv4s[i].NonNegotiated.IsNull() && !data.SlaveIpv4s[i].NonNegotiated.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.SlaveIpv4s[i].NonNegotiated = types.BoolValue(false)
-			} else if !data.SlaveIpv4s[i].NonNegotiated.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.SlaveIpv4s[i].NonNegotiated.IsNull() {
 				data.SlaveIpv4s[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.SlaveIpv4s[i].NonNegotiated.IsNull() {
 				data.SlaveIpv4s[i].NonNegotiated = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.SlaveIpv4s[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 	}
@@ -1064,21 +1075,15 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.SlaveIpv6s[i].Address = types.StringNull()
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.SlaveIpv6s[i].NonNegotiated.IsNull() && !data.SlaveIpv6s[i].NonNegotiated.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.SlaveIpv6s[i].NonNegotiated = types.BoolValue(false)
-			} else if !data.SlaveIpv6s[i].NonNegotiated.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.SlaveIpv6s[i].NonNegotiated.IsNull() {
 				data.SlaveIpv6s[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.SlaveIpv6s[i].NonNegotiated.IsNull() {
 				data.SlaveIpv6s[i].NonNegotiated = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.SlaveIpv6s[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 	}
@@ -1111,21 +1116,15 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.SlaveEthernets[i].Address = types.StringNull()
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.SlaveEthernets[i].NonNegotiated.IsNull() && !data.SlaveEthernets[i].NonNegotiated.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.SlaveEthernets[i].NonNegotiated = types.BoolValue(false)
-			} else if !data.SlaveEthernets[i].NonNegotiated.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.SlaveEthernets[i].NonNegotiated.IsNull() {
 				data.SlaveEthernets[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.SlaveEthernets[i].NonNegotiated.IsNull() {
 				data.SlaveEthernets[i].NonNegotiated = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.SlaveEthernets[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 	}
@@ -1168,57 +1167,39 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterIpv4s[i].ClockClass = types.Int64Null()
 		}
 		if value := r.Get("multicast"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv4s[i].Multicast.IsNull() && !data.MasterIpv4s[i].Multicast.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv4s[i].Multicast = types.BoolValue(false)
-			} else if !data.MasterIpv4s[i].Multicast.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].Multicast.IsNull() {
 				data.MasterIpv4s[i].Multicast = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv4s[i].Multicast.IsNull() {
 				data.MasterIpv4s[i].Multicast = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv4s[i].Multicast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("multicast.mixed"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv4s[i].MulticastMixed.IsNull() && !data.MasterIpv4s[i].MulticastMixed.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv4s[i].MulticastMixed = types.BoolValue(false)
-			} else if !data.MasterIpv4s[i].MulticastMixed.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].MulticastMixed.IsNull() {
 				data.MasterIpv4s[i].MulticastMixed = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv4s[i].MulticastMixed.IsNull() {
 				data.MasterIpv4s[i].MulticastMixed = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv4s[i].MulticastMixed = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv4s[i].NonNegotiated.IsNull() && !data.MasterIpv4s[i].NonNegotiated.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv4s[i].NonNegotiated = types.BoolValue(false)
-			} else if !data.MasterIpv4s[i].NonNegotiated.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].NonNegotiated.IsNull() {
 				data.MasterIpv4s[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv4s[i].NonNegotiated.IsNull() {
 				data.MasterIpv4s[i].NonNegotiated = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv4s[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("delay-asymmetry"); value.Exists() && !data.MasterIpv4s[i].DelayAsymmetry.IsNull() {
@@ -1227,57 +1208,39 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterIpv4s[i].DelayAsymmetry = types.Int64Null()
 		}
 		if value := r.Get("nanoseconds"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv4s[i].Nanoseconds.IsNull() && !data.MasterIpv4s[i].Nanoseconds.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv4s[i].Nanoseconds = types.BoolValue(false)
-			} else if !data.MasterIpv4s[i].Nanoseconds.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].Nanoseconds.IsNull() {
 				data.MasterIpv4s[i].Nanoseconds = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv4s[i].Nanoseconds.IsNull() {
 				data.MasterIpv4s[i].Nanoseconds = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv4s[i].Nanoseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("microseconds"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv4s[i].Microseconds.IsNull() && !data.MasterIpv4s[i].Microseconds.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv4s[i].Microseconds = types.BoolValue(false)
-			} else if !data.MasterIpv4s[i].Microseconds.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].Microseconds.IsNull() {
 				data.MasterIpv4s[i].Microseconds = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv4s[i].Microseconds.IsNull() {
 				data.MasterIpv4s[i].Microseconds = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv4s[i].Microseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("milliseconds"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv4s[i].Milliseconds.IsNull() && !data.MasterIpv4s[i].Milliseconds.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv4s[i].Milliseconds = types.BoolValue(false)
-			} else if !data.MasterIpv4s[i].Milliseconds.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].Milliseconds.IsNull() {
 				data.MasterIpv4s[i].Milliseconds = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv4s[i].Milliseconds.IsNull() {
 				data.MasterIpv4s[i].Milliseconds = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv4s[i].Milliseconds = types.BoolValue(false)
 			}
 		}
 	}
@@ -1320,57 +1283,39 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterIpv6s[i].ClockClass = types.Int64Null()
 		}
 		if value := r.Get("multicast"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv6s[i].Multicast.IsNull() && !data.MasterIpv6s[i].Multicast.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv6s[i].Multicast = types.BoolValue(false)
-			} else if !data.MasterIpv6s[i].Multicast.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].Multicast.IsNull() {
 				data.MasterIpv6s[i].Multicast = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv6s[i].Multicast.IsNull() {
 				data.MasterIpv6s[i].Multicast = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv6s[i].Multicast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("multicast.mixed"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv6s[i].MulticastMixed.IsNull() && !data.MasterIpv6s[i].MulticastMixed.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv6s[i].MulticastMixed = types.BoolValue(false)
-			} else if !data.MasterIpv6s[i].MulticastMixed.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].MulticastMixed.IsNull() {
 				data.MasterIpv6s[i].MulticastMixed = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv6s[i].MulticastMixed.IsNull() {
 				data.MasterIpv6s[i].MulticastMixed = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv6s[i].MulticastMixed = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv6s[i].NonNegotiated.IsNull() && !data.MasterIpv6s[i].NonNegotiated.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv6s[i].NonNegotiated = types.BoolValue(false)
-			} else if !data.MasterIpv6s[i].NonNegotiated.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].NonNegotiated.IsNull() {
 				data.MasterIpv6s[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv6s[i].NonNegotiated.IsNull() {
 				data.MasterIpv6s[i].NonNegotiated = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv6s[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("delay-asymmetry"); value.Exists() && !data.MasterIpv6s[i].DelayAsymmetry.IsNull() {
@@ -1379,57 +1324,39 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterIpv6s[i].DelayAsymmetry = types.Int64Null()
 		}
 		if value := r.Get("nanoseconds"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv6s[i].Nanoseconds.IsNull() && !data.MasterIpv6s[i].Nanoseconds.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv6s[i].Nanoseconds = types.BoolValue(false)
-			} else if !data.MasterIpv6s[i].Nanoseconds.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].Nanoseconds.IsNull() {
 				data.MasterIpv6s[i].Nanoseconds = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv6s[i].Nanoseconds.IsNull() {
 				data.MasterIpv6s[i].Nanoseconds = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv6s[i].Nanoseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("microseconds"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv6s[i].Microseconds.IsNull() && !data.MasterIpv6s[i].Microseconds.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv6s[i].Microseconds = types.BoolValue(false)
-			} else if !data.MasterIpv6s[i].Microseconds.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].Microseconds.IsNull() {
 				data.MasterIpv6s[i].Microseconds = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv6s[i].Microseconds.IsNull() {
 				data.MasterIpv6s[i].Microseconds = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv6s[i].Microseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("milliseconds"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterIpv6s[i].Milliseconds.IsNull() && !data.MasterIpv6s[i].Milliseconds.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterIpv6s[i].Milliseconds = types.BoolValue(false)
-			} else if !data.MasterIpv6s[i].Milliseconds.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].Milliseconds.IsNull() {
 				data.MasterIpv6s[i].Milliseconds = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterIpv6s[i].Milliseconds.IsNull() {
 				data.MasterIpv6s[i].Milliseconds = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterIpv6s[i].Milliseconds = types.BoolValue(false)
 			}
 		}
 	}
@@ -1472,57 +1399,39 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterEthernets[i].ClockClass = types.Int64Null()
 		}
 		if value := r.Get("multicast"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterEthernets[i].Multicast.IsNull() && !data.MasterEthernets[i].Multicast.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterEthernets[i].Multicast = types.BoolValue(false)
-			} else if !data.MasterEthernets[i].Multicast.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].Multicast.IsNull() {
 				data.MasterEthernets[i].Multicast = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterEthernets[i].Multicast.IsNull() {
 				data.MasterEthernets[i].Multicast = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterEthernets[i].Multicast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("multicast.mixed"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterEthernets[i].MulticastMixed.IsNull() && !data.MasterEthernets[i].MulticastMixed.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterEthernets[i].MulticastMixed = types.BoolValue(false)
-			} else if !data.MasterEthernets[i].MulticastMixed.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].MulticastMixed.IsNull() {
 				data.MasterEthernets[i].MulticastMixed = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterEthernets[i].MulticastMixed.IsNull() {
 				data.MasterEthernets[i].MulticastMixed = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterEthernets[i].MulticastMixed = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("non-negotiated"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterEthernets[i].NonNegotiated.IsNull() && !data.MasterEthernets[i].NonNegotiated.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterEthernets[i].NonNegotiated = types.BoolValue(false)
-			} else if !data.MasterEthernets[i].NonNegotiated.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].NonNegotiated.IsNull() {
 				data.MasterEthernets[i].NonNegotiated = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterEthernets[i].NonNegotiated.IsNull() {
 				data.MasterEthernets[i].NonNegotiated = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterEthernets[i].NonNegotiated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("delay-asymmetry"); value.Exists() && !data.MasterEthernets[i].DelayAsymmetry.IsNull() {
@@ -1531,128 +1440,114 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 			data.MasterEthernets[i].DelayAsymmetry = types.Int64Null()
 		}
 		if value := r.Get("nanoseconds"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterEthernets[i].Nanoseconds.IsNull() && !data.MasterEthernets[i].Nanoseconds.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterEthernets[i].Nanoseconds = types.BoolValue(false)
-			} else if !data.MasterEthernets[i].Nanoseconds.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].Nanoseconds.IsNull() {
 				data.MasterEthernets[i].Nanoseconds = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterEthernets[i].Nanoseconds.IsNull() {
 				data.MasterEthernets[i].Nanoseconds = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterEthernets[i].Nanoseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("microseconds"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterEthernets[i].Microseconds.IsNull() && !data.MasterEthernets[i].Microseconds.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterEthernets[i].Microseconds = types.BoolValue(false)
-			} else if !data.MasterEthernets[i].Microseconds.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].Microseconds.IsNull() {
 				data.MasterEthernets[i].Microseconds = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterEthernets[i].Microseconds.IsNull() {
 				data.MasterEthernets[i].Microseconds = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterEthernets[i].Microseconds = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("milliseconds"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MasterEthernets[i].Milliseconds.IsNull() && !data.MasterEthernets[i].Milliseconds.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MasterEthernets[i].Milliseconds = types.BoolValue(false)
-			} else if !data.MasterEthernets[i].Milliseconds.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].Milliseconds.IsNull() {
 				data.MasterEthernets[i].Milliseconds = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MasterEthernets[i].Milliseconds.IsNull() {
 				data.MasterEthernets[i].Milliseconds = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MasterEthernets[i].Milliseconds = types.BoolValue(false)
 			}
 		}
 	}
 	if value := gjson.GetBytes(res, "interop.profile.default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InteropProfileDefault.IsNull() {
 			data.InteropProfileDefault = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InteropProfileDefault.IsNull() {
 			data.InteropProfileDefault = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interop.profile.g-8265-1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InteropProfileG82651.IsNull() {
 			data.InteropProfileG82651 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InteropProfileG82651.IsNull() {
 			data.InteropProfileG82651 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interop.profile.g-8275-1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InteropProfileG82751.IsNull() {
 			data.InteropProfileG82751 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InteropProfileG82751.IsNull() {
 			data.InteropProfileG82751 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interop.profile.g-8275-2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InteropProfileG82752.IsNull() {
 			data.InteropProfileG82752 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InteropProfileG82752.IsNull() {
 			data.InteropProfileG82752 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interop.domain"); value.Exists() && !data.InteropDomain.IsNull() {
 		data.InteropDomain = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropDomain.IsNull() {
 		data.InteropDomain = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interop.egress-conversion.priority1"); value.Exists() && !data.InteropEgressConversionPriority1.IsNull() {
 		data.InteropEgressConversionPriority1 = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropEgressConversionPriority1.IsNull() {
 		data.InteropEgressConversionPriority1 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interop.egress-conversion.priority2"); value.Exists() && !data.InteropEgressConversionPriority2.IsNull() {
 		data.InteropEgressConversionPriority2 = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropEgressConversionPriority2.IsNull() {
 		data.InteropEgressConversionPriority2 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-accuracy"); value.Exists() && !data.InteropEgressConversionClockAccuracy.IsNull() {
 		data.InteropEgressConversionClockAccuracy = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropEgressConversionClockAccuracy.IsNull() {
 		data.InteropEgressConversionClockAccuracy = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interop.egress-conversion.offset-scaled-log-variance"); value.Exists() && !data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-class.default"); value.Exists() && !data.InteropEgressConversionClockClassDefault.IsNull() {
 		data.InteropEgressConversionClockClassDefault = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropEgressConversionClockClassDefault.IsNull() {
 		data.InteropEgressConversionClockClassDefault = types.Int64Null()
 	}
 	for i := range data.InteropEgressConversionClockClassMappings {
@@ -1691,27 +1586,27 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "interop.ingress-conversion.priority1"); value.Exists() && !data.InteropIngressConversionPriority1.IsNull() {
 		data.InteropIngressConversionPriority1 = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropIngressConversionPriority1.IsNull() {
 		data.InteropIngressConversionPriority1 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interop.ingress-conversion.priority2"); value.Exists() && !data.InteropIngressConversionPriority2.IsNull() {
 		data.InteropIngressConversionPriority2 = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropIngressConversionPriority2.IsNull() {
 		data.InteropIngressConversionPriority2 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-accuracy"); value.Exists() && !data.InteropIngressConversionClockAccuracy.IsNull() {
 		data.InteropIngressConversionClockAccuracy = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropIngressConversionClockAccuracy.IsNull() {
 		data.InteropIngressConversionClockAccuracy = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interop.ingress-conversion.offset-scaled-log-variance"); value.Exists() && !data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-class.default"); value.Exists() && !data.InteropIngressConversionClockClassDefault.IsNull() {
 		data.InteropIngressConversionClockClassDefault = types.Int64Value(value.Int())
-	} else {
+	} else if data.InteropIngressConversionClockClassDefault.IsNull() {
 		data.InteropIngressConversionClockClassDefault = types.Int64Null()
 	}
 	for i := range data.InteropIngressConversionClockClassMappings {
@@ -1918,201 +1813,183 @@ func (data PTPProfile) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.SlaveIpv4s) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.SlaveIpv4s {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/subordinate/ipv4s/ipv4-non-negotiated[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.NonNegotiated.IsNull() && !item.NonNegotiated.IsUnknown() {
 				if item.NonNegotiated.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "non-negotiated", "")
+					body = helpers.SetFromXPath(body, basePath+"/non-negotiated", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"subordinate/ipv4s/ipv4-non-negotiated", cBody.Res())
 		}
 	}
 	if len(data.SlaveIpv6s) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.SlaveIpv6s {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/subordinate/ipv6s/ipv6[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.NonNegotiated.IsNull() && !item.NonNegotiated.IsUnknown() {
 				if item.NonNegotiated.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "non-negotiated", "")
+					body = helpers.SetFromXPath(body, basePath+"/non-negotiated", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"subordinate/ipv6s/ipv6", cBody.Res())
 		}
 	}
 	if len(data.SlaveEthernets) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.SlaveEthernets {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/subordinate/ethernets/ethernet[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.NonNegotiated.IsNull() && !item.NonNegotiated.IsUnknown() {
 				if item.NonNegotiated.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "non-negotiated", "")
+					body = helpers.SetFromXPath(body, basePath+"/non-negotiated", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"subordinate/ethernets/ethernet", cBody.Res())
 		}
 	}
 	if len(data.MasterIpv4s) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MasterIpv4s {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/primary/ipv4s/ipv4[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.Priority.IsNull() && !item.Priority.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
 			}
 			if !item.ClockClass.IsNull() && !item.ClockClass.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "clock-class", strconv.FormatInt(item.ClockClass.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/clock-class", strconv.FormatInt(item.ClockClass.ValueInt64(), 10))
 			}
 			if !item.Multicast.IsNull() && !item.Multicast.IsUnknown() {
 				if item.Multicast.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "multicast", "")
+					body = helpers.SetFromXPath(body, basePath+"/multicast", "")
 				}
 			}
 			if !item.MulticastMixed.IsNull() && !item.MulticastMixed.IsUnknown() {
 				if item.MulticastMixed.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "multicast/mixed", "")
+					body = helpers.SetFromXPath(body, basePath+"/multicast/mixed", "")
 				}
 			}
 			if !item.NonNegotiated.IsNull() && !item.NonNegotiated.IsUnknown() {
 				if item.NonNegotiated.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "non-negotiated", "")
+					body = helpers.SetFromXPath(body, basePath+"/non-negotiated", "")
 				}
 			}
 			if !item.DelayAsymmetry.IsNull() && !item.DelayAsymmetry.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "delay-asymmetry", strconv.FormatInt(item.DelayAsymmetry.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/delay-asymmetry", strconv.FormatInt(item.DelayAsymmetry.ValueInt64(), 10))
 			}
 			if !item.Nanoseconds.IsNull() && !item.Nanoseconds.IsUnknown() {
 				if item.Nanoseconds.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "nanoseconds", "")
+					body = helpers.SetFromXPath(body, basePath+"/nanoseconds", "")
 				}
 			}
 			if !item.Microseconds.IsNull() && !item.Microseconds.IsUnknown() {
 				if item.Microseconds.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "microseconds", "")
+					body = helpers.SetFromXPath(body, basePath+"/microseconds", "")
 				}
 			}
 			if !item.Milliseconds.IsNull() && !item.Milliseconds.IsUnknown() {
 				if item.Milliseconds.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "milliseconds", "")
+					body = helpers.SetFromXPath(body, basePath+"/milliseconds", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"primary/ipv4s/ipv4", cBody.Res())
 		}
 	}
 	if len(data.MasterIpv6s) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MasterIpv6s {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/primary/ipv6s/ipv6[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.Priority.IsNull() && !item.Priority.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
 			}
 			if !item.ClockClass.IsNull() && !item.ClockClass.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "clock-class", strconv.FormatInt(item.ClockClass.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/clock-class", strconv.FormatInt(item.ClockClass.ValueInt64(), 10))
 			}
 			if !item.Multicast.IsNull() && !item.Multicast.IsUnknown() {
 				if item.Multicast.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "multicast", "")
+					body = helpers.SetFromXPath(body, basePath+"/multicast", "")
 				}
 			}
 			if !item.MulticastMixed.IsNull() && !item.MulticastMixed.IsUnknown() {
 				if item.MulticastMixed.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "multicast/mixed", "")
+					body = helpers.SetFromXPath(body, basePath+"/multicast/mixed", "")
 				}
 			}
 			if !item.NonNegotiated.IsNull() && !item.NonNegotiated.IsUnknown() {
 				if item.NonNegotiated.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "non-negotiated", "")
+					body = helpers.SetFromXPath(body, basePath+"/non-negotiated", "")
 				}
 			}
 			if !item.DelayAsymmetry.IsNull() && !item.DelayAsymmetry.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "delay-asymmetry", strconv.FormatInt(item.DelayAsymmetry.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/delay-asymmetry", strconv.FormatInt(item.DelayAsymmetry.ValueInt64(), 10))
 			}
 			if !item.Nanoseconds.IsNull() && !item.Nanoseconds.IsUnknown() {
 				if item.Nanoseconds.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "nanoseconds", "")
+					body = helpers.SetFromXPath(body, basePath+"/nanoseconds", "")
 				}
 			}
 			if !item.Microseconds.IsNull() && !item.Microseconds.IsUnknown() {
 				if item.Microseconds.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "microseconds", "")
+					body = helpers.SetFromXPath(body, basePath+"/microseconds", "")
 				}
 			}
 			if !item.Milliseconds.IsNull() && !item.Milliseconds.IsUnknown() {
 				if item.Milliseconds.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "milliseconds", "")
+					body = helpers.SetFromXPath(body, basePath+"/milliseconds", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"primary/ipv6s/ipv6", cBody.Res())
 		}
 	}
 	if len(data.MasterEthernets) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MasterEthernets {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/primary/ethernets/ethernet[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.Priority.IsNull() && !item.Priority.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
 			}
 			if !item.ClockClass.IsNull() && !item.ClockClass.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "clock-class", strconv.FormatInt(item.ClockClass.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/clock-class", strconv.FormatInt(item.ClockClass.ValueInt64(), 10))
 			}
 			if !item.Multicast.IsNull() && !item.Multicast.IsUnknown() {
 				if item.Multicast.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "multicast", "")
+					body = helpers.SetFromXPath(body, basePath+"/multicast", "")
 				}
 			}
 			if !item.MulticastMixed.IsNull() && !item.MulticastMixed.IsUnknown() {
 				if item.MulticastMixed.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "multicast/mixed", "")
+					body = helpers.SetFromXPath(body, basePath+"/multicast/mixed", "")
 				}
 			}
 			if !item.NonNegotiated.IsNull() && !item.NonNegotiated.IsUnknown() {
 				if item.NonNegotiated.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "non-negotiated", "")
+					body = helpers.SetFromXPath(body, basePath+"/non-negotiated", "")
 				}
 			}
 			if !item.DelayAsymmetry.IsNull() && !item.DelayAsymmetry.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "delay-asymmetry", strconv.FormatInt(item.DelayAsymmetry.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/delay-asymmetry", strconv.FormatInt(item.DelayAsymmetry.ValueInt64(), 10))
 			}
 			if !item.Nanoseconds.IsNull() && !item.Nanoseconds.IsUnknown() {
 				if item.Nanoseconds.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "nanoseconds", "")
+					body = helpers.SetFromXPath(body, basePath+"/nanoseconds", "")
 				}
 			}
 			if !item.Microseconds.IsNull() && !item.Microseconds.IsUnknown() {
 				if item.Microseconds.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "microseconds", "")
+					body = helpers.SetFromXPath(body, basePath+"/microseconds", "")
 				}
 			}
 			if !item.Milliseconds.IsNull() && !item.Milliseconds.IsUnknown() {
 				if item.Milliseconds.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "milliseconds", "")
+					body = helpers.SetFromXPath(body, basePath+"/milliseconds", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"primary/ethernets/ethernet", cBody.Res())
 		}
 	}
 	if !data.InteropProfileDefault.IsNull() && !data.InteropProfileDefault.IsUnknown() {
@@ -2154,17 +2031,14 @@ func (data PTPProfile) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/interop/egress-conversion/clock-class/default", strconv.FormatInt(data.InteropEgressConversionClockClassDefault.ValueInt64(), 10))
 	}
 	if len(data.InteropEgressConversionClockClassMappings) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.InteropEgressConversionClockClassMappings {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/interop/egress-conversion/clock-class/mappings/mapping[clock-class-to-map-from='" + strconv.FormatInt(item.ClockClassToMapFrom.ValueInt64(), 10) + "']"
 			if !item.ClockClassToMapFrom.IsNull() && !item.ClockClassToMapFrom.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "clock-class-to-map-from", strconv.FormatInt(item.ClockClassToMapFrom.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/clock-class-to-map-from", strconv.FormatInt(item.ClockClassToMapFrom.ValueInt64(), 10))
 			}
 			if !item.ClockClassToMapTo.IsNull() && !item.ClockClassToMapTo.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "clock-class-to-map-to", strconv.FormatInt(item.ClockClassToMapTo.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/clock-class-to-map-to", strconv.FormatInt(item.ClockClassToMapTo.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"interop/egress-conversion/clock-class/mappings/mapping", cBody.Res())
 		}
 	}
 	if !data.InteropIngressConversionPriority1.IsNull() && !data.InteropIngressConversionPriority1.IsUnknown() {
@@ -2183,17 +2057,14 @@ func (data PTPProfile) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/interop/ingress-conversion/clock-class/default", strconv.FormatInt(data.InteropIngressConversionClockClassDefault.ValueInt64(), 10))
 	}
 	if len(data.InteropIngressConversionClockClassMappings) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.InteropIngressConversionClockClassMappings {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/interop/ingress-conversion/clock-class/mappings/mapping[clock-class-to-map-from='" + strconv.FormatInt(item.ClockClassToMapFrom.ValueInt64(), 10) + "']"
 			if !item.ClockClassToMapFrom.IsNull() && !item.ClockClassToMapFrom.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "clock-class-to-map-from", strconv.FormatInt(item.ClockClassToMapFrom.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/clock-class-to-map-from", strconv.FormatInt(item.ClockClassToMapFrom.ValueInt64(), 10))
 			}
 			if !item.ClockClassToMapTo.IsNull() && !item.ClockClassToMapTo.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "clock-class-to-map-to", strconv.FormatInt(item.ClockClassToMapTo.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/clock-class-to-map-to", strconv.FormatInt(item.ClockClassToMapTo.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"interop/ingress-conversion/clock-class/mappings/mapping", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -2207,264 +2078,318 @@ func (data PTPProfile) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/profile-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-name"); value.Exists() {
 		data.ProfileName = types.StringValue(value.String())
 	} else if data.ProfileName.IsNull() {
 		data.ProfileName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/port/state/subordinate-only"); value.Exists() {
-		data.PortStateSlaveOnly = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/port/state/subordinate-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PortStateSlaveOnly.IsNull() {
+			data.PortStateSlaveOnly = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PortStateSlaveOnly.IsNull() {
 			data.PortStateSlaveOnly = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/port/state/primary-only"); value.Exists() {
-		data.PortStateMasterOnly = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/port/state/primary-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PortStateMasterOnly.IsNull() {
+			data.PortStateMasterOnly = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PortStateMasterOnly.IsNull() {
 			data.PortStateMasterOnly = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/port/state/any"); value.Exists() {
-		data.PortStateAny = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/port/state/any"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PortStateAny.IsNull() {
+			data.PortStateAny = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PortStateAny.IsNull() {
 			data.PortStateAny = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/ipv4/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/ipv4/address"); value.Exists() {
 		data.SourceIpv4Address = types.StringValue(value.String())
 	} else if data.SourceIpv4Address.IsNull() {
 		data.SourceIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/ipv6/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/ipv6/address"); value.Exists() {
 		data.SourceIpv6Address = types.StringValue(value.String())
 	} else if data.SourceIpv6Address.IsNull() {
 		data.SourceIpv6Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast"); value.Exists() {
-		data.Multicast = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Multicast.IsNull() {
+			data.Multicast = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Multicast.IsNull() {
 			data.Multicast = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/mixed"); value.Exists() {
-		data.MulticastMixed = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/mixed"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MulticastMixed.IsNull() {
+			data.MulticastMixed = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastMixed.IsNull() {
 			data.MulticastMixed = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/disable"); value.Exists() {
-		data.MulticastDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MulticastDisable.IsNull() {
+			data.MulticastDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastDisable.IsNull() {
 			data.MulticastDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-1b-19-00-00-00"); value.Exists() {
-		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-1b-19-00-00-00"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
+			data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
 			data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-80-c2-00-00-0e"); value.Exists() {
-		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-80-c2-00-00-0e"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
+			data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
 			data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/ipv4"); value.Exists() {
-		data.TransportIpv4 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/ipv4"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportIpv4.IsNull() {
+			data.TransportIpv4 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TransportIpv4.IsNull() {
 			data.TransportIpv4 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/ipv6"); value.Exists() {
-		data.TransportIpv6 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/ipv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportIpv6.IsNull() {
+			data.TransportIpv6 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TransportIpv6.IsNull() {
 			data.TransportIpv6 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/ethernet"); value.Exists() {
-		data.TransportEthernet = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/ethernet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransportEthernet.IsNull() {
+			data.TransportEthernet = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TransportEthernet.IsNull() {
 			data.TransportEthernet = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/operation/one-step"); value.Exists() {
-		data.ClockOperationOneStep = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/operation/one-step"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockOperationOneStep.IsNull() {
+			data.ClockOperationOneStep = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockOperationOneStep.IsNull() {
 			data.ClockOperationOneStep = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/operation/two-step"); value.Exists() {
-		data.ClockOperationTwoStep = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/operation/two-step"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockOperationTwoStep.IsNull() {
+			data.ClockOperationTwoStep = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockOperationTwoStep.IsNull() {
 			data.ClockOperationTwoStep = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/interval"); value.Exists() {
 		data.AnnounceInterval = types.StringValue(value.String())
 	} else if data.AnnounceInterval.IsNull() {
 		data.AnnounceInterval = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/frequency"); value.Exists() {
 		data.AnnounceFrequency = types.StringValue(value.String())
 	} else if data.AnnounceFrequency.IsNull() {
 		data.AnnounceFrequency = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/timeout"); value.Exists() {
 		data.AnnounceTimeout = types.Int64Value(value.Int())
 	} else if data.AnnounceTimeout.IsNull() {
 		data.AnnounceTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/grant-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/grant-duration"); value.Exists() {
 		data.AnnounceGrantDuration = types.Int64Value(value.Int())
 	} else if data.AnnounceGrantDuration.IsNull() {
 		data.AnnounceGrantDuration = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/interval"); value.Exists() {
 		data.SyncInterval = types.StringValue(value.String())
 	} else if data.SyncInterval.IsNull() {
 		data.SyncInterval = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/frequency"); value.Exists() {
 		data.SyncFrequency = types.StringValue(value.String())
 	} else if data.SyncFrequency.IsNull() {
 		data.SyncFrequency = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/grant-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/grant-duration"); value.Exists() {
 		data.SyncGrantDuration = types.Int64Value(value.Int())
 	} else if data.SyncGrantDuration.IsNull() {
 		data.SyncGrantDuration = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/timeout"); value.Exists() {
 		data.SyncTimeout = types.Int64Value(value.Int())
 	} else if data.SyncTimeout.IsNull() {
 		data.SyncTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-request/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-request/interval"); value.Exists() {
 		data.DelayRequestInterval = types.StringValue(value.String())
 	} else if data.DelayRequestInterval.IsNull() {
 		data.DelayRequestInterval = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-request/frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-request/frequency"); value.Exists() {
 		data.DelayRequestFrequency = types.StringValue(value.String())
 	} else if data.DelayRequestFrequency.IsNull() {
 		data.DelayRequestFrequency = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cos"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cos"); value.Exists() {
 		data.Cos = types.Int64Value(value.Int())
 	} else if data.Cos.IsNull() {
 		data.Cos = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/event-cos"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/event-cos"); value.Exists() {
 		data.CosEvent = types.Int64Value(value.Int())
 	} else if data.CosEvent.IsNull() {
 		data.CosEvent = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/general-cos"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/general-cos"); value.Exists() {
 		data.CosGeneral = types.Int64Value(value.Int())
 	} else if data.CosGeneral.IsNull() {
 		data.CosGeneral = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	} else if data.Dscp.IsNull() {
 		data.Dscp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/event-dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/event-dscp"); value.Exists() {
 		data.DscpEvent = types.Int64Value(value.Int())
 	} else if data.DscpEvent.IsNull() {
 		data.DscpEvent = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/general-dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/general-dscp"); value.Exists() {
 		data.DscpGeneral = types.Int64Value(value.Int())
 	} else if data.DscpGeneral.IsNull() {
 		data.DscpGeneral = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4-ttl"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4-ttl"); value.Exists() {
 		data.Ipv4Ttl = types.Int64Value(value.Int())
 	} else if data.Ipv4Ttl.IsNull() {
 		data.Ipv4Ttl = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6-hop-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6-hop-limit"); value.Exists() {
 		data.Ipv6HopLimit = types.Int64Value(value.Int())
 	} else if data.Ipv6HopLimit.IsNull() {
 		data.Ipv6HopLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-asymmetry"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-asymmetry"); value.Exists() {
 		data.DelayAsymmetryValue = types.Int64Value(value.Int())
 	} else if data.DelayAsymmetryValue.IsNull() {
 		data.DelayAsymmetryValue = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nanoseconds"); value.Exists() {
-		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/nanoseconds"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayAsymmetryUnitNanoseconds.IsNull() {
+			data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DelayAsymmetryUnitNanoseconds.IsNull() {
 			data.DelayAsymmetryUnitNanoseconds = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/microseconds"); value.Exists() {
-		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/microseconds"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayAsymmetryUnitMicroseconds.IsNull() {
+			data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DelayAsymmetryUnitMicroseconds.IsNull() {
 			data.DelayAsymmetryUnitMicroseconds = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/milliseconds"); value.Exists() {
-		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/milliseconds"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayAsymmetryUnitMilliseconds.IsNull() {
+			data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DelayAsymmetryUnitMilliseconds.IsNull() {
 			data.DelayAsymmetryUnitMilliseconds = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-response/grant-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-response/grant-duration"); value.Exists() {
 		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
 	} else if data.DelayResponseGrantDuration.IsNull() {
 		data.DelayResponseGrantDuration = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-response/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-response/timeout"); value.Exists() {
 		data.DelayResponseTimeout = types.Int64Value(value.Int())
 	} else if data.DelayResponseTimeout.IsNull() {
 		data.DelayResponseTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unicast-grant/invalid-request/reduce"); value.Exists() {
-		data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unicast-grant/invalid-request/reduce"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UnicastGrantInvalidRequestReduce.IsNull() {
+			data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.UnicastGrantInvalidRequestReduce.IsNull() {
 			data.UnicastGrantInvalidRequestReduce = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unicast-grant/invalid-request/deny"); value.Exists() {
-		data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unicast-grant/invalid-request/deny"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UnicastGrantInvalidRequestDeny.IsNull() {
+			data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.UnicastGrantInvalidRequestDeny.IsNull() {
@@ -2476,7 +2401,7 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 		keyValues := [...]string{data.SlaveIpv4s[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/subordinate/ipv4s/ipv4-non-negotiated").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subordinate/ipv4s/ipv4-non-negotiated").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2500,7 +2425,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.SlaveIpv4s[i].Address = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "non-negotiated"); value.Exists() {
-			data.SlaveIpv4s[i].NonNegotiated = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.SlaveIpv4s[i].NonNegotiated.IsNull() {
+				data.SlaveIpv4s[i].NonNegotiated = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2514,7 +2442,7 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 		keyValues := [...]string{data.SlaveIpv6s[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/subordinate/ipv6s/ipv6").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subordinate/ipv6s/ipv6").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2538,7 +2466,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.SlaveIpv6s[i].Address = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "non-negotiated"); value.Exists() {
-			data.SlaveIpv6s[i].NonNegotiated = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.SlaveIpv6s[i].NonNegotiated.IsNull() {
+				data.SlaveIpv6s[i].NonNegotiated = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2552,7 +2483,7 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 		keyValues := [...]string{data.SlaveEthernets[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/subordinate/ethernets/ethernet").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subordinate/ethernets/ethernet").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2576,7 +2507,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.SlaveEthernets[i].Address = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "non-negotiated"); value.Exists() {
-			data.SlaveEthernets[i].NonNegotiated = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.SlaveEthernets[i].NonNegotiated.IsNull() {
+				data.SlaveEthernets[i].NonNegotiated = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2590,7 +2524,7 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 		keyValues := [...]string{data.MasterIpv4s[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/ipv4s/ipv4").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/ipv4s/ipv4").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2624,7 +2558,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.MasterIpv4s[i].ClockClass = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "multicast"); value.Exists() {
-			data.MasterIpv4s[i].Multicast = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].Multicast.IsNull() {
+				data.MasterIpv4s[i].Multicast = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2633,7 +2570,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "multicast/mixed"); value.Exists() {
-			data.MasterIpv4s[i].MulticastMixed = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].MulticastMixed.IsNull() {
+				data.MasterIpv4s[i].MulticastMixed = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2642,7 +2582,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "non-negotiated"); value.Exists() {
-			data.MasterIpv4s[i].NonNegotiated = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].NonNegotiated.IsNull() {
+				data.MasterIpv4s[i].NonNegotiated = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2656,7 +2599,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.MasterIpv4s[i].DelayAsymmetry = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "nanoseconds"); value.Exists() {
-			data.MasterIpv4s[i].Nanoseconds = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].Nanoseconds.IsNull() {
+				data.MasterIpv4s[i].Nanoseconds = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2665,7 +2611,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "microseconds"); value.Exists() {
-			data.MasterIpv4s[i].Microseconds = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].Microseconds.IsNull() {
+				data.MasterIpv4s[i].Microseconds = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2674,7 +2623,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "milliseconds"); value.Exists() {
-			data.MasterIpv4s[i].Milliseconds = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv4s[i].Milliseconds.IsNull() {
+				data.MasterIpv4s[i].Milliseconds = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2688,7 +2640,7 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 		keyValues := [...]string{data.MasterIpv6s[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/ipv6s/ipv6").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/ipv6s/ipv6").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2722,7 +2674,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.MasterIpv6s[i].ClockClass = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "multicast"); value.Exists() {
-			data.MasterIpv6s[i].Multicast = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].Multicast.IsNull() {
+				data.MasterIpv6s[i].Multicast = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2731,7 +2686,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "multicast/mixed"); value.Exists() {
-			data.MasterIpv6s[i].MulticastMixed = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].MulticastMixed.IsNull() {
+				data.MasterIpv6s[i].MulticastMixed = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2740,7 +2698,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "non-negotiated"); value.Exists() {
-			data.MasterIpv6s[i].NonNegotiated = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].NonNegotiated.IsNull() {
+				data.MasterIpv6s[i].NonNegotiated = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2754,7 +2715,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.MasterIpv6s[i].DelayAsymmetry = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "nanoseconds"); value.Exists() {
-			data.MasterIpv6s[i].Nanoseconds = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].Nanoseconds.IsNull() {
+				data.MasterIpv6s[i].Nanoseconds = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2763,7 +2727,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "microseconds"); value.Exists() {
-			data.MasterIpv6s[i].Microseconds = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].Microseconds.IsNull() {
+				data.MasterIpv6s[i].Microseconds = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2772,7 +2739,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "milliseconds"); value.Exists() {
-			data.MasterIpv6s[i].Milliseconds = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterIpv6s[i].Milliseconds.IsNull() {
+				data.MasterIpv6s[i].Milliseconds = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2786,7 +2756,7 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 		keyValues := [...]string{data.MasterEthernets[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/ethernets/ethernet").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/ethernets/ethernet").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2820,7 +2790,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.MasterEthernets[i].ClockClass = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "multicast"); value.Exists() {
-			data.MasterEthernets[i].Multicast = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].Multicast.IsNull() {
+				data.MasterEthernets[i].Multicast = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2829,7 +2802,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "multicast/mixed"); value.Exists() {
-			data.MasterEthernets[i].MulticastMixed = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].MulticastMixed.IsNull() {
+				data.MasterEthernets[i].MulticastMixed = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2838,7 +2814,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "non-negotiated"); value.Exists() {
-			data.MasterEthernets[i].NonNegotiated = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].NonNegotiated.IsNull() {
+				data.MasterEthernets[i].NonNegotiated = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2852,7 +2831,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.MasterEthernets[i].DelayAsymmetry = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "nanoseconds"); value.Exists() {
-			data.MasterEthernets[i].Nanoseconds = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].Nanoseconds.IsNull() {
+				data.MasterEthernets[i].Nanoseconds = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2861,7 +2843,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "microseconds"); value.Exists() {
-			data.MasterEthernets[i].Microseconds = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].Microseconds.IsNull() {
+				data.MasterEthernets[i].Microseconds = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2870,7 +2855,10 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 		if value := helpers.GetFromXPath(r, "milliseconds"); value.Exists() {
-			data.MasterEthernets[i].Milliseconds = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MasterEthernets[i].Milliseconds.IsNull() {
+				data.MasterEthernets[i].Milliseconds = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2879,64 +2867,76 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/default"); value.Exists() {
-		data.InteropProfileDefault = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InteropProfileDefault.IsNull() {
+			data.InteropProfileDefault = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InteropProfileDefault.IsNull() {
 			data.InteropProfileDefault = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/g-8265-1"); value.Exists() {
-		data.InteropProfileG82651 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/g-8265-1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InteropProfileG82651.IsNull() {
+			data.InteropProfileG82651 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InteropProfileG82651.IsNull() {
 			data.InteropProfileG82651 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/g-8275-1"); value.Exists() {
-		data.InteropProfileG82751 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/g-8275-1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InteropProfileG82751.IsNull() {
+			data.InteropProfileG82751 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InteropProfileG82751.IsNull() {
 			data.InteropProfileG82751 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/g-8275-2"); value.Exists() {
-		data.InteropProfileG82752 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/g-8275-2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InteropProfileG82752.IsNull() {
+			data.InteropProfileG82752 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InteropProfileG82752.IsNull() {
 			data.InteropProfileG82752 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/domain"); value.Exists() {
 		data.InteropDomain = types.Int64Value(value.Int())
 	} else if data.InteropDomain.IsNull() {
 		data.InteropDomain = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/priority1"); value.Exists() {
 		data.InteropEgressConversionPriority1 = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionPriority1.IsNull() {
 		data.InteropEgressConversionPriority1 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/priority2"); value.Exists() {
 		data.InteropEgressConversionPriority2 = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionPriority2.IsNull() {
 		data.InteropEgressConversionPriority2 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/clock-accuracy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/clock-accuracy"); value.Exists() {
 		data.InteropEgressConversionClockAccuracy = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionClockAccuracy.IsNull() {
 		data.InteropEgressConversionClockAccuracy = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/offset-scaled-log-variance"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/offset-scaled-log-variance"); value.Exists() {
 		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/clock-class/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/clock-class/default"); value.Exists() {
 		data.InteropEgressConversionClockClassDefault = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionClockClassDefault.IsNull() {
 		data.InteropEgressConversionClockClassDefault = types.Int64Null()
@@ -2946,7 +2946,7 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 		keyValues := [...]string{strconv.FormatInt(data.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/clock-class/mappings/mapping").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/clock-class/mappings/mapping").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2975,27 +2975,27 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.InteropEgressConversionClockClassMappings[i].ClockClassToMapTo = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/priority1"); value.Exists() {
 		data.InteropIngressConversionPriority1 = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionPriority1.IsNull() {
 		data.InteropIngressConversionPriority1 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/priority2"); value.Exists() {
 		data.InteropIngressConversionPriority2 = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionPriority2.IsNull() {
 		data.InteropIngressConversionPriority2 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/clock-accuracy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/clock-accuracy"); value.Exists() {
 		data.InteropIngressConversionClockAccuracy = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionClockAccuracy.IsNull() {
 		data.InteropIngressConversionClockAccuracy = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/offset-scaled-log-variance"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/offset-scaled-log-variance"); value.Exists() {
 		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/clock-class/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/clock-class/default"); value.Exists() {
 		data.InteropIngressConversionClockClassDefault = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionClockClassDefault.IsNull() {
 		data.InteropIngressConversionClockClassDefault = types.Int64Null()
@@ -3005,7 +3005,7 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/clock-class/mappings/mapping").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/clock-class/mappings/mapping").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3044,20 +3044,27 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "port.state.subordinate-only"); value.Exists() {
 		data.PortStateSlaveOnly = types.BoolValue(true)
-	} else {
-		data.PortStateSlaveOnly = types.BoolNull()
+	} else if !data.PortStateSlaveOnly.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PortStateSlaveOnly = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "port.state.primary-only"); value.Exists() {
 		data.PortStateMasterOnly = types.BoolValue(true)
-	} else {
-		data.PortStateMasterOnly = types.BoolNull()
+	} else if !data.PortStateMasterOnly.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PortStateMasterOnly = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "port.state.any"); value.Exists() {
 		data.PortStateAny = types.BoolValue(true)
-	} else {
-		data.PortStateAny = types.BoolNull()
+	} else if !data.PortStateAny.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PortStateAny = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "source.ipv4.address"); value.Exists() {
 		data.SourceIpv4Address = types.StringValue(value.String())
@@ -3067,53 +3074,63 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "multicast"); value.Exists() {
 		data.Multicast = types.BoolValue(true)
-	} else {
-		data.Multicast = types.BoolNull()
+	} else if !data.Multicast.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Multicast = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.mixed"); value.Exists() {
 		data.MulticastMixed = types.BoolValue(true)
-	} else {
-		data.MulticastMixed = types.BoolNull()
+	} else if !data.MulticastMixed.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastMixed = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.disable"); value.Exists() {
 		data.MulticastDisable = types.BoolValue(true)
-	} else {
-		data.MulticastDisable = types.BoolNull()
+	} else if !data.MulticastDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.target-address.ethernet.mac-address-01-1b-19-00-00-00"); value.Exists() {
 		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
-	} else {
-		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolNull()
+	} else if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.target-address.ethernet.mac-address-01-80-c2-00-00-0e"); value.Exists() {
 		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
-	} else {
-		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolNull()
+	} else if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transport.ipv4"); value.Exists() {
 		data.TransportIpv4 = types.BoolValue(true)
-	} else {
-		data.TransportIpv4 = types.BoolNull()
+	} else if !data.TransportIpv4.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportIpv4 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transport.ipv6"); value.Exists() {
 		data.TransportIpv6 = types.BoolValue(true)
-	} else {
-		data.TransportIpv6 = types.BoolNull()
+	} else if !data.TransportIpv6.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportIpv6 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transport.ethernet"); value.Exists() {
 		data.TransportEthernet = types.BoolValue(true)
-	} else {
-		data.TransportEthernet = types.BoolNull()
+	} else if !data.TransportEthernet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportEthernet = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.operation.one-step"); value.Exists() {
 		data.ClockOperationOneStep = types.BoolValue(true)
-	} else {
-		data.ClockOperationOneStep = types.BoolNull()
+	} else if !data.ClockOperationOneStep.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockOperationOneStep = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.operation.two-step"); value.Exists() {
 		data.ClockOperationTwoStep = types.BoolValue(true)
-	} else {
-		data.ClockOperationTwoStep = types.BoolNull()
+	} else if !data.ClockOperationTwoStep.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockOperationTwoStep = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "announce.interval"); value.Exists() {
 		data.AnnounceInterval = types.StringValue(value.String())
@@ -3174,18 +3191,21 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "nanoseconds"); value.Exists() {
 		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
-	} else {
-		data.DelayAsymmetryUnitNanoseconds = types.BoolNull()
+	} else if !data.DelayAsymmetryUnitNanoseconds.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "microseconds"); value.Exists() {
 		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
-	} else {
-		data.DelayAsymmetryUnitMicroseconds = types.BoolNull()
+	} else if !data.DelayAsymmetryUnitMicroseconds.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "milliseconds"); value.Exists() {
 		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
-	} else {
-		data.DelayAsymmetryUnitMilliseconds = types.BoolNull()
+	} else if !data.DelayAsymmetryUnitMilliseconds.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "delay-response.grant-duration"); value.Exists() {
 		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
@@ -3195,13 +3215,15 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "unicast-grant.invalid-request.reduce"); value.Exists() {
 		data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
-	} else {
-		data.UnicastGrantInvalidRequestReduce = types.BoolNull()
+	} else if !data.UnicastGrantInvalidRequestReduce.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UnicastGrantInvalidRequestReduce = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "unicast-grant.invalid-request.deny"); value.Exists() {
 		data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
-	} else {
-		data.UnicastGrantInvalidRequestDeny = types.BoolNull()
+	} else if !data.UnicastGrantInvalidRequestDeny.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UnicastGrantInvalidRequestDeny = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "subordinate.ipv4s.ipv4-non-negotiated"); value.Exists() {
 		data.SlaveIpv4s = make([]PTPProfileSlaveIpv4s, 0)
@@ -3212,8 +3234,9 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolNull()
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveIpv4s = append(data.SlaveIpv4s, item)
 			return true
@@ -3228,8 +3251,9 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolNull()
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveIpv6s = append(data.SlaveIpv6s, item)
 			return true
@@ -3244,8 +3268,9 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolNull()
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveEthernets = append(data.SlaveEthernets, item)
 			return true
@@ -3266,36 +3291,42 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
-			} else {
-				item.Multicast = types.BoolNull()
+			} else if !item.Multicast.IsNull() {
+				// Only set to false if it was previously set
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
-			} else {
-				item.MulticastMixed = types.BoolNull()
+			} else if !item.MulticastMixed.IsNull() {
+				// Only set to false if it was previously set
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolNull()
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
-			} else {
-				item.Nanoseconds = types.BoolNull()
+			} else if !item.Nanoseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
-			} else {
-				item.Microseconds = types.BoolNull()
+			} else if !item.Microseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
-			} else {
-				item.Milliseconds = types.BoolNull()
+			} else if !item.Milliseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterIpv4s = append(data.MasterIpv4s, item)
 			return true
@@ -3316,36 +3347,42 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
-			} else {
-				item.Multicast = types.BoolNull()
+			} else if !item.Multicast.IsNull() {
+				// Only set to false if it was previously set
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
-			} else {
-				item.MulticastMixed = types.BoolNull()
+			} else if !item.MulticastMixed.IsNull() {
+				// Only set to false if it was previously set
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolNull()
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
-			} else {
-				item.Nanoseconds = types.BoolNull()
+			} else if !item.Nanoseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
-			} else {
-				item.Microseconds = types.BoolNull()
+			} else if !item.Microseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
-			} else {
-				item.Milliseconds = types.BoolNull()
+			} else if !item.Milliseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterIpv6s = append(data.MasterIpv6s, item)
 			return true
@@ -3366,36 +3403,42 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
-			} else {
-				item.Multicast = types.BoolNull()
+			} else if !item.Multicast.IsNull() {
+				// Only set to false if it was previously set
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
-			} else {
-				item.MulticastMixed = types.BoolNull()
+			} else if !item.MulticastMixed.IsNull() {
+				// Only set to false if it was previously set
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolNull()
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
-			} else {
-				item.Nanoseconds = types.BoolNull()
+			} else if !item.Nanoseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
-			} else {
-				item.Microseconds = types.BoolNull()
+			} else if !item.Microseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
-			} else {
-				item.Milliseconds = types.BoolNull()
+			} else if !item.Milliseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterEthernets = append(data.MasterEthernets, item)
 			return true
@@ -3403,23 +3446,27 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "interop.profile.default"); value.Exists() {
 		data.InteropProfileDefault = types.BoolValue(true)
-	} else {
-		data.InteropProfileDefault = types.BoolNull()
+	} else if !data.InteropProfileDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InteropProfileDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interop.profile.g-8265-1"); value.Exists() {
 		data.InteropProfileG82651 = types.BoolValue(true)
-	} else {
-		data.InteropProfileG82651 = types.BoolNull()
+	} else if !data.InteropProfileG82651.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InteropProfileG82651 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interop.profile.g-8275-1"); value.Exists() {
 		data.InteropProfileG82751 = types.BoolValue(true)
-	} else {
-		data.InteropProfileG82751 = types.BoolNull()
+	} else if !data.InteropProfileG82751.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InteropProfileG82751 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interop.profile.g-8275-2"); value.Exists() {
 		data.InteropProfileG82752 = types.BoolValue(true)
-	} else {
-		data.InteropProfileG82752 = types.BoolNull()
+	} else if !data.InteropProfileG82752.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InteropProfileG82752 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interop.domain"); value.Exists() {
 		data.InteropDomain = types.Int64Value(value.Int())
@@ -3488,24 +3535,29 @@ func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "port.state.subordinate-only"); value.Exists() {
 		data.PortStateSlaveOnly = types.BoolValue(true)
 	} else {
-		data.PortStateSlaveOnly = types.BoolNull()
+		data.PortStateSlaveOnly = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "port.state.primary-only"); value.Exists() {
 		data.PortStateMasterOnly = types.BoolValue(true)
 	} else {
-		data.PortStateMasterOnly = types.BoolNull()
+		data.PortStateMasterOnly = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "port.state.any"); value.Exists() {
 		data.PortStateAny = types.BoolValue(true)
 	} else {
-		data.PortStateAny = types.BoolNull()
+		data.PortStateAny = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "source.ipv4.address"); value.Exists() {
 		data.SourceIpv4Address = types.StringValue(value.String())
@@ -3516,52 +3568,52 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "multicast"); value.Exists() {
 		data.Multicast = types.BoolValue(true)
 	} else {
-		data.Multicast = types.BoolNull()
+		data.Multicast = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.mixed"); value.Exists() {
 		data.MulticastMixed = types.BoolValue(true)
 	} else {
-		data.MulticastMixed = types.BoolNull()
+		data.MulticastMixed = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.disable"); value.Exists() {
 		data.MulticastDisable = types.BoolValue(true)
 	} else {
-		data.MulticastDisable = types.BoolNull()
+		data.MulticastDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.target-address.ethernet.mac-address-01-1b-19-00-00-00"); value.Exists() {
 		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
 	} else {
-		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolNull()
+		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.target-address.ethernet.mac-address-01-80-c2-00-00-0e"); value.Exists() {
 		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
 	} else {
-		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolNull()
+		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transport.ipv4"); value.Exists() {
 		data.TransportIpv4 = types.BoolValue(true)
 	} else {
-		data.TransportIpv4 = types.BoolNull()
+		data.TransportIpv4 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transport.ipv6"); value.Exists() {
 		data.TransportIpv6 = types.BoolValue(true)
 	} else {
-		data.TransportIpv6 = types.BoolNull()
+		data.TransportIpv6 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transport.ethernet"); value.Exists() {
 		data.TransportEthernet = types.BoolValue(true)
 	} else {
-		data.TransportEthernet = types.BoolNull()
+		data.TransportEthernet = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.operation.one-step"); value.Exists() {
 		data.ClockOperationOneStep = types.BoolValue(true)
 	} else {
-		data.ClockOperationOneStep = types.BoolNull()
+		data.ClockOperationOneStep = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.operation.two-step"); value.Exists() {
 		data.ClockOperationTwoStep = types.BoolValue(true)
 	} else {
-		data.ClockOperationTwoStep = types.BoolNull()
+		data.ClockOperationTwoStep = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "announce.interval"); value.Exists() {
 		data.AnnounceInterval = types.StringValue(value.String())
@@ -3623,17 +3675,17 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "nanoseconds"); value.Exists() {
 		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
 	} else {
-		data.DelayAsymmetryUnitNanoseconds = types.BoolNull()
+		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "microseconds"); value.Exists() {
 		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
 	} else {
-		data.DelayAsymmetryUnitMicroseconds = types.BoolNull()
+		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "milliseconds"); value.Exists() {
 		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
 	} else {
-		data.DelayAsymmetryUnitMilliseconds = types.BoolNull()
+		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "delay-response.grant-duration"); value.Exists() {
 		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
@@ -3644,12 +3696,12 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "unicast-grant.invalid-request.reduce"); value.Exists() {
 		data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
 	} else {
-		data.UnicastGrantInvalidRequestReduce = types.BoolNull()
+		data.UnicastGrantInvalidRequestReduce = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "unicast-grant.invalid-request.deny"); value.Exists() {
 		data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
 	} else {
-		data.UnicastGrantInvalidRequestDeny = types.BoolNull()
+		data.UnicastGrantInvalidRequestDeny = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "subordinate.ipv4s.ipv4-non-negotiated"); value.Exists() {
 		data.SlaveIpv4s = make([]PTPProfileSlaveIpv4s, 0)
@@ -3661,7 +3713,7 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveIpv4s = append(data.SlaveIpv4s, item)
 			return true
@@ -3677,7 +3729,7 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveIpv6s = append(data.SlaveIpv6s, item)
 			return true
@@ -3693,7 +3745,7 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveEthernets = append(data.SlaveEthernets, item)
 			return true
@@ -3715,17 +3767,17 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolNull()
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolNull()
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -3733,17 +3785,17 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolNull()
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolNull()
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolNull()
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterIpv4s = append(data.MasterIpv4s, item)
 			return true
@@ -3765,17 +3817,17 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolNull()
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolNull()
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -3783,17 +3835,17 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolNull()
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolNull()
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolNull()
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterIpv6s = append(data.MasterIpv6s, item)
 			return true
@@ -3815,17 +3867,17 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolNull()
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolNull()
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := v.Get("non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -3833,17 +3885,17 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolNull()
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolNull()
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := v.Get("milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolNull()
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterEthernets = append(data.MasterEthernets, item)
 			return true
@@ -3852,22 +3904,22 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "interop.profile.default"); value.Exists() {
 		data.InteropProfileDefault = types.BoolValue(true)
 	} else {
-		data.InteropProfileDefault = types.BoolNull()
+		data.InteropProfileDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interop.profile.g-8265-1"); value.Exists() {
 		data.InteropProfileG82651 = types.BoolValue(true)
 	} else {
-		data.InteropProfileG82651 = types.BoolNull()
+		data.InteropProfileG82651 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interop.profile.g-8275-1"); value.Exists() {
 		data.InteropProfileG82751 = types.BoolValue(true)
 	} else {
-		data.InteropProfileG82751 = types.BoolNull()
+		data.InteropProfileG82751 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interop.profile.g-8275-2"); value.Exists() {
 		data.InteropProfileG82752 = types.BoolValue(true)
 	} else {
-		data.InteropProfileG82752 = types.BoolNull()
+		data.InteropProfileG82752 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interop.domain"); value.Exists() {
 		data.InteropDomain = types.Int64Value(value.Int())
@@ -3936,166 +3988,166 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/port/state/subordinate-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/port/state/subordinate-only"); value.Exists() {
 		data.PortStateSlaveOnly = types.BoolValue(true)
 	} else {
-		data.PortStateSlaveOnly = types.BoolNull()
+		data.PortStateSlaveOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/port/state/primary-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/port/state/primary-only"); value.Exists() {
 		data.PortStateMasterOnly = types.BoolValue(true)
 	} else {
-		data.PortStateMasterOnly = types.BoolNull()
+		data.PortStateMasterOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/port/state/any"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/port/state/any"); value.Exists() {
 		data.PortStateAny = types.BoolValue(true)
 	} else {
-		data.PortStateAny = types.BoolNull()
+		data.PortStateAny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/ipv4/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/ipv4/address"); value.Exists() {
 		data.SourceIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/ipv6/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/ipv6/address"); value.Exists() {
 		data.SourceIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast"); value.Exists() {
 		data.Multicast = types.BoolValue(true)
 	} else {
-		data.Multicast = types.BoolNull()
+		data.Multicast = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/mixed"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/mixed"); value.Exists() {
 		data.MulticastMixed = types.BoolValue(true)
 	} else {
-		data.MulticastMixed = types.BoolNull()
+		data.MulticastMixed = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/disable"); value.Exists() {
 		data.MulticastDisable = types.BoolValue(true)
 	} else {
-		data.MulticastDisable = types.BoolNull()
+		data.MulticastDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-1b-19-00-00-00"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-1b-19-00-00-00"); value.Exists() {
 		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
 	} else {
-		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolNull()
+		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-80-c2-00-00-0e"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-80-c2-00-00-0e"); value.Exists() {
 		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
 	} else {
-		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolNull()
+		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/ipv4"); value.Exists() {
 		data.TransportIpv4 = types.BoolValue(true)
 	} else {
-		data.TransportIpv4 = types.BoolNull()
+		data.TransportIpv4 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/ipv6"); value.Exists() {
 		data.TransportIpv6 = types.BoolValue(true)
 	} else {
-		data.TransportIpv6 = types.BoolNull()
+		data.TransportIpv6 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/ethernet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/ethernet"); value.Exists() {
 		data.TransportEthernet = types.BoolValue(true)
 	} else {
-		data.TransportEthernet = types.BoolNull()
+		data.TransportEthernet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/operation/one-step"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/operation/one-step"); value.Exists() {
 		data.ClockOperationOneStep = types.BoolValue(true)
 	} else {
-		data.ClockOperationOneStep = types.BoolNull()
+		data.ClockOperationOneStep = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/operation/two-step"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/operation/two-step"); value.Exists() {
 		data.ClockOperationTwoStep = types.BoolValue(true)
 	} else {
-		data.ClockOperationTwoStep = types.BoolNull()
+		data.ClockOperationTwoStep = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/interval"); value.Exists() {
 		data.AnnounceInterval = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/frequency"); value.Exists() {
 		data.AnnounceFrequency = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/timeout"); value.Exists() {
 		data.AnnounceTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/grant-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/grant-duration"); value.Exists() {
 		data.AnnounceGrantDuration = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/interval"); value.Exists() {
 		data.SyncInterval = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/frequency"); value.Exists() {
 		data.SyncFrequency = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/grant-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/grant-duration"); value.Exists() {
 		data.SyncGrantDuration = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/timeout"); value.Exists() {
 		data.SyncTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-request/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-request/interval"); value.Exists() {
 		data.DelayRequestInterval = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-request/frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-request/frequency"); value.Exists() {
 		data.DelayRequestFrequency = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cos"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cos"); value.Exists() {
 		data.Cos = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/event-cos"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/event-cos"); value.Exists() {
 		data.CosEvent = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/general-cos"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/general-cos"); value.Exists() {
 		data.CosGeneral = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/event-dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/event-dscp"); value.Exists() {
 		data.DscpEvent = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/general-dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/general-dscp"); value.Exists() {
 		data.DscpGeneral = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4-ttl"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4-ttl"); value.Exists() {
 		data.Ipv4Ttl = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6-hop-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6-hop-limit"); value.Exists() {
 		data.Ipv6HopLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-asymmetry"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-asymmetry"); value.Exists() {
 		data.DelayAsymmetryValue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nanoseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/nanoseconds"); value.Exists() {
 		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
 	} else {
-		data.DelayAsymmetryUnitNanoseconds = types.BoolNull()
+		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/microseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/microseconds"); value.Exists() {
 		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
 	} else {
-		data.DelayAsymmetryUnitMicroseconds = types.BoolNull()
+		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/milliseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/milliseconds"); value.Exists() {
 		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
 	} else {
-		data.DelayAsymmetryUnitMilliseconds = types.BoolNull()
+		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-response/grant-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-response/grant-duration"); value.Exists() {
 		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-response/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-response/timeout"); value.Exists() {
 		data.DelayResponseTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unicast-grant/invalid-request/reduce"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unicast-grant/invalid-request/reduce"); value.Exists() {
 		data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
 	} else {
-		data.UnicastGrantInvalidRequestReduce = types.BoolNull()
+		data.UnicastGrantInvalidRequestReduce = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unicast-grant/invalid-request/deny"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unicast-grant/invalid-request/deny"); value.Exists() {
 		data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
 	} else {
-		data.UnicastGrantInvalidRequestDeny = types.BoolNull()
+		data.UnicastGrantInvalidRequestDeny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subordinate/ipv4s/ipv4-non-negotiated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subordinate/ipv4s/ipv4-non-negotiated"); value.Exists() {
 		data.SlaveIpv4s = make([]PTPProfileSlaveIpv4s, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileSlaveIpv4s{}
@@ -4105,13 +4157,13 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveIpv4s = append(data.SlaveIpv4s, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subordinate/ipv6s/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subordinate/ipv6s/ipv6"); value.Exists() {
 		data.SlaveIpv6s = make([]PTPProfileSlaveIpv6s, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileSlaveIpv6s{}
@@ -4121,13 +4173,13 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveIpv6s = append(data.SlaveIpv6s, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subordinate/ethernets/ethernet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subordinate/ethernets/ethernet"); value.Exists() {
 		data.SlaveEthernets = make([]PTPProfileSlaveEthernets, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileSlaveEthernets{}
@@ -4137,13 +4189,13 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			data.SlaveEthernets = append(data.SlaveEthernets, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/ipv4s/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/ipv4s/ipv4"); value.Exists() {
 		data.MasterIpv4s = make([]PTPProfileMasterIpv4s, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileMasterIpv4s{}
@@ -4159,17 +4211,17 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolNull()
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "multicast/mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolNull()
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -4177,23 +4229,23 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolNull()
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolNull()
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolNull()
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterIpv4s = append(data.MasterIpv4s, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/ipv6s/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/ipv6s/ipv6"); value.Exists() {
 		data.MasterIpv6s = make([]PTPProfileMasterIpv6s, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileMasterIpv6s{}
@@ -4209,17 +4261,17 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolNull()
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "multicast/mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolNull()
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -4227,23 +4279,23 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolNull()
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolNull()
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolNull()
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterIpv6s = append(data.MasterIpv6s, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/ethernets/ethernet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/ethernets/ethernet"); value.Exists() {
 		data.MasterEthernets = make([]PTPProfileMasterEthernets, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileMasterEthernets{}
@@ -4259,17 +4311,17 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "multicast"); cValue.Exists() {
 				item.Multicast = types.BoolValue(true)
 			} else {
-				item.Multicast = types.BoolNull()
+				item.Multicast = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "multicast/mixed"); cValue.Exists() {
 				item.MulticastMixed = types.BoolValue(true)
 			} else {
-				item.MulticastMixed = types.BoolNull()
+				item.MulticastMixed = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "non-negotiated"); cValue.Exists() {
 				item.NonNegotiated = types.BoolValue(true)
 			} else {
-				item.NonNegotiated = types.BoolNull()
+				item.NonNegotiated = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "delay-asymmetry"); cValue.Exists() {
 				item.DelayAsymmetry = types.Int64Value(cValue.Int())
@@ -4277,61 +4329,61 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "nanoseconds"); cValue.Exists() {
 				item.Nanoseconds = types.BoolValue(true)
 			} else {
-				item.Nanoseconds = types.BoolNull()
+				item.Nanoseconds = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "microseconds"); cValue.Exists() {
 				item.Microseconds = types.BoolValue(true)
 			} else {
-				item.Microseconds = types.BoolNull()
+				item.Microseconds = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "milliseconds"); cValue.Exists() {
 				item.Milliseconds = types.BoolValue(true)
 			} else {
-				item.Milliseconds = types.BoolNull()
+				item.Milliseconds = types.BoolValue(false)
 			}
 			data.MasterEthernets = append(data.MasterEthernets, item)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/default"); value.Exists() {
 		data.InteropProfileDefault = types.BoolValue(true)
 	} else {
-		data.InteropProfileDefault = types.BoolNull()
+		data.InteropProfileDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/g-8265-1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/g-8265-1"); value.Exists() {
 		data.InteropProfileG82651 = types.BoolValue(true)
 	} else {
-		data.InteropProfileG82651 = types.BoolNull()
+		data.InteropProfileG82651 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/g-8275-1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/g-8275-1"); value.Exists() {
 		data.InteropProfileG82751 = types.BoolValue(true)
 	} else {
-		data.InteropProfileG82751 = types.BoolNull()
+		data.InteropProfileG82751 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/g-8275-2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/g-8275-2"); value.Exists() {
 		data.InteropProfileG82752 = types.BoolValue(true)
 	} else {
-		data.InteropProfileG82752 = types.BoolNull()
+		data.InteropProfileG82752 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/domain"); value.Exists() {
 		data.InteropDomain = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/priority1"); value.Exists() {
 		data.InteropEgressConversionPriority1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/priority2"); value.Exists() {
 		data.InteropEgressConversionPriority2 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/clock-accuracy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/clock-accuracy"); value.Exists() {
 		data.InteropEgressConversionClockAccuracy = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/offset-scaled-log-variance"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/offset-scaled-log-variance"); value.Exists() {
 		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/clock-class/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/clock-class/default"); value.Exists() {
 		data.InteropEgressConversionClockClassDefault = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/clock-class/mappings/mapping"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/clock-class/mappings/mapping"); value.Exists() {
 		data.InteropEgressConversionClockClassMappings = make([]PTPProfileInteropEgressConversionClockClassMappings, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileInteropEgressConversionClockClassMappings{}
@@ -4345,22 +4397,22 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/priority1"); value.Exists() {
 		data.InteropIngressConversionPriority1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/priority2"); value.Exists() {
 		data.InteropIngressConversionPriority2 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/clock-accuracy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/clock-accuracy"); value.Exists() {
 		data.InteropIngressConversionClockAccuracy = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/offset-scaled-log-variance"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/offset-scaled-log-variance"); value.Exists() {
 		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/clock-class/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/clock-class/default"); value.Exists() {
 		data.InteropIngressConversionClockClassDefault = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/clock-class/mappings/mapping"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/clock-class/mappings/mapping"); value.Exists() {
 		data.InteropIngressConversionClockClassMappings = make([]PTPProfileInteropIngressConversionClockClassMappings, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileInteropIngressConversionClockClassMappings{}
@@ -4380,166 +4432,166 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/port/state/subordinate-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/port/state/subordinate-only"); value.Exists() {
 		data.PortStateSlaveOnly = types.BoolValue(true)
 	} else {
 		data.PortStateSlaveOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/port/state/primary-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/port/state/primary-only"); value.Exists() {
 		data.PortStateMasterOnly = types.BoolValue(true)
 	} else {
 		data.PortStateMasterOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/port/state/any"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/port/state/any"); value.Exists() {
 		data.PortStateAny = types.BoolValue(true)
 	} else {
 		data.PortStateAny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/ipv4/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/ipv4/address"); value.Exists() {
 		data.SourceIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source/ipv6/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source/ipv6/address"); value.Exists() {
 		data.SourceIpv6Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast"); value.Exists() {
 		data.Multicast = types.BoolValue(true)
 	} else {
 		data.Multicast = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/mixed"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/mixed"); value.Exists() {
 		data.MulticastMixed = types.BoolValue(true)
 	} else {
 		data.MulticastMixed = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/disable"); value.Exists() {
 		data.MulticastDisable = types.BoolValue(true)
 	} else {
 		data.MulticastDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-1b-19-00-00-00"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-1b-19-00-00-00"); value.Exists() {
 		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
 	} else {
 		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-80-c2-00-00-0e"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/target-address/ethernet/mac-address-01-80-c2-00-00-0e"); value.Exists() {
 		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
 	} else {
 		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/ipv4"); value.Exists() {
 		data.TransportIpv4 = types.BoolValue(true)
 	} else {
 		data.TransportIpv4 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/ipv6"); value.Exists() {
 		data.TransportIpv6 = types.BoolValue(true)
 	} else {
 		data.TransportIpv6 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transport/ethernet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transport/ethernet"); value.Exists() {
 		data.TransportEthernet = types.BoolValue(true)
 	} else {
 		data.TransportEthernet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/operation/one-step"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/operation/one-step"); value.Exists() {
 		data.ClockOperationOneStep = types.BoolValue(true)
 	} else {
 		data.ClockOperationOneStep = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/operation/two-step"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/operation/two-step"); value.Exists() {
 		data.ClockOperationTwoStep = types.BoolValue(true)
 	} else {
 		data.ClockOperationTwoStep = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/interval"); value.Exists() {
 		data.AnnounceInterval = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/frequency"); value.Exists() {
 		data.AnnounceFrequency = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/timeout"); value.Exists() {
 		data.AnnounceTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/announce/grant-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/announce/grant-duration"); value.Exists() {
 		data.AnnounceGrantDuration = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/interval"); value.Exists() {
 		data.SyncInterval = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/frequency"); value.Exists() {
 		data.SyncFrequency = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/grant-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/grant-duration"); value.Exists() {
 		data.SyncGrantDuration = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sync/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sync/timeout"); value.Exists() {
 		data.SyncTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-request/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-request/interval"); value.Exists() {
 		data.DelayRequestInterval = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-request/frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-request/frequency"); value.Exists() {
 		data.DelayRequestFrequency = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cos"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cos"); value.Exists() {
 		data.Cos = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/event-cos"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/event-cos"); value.Exists() {
 		data.CosEvent = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/general-cos"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/general-cos"); value.Exists() {
 		data.CosGeneral = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dscp"); value.Exists() {
 		data.Dscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/event-dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/event-dscp"); value.Exists() {
 		data.DscpEvent = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/general-dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/general-dscp"); value.Exists() {
 		data.DscpGeneral = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4-ttl"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4-ttl"); value.Exists() {
 		data.Ipv4Ttl = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6-hop-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6-hop-limit"); value.Exists() {
 		data.Ipv6HopLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-asymmetry"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-asymmetry"); value.Exists() {
 		data.DelayAsymmetryValue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nanoseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/nanoseconds"); value.Exists() {
 		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
 	} else {
 		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/microseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/microseconds"); value.Exists() {
 		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
 	} else {
 		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/milliseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/milliseconds"); value.Exists() {
 		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
 	} else {
 		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-response/grant-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-response/grant-duration"); value.Exists() {
 		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-response/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-response/timeout"); value.Exists() {
 		data.DelayResponseTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unicast-grant/invalid-request/reduce"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unicast-grant/invalid-request/reduce"); value.Exists() {
 		data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
 	} else {
 		data.UnicastGrantInvalidRequestReduce = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unicast-grant/invalid-request/deny"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unicast-grant/invalid-request/deny"); value.Exists() {
 		data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
 	} else {
 		data.UnicastGrantInvalidRequestDeny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subordinate/ipv4s/ipv4-non-negotiated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subordinate/ipv4s/ipv4-non-negotiated"); value.Exists() {
 		data.SlaveIpv4s = make([]PTPProfileSlaveIpv4s, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileSlaveIpv4s{}
@@ -4555,7 +4607,7 @@ func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subordinate/ipv6s/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subordinate/ipv6s/ipv6"); value.Exists() {
 		data.SlaveIpv6s = make([]PTPProfileSlaveIpv6s, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileSlaveIpv6s{}
@@ -4571,7 +4623,7 @@ func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/subordinate/ethernets/ethernet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/subordinate/ethernets/ethernet"); value.Exists() {
 		data.SlaveEthernets = make([]PTPProfileSlaveEthernets, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileSlaveEthernets{}
@@ -4587,7 +4639,7 @@ func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/ipv4s/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/ipv4s/ipv4"); value.Exists() {
 		data.MasterIpv4s = make([]PTPProfileMasterIpv4s, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileMasterIpv4s{}
@@ -4637,7 +4689,7 @@ func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/ipv6s/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/ipv6s/ipv6"); value.Exists() {
 		data.MasterIpv6s = make([]PTPProfileMasterIpv6s, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileMasterIpv6s{}
@@ -4687,7 +4739,7 @@ func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/primary/ethernets/ethernet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/primary/ethernets/ethernet"); value.Exists() {
 		data.MasterEthernets = make([]PTPProfileMasterEthernets, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileMasterEthernets{}
@@ -4737,45 +4789,45 @@ func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/default"); value.Exists() {
 		data.InteropProfileDefault = types.BoolValue(true)
 	} else {
 		data.InteropProfileDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/g-8265-1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/g-8265-1"); value.Exists() {
 		data.InteropProfileG82651 = types.BoolValue(true)
 	} else {
 		data.InteropProfileG82651 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/g-8275-1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/g-8275-1"); value.Exists() {
 		data.InteropProfileG82751 = types.BoolValue(true)
 	} else {
 		data.InteropProfileG82751 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/profile/g-8275-2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/profile/g-8275-2"); value.Exists() {
 		data.InteropProfileG82752 = types.BoolValue(true)
 	} else {
 		data.InteropProfileG82752 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/domain"); value.Exists() {
 		data.InteropDomain = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/priority1"); value.Exists() {
 		data.InteropEgressConversionPriority1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/priority2"); value.Exists() {
 		data.InteropEgressConversionPriority2 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/clock-accuracy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/clock-accuracy"); value.Exists() {
 		data.InteropEgressConversionClockAccuracy = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/offset-scaled-log-variance"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/offset-scaled-log-variance"); value.Exists() {
 		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/clock-class/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/clock-class/default"); value.Exists() {
 		data.InteropEgressConversionClockClassDefault = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/egress-conversion/clock-class/mappings/mapping"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/egress-conversion/clock-class/mappings/mapping"); value.Exists() {
 		data.InteropEgressConversionClockClassMappings = make([]PTPProfileInteropEgressConversionClockClassMappings, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileInteropEgressConversionClockClassMappings{}
@@ -4789,22 +4841,22 @@ func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/priority1"); value.Exists() {
 		data.InteropIngressConversionPriority1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/priority2"); value.Exists() {
 		data.InteropIngressConversionPriority2 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/clock-accuracy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/clock-accuracy"); value.Exists() {
 		data.InteropIngressConversionClockAccuracy = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/offset-scaled-log-variance"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/offset-scaled-log-variance"); value.Exists() {
 		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/clock-class/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/clock-class/default"); value.Exists() {
 		data.InteropIngressConversionClockClassDefault = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interop/ingress-conversion/clock-class/mappings/mapping"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interop/ingress-conversion/clock-class/mappings/mapping"); value.Exists() {
 		data.InteropIngressConversionClockClassMappings = make([]PTPProfileInteropIngressConversionClockClassMappings, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPProfileInteropIngressConversionClockClassMappings{}
@@ -5689,9 +5741,10 @@ func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfi
 func (data *PTPProfile) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.InteropIngressConversionClockClassMappings {
-		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/clock-class/mappings/mapping=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[clock-class-to-map-from=" + strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/clock-class/mappings/mapping%v", data.getPath(), keyPath))
 	}
 	if !data.InteropIngressConversionClockClassDefault.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/clock-class/default", data.getPath()))
@@ -5709,9 +5762,10 @@ func (data *PTPProfile) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/priority1", data.getPath()))
 	}
 	for i := range data.InteropEgressConversionClockClassMappings {
-		keyValues := [...]string{strconv.FormatInt(data.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/egress-conversion/clock-class/mappings/mapping=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[clock-class-to-map-from=" + strconv.FormatInt(data.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/egress-conversion/clock-class/mappings/mapping%v", data.getPath(), keyPath))
 	}
 	if !data.InteropEgressConversionClockClassDefault.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/egress-conversion/clock-class/default", data.getPath()))
@@ -5744,34 +5798,40 @@ func (data *PTPProfile) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/profile/default", data.getPath()))
 	}
 	for i := range data.MasterEthernets {
-		keyValues := [...]string{data.MasterEthernets[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/ethernets/ethernet=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MasterEthernets[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/ethernets/ethernet%v", data.getPath(), keyPath))
 	}
 	for i := range data.MasterIpv6s {
-		keyValues := [...]string{data.MasterIpv6s[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/ipv6s/ipv6=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MasterIpv6s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/ipv6s/ipv6%v", data.getPath(), keyPath))
 	}
 	for i := range data.MasterIpv4s {
-		keyValues := [...]string{data.MasterIpv4s[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/ipv4s/ipv4=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MasterIpv4s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/ipv4s/ipv4%v", data.getPath(), keyPath))
 	}
 	for i := range data.SlaveEthernets {
-		keyValues := [...]string{data.SlaveEthernets[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/subordinate/ethernets/ethernet=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.SlaveEthernets[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/subordinate/ethernets/ethernet%v", data.getPath(), keyPath))
 	}
 	for i := range data.SlaveIpv6s {
-		keyValues := [...]string{data.SlaveIpv6s[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/subordinate/ipv6s/ipv6=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.SlaveIpv6s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/subordinate/ipv6s/ipv6%v", data.getPath(), keyPath))
 	}
 	for i := range data.SlaveIpv4s {
-		keyValues := [...]string{data.SlaveIpv4s[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/subordinate/ipv4s/ipv4-non-negotiated=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.SlaveIpv4s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/subordinate/ipv4s/ipv4-non-negotiated%v", data.getPath(), keyPath))
 	}
 	if !data.UnicastGrantInvalidRequestDeny.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/unicast-grant/invalid-request/deny", data.getPath()))

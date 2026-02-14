@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -585,395 +584,383 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/update/periodic", strconv.FormatInt(data.UpdatePeriodic.ValueInt64(), 10))
 	}
 	if len(data.Exec) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Exec {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/exec/accounting-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "list-name", item.List.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
 			if !item.StartStop.IsNull() && !item.StartStop.IsUnknown() {
 				if item.StartStop.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "start-stop", "")
+					body = helpers.SetFromXPath(body, basePath+"/start-stop", "")
 				}
 			}
 			if !item.StopOnly.IsNull() && !item.StopOnly.IsUnknown() {
 				if item.StopOnly.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "stop-only", "")
+					body = helpers.SetFromXPath(body, basePath+"/stop-only", "")
 				}
 			}
 			if !item.A1None.IsNull() && !item.A1None.IsUnknown() {
 				if item.A1None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "none", "")
+					body = helpers.SetFromXPath(body, basePath+"/none", "")
 				}
 			}
 			if !item.A1Tacacs.IsNull() && !item.A1Tacacs.IsUnknown() {
 				if item.A1Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-1/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-1/tacacs", "")
 				}
 			}
 			if !item.A1Radius.IsNull() && !item.A1Radius.IsUnknown() {
 				if item.A1Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-1/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-1/radius", "")
 				}
 			}
 			if !item.A1Group.IsNull() && !item.A1Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-1/server-group-name", item.A1Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-1/server-group-name", item.A1Group.ValueString())
 			}
 			if !item.A2None.IsNull() && !item.A2None.IsUnknown() {
 				if item.A2None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/none", "")
 				}
 			}
 			if !item.A2Tacacs.IsNull() && !item.A2Tacacs.IsUnknown() {
 				if item.A2Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/tacacs", "")
 				}
 			}
 			if !item.A2Radius.IsNull() && !item.A2Radius.IsUnknown() {
 				if item.A2Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/radius", "")
 				}
 			}
 			if !item.A2Group.IsNull() && !item.A2Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-2/server-group-name", item.A2Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-2/server-group-name", item.A2Group.ValueString())
 			}
 			if !item.A3None.IsNull() && !item.A3None.IsUnknown() {
 				if item.A3None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/none", "")
 				}
 			}
 			if !item.A3Tacacs.IsNull() && !item.A3Tacacs.IsUnknown() {
 				if item.A3Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/tacacs", "")
 				}
 			}
 			if !item.A3Radius.IsNull() && !item.A3Radius.IsUnknown() {
 				if item.A3Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/radius", "")
 				}
 			}
 			if !item.A3Group.IsNull() && !item.A3Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-3/server-group-name", item.A3Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-3/server-group-name", item.A3Group.ValueString())
 			}
 			if !item.A4None.IsNull() && !item.A4None.IsUnknown() {
 				if item.A4None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/none", "")
 				}
 			}
 			if !item.A4Tacacs.IsNull() && !item.A4Tacacs.IsUnknown() {
 				if item.A4Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/tacacs", "")
 				}
 			}
 			if !item.A4Radius.IsNull() && !item.A4Radius.IsUnknown() {
 				if item.A4Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/radius", "")
 				}
 			}
 			if !item.A4Group.IsNull() && !item.A4Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-4/server-group-name", item.A4Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-4/server-group-name", item.A4Group.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"exec/accounting-list", cBody.Res())
 		}
 	}
 	if len(data.Commands) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Commands {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/commands/accounting-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "list-name", item.List.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
 			if !item.StartStop.IsNull() && !item.StartStop.IsUnknown() {
 				if item.StartStop.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "start-stop", "")
+					body = helpers.SetFromXPath(body, basePath+"/start-stop", "")
 				}
 			}
 			if !item.StopOnly.IsNull() && !item.StopOnly.IsUnknown() {
 				if item.StopOnly.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "stop-only", "")
+					body = helpers.SetFromXPath(body, basePath+"/stop-only", "")
 				}
 			}
 			if !item.A1None.IsNull() && !item.A1None.IsUnknown() {
 				if item.A1None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "none", "")
+					body = helpers.SetFromXPath(body, basePath+"/none", "")
 				}
 			}
 			if !item.A1Local.IsNull() && !item.A1Local.IsUnknown() {
 				if item.A1Local.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "local", "")
+					body = helpers.SetFromXPath(body, basePath+"/local", "")
 				}
 			}
 			if !item.A1Tacacs.IsNull() && !item.A1Tacacs.IsUnknown() {
 				if item.A1Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-1/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-1/tacacs", "")
 				}
 			}
 			if !item.A1Radius.IsNull() && !item.A1Radius.IsUnknown() {
 				if item.A1Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-1/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-1/radius", "")
 				}
 			}
 			if !item.A1Group.IsNull() && !item.A1Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-1/server-group-name", item.A1Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-1/server-group-name", item.A1Group.ValueString())
 			}
 			if !item.A2Local.IsNull() && !item.A2Local.IsUnknown() {
 				if item.A2Local.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/local", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/local", "")
 				}
 			}
 			if !item.A2None.IsNull() && !item.A2None.IsUnknown() {
 				if item.A2None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/none", "")
 				}
 			}
 			if !item.A2Tacacs.IsNull() && !item.A2Tacacs.IsUnknown() {
 				if item.A2Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/tacacs", "")
 				}
 			}
 			if !item.A2Radius.IsNull() && !item.A2Radius.IsUnknown() {
 				if item.A2Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/radius", "")
 				}
 			}
 			if !item.A2Group.IsNull() && !item.A2Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-2/server-group-name", item.A2Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-2/server-group-name", item.A2Group.ValueString())
 			}
 			if !item.A3Local.IsNull() && !item.A3Local.IsUnknown() {
 				if item.A3Local.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/local", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/local", "")
 				}
 			}
 			if !item.A3None.IsNull() && !item.A3None.IsUnknown() {
 				if item.A3None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/none", "")
 				}
 			}
 			if !item.A3Tacacs.IsNull() && !item.A3Tacacs.IsUnknown() {
 				if item.A3Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/tacacs", "")
 				}
 			}
 			if !item.A3Radius.IsNull() && !item.A3Radius.IsUnknown() {
 				if item.A3Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/radius", "")
 				}
 			}
 			if !item.A3Group.IsNull() && !item.A3Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-3/server-group-name", item.A3Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-3/server-group-name", item.A3Group.ValueString())
 			}
 			if !item.A4Local.IsNull() && !item.A4Local.IsUnknown() {
 				if item.A4Local.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/local", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/local", "")
 				}
 			}
 			if !item.A4None.IsNull() && !item.A4None.IsUnknown() {
 				if item.A4None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/none", "")
 				}
 			}
 			if !item.A4Tacacs.IsNull() && !item.A4Tacacs.IsUnknown() {
 				if item.A4Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/tacacs", "")
 				}
 			}
 			if !item.A4Radius.IsNull() && !item.A4Radius.IsUnknown() {
 				if item.A4Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/radius", "")
 				}
 			}
 			if !item.A4Group.IsNull() && !item.A4Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-4/server-group-name", item.A4Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-4/server-group-name", item.A4Group.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"commands/accounting-list", cBody.Res())
 		}
 	}
 	if len(data.System) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.System {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/system/accounting-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "list-name", item.List.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
 			if !item.StartStop.IsNull() && !item.StartStop.IsUnknown() {
 				if item.StartStop.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "start-stop", "")
+					body = helpers.SetFromXPath(body, basePath+"/start-stop", "")
 				}
 			}
 			if !item.Broadcast.IsNull() && !item.Broadcast.IsUnknown() {
 				if item.Broadcast.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "broadcast", "")
+					body = helpers.SetFromXPath(body, basePath+"/broadcast", "")
 				}
 			}
 			if !item.A1None.IsNull() && !item.A1None.IsUnknown() {
 				if item.A1None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "none", "")
+					body = helpers.SetFromXPath(body, basePath+"/none", "")
 				}
 			}
 			if !item.A1Tacacs.IsNull() && !item.A1Tacacs.IsUnknown() {
 				if item.A1Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-1/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-1/tacacs", "")
 				}
 			}
 			if !item.A1Radius.IsNull() && !item.A1Radius.IsUnknown() {
 				if item.A1Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-1/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-1/radius", "")
 				}
 			}
 			if !item.A1Group.IsNull() && !item.A1Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-1/server-group-name", item.A1Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-1/server-group-name", item.A1Group.ValueString())
 			}
 			if !item.A2None.IsNull() && !item.A2None.IsUnknown() {
 				if item.A2None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/none", "")
 				}
 			}
 			if !item.A2Tacacs.IsNull() && !item.A2Tacacs.IsUnknown() {
 				if item.A2Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/tacacs", "")
 				}
 			}
 			if !item.A2Radius.IsNull() && !item.A2Radius.IsUnknown() {
 				if item.A2Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/radius", "")
 				}
 			}
 			if !item.A2Group.IsNull() && !item.A2Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-2/server-group-name", item.A2Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-2/server-group-name", item.A2Group.ValueString())
 			}
 			if !item.A3None.IsNull() && !item.A3None.IsUnknown() {
 				if item.A3None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/none", "")
 				}
 			}
 			if !item.A3Tacacs.IsNull() && !item.A3Tacacs.IsUnknown() {
 				if item.A3Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/tacacs", "")
 				}
 			}
 			if !item.A3Radius.IsNull() && !item.A3Radius.IsUnknown() {
 				if item.A3Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/radius", "")
 				}
 			}
 			if !item.A3Group.IsNull() && !item.A3Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-3/server-group-name", item.A3Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-3/server-group-name", item.A3Group.ValueString())
 			}
 			if !item.A4None.IsNull() && !item.A4None.IsUnknown() {
 				if item.A4None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/none", "")
 				}
 			}
 			if !item.A4Tacacs.IsNull() && !item.A4Tacacs.IsUnknown() {
 				if item.A4Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/tacacs", "")
 				}
 			}
 			if !item.A4Radius.IsNull() && !item.A4Radius.IsUnknown() {
 				if item.A4Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/radius", "")
 				}
 			}
 			if !item.A4Group.IsNull() && !item.A4Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-4/server-group-name", item.A4Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-4/server-group-name", item.A4Group.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"system/accounting-list", cBody.Res())
 		}
 	}
 	if len(data.Network) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Network {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/network/accounting-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "list-name", item.List.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
 			if !item.StartStop.IsNull() && !item.StartStop.IsUnknown() {
 				if item.StartStop.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "start-stop", "")
+					body = helpers.SetFromXPath(body, basePath+"/start-stop", "")
 				}
 			}
 			if !item.StopOnly.IsNull() && !item.StopOnly.IsUnknown() {
 				if item.StopOnly.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "stop-only", "")
+					body = helpers.SetFromXPath(body, basePath+"/stop-only", "")
 				}
 			}
 			if !item.A1None.IsNull() && !item.A1None.IsUnknown() {
 				if item.A1None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "none", "")
+					body = helpers.SetFromXPath(body, basePath+"/none", "")
 				}
 			}
 			if !item.A1Tacacs.IsNull() && !item.A1Tacacs.IsUnknown() {
 				if item.A1Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-1/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-1/tacacs", "")
 				}
 			}
 			if !item.A1Radius.IsNull() && !item.A1Radius.IsUnknown() {
 				if item.A1Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-1/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-1/radius", "")
 				}
 			}
 			if !item.A1Group.IsNull() && !item.A1Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-1/server-group-name", item.A1Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-1/server-group-name", item.A1Group.ValueString())
 			}
 			if !item.A2None.IsNull() && !item.A2None.IsUnknown() {
 				if item.A2None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/none", "")
 				}
 			}
 			if !item.A2Tacacs.IsNull() && !item.A2Tacacs.IsUnknown() {
 				if item.A2Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/tacacs", "")
 				}
 			}
 			if !item.A2Radius.IsNull() && !item.A2Radius.IsUnknown() {
 				if item.A2Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-2/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-2/radius", "")
 				}
 			}
 			if !item.A2Group.IsNull() && !item.A2Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-2/server-group-name", item.A2Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-2/server-group-name", item.A2Group.ValueString())
 			}
 			if !item.A3None.IsNull() && !item.A3None.IsUnknown() {
 				if item.A3None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/none", "")
 				}
 			}
 			if !item.A3Tacacs.IsNull() && !item.A3Tacacs.IsUnknown() {
 				if item.A3Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/tacacs", "")
 				}
 			}
 			if !item.A3Radius.IsNull() && !item.A3Radius.IsUnknown() {
 				if item.A3Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-3/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-3/radius", "")
 				}
 			}
 			if !item.A3Group.IsNull() && !item.A3Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-3/server-group-name", item.A3Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-3/server-group-name", item.A3Group.ValueString())
 			}
 			if !item.A4None.IsNull() && !item.A4None.IsUnknown() {
 				if item.A4None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/none", "")
 				}
 			}
 			if !item.A4Tacacs.IsNull() && !item.A4Tacacs.IsUnknown() {
 				if item.A4Tacacs.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/tacacs", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/tacacs", "")
 				}
 			}
 			if !item.A4Radius.IsNull() && !item.A4Radius.IsUnknown() {
 				if item.A4Radius.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "groups/group-4/radius", "")
+					body = helpers.SetFromXPath(body, basePath+"/groups/group-4/radius", "")
 				}
 			}
 			if !item.A4Group.IsNull() && !item.A4Group.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "groups/group-4/server-group-name", item.A4Group.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/groups/group-4/server-group-name", item.A4Group.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"network/accounting-list", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -989,18 +976,19 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 
 func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "update.newinfo"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.UpdateNewinfo.IsNull() {
 			data.UpdateNewinfo = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.UpdateNewinfo.IsNull() {
 			data.UpdateNewinfo = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "update.periodic"); value.Exists() && !data.UpdatePeriodic.IsNull() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
-	} else {
+	} else if data.UpdatePeriodic.IsNull() {
 		data.UpdatePeriodic = types.Int64Null()
 	}
 	for i := range data.Exec {
@@ -1032,93 +1020,63 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Exec[i].List = types.StringNull()
 		}
 		if value := r.Get("start-stop"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].StartStop.IsNull() && !data.Exec[i].StartStop.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].StartStop = types.BoolValue(false)
-			} else if !data.Exec[i].StartStop.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].StartStop.IsNull() {
 				data.Exec[i].StartStop = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].StartStop.IsNull() {
 				data.Exec[i].StartStop = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].StartStop = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("stop-only"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].StopOnly.IsNull() && !data.Exec[i].StopOnly.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].StopOnly = types.BoolValue(false)
-			} else if !data.Exec[i].StopOnly.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].StopOnly.IsNull() {
 				data.Exec[i].StopOnly = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].StopOnly.IsNull() {
 				data.Exec[i].StopOnly = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].StopOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A1None.IsNull() && !data.Exec[i].A1None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A1None = types.BoolValue(false)
-			} else if !data.Exec[i].A1None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A1None.IsNull() {
 				data.Exec[i].A1None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A1None.IsNull() {
 				data.Exec[i].A1None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A1None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A1Tacacs.IsNull() && !data.Exec[i].A1Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A1Tacacs = types.BoolValue(false)
-			} else if !data.Exec[i].A1Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A1Tacacs.IsNull() {
 				data.Exec[i].A1Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A1Tacacs.IsNull() {
 				data.Exec[i].A1Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A1Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A1Radius.IsNull() && !data.Exec[i].A1Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A1Radius = types.BoolValue(false)
-			} else if !data.Exec[i].A1Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A1Radius.IsNull() {
 				data.Exec[i].A1Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A1Radius.IsNull() {
 				data.Exec[i].A1Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A1Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Exec[i].A1Group.IsNull() {
@@ -1127,57 +1085,39 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Exec[i].A1Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-2.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A2None.IsNull() && !data.Exec[i].A2None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A2None = types.BoolValue(false)
-			} else if !data.Exec[i].A2None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A2None.IsNull() {
 				data.Exec[i].A2None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A2None.IsNull() {
 				data.Exec[i].A2None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A2None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A2Tacacs.IsNull() && !data.Exec[i].A2Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A2Tacacs = types.BoolValue(false)
-			} else if !data.Exec[i].A2Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A2Tacacs.IsNull() {
 				data.Exec[i].A2Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A2Tacacs.IsNull() {
 				data.Exec[i].A2Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A2Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A2Radius.IsNull() && !data.Exec[i].A2Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A2Radius = types.BoolValue(false)
-			} else if !data.Exec[i].A2Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A2Radius.IsNull() {
 				data.Exec[i].A2Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A2Radius.IsNull() {
 				data.Exec[i].A2Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A2Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Exec[i].A2Group.IsNull() {
@@ -1186,57 +1126,39 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Exec[i].A2Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-3.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A3None.IsNull() && !data.Exec[i].A3None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A3None = types.BoolValue(false)
-			} else if !data.Exec[i].A3None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A3None.IsNull() {
 				data.Exec[i].A3None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A3None.IsNull() {
 				data.Exec[i].A3None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A3None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A3Tacacs.IsNull() && !data.Exec[i].A3Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A3Tacacs = types.BoolValue(false)
-			} else if !data.Exec[i].A3Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A3Tacacs.IsNull() {
 				data.Exec[i].A3Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A3Tacacs.IsNull() {
 				data.Exec[i].A3Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A3Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A3Radius.IsNull() && !data.Exec[i].A3Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A3Radius = types.BoolValue(false)
-			} else if !data.Exec[i].A3Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A3Radius.IsNull() {
 				data.Exec[i].A3Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A3Radius.IsNull() {
 				data.Exec[i].A3Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A3Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Exec[i].A3Group.IsNull() {
@@ -1245,57 +1167,39 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Exec[i].A3Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-4.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A4None.IsNull() && !data.Exec[i].A4None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A4None = types.BoolValue(false)
-			} else if !data.Exec[i].A4None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A4None.IsNull() {
 				data.Exec[i].A4None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A4None.IsNull() {
 				data.Exec[i].A4None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A4None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A4Tacacs.IsNull() && !data.Exec[i].A4Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A4Tacacs = types.BoolValue(false)
-			} else if !data.Exec[i].A4Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A4Tacacs.IsNull() {
 				data.Exec[i].A4Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A4Tacacs.IsNull() {
 				data.Exec[i].A4Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A4Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Exec[i].A4Radius.IsNull() && !data.Exec[i].A4Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Exec[i].A4Radius = types.BoolValue(false)
-			} else if !data.Exec[i].A4Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A4Radius.IsNull() {
 				data.Exec[i].A4Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Exec[i].A4Radius.IsNull() {
 				data.Exec[i].A4Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Exec[i].A4Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Exec[i].A4Group.IsNull() {
@@ -1333,111 +1237,75 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Commands[i].List = types.StringNull()
 		}
 		if value := r.Get("start-stop"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].StartStop.IsNull() && !data.Commands[i].StartStop.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].StartStop = types.BoolValue(false)
-			} else if !data.Commands[i].StartStop.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].StartStop.IsNull() {
 				data.Commands[i].StartStop = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].StartStop.IsNull() {
 				data.Commands[i].StartStop = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].StartStop = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("stop-only"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].StopOnly.IsNull() && !data.Commands[i].StopOnly.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].StopOnly = types.BoolValue(false)
-			} else if !data.Commands[i].StopOnly.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].StopOnly.IsNull() {
 				data.Commands[i].StopOnly = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].StopOnly.IsNull() {
 				data.Commands[i].StopOnly = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].StopOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A1None.IsNull() && !data.Commands[i].A1None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A1None = types.BoolValue(false)
-			} else if !data.Commands[i].A1None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A1None.IsNull() {
 				data.Commands[i].A1None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A1None.IsNull() {
 				data.Commands[i].A1None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A1None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A1Local.IsNull() && !data.Commands[i].A1Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A1Local = types.BoolValue(false)
-			} else if !data.Commands[i].A1Local.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A1Local.IsNull() {
 				data.Commands[i].A1Local = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A1Local.IsNull() {
 				data.Commands[i].A1Local = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A1Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A1Tacacs.IsNull() && !data.Commands[i].A1Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A1Tacacs = types.BoolValue(false)
-			} else if !data.Commands[i].A1Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A1Tacacs.IsNull() {
 				data.Commands[i].A1Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A1Tacacs.IsNull() {
 				data.Commands[i].A1Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A1Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A1Radius.IsNull() && !data.Commands[i].A1Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A1Radius = types.BoolValue(false)
-			} else if !data.Commands[i].A1Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A1Radius.IsNull() {
 				data.Commands[i].A1Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A1Radius.IsNull() {
 				data.Commands[i].A1Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A1Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Commands[i].A1Group.IsNull() {
@@ -1446,75 +1314,51 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Commands[i].A1Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-2.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A2Local.IsNull() && !data.Commands[i].A2Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A2Local = types.BoolValue(false)
-			} else if !data.Commands[i].A2Local.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A2Local.IsNull() {
 				data.Commands[i].A2Local = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A2Local.IsNull() {
 				data.Commands[i].A2Local = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A2Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A2None.IsNull() && !data.Commands[i].A2None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A2None = types.BoolValue(false)
-			} else if !data.Commands[i].A2None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A2None.IsNull() {
 				data.Commands[i].A2None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A2None.IsNull() {
 				data.Commands[i].A2None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A2None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A2Tacacs.IsNull() && !data.Commands[i].A2Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A2Tacacs = types.BoolValue(false)
-			} else if !data.Commands[i].A2Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A2Tacacs.IsNull() {
 				data.Commands[i].A2Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A2Tacacs.IsNull() {
 				data.Commands[i].A2Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A2Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A2Radius.IsNull() && !data.Commands[i].A2Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A2Radius = types.BoolValue(false)
-			} else if !data.Commands[i].A2Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A2Radius.IsNull() {
 				data.Commands[i].A2Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A2Radius.IsNull() {
 				data.Commands[i].A2Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A2Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Commands[i].A2Group.IsNull() {
@@ -1523,75 +1367,51 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Commands[i].A2Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-3.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A3Local.IsNull() && !data.Commands[i].A3Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A3Local = types.BoolValue(false)
-			} else if !data.Commands[i].A3Local.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A3Local.IsNull() {
 				data.Commands[i].A3Local = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A3Local.IsNull() {
 				data.Commands[i].A3Local = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A3Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A3None.IsNull() && !data.Commands[i].A3None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A3None = types.BoolValue(false)
-			} else if !data.Commands[i].A3None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A3None.IsNull() {
 				data.Commands[i].A3None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A3None.IsNull() {
 				data.Commands[i].A3None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A3None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A3Tacacs.IsNull() && !data.Commands[i].A3Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A3Tacacs = types.BoolValue(false)
-			} else if !data.Commands[i].A3Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A3Tacacs.IsNull() {
 				data.Commands[i].A3Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A3Tacacs.IsNull() {
 				data.Commands[i].A3Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A3Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A3Radius.IsNull() && !data.Commands[i].A3Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A3Radius = types.BoolValue(false)
-			} else if !data.Commands[i].A3Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A3Radius.IsNull() {
 				data.Commands[i].A3Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A3Radius.IsNull() {
 				data.Commands[i].A3Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A3Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Commands[i].A3Group.IsNull() {
@@ -1600,75 +1420,51 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Commands[i].A3Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-4.local"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A4Local.IsNull() && !data.Commands[i].A4Local.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A4Local = types.BoolValue(false)
-			} else if !data.Commands[i].A4Local.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A4Local.IsNull() {
 				data.Commands[i].A4Local = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A4Local.IsNull() {
 				data.Commands[i].A4Local = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A4Local = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A4None.IsNull() && !data.Commands[i].A4None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A4None = types.BoolValue(false)
-			} else if !data.Commands[i].A4None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A4None.IsNull() {
 				data.Commands[i].A4None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A4None.IsNull() {
 				data.Commands[i].A4None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A4None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A4Tacacs.IsNull() && !data.Commands[i].A4Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A4Tacacs = types.BoolValue(false)
-			} else if !data.Commands[i].A4Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A4Tacacs.IsNull() {
 				data.Commands[i].A4Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A4Tacacs.IsNull() {
 				data.Commands[i].A4Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A4Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Commands[i].A4Radius.IsNull() && !data.Commands[i].A4Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Commands[i].A4Radius = types.BoolValue(false)
-			} else if !data.Commands[i].A4Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A4Radius.IsNull() {
 				data.Commands[i].A4Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Commands[i].A4Radius.IsNull() {
 				data.Commands[i].A4Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Commands[i].A4Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Commands[i].A4Group.IsNull() {
@@ -1706,93 +1502,63 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.System[i].List = types.StringNull()
 		}
 		if value := r.Get("start-stop"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].StartStop.IsNull() && !data.System[i].StartStop.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].StartStop = types.BoolValue(false)
-			} else if !data.System[i].StartStop.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].StartStop.IsNull() {
 				data.System[i].StartStop = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].StartStop.IsNull() {
 				data.System[i].StartStop = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].StartStop = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("broadcast"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].Broadcast.IsNull() && !data.System[i].Broadcast.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].Broadcast = types.BoolValue(false)
-			} else if !data.System[i].Broadcast.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].Broadcast.IsNull() {
 				data.System[i].Broadcast = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].Broadcast.IsNull() {
 				data.System[i].Broadcast = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].Broadcast = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A1None.IsNull() && !data.System[i].A1None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A1None = types.BoolValue(false)
-			} else if !data.System[i].A1None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A1None.IsNull() {
 				data.System[i].A1None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A1None.IsNull() {
 				data.System[i].A1None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A1None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A1Tacacs.IsNull() && !data.System[i].A1Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A1Tacacs = types.BoolValue(false)
-			} else if !data.System[i].A1Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A1Tacacs.IsNull() {
 				data.System[i].A1Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A1Tacacs.IsNull() {
 				data.System[i].A1Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A1Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A1Radius.IsNull() && !data.System[i].A1Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A1Radius = types.BoolValue(false)
-			} else if !data.System[i].A1Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A1Radius.IsNull() {
 				data.System[i].A1Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A1Radius.IsNull() {
 				data.System[i].A1Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A1Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.System[i].A1Group.IsNull() {
@@ -1801,57 +1567,39 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.System[i].A1Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-2.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A2None.IsNull() && !data.System[i].A2None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A2None = types.BoolValue(false)
-			} else if !data.System[i].A2None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A2None.IsNull() {
 				data.System[i].A2None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A2None.IsNull() {
 				data.System[i].A2None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A2None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A2Tacacs.IsNull() && !data.System[i].A2Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A2Tacacs = types.BoolValue(false)
-			} else if !data.System[i].A2Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A2Tacacs.IsNull() {
 				data.System[i].A2Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A2Tacacs.IsNull() {
 				data.System[i].A2Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A2Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A2Radius.IsNull() && !data.System[i].A2Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A2Radius = types.BoolValue(false)
-			} else if !data.System[i].A2Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A2Radius.IsNull() {
 				data.System[i].A2Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A2Radius.IsNull() {
 				data.System[i].A2Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A2Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.System[i].A2Group.IsNull() {
@@ -1860,57 +1608,39 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.System[i].A2Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-3.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A3None.IsNull() && !data.System[i].A3None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A3None = types.BoolValue(false)
-			} else if !data.System[i].A3None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A3None.IsNull() {
 				data.System[i].A3None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A3None.IsNull() {
 				data.System[i].A3None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A3None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A3Tacacs.IsNull() && !data.System[i].A3Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A3Tacacs = types.BoolValue(false)
-			} else if !data.System[i].A3Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A3Tacacs.IsNull() {
 				data.System[i].A3Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A3Tacacs.IsNull() {
 				data.System[i].A3Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A3Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A3Radius.IsNull() && !data.System[i].A3Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A3Radius = types.BoolValue(false)
-			} else if !data.System[i].A3Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A3Radius.IsNull() {
 				data.System[i].A3Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A3Radius.IsNull() {
 				data.System[i].A3Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A3Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.System[i].A3Group.IsNull() {
@@ -1919,57 +1649,39 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.System[i].A3Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-4.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A4None.IsNull() && !data.System[i].A4None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A4None = types.BoolValue(false)
-			} else if !data.System[i].A4None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A4None.IsNull() {
 				data.System[i].A4None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A4None.IsNull() {
 				data.System[i].A4None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A4None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A4Tacacs.IsNull() && !data.System[i].A4Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A4Tacacs = types.BoolValue(false)
-			} else if !data.System[i].A4Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A4Tacacs.IsNull() {
 				data.System[i].A4Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A4Tacacs.IsNull() {
 				data.System[i].A4Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A4Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.System[i].A4Radius.IsNull() && !data.System[i].A4Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.System[i].A4Radius = types.BoolValue(false)
-			} else if !data.System[i].A4Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A4Radius.IsNull() {
 				data.System[i].A4Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.System[i].A4Radius.IsNull() {
 				data.System[i].A4Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.System[i].A4Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.System[i].A4Group.IsNull() {
@@ -2007,93 +1719,63 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Network[i].List = types.StringNull()
 		}
 		if value := r.Get("start-stop"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].StartStop.IsNull() && !data.Network[i].StartStop.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].StartStop = types.BoolValue(false)
-			} else if !data.Network[i].StartStop.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].StartStop.IsNull() {
 				data.Network[i].StartStop = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].StartStop.IsNull() {
 				data.Network[i].StartStop = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].StartStop = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("stop-only"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].StopOnly.IsNull() && !data.Network[i].StopOnly.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].StopOnly = types.BoolValue(false)
-			} else if !data.Network[i].StopOnly.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].StopOnly.IsNull() {
 				data.Network[i].StopOnly = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].StopOnly.IsNull() {
 				data.Network[i].StopOnly = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].StopOnly = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A1None.IsNull() && !data.Network[i].A1None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A1None = types.BoolValue(false)
-			} else if !data.Network[i].A1None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A1None.IsNull() {
 				data.Network[i].A1None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A1None.IsNull() {
 				data.Network[i].A1None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A1None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A1Tacacs.IsNull() && !data.Network[i].A1Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A1Tacacs = types.BoolValue(false)
-			} else if !data.Network[i].A1Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A1Tacacs.IsNull() {
 				data.Network[i].A1Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A1Tacacs.IsNull() {
 				data.Network[i].A1Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A1Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A1Radius.IsNull() && !data.Network[i].A1Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A1Radius = types.BoolValue(false)
-			} else if !data.Network[i].A1Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A1Radius.IsNull() {
 				data.Network[i].A1Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A1Radius.IsNull() {
 				data.Network[i].A1Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A1Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-1.server-group-name"); value.Exists() && !data.Network[i].A1Group.IsNull() {
@@ -2102,57 +1784,39 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Network[i].A1Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-2.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A2None.IsNull() && !data.Network[i].A2None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A2None = types.BoolValue(false)
-			} else if !data.Network[i].A2None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A2None.IsNull() {
 				data.Network[i].A2None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A2None.IsNull() {
 				data.Network[i].A2None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A2None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A2Tacacs.IsNull() && !data.Network[i].A2Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A2Tacacs = types.BoolValue(false)
-			} else if !data.Network[i].A2Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A2Tacacs.IsNull() {
 				data.Network[i].A2Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A2Tacacs.IsNull() {
 				data.Network[i].A2Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A2Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A2Radius.IsNull() && !data.Network[i].A2Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A2Radius = types.BoolValue(false)
-			} else if !data.Network[i].A2Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A2Radius.IsNull() {
 				data.Network[i].A2Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A2Radius.IsNull() {
 				data.Network[i].A2Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A2Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-2.server-group-name"); value.Exists() && !data.Network[i].A2Group.IsNull() {
@@ -2161,57 +1825,39 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Network[i].A2Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-3.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A3None.IsNull() && !data.Network[i].A3None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A3None = types.BoolValue(false)
-			} else if !data.Network[i].A3None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A3None.IsNull() {
 				data.Network[i].A3None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A3None.IsNull() {
 				data.Network[i].A3None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A3None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A3Tacacs.IsNull() && !data.Network[i].A3Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A3Tacacs = types.BoolValue(false)
-			} else if !data.Network[i].A3Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A3Tacacs.IsNull() {
 				data.Network[i].A3Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A3Tacacs.IsNull() {
 				data.Network[i].A3Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A3Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A3Radius.IsNull() && !data.Network[i].A3Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A3Radius = types.BoolValue(false)
-			} else if !data.Network[i].A3Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A3Radius.IsNull() {
 				data.Network[i].A3Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A3Radius.IsNull() {
 				data.Network[i].A3Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A3Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-3.server-group-name"); value.Exists() && !data.Network[i].A3Group.IsNull() {
@@ -2220,57 +1866,39 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.Network[i].A3Group = types.StringNull()
 		}
 		if value := r.Get("groups.group-4.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A4None.IsNull() && !data.Network[i].A4None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A4None = types.BoolValue(false)
-			} else if !data.Network[i].A4None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A4None.IsNull() {
 				data.Network[i].A4None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A4None.IsNull() {
 				data.Network[i].A4None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A4None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.tacacs"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A4Tacacs.IsNull() && !data.Network[i].A4Tacacs.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A4Tacacs = types.BoolValue(false)
-			} else if !data.Network[i].A4Tacacs.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A4Tacacs.IsNull() {
 				data.Network[i].A4Tacacs = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A4Tacacs.IsNull() {
 				data.Network[i].A4Tacacs = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A4Tacacs = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.radius"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Network[i].A4Radius.IsNull() && !data.Network[i].A4Radius.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Network[i].A4Radius = types.BoolValue(false)
-			} else if !data.Network[i].A4Radius.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A4Radius.IsNull() {
 				data.Network[i].A4Radius = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Network[i].A4Radius.IsNull() {
 				data.Network[i].A4Radius = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Network[i].A4Radius = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("groups.group-4.server-group-name"); value.Exists() && !data.Network[i].A4Group.IsNull() {
@@ -2286,15 +1914,18 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/newinfo"); value.Exists() {
-		data.UpdateNewinfo = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/newinfo"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UpdateNewinfo.IsNull() {
+			data.UpdateNewinfo = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.UpdateNewinfo.IsNull() {
 			data.UpdateNewinfo = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/periodic"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/periodic"); value.Exists() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
 	} else if data.UpdatePeriodic.IsNull() {
 		data.UpdatePeriodic = types.Int64Null()
@@ -2304,7 +1935,7 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 		keyValues := [...]string{data.Exec[i].List.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/accounting-list").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/exec/accounting-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2328,7 +1959,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Exec[i].List = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "start-stop"); value.Exists() {
-			data.Exec[i].StartStop = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].StartStop.IsNull() {
+				data.Exec[i].StartStop = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2337,7 +1971,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "stop-only"); value.Exists() {
-			data.Exec[i].StopOnly = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].StopOnly.IsNull() {
+				data.Exec[i].StopOnly = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2346,7 +1983,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "none"); value.Exists() {
-			data.Exec[i].A1None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A1None.IsNull() {
+				data.Exec[i].A1None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2355,7 +1995,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-1/tacacs"); value.Exists() {
-			data.Exec[i].A1Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A1Tacacs.IsNull() {
+				data.Exec[i].A1Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2364,7 +2007,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-1/radius"); value.Exists() {
-			data.Exec[i].A1Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A1Radius.IsNull() {
+				data.Exec[i].A1Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2378,7 +2024,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Exec[i].A1Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/none"); value.Exists() {
-			data.Exec[i].A2None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A2None.IsNull() {
+				data.Exec[i].A2None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2387,7 +2036,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/tacacs"); value.Exists() {
-			data.Exec[i].A2Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A2Tacacs.IsNull() {
+				data.Exec[i].A2Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2396,7 +2048,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/radius"); value.Exists() {
-			data.Exec[i].A2Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A2Radius.IsNull() {
+				data.Exec[i].A2Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2410,7 +2065,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Exec[i].A2Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/none"); value.Exists() {
-			data.Exec[i].A3None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A3None.IsNull() {
+				data.Exec[i].A3None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2419,7 +2077,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/tacacs"); value.Exists() {
-			data.Exec[i].A3Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A3Tacacs.IsNull() {
+				data.Exec[i].A3Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2428,7 +2089,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/radius"); value.Exists() {
-			data.Exec[i].A3Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A3Radius.IsNull() {
+				data.Exec[i].A3Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2442,7 +2106,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Exec[i].A3Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/none"); value.Exists() {
-			data.Exec[i].A4None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A4None.IsNull() {
+				data.Exec[i].A4None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2451,7 +2118,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/tacacs"); value.Exists() {
-			data.Exec[i].A4Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A4Tacacs.IsNull() {
+				data.Exec[i].A4Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2460,7 +2130,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/radius"); value.Exists() {
-			data.Exec[i].A4Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Exec[i].A4Radius.IsNull() {
+				data.Exec[i].A4Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2479,7 +2152,7 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 		keyValues := [...]string{data.Commands[i].List.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/commands/accounting-list").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/commands/accounting-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2503,7 +2176,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Commands[i].List = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "start-stop"); value.Exists() {
-			data.Commands[i].StartStop = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].StartStop.IsNull() {
+				data.Commands[i].StartStop = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2512,7 +2188,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "stop-only"); value.Exists() {
-			data.Commands[i].StopOnly = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].StopOnly.IsNull() {
+				data.Commands[i].StopOnly = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2521,7 +2200,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "none"); value.Exists() {
-			data.Commands[i].A1None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A1None.IsNull() {
+				data.Commands[i].A1None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2530,7 +2212,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "local"); value.Exists() {
-			data.Commands[i].A1Local = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A1Local.IsNull() {
+				data.Commands[i].A1Local = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2539,7 +2224,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-1/tacacs"); value.Exists() {
-			data.Commands[i].A1Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A1Tacacs.IsNull() {
+				data.Commands[i].A1Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2548,7 +2236,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-1/radius"); value.Exists() {
-			data.Commands[i].A1Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A1Radius.IsNull() {
+				data.Commands[i].A1Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2562,7 +2253,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Commands[i].A1Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/local"); value.Exists() {
-			data.Commands[i].A2Local = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A2Local.IsNull() {
+				data.Commands[i].A2Local = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2571,7 +2265,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/none"); value.Exists() {
-			data.Commands[i].A2None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A2None.IsNull() {
+				data.Commands[i].A2None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2580,7 +2277,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/tacacs"); value.Exists() {
-			data.Commands[i].A2Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A2Tacacs.IsNull() {
+				data.Commands[i].A2Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2589,7 +2289,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/radius"); value.Exists() {
-			data.Commands[i].A2Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A2Radius.IsNull() {
+				data.Commands[i].A2Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2603,7 +2306,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Commands[i].A2Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/local"); value.Exists() {
-			data.Commands[i].A3Local = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A3Local.IsNull() {
+				data.Commands[i].A3Local = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2612,7 +2318,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/none"); value.Exists() {
-			data.Commands[i].A3None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A3None.IsNull() {
+				data.Commands[i].A3None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2621,7 +2330,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/tacacs"); value.Exists() {
-			data.Commands[i].A3Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A3Tacacs.IsNull() {
+				data.Commands[i].A3Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2630,7 +2342,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/radius"); value.Exists() {
-			data.Commands[i].A3Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A3Radius.IsNull() {
+				data.Commands[i].A3Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2644,7 +2359,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Commands[i].A3Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/local"); value.Exists() {
-			data.Commands[i].A4Local = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A4Local.IsNull() {
+				data.Commands[i].A4Local = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2653,7 +2371,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/none"); value.Exists() {
-			data.Commands[i].A4None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A4None.IsNull() {
+				data.Commands[i].A4None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2662,7 +2383,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/tacacs"); value.Exists() {
-			data.Commands[i].A4Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A4Tacacs.IsNull() {
+				data.Commands[i].A4Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2671,7 +2395,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/radius"); value.Exists() {
-			data.Commands[i].A4Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Commands[i].A4Radius.IsNull() {
+				data.Commands[i].A4Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2690,7 +2417,7 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 		keyValues := [...]string{data.System[i].List.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/accounting-list").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/system/accounting-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2714,7 +2441,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.System[i].List = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "start-stop"); value.Exists() {
-			data.System[i].StartStop = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].StartStop.IsNull() {
+				data.System[i].StartStop = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2723,7 +2453,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "broadcast"); value.Exists() {
-			data.System[i].Broadcast = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].Broadcast.IsNull() {
+				data.System[i].Broadcast = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2732,7 +2465,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "none"); value.Exists() {
-			data.System[i].A1None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A1None.IsNull() {
+				data.System[i].A1None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2741,7 +2477,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-1/tacacs"); value.Exists() {
-			data.System[i].A1Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A1Tacacs.IsNull() {
+				data.System[i].A1Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2750,7 +2489,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-1/radius"); value.Exists() {
-			data.System[i].A1Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A1Radius.IsNull() {
+				data.System[i].A1Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2764,7 +2506,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.System[i].A1Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/none"); value.Exists() {
-			data.System[i].A2None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A2None.IsNull() {
+				data.System[i].A2None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2773,7 +2518,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/tacacs"); value.Exists() {
-			data.System[i].A2Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A2Tacacs.IsNull() {
+				data.System[i].A2Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2782,7 +2530,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/radius"); value.Exists() {
-			data.System[i].A2Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A2Radius.IsNull() {
+				data.System[i].A2Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2796,7 +2547,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.System[i].A2Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/none"); value.Exists() {
-			data.System[i].A3None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A3None.IsNull() {
+				data.System[i].A3None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2805,7 +2559,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/tacacs"); value.Exists() {
-			data.System[i].A3Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A3Tacacs.IsNull() {
+				data.System[i].A3Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2814,7 +2571,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/radius"); value.Exists() {
-			data.System[i].A3Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A3Radius.IsNull() {
+				data.System[i].A3Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2828,7 +2588,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.System[i].A3Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/none"); value.Exists() {
-			data.System[i].A4None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A4None.IsNull() {
+				data.System[i].A4None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2837,7 +2600,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/tacacs"); value.Exists() {
-			data.System[i].A4Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A4Tacacs.IsNull() {
+				data.System[i].A4Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2846,7 +2612,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/radius"); value.Exists() {
-			data.System[i].A4Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.System[i].A4Radius.IsNull() {
+				data.System[i].A4Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2865,7 +2634,7 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 		keyValues := [...]string{data.Network[i].List.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/network/accounting-list").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/network/accounting-list").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2889,7 +2658,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Network[i].List = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "start-stop"); value.Exists() {
-			data.Network[i].StartStop = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].StartStop.IsNull() {
+				data.Network[i].StartStop = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2898,7 +2670,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "stop-only"); value.Exists() {
-			data.Network[i].StopOnly = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].StopOnly.IsNull() {
+				data.Network[i].StopOnly = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2907,7 +2682,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "none"); value.Exists() {
-			data.Network[i].A1None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A1None.IsNull() {
+				data.Network[i].A1None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2916,7 +2694,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-1/tacacs"); value.Exists() {
-			data.Network[i].A1Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A1Tacacs.IsNull() {
+				data.Network[i].A1Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2925,7 +2706,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-1/radius"); value.Exists() {
-			data.Network[i].A1Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A1Radius.IsNull() {
+				data.Network[i].A1Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2939,7 +2723,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Network[i].A1Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/none"); value.Exists() {
-			data.Network[i].A2None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A2None.IsNull() {
+				data.Network[i].A2None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2948,7 +2735,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/tacacs"); value.Exists() {
-			data.Network[i].A2Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A2Tacacs.IsNull() {
+				data.Network[i].A2Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2957,7 +2747,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-2/radius"); value.Exists() {
-			data.Network[i].A2Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A2Radius.IsNull() {
+				data.Network[i].A2Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2971,7 +2764,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Network[i].A2Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/none"); value.Exists() {
-			data.Network[i].A3None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A3None.IsNull() {
+				data.Network[i].A3None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2980,7 +2776,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/tacacs"); value.Exists() {
-			data.Network[i].A3Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A3Tacacs.IsNull() {
+				data.Network[i].A3Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2989,7 +2788,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-3/radius"); value.Exists() {
-			data.Network[i].A3Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A3Radius.IsNull() {
+				data.Network[i].A3Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3003,7 +2805,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			data.Network[i].A3Group = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/none"); value.Exists() {
-			data.Network[i].A4None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A4None.IsNull() {
+				data.Network[i].A4None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3012,7 +2817,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/tacacs"); value.Exists() {
-			data.Network[i].A4Tacacs = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A4Tacacs.IsNull() {
+				data.Network[i].A4Tacacs = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3021,7 +2829,10 @@ func (data *AAAAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 			}
 		}
 		if value := helpers.GetFromXPath(r, "groups/group-4/radius"); value.Exists() {
-			data.Network[i].A4Radius = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Network[i].A4Radius.IsNull() {
+				data.Network[i].A4Radius = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3046,10 +2857,15 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "update.newinfo"); value.Exists() {
 		data.UpdateNewinfo = types.BoolValue(true)
-	} else {
-		data.UpdateNewinfo = types.BoolNull()
+	} else if !data.UpdateNewinfo.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UpdateNewinfo = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "update.periodic"); value.Exists() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
@@ -3063,82 +2879,96 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
-			} else {
-				item.StartStop = types.BoolNull()
+			} else if !item.StartStop.IsNull() {
+				// Only set to false if it was previously set
+				item.StartStop = types.BoolValue(false)
 			}
 			if cValue := v.Get("stop-only"); cValue.Exists() {
 				item.StopOnly = types.BoolValue(true)
-			} else {
-				item.StopOnly = types.BoolNull()
+			} else if !item.StopOnly.IsNull() {
+				// Only set to false if it was previously set
+				item.StopOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolNull()
+			} else if !item.A1None.IsNull() {
+				// Only set to false if it was previously set
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolNull()
+			} else if !item.A1Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolNull()
+			} else if !item.A1Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolNull()
+			} else if !item.A2None.IsNull() {
+				// Only set to false if it was previously set
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolNull()
+			} else if !item.A2Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolNull()
+			} else if !item.A2Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolNull()
+			} else if !item.A3None.IsNull() {
+				// Only set to false if it was previously set
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolNull()
+			} else if !item.A3Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolNull()
+			} else if !item.A3Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolNull()
+			} else if !item.A4None.IsNull() {
+				// Only set to false if it was previously set
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolNull()
+			} else if !item.A4Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolNull()
+			} else if !item.A4Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3156,102 +2986,120 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
-			} else {
-				item.StartStop = types.BoolNull()
+			} else if !item.StartStop.IsNull() {
+				// Only set to false if it was previously set
+				item.StartStop = types.BoolValue(false)
 			}
 			if cValue := v.Get("stop-only"); cValue.Exists() {
 				item.StopOnly = types.BoolValue(true)
-			} else {
-				item.StopOnly = types.BoolNull()
+			} else if !item.StopOnly.IsNull() {
+				// Only set to false if it was previously set
+				item.StopOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolNull()
+			} else if !item.A1None.IsNull() {
+				// Only set to false if it was previously set
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
-			} else {
-				item.A1Local = types.BoolNull()
+			} else if !item.A1Local.IsNull() {
+				// Only set to false if it was previously set
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolNull()
+			} else if !item.A1Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolNull()
+			} else if !item.A1Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
-			} else {
-				item.A2Local = types.BoolNull()
+			} else if !item.A2Local.IsNull() {
+				// Only set to false if it was previously set
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolNull()
+			} else if !item.A2None.IsNull() {
+				// Only set to false if it was previously set
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolNull()
+			} else if !item.A2Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolNull()
+			} else if !item.A2Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
-			} else {
-				item.A3Local = types.BoolNull()
+			} else if !item.A3Local.IsNull() {
+				// Only set to false if it was previously set
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolNull()
+			} else if !item.A3None.IsNull() {
+				// Only set to false if it was previously set
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolNull()
+			} else if !item.A3Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolNull()
+			} else if !item.A3Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
-			} else {
-				item.A4Local = types.BoolNull()
+			} else if !item.A4Local.IsNull() {
+				// Only set to false if it was previously set
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolNull()
+			} else if !item.A4None.IsNull() {
+				// Only set to false if it was previously set
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolNull()
+			} else if !item.A4Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolNull()
+			} else if !item.A4Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3269,82 +3117,96 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
-			} else {
-				item.StartStop = types.BoolNull()
+			} else if !item.StartStop.IsNull() {
+				// Only set to false if it was previously set
+				item.StartStop = types.BoolValue(false)
 			}
 			if cValue := v.Get("broadcast"); cValue.Exists() {
 				item.Broadcast = types.BoolValue(true)
-			} else {
-				item.Broadcast = types.BoolNull()
+			} else if !item.Broadcast.IsNull() {
+				// Only set to false if it was previously set
+				item.Broadcast = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolNull()
+			} else if !item.A1None.IsNull() {
+				// Only set to false if it was previously set
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolNull()
+			} else if !item.A1Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolNull()
+			} else if !item.A1Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolNull()
+			} else if !item.A2None.IsNull() {
+				// Only set to false if it was previously set
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolNull()
+			} else if !item.A2Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolNull()
+			} else if !item.A2Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolNull()
+			} else if !item.A3None.IsNull() {
+				// Only set to false if it was previously set
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolNull()
+			} else if !item.A3Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolNull()
+			} else if !item.A3Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolNull()
+			} else if !item.A4None.IsNull() {
+				// Only set to false if it was previously set
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolNull()
+			} else if !item.A4Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolNull()
+			} else if !item.A4Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3362,82 +3224,96 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
-			} else {
-				item.StartStop = types.BoolNull()
+			} else if !item.StartStop.IsNull() {
+				// Only set to false if it was previously set
+				item.StartStop = types.BoolValue(false)
 			}
 			if cValue := v.Get("stop-only"); cValue.Exists() {
 				item.StopOnly = types.BoolValue(true)
-			} else {
-				item.StopOnly = types.BoolNull()
+			} else if !item.StopOnly.IsNull() {
+				// Only set to false if it was previously set
+				item.StopOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolNull()
+			} else if !item.A1None.IsNull() {
+				// Only set to false if it was previously set
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolNull()
+			} else if !item.A1Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolNull()
+			} else if !item.A1Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolNull()
+			} else if !item.A2None.IsNull() {
+				// Only set to false if it was previously set
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolNull()
+			} else if !item.A2Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolNull()
+			} else if !item.A2Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolNull()
+			} else if !item.A3None.IsNull() {
+				// Only set to false if it was previously set
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolNull()
+			} else if !item.A3Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolNull()
+			} else if !item.A3Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolNull()
+			} else if !item.A4None.IsNull() {
+				// Only set to false if it was previously set
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolNull()
+			} else if !item.A4Tacacs.IsNull() {
+				// Only set to false if it was previously set
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolNull()
+			} else if !item.A4Radius.IsNull() {
+				// Only set to false if it was previously set
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3453,14 +3329,19 @@ func (data *AAAAccounting) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "update.newinfo"); value.Exists() {
 		data.UpdateNewinfo = types.BoolValue(true)
 	} else {
-		data.UpdateNewinfo = types.BoolNull()
+		data.UpdateNewinfo = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "update.periodic"); value.Exists() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
@@ -3475,27 +3356,27 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
 			} else {
-				item.StartStop = types.BoolNull()
+				item.StartStop = types.BoolValue(false)
 			}
 			if cValue := v.Get("stop-only"); cValue.Exists() {
 				item.StopOnly = types.BoolValue(true)
 			} else {
-				item.StopOnly = types.BoolNull()
+				item.StopOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3503,17 +3384,17 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3521,17 +3402,17 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3539,17 +3420,17 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3568,32 +3449,32 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
 			} else {
-				item.StartStop = types.BoolNull()
+				item.StartStop = types.BoolValue(false)
 			}
 			if cValue := v.Get("stop-only"); cValue.Exists() {
 				item.StopOnly = types.BoolValue(true)
 			} else {
-				item.StopOnly = types.BoolNull()
+				item.StopOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("local"); cValue.Exists() {
 				item.A1Local = types.BoolValue(true)
 			} else {
-				item.A1Local = types.BoolNull()
+				item.A1Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3601,22 +3482,22 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.local"); cValue.Exists() {
 				item.A2Local = types.BoolValue(true)
 			} else {
-				item.A2Local = types.BoolNull()
+				item.A2Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3624,22 +3505,22 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.local"); cValue.Exists() {
 				item.A3Local = types.BoolValue(true)
 			} else {
-				item.A3Local = types.BoolNull()
+				item.A3Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3647,22 +3528,22 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.local"); cValue.Exists() {
 				item.A4Local = types.BoolValue(true)
 			} else {
-				item.A4Local = types.BoolNull()
+				item.A4Local = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3681,27 +3562,27 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
 			} else {
-				item.StartStop = types.BoolNull()
+				item.StartStop = types.BoolValue(false)
 			}
 			if cValue := v.Get("broadcast"); cValue.Exists() {
 				item.Broadcast = types.BoolValue(true)
 			} else {
-				item.Broadcast = types.BoolNull()
+				item.Broadcast = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3709,17 +3590,17 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3727,17 +3608,17 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3745,17 +3626,17 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3774,27 +3655,27 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-stop"); cValue.Exists() {
 				item.StartStop = types.BoolValue(true)
 			} else {
-				item.StartStop = types.BoolNull()
+				item.StartStop = types.BoolValue(false)
 			}
 			if cValue := v.Get("stop-only"); cValue.Exists() {
 				item.StopOnly = types.BoolValue(true)
 			} else {
-				item.StopOnly = types.BoolNull()
+				item.StopOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("none"); cValue.Exists() {
 				item.A1None = types.BoolValue(true)
 			} else {
-				item.A1None = types.BoolNull()
+				item.A1None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.tacacs"); cValue.Exists() {
 				item.A1Tacacs = types.BoolValue(true)
 			} else {
-				item.A1Tacacs = types.BoolNull()
+				item.A1Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.radius"); cValue.Exists() {
 				item.A1Radius = types.BoolValue(true)
 			} else {
-				item.A1Radius = types.BoolNull()
+				item.A1Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-1.server-group-name"); cValue.Exists() {
 				item.A1Group = types.StringValue(cValue.String())
@@ -3802,17 +3683,17 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-2.none"); cValue.Exists() {
 				item.A2None = types.BoolValue(true)
 			} else {
-				item.A2None = types.BoolNull()
+				item.A2None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.tacacs"); cValue.Exists() {
 				item.A2Tacacs = types.BoolValue(true)
 			} else {
-				item.A2Tacacs = types.BoolNull()
+				item.A2Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.radius"); cValue.Exists() {
 				item.A2Radius = types.BoolValue(true)
 			} else {
-				item.A2Radius = types.BoolNull()
+				item.A2Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-2.server-group-name"); cValue.Exists() {
 				item.A2Group = types.StringValue(cValue.String())
@@ -3820,17 +3701,17 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-3.none"); cValue.Exists() {
 				item.A3None = types.BoolValue(true)
 			} else {
-				item.A3None = types.BoolNull()
+				item.A3None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.tacacs"); cValue.Exists() {
 				item.A3Tacacs = types.BoolValue(true)
 			} else {
-				item.A3Tacacs = types.BoolNull()
+				item.A3Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.radius"); cValue.Exists() {
 				item.A3Radius = types.BoolValue(true)
 			} else {
-				item.A3Radius = types.BoolNull()
+				item.A3Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-3.server-group-name"); cValue.Exists() {
 				item.A3Group = types.StringValue(cValue.String())
@@ -3838,17 +3719,17 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("groups.group-4.none"); cValue.Exists() {
 				item.A4None = types.BoolValue(true)
 			} else {
-				item.A4None = types.BoolNull()
+				item.A4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.tacacs"); cValue.Exists() {
 				item.A4Tacacs = types.BoolValue(true)
 			} else {
-				item.A4Tacacs = types.BoolNull()
+				item.A4Tacacs = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.radius"); cValue.Exists() {
 				item.A4Radius = types.BoolValue(true)
 			} else {
-				item.A4Radius = types.BoolNull()
+				item.A4Radius = types.BoolValue(false)
 			}
 			if cValue := v.Get("groups.group-4.server-group-name"); cValue.Exists() {
 				item.A4Group = types.StringValue(cValue.String())
@@ -3864,422 +3745,15 @@ func (data *AAAAccountingData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *AAAAccounting) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/newinfo"); value.Exists() {
-		data.UpdateNewinfo = types.BoolValue(true)
-	} else {
-		data.UpdateNewinfo = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/periodic"); value.Exists() {
-		data.UpdatePeriodic = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/accounting-list"); value.Exists() {
-		data.Exec = make([]AAAAccountingExec, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := AAAAccountingExec{}
-			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
-				item.List = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
-				item.StartStop = types.BoolValue(true)
-			} else {
-				item.StartStop = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
-				item.StopOnly = types.BoolValue(true)
-			} else {
-				item.StopOnly = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
-				item.A1Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
-				item.A2Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
-				item.A3Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
-				item.A4Group = types.StringValue(cValue.String())
-			}
-			data.Exec = append(data.Exec, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/commands/accounting-list"); value.Exists() {
-		data.Commands = make([]AAAAccountingCommands, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := AAAAccountingCommands{}
-			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
-				item.List = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
-				item.StartStop = types.BoolValue(true)
-			} else {
-				item.StartStop = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
-				item.StopOnly = types.BoolValue(true)
-			} else {
-				item.StopOnly = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
-				item.A1Local = types.BoolValue(true)
-			} else {
-				item.A1Local = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
-				item.A1Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
-				item.A2Local = types.BoolValue(true)
-			} else {
-				item.A2Local = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
-				item.A2Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
-				item.A3Local = types.BoolValue(true)
-			} else {
-				item.A3Local = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
-				item.A3Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
-				item.A4Local = types.BoolValue(true)
-			} else {
-				item.A4Local = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
-				item.A4Group = types.StringValue(cValue.String())
-			}
-			data.Commands = append(data.Commands, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/accounting-list"); value.Exists() {
-		data.System = make([]AAAAccountingSystem, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := AAAAccountingSystem{}
-			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
-				item.List = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
-				item.StartStop = types.BoolValue(true)
-			} else {
-				item.StartStop = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "broadcast"); cValue.Exists() {
-				item.Broadcast = types.BoolValue(true)
-			} else {
-				item.Broadcast = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
-				item.A1Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
-				item.A2Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
-				item.A3Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
-				item.A4Group = types.StringValue(cValue.String())
-			}
-			data.System = append(data.System, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/network/accounting-list"); value.Exists() {
-		data.Network = make([]AAAAccountingNetwork, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := AAAAccountingNetwork{}
-			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
-				item.List = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
-				item.StartStop = types.BoolValue(true)
-			} else {
-				item.StartStop = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
-				item.StopOnly = types.BoolValue(true)
-			} else {
-				item.StopOnly = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
-				item.A1None = types.BoolValue(true)
-			} else {
-				item.A1None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
-				item.A1Tacacs = types.BoolValue(true)
-			} else {
-				item.A1Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
-				item.A1Radius = types.BoolValue(true)
-			} else {
-				item.A1Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
-				item.A1Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
-				item.A2None = types.BoolValue(true)
-			} else {
-				item.A2None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
-				item.A2Tacacs = types.BoolValue(true)
-			} else {
-				item.A2Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
-				item.A2Radius = types.BoolValue(true)
-			} else {
-				item.A2Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
-				item.A2Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
-				item.A3None = types.BoolValue(true)
-			} else {
-				item.A3None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
-				item.A3Tacacs = types.BoolValue(true)
-			} else {
-				item.A3Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
-				item.A3Radius = types.BoolValue(true)
-			} else {
-				item.A3Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
-				item.A3Group = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
-				item.A4None = types.BoolValue(true)
-			} else {
-				item.A4None = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
-				item.A4Tacacs = types.BoolValue(true)
-			} else {
-				item.A4Tacacs = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
-				item.A4Radius = types.BoolValue(true)
-			} else {
-				item.A4Radius = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
-				item.A4Group = types.StringValue(cValue.String())
-			}
-			data.Network = append(data.Network, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/newinfo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/newinfo"); value.Exists() {
 		data.UpdateNewinfo = types.BoolValue(true)
 	} else {
 		data.UpdateNewinfo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/update/periodic"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/periodic"); value.Exists() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/exec/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/exec/accounting-list"); value.Exists() {
 		data.Exec = make([]AAAAccountingExec, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingExec{}
@@ -4372,7 +3846,7 @@ func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Resul
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/commands/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/commands/accounting-list"); value.Exists() {
 		data.Commands = make([]AAAAccountingCommands, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingCommands{}
@@ -4485,7 +3959,7 @@ func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Resul
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/system/accounting-list"); value.Exists() {
 		data.System = make([]AAAAccountingSystem, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingSystem{}
@@ -4578,7 +4052,414 @@ func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Resul
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/network/accounting-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/network/accounting-list"); value.Exists() {
+		data.Network = make([]AAAAccountingNetwork, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := AAAAccountingNetwork{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.List = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
+				item.StartStop = types.BoolValue(true)
+			} else {
+				item.StartStop = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
+				item.StopOnly = types.BoolValue(true)
+			} else {
+				item.StopOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+				item.A1None = types.BoolValue(true)
+			} else {
+				item.A1None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
+				item.A1Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+				item.A2None = types.BoolValue(true)
+			} else {
+				item.A2None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
+				item.A2Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+				item.A3None = types.BoolValue(true)
+			} else {
+				item.A3None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
+				item.A3Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+				item.A4None = types.BoolValue(true)
+			} else {
+				item.A4None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
+				item.A4Group = types.StringValue(cValue.String())
+			}
+			data.Network = append(data.Network, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *AAAAccountingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/newinfo"); value.Exists() {
+		data.UpdateNewinfo = types.BoolValue(true)
+	} else {
+		data.UpdateNewinfo = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/periodic"); value.Exists() {
+		data.UpdatePeriodic = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/exec/accounting-list"); value.Exists() {
+		data.Exec = make([]AAAAccountingExec, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := AAAAccountingExec{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.List = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
+				item.StartStop = types.BoolValue(true)
+			} else {
+				item.StartStop = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
+				item.StopOnly = types.BoolValue(true)
+			} else {
+				item.StopOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+				item.A1None = types.BoolValue(true)
+			} else {
+				item.A1None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
+				item.A1Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+				item.A2None = types.BoolValue(true)
+			} else {
+				item.A2None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
+				item.A2Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+				item.A3None = types.BoolValue(true)
+			} else {
+				item.A3None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
+				item.A3Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+				item.A4None = types.BoolValue(true)
+			} else {
+				item.A4None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
+				item.A4Group = types.StringValue(cValue.String())
+			}
+			data.Exec = append(data.Exec, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/commands/accounting-list"); value.Exists() {
+		data.Commands = make([]AAAAccountingCommands, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := AAAAccountingCommands{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.List = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
+				item.StartStop = types.BoolValue(true)
+			} else {
+				item.StartStop = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "stop-only"); cValue.Exists() {
+				item.StopOnly = types.BoolValue(true)
+			} else {
+				item.StopOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+				item.A1None = types.BoolValue(true)
+			} else {
+				item.A1None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "local"); cValue.Exists() {
+				item.A1Local = types.BoolValue(true)
+			} else {
+				item.A1Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
+				item.A1Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/local"); cValue.Exists() {
+				item.A2Local = types.BoolValue(true)
+			} else {
+				item.A2Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+				item.A2None = types.BoolValue(true)
+			} else {
+				item.A2None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
+				item.A2Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/local"); cValue.Exists() {
+				item.A3Local = types.BoolValue(true)
+			} else {
+				item.A3Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+				item.A3None = types.BoolValue(true)
+			} else {
+				item.A3None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
+				item.A3Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/local"); cValue.Exists() {
+				item.A4Local = types.BoolValue(true)
+			} else {
+				item.A4Local = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+				item.A4None = types.BoolValue(true)
+			} else {
+				item.A4None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
+				item.A4Group = types.StringValue(cValue.String())
+			}
+			data.Commands = append(data.Commands, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/system/accounting-list"); value.Exists() {
+		data.System = make([]AAAAccountingSystem, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := AAAAccountingSystem{}
+			if cValue := helpers.GetFromXPath(v, "list-name"); cValue.Exists() {
+				item.List = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-stop"); cValue.Exists() {
+				item.StartStop = types.BoolValue(true)
+			} else {
+				item.StartStop = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "broadcast"); cValue.Exists() {
+				item.Broadcast = types.BoolValue(true)
+			} else {
+				item.Broadcast = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "none"); cValue.Exists() {
+				item.A1None = types.BoolValue(true)
+			} else {
+				item.A1None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/tacacs"); cValue.Exists() {
+				item.A1Tacacs = types.BoolValue(true)
+			} else {
+				item.A1Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/radius"); cValue.Exists() {
+				item.A1Radius = types.BoolValue(true)
+			} else {
+				item.A1Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-1/server-group-name"); cValue.Exists() {
+				item.A1Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/none"); cValue.Exists() {
+				item.A2None = types.BoolValue(true)
+			} else {
+				item.A2None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/tacacs"); cValue.Exists() {
+				item.A2Tacacs = types.BoolValue(true)
+			} else {
+				item.A2Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/radius"); cValue.Exists() {
+				item.A2Radius = types.BoolValue(true)
+			} else {
+				item.A2Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-2/server-group-name"); cValue.Exists() {
+				item.A2Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/none"); cValue.Exists() {
+				item.A3None = types.BoolValue(true)
+			} else {
+				item.A3None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/tacacs"); cValue.Exists() {
+				item.A3Tacacs = types.BoolValue(true)
+			} else {
+				item.A3Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/radius"); cValue.Exists() {
+				item.A3Radius = types.BoolValue(true)
+			} else {
+				item.A3Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-3/server-group-name"); cValue.Exists() {
+				item.A3Group = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/none"); cValue.Exists() {
+				item.A4None = types.BoolValue(true)
+			} else {
+				item.A4None = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/tacacs"); cValue.Exists() {
+				item.A4Tacacs = types.BoolValue(true)
+			} else {
+				item.A4Tacacs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/radius"); cValue.Exists() {
+				item.A4Radius = types.BoolValue(true)
+			} else {
+				item.A4Radius = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group-4/server-group-name"); cValue.Exists() {
+				item.A4Group = types.StringValue(cValue.String())
+			}
+			data.System = append(data.System, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/network/accounting-list"); value.Exists() {
 		data.Network = make([]AAAAccountingNetwork, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := AAAAccountingNetwork{}
@@ -5510,24 +5391,28 @@ func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAc
 func (data *AAAAccounting) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Network {
-		keyValues := [...]string{data.Network[i].List.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/network/accounting-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[list-name=" + data.Network[i].List.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/network/accounting-list%v", data.getPath(), keyPath))
 	}
 	for i := range data.System {
-		keyValues := [...]string{data.System[i].List.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/system/accounting-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[list-name=" + data.System[i].List.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/system/accounting-list%v", data.getPath(), keyPath))
 	}
 	for i := range data.Commands {
-		keyValues := [...]string{data.Commands[i].List.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/commands/accounting-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[list-name=" + data.Commands[i].List.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/commands/accounting-list%v", data.getPath(), keyPath))
 	}
 	for i := range data.Exec {
-		keyValues := [...]string{data.Exec[i].List.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/exec/accounting-list=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[list-name=" + data.Exec[i].List.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/exec/accounting-list%v", data.getPath(), keyPath))
 	}
 	if !data.UpdatePeriodic.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/update/periodic", data.getPath()))

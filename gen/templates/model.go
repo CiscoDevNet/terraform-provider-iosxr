@@ -229,12 +229,28 @@ func (data {{camelCase .Name}}Data) getXPath() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
+	{{- $noAugmentCount := 0}}
+	{{- $totalAttrCount := 0}}
+	{{- range .Attributes}}{{if and (not .Id) (not .Reference)}}{{$totalAttrCount = add $totalAttrCount 1}}{{end}}{{end}}
+	{{- range .Attributes}}{{if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}{{$noAugmentCount = add $noAugmentCount 1}}{{end}}{{end}}
+	{{- if and (eq $noAugmentCount 1) (eq $totalAttrCount 1)}}
+	{{- range .Attributes}}
+	{{- if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}
+	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
+		return fmt.Sprintf(`"%s"`, data.{{toGoName .TfName}}.ValueString())
+	}
+	return "{}"
+	{{- end}}
+	{{- end}}
+	{{- else}}
 	body := "{}"
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (ne .Type "List") (ne .Type "Set")}}
 	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, "{{toDotPath .XPath}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
+		{{- else if eq .Type "Float64"}}
+		body, _ = sjson.Set(body, "{{toDotPath .XPath}}", strconv.FormatFloat(data.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
 		{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
 		if data.{{toGoName .TfName}}.ValueBool() {
 			body, _ = sjson.Set(body, "{{toDotPath .XPath}}", []interface{}{nil})
@@ -270,6 +286,8 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 			if !item.{{toGoName .TfName}}.IsNull() && !item.{{toGoName .TfName}}.IsUnknown() {
 				{{- if eq .Type "Int64"}}
 				body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toDotPath .XPath}}", strconv.FormatInt(item.{{toGoName .TfName}}.ValueInt64(), 10))
+				{{- else if eq .Type "Float64"}}
+				body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toDotPath .XPath}}", strconv.FormatFloat(item.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
 				{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
 				if item.{{toGoName .TfName}}.ValueBool() {
 					body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toDotPath .XPath}}", []interface{}{nil})
@@ -298,13 +316,14 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 			{{- if or (eq .Type "List") (eq .Type "Set")}}
 			{{- $clist := toDotPath .XPath }}
 			if len(item.{{toGoName .TfName}}) > 0 {
-				body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toDotPath .XPath}}", []interface{}{})
 				for cindex, citem := range item.{{toGoName .TfName}} {
 					{{- range .Attributes}}
 					{{- if and (ne .Type "List") (ne .Type "Set")}}
 					if !citem.{{toGoName .TfName}}.IsNull() && !citem.{{toGoName .TfName}}.IsUnknown() {
 						{{- if eq .Type "Int64"}}
 						body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{toDotPath .XPath}}", strconv.FormatInt(citem.{{toGoName .TfName}}.ValueInt64(), 10))
+						{{- else if eq .Type "Float64"}}
+						body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{toDotPath .XPath}}", strconv.FormatFloat(citem.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
 						{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
 						if citem.{{toGoName .TfName}}.ValueBool() {
 							body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{toDotPath .XPath}}", []interface{}{nil})
@@ -333,13 +352,14 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 					{{- if or (eq .Type "List") (eq .Type "Set")}}
 					{{- $cclist := toDotPath .XPath }}
 					if len(citem.{{toGoName .TfName}}) > 0 {
-						body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{toDotPath .XPath}}", []interface{}{})
 						for ccindex, ccitem := range citem.{{toGoName .TfName}} {
 							{{- range .Attributes}}
 							{{- if and (ne .Type "List") (ne .Type "Set")}}
 							if !ccitem.{{toGoName .TfName}}.IsNull() && !ccitem.{{toGoName .TfName}}.IsUnknown() {
 								{{- if eq .Type "Int64"}}
 								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{toDotPath .XPath}}", strconv.FormatInt(ccitem.{{toGoName .TfName}}.ValueInt64(), 10))
+								{{- else if eq .Type "Float64"}}
+								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{toDotPath .XPath}}", strconv.FormatFloat(ccitem.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
 								{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
 								if ccitem.{{toGoName .TfName}}.ValueBool() {
 									body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{toDotPath .XPath}}", []interface{}{nil})
@@ -364,45 +384,121 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 							}
 							{{- end}}
 							{{- end}}
+						{{- range .Attributes}}
+						{{- if or (eq .Type "List") (eq .Type "Set")}}
+						{{- $ccclist := toDotPath .XPath }}
+						{{- $ccclistName := toGoName .TfName}}
+						{{- $hasOnlyIdAttr := true}}
+						{{- $idAttrType := ""}}
+						{{- $idAttrName := ""}}
+						{{- range .Attributes}}
+						{{- if or (ne .Type "List") (ne .Type "Set")}}
+						{{- if .Id}}
+						{{- $idAttrType = .Type}}
+						{{- $idAttrName = toGoName .TfName}}
+						{{- else}}
+						{{- $hasOnlyIdAttr = false}}
+						{{- end}}
+						{{- end}}
+						{{- end}}
+						{{- if and .NoAugmentConfig $hasOnlyIdAttr}}
+						// Special handling for no_augment_config lists with only ID attributes (leaf-list behavior)
+						if len(ccitem.{{$ccclistName}}) > 0 {
 							{{- range .Attributes}}
-							{{- if or (eq .Type "List") (eq .Type "Set")}}
-							{{- $ccclist := toDotPath .XPath }}
-							if len(ccitem.{{toGoName .TfName}}) > 0 {
-								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{toDotPath .XPath}}", []interface{}{})
-								for cccindex, cccitem := range ccitem.{{toGoName .TfName}} {
-									{{- range .Attributes}}
-									{{- if and (ne .Type "List") (ne .Type "Set")}}
-									if !cccitem.{{toGoName .TfName}}.IsNull() && !cccitem.{{toGoName .TfName}}.IsUnknown() {
-										{{- if eq .Type "Int64"}}
-										body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toDotPath .XPath}}", strconv.FormatInt(cccitem.{{toGoName .TfName}}.ValueInt64(), 10))
-										{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
-										if cccitem.{{toGoName .TfName}}.ValueBool() {
-											body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toDotPath .XPath}}", []interface{}{nil})
-										}
-										{{- else if and (eq .Type "Bool") (eq .TypeYangBool "presence")}}
-										if cccitem.{{toGoName .TfName}}.ValueBool() {
-											body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toDotPath .XPath}}", map[string]string{})
-										}
-										{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
-										body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toDotPath .XPath}}", cccitem.{{toGoName .TfName}}.ValueBool())
-										{{- else if eq .Type "String"}}
-										body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toDotPath .XPath}}", cccitem.{{toGoName .TfName}}.ValueString())
-										{{- else if or (eq .Type "StringList") (eq .Type "StringSet")}}
-										var values []string
-										cccitem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
-										body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toDotPath .XPath}}", values)
-										{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-										var values []int
-										cccitem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
-										body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{toDotPath .XPath}}", values)
-										{{- end}}
-									}
-									{{- end}}
-									{{- end}}
+							{{- if .Id}}
+							{{- if eq .Type "Int64"}}
+							for cccindex, cccitem := range ccitem.{{$ccclistName}} {
+								if !cccitem.{{toGoName .TfName}}.IsNull() && !cccitem.{{toGoName .TfName}}.IsUnknown() {
+									body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{.YangName}}", int(cccitem.{{toGoName .TfName}}.ValueInt64()))
+								}
+							}
+							{{- else if eq .Type "String"}}
+							for cccindex, cccitem := range ccitem.{{$ccclistName}} {
+								if !cccitem.{{toGoName .TfName}}.IsNull() && !cccitem.{{toGoName .TfName}}.IsUnknown() {
+									body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{.YangName}}", cccitem.{{toGoName .TfName}}.ValueString())
 								}
 							}
 							{{- end}}
 							{{- end}}
+							{{- end}}
+						}
+						{{- else}}
+						if len(ccitem.{{toGoName .TfName}}) > 0 {
+							for cccindex, cccitem := range ccitem.{{toGoName .TfName}} {
+								{{- range .Attributes}}
+								{{- if and (ne .Type "List") (ne .Type "Set")}}
+								if !cccitem.{{toGoName .TfName}}.IsNull() && !cccitem.{{toGoName .TfName}}.IsUnknown() {
+								{{- if eq .Type "Int64"}}
+								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex){{if .XPath}}+"."+"{{toDotPath .XPath}}"{{end}}, strconv.FormatInt(cccitem.{{toGoName .TfName}}.ValueInt64(), 10))
+								{{- else if eq .Type "Float64"}}
+								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex){{if .XPath}}+"."+"{{toDotPath .XPath}}"{{end}}, strconv.FormatFloat(cccitem.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
+								{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+								if cccitem.{{toGoName .TfName}}.ValueBool() {
+									body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex){{if .XPath}}+"."+"{{toDotPath .XPath}}"{{end}}, []interface{}{nil})
+								}
+								{{- else if and (eq .Type "Bool") (eq .TypeYangBool "presence")}}
+								if cccitem.{{toGoName .TfName}}.ValueBool() {
+									body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex){{if .XPath}}+"."+"{{toDotPath .XPath}}"{{end}}, map[string]string{})
+								}
+								{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
+								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex){{if .XPath}}+"."+"{{toDotPath .XPath}}"{{end}}, cccitem.{{toGoName .TfName}}.ValueBool())
+								{{- else if eq .Type "String"}}
+								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex){{if .XPath}}+"."+"{{toDotPath .XPath}}"{{end}}, cccitem.{{toGoName .TfName}}.ValueString())
+								{{- else if or (eq .Type "StringList") (eq .Type "StringSet")}}
+								var values []string
+								cccitem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
+								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex){{if .XPath}}+"."+"{{toDotPath .XPath}}"{{end}}, values)
+								{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+								var values []int
+								cccitem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
+								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex){{if .XPath}}+"."+"{{toDotPath .XPath}}"{{end}}, values)
+								{{- end}}
+								}
+								{{- else if or (eq .Type "List") (eq .Type "Set")}}
+								{{- $cccclist := toDotPath .XPath }}
+								{{- $cccclistName := toGoName .TfName}}
+								{{- $hasOnlyIdAttr := true}}
+								{{- $idAttrType := ""}}
+								{{- $idAttrName := ""}}
+								{{- range .Attributes}}
+								{{- if or (ne .Type "List") (ne .Type "Set")}}
+								{{- if .Id}}
+								{{- $idAttrType = .Type}}
+								{{- $idAttrName = toGoName .TfName}}
+								{{- else}}
+								{{- $hasOnlyIdAttr = false}}
+								{{- end}}
+								{{- end}}
+								{{- end}}
+								{{- if and .NoAugmentConfig $hasOnlyIdAttr}}
+								// Special handling for no_augment_config lists with only ID attributes at 4th level (leaf-list behavior)
+								if len(cccitem.{{$cccclistName}}) > 0 {
+									{{- range .Attributes}}
+									{{- if .Id}}
+									{{- if eq .Type "Int64"}}
+									for ccccindex, ccccitem := range cccitem.{{$cccclistName}} {
+										if !ccccitem.{{toGoName .TfName}}.IsNull() && !ccccitem.{{toGoName .TfName}}.IsUnknown() {
+											body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{$cccclist}}"+"."+strconv.Itoa(ccccindex)+"."+"{{.YangName}}", int(ccccitem.{{toGoName .TfName}}.ValueInt64()))
+										}
+									}
+									{{- else if eq .Type "String"}}
+									for ccccindex, ccccitem := range cccitem.{{$cccclistName}} {
+										if !ccccitem.{{toGoName .TfName}}.IsNull() && !ccccitem.{{toGoName .TfName}}.IsUnknown() {
+											body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{$ccclist}}"+"."+strconv.Itoa(cccindex)+"."+"{{$cccclist}}"+"."+strconv.Itoa(ccccindex)+"."+"{{.YangName}}", ccccitem.{{toGoName .TfName}}.ValueString())
+										}
+									}
+									{{- end}}
+									{{- end}}
+									{{- end}}
+								}
+								{{- end}}
+								{{- end}}
+								{{- end}}
+							}
+						}
+						{{- end}}
+						{{- end}}
+						{{- end}}
 						}
 					}
 					{{- end}}
@@ -416,6 +512,7 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 	{{- end}}
 	{{- end}}
 	return body
+	{{- end}}
 }
 
 // End of section. //template:end toBody
@@ -423,13 +520,36 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte) {
+	{{- $noAugmentCount := 0}}
+	{{- range .Attributes}}{{if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}{{$noAugmentCount = add $noAugmentCount 1}}{{end}}{{end}}
+	{{- if eq $noAugmentCount 1}}
+	// For root element, value is at the element name in the response
+	lastElement := helpers.LastElement(data.getPath())
+	{{- range .Attributes}}
+	{{- if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}
+	if value := gjson.GetBytes(res, lastElement); value.Exists() {
+		data.{{toGoName .TfName}} = types.StringValue(value.String())
+	} else if !data.{{toGoName .TfName}}.IsNull() {
+		data.{{toGoName .TfName}} = types.StringValue(data.{{toGoName .TfName}}.ValueString())
+	} else {
+		data.{{toGoName .TfName}} = types.StringNull()
+	}
+	{{- end}}
+	{{- end}}
+	{{- else}}
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (not .Id) (not .WriteOnly)}}
 	{{- if eq .Type "Int64"}}
 	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
-	} else {
+	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Int64Null()
+	}
+	{{- else if eq .Type "Float64"}}
+	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
+		data.{{toGoName .TfName}} = types.Float64Value(value.Float())
+	} else if data.{{toGoName .TfName}}.IsNull() {
+		data.{{toGoName .TfName}} = types.Float64Null()
 	}
 	{{- else if eq .Type "Bool"}}
 	{{- if eq .TypeYangBool "boolean"}}
@@ -440,11 +560,12 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	}
 	{{- else}}
 	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.{{toGoName .TfName}}.IsNull() {
 			data.{{toGoName .TfName}} = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.{{toGoName .TfName}}.IsNull() {
 			data.{{toGoName .TfName}} = types.BoolNull()
 		}
@@ -453,31 +574,31 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	{{- else if eq .Type "String"}}
 	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.StringValue(value.String())
-	} else {
+	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.StringNull()
 	}
 	{{- else if eq .Type "StringList"}}
 	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.ListNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64List"}}
 	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = helpers.GetInt64List(value.Array())
-	} else {
+	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
 	}
 	{{- else if eq .Type "StringSet"}}
 	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = helpers.GetStringSet(value.Array())
-	} else {
+	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.SetNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64Set"}}
 	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = helpers.GetInt64Set(value.Array())
-	} else {
+	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.SetNull(types.Int64Type)
 	}
 	{{- else if or (eq .Type "List") (eq .Type "Set")}}
@@ -515,33 +636,29 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 		} else {
 			data.{{$list}}[i].{{toGoName .TfName}} = types.Int64Null()
 		}
-		{{- else if eq .Type "Bool"}}
-		{{- if eq .TypeYangBool "boolean"}}
-		if value := r.Get("{{toDotPath .XPath}}"); value.Exists() {
-			data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(value.Bool())
-		} else if data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
-			data.{{$list}}[i].{{toGoName .TfName}} = types.BoolNull()
+		{{- else if eq .Type "Float64"}}
+		if value := r.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
+			data.{{$list}}[i].{{toGoName .TfName}} = types.Float64Value(value.Float())
+		} else {
+			data.{{$list}}[i].{{toGoName .TfName}} = types.Float64Null()
 		}
-		{{- else}}
+		{{- else if eq .Type "Bool"}}
 		if value := r.Get("{{toDotPath .XPath}}"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(false)
-			} else if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
+			{{- if eq .TypeYangBool "boolean"}}
+			data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(value.Bool())
+			{{- else}}
+			// Only set to true if it was already in the plan (not null)
+			if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
 				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(true)
 			}
+			{{- end}}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
 				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(false)
 			}
 		}
-		{{- end}}
 		{{- else if eq .Type "String"}}
 		if value := r.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
 			data.{{$list}}[i].{{toGoName .TfName}} = types.StringValue(value.String())
@@ -575,174 +692,286 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 		{{- else if or (eq .Type "List") (eq .Type "Set")}}
 		{{- $clist := (toGoName .TfName)}}
 		{{- $clistPath := (toDotPath .XPath)}}
-		// Rebuild nested list from device response
-		if value := r.Get("{{$clistPath}}"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.{{$list}}[i].{{$clist}}
-			data.{{$list}}[i].{{$clist}} = make([]{{$name}}{{$list}}{{$clist}}, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := {{$name}}{{$list}}{{$clist}}{}
+		for ci := range data.{{$list}}[i].{{$clist}} {
+			keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
+			keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+
+			var cr gjson.Result
+			r.Get("{{$clistPath}}").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+
+			{{- range .Attributes}}
+			{{- if not .WriteOnly}}
+			{{- if eq .Type "Int64"}}
+			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.Int64Value(value.Int())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.Int64Null()
+			}
+			{{- else if eq .Type "Float64"}}
+			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.Float64Value(value.Float())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.Float64Null()
+			}
+			{{- else if eq .Type "Bool"}}
+			{{- if eq .TypeYangBool "boolean"}}
+			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(value.Bool())
+			} else if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolNull()
+			}
+			{{- else}}
+			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() {
+				if !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolNull()
+				}
+			}
+			{{- end}}
+			{{- else if eq .Type "String"}}
+			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.StringNull()
+			}
+			{{- else if eq .Type "StringList"}}
+			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = helpers.GetStringList(value.Array())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.ListNull(types.StringType)
+			}
+			{{- else if eq .Type "Int64List"}}
+			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = helpers.GetInt64List(value.Array())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.ListNull(types.Int64Type)
+			}
+			{{- else if eq .Type "StringSet"}}
+			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = helpers.GetStringSet(value.Array())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.SetNull(types.StringType)
+			}
+			{{- else if eq .Type "Int64Set"}}
+			if value := cr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = helpers.GetInt64Set(value.Array())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.SetNull(types.Int64Type)
+			}
+			{{- else if or (eq .Type "List") (eq .Type "Set")}}
+			{{- $cclist := (toGoName .TfName)}}
+			{{- $cclistPath := (toDotPath .XPath)}}
+			for cci := range data.{{$list}}[i].{{$clist}}[ci].{{$cclist}} {
+				keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
+				keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+
+				var ccr gjson.Result
+				cr.Get("{{$cclistPath}}").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+
 				{{- range .Attributes}}
 				{{- if not .WriteOnly}}
 				{{- if eq .Type "Int64"}}
-				if cValue := cr.Get("{{toDotPath .XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = types.Int64Value(cValue.Int())
+				if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.Int64Value(value.Int())
+				} else {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.Int64Null()
+				}
+				{{- else if eq .Type "Float64"}}
+				if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.Float64Value(value.Float())
+				} else {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.Float64Null()
 				}
 				{{- else if eq .Type "Bool"}}
-				{{- if eq .TypeYangBool "boolean"}}
-				if cValue := cr.Get("{{toDotPath .XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = types.BoolValue(cValue.Bool())
-				} else {
-					citem.{{toGoName .TfName}} = types.BoolNull()
-				}
-				{{- else}}
-				if cValue := cr.Get("{{toDotPath .XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = types.BoolValue(true)
-				} else {
-					citem.{{toGoName .TfName}} = types.BoolValue(false)
-				}
-				{{- end}}
-				{{- else if eq .Type "String"}}
-				if cValue := cr.Get("{{toDotPath .XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}cValue.Raw{{else}}cValue.String(){{end}})
-				}
-				{{- else if eq .Type "StringList"}}
-				if cValue := cr.Get("{{toDotPath .XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = helpers.GetStringList(cValue.Array())
-				} else {
-					citem.{{toGoName .TfName}} = types.ListNull(types.StringType)
-				}
-				{{- else if eq .Type "Int64List"}}
-				if cValue := cr.Get("{{toDotPath .XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = helpers.GetInt64List(cValue.Array())
-				} else {
-					citem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
-				}
-				{{- else if eq .Type "StringSet"}}
-				if cValue := cr.Get("{{toDotPath .XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = helpers.GetStringSet(cValue.Array())
-				} else {
-					citem.{{toGoName .TfName}} = types.SetNull(types.StringType)
-				}
-				{{- else if eq .Type "Int64Set"}}
-				if cValue := cr.Get("{{toDotPath .XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = helpers.GetInt64Set(cValue.Array())
-				} else {
-					citem.{{toGoName .TfName}} = types.SetNull(types.Int64Type)
-				}
-				{{- else if or (eq .Type "List") (eq .Type "Set")}}
-				{{- $cclist := (toGoName .TfName)}}
-				{{- $cclistPath := (toDotPath .XPath)}}
-				// Rebuild nested nested list from device response
-				if ccValue := cr.Get("{{$cclistPath}}"); ccValue.Exists() {
-					citem.{{$cclist}} = make([]{{$name}}{{$list}}{{$clist}}{{$cclist}}, 0)
-					ccValue.ForEach(func(_, ccr gjson.Result) bool {
-						ccitem := {{$name}}{{$list}}{{$clist}}{{$cclist}}{}
-						{{- range .Attributes}}
-						{{- if not .WriteOnly}}
-						{{- if eq .Type "Int64"}}
-						if ccValue := ccr.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = types.Int64Value(ccValue.Int())
-						}
-						{{- else if eq .Type "Bool"}}
-						{{- if eq .TypeYangBool "boolean"}}
-						if ccValue := ccr.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = types.BoolValue(ccValue.Bool())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.BoolNull()
-						}
-						{{- else}}
-						if ccValue := ccr.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = types.BoolValue(true)
-						} else {
-							ccitem.{{toGoName .TfName}} = types.BoolValue(false)
-						}
-						{{- end}}
-						{{- else if eq .Type "String"}}
-						if ccValue := ccr.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}ccValue.Raw{{else}}ccValue.String(){{end}})
-						}
-						{{- else if eq .Type "StringList"}}
-						if ccValue := ccr.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = helpers.GetStringList(ccValue.Array())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.ListNull(types.StringType)
-						}
-						{{- else if eq .Type "Int64List"}}
-						if ccValue := ccr.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = helpers.GetInt64List(ccValue.Array())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
-						}
-						{{- else if eq .Type "StringSet"}}
-						if ccValue := ccr.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = helpers.GetStringSet(ccValue.Array())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.SetNull(types.StringType)
-						}
-						{{- else if eq .Type "Int64Set"}}
-						if ccValue := ccr.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = helpers.GetInt64Set(ccValue.Array())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.SetNull(types.Int64Type)
-						}
-						{{- end}}
-						{{- end}}
-						{{- end}}
-						citem.{{$cclist}} = append(citem.{{$cclist}}, ccitem)
-						return true
-					})
-				}
-				{{- end}}
-				{{- end}}
-				{{- end}}
-
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					{{- range .Attributes}}
-					{{- if .Id}}
-					{{- if eq .Type "Int64"}}
-					if !existingItem.{{toGoName .TfName}}.Equal(citem.{{toGoName .TfName}}) {
-						match = false
-					}
-					{{- else if eq .Type "Bool"}}
-					if !existingItem.{{toGoName .TfName}}.Equal(citem.{{toGoName .TfName}}) {
-						match = false
+				if value := ccr.Get("{{toDotPath .XPath}}"); !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					{{- if eq .TypeYangBool "boolean"}}
+					if value.Exists() {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolValue(value.Bool())
 					}
 					{{- else}}
-					if existingItem.{{toGoName .TfName}}.ValueString() != citem.{{toGoName .TfName}}.ValueString() {
-						match = false
+					if value.Exists() {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolValue(true)
+					} else {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolValue(false)
 					}
 					{{- end}}
-					{{- end}}
-					{{- end}}
+				} else {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.BoolNull()
+				}
+				{{- else if eq .Type "String"}}
+				if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
+				} else {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.StringNull()
+				}
+				{{- else if eq .Type "StringList"}}
+				if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = helpers.GetStringList(value.Array())
+				} else {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.ListNull(types.StringType)
+				}
+				{{- else if eq .Type "Int64List"}}
+				if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = helpers.GetInt64List(value.Array())
+				} else {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.ListNull(types.Int64Type)
+				}
+				{{- else if eq .Type "StringSet"}}
+				if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = helpers.GetStringSet(value.Array())
+				} else {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.SetNull(types.StringType)
+				}
+				{{- else if eq .Type "Int64Set"}}
+				if value := ccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = helpers.GetInt64Set(value.Array())
+				} else {
+					data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}} = types.SetNull(types.Int64Type)
+				}
+				{{- else if or (eq .Type "List") (eq .Type "Set")}}
+				{{- $ccclist := (toGoName .TfName)}}
+				{{- $ccclistPath := (toDotPath .XPath)}}
+				for ccci := range data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}} {
+					keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
+					keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 
-					if match {
-						// Preserve false values for presence-based booleans
-						{{- range .Attributes}}
-						{{- if and (not .WriteOnly) (not .Id)}}
-						{{- if eq .Type "Bool"}}
-						{{- if ne .TypeYangBool "boolean"}}
-						if !citem.{{toGoName .TfName}}.ValueBool() && existingItem.{{toGoName .TfName}}.ValueBool() == false {
-							citem.{{toGoName .TfName}} = existingItem.{{toGoName .TfName}}
+					var cccr gjson.Result
+					ccr.Get("{{$ccclistPath}}").ForEach(
+						func(_, v gjson.Result) bool {
+							found := false
+							for ik := range keys {
+								if v.Get(keys[ik]).String() == keyValues[ik] {
+									found = true
+									continue
+								}
+								found = false
+								break
+							}
+							if found {
+								cccr = v
+								return false
+							}
+							return true
+						},
+					)
+
+					{{- range .Attributes}}
+					{{- if not .WriteOnly}}
+					{{- if and (ne .Type "List") (ne .Type "Set")}}
+					{{- if eq .Type "Int64"}}
+					if value := cccr.Get("{{if .XPath}}{{toDotPath .XPath}}{{else}}{{.YangName}}{{end}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.Int64Value(value.Int())
+					} else {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.Int64Null()
+					}
+					{{- else if eq .Type "Float64"}}
+					if value := cccr.Get("{{if .XPath}}{{toDotPath .XPath}}{{else}}{{.YangName}}{{end}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.Float64Value(value.Float())
+					} else {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.Float64Null()
+					}
+					{{- else if eq .Type "Bool"}}
+					if value := cccr.Get("{{if .XPath}}{{toDotPath .XPath}}{{else}}{{.YangName}}{{end}}"); !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() {
+						{{- if eq .TypeYangBool "boolean"}}
+						if value.Exists() {
+							data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.BoolValue(value.Bool())
+						}
+						{{- else}}
+						if value.Exists() {
+							data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.BoolValue(true)
+						} else {
+							data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.BoolValue(false)
 						}
 						{{- end}}
-						{{- end}}
-						{{- end}}
-						{{- end}}
-						break
+					} else {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.BoolNull()
 					}
+					{{- else if eq .Type "String"}}
+					if value := cccr.Get("{{if .XPath}}{{toDotPath .XPath}}{{else}}{{.YangName}}{{end}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
+					} else {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.StringNull()
+					}
+					{{- else if eq .Type "StringList"}}
+					if value := cccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = helpers.GetStringList(value.Array())
+					} else {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.ListNull(types.StringType)
+					}
+					{{- else if eq .Type "Int64List"}}
+					if value := cccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = helpers.GetInt64List(value.Array())
+					} else {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.ListNull(types.Int64Type)
+					}
+					{{- else if eq .Type "StringSet"}}
+					if value := cccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = helpers.GetStringSet(value.Array())
+					} else {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.SetNull(types.StringType)
+					}
+					{{- else if eq .Type "Int64Set"}}
+					if value := cccr.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = helpers.GetInt64Set(value.Array())
+					} else {
+						data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}} = types.SetNull(types.Int64Type)
+					}
+					{{- end}}
+					{{- end}}
+					{{- end}}
+					{{- end}}
 				}
-
-				data.{{$list}}[i].{{$clist}} = append(data.{{$list}}[i].{{$clist}}, citem)
-				return true
-			})
+				{{- end}}
+				{{- end}}
+				{{- end}}
+			}
+			{{- end}}
+			{{- end}}
+			{{- end}}
 		}
 		{{- end}}
 		{{- end}}
 		{{- end}}
 	}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- end}}
@@ -753,10 +982,50 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result) {
+	{{- $noAugmentCount := 0}}
+	{{- range .Attributes}}{{if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}{{$noAugmentCount = add $noAugmentCount 1}}{{end}}{{end}}
+	{{- if eq $noAugmentCount 1}}
+	// For leaf at root, gNMI returns the value directly as a JSON string (e.g., "value")
+	// Check if the result is a simple string value
+	if res.IsArray() || res.IsObject() {
+		// Try to extract from nested structure
+		lastElement := helpers.LastElement(data.getPath())
+		{{- range .Attributes}}
+		{{- if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}
+		if value := res.Get(lastElement); value.Exists() {
+			data.{{toGoName .TfName}} = types.StringValue(value.String())
+			return
+		}
+		if value := res.Get("{{.YangName}}"); value.Exists() {
+			data.{{toGoName .TfName}} = types.StringValue(value.String())
+			return
+		}
+		data.{{toGoName .TfName}} = types.StringNull()
+		{{- end}}
+		{{- end}}
+	} else if res.Exists() {
+		// Direct string value
+		{{- range .Attributes}}
+		{{- if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}
+		data.{{toGoName .TfName}} = types.StringValue(res.String())
+		{{- end}}
+		{{- end}}
+	} else {
+		{{- range .Attributes}}
+		{{- if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}
+		data.{{toGoName .TfName}} = types.StringNull()
+		{{- end}}
+		{{- end}}
+	}
+	{{- else}}
 	{{- $name := camelCase .Name}}
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	{{- range .Attributes}}
 	{{- $cname := toGoName .TfName}}
@@ -765,6 +1034,10 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 	if value := res.Get(prefix+"{{toDotPath .XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
 	}
+	{{- else if eq .Type "Float64"}}
+	if value := res.Get(prefix+"{{toDotPath .XPath}}"); value.Exists() {
+		data.{{toGoName .TfName}} = types.Float64Value(value.Float())
+	}
 	{{- else if eq .Type "Bool"}}
 	if value := res.Get(prefix+"{{toDotPath .XPath}}"); value.Exists() {
 		{{- if eq .TypeYangBool "boolean"}}
@@ -772,8 +1045,9 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 		{{- else}}
 		data.{{toGoName .TfName}} = types.BoolValue(true)
 		{{- end}}
-	} else {
-		data.{{toGoName .TfName}} = types.BoolNull()
+	} else if !data.{{toGoName .TfName}}.IsNull() {
+		// Only set to false if it was previously set in state
+		data.{{toGoName .TfName}} = types.BoolValue(false)
 	}
 	{{- else if eq .Type "String"}}
 	if value := res.Get(prefix+"{{toDotPath .XPath}}"); value.Exists() {
@@ -814,6 +1088,10 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 			if cValue := v.Get("{{toDotPath .XPath}}"); cValue.Exists() {
 				item.{{toGoName .TfName}} = types.Int64Value(cValue.Int())
 			}
+			{{- else if eq .Type "Float64"}}
+			if cValue := v.Get("{{toDotPath .XPath}}"); cValue.Exists() {
+				item.{{toGoName .TfName}} = types.Float64Value(cValue.Float())
+			}
 			{{- else if eq .Type "Bool"}}
 			if cValue := v.Get("{{toDotPath .XPath}}"); cValue.Exists() {
 				{{- if eq .TypeYangBool "boolean"}}
@@ -821,8 +1099,9 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 				{{- else}}
 				item.{{toGoName .TfName}} = types.BoolValue(true)
 				{{- end}}
-			} else {
-				item.{{toGoName .TfName}} = types.BoolNull()
+			} else if !item.{{toGoName .TfName}}.IsNull() {
+				// Only set to false if it was previously set
+				item.{{toGoName .TfName}} = types.BoolValue(false)
 			}
 			{{- else if eq .Type "String"}}
 			if cValue := v.Get("{{toDotPath .XPath}}"); cValue.Exists() {
@@ -852,6 +1131,10 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 				if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
 					cItem.{{toGoName .TfName}} = types.Int64Value(ccValue.Int())
 				}
+				{{- else if eq .Type "Float64"}}
+				if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
+					cItem.{{toGoName .TfName}} = types.Float64Value(ccValue.Float())
+				}
 				{{- else if eq .Type "Bool"}}
 				if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
 					{{- if eq .TypeYangBool "boolean"}}
@@ -859,25 +1142,26 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 					{{- else}}
 					cItem.{{toGoName .TfName}} = types.BoolValue(true)
 					{{- end}}
-				} else {
-					cItem.{{toGoName .TfName}} = types.BoolNull()
+				} else if !cItem.{{toGoName .TfName}}.IsNull() {
+					// Only set to false if it was previously set
+					cItem.{{toGoName .TfName}} = types.BoolValue(false)
 				}
-					{{- else if eq .Type "String"}}
-					if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-						cItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}ccValue.Raw{{else}}ccValue.String(){{end}})
-					}
-					{{- else if eq .Type "StringList"}}
-					if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-						cItem.{{toGoName .TfName}} = helpers.GetStringList(ccValue.Array())
-					} else {
-						cItem.{{toGoName .TfName}} = types.ListNull(types.StringType)
-					}
-					{{- else if eq .Type "Int64List"}}
-					if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
-						cItem.{{toGoName .TfName}} = helpers.GetInt64List(ccValue.Array())
-					} else {
-						cItem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
-					}
+				{{- else if eq .Type "String"}}
+				if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
+					cItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}ccValue.Raw{{else}}ccValue.String(){{end}})
+				}
+				{{- else if eq .Type "StringList"}}
+				if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
+					cItem.{{toGoName .TfName}} = helpers.GetStringList(ccValue.Array())
+				} else {
+					cItem.{{toGoName .TfName}} = types.ListNull(types.StringType)
+				}
+				{{- else if eq .Type "Int64List"}}
+				if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
+					cItem.{{toGoName .TfName}} = helpers.GetInt64List(ccValue.Array())
+				} else {
+					cItem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
+				}
 				{{- else if eq .Type "List"}}
 				{{- $cccname := toGoName .TfName}}
 				if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
@@ -890,6 +1174,10 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 					if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
 						ccItem.{{toGoName .TfName}} = types.Int64Value(cccValue.Int())
 					}
+					{{- else if eq .Type "Float64"}}
+					if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
+						ccItem.{{toGoName .TfName}} = types.Float64Value(cccValue.Float())
+					}
 					{{- else if eq .Type "Bool"}}
 					if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
 						{{- if eq .TypeYangBool "boolean"}}
@@ -897,90 +1185,97 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 						{{- else}}
 						ccItem.{{toGoName .TfName}} = types.BoolValue(true)
 						{{- end}}
-					} else {
-						ccItem.{{toGoName .TfName}} = types.BoolNull()
+					} else if !ccItem.{{toGoName .TfName}}.IsNull() {
+						// Only set to false if it was previously set
+						ccItem.{{toGoName .TfName}} = types.BoolValue(false)
 					}
-						{{- else if eq .Type "String"}}
-						if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
-							ccItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}cccValue.Raw{{else}}cccValue.String(){{end}})
-						}
-						{{- else if eq .Type "StringList"}}
-						if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
-							ccItem.{{toGoName .TfName}} = helpers.GetStringList(cccValue.Array())
-						} else {
-							ccItem.{{toGoName .TfName}} = types.ListNull(types.StringType)
-						}
-						{{- else if eq .Type "Int64List"}}
-						if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
-							ccItem.{{toGoName .TfName}} = helpers.GetInt64List(cccValue.Array())
-						} else {
-							ccItem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
-						}
-						{{- else if eq .Type "List"}}
-						if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
-							ccItem.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}, 0)
-							cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
-								cccItem := {{$name}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}{}
-								{{- range .Attributes}}
-								{{- if and (not .WriteOnly) .TfName .Type}}
-								{{- if eq .Type "Int64"}}
-								if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
-									cccItem.{{toGoName .TfName}} = types.Int64Value(ccccValue.Int())
-								}
-								{{- else if eq .Type "Bool"}}
-								if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
-									{{- if eq .TypeYangBool "boolean"}}
-									cccItem.{{toGoName .TfName}} = types.BoolValue(ccccValue.Bool())
-									{{- else}}
-									cccItem.{{toGoName .TfName}} = types.BoolValue(true)
-									{{- end}}
-								} else {
-									cccItem.{{toGoName .TfName}} = types.BoolNull()
-								}
-								{{- else if eq .Type "String"}}
-								if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
-									cccItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}ccccValue.Raw{{else}}ccccValue.String(){{end}})
-								}
-								{{- else if eq .Type "StringList"}}
-								if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
-									cccItem.{{toGoName .TfName}} = helpers.GetStringList(ccccValue.Array())
-								} else {
-									cccItem.{{toGoName .TfName}} = types.ListNull(types.StringType)
-								}
-								{{- else if eq .Type "Int64List"}}
-								if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
-									cccItem.{{toGoName .TfName}} = helpers.GetInt64List(ccccValue.Array())
-								} else {
-									cccItem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
-								}
+					{{- else if eq .Type "String"}}
+					if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
+						ccItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}cccValue.Raw{{else}}cccValue.String(){{end}})
+					}
+					{{- else if eq .Type "StringList"}}
+					if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
+						ccItem.{{toGoName .TfName}} = helpers.GetStringList(cccValue.Array())
+					} else {
+						ccItem.{{toGoName .TfName}} = types.ListNull(types.StringType)
+					}
+					{{- else if eq .Type "Int64List"}}
+					if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
+						ccItem.{{toGoName .TfName}} = helpers.GetInt64List(cccValue.Array())
+					} else {
+						ccItem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
+					}
+					{{- else if eq .Type "List"}}
+					if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
+						ccItem.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}, 0)
+						cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+							cccItem := {{$name}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}{}
+							{{- range .Attributes}}
+							{{- if and (not .WriteOnly) .TfName .Type}}
+							{{- if eq .Type "Int64"}}
+							if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
+								cccItem.{{toGoName .TfName}} = types.Int64Value(ccccValue.Int())
+							}
+							{{- else if eq .Type "Float64"}}
+							if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
+								cccItem.{{toGoName .TfName}} = types.Float64Value(ccccValue.Float())
+							}
+							{{- else if eq .Type "Bool"}}
+							if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
+								{{- if eq .TypeYangBool "boolean"}}
+								cccItem.{{toGoName .TfName}} = types.BoolValue(ccccValue.Bool())
+								{{- else}}
+								cccItem.{{toGoName .TfName}} = types.BoolValue(true)
 								{{- end}}
-								{{- end}}
-								{{- end}}
-								ccItem.{{toGoName .TfName}} = append(ccItem.{{toGoName .TfName}}, cccItem)
-								return true
-							})
-						}
-						{{- end}}
-						{{- end}}
-						{{- end}}
-						cItem.{{toGoName .TfName}} = append(cItem.{{toGoName .TfName}}, ccItem)
-						return true
-					})
-				}
-				{{- end}}
-				{{- end}}
-				{{- end}}
-				item.{{toGoName .TfName}} = append(item.{{toGoName .TfName}}, cItem)
-				return true
-			})
-		}
-		{{- end}}
+							} else if !cccItem.{{toGoName .TfName}}.IsNull() {
+								// Only set to false if it was previously set
+								cccItem.{{toGoName .TfName}} = types.BoolValue(false)
+							}
+							{{- else if eq .Type "String"}}
+							if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
+								cccItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}ccccValue.Raw{{else}}ccccValue.String(){{end}})
+							}
+							{{- else if eq .Type "StringList"}}
+							if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
+								cccItem.{{toGoName .TfName}} = helpers.GetStringList(ccccValue.Array())
+							} else {
+								cccItem.{{toGoName .TfName}} = types.ListNull(types.StringType)
+							}
+							{{- else if eq .Type "Int64List"}}
+							if ccccValue := cccv.Get("{{toDotPath .XPath}}"); ccccValue.Exists() {
+								cccItem.{{toGoName .TfName}} = helpers.GetInt64List(ccccValue.Array())
+							} else {
+								cccItem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
+							}
+							{{- end}}
+							{{- end}}
+							{{- end}}
+							ccItem.{{toGoName .TfName}} = append(ccItem.{{toGoName .TfName}}, cccItem)
+							return true
+						})
+					}
+					{{- end}}
+					{{- end}}
+					{{- end}}
+					cItem.{{toGoName .TfName}} = append(cItem.{{toGoName .TfName}}, ccItem)
+					return true
+				})
+			}
+			{{- end}}
+			{{- end}}
+			{{- end}}
+			item.{{toGoName .TfName}} = append(item.{{toGoName .TfName}}, cItem)
+			return true
+		})
+	}
+	{{- end}}
 			{{- end}}
 			{{- end}}
 			data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, item)
 			return true
 		})
 	}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- end}}
@@ -992,10 +1287,31 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res gjson.Result)
 
 func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res gjson.Result) {
 	{{- $name := camelCase .Name}}
+	{{- $noAugmentCount := 0}}
+	{{- $totalAttrCount := 0}}
+	{{- range .Attributes}}{{if and (not .Id) (not .Reference)}}{{$totalAttrCount = add $totalAttrCount 1}}{{end}}{{end}}
+	{{- range .Attributes}}{{if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}{{$noAugmentCount = add $noAugmentCount 1}}{{end}}{{end}}
+	{{- if and (eq $noAugmentCount 1) (eq $totalAttrCount 1)}}
+	{{- range .Attributes}}
+	{{- if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}
+	// Special case: single no_augment_config string attribute returns direct string value
+	if res.Type == gjson.String {
+		data.{{toGoName .TfName}} = types.StringValue(res.String())
+		return
+	}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+
 	{{- range .Attributes}}
 	{{- $cname := toGoName .TfName}}
 	{{- if and (not .Reference) (not .Id)}}
@@ -1011,7 +1327,11 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res gjson.Res
 		data.{{toGoName .TfName}} = types.BoolValue(true)
 		{{- end}}
 	} else {
+		{{- if or (eq .TypeYangBool "presence") (eq .TypeYangBool "empty")}}
+		data.{{toGoName .TfName}} = types.BoolValue(false)
+		{{- else}}
 		data.{{toGoName .TfName}} = types.BoolNull()
+		{{- end}}
 	}
 	{{- else if eq .Type "String"}}
 	if value := res.Get(prefix+"{{toDotPath .XPath}}"); value.Exists() {
@@ -1059,7 +1379,11 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res gjson.Res
 				item.{{toGoName .TfName}} = types.BoolValue(true)
 				{{- end}}
 			} else {
+				{{- if or (eq .TypeYangBool "presence") (eq .TypeYangBool "empty")}}
+				item.{{toGoName .TfName}} = types.BoolValue(false)
+				{{- else}}
 				item.{{toGoName .TfName}} = types.BoolNull()
+				{{- end}}
 			}
 			{{- else if eq .Type "String"}}
 			if cValue := v.Get("{{toDotPath .XPath}}"); cValue.Exists() {
@@ -1096,7 +1420,11 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res gjson.Res
 						cItem.{{toGoName .TfName}} = types.BoolValue(true)
 						{{- end}}
 					} else {
+						{{- if or (eq .TypeYangBool "presence") (eq .TypeYangBool "empty")}}
+						cItem.{{toGoName .TfName}} = types.BoolValue(false)
+						{{- else}}
 						cItem.{{toGoName .TfName}} = types.BoolNull()
+						{{- end}}
 					}
 					{{- else if eq .Type "String"}}
 					if ccValue := cv.Get("{{toDotPath .XPath}}"); ccValue.Exists() {
@@ -1133,7 +1461,11 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res gjson.Res
 								ccItem.{{toGoName .TfName}} = types.BoolValue(true)
 								{{- end}}
 							} else {
+								{{- if or (eq .TypeYangBool "presence") (eq .TypeYangBool "empty")}}
+								ccItem.{{toGoName .TfName}} = types.BoolValue(false)
+								{{- else}}
 								ccItem.{{toGoName .TfName}} = types.BoolNull()
+								{{- end}}
 							}
 							{{- else if eq .Type "String"}}
 							if cccValue := ccv.Get("{{toDotPath .XPath}}"); cccValue.Exists() {
@@ -1211,9 +1543,9 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res gjson.Res
 			}
 			{{- end}}
 			{{- end}}
-			data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, item)
-			return true
-		})
+		data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, item)
+		return true
+	})
 	}
 	{{- end}}
 	{{- end}}
@@ -1229,7 +1561,11 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 	{{- range reverseAttributes .Attributes}}
 	{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}
 	if !state.{{toGoName .TfName}}.IsNull() && data.{{toGoName .TfName}}.IsNull() {
+		{{- if and .NoAugmentConfig (eq .Type "String")}}
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		{{- else}}
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/{{getDeletePath .}}", state.getPath()))
+		{{- end}}
 	}
 	{{- else if or (eq .Type "List") (eq .Type "Set")}}
 	{{- $xpath := .XPath}}
@@ -1540,14 +1876,29 @@ func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
 	{{- range reverseAttributes .Attributes}}
 	{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}
 	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if and .NoAugmentConfig (eq .Type "String")}}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		{{- else}}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/{{getDeletePath .}}", data.getPath()))
+		{{- end}}
 	}
 	{{- else if and (or (eq .Type "List") (eq .Type "Set")) (not .NoDelete)}}
 	for i := range data.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
-		keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/{{getDeletePath .}}=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		{{- range .Attributes}}
+		{{- if .Id}}
+		{{- if eq .Type "Int64"}}
+		keyPath += "[{{.YangName}}=" + strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10) + "]"
+		{{- else if eq .Type "Bool"}}
+		keyPath += "[{{.YangName}}=" + strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()) + "]"
+		{{- else}}
+		keyPath += "[{{.YangName}}=" + data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}() + "]"
+		{{- end}}
+		{{- end}}
+		{{- end}}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/{{getDeletePath .}}%v", data.getPath(), keyPath))
 	}
 	{{- end}}
 	{{- end}}
@@ -1560,6 +1911,24 @@ func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
+	{{- $noAugmentCount := 0}}
+	{{- range .Attributes}}{{if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}{{$noAugmentCount = add $noAugmentCount 1}}{{end}}{{end}}
+	{{- if eq $noAugmentCount 1}}
+	{{- range .Attributes}}
+	{{- if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}
+	// Special case: value goes directly into root element text content
+	body := netconf.Body{}
+	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath(), data.{{toGoName .TfName}}.ValueString())
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	return bodyString
+	{{- end}}
+	{{- end}}
+	{{- else}}
 	body := netconf.Body{}
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (ne .Type "List") (ne .Type "Set")}}
@@ -1568,6 +1937,10 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath() + "/{{.XPath}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 		{{- else if eq .Type "Float64"}}
 		body = helpers.SetFromXPath(body, data.getXPath() + "/{{.XPath}}", strconv.FormatFloat(data.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
+		{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+		if data.{{toGoName .TfName}}.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath() + "/{{.XPath}}", "")
+		}
 		{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 		if data.{{toGoName .TfName}}.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath() + "/{{.XPath}}", "")
@@ -1592,118 +1965,215 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
 	}
 	{{- else if or (eq .Type "List") (eq .Type "Set")}}
 	if len(data.{{toGoName .TfName}}) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.{{toGoName .TfName}} {
-			cBody := netconf.Body{}
+			{{- $idAttrs := getIdAttributes .Attributes}}
+			{{- if gt (len $idAttrs) 0}}
+			basePath := data.getXPath() + "/{{.XPath}}[{{range $i, $attr := $idAttrs}}{{if $i}} and {{end}}{{$attr.XPath}}='" + {{if eq $attr.Type "Int64"}}strconv.FormatInt(item.{{toGoName $attr.TfName}}.ValueInt64(), 10){{else}}item.{{toGoName $attr.TfName}}.ValueString(){{end}} + "'{{end}}]"
+			{{- else}}
+			basePath := data.getXPath() + "/{{.XPath}}"
+			{{- end}}
 			{{- range .Attributes}}
 			{{- if and (ne .Type "List") (ne .Type "Set")}}
 			if !item.{{toGoName .TfName}}.IsNull() && !item.{{toGoName .TfName}}.IsUnknown() {
 				{{- if eq .Type "Int64"}}
-				cBody = helpers.SetFromXPath(cBody, "{{.XPath}}", strconv.FormatInt(item.{{toGoName .TfName}}.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/{{.XPath}}", strconv.FormatInt(item.{{toGoName .TfName}}.ValueInt64(), 10))
 				{{- else if eq .Type "Float64"}}
-				cBody = helpers.SetFromXPath(cBody, "{{.XPath}}", strconv.FormatFloat(item.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
+				body = helpers.SetFromXPath(body, basePath+"/{{.XPath}}", strconv.FormatFloat(item.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
+				{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+				if item.{{toGoName .TfName}}.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/{{.XPath}}", "")
+				}
 				{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 				if item.{{toGoName .TfName}}.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "{{.XPath}}", "")
+					body = helpers.SetFromXPath(body, basePath+"/{{.XPath}}", "")
 				}
 				{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
-				cBody = helpers.SetFromXPath(cBody, "{{.XPath}}", item.{{toGoName .TfName}}.ValueBool())
+				body = helpers.SetFromXPath(body, basePath+"/{{.XPath}}", item.{{toGoName .TfName}}.ValueBool())
 				{{- else if eq .Type "String"}}
-				cBody = helpers.SetFromXPath(cBody, "{{.XPath}}", item.{{toGoName .TfName}}.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/{{.XPath}}", item.{{toGoName .TfName}}.ValueString())
 				{{- else if or (eq .Type "StringList") (eq .Type "StringSet")}}
 				var values []string
 				item.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
 				for _, v := range values {
-					cBody = helpers.AppendFromXPath(cBody, "{{.XPath}}", v)
+					body = helpers.AppendFromXPath(body, basePath+"/{{.XPath}}", v)
 				}
 				{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
 				var values []int
 				item.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
 				for _, v := range values {
-					cBody = helpers.AppendFromXPath(cBody, "{{.XPath}}", v)
+					body = helpers.AppendFromXPath(body, basePath+"/{{.XPath}}", v)
 				}
 				{{- end}}
 			}
 			{{- else if or (eq .Type "List") (eq .Type "Set")}}
 			if len(item.{{toGoName .TfName}}) > 0 {
 				for _, citem := range item.{{toGoName .TfName}} {
-					ccBody := netconf.Body{}
+					{{- $idAttrs := getIdAttributes .Attributes}}
+					{{- if gt (len $idAttrs) 0}}
+					cbasePath := basePath + "/{{.XPath}}[{{range $i, $attr := $idAttrs}}{{if $i}} and {{end}}{{$attr.XPath}}='" + {{if eq $attr.Type "Int64"}}strconv.FormatInt(citem.{{toGoName $attr.TfName}}.ValueInt64(), 10){{else}}citem.{{toGoName $attr.TfName}}.ValueString(){{end}} + "'{{end}}]"
+					{{- else}}
+					cbasePath := basePath + "/{{.XPath}}"
+					{{- end}}
 					{{- range .Attributes}}
 					{{- if and (ne .Type "List") (ne .Type "Set")}}
 					if !citem.{{toGoName .TfName}}.IsNull() && !citem.{{toGoName .TfName}}.IsUnknown() {
 						{{- if eq .Type "Int64"}}
-						ccBody = helpers.SetFromXPath(ccBody, "{{.XPath}}", strconv.FormatInt(citem.{{toGoName .TfName}}.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/{{.XPath}}", strconv.FormatInt(citem.{{toGoName .TfName}}.ValueInt64(), 10))
 						{{- else if eq .Type "Float64"}}
-						ccBody = helpers.SetFromXPath(ccBody, "{{.XPath}}", strconv.FormatFloat(citem.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
+						body = helpers.SetFromXPath(body, cbasePath+"/{{.XPath}}", strconv.FormatFloat(citem.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
+						{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+						if citem.{{toGoName .TfName}}.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/{{.XPath}}", "")
+						}
 						{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 						if citem.{{toGoName .TfName}}.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "{{.XPath}}", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/{{.XPath}}", "")
 						}
 						{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
-						ccBody = helpers.SetFromXPath(ccBody, "{{.XPath}}", citem.{{toGoName .TfName}}.ValueBool())
+						body = helpers.SetFromXPath(body, cbasePath+"/{{.XPath}}", citem.{{toGoName .TfName}}.ValueBool())
 						{{- else if eq .Type "String"}}
-						ccBody = helpers.SetFromXPath(ccBody, "{{.XPath}}", citem.{{toGoName .TfName}}.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/{{.XPath}}", citem.{{toGoName .TfName}}.ValueString())
 						{{- else if or (eq .Type "StringList") (eq .Type "StringSet")}}
 						var values []string
 						citem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
 						for _, v := range values {
-							ccBody = helpers.AppendFromXPath(ccBody, "{{.XPath}}", v)
+							body = helpers.AppendFromXPath(body, cbasePath+"/{{.XPath}}", v)
 						}
 						{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
 						var values []int
 						citem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
 						for _, v := range values {
-							ccBody = helpers.AppendFromXPath(ccBody, "{{.XPath}}", v)
+							body = helpers.AppendFromXPath(body, cbasePath+"/{{.XPath}}", v)
 						}
 						{{- end}}
 					}
 					{{- else if or (eq .Type "List") (eq .Type "Set")}}
 					if len(citem.{{toGoName .TfName}}) > 0 {
 						for _, ccitem := range citem.{{toGoName .TfName}} {
-							cccBody := netconf.Body{}
+							{{- $idAttrs := getIdAttributes .Attributes}}
+							{{- if gt (len $idAttrs) 0}}
+							ccbasePath := cbasePath + "/{{.XPath}}[{{range $i, $attr := $idAttrs}}{{if $i}} and {{end}}{{$attr.XPath}}='" + {{if eq $attr.Type "Int64"}}strconv.FormatInt(ccitem.{{toGoName $attr.TfName}}.ValueInt64(), 10){{else}}ccitem.{{toGoName $attr.TfName}}.ValueString(){{end}} + "'{{end}}]"
+							{{- else}}
+							ccbasePath := cbasePath + "/{{.XPath}}"
+							{{- end}}
 							{{- range .Attributes}}
 							{{- if and (ne .Type "List") (ne .Type "Set")}}
 							if !ccitem.{{toGoName .TfName}}.IsNull() && !ccitem.{{toGoName .TfName}}.IsUnknown() {
 								{{- if eq .Type "Int64"}}
-								cccBody = helpers.SetFromXPath(cccBody, "{{.XPath}}", strconv.FormatInt(ccitem.{{toGoName .TfName}}.ValueInt64(), 10))
+								body = helpers.SetFromXPath(body, ccbasePath+"/{{.XPath}}", strconv.FormatInt(ccitem.{{toGoName .TfName}}.ValueInt64(), 10))
 								{{- else if eq .Type "Float64"}}
-								cccBody = helpers.SetFromXPath(cccBody, "{{.XPath}}", strconv.FormatFloat(ccitem.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
+								body = helpers.SetFromXPath(body, ccbasePath+"/{{.XPath}}", strconv.FormatFloat(ccitem.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
+								{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+								if ccitem.{{toGoName .TfName}}.ValueBool() {
+									body = helpers.SetFromXPath(body, ccbasePath+"/{{.XPath}}", "")
+								}
 								{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 								if ccitem.{{toGoName .TfName}}.ValueBool() {
-									cccBody = helpers.SetFromXPath(cccBody, "{{.XPath}}", "")
+									body = helpers.SetFromXPath(body, ccbasePath+"/{{.XPath}}", "")
 								}
 								{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
-								cccBody = helpers.SetFromXPath(cccBody, "{{.XPath}}", ccitem.{{toGoName .TfName}}.ValueBool())
+								body = helpers.SetFromXPath(body, ccbasePath+"/{{.XPath}}", ccitem.{{toGoName .TfName}}.ValueBool())
 								{{- else if eq .Type "String"}}
-								cccBody = helpers.SetFromXPath(cccBody, "{{.XPath}}", ccitem.{{toGoName .TfName}}.ValueString())
+								body = helpers.SetFromXPath(body, ccbasePath+"/{{.XPath}}", ccitem.{{toGoName .TfName}}.ValueString())
 								{{- else if or (eq .Type "StringList") (eq .Type "StringSet")}}
 								var values []string
 								ccitem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
 								for _, v := range values {
-									cccBody = helpers.AppendFromXPath(cccBody, "{{.XPath}}", v)
+									body = helpers.AppendFromXPath(body, ccbasePath+"/{{.XPath}}", v)
 								}
 								{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
 								var values []int
 								ccitem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
 								for _, v := range values {
-									cccBody = helpers.AppendFromXPath(cccBody, "{{.XPath}}", v)
+									body = helpers.AppendFromXPath(body, ccbasePath+"/{{.XPath}}", v)
 								}
 								{{- end}}
 							}
+							{{- else if or (eq .Type "List") (eq .Type "Set")}}
+							if len(ccitem.{{toGoName .TfName}}) > 0 {
+								for _, cccitem := range ccitem.{{toGoName .TfName}} {
+									{{- $idAttrs := getIdAttributes .Attributes}}
+									{{- if gt (len $idAttrs) 0}}
+									cccbasePath := ccbasePath + "/{{.XPath}}[{{range $i, $attr := $idAttrs}}{{if $i}} and {{end}}{{$attr.XPath}}='" + {{if eq $attr.Type "Int64"}}strconv.FormatInt(cccitem.{{toGoName $attr.TfName}}.ValueInt64(), 10){{else}}cccitem.{{toGoName $attr.TfName}}.ValueString(){{end}} + "'{{end}}]"
+									{{- else}}
+									cccbasePath := ccbasePath + "/{{.XPath}}"
+									{{- end}}
+									{{- range .Attributes}}
+									{{- if and (ne .Type "List") (ne .Type "Set")}}
+									if !cccitem.{{toGoName .TfName}}.IsNull() && !cccitem.{{toGoName .TfName}}.IsUnknown() {
+										{{- if eq .Type "Int64"}}
+										body = helpers.SetFromXPath(body, cccbasePath+"/{{.XPath}}", strconv.FormatInt(cccitem.{{toGoName .TfName}}.ValueInt64(), 10))
+										{{- else if eq .Type "Float64"}}
+										body = helpers.SetFromXPath(body, cccbasePath+"/{{.XPath}}", strconv.FormatFloat(cccitem.{{toGoName .TfName}}.ValueFloat64(), 'f', 1, 64))
+										{{- else if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+										if cccitem.{{toGoName .TfName}}.ValueBool() {
+											body = helpers.SetFromXPath(body, cccbasePath+"/{{.XPath}}", "")
+										}
+										{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
+										if cccitem.{{toGoName .TfName}}.ValueBool() {
+											body = helpers.SetFromXPath(body, cccbasePath+"/{{.XPath}}", "")
+										}
+										{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
+										body = helpers.SetFromXPath(body, cccbasePath+"/{{.XPath}}", cccitem.{{toGoName .TfName}}.ValueBool())
+										{{- else if eq .Type "String"}}
+										body = helpers.SetFromXPath(body, cccbasePath+"/{{.XPath}}", cccitem.{{toGoName .TfName}}.ValueString())
+										{{- else if or (eq .Type "StringList") (eq .Type "StringSet")}}
+										var values []string
+										cccitem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
+										for _, v := range values {
+											body = helpers.AppendFromXPath(body, cccbasePath+"/{{.XPath}}", v)
+										}
+										{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+										var values []int
+										cccitem.{{toGoName .TfName}}.ElementsAs(ctx, &values, false)
+										for _, v := range values {
+											body = helpers.AppendFromXPath(body, cccbasePath+"/{{.XPath}}", v)
+										}
+										{{- end}}
+									}
+									{{- else if or (eq .Type "List") (eq .Type "Set")}}
+									{{- $hasOnlyIdAttr := true}}
+									{{- $idAttrType := ""}}
+									{{- range .Attributes}}
+									{{- if or (ne .Type "List") (ne .Type "Set")}}
+									{{- if .Id}}
+									{{- $idAttrType = .Type}}
+									{{- else}}
+									{{- $hasOnlyIdAttr = false}}
+									{{- end}}
+									{{- end}}
+									{{- end}}
+									{{- if and .NoAugmentConfig $hasOnlyIdAttr}}
+									if len(cccitem.{{toGoName .TfName}}) > 0 {
+										for _, ccccitem := range cccitem.{{toGoName .TfName}} {
+											{{- range .Attributes}}
+											{{- if .Id}}
+											if !ccccitem.{{toGoName .TfName}}.IsNull() && !ccccitem.{{toGoName .TfName}}.IsUnknown() {
+												{{- if eq .Type "Int64"}}
+												body = helpers.SetFromXPath(body, cccbasePath+"/{{.XPath}}", strconv.FormatInt(ccccitem.{{toGoName .TfName}}.ValueInt64(), 10))
+												{{- else if eq .Type "String"}}
+												body = helpers.SetFromXPath(body, cccbasePath+"/{{.XPath}}", ccccitem.{{toGoName .TfName}}.ValueString())
+												{{- end}}
+											}
+											{{- end}}
+											{{- end}}
+										}
+									}
+									{{- end}}
+									{{- end}}
+									{{- end}}
+								}
+							}
 							{{- end}}
 							{{- end}}
-							ccBody = helpers.AppendRawFromXPath(ccBody, "{{.XPath}}", cccBody.Res())
 						}
 					}
 					{{- end}}
 					{{- end}}
-					cBody = helpers.SetRawFromXPath(cBody, "{{.XPath}}", ccBody.Res())
 				}
 			}
 			{{- end}}
 			{{- end}}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"{{.XPath}}", cBody.Res())
 		}
 	}
 	{{- end}}
@@ -1713,6 +2183,7 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
 	}
 	return bodyString
+	{{- end}}
 }
 
 // End of section. //template:end toBodyXML
@@ -1723,27 +2194,30 @@ func (data *{{camelCase .Name}}) updateFromBodyXML(ctx context.Context, res xmld
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (not .WriteOnly)}}
 	{{- if eq .Type "Int64"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Int64Null()
 	}
 	{{- else if eq .Type "Float64"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.Float64Value(value.Float())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Float64Null()
 	}
 	{{- else if eq .Type "Bool"}}
 	{{- if eq .TypeYangBool "boolean"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.BoolValue(value.Bool())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.BoolNull()
 	}
 	{{- else}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
-		data.{{toGoName .TfName}} = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.{{toGoName .TfName}}.IsNull() {
+			data.{{toGoName .TfName}} = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.{{toGoName .TfName}}.IsNull() {
@@ -1752,31 +2226,31 @@ func (data *{{camelCase .Name}}) updateFromBodyXML(ctx context.Context, res xmld
 	}
 	{{- end}}
 	{{- else if eq .Type "String"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.StringNull()
 	}
 	{{- else if eq .Type "StringList"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetStringListXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.ListNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64List"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
 	}
 	{{- else if eq .Type "StringSet"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetStringSetXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.SetNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64Set"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetInt64SetXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.SetNull(types.Int64Type)
@@ -1788,7 +2262,7 @@ func (data *{{camelCase .Name}}) updateFromBodyXML(ctx context.Context, res xmld
 		keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}").ForEach(
+		helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1826,7 +2300,10 @@ func (data *{{camelCase .Name}}) updateFromBodyXML(ctx context.Context, res xmld
 			{{- if eq .TypeYangBool "boolean"}}
 			data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(value.Bool())
 			{{- else}}
-			data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(true)
+			}
 			{{- end}}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
@@ -1859,180 +2336,97 @@ func (data *{{camelCase .Name}}) updateFromBodyXML(ctx context.Context, res xmld
 		}
 		{{- else if or (eq .Type "List") (eq .Type "Set")}}
 		{{- $clist := (toGoName .TfName)}}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "{{.XPath}}"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.{{$list}}[i].{{$clist}}
-			data.{{$list}}[i].{{$clist}} = make([]{{$name}}{{$list}}{{$clist}}, 0)
+		for ci := range data.{{$list}}[i].{{$clist}} {
+			keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.XPath}}", {{end}}{{end}} }
+			keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := {{$name}}{{$list}}{{$clist}}{}
-
-				// First, populate all fields from device
-				{{- range .Attributes}}
-				{{- if not .WriteOnly}}
-				{{- if eq .Type "Int64"}}
-				if cValue := helpers.GetFromXPath(cr, "{{.XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = types.Int64Value(cValue.Int())
-				}
-				{{- else if eq .Type "Float64"}}
-				if cValue := helpers.GetFromXPath(cr, "{{.XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = types.Float64Value(cValue.Float())
-				}
-				{{- else if eq .Type "Bool"}}
-				{{- if eq .TypeYangBool "boolean"}}
-				if cValue := helpers.GetFromXPath(cr, "{{.XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = types.BoolValue(cValue.Bool())
-				} else {
-					citem.{{toGoName .TfName}} = types.BoolValue(false)
-				}
-				{{- else}}
-				if cValue := helpers.GetFromXPath(cr, "{{.XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = types.BoolValue(true)
-				} else {
-					citem.{{toGoName .TfName}} = types.BoolValue(false)
-				}
-				{{- end}}
-				{{- else if eq .Type "String"}}
-				if cValue := helpers.GetFromXPath(cr, "{{.XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = types.StringValue(cValue.String())
-				}
-				{{- else if eq .Type "StringList"}}
-				if cValue := helpers.GetFromXPath(cr, "{{.XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = helpers.GetStringListXML(cValue.Array())
-				} else {
-					citem.{{toGoName .TfName}} = types.ListNull(types.StringType)
-				}
-				{{- else if eq .Type "Int64List"}}
-				if cValue := helpers.GetFromXPath(cr, "{{.XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = helpers.GetInt64ListXML(cValue.Array())
-				} else {
-					citem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
-				}
-				{{- else if eq .Type "StringSet"}}
-				if cValue := helpers.GetFromXPath(cr, "{{.XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = helpers.GetStringSetXML(cValue.Array())
-				} else {
-					citem.{{toGoName .TfName}} = types.SetNull(types.StringType)
-				}
-				{{- else if eq .Type "Int64Set"}}
-				if cValue := helpers.GetFromXPath(cr, "{{.XPath}}"); cValue.Exists() {
-					citem.{{toGoName .TfName}} = helpers.GetInt64SetXML(cValue.Array())
-				} else {
-					citem.{{toGoName .TfName}} = types.SetNull(types.Int64Type)
-				}
-				{{- else if or (eq .Type "List") (eq .Type "Set")}}
-				{{- $cclist := (toGoName .TfName)}}
-				// Rebuild nested nested list from device XML response
-				if ccValue := helpers.GetFromXPath(cr, "{{.XPath}}"); ccValue.Exists() {
-					citem.{{$cclist}} = make([]{{$name}}{{$list}}{{$clist}}{{$cclist}}, 0)
-					ccValue.ForEach(func(_ int, ccr xmldot.Result) bool {
-						ccitem := {{$name}}{{$list}}{{$clist}}{{$cclist}}{}
-						{{- range .Attributes}}
-						{{- if not .WriteOnly}}
-						{{- if eq .Type "Int64"}}
-						if ccValue := helpers.GetFromXPath(ccr, "{{.XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = types.Int64Value(ccValue.Int())
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "{{.XPath}}").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
-						{{- else if eq .Type "Float64"}}
-						if ccValue := helpers.GetFromXPath(ccr, "{{.XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = types.Float64Value(ccValue.Float())
-						}
-						{{- else if eq .Type "Bool"}}
-						{{- if eq .TypeYangBool "boolean"}}
-						if ccValue := helpers.GetFromXPath(ccr, "{{.XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = types.BoolValue(ccValue.Bool())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.BoolValue(false)
-						}
-						{{- else}}
-						if ccValue := helpers.GetFromXPath(ccr, "{{.XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = types.BoolValue(true)
-						} else {
-							ccitem.{{toGoName .TfName}} = types.BoolValue(false)
-						}
-						{{- end}}
-						{{- else if eq .Type "String"}}
-						if ccValue := helpers.GetFromXPath(ccr, "{{.XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = types.StringValue(ccValue.String())
-						}
-						{{- else if eq .Type "StringList"}}
-						if ccValue := helpers.GetFromXPath(ccr, "{{.XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = helpers.GetStringListXML(ccValue.Array())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.ListNull(types.StringType)
-						}
-						{{- else if eq .Type "Int64List"}}
-						if ccValue := helpers.GetFromXPath(ccr, "{{.XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = helpers.GetInt64ListXML(ccValue.Array())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
-						}
-						{{- else if eq .Type "StringSet"}}
-						if ccValue := helpers.GetFromXPath(ccr, "{{.XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = helpers.GetStringSetXML(ccValue.Array())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.SetNull(types.StringType)
-						}
-						{{- else if eq .Type "Int64Set"}}
-						if ccValue := helpers.GetFromXPath(ccr, "{{.XPath}}"); ccValue.Exists() {
-							ccitem.{{toGoName .TfName}} = helpers.GetInt64SetXML(ccValue.Array())
-						} else {
-							ccitem.{{toGoName .TfName}} = types.SetNull(types.Int64Type)
-						}
-						{{- end}}
-						{{- end}}
-						{{- end}}
-						citem.{{$cclist}} = append(citem.{{$cclist}}, ccitem)
-						return true
-					})
-				}
-				{{- end}}
-				{{- end}}
-				{{- end}}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					{{- range .Attributes}}
-					{{- if .Id}}
-					{{- if eq .Type "Int64"}}
-					if !existingItem.{{toGoName .TfName}}.Equal(citem.{{toGoName .TfName}}) {
-						match = false
-					}
-					{{- else if eq .Type "Bool"}}
-					if !existingItem.{{toGoName .TfName}}.Equal(citem.{{toGoName .TfName}}) {
-						match = false
-					}
-					{{- else}}
-					if existingItem.{{toGoName .TfName}}.ValueString() != citem.{{toGoName .TfName}}.ValueString() {
-						match = false
-					}
-					{{- end}}
-					{{- end}}
-					{{- end}}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
-						{{- range .Attributes}}
-						{{- if and (not .WriteOnly) (not .Id)}}
-						{{- if eq .Type "Bool"}}
-						{{- if ne .TypeYangBool "boolean"}}
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.{{toGoName .TfName}}.ValueBool() && existingItem.{{toGoName .TfName}}.ValueBool() == false {
-							citem.{{toGoName .TfName}} = existingItem.{{toGoName .TfName}}
-						}
-						{{- end}}
-						{{- end}}
-						{{- end}}
-						{{- end}}
+						found = false
 						break
 					}
-				}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
 
-				data.{{$list}}[i].{{$clist}} = append(data.{{$list}}[i].{{$clist}}, citem)
-				return true
-			})
+			{{- range .Attributes}}
+			{{- if not .WriteOnly}}
+			{{- if eq .Type "Int64"}}
+			if value := helpers.GetFromXPath(cr, "{{.XPath}}"); value.Exists() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.Int64Value(value.Int())
+			} else if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.Int64Null()
+			}
+			{{- else if eq .Type "Float64"}}
+			if value := helpers.GetFromXPath(cr, "{{.XPath}}"); value.Exists() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.Float64Value(value.Float())
+			} else if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.Float64Null()
+			}
+				{{- else if eq .Type "Bool"}}
+				{{- if eq .TypeYangBool "boolean"}}
+				if value := helpers.GetFromXPath(cr, "{{.XPath}}"); value.Exists() {
+					data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(value.Bool())
+				} else if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+					data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolNull()
+				}
+					{{- else}}
+					if value := helpers.GetFromXPath(cr, "{{.XPath}}"); value.Exists() {
+						if !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+							data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolValue(true)
+						}
+					} else {
+						// For presence-based booleans, only set to false if the attribute is null in state
+						if data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
+							data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.BoolNull()
+						}
+					}
+					{{- end}}
+			{{- else if eq .Type "String"}}
+			if value := helpers.GetFromXPath(cr, "{{.XPath}}"); value.Exists() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			{{- else if eq .Type "StringList"}}
+			if value := helpers.GetFromXPath(cr, "{{.XPath}}"); value.Exists() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = helpers.GetStringListXML(value.Array())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.ListNull(types.StringType)
+			}
+			{{- else if eq .Type "Int64List"}}
+			if value := helpers.GetFromXPath(cr, "{{.XPath}}"); value.Exists() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = helpers.GetInt64ListXML(value.Array())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.ListNull(types.Int64Type)
+			}
+			{{- else if eq .Type "StringSet"}}
+			if value := helpers.GetFromXPath(cr, "{{.XPath}}"); value.Exists() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = helpers.GetStringSetXML(value.Array())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.SetNull(types.StringType)
+			}
+			{{- else if eq .Type "Int64Set"}}
+			if value := helpers.GetFromXPath(cr, "{{.XPath}}"); value.Exists() {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = helpers.GetInt64SetXML(value.Array())
+			} else {
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.SetNull(types.Int64Type)
+			}
+			{{- end}}
+			{{- end}}
+			{{- end}}
 		}
 		{{- end}}
 		{{- end}}
@@ -2053,53 +2447,53 @@ func (data *{{camelCase .Name}}) fromBodyXML(ctx context.Context, res xmldot.Res
 	{{- $cname := toGoName .TfName}}
 	{{- if and (not .Reference) (not .Id)}}
 	{{- if eq .Type "Int64"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
 	}
 	{{- else if eq .Type "Float64"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.Float64Value(value.Float())
 	}
 	{{- else if eq .Type "Bool"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		{{- if eq .TypeYangBool "boolean"}}
 		data.{{toGoName .TfName}} = types.BoolValue(value.Bool())
 		{{- else}}
 		data.{{toGoName .TfName}} = types.BoolValue(true)
 		{{- end}}
 	} else {
-		data.{{toGoName .TfName}} = types.BoolNull()
+		data.{{toGoName .TfName}} = types.BoolValue(false)
 	}
 	{{- else if eq .Type "String"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
 	}
 	{{- else if eq .Type "StringList"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetStringListXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.ListNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64List"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
 	}
 	{{- else if eq .Type "StringSet"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetStringSetXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.SetNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64Set"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetInt64SetXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.SetNull(types.Int64Type)
 	}
 	{{- else if or (eq .Type "List") (eq .Type "Set")}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = make([]{{$name}}{{toGoName .TfName}}, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := {{$name}}{{toGoName .TfName}}{}
@@ -2120,7 +2514,7 @@ func (data *{{camelCase .Name}}) fromBodyXML(ctx context.Context, res xmldot.Res
 				item.{{toGoName .TfName}} = types.BoolValue(true)
 				{{- end}}
 			} else {
-				item.{{toGoName .TfName}} = types.BoolNull()
+				item.{{toGoName .TfName}} = types.BoolValue(false)
 			}
 			{{- else if eq .Type "String"}}
 			if cValue := helpers.GetFromXPath(v, "{{.XPath}}"); cValue.Exists() {
@@ -2165,17 +2559,17 @@ func (data *{{camelCase .Name}}) fromBodyXML(ctx context.Context, res xmldot.Res
 					if ccValue := helpers.GetFromXPath(cv, "{{.XPath}}"); ccValue.Exists() {
 						cItem.{{toGoName .TfName}} = types.Float64Value(ccValue.Float())
 					}
-					{{else if eq .Type "Bool"}}
+					{{- else if eq .Type "Bool"}}
 					if ccValue := helpers.GetFromXPath(cv, "{{.XPath}}"); ccValue.Exists() {
-						{{if eq .TypeYangBool "boolean"}}
+						{{- if eq .TypeYangBool "boolean"}}
 						cItem.{{toGoName .TfName}} = types.BoolValue(ccValue.Bool())
-						{{else}}
+						{{- else}}
 						cItem.{{toGoName .TfName}} = types.BoolValue(true)
-						{{end}}
+						{{- end}}
 					} else {
 						cItem.{{toGoName .TfName}} = types.BoolValue(false)
 					}
-					{{else if eq .Type "String"}}
+					{{- else if eq .Type "String"}}
 					if ccValue := helpers.GetFromXPath(cv, "{{.XPath}}"); ccValue.Exists() {
 						cItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}ccValue.Raw{{else}}ccValue.String(){{end}})
 					}
@@ -2227,11 +2621,7 @@ func (data *{{camelCase .Name}}) fromBodyXML(ctx context.Context, res xmldot.Res
 								ccItem.{{toGoName .TfName}} = types.BoolValue(true)
 								{{- end}}
 							} else {
-								{{- if eq .TypeYangBool "boolean"}}
-								ccItem.{{toGoName .TfName}} = types.BoolNull()
-								{{- else}}
 								ccItem.{{toGoName .TfName}} = types.BoolValue(false)
-								{{- end}}
 							}
 							{{- else if eq .Type "String"}}
 							if cccValue := helpers.GetFromXPath(ccv, "{{.XPath}}"); cccValue.Exists() {
@@ -2245,7 +2635,7 @@ func (data *{{camelCase .Name}}) fromBodyXML(ctx context.Context, res xmldot.Res
 							}
 							{{- else if eq .Type "Int64List"}}
 							if cccValue := helpers.GetFromXPath(ccv, "{{.XPath}}"); cccValue.Exists() {
-								ccItem.{{toGoName .TfName}} = helpers.GetInt64ListXML(cccValue.Array())
+								ccItem.{{toGoName .TfName}} = helpers.GetInt64ListXML(ccValue.Array())
 							} else {
 								ccItem.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
 							}
@@ -2272,7 +2662,7 @@ func (data *{{camelCase .Name}}) fromBodyXML(ctx context.Context, res xmldot.Res
 										cccItem.{{toGoName .TfName}} = types.BoolValue(true)
 										{{- end}}
 									} else {
-										cccItem.{{toGoName .TfName}} = types.BoolNull()
+										cccItem.{{toGoName .TfName}} = types.BoolValue(false)
 									}
 									{{- else if eq .Type "String"}}
 									if ccccValue := helpers.GetFromXPath(cccv, "{{.XPath}}"); ccccValue.Exists() {
@@ -2331,15 +2721,15 @@ func (data *{{camelCase .Name}}Data) fromBodyXML(ctx context.Context, res xmldot
 	{{- $cname := toGoName .TfName}}
 	{{- if and (not .Reference) (not .Id)}}
 	{{- if eq .Type "Int64"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
 	}
 	{{- else if eq .Type "Float64"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.Float64Value(value.Float())
 	}
 	{{- else if eq .Type "Bool"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		{{- if eq .TypeYangBool "boolean"}}
 		data.{{toGoName .TfName}} = types.BoolValue(value.Bool())
 		{{- else}}
@@ -2349,35 +2739,35 @@ func (data *{{camelCase .Name}}Data) fromBodyXML(ctx context.Context, res xmldot
 		data.{{toGoName .TfName}} = types.BoolValue(false)
 	}
 	{{- else if eq .Type "String"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
 	}
 	{{- else if eq .Type "StringList"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetStringListXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.ListNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64List"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
 	}
 	{{- else if eq .Type "StringSet"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetStringSetXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.SetNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64Set"}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = helpers.GetInt64SetXML(value.Array())
 	} else {
 		data.{{toGoName .TfName}} = types.SetNull(types.Int64Type)
 	}
 	{{- else if or (eq .Type "List") (eq .Type "Set")}}
-	if value := helpers.GetFromXPath(res, "data" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = make([]{{$name}}{{toGoName .TfName}}, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := {{$name}}{{toGoName .TfName}}{}
@@ -2451,8 +2841,10 @@ func (data *{{camelCase .Name}}Data) fromBodyXML(ctx context.Context, res xmldot
 						{{- end}}
 					} else {
 						{{- if eq .TypeYangBool "boolean"}}
-		cItem.{{toGoName .TfName}} = types.BoolNull()
-		{{- end}}
+						cItem.{{toGoName .TfName}} = types.BoolNull()
+						{{- else}}
+						cItem.{{toGoName .TfName}} = types.BoolValue(false)
+						{{- end}}
 					}
 					{{- else if eq .Type "String"}}
 					if ccValue := helpers.GetFromXPath(cv, "{{.XPath}}"); ccValue.Exists() {
@@ -2791,4 +3183,3 @@ func (data *{{camelCase .Name}}) addDeletePathsXML(ctx context.Context, body str
 }
 
 // End of section. //template:end addDeletePathsXML
-

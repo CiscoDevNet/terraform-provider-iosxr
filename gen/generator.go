@@ -127,6 +127,7 @@ type YamlConfigAttribute struct {
 	Optional          bool                  `yaml:"optional"`
 	WriteOnly         bool                  `yaml:"write_only"`
 	Sensitive         bool                  `yaml:"sensitive"`
+	Root              bool                  `yaml:"root"` // Value goes into root element directly
 	ExcludeTest       bool                  `yaml:"exclude_test"`
 	ExcludeExample    bool                  `yaml:"exclude_example"`
 	IncludeExample    bool                  `yaml:"include_example"`
@@ -284,6 +285,17 @@ func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	return attributes
 }
 
+// Templating helper function to get ID attributes from a list
+func GetIdAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
+	idAttrs := []YamlConfigAttribute{}
+	for _, attr := range attributes {
+		if attr.Id {
+			idAttrs = append(idAttrs, attr)
+		}
+	}
+	return idAttrs
+}
+
 // Templating helper function to get xpath if available
 func GetXPath(yangPath, xPath string) string {
 	if xPath != "" {
@@ -381,6 +393,7 @@ var functions = template.FuncMap{
 	"hasReference":          HasReference,
 	"importParts":           ImportParts,
 	"importAttributes":      ImportAttributes,
+	"getIdAttributes":       GetIdAttributes,
 	"add":                   Add,
 	"sprintf":               fmt.Sprintf,
 	"removeLastPathElement": RemoveLastPathElement,
@@ -575,6 +588,33 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 		if config.Attributes[ia].XPath == "" {
 			config.Attributes[ia].XPath = config.Attributes[ia].YangName
 		}
+
+		// For Lists with NoAugmentConfig, still process child attributes to set their XPath
+		if config.Attributes[ia].Type == "List" && config.Attributes[ia].NoAugmentConfig {
+			for iaa := range config.Attributes[ia].Attributes {
+				// Default XPath from YangName if not explicitly set
+				if config.Attributes[ia].Attributes[iaa].XPath == "" {
+					config.Attributes[ia].Attributes[iaa].XPath = config.Attributes[ia].Attributes[iaa].YangName
+				}
+				// If parent list has no_augment_config and child is an id attribute, inherit the flag
+				if config.Attributes[ia].Attributes[iaa].Id && !config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
+					config.Attributes[ia].Attributes[iaa].NoAugmentConfig = true
+				}
+				// For nested lists, also set XPath for their children
+				if config.Attributes[ia].Attributes[iaa].Type == "List" && config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
+					for iaaa := range config.Attributes[ia].Attributes[iaa].Attributes {
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath == "" {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName
+						}
+						// If parent list has no_augment_config and child is an id attribute, inherit the flag
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig = true
+						}
+					}
+				}
+			}
+		}
+
 		if config.Attributes[ia].Id || config.Attributes[ia].Reference || config.Attributes[ia].NoAugmentConfig {
 			continue
 		}
@@ -597,21 +637,48 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath == "" {
 							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName
 						}
-						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
-							continue
+						// If parent list has no_augment_config and child is an id attribute, inherit the flag
+						if config.Attributes[ia].Attributes[iaa].NoAugmentConfig && config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig = true
 						}
-						parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
-						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" {
+						// Only skip parseAttribute if no_augment_config, but still process children
+						if !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
+						}
+						// Process children if this is a List (check Type from YAML, or if children exist)
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" || config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "Set" || len(config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes) > 0 {
 							elll := resolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName)
 							for iaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes {
 								// Default XPath from YangName if not explicitly set (do this first for all attributes)
 								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].XPath == "" {
 									config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].YangName
 								}
-								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
-									continue
+								// If parent list has no_augment_config and child is an id attribute, inherit the flag
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig && config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig = true
 								}
-								parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
+								// Only skip parseAttribute if no_augment_config, but still process children
+								if !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
+								}
+								// Process level 5 children if this is a List
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Type == "List" || config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Type == "Set" || len(config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes) > 0 {
+									ellll := resolvePath(elll, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].YangName)
+									for iaaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes {
+										// Default XPath from YangName if not explicitly set
+										if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].XPath == "" {
+											config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].YangName
+										}
+										// If parent list has no_augment_config and child is an id attribute, inherit the flag
+										if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig && config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].NoAugmentConfig {
+											config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].NoAugmentConfig = true
+										}
+										if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].NoAugmentConfig {
+											continue
+										}
+										parseAttribute(ellll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa])
+									}
+								}
 							}
 						}
 					}
@@ -763,6 +830,15 @@ func main() {
 		if resourceName != "" && configs[i].Name != resourceName {
 			continue
 		}
+
+		// Set default descriptions if not provided
+		if configs[i].DsDescription == "" {
+			configs[i].DsDescription = fmt.Sprintf("This data source can read the %s configuration.", configs[i].Name)
+		}
+		if configs[i].ResDescription == "" {
+			configs[i].ResDescription = fmt.Sprintf("This resource can manage the %s configuration.", configs[i].Name)
+		}
+
 		// Augment config by yang models
 		if !configs[i].NoAugmentConfig {
 			augmentConfig(&configs[i], modelPaths)

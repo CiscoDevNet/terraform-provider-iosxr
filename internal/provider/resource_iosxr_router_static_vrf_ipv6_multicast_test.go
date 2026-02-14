@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -115,6 +115,34 @@ func TestAccIosxrRouterStaticVRFIPv6Multicast(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterStaticVRFIPv6MulticastImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+		PrefixAddress := primary.Attributes["prefix_address"]
+		PrefixLength := primary.Attributes["prefix_length"]
+
+		return fmt.Sprintf("%s,%s,%s", VrfName, PrefixAddress, PrefixLength), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrRouterStaticVRFIPv6MulticastPrerequisitesConfig = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]"
+	attributes = {
+		"vrf-name" = "VRF2"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrRouterStaticVRFIPv6MulticastConfig_minimum() string {
@@ -125,7 +153,7 @@ func testAccIosxrRouterStaticVRFIPv6MulticastConfig_minimum() string {
 	config += `	nexthop_interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -210,35 +238,9 @@ func testAccIosxrRouterStaticVRFIPv6MulticastConfig_all() string {
 	config += `			metric = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrRouterStaticVRFIPv6MulticastImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		VrfName := primary.Attributes["vrf_name"]
-		PrefixAddress := primary.Attributes["prefix_address"]
-		PrefixLength := primary.Attributes["prefix_length"]
-
-		return fmt.Sprintf("%s,%s,%s", VrfName, PrefixAddress, PrefixLength), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrRouterStaticVRFIPv6MulticastPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]"
-	attributes = {
-		"vrf-name" = "VRF2"
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites

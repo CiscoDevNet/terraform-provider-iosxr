@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -345,15 +344,16 @@ func (data KeyChain) toBody(ctx context.Context) string {
 func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "accept-tolerance.tolerance-value"); value.Exists() && !data.AcceptToleranceValue.IsNull() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
-	} else {
+	} else if data.AcceptToleranceValue.IsNull() {
 		data.AcceptToleranceValue = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "accept-tolerance.infinite"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AcceptToleranceInfinite.IsNull() {
 			data.AcceptToleranceInfinite = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AcceptToleranceInfinite.IsNull() {
 			data.AcceptToleranceInfinite = types.BoolNull()
 		}
@@ -457,21 +457,15 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 			data.MacsecKeys[i].LifetimeDuration = types.Int64Null()
 		}
 		if value := r.Get("lifetime.infinite"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MacsecKeys[i].LifetimeInfinite.IsNull() && !data.MacsecKeys[i].LifetimeInfinite.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(false)
-			} else if !data.MacsecKeys[i].LifetimeInfinite.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MacsecKeys[i].LifetimeInfinite.IsNull() {
 				data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MacsecKeys[i].LifetimeInfinite.IsNull() {
 				data.MacsecKeys[i].LifetimeInfinite = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(false)
 			}
 		}
 	}
@@ -574,21 +568,15 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 			data.Keys[i].AcceptLifetimeDuration = types.Int64Null()
 		}
 		if value := r.Get("accept-lifetime.infinite"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Keys[i].AcceptLifetimeInfinite.IsNull() && !data.Keys[i].AcceptLifetimeInfinite.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(false)
-			} else if !data.Keys[i].AcceptLifetimeInfinite.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Keys[i].AcceptLifetimeInfinite.IsNull() {
 				data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Keys[i].AcceptLifetimeInfinite.IsNull() {
 				data.Keys[i].AcceptLifetimeInfinite = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("send-lifetime.start-time.hour"); value.Exists() && !data.Keys[i].SendLifetimeStartTimeHour.IsNull() {
@@ -657,40 +645,36 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 			data.Keys[i].SendLifetimeDuration = types.Int64Null()
 		}
 		if value := r.Get("send-lifetime.infinite"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Keys[i].SendLifetimeInfinite.IsNull() && !data.Keys[i].SendLifetimeInfinite.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Keys[i].SendLifetimeInfinite = types.BoolValue(false)
-			} else if !data.Keys[i].SendLifetimeInfinite.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Keys[i].SendLifetimeInfinite.IsNull() {
 				data.Keys[i].SendLifetimeInfinite = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Keys[i].SendLifetimeInfinite.IsNull() {
 				data.Keys[i].SendLifetimeInfinite = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Keys[i].SendLifetimeInfinite = types.BoolValue(false)
 			}
 		}
 	}
 	if value := gjson.GetBytes(res, "timezone.local"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TimezoneLocal.IsNull() {
 			data.TimezoneLocal = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TimezoneLocal.IsNull() {
 			data.TimezoneLocal = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "timezone.gmt"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TimezoneGmt.IsNull() {
 			data.TimezoneGmt = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TimezoneGmt.IsNull() {
 			data.TimezoneGmt = types.BoolNull()
 		}
@@ -714,175 +698,169 @@ func (data KeyChain) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.MacsecKeys) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MacsecKeys {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/macsec/keys/key[ckn='" + item.Ckn.ValueString() + "']"
 			if !item.Ckn.IsNull() && !item.Ckn.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ckn", item.Ckn.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ckn", item.Ckn.ValueString())
 			}
 			if !item.KeyStringPassword.IsNull() && !item.KeyStringPassword.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-string/password", item.KeyStringPassword.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/key-string/password", item.KeyStringPassword.ValueString())
 			}
 			if !item.KeyStringPassword6.IsNull() && !item.KeyStringPassword6.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-string/password6", item.KeyStringPassword6.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/key-string/password6", item.KeyStringPassword6.ValueString())
 			}
 			if !item.KeyStringCryptographicAlgorithm.IsNull() && !item.KeyStringCryptographicAlgorithm.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-string/cryptographic-algorithm", item.KeyStringCryptographicAlgorithm.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/key-string/cryptographic-algorithm", item.KeyStringCryptographicAlgorithm.ValueString())
 			}
 			if !item.LifetimeStartTimeHour.IsNull() && !item.LifetimeStartTimeHour.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/start-time/hour", strconv.FormatInt(item.LifetimeStartTimeHour.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/start-time/hour", strconv.FormatInt(item.LifetimeStartTimeHour.ValueInt64(), 10))
 			}
 			if !item.LifetimeStartTimeMinute.IsNull() && !item.LifetimeStartTimeMinute.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/start-time/minute", strconv.FormatInt(item.LifetimeStartTimeMinute.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/start-time/minute", strconv.FormatInt(item.LifetimeStartTimeMinute.ValueInt64(), 10))
 			}
 			if !item.LifetimeStartTimeSecond.IsNull() && !item.LifetimeStartTimeSecond.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/start-time/second", strconv.FormatInt(item.LifetimeStartTimeSecond.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/start-time/second", strconv.FormatInt(item.LifetimeStartTimeSecond.ValueInt64(), 10))
 			}
 			if !item.LifetimeStartTimeMonth.IsNull() && !item.LifetimeStartTimeMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/start-time/month", item.LifetimeStartTimeMonth.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/start-time/month", item.LifetimeStartTimeMonth.ValueString())
 			}
 			if !item.LifetimeStartTimeDayOfMonth.IsNull() && !item.LifetimeStartTimeDayOfMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/start-time/day-of-month", strconv.FormatInt(item.LifetimeStartTimeDayOfMonth.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/start-time/day-of-month", strconv.FormatInt(item.LifetimeStartTimeDayOfMonth.ValueInt64(), 10))
 			}
 			if !item.LifetimeStartTimeYear.IsNull() && !item.LifetimeStartTimeYear.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/start-time/year", strconv.FormatInt(item.LifetimeStartTimeYear.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/start-time/year", strconv.FormatInt(item.LifetimeStartTimeYear.ValueInt64(), 10))
 			}
 			if !item.LifetimeEndTimeHour.IsNull() && !item.LifetimeEndTimeHour.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/end-time/hour", strconv.FormatInt(item.LifetimeEndTimeHour.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/end-time/hour", strconv.FormatInt(item.LifetimeEndTimeHour.ValueInt64(), 10))
 			}
 			if !item.LifetimeEndTimeMinute.IsNull() && !item.LifetimeEndTimeMinute.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/end-time/minute", strconv.FormatInt(item.LifetimeEndTimeMinute.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/end-time/minute", strconv.FormatInt(item.LifetimeEndTimeMinute.ValueInt64(), 10))
 			}
 			if !item.LifetimeEndTimeSecond.IsNull() && !item.LifetimeEndTimeSecond.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/end-time/second", strconv.FormatInt(item.LifetimeEndTimeSecond.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/end-time/second", strconv.FormatInt(item.LifetimeEndTimeSecond.ValueInt64(), 10))
 			}
 			if !item.LifetimeEndTimeMonth.IsNull() && !item.LifetimeEndTimeMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/end-time/month", item.LifetimeEndTimeMonth.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/end-time/month", item.LifetimeEndTimeMonth.ValueString())
 			}
 			if !item.LifetimeEndTimeDayOfMonth.IsNull() && !item.LifetimeEndTimeDayOfMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/end-time/day-of-month", strconv.FormatInt(item.LifetimeEndTimeDayOfMonth.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/end-time/day-of-month", strconv.FormatInt(item.LifetimeEndTimeDayOfMonth.ValueInt64(), 10))
 			}
 			if !item.LifetimeEndTimeYear.IsNull() && !item.LifetimeEndTimeYear.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/end-time/year", strconv.FormatInt(item.LifetimeEndTimeYear.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/end-time/year", strconv.FormatInt(item.LifetimeEndTimeYear.ValueInt64(), 10))
 			}
 			if !item.LifetimeDuration.IsNull() && !item.LifetimeDuration.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lifetime/duration", strconv.FormatInt(item.LifetimeDuration.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/lifetime/duration", strconv.FormatInt(item.LifetimeDuration.ValueInt64(), 10))
 			}
 			if !item.LifetimeInfinite.IsNull() && !item.LifetimeInfinite.IsUnknown() {
 				if item.LifetimeInfinite.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "lifetime/infinite", "")
+					body = helpers.SetFromXPath(body, basePath+"/lifetime/infinite", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"macsec/keys/key", cBody.Res())
 		}
 	}
 	if len(data.Keys) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Keys {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/keys/key[key-name='" + item.KeyName.ValueString() + "']"
 			if !item.KeyName.IsNull() && !item.KeyName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-name", item.KeyName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/key-name", item.KeyName.ValueString())
 			}
 			if !item.KeyStringPassword.IsNull() && !item.KeyStringPassword.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-string/password", item.KeyStringPassword.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/key-string/password", item.KeyStringPassword.ValueString())
 			}
 			if !item.KeyStringPassword6.IsNull() && !item.KeyStringPassword6.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "key-string/password6", item.KeyStringPassword6.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/key-string/password6", item.KeyStringPassword6.ValueString())
 			}
 			if !item.CryptographicAlgorithm.IsNull() && !item.CryptographicAlgorithm.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "cryptographic-algorithm", item.CryptographicAlgorithm.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/cryptographic-algorithm", item.CryptographicAlgorithm.ValueString())
 			}
 			if !item.AcceptLifetimeStartTimeHour.IsNull() && !item.AcceptLifetimeStartTimeHour.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/start-time/hour", strconv.FormatInt(item.AcceptLifetimeStartTimeHour.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/start-time/hour", strconv.FormatInt(item.AcceptLifetimeStartTimeHour.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeStartTimeMinute.IsNull() && !item.AcceptLifetimeStartTimeMinute.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/start-time/minute", strconv.FormatInt(item.AcceptLifetimeStartTimeMinute.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/start-time/minute", strconv.FormatInt(item.AcceptLifetimeStartTimeMinute.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeStartTimeSecond.IsNull() && !item.AcceptLifetimeStartTimeSecond.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/start-time/second", strconv.FormatInt(item.AcceptLifetimeStartTimeSecond.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/start-time/second", strconv.FormatInt(item.AcceptLifetimeStartTimeSecond.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeStartTimeMonth.IsNull() && !item.AcceptLifetimeStartTimeMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/start-time/month", item.AcceptLifetimeStartTimeMonth.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/start-time/month", item.AcceptLifetimeStartTimeMonth.ValueString())
 			}
 			if !item.AcceptLifetimeStartTimeDayOfMonth.IsNull() && !item.AcceptLifetimeStartTimeDayOfMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/start-time/day-of-month", strconv.FormatInt(item.AcceptLifetimeStartTimeDayOfMonth.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/start-time/day-of-month", strconv.FormatInt(item.AcceptLifetimeStartTimeDayOfMonth.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeStartTimeYear.IsNull() && !item.AcceptLifetimeStartTimeYear.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/start-time/year", strconv.FormatInt(item.AcceptLifetimeStartTimeYear.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/start-time/year", strconv.FormatInt(item.AcceptLifetimeStartTimeYear.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeEndTimeHour.IsNull() && !item.AcceptLifetimeEndTimeHour.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/end-time/hour", strconv.FormatInt(item.AcceptLifetimeEndTimeHour.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/end-time/hour", strconv.FormatInt(item.AcceptLifetimeEndTimeHour.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeEndTimeMinute.IsNull() && !item.AcceptLifetimeEndTimeMinute.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/end-time/minute", strconv.FormatInt(item.AcceptLifetimeEndTimeMinute.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/end-time/minute", strconv.FormatInt(item.AcceptLifetimeEndTimeMinute.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeEndTimeSecond.IsNull() && !item.AcceptLifetimeEndTimeSecond.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/end-time/second", strconv.FormatInt(item.AcceptLifetimeEndTimeSecond.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/end-time/second", strconv.FormatInt(item.AcceptLifetimeEndTimeSecond.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeEndTimeMonth.IsNull() && !item.AcceptLifetimeEndTimeMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/end-time/month", item.AcceptLifetimeEndTimeMonth.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/end-time/month", item.AcceptLifetimeEndTimeMonth.ValueString())
 			}
 			if !item.AcceptLifetimeEndTimeDayOfMonth.IsNull() && !item.AcceptLifetimeEndTimeDayOfMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/end-time/day-of-month", strconv.FormatInt(item.AcceptLifetimeEndTimeDayOfMonth.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/end-time/day-of-month", strconv.FormatInt(item.AcceptLifetimeEndTimeDayOfMonth.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeEndTimeYear.IsNull() && !item.AcceptLifetimeEndTimeYear.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/end-time/year", strconv.FormatInt(item.AcceptLifetimeEndTimeYear.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/end-time/year", strconv.FormatInt(item.AcceptLifetimeEndTimeYear.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeDuration.IsNull() && !item.AcceptLifetimeDuration.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "accept-lifetime/duration", strconv.FormatInt(item.AcceptLifetimeDuration.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/duration", strconv.FormatInt(item.AcceptLifetimeDuration.ValueInt64(), 10))
 			}
 			if !item.AcceptLifetimeInfinite.IsNull() && !item.AcceptLifetimeInfinite.IsUnknown() {
 				if item.AcceptLifetimeInfinite.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "accept-lifetime/infinite", "")
+					body = helpers.SetFromXPath(body, basePath+"/accept-lifetime/infinite", "")
 				}
 			}
 			if !item.SendLifetimeStartTimeHour.IsNull() && !item.SendLifetimeStartTimeHour.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/start-time/hour", strconv.FormatInt(item.SendLifetimeStartTimeHour.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/start-time/hour", strconv.FormatInt(item.SendLifetimeStartTimeHour.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeStartTimeMinute.IsNull() && !item.SendLifetimeStartTimeMinute.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/start-time/minute", strconv.FormatInt(item.SendLifetimeStartTimeMinute.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/start-time/minute", strconv.FormatInt(item.SendLifetimeStartTimeMinute.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeStartTimeSecond.IsNull() && !item.SendLifetimeStartTimeSecond.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/start-time/second", strconv.FormatInt(item.SendLifetimeStartTimeSecond.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/start-time/second", strconv.FormatInt(item.SendLifetimeStartTimeSecond.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeStartTimeMonth.IsNull() && !item.SendLifetimeStartTimeMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/start-time/month", item.SendLifetimeStartTimeMonth.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/start-time/month", item.SendLifetimeStartTimeMonth.ValueString())
 			}
 			if !item.SendLifetimeStartTimeDayOfMonth.IsNull() && !item.SendLifetimeStartTimeDayOfMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/start-time/day-of-month", strconv.FormatInt(item.SendLifetimeStartTimeDayOfMonth.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/start-time/day-of-month", strconv.FormatInt(item.SendLifetimeStartTimeDayOfMonth.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeStartTimeYear.IsNull() && !item.SendLifetimeStartTimeYear.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/start-time/year", strconv.FormatInt(item.SendLifetimeStartTimeYear.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/start-time/year", strconv.FormatInt(item.SendLifetimeStartTimeYear.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeEndTimeHour.IsNull() && !item.SendLifetimeEndTimeHour.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/end-time/hour", strconv.FormatInt(item.SendLifetimeEndTimeHour.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/end-time/hour", strconv.FormatInt(item.SendLifetimeEndTimeHour.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeEndTimeMinute.IsNull() && !item.SendLifetimeEndTimeMinute.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/end-time/minute", strconv.FormatInt(item.SendLifetimeEndTimeMinute.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/end-time/minute", strconv.FormatInt(item.SendLifetimeEndTimeMinute.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeEndTimeSecond.IsNull() && !item.SendLifetimeEndTimeSecond.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/end-time/second", strconv.FormatInt(item.SendLifetimeEndTimeSecond.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/end-time/second", strconv.FormatInt(item.SendLifetimeEndTimeSecond.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeEndTimeMonth.IsNull() && !item.SendLifetimeEndTimeMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/end-time/month", item.SendLifetimeEndTimeMonth.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/end-time/month", item.SendLifetimeEndTimeMonth.ValueString())
 			}
 			if !item.SendLifetimeEndTimeDayOfMonth.IsNull() && !item.SendLifetimeEndTimeDayOfMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/end-time/day-of-month", strconv.FormatInt(item.SendLifetimeEndTimeDayOfMonth.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/end-time/day-of-month", strconv.FormatInt(item.SendLifetimeEndTimeDayOfMonth.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeEndTimeYear.IsNull() && !item.SendLifetimeEndTimeYear.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/end-time/year", strconv.FormatInt(item.SendLifetimeEndTimeYear.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/end-time/year", strconv.FormatInt(item.SendLifetimeEndTimeYear.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeDuration.IsNull() && !item.SendLifetimeDuration.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "send-lifetime/duration", strconv.FormatInt(item.SendLifetimeDuration.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/send-lifetime/duration", strconv.FormatInt(item.SendLifetimeDuration.ValueInt64(), 10))
 			}
 			if !item.SendLifetimeInfinite.IsNull() && !item.SendLifetimeInfinite.IsUnknown() {
 				if item.SendLifetimeInfinite.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "send-lifetime/infinite", "")
+					body = helpers.SetFromXPath(body, basePath+"/send-lifetime/infinite", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"keys/key", cBody.Res())
 		}
 	}
 	if !data.TimezoneLocal.IsNull() && !data.TimezoneLocal.IsUnknown() {
@@ -906,18 +884,21 @@ func (data KeyChain) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/key-chain-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key-chain-name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/tolerance-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-tolerance/tolerance-value"); value.Exists() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
 	} else if data.AcceptToleranceValue.IsNull() {
 		data.AcceptToleranceValue = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/infinite"); value.Exists() {
-		data.AcceptToleranceInfinite = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-tolerance/infinite"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AcceptToleranceInfinite.IsNull() {
+			data.AcceptToleranceInfinite = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AcceptToleranceInfinite.IsNull() {
@@ -929,7 +910,7 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 		keyValues := [...]string{data.MacsecKeys[i].Ckn.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/macsec/keys/key").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/macsec/keys/key").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1023,7 +1004,10 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			data.MacsecKeys[i].LifetimeDuration = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "lifetime/infinite"); value.Exists() {
-			data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MacsecKeys[i].LifetimeInfinite.IsNull() {
+				data.MacsecKeys[i].LifetimeInfinite = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1037,7 +1021,7 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/keys/key").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/keys/key").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1131,7 +1115,10 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			data.Keys[i].AcceptLifetimeDuration = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "accept-lifetime/infinite"); value.Exists() {
-			data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Keys[i].AcceptLifetimeInfinite.IsNull() {
+				data.Keys[i].AcceptLifetimeInfinite = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1205,7 +1192,10 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			data.Keys[i].SendLifetimeDuration = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "send-lifetime/infinite"); value.Exists() {
-			data.Keys[i].SendLifetimeInfinite = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Keys[i].SendLifetimeInfinite.IsNull() {
+				data.Keys[i].SendLifetimeInfinite = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1214,16 +1204,22 @@ func (data *KeyChain) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/local"); value.Exists() {
-		data.TimezoneLocal = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timezone/local"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TimezoneLocal.IsNull() {
+			data.TimezoneLocal = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TimezoneLocal.IsNull() {
 			data.TimezoneLocal = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/gmt"); value.Exists() {
-		data.TimezoneGmt = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timezone/gmt"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TimezoneGmt.IsNull() {
+			data.TimezoneGmt = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TimezoneGmt.IsNull() {
@@ -1240,13 +1236,18 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "accept-tolerance.tolerance-value"); value.Exists() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "accept-tolerance.infinite"); value.Exists() {
 		data.AcceptToleranceInfinite = types.BoolValue(true)
-	} else {
-		data.AcceptToleranceInfinite = types.BoolNull()
+	} else if !data.AcceptToleranceInfinite.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AcceptToleranceInfinite = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "macsec.keys.key"); value.Exists() {
 		data.MacsecKeys = make([]KeyChainMacsecKeys, 0)
@@ -1299,8 +1300,9 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("lifetime.infinite"); cValue.Exists() {
 				item.LifetimeInfinite = types.BoolValue(true)
-			} else {
-				item.LifetimeInfinite = types.BoolNull()
+			} else if !item.LifetimeInfinite.IsNull() {
+				// Only set to false if it was previously set
+				item.LifetimeInfinite = types.BoolValue(false)
 			}
 			data.MacsecKeys = append(data.MacsecKeys, item)
 			return true
@@ -1357,8 +1359,9 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("accept-lifetime.infinite"); cValue.Exists() {
 				item.AcceptLifetimeInfinite = types.BoolValue(true)
-			} else {
-				item.AcceptLifetimeInfinite = types.BoolNull()
+			} else if !item.AcceptLifetimeInfinite.IsNull() {
+				// Only set to false if it was previously set
+				item.AcceptLifetimeInfinite = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-lifetime.start-time.hour"); cValue.Exists() {
 				item.SendLifetimeStartTimeHour = types.Int64Value(cValue.Int())
@@ -1401,8 +1404,9 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("send-lifetime.infinite"); cValue.Exists() {
 				item.SendLifetimeInfinite = types.BoolValue(true)
-			} else {
-				item.SendLifetimeInfinite = types.BoolNull()
+			} else if !item.SendLifetimeInfinite.IsNull() {
+				// Only set to false if it was previously set
+				item.SendLifetimeInfinite = types.BoolValue(false)
 			}
 			data.Keys = append(data.Keys, item)
 			return true
@@ -1410,13 +1414,15 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "timezone.local"); value.Exists() {
 		data.TimezoneLocal = types.BoolValue(true)
-	} else {
-		data.TimezoneLocal = types.BoolNull()
+	} else if !data.TimezoneLocal.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TimezoneLocal = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "timezone.gmt"); value.Exists() {
 		data.TimezoneGmt = types.BoolValue(true)
-	} else {
-		data.TimezoneGmt = types.BoolNull()
+	} else if !data.TimezoneGmt.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TimezoneGmt = types.BoolValue(false)
 	}
 }
 
@@ -1424,9 +1430,14 @@ func (data *KeyChain) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "accept-tolerance.tolerance-value"); value.Exists() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
@@ -1434,7 +1445,7 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "accept-tolerance.infinite"); value.Exists() {
 		data.AcceptToleranceInfinite = types.BoolValue(true)
 	} else {
-		data.AcceptToleranceInfinite = types.BoolNull()
+		data.AcceptToleranceInfinite = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "macsec.keys.key"); value.Exists() {
 		data.MacsecKeys = make([]KeyChainMacsecKeys, 0)
@@ -1494,7 +1505,7 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("lifetime.infinite"); cValue.Exists() {
 				item.LifetimeInfinite = types.BoolValue(true)
 			} else {
-				item.LifetimeInfinite = types.BoolNull()
+				item.LifetimeInfinite = types.BoolValue(false)
 			}
 			data.MacsecKeys = append(data.MacsecKeys, item)
 			return true
@@ -1558,7 +1569,7 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("accept-lifetime.infinite"); cValue.Exists() {
 				item.AcceptLifetimeInfinite = types.BoolValue(true)
 			} else {
-				item.AcceptLifetimeInfinite = types.BoolNull()
+				item.AcceptLifetimeInfinite = types.BoolValue(false)
 			}
 			if cValue := v.Get("send-lifetime.start-time.hour"); cValue.Exists() {
 				item.SendLifetimeStartTimeHour = types.Int64Value(cValue.Int())
@@ -1602,7 +1613,7 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("send-lifetime.infinite"); cValue.Exists() {
 				item.SendLifetimeInfinite = types.BoolValue(true)
 			} else {
-				item.SendLifetimeInfinite = types.BoolNull()
+				item.SendLifetimeInfinite = types.BoolValue(false)
 			}
 			data.Keys = append(data.Keys, item)
 			return true
@@ -1611,12 +1622,12 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "timezone.local"); value.Exists() {
 		data.TimezoneLocal = types.BoolValue(true)
 	} else {
-		data.TimezoneLocal = types.BoolNull()
+		data.TimezoneLocal = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "timezone.gmt"); value.Exists() {
 		data.TimezoneGmt = types.BoolValue(true)
 	} else {
-		data.TimezoneGmt = types.BoolNull()
+		data.TimezoneGmt = types.BoolValue(false)
 	}
 }
 
@@ -1624,211 +1635,15 @@ func (data *KeyChainData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *KeyChain) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/tolerance-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-tolerance/tolerance-value"); value.Exists() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/infinite"); value.Exists() {
-		data.AcceptToleranceInfinite = types.BoolValue(true)
-	} else {
-		data.AcceptToleranceInfinite = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/macsec/keys/key"); value.Exists() {
-		data.MacsecKeys = make([]KeyChainMacsecKeys, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := KeyChainMacsecKeys{}
-			if cValue := helpers.GetFromXPath(v, "ckn"); cValue.Exists() {
-				item.Ckn = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "key-string/password"); cValue.Exists() {
-				item.KeyStringPassword = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "key-string/password6"); cValue.Exists() {
-				item.KeyStringPassword6 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "key-string/cryptographic-algorithm"); cValue.Exists() {
-				item.KeyStringCryptographicAlgorithm = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/hour"); cValue.Exists() {
-				item.LifetimeStartTimeHour = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/minute"); cValue.Exists() {
-				item.LifetimeStartTimeMinute = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/second"); cValue.Exists() {
-				item.LifetimeStartTimeSecond = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/month"); cValue.Exists() {
-				item.LifetimeStartTimeMonth = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/day-of-month"); cValue.Exists() {
-				item.LifetimeStartTimeDayOfMonth = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/year"); cValue.Exists() {
-				item.LifetimeStartTimeYear = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/hour"); cValue.Exists() {
-				item.LifetimeEndTimeHour = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/minute"); cValue.Exists() {
-				item.LifetimeEndTimeMinute = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/second"); cValue.Exists() {
-				item.LifetimeEndTimeSecond = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/month"); cValue.Exists() {
-				item.LifetimeEndTimeMonth = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/day-of-month"); cValue.Exists() {
-				item.LifetimeEndTimeDayOfMonth = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/year"); cValue.Exists() {
-				item.LifetimeEndTimeYear = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/duration"); cValue.Exists() {
-				item.LifetimeDuration = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lifetime/infinite"); cValue.Exists() {
-				item.LifetimeInfinite = types.BoolValue(true)
-			} else {
-				item.LifetimeInfinite = types.BoolNull()
-			}
-			data.MacsecKeys = append(data.MacsecKeys, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/keys/key"); value.Exists() {
-		data.Keys = make([]KeyChainKeys, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := KeyChainKeys{}
-			if cValue := helpers.GetFromXPath(v, "key-name"); cValue.Exists() {
-				item.KeyName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "key-string/password"); cValue.Exists() {
-				item.KeyStringPassword = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "key-string/password6"); cValue.Exists() {
-				item.KeyStringPassword6 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "cryptographic-algorithm"); cValue.Exists() {
-				item.CryptographicAlgorithm = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/hour"); cValue.Exists() {
-				item.AcceptLifetimeStartTimeHour = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/minute"); cValue.Exists() {
-				item.AcceptLifetimeStartTimeMinute = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/second"); cValue.Exists() {
-				item.AcceptLifetimeStartTimeSecond = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/month"); cValue.Exists() {
-				item.AcceptLifetimeStartTimeMonth = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/day-of-month"); cValue.Exists() {
-				item.AcceptLifetimeStartTimeDayOfMonth = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/year"); cValue.Exists() {
-				item.AcceptLifetimeStartTimeYear = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/hour"); cValue.Exists() {
-				item.AcceptLifetimeEndTimeHour = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/minute"); cValue.Exists() {
-				item.AcceptLifetimeEndTimeMinute = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/second"); cValue.Exists() {
-				item.AcceptLifetimeEndTimeSecond = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/month"); cValue.Exists() {
-				item.AcceptLifetimeEndTimeMonth = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/day-of-month"); cValue.Exists() {
-				item.AcceptLifetimeEndTimeDayOfMonth = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/year"); cValue.Exists() {
-				item.AcceptLifetimeEndTimeYear = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/duration"); cValue.Exists() {
-				item.AcceptLifetimeDuration = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "accept-lifetime/infinite"); cValue.Exists() {
-				item.AcceptLifetimeInfinite = types.BoolValue(true)
-			} else {
-				item.AcceptLifetimeInfinite = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/hour"); cValue.Exists() {
-				item.SendLifetimeStartTimeHour = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/minute"); cValue.Exists() {
-				item.SendLifetimeStartTimeMinute = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/second"); cValue.Exists() {
-				item.SendLifetimeStartTimeSecond = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/month"); cValue.Exists() {
-				item.SendLifetimeStartTimeMonth = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/day-of-month"); cValue.Exists() {
-				item.SendLifetimeStartTimeDayOfMonth = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/year"); cValue.Exists() {
-				item.SendLifetimeStartTimeYear = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/hour"); cValue.Exists() {
-				item.SendLifetimeEndTimeHour = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/minute"); cValue.Exists() {
-				item.SendLifetimeEndTimeMinute = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/second"); cValue.Exists() {
-				item.SendLifetimeEndTimeSecond = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/month"); cValue.Exists() {
-				item.SendLifetimeEndTimeMonth = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/day-of-month"); cValue.Exists() {
-				item.SendLifetimeEndTimeDayOfMonth = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/year"); cValue.Exists() {
-				item.SendLifetimeEndTimeYear = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/duration"); cValue.Exists() {
-				item.SendLifetimeDuration = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "send-lifetime/infinite"); cValue.Exists() {
-				item.SendLifetimeInfinite = types.BoolValue(true)
-			} else {
-				item.SendLifetimeInfinite = types.BoolNull()
-			}
-			data.Keys = append(data.Keys, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/local"); value.Exists() {
-		data.TimezoneLocal = types.BoolValue(true)
-	} else {
-		data.TimezoneLocal = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/gmt"); value.Exists() {
-		data.TimezoneGmt = types.BoolValue(true)
-	} else {
-		data.TimezoneGmt = types.BoolNull()
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *KeyChainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/tolerance-value"); value.Exists() {
-		data.AcceptToleranceValue = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-tolerance/infinite"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-tolerance/infinite"); value.Exists() {
 		data.AcceptToleranceInfinite = types.BoolValue(true)
 	} else {
 		data.AcceptToleranceInfinite = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/macsec/keys/key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/macsec/keys/key"); value.Exists() {
 		data.MacsecKeys = make([]KeyChainMacsecKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := KeyChainMacsecKeys{}
@@ -1892,7 +1707,7 @@ func (data *KeyChainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/keys/key"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/keys/key"); value.Exists() {
 		data.Keys = make([]KeyChainKeys, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := KeyChainKeys{}
@@ -2000,12 +1815,208 @@ func (data *KeyChainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/local"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timezone/local"); value.Exists() {
 		data.TimezoneLocal = types.BoolValue(true)
 	} else {
 		data.TimezoneLocal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timezone/gmt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timezone/gmt"); value.Exists() {
+		data.TimezoneGmt = types.BoolValue(true)
+	} else {
+		data.TimezoneGmt = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *KeyChainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-tolerance/tolerance-value"); value.Exists() {
+		data.AcceptToleranceValue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-tolerance/infinite"); value.Exists() {
+		data.AcceptToleranceInfinite = types.BoolValue(true)
+	} else {
+		data.AcceptToleranceInfinite = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/macsec/keys/key"); value.Exists() {
+		data.MacsecKeys = make([]KeyChainMacsecKeys, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := KeyChainMacsecKeys{}
+			if cValue := helpers.GetFromXPath(v, "ckn"); cValue.Exists() {
+				item.Ckn = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "key-string/password"); cValue.Exists() {
+				item.KeyStringPassword = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "key-string/password6"); cValue.Exists() {
+				item.KeyStringPassword6 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "key-string/cryptographic-algorithm"); cValue.Exists() {
+				item.KeyStringCryptographicAlgorithm = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/hour"); cValue.Exists() {
+				item.LifetimeStartTimeHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/minute"); cValue.Exists() {
+				item.LifetimeStartTimeMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/second"); cValue.Exists() {
+				item.LifetimeStartTimeSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/month"); cValue.Exists() {
+				item.LifetimeStartTimeMonth = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/day-of-month"); cValue.Exists() {
+				item.LifetimeStartTimeDayOfMonth = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/start-time/year"); cValue.Exists() {
+				item.LifetimeStartTimeYear = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/hour"); cValue.Exists() {
+				item.LifetimeEndTimeHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/minute"); cValue.Exists() {
+				item.LifetimeEndTimeMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/second"); cValue.Exists() {
+				item.LifetimeEndTimeSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/month"); cValue.Exists() {
+				item.LifetimeEndTimeMonth = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/day-of-month"); cValue.Exists() {
+				item.LifetimeEndTimeDayOfMonth = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/end-time/year"); cValue.Exists() {
+				item.LifetimeEndTimeYear = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/duration"); cValue.Exists() {
+				item.LifetimeDuration = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lifetime/infinite"); cValue.Exists() {
+				item.LifetimeInfinite = types.BoolValue(true)
+			} else {
+				item.LifetimeInfinite = types.BoolValue(false)
+			}
+			data.MacsecKeys = append(data.MacsecKeys, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/keys/key"); value.Exists() {
+		data.Keys = make([]KeyChainKeys, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := KeyChainKeys{}
+			if cValue := helpers.GetFromXPath(v, "key-name"); cValue.Exists() {
+				item.KeyName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "key-string/password"); cValue.Exists() {
+				item.KeyStringPassword = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "key-string/password6"); cValue.Exists() {
+				item.KeyStringPassword6 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "cryptographic-algorithm"); cValue.Exists() {
+				item.CryptographicAlgorithm = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/hour"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/minute"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/second"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/month"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeMonth = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/day-of-month"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeDayOfMonth = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/start-time/year"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeYear = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/hour"); cValue.Exists() {
+				item.AcceptLifetimeEndTimeHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/minute"); cValue.Exists() {
+				item.AcceptLifetimeEndTimeMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/second"); cValue.Exists() {
+				item.AcceptLifetimeEndTimeSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/month"); cValue.Exists() {
+				item.AcceptLifetimeEndTimeMonth = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/day-of-month"); cValue.Exists() {
+				item.AcceptLifetimeEndTimeDayOfMonth = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/end-time/year"); cValue.Exists() {
+				item.AcceptLifetimeEndTimeYear = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/duration"); cValue.Exists() {
+				item.AcceptLifetimeDuration = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "accept-lifetime/infinite"); cValue.Exists() {
+				item.AcceptLifetimeInfinite = types.BoolValue(true)
+			} else {
+				item.AcceptLifetimeInfinite = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/hour"); cValue.Exists() {
+				item.SendLifetimeStartTimeHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/minute"); cValue.Exists() {
+				item.SendLifetimeStartTimeMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/second"); cValue.Exists() {
+				item.SendLifetimeStartTimeSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/month"); cValue.Exists() {
+				item.SendLifetimeStartTimeMonth = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/day-of-month"); cValue.Exists() {
+				item.SendLifetimeStartTimeDayOfMonth = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/start-time/year"); cValue.Exists() {
+				item.SendLifetimeStartTimeYear = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/hour"); cValue.Exists() {
+				item.SendLifetimeEndTimeHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/minute"); cValue.Exists() {
+				item.SendLifetimeEndTimeMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/second"); cValue.Exists() {
+				item.SendLifetimeEndTimeSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/month"); cValue.Exists() {
+				item.SendLifetimeEndTimeMonth = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/day-of-month"); cValue.Exists() {
+				item.SendLifetimeEndTimeDayOfMonth = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/end-time/year"); cValue.Exists() {
+				item.SendLifetimeEndTimeYear = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/duration"); cValue.Exists() {
+				item.SendLifetimeDuration = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "send-lifetime/infinite"); cValue.Exists() {
+				item.SendLifetimeInfinite = types.BoolValue(true)
+			} else {
+				item.SendLifetimeInfinite = types.BoolValue(false)
+			}
+			data.Keys = append(data.Keys, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timezone/local"); value.Exists() {
+		data.TimezoneLocal = types.BoolValue(true)
+	} else {
+		data.TimezoneLocal = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timezone/gmt"); value.Exists() {
 		data.TimezoneGmt = types.BoolValue(true)
 	} else {
 		data.TimezoneGmt = types.BoolValue(false)
@@ -2311,14 +2322,16 @@ func (data *KeyChain) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timezone/local", data.getPath()))
 	}
 	for i := range data.Keys {
-		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/keys/key=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[key-name=" + data.Keys[i].KeyName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/keys/key%v", data.getPath(), keyPath))
 	}
 	for i := range data.MacsecKeys {
-		keyValues := [...]string{data.MacsecKeys[i].Ckn.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/macsec/keys/key=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ckn=" + data.MacsecKeys[i].Ckn.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/macsec/keys/key%v", data.getPath(), keyPath))
 	}
 	if !data.AcceptToleranceInfinite.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/accept-tolerance/infinite", data.getPath()))

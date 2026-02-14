@@ -116,7 +116,7 @@ func (data ExtcommunitySOOSet) toBodyXML(ctx context.Context) string {
 func (data *ExtcommunitySOOSet) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-soo-set"); value.Exists() && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
-	} else {
+	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
 }
@@ -126,13 +126,13 @@ func (data *ExtcommunitySOOSet) updateFromBody(ctx context.Context, res []byte) 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *ExtcommunitySOOSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/set-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/set-name"); value.Exists() {
 		data.SetName = types.StringValue(value.String())
 	} else if data.SetName.IsNull() {
 		data.SetName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-extended-community-soo-set"); value.Exists() {
-		data.Rpl = types.StringValue(value.Raw)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-soo-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
 	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
@@ -147,6 +147,10 @@ func (data *ExtcommunitySOOSet) fromBody(ctx context.Context, res gjson.Result) 
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "rpl-extended-community-soo-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
@@ -157,9 +161,14 @@ func (data *ExtcommunitySOOSet) fromBody(ctx context.Context, res gjson.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *ExtcommunitySOOSetData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "rpl-extended-community-soo-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
@@ -171,8 +180,8 @@ func (data *ExtcommunitySOOSetData) fromBody(ctx context.Context, res gjson.Resu
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *ExtcommunitySOOSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-extended-community-soo-set"); value.Exists() {
-		data.Rpl = types.StringValue(value.Raw)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-soo-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
@@ -181,8 +190,8 @@ func (data *ExtcommunitySOOSet) fromBodyXML(ctx context.Context, res xmldot.Resu
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *ExtcommunitySOOSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-extended-community-soo-set"); value.Exists() {
-		data.Rpl = types.StringValue(value.Raw)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-soo-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 

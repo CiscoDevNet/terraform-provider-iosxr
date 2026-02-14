@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -461,129 +460,102 @@ func (data EVPNSegmentRoutingSRv6EVI) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/ipv4-address-assigned-number", strconv.FormatInt(data.BgpRdIpv4AddressIndex.ValueInt64(), 10))
 	}
 	if len(data.BgpRouteTargetTwoByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetTwoByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt[two-byte-as-number='" + strconv.FormatInt(item.AsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/two-byte-as-rts/two-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetFourByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetFourByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/four-byte-as-rts/four-byte-as-rt[four-byte-as-number='" + strconv.FormatInt(item.AsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/four-byte-as-rts/four-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetIpv4AddressFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetIpv4AddressFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/ipv4-address-rts/ipv4-address-rt[ipv4-address='" + item.Ipv4Address.ValueString() + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetImportTwoByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetImportTwoByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt[two-byte-as-number='" + strconv.FormatInt(item.AsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/import/two-byte-as-rts/two-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetImportFourByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetImportFourByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt[four-byte-as-number='" + strconv.FormatInt(item.AsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/import/four-byte-as-rts/four-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetImportIpv4AddressFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetImportIpv4AddressFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt[ipv4-address='" + item.Ipv4Address.ValueString() + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/import/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetExportTwoByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetExportTwoByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt[two-byte-as-number='" + strconv.FormatInt(item.AsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/two-byte-as-rts/two-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetExportFourByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetExportFourByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt[four-byte-as-number='" + strconv.FormatInt(item.AsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/four-byte-as-rts/four-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetExportIpv4AddressFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetExportIpv4AddressFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt[ipv4-address='" + item.Ipv4Address.ValueString() + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
 	if !data.BgpTablePolicy.IsNull() && !data.BgpTablePolicy.IsUnknown() {
@@ -681,19 +653,16 @@ func (data EVPNSegmentRoutingSRv6EVI) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.Locators) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Locators {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/locators/locator[locator-name='" + item.LocatorName.ValueString() + "']"
 			if !item.LocatorName.IsNull() && !item.LocatorName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "locator-name", item.LocatorName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/locator-name", item.LocatorName.ValueString())
 			}
 			if !item.UsidAllocationWideLocalIdBlock.IsNull() && !item.UsidAllocationWideLocalIdBlock.IsUnknown() {
 				if item.UsidAllocationWideLocalIdBlock.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "usid/allocation/wide-local-id-block", "")
+					body = helpers.SetFromXPath(body, basePath+"/usid/allocation/wide-local-id-block", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"locators/locator", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -710,37 +679,37 @@ func (data EVPNSegmentRoutingSRv6EVI) toBodyXML(ctx context.Context) string {
 func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
-	} else {
+	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() && !data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-number"); value.Exists() && !data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address"); value.Exists() && !data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Null()
 	}
 	for i := range data.BgpRouteTargetTwoByteAsFormat {
@@ -1051,185 +1020,202 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 	}
 	if value := gjson.GetBytes(res, "bgp.table-policy"); value.Exists() && !data.BgpTablePolicy.IsNull() {
 		data.BgpTablePolicy = types.StringValue(value.String())
-	} else {
+	} else if data.BgpTablePolicy.IsNull() {
 		data.BgpTablePolicy = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bgp.implicit-import-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BgpImplicitImportDisable.IsNull() {
 			data.BgpImplicitImportDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BgpImplicitImportDisable.IsNull() {
 			data.BgpImplicitImportDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "bgp.route-policy.import"); value.Exists() && !data.BgpRoutePolicyImport.IsNull() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
-	} else {
+	} else if data.BgpRoutePolicyImport.IsNull() {
 		data.BgpRoutePolicyImport = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bgp.route-policy.export"); value.Exists() && !data.BgpRoutePolicyExport.IsNull() {
 		data.BgpRoutePolicyExport = types.StringValue(value.String())
-	} else {
+	} else if data.BgpRoutePolicyExport.IsNull() {
 		data.BgpRoutePolicyExport = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "preferred-nexthop.lowest-ip"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PreferredNexthopLowestIp.IsNull() {
 			data.PreferredNexthopLowestIp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopLowestIp.IsNull() {
 			data.PreferredNexthopLowestIp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "preferred-nexthop.highest-ip"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PreferredNexthopHighestIp.IsNull() {
 			data.PreferredNexthopHighestIp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopHighestIp.IsNull() {
 			data.PreferredNexthopHighestIp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "preferred-nexthop.modulo"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PreferredNexthopModulo.IsNull() {
 			data.PreferredNexthopModulo = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopModulo.IsNull() {
 			data.PreferredNexthopModulo = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseMac.IsNull() {
 			data.AdvertiseMac = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AdvertiseMac.IsNull() {
 			data.AdvertiseMac = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "advertise-mac.bvi-mac"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseMacBviMac.IsNull() {
 			data.AdvertiseMacBviMac = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AdvertiseMacBviMac.IsNull() {
 			data.AdvertiseMacBviMac = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.UnknownUnicastSuppression.IsNull() {
 			data.UnknownUnicastSuppression = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.UnknownUnicastSuppression.IsNull() {
 			data.UnknownUnicastSuppression = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.IgnoreMtuMismatch.IsNull() {
 			data.IgnoreMtuMismatch = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.IgnoreMtuMismatch.IsNull() {
 			data.IgnoreMtuMismatch = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ignore-mtu-mismatch.disable-deprecated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
 			data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
 			data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "enforce-mtu-match"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EnforceMtuMatch.IsNull() {
 			data.EnforceMtuMatch = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EnforceMtuMatch.IsNull() {
 			data.EnforceMtuMatch = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "transmit-mtu-zero"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TransmitMtuZero.IsNull() {
 			data.TransmitMtuZero = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TransmitMtuZero.IsNull() {
 			data.TransmitMtuZero = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "transmit-mtu-zero.disable-deprecated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TransmitMtuZeroDisableDeprecated.IsNull() {
 			data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TransmitMtuZeroDisableDeprecated.IsNull() {
 			data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "transmit-l2-mtu"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TransmitL2Mtu.IsNull() {
 			data.TransmitL2Mtu = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TransmitL2Mtu.IsNull() {
 			data.TransmitL2Mtu = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "re-origination-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ReOriginationDisable.IsNull() {
 			data.ReOriginationDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ReOriginationDisable.IsNull() {
 			data.ReOriginationDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "etree"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Etree.IsNull() {
 			data.Etree = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Etree.IsNull() {
 			data.Etree = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "etree.rt-leaf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EtreeRtLeaf.IsNull() {
 			data.EtreeRtLeaf = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EtreeRtLeaf.IsNull() {
 			data.EtreeRtLeaf = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "bvi-coupled-mode"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BviCoupledMode.IsNull() {
 			data.BviCoupledMode = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BviCoupledMode.IsNull() {
 			data.BviCoupledMode = types.BoolNull()
 		}
@@ -1263,21 +1249,15 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 			data.Locators[i].LocatorName = types.StringNull()
 		}
 		if value := r.Get("usid.allocation.wide-local-id-block"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(false)
-			} else if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
 				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
 				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 			}
 		}
 	}
@@ -1288,42 +1268,42 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vpn-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vpn-id"); value.Exists() {
 		data.VpnId = types.Int64Value(value.Int())
 	} else if data.VpnId.IsNull() {
 		data.VpnId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else if data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	} else if data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	} else if data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Null()
@@ -1333,7 +1313,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1367,7 +1347,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1401,7 +1381,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1435,7 +1415,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1469,7 +1449,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1503,7 +1483,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1537,7 +1517,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1571,7 +1551,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1605,7 +1585,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1634,151 +1614,202 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/table-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/table-policy"); value.Exists() {
 		data.BgpTablePolicy = types.StringValue(value.String())
 	} else if data.BgpTablePolicy.IsNull() {
 		data.BgpTablePolicy = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/implicit-import-disable"); value.Exists() {
-		data.BgpImplicitImportDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/implicit-import-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BgpImplicitImportDisable.IsNull() {
+			data.BgpImplicitImportDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BgpImplicitImportDisable.IsNull() {
 			data.BgpImplicitImportDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
 	} else if data.BgpRoutePolicyImport.IsNull() {
 		data.BgpRoutePolicyImport = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
 		data.BgpRoutePolicyExport = types.StringValue(value.String())
 	} else if data.BgpRoutePolicyExport.IsNull() {
 		data.BgpRoutePolicyExport = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
-		data.PreferredNexthopLowestIp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PreferredNexthopLowestIp.IsNull() {
+			data.PreferredNexthopLowestIp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopLowestIp.IsNull() {
 			data.PreferredNexthopLowestIp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
-		data.PreferredNexthopHighestIp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PreferredNexthopHighestIp.IsNull() {
+			data.PreferredNexthopHighestIp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopHighestIp.IsNull() {
 			data.PreferredNexthopHighestIp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
-		data.PreferredNexthopModulo = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PreferredNexthopModulo.IsNull() {
+			data.PreferredNexthopModulo = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopModulo.IsNull() {
 			data.PreferredNexthopModulo = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
-		data.AdvertiseMac = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise-mac"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AdvertiseMac.IsNull() {
+			data.AdvertiseMac = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AdvertiseMac.IsNull() {
 			data.AdvertiseMac = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac/bvi-mac"); value.Exists() {
-		data.AdvertiseMacBviMac = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise-mac/bvi-mac"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AdvertiseMacBviMac.IsNull() {
+			data.AdvertiseMacBviMac = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AdvertiseMacBviMac.IsNull() {
 			data.AdvertiseMacBviMac = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
-		data.UnknownUnicastSuppression = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UnknownUnicastSuppression.IsNull() {
+			data.UnknownUnicastSuppression = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.UnknownUnicastSuppression.IsNull() {
 			data.UnknownUnicastSuppression = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
-		data.IgnoreMtuMismatch = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IgnoreMtuMismatch.IsNull() {
+			data.IgnoreMtuMismatch = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.IgnoreMtuMismatch.IsNull() {
 			data.IgnoreMtuMismatch = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated"); value.Exists() {
-		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+			data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
 			data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enforce-mtu-match"); value.Exists() {
-		data.EnforceMtuMatch = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enforce-mtu-match"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EnforceMtuMatch.IsNull() {
+			data.EnforceMtuMatch = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EnforceMtuMatch.IsNull() {
 			data.EnforceMtuMatch = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero"); value.Exists() {
-		data.TransmitMtuZero = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transmit-mtu-zero"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransmitMtuZero.IsNull() {
+			data.TransmitMtuZero = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TransmitMtuZero.IsNull() {
 			data.TransmitMtuZero = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero/disable-deprecated"); value.Exists() {
-		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transmit-mtu-zero/disable-deprecated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransmitMtuZeroDisableDeprecated.IsNull() {
+			data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TransmitMtuZeroDisableDeprecated.IsNull() {
 			data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-l2-mtu"); value.Exists() {
-		data.TransmitL2Mtu = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transmit-l2-mtu"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransmitL2Mtu.IsNull() {
+			data.TransmitL2Mtu = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TransmitL2Mtu.IsNull() {
 			data.TransmitL2Mtu = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
-		data.ReOriginationDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ReOriginationDisable.IsNull() {
+			data.ReOriginationDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ReOriginationDisable.IsNull() {
 			data.ReOriginationDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
-		data.Etree = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/etree"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Etree.IsNull() {
+			data.Etree = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Etree.IsNull() {
 			data.Etree = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
-		data.EtreeRtLeaf = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EtreeRtLeaf.IsNull() {
+			data.EtreeRtLeaf = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EtreeRtLeaf.IsNull() {
 			data.EtreeRtLeaf = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bvi-coupled-mode"); value.Exists() {
-		data.BviCoupledMode = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bvi-coupled-mode"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BviCoupledMode.IsNull() {
+			data.BviCoupledMode = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BviCoupledMode.IsNull() {
@@ -1790,7 +1821,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 		keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/locators/locator").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locators/locator").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1814,7 +1845,10 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 			data.Locators[i].LocatorName = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "usid/allocation/wide-local-id-block"); value.Exists() {
-			data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1834,6 +1868,10 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -1986,8 +2024,9 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 	}
 	if value := res.Get(prefix + "bgp.implicit-import-disable"); value.Exists() {
 		data.BgpImplicitImportDisable = types.BoolValue(true)
-	} else {
-		data.BgpImplicitImportDisable = types.BoolNull()
+	} else if !data.BgpImplicitImportDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BgpImplicitImportDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "bgp.route-policy.import"); value.Exists() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
@@ -1997,83 +2036,99 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 	}
 	if value := res.Get(prefix + "preferred-nexthop.lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
-	} else {
-		data.PreferredNexthopLowestIp = types.BoolNull()
+	} else if !data.PreferredNexthopLowestIp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preferred-nexthop.highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
-	} else {
-		data.PreferredNexthopHighestIp = types.BoolNull()
+	} else if !data.PreferredNexthopHighestIp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preferred-nexthop.modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
-	} else {
-		data.PreferredNexthopModulo = types.BoolNull()
+	} else if !data.PreferredNexthopModulo.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
-	} else {
-		data.AdvertiseMac = types.BoolNull()
+	} else if !data.AdvertiseMac.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AdvertiseMac = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "advertise-mac.bvi-mac"); value.Exists() {
 		data.AdvertiseMacBviMac = types.BoolValue(true)
-	} else {
-		data.AdvertiseMacBviMac = types.BoolNull()
+	} else if !data.AdvertiseMacBviMac.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AdvertiseMacBviMac = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
-	} else {
-		data.UnknownUnicastSuppression = types.BoolNull()
+	} else if !data.UnknownUnicastSuppression.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
-	} else {
-		data.IgnoreMtuMismatch = types.BoolNull()
+	} else if !data.IgnoreMtuMismatch.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IgnoreMtuMismatch = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ignore-mtu-mismatch.disable-deprecated"); value.Exists() {
 		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
-	} else {
-		data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
+	} else if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "enforce-mtu-match"); value.Exists() {
 		data.EnforceMtuMatch = types.BoolValue(true)
-	} else {
-		data.EnforceMtuMatch = types.BoolNull()
+	} else if !data.EnforceMtuMatch.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EnforceMtuMatch = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transmit-mtu-zero"); value.Exists() {
 		data.TransmitMtuZero = types.BoolValue(true)
-	} else {
-		data.TransmitMtuZero = types.BoolNull()
+	} else if !data.TransmitMtuZero.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransmitMtuZero = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transmit-mtu-zero.disable-deprecated"); value.Exists() {
 		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
-	} else {
-		data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
+	} else if !data.TransmitMtuZeroDisableDeprecated.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transmit-l2-mtu"); value.Exists() {
 		data.TransmitL2Mtu = types.BoolValue(true)
-	} else {
-		data.TransmitL2Mtu = types.BoolNull()
+	} else if !data.TransmitL2Mtu.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransmitL2Mtu = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
-	} else {
-		data.ReOriginationDisable = types.BoolNull()
+	} else if !data.ReOriginationDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ReOriginationDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
-	} else {
-		data.Etree = types.BoolNull()
+	} else if !data.Etree.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Etree = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "etree.rt-leaf"); value.Exists() {
 		data.EtreeRtLeaf = types.BoolValue(true)
-	} else {
-		data.EtreeRtLeaf = types.BoolNull()
+	} else if !data.EtreeRtLeaf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EtreeRtLeaf = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "bvi-coupled-mode"); value.Exists() {
 		data.BviCoupledMode = types.BoolValue(true)
-	} else {
-		data.BviCoupledMode = types.BoolNull()
+	} else if !data.BviCoupledMode.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BviCoupledMode = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "locators.locator"); value.Exists() {
 		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
@@ -2084,8 +2139,9 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 			}
 			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
-			} else {
-				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
+			} else if !item.UsidAllocationWideLocalIdBlock.IsNull() {
+				// Only set to false if it was previously set
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 			}
 			data.Locators = append(data.Locators, item)
 			return true
@@ -2098,9 +2154,14 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res gjson.R
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -2255,7 +2316,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res gjs
 	if value := res.Get(prefix + "bgp.implicit-import-disable"); value.Exists() {
 		data.BgpImplicitImportDisable = types.BoolValue(true)
 	} else {
-		data.BgpImplicitImportDisable = types.BoolNull()
+		data.BgpImplicitImportDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "bgp.route-policy.import"); value.Exists() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
@@ -2266,82 +2327,82 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res gjs
 	if value := res.Get(prefix + "preferred-nexthop.lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopLowestIp = types.BoolNull()
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preferred-nexthop.highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopHighestIp = types.BoolNull()
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preferred-nexthop.modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopModulo = types.BoolNull()
+		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
-		data.AdvertiseMac = types.BoolNull()
+		data.AdvertiseMac = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "advertise-mac.bvi-mac"); value.Exists() {
 		data.AdvertiseMacBviMac = types.BoolValue(true)
 	} else {
-		data.AdvertiseMacBviMac = types.BoolNull()
+		data.AdvertiseMacBviMac = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
-		data.UnknownUnicastSuppression = types.BoolNull()
+		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
 	} else {
-		data.IgnoreMtuMismatch = types.BoolNull()
+		data.IgnoreMtuMismatch = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ignore-mtu-mismatch.disable-deprecated"); value.Exists() {
 		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
 	} else {
-		data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "enforce-mtu-match"); value.Exists() {
 		data.EnforceMtuMatch = types.BoolValue(true)
 	} else {
-		data.EnforceMtuMatch = types.BoolNull()
+		data.EnforceMtuMatch = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transmit-mtu-zero"); value.Exists() {
 		data.TransmitMtuZero = types.BoolValue(true)
 	} else {
-		data.TransmitMtuZero = types.BoolNull()
+		data.TransmitMtuZero = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transmit-mtu-zero.disable-deprecated"); value.Exists() {
 		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
 	} else {
-		data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "transmit-l2-mtu"); value.Exists() {
 		data.TransmitL2Mtu = types.BoolValue(true)
 	} else {
-		data.TransmitL2Mtu = types.BoolNull()
+		data.TransmitL2Mtu = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
-		data.ReOriginationDisable = types.BoolNull()
+		data.ReOriginationDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
 	} else {
-		data.Etree = types.BoolNull()
+		data.Etree = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "etree.rt-leaf"); value.Exists() {
 		data.EtreeRtLeaf = types.BoolValue(true)
 	} else {
-		data.EtreeRtLeaf = types.BoolNull()
+		data.EtreeRtLeaf = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "bvi-coupled-mode"); value.Exists() {
 		data.BviCoupledMode = types.BoolValue(true)
 	} else {
-		data.BviCoupledMode = types.BoolNull()
+		data.BviCoupledMode = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "locators.locator"); value.Exists() {
 		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
@@ -2353,7 +2414,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res gjs
 			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			} else {
-				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 			}
 			data.Locators = append(data.Locators, item)
 			return true
@@ -2366,28 +2427,28 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res gjs
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat{}
@@ -2401,7 +2462,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat{}
@@ -2415,7 +2476,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat{}
@@ -2429,7 +2490,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat{}
@@ -2443,7 +2504,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportFourByteAsFormat{}
@@ -2457,7 +2518,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportIpv4AddressFormat{}
@@ -2471,7 +2532,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportTwoByteAsFormat{}
@@ -2485,7 +2546,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportFourByteAsFormat{}
@@ -2499,7 +2560,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportIpv4AddressFormat{}
@@ -2513,101 +2574,101 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/table-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/table-policy"); value.Exists() {
 		data.BgpTablePolicy = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/implicit-import-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/implicit-import-disable"); value.Exists() {
 		data.BgpImplicitImportDisable = types.BoolValue(true)
 	} else {
-		data.BgpImplicitImportDisable = types.BoolNull()
+		data.BgpImplicitImportDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
 		data.BgpRoutePolicyExport = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopLowestIp = types.BoolNull()
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopHighestIp = types.BoolNull()
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopModulo = types.BoolNull()
+		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
-		data.AdvertiseMac = types.BoolNull()
+		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac/bvi-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise-mac/bvi-mac"); value.Exists() {
 		data.AdvertiseMacBviMac = types.BoolValue(true)
 	} else {
-		data.AdvertiseMacBviMac = types.BoolNull()
+		data.AdvertiseMacBviMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
-		data.UnknownUnicastSuppression = types.BoolNull()
+		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
 	} else {
-		data.IgnoreMtuMismatch = types.BoolNull()
+		data.IgnoreMtuMismatch = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated"); value.Exists() {
 		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
 	} else {
-		data.IgnoreMtuMismatchDisableDeprecated = types.BoolNull()
+		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enforce-mtu-match"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enforce-mtu-match"); value.Exists() {
 		data.EnforceMtuMatch = types.BoolValue(true)
 	} else {
-		data.EnforceMtuMatch = types.BoolNull()
+		data.EnforceMtuMatch = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transmit-mtu-zero"); value.Exists() {
 		data.TransmitMtuZero = types.BoolValue(true)
 	} else {
-		data.TransmitMtuZero = types.BoolNull()
+		data.TransmitMtuZero = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero/disable-deprecated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transmit-mtu-zero/disable-deprecated"); value.Exists() {
 		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
 	} else {
-		data.TransmitMtuZeroDisableDeprecated = types.BoolNull()
+		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-l2-mtu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transmit-l2-mtu"); value.Exists() {
 		data.TransmitL2Mtu = types.BoolValue(true)
 	} else {
-		data.TransmitL2Mtu = types.BoolNull()
+		data.TransmitL2Mtu = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
-		data.ReOriginationDisable = types.BoolNull()
+		data.ReOriginationDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
 	} else {
-		data.Etree = types.BoolNull()
+		data.Etree = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
 		data.EtreeRtLeaf = types.BoolValue(true)
 	} else {
-		data.EtreeRtLeaf = types.BoolNull()
+		data.EtreeRtLeaf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bvi-coupled-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bvi-coupled-mode"); value.Exists() {
 		data.BviCoupledMode = types.BoolValue(true)
 	} else {
-		data.BviCoupledMode = types.BoolNull()
+		data.BviCoupledMode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/locators/locator"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locators/locator"); value.Exists() {
 		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVILocators{}
@@ -2617,7 +2678,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			if cValue := helpers.GetFromXPath(v, "usid/allocation/wide-local-id-block"); cValue.Exists() {
 				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 			} else {
-				item.UsidAllocationWideLocalIdBlock = types.BoolNull()
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 			}
 			data.Locators = append(data.Locators, item)
 			return true
@@ -2630,28 +2691,28 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat{}
@@ -2665,7 +2726,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetFourByteAsFormat{}
@@ -2679,7 +2740,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetIpv4AddressFormat{}
@@ -2693,7 +2754,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat{}
@@ -2707,7 +2768,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportFourByteAsFormat{}
@@ -2721,7 +2782,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportIpv4AddressFormat{}
@@ -2735,7 +2796,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportTwoByteAsFormat{}
@@ -2749,7 +2810,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportFourByteAsFormat{}
@@ -2763,7 +2824,7 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportIpv4AddressFormat{}
@@ -2777,101 +2838,101 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/table-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/table-policy"); value.Exists() {
 		data.BgpTablePolicy = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/implicit-import-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/implicit-import-disable"); value.Exists() {
 		data.BgpImplicitImportDisable = types.BoolValue(true)
 	} else {
 		data.BgpImplicitImportDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-policy/import"); value.Exists() {
 		data.BgpRoutePolicyImport = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-policy/export"); value.Exists() {
 		data.BgpRoutePolicyExport = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
 		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac/bvi-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise-mac/bvi-mac"); value.Exists() {
 		data.AdvertiseMacBviMac = types.BoolValue(true)
 	} else {
 		data.AdvertiseMacBviMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
 		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatch = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch/disable-deprecated"); value.Exists() {
 		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(true)
 	} else {
 		data.IgnoreMtuMismatchDisableDeprecated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enforce-mtu-match"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enforce-mtu-match"); value.Exists() {
 		data.EnforceMtuMatch = types.BoolValue(true)
 	} else {
 		data.EnforceMtuMatch = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transmit-mtu-zero"); value.Exists() {
 		data.TransmitMtuZero = types.BoolValue(true)
 	} else {
 		data.TransmitMtuZero = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-mtu-zero/disable-deprecated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transmit-mtu-zero/disable-deprecated"); value.Exists() {
 		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(true)
 	} else {
 		data.TransmitMtuZeroDisableDeprecated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transmit-l2-mtu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transmit-l2-mtu"); value.Exists() {
 		data.TransmitL2Mtu = types.BoolValue(true)
 	} else {
 		data.TransmitL2Mtu = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
 		data.ReOriginationDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/etree"); value.Exists() {
 		data.Etree = types.BoolValue(true)
 	} else {
 		data.Etree = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/etree/rt-leaf"); value.Exists() {
 		data.EtreeRtLeaf = types.BoolValue(true)
 	} else {
 		data.EtreeRtLeaf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bvi-coupled-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bvi-coupled-mode"); value.Exists() {
 		data.BviCoupledMode = types.BoolValue(true)
 	} else {
 		data.BviCoupledMode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/locators/locator"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locators/locator"); value.Exists() {
 		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNSegmentRoutingSRv6EVILocators{}
@@ -3541,9 +3602,10 @@ func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context, 
 func (data *EVPNSegmentRoutingSRv6EVI) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Locators {
-		keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/locators/locator=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[locator-name=" + data.Locators[i].LocatorName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/locators/locator%v", data.getPath(), keyPath))
 	}
 	if !data.BviCoupledMode.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bvi-coupled-mode", data.getPath()))
@@ -3606,49 +3668,67 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletePaths(ctx context.Context) []str
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/table-policy", data.getPath()))
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
-		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ipv4-address=" + data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString() + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetExportFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[four-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[two-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
-		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ipv4-address=" + data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString() + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetImportFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[four-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[two-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetIpv4AddressFormat {
-		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ipv4-address=" + data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString() + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[four-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[two-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	if !data.BgpRdIpv4AddressIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/ipv4-address-assigned-number", data.getPath()))

@@ -26,7 +26,6 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -316,128 +315,135 @@ func (data RSVP) toBody(ctx context.Context) string {
 
 func (data *RSVP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "signalling.graceful-restart"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SignallingGracefulRestart.IsNull() {
 			data.SignallingGracefulRestart = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingGracefulRestart.IsNull() {
 			data.SignallingGracefulRestart = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "signalling.graceful-restart-lsp-type"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SignallingGracefulRestartLspCtype.IsNull() {
 			data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingGracefulRestartLspCtype.IsNull() {
 			data.SignallingGracefulRestartLspCtype = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "signalling.graceful-restart-recovery-time"); value.Exists() && !data.SignallingGracefulRestartRecoveryTime.IsNull() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingGracefulRestartRecoveryTime.IsNull() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.graceful-restart-restart-time"); value.Exists() && !data.SignallingGracefulRestartRestartTime.IsNull() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingGracefulRestartRestartTime.IsNull() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.refresh.interval"); value.Exists() && !data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.refresh.misses"); value.Exists() && !data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.event-per-pulse"); value.Exists() && !data.SignallingEventPerPulse.IsNull() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignallingEventPerPulse.IsNull() {
 		data.SignallingEventPerPulse = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "signalling.prefix-filtering.access-list"); value.Exists() && !data.SignallingPrefixFilteringAcl.IsNull() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
-	} else {
+	} else if data.SignallingPrefixFilteringAcl.IsNull() {
 		data.SignallingPrefixFilteringAcl = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
 			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
 			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "signalling.message-bundle.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SignallingMessageBundleDisable.IsNull() {
 			data.SignallingMessageBundleDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingMessageBundleDisable.IsNull() {
 			data.SignallingMessageBundleDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "signalling.nodeid-subobject.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SignallingNodeidSubobjectDisable.IsNull() {
 			data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingNodeidSubobjectDisable.IsNull() {
 			data.SignallingNodeidSubobjectDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "signalling.patherr.state-removal.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SignallingPatherrStateRemovalDisable.IsNull() {
 			data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingPatherrStateRemovalDisable.IsNull() {
 			data.SignallingPatherrStateRemovalDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "signalling.checksum.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SignallingChecksumDisable.IsNull() {
 			data.SignallingChecksumDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingChecksumDisable.IsNull() {
 			data.SignallingChecksumDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "signalling.out-of-band.vrf"); value.Exists() && !data.SignallingOobVrf.IsNull() {
 		data.SignallingOobVrf = types.StringValue(value.String())
-	} else {
+	} else if data.SignallingOobVrf.IsNull() {
 		data.SignallingOobVrf = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "authentication.key-source.key-chain"); value.Exists() && !data.AuthenticationKeyChain.IsNull() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
-	} else {
+	} else if data.AuthenticationKeyChain.IsNull() {
 		data.AuthenticationKeyChain = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "authentication.window-size"); value.Exists() && !data.AuthenticationWindowSize.IsNull() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.AuthenticationWindowSize.IsNull() {
 		data.AuthenticationWindowSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "authentication.life-time"); value.Exists() && !data.AuthenticationLifeTime.IsNull() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.AuthenticationLifeTime.IsNull() {
 		data.AuthenticationLifeTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "authentication.retransmit"); value.Exists() && !data.AuthenticationRetransmit.IsNull() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
-	} else {
+	} else if data.AuthenticationRetransmit.IsNull() {
 		data.AuthenticationRetransmit = types.Int64Null()
 	}
 	for i := range data.Neighbors {
@@ -486,125 +492,134 @@ func (data *RSVP) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() && !data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() && !data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() && !data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() && !data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() && !data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "latency.threshold"); value.Exists() && !data.LatencyThreshold.IsNull() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.LatencyThreshold.IsNull() {
 		data.LatencyThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "logging.events.nsr"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsNsr.IsNull() {
 			data.LoggingEventsNsr = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsNsr.IsNull() {
 			data.LoggingEventsNsr = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "logging.events.issu"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsIssu.IsNull() {
 			data.LoggingEventsIssu = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsIssu.IsNull() {
 			data.LoggingEventsIssu = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() && !data.LtraceBufferMultiplier.IsNull() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
-	} else {
+	} else if data.LtraceBufferMultiplier.IsNull() {
 		data.LtraceBufferMultiplier = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.rare"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LtraceBufferMultiplierRare.IsNull() {
 			data.LtraceBufferMultiplierRare = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierRare.IsNull() {
 			data.LtraceBufferMultiplierRare = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.common"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LtraceBufferMultiplierCommon.IsNull() {
 			data.LtraceBufferMultiplierCommon = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierCommon.IsNull() {
 			data.LtraceBufferMultiplierCommon = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LtraceBufferMultiplierSig.IsNull() {
 			data.LtraceBufferMultiplierSig = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierSig.IsNull() {
 			data.LtraceBufferMultiplierSig = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig-err"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LtraceBufferMultiplierSigErr.IsNull() {
 			data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierSigErr.IsNull() {
 			data.LtraceBufferMultiplierSigErr = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.intf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LtraceBufferMultiplierIntf.IsNull() {
 			data.LtraceBufferMultiplierIntf = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierIntf.IsNull() {
 			data.LtraceBufferMultiplierIntf = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LtraceBufferMultiplierDbgErr.IsNull() {
 			data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierDbgErr.IsNull() {
 			data.LtraceBufferMultiplierDbgErr = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sync"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LtraceBufferMultiplierSync.IsNull() {
 			data.LtraceBufferMultiplierSync = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierSync.IsNull() {
 			data.LtraceBufferMultiplierSync = types.BoolNull()
 		}
@@ -685,23 +700,20 @@ func (data RSVP) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/authentication/retransmit", strconv.FormatInt(data.AuthenticationRetransmit.ValueInt64(), 10))
 	}
 	if len(data.Neighbors) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Neighbors {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/neighbors/neighbor[neighbor-address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "neighbor-address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/neighbor-address", item.Address.ValueString())
 			}
 			if !item.AuthenticationKeyChain.IsNull() && !item.AuthenticationKeyChain.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "authentication/key-source/key-chain", item.AuthenticationKeyChain.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/authentication/key-source/key-chain", item.AuthenticationKeyChain.ValueString())
 			}
 			if !item.AuthenticationWindowSize.IsNull() && !item.AuthenticationWindowSize.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "authentication/window-size", strconv.FormatInt(item.AuthenticationWindowSize.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/authentication/window-size", strconv.FormatInt(item.AuthenticationWindowSize.ValueInt64(), 10))
 			}
 			if !item.AuthenticationLifeTime.IsNull() && !item.AuthenticationLifeTime.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "authentication/life-time", strconv.FormatInt(item.AuthenticationLifeTime.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/authentication/life-time", strconv.FormatInt(item.AuthenticationLifeTime.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"neighbors/neighbor", cBody.Res())
 		}
 	}
 	if !data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() && !data.BandwidthMamPercentageMaxReservableBandwidth.IsUnknown() {
@@ -781,113 +793,134 @@ func (data RSVP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart"); value.Exists() {
-		data.SignallingGracefulRestart = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingGracefulRestart.IsNull() {
+			data.SignallingGracefulRestart = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingGracefulRestart.IsNull() {
 			data.SignallingGracefulRestart = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-lsp-type"); value.Exists() {
-		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart-lsp-type"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingGracefulRestartLspCtype.IsNull() {
+			data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingGracefulRestartLspCtype.IsNull() {
 			data.SignallingGracefulRestartLspCtype = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-recovery-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
 	} else if data.SignallingGracefulRestartRecoveryTime.IsNull() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-restart-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart-restart-time"); value.Exists() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
 	} else if data.SignallingGracefulRestartRestartTime.IsNull() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
 	} else if data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
 	} else if data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/event-per-pulse"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/event-per-pulse"); value.Exists() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
 	} else if data.SignallingEventPerPulse.IsNull() {
 		data.SignallingEventPerPulse = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/prefix-filtering/access-list"); value.Exists() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
 	} else if data.SignallingPrefixFilteringAcl.IsNull() {
 		data.SignallingPrefixFilteringAcl = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
 			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/message-bundle/disable"); value.Exists() {
-		data.SignallingMessageBundleDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/message-bundle/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingMessageBundleDisable.IsNull() {
+			data.SignallingMessageBundleDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingMessageBundleDisable.IsNull() {
 			data.SignallingMessageBundleDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/nodeid-subobject/disable"); value.Exists() {
-		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/nodeid-subobject/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingNodeidSubobjectDisable.IsNull() {
+			data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingNodeidSubobjectDisable.IsNull() {
 			data.SignallingNodeidSubobjectDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/patherr/state-removal/disable"); value.Exists() {
-		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/patherr/state-removal/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingPatherrStateRemovalDisable.IsNull() {
+			data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingPatherrStateRemovalDisable.IsNull() {
 			data.SignallingPatherrStateRemovalDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/checksum/disable"); value.Exists() {
-		data.SignallingChecksumDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/checksum/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignallingChecksumDisable.IsNull() {
+			data.SignallingChecksumDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SignallingChecksumDisable.IsNull() {
 			data.SignallingChecksumDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/out-of-band/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/out-of-band/vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
 	} else if data.SignallingOobVrf.IsNull() {
 		data.SignallingOobVrf = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	} else if data.AuthenticationKeyChain.IsNull() {
 		data.AuthenticationKeyChain = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	} else if data.AuthenticationWindowSize.IsNull() {
 		data.AuthenticationWindowSize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/life-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	} else if data.AuthenticationLifeTime.IsNull() {
 		data.AuthenticationLifeTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/retransmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/retransmit"); value.Exists() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
 	} else if data.AuthenticationRetransmit.IsNull() {
 		data.AuthenticationRetransmit = types.Int64Null()
@@ -897,7 +930,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbors/neighbor").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -936,107 +969,134 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Neighbors[i].AuthenticationLifeTime = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
 	} else if data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	} else if data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	} else if data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	} else if data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	} else if data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/latency/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/latency/threshold"); value.Exists() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
 	} else if data.LatencyThreshold.IsNull() {
 		data.LatencyThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/nsr"); value.Exists() {
-		data.LoggingEventsNsr = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/events/nsr"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsNsr.IsNull() {
+			data.LoggingEventsNsr = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsNsr.IsNull() {
 			data.LoggingEventsNsr = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/issu"); value.Exists() {
-		data.LoggingEventsIssu = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/events/issu"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsIssu.IsNull() {
+			data.LoggingEventsIssu = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsIssu.IsNull() {
 			data.LoggingEventsIssu = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	} else if data.LtraceBufferMultiplier.IsNull() {
 		data.LtraceBufferMultiplier = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/rare"); value.Exists() {
-		data.LtraceBufferMultiplierRare = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/rare"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LtraceBufferMultiplierRare.IsNull() {
+			data.LtraceBufferMultiplierRare = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierRare.IsNull() {
 			data.LtraceBufferMultiplierRare = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/common"); value.Exists() {
-		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/common"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LtraceBufferMultiplierCommon.IsNull() {
+			data.LtraceBufferMultiplierCommon = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierCommon.IsNull() {
 			data.LtraceBufferMultiplierCommon = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig"); value.Exists() {
-		data.LtraceBufferMultiplierSig = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/sig"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LtraceBufferMultiplierSig.IsNull() {
+			data.LtraceBufferMultiplierSig = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierSig.IsNull() {
 			data.LtraceBufferMultiplierSig = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig-err"); value.Exists() {
-		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/sig-err"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LtraceBufferMultiplierSigErr.IsNull() {
+			data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierSigErr.IsNull() {
 			data.LtraceBufferMultiplierSigErr = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/intf"); value.Exists() {
-		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/intf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LtraceBufferMultiplierIntf.IsNull() {
+			data.LtraceBufferMultiplierIntf = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierIntf.IsNull() {
 			data.LtraceBufferMultiplierIntf = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
-		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LtraceBufferMultiplierDbgErr.IsNull() {
+			data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierDbgErr.IsNull() {
 			data.LtraceBufferMultiplierDbgErr = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sync"); value.Exists() {
-		data.LtraceBufferMultiplierSync = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/sync"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LtraceBufferMultiplierSync.IsNull() {
+			data.LtraceBufferMultiplierSync = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LtraceBufferMultiplierSync.IsNull() {
@@ -1053,15 +1113,21 @@ func (data *RSVP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "signalling.graceful-restart"); value.Exists() {
 		data.SignallingGracefulRestart = types.BoolValue(true)
-	} else {
-		data.SignallingGracefulRestart = types.BoolNull()
+	} else if !data.SignallingGracefulRestart.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingGracefulRestart = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.graceful-restart-lsp-type"); value.Exists() {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
-	} else {
-		data.SignallingGracefulRestartLspCtype = types.BoolNull()
+	} else if !data.SignallingGracefulRestartLspCtype.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
@@ -1083,28 +1149,33 @@ func (data *RSVP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
-	} else {
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
+	} else if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.message-bundle.disable"); value.Exists() {
 		data.SignallingMessageBundleDisable = types.BoolValue(true)
-	} else {
-		data.SignallingMessageBundleDisable = types.BoolNull()
+	} else if !data.SignallingMessageBundleDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingMessageBundleDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.nodeid-subobject.disable"); value.Exists() {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
-	} else {
-		data.SignallingNodeidSubobjectDisable = types.BoolNull()
+	} else if !data.SignallingNodeidSubobjectDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.patherr.state-removal.disable"); value.Exists() {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
-	} else {
-		data.SignallingPatherrStateRemovalDisable = types.BoolNull()
+	} else if !data.SignallingPatherrStateRemovalDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.checksum.disable"); value.Exists() {
 		data.SignallingChecksumDisable = types.BoolValue(true)
-	} else {
-		data.SignallingChecksumDisable = types.BoolNull()
+	} else if !data.SignallingChecksumDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingChecksumDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.out-of-band.vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
@@ -1161,51 +1232,60 @@ func (data *RSVP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "logging.events.nsr"); value.Exists() {
 		data.LoggingEventsNsr = types.BoolValue(true)
-	} else {
-		data.LoggingEventsNsr = types.BoolNull()
+	} else if !data.LoggingEventsNsr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsNsr = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "logging.events.issu"); value.Exists() {
 		data.LoggingEventsIssu = types.BoolValue(true)
-	} else {
-		data.LoggingEventsIssu = types.BoolNull()
+	} else if !data.LoggingEventsIssu.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsIssu = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.rare"); value.Exists() {
 		data.LtraceBufferMultiplierRare = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierRare = types.BoolNull()
+	} else if !data.LtraceBufferMultiplierRare.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierRare = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.common"); value.Exists() {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierCommon = types.BoolNull()
+	} else if !data.LtraceBufferMultiplierCommon.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig"); value.Exists() {
 		data.LtraceBufferMultiplierSig = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierSig = types.BoolNull()
+	} else if !data.LtraceBufferMultiplierSig.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierSig = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig-err"); value.Exists() {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierSigErr = types.BoolNull()
+	} else if !data.LtraceBufferMultiplierSigErr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.intf"); value.Exists() {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierIntf = types.BoolNull()
+	} else if !data.LtraceBufferMultiplierIntf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierDbgErr = types.BoolNull()
+	} else if !data.LtraceBufferMultiplierDbgErr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.sync"); value.Exists() {
 		data.LtraceBufferMultiplierSync = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierSync = types.BoolNull()
+	} else if !data.LtraceBufferMultiplierSync.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierSync = types.BoolValue(false)
 	}
 }
 
@@ -1213,19 +1293,24 @@ func (data *RSVP) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RSVPData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "signalling.graceful-restart"); value.Exists() {
 		data.SignallingGracefulRestart = types.BoolValue(true)
 	} else {
-		data.SignallingGracefulRestart = types.BoolNull()
+		data.SignallingGracefulRestart = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.graceful-restart-lsp-type"); value.Exists() {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
 	} else {
-		data.SignallingGracefulRestartLspCtype = types.BoolNull()
+		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
@@ -1248,27 +1333,27 @@ func (data *RSVPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
 	} else {
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.message-bundle.disable"); value.Exists() {
 		data.SignallingMessageBundleDisable = types.BoolValue(true)
 	} else {
-		data.SignallingMessageBundleDisable = types.BoolNull()
+		data.SignallingMessageBundleDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.nodeid-subobject.disable"); value.Exists() {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
 	} else {
-		data.SignallingNodeidSubobjectDisable = types.BoolNull()
+		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.patherr.state-removal.disable"); value.Exists() {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
 	} else {
-		data.SignallingPatherrStateRemovalDisable = types.BoolNull()
+		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.checksum.disable"); value.Exists() {
 		data.SignallingChecksumDisable = types.BoolValue(true)
 	} else {
-		data.SignallingChecksumDisable = types.BoolNull()
+		data.SignallingChecksumDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "signalling.out-of-band.vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
@@ -1326,12 +1411,12 @@ func (data *RSVPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "logging.events.nsr"); value.Exists() {
 		data.LoggingEventsNsr = types.BoolValue(true)
 	} else {
-		data.LoggingEventsNsr = types.BoolNull()
+		data.LoggingEventsNsr = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "logging.events.issu"); value.Exists() {
 		data.LoggingEventsIssu = types.BoolValue(true)
 	} else {
-		data.LoggingEventsIssu = types.BoolNull()
+		data.LoggingEventsIssu = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
@@ -1339,37 +1424,37 @@ func (data *RSVPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.rare"); value.Exists() {
 		data.LtraceBufferMultiplierRare = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierRare = types.BoolNull()
+		data.LtraceBufferMultiplierRare = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.common"); value.Exists() {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierCommon = types.BoolNull()
+		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig"); value.Exists() {
 		data.LtraceBufferMultiplierSig = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSig = types.BoolNull()
+		data.LtraceBufferMultiplierSig = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig-err"); value.Exists() {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSigErr = types.BoolNull()
+		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.intf"); value.Exists() {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierIntf = types.BoolNull()
+		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierDbgErr = types.BoolNull()
+		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ltrace-buffer.multiplier.sync"); value.Exists() {
 		data.LtraceBufferMultiplierSync = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSync = types.BoolNull()
+		data.LtraceBufferMultiplierSync = types.BoolValue(false)
 	}
 }
 
@@ -1377,75 +1462,75 @@ func (data *RSVPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RSVP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart"); value.Exists() {
 		data.SignallingGracefulRestart = types.BoolValue(true)
 	} else {
-		data.SignallingGracefulRestart = types.BoolNull()
+		data.SignallingGracefulRestart = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-lsp-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart-lsp-type"); value.Exists() {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
 	} else {
-		data.SignallingGracefulRestartLspCtype = types.BoolNull()
+		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-recovery-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-restart-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart-restart-time"); value.Exists() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/event-per-pulse"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/event-per-pulse"); value.Exists() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/prefix-filtering/access-list"); value.Exists() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
 	} else {
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/message-bundle/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/message-bundle/disable"); value.Exists() {
 		data.SignallingMessageBundleDisable = types.BoolValue(true)
 	} else {
-		data.SignallingMessageBundleDisable = types.BoolNull()
+		data.SignallingMessageBundleDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/nodeid-subobject/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/nodeid-subobject/disable"); value.Exists() {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
 	} else {
-		data.SignallingNodeidSubobjectDisable = types.BoolNull()
+		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/patherr/state-removal/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/patherr/state-removal/disable"); value.Exists() {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
 	} else {
-		data.SignallingPatherrStateRemovalDisable = types.BoolNull()
+		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/checksum/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/checksum/disable"); value.Exists() {
 		data.SignallingChecksumDisable = types.BoolValue(true)
 	} else {
-		data.SignallingChecksumDisable = types.BoolNull()
+		data.SignallingChecksumDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/out-of-band/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/out-of-band/vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/life-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/retransmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/retransmit"); value.Exists() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]RSVPNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RSVPNeighbors{}
@@ -1465,71 +1550,71 @@ func (data *RSVP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/latency/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/latency/threshold"); value.Exists() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/events/nsr"); value.Exists() {
 		data.LoggingEventsNsr = types.BoolValue(true)
 	} else {
-		data.LoggingEventsNsr = types.BoolNull()
+		data.LoggingEventsNsr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/issu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/events/issu"); value.Exists() {
 		data.LoggingEventsIssu = types.BoolValue(true)
 	} else {
-		data.LoggingEventsIssu = types.BoolNull()
+		data.LoggingEventsIssu = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/rare"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/rare"); value.Exists() {
 		data.LtraceBufferMultiplierRare = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierRare = types.BoolNull()
+		data.LtraceBufferMultiplierRare = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/common"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/common"); value.Exists() {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierCommon = types.BoolNull()
+		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/sig"); value.Exists() {
 		data.LtraceBufferMultiplierSig = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSig = types.BoolNull()
+		data.LtraceBufferMultiplierSig = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/sig-err"); value.Exists() {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSigErr = types.BoolNull()
+		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/intf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/intf"); value.Exists() {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierIntf = types.BoolNull()
+		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierDbgErr = types.BoolNull()
+		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/sync"); value.Exists() {
 		data.LtraceBufferMultiplierSync = types.BoolValue(true)
 	} else {
-		data.LtraceBufferMultiplierSync = types.BoolNull()
+		data.LtraceBufferMultiplierSync = types.BoolValue(false)
 	}
 }
 
@@ -1537,75 +1622,75 @@ func (data *RSVP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RSVPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart"); value.Exists() {
 		data.SignallingGracefulRestart = types.BoolValue(true)
 	} else {
 		data.SignallingGracefulRestart = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-lsp-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart-lsp-type"); value.Exists() {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
 	} else {
 		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-recovery-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart-recovery-time"); value.Exists() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/graceful-restart-restart-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/graceful-restart-restart-time"); value.Exists() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/interval"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/hello/graceful-restart/refresh/misses"); value.Exists() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/event-per-pulse"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/event-per-pulse"); value.Exists() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/prefix-filtering/access-list"); value.Exists() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/prefix-filtering/default-deny-action/drop"); value.Exists() {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
 	} else {
 		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/message-bundle/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/message-bundle/disable"); value.Exists() {
 		data.SignallingMessageBundleDisable = types.BoolValue(true)
 	} else {
 		data.SignallingMessageBundleDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/nodeid-subobject/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/nodeid-subobject/disable"); value.Exists() {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
 	} else {
 		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/patherr/state-removal/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/patherr/state-removal/disable"); value.Exists() {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
 	} else {
 		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/checksum/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/checksum/disable"); value.Exists() {
 		data.SignallingChecksumDisable = types.BoolValue(true)
 	} else {
 		data.SignallingChecksumDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/signalling/out-of-band/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/signalling/out-of-band/vrf"); value.Exists() {
 		data.SignallingOobVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/key-source/key-chain"); value.Exists() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/window-size"); value.Exists() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/life-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/life-time"); value.Exists() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/authentication/retransmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/authentication/retransmit"); value.Exists() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]RSVPNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RSVPNeighbors{}
@@ -1625,68 +1710,68 @@ func (data *RSVPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/max-reservable-bandwidth"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc0"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/mam/percentage/max-reservable/bc1"); value.Exists() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc0"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth/rdm/percentage/max-reservable-bc0/bc1"); value.Exists() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/latency/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/latency/threshold"); value.Exists() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/nsr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/events/nsr"); value.Exists() {
 		data.LoggingEventsNsr = types.BoolValue(true)
 	} else {
 		data.LoggingEventsNsr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/issu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/events/issu"); value.Exists() {
 		data.LoggingEventsIssu = types.BoolValue(true)
 	} else {
 		data.LoggingEventsIssu = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/multiplier-factor"); value.Exists() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/rare"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/rare"); value.Exists() {
 		data.LtraceBufferMultiplierRare = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierRare = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/common"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/common"); value.Exists() {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/sig"); value.Exists() {
 		data.LtraceBufferMultiplierSig = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierSig = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sig-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/sig-err"); value.Exists() {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/intf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/intf"); value.Exists() {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/dbg-err"); value.Exists() {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ltrace-buffer/multiplier/sync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ltrace-buffer/multiplier/sync"); value.Exists() {
 		data.LtraceBufferMultiplierSync = types.BoolValue(true)
 	} else {
 		data.LtraceBufferMultiplierSync = types.BoolValue(false)
@@ -2008,9 +2093,10 @@ func (data *RSVP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth/mam/percentage/max-reservable", data.getPath()))
 	}
 	for i := range data.Neighbors {
-		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[neighbor-address=" + data.Neighbors[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor%v", data.getPath(), keyPath))
 	}
 	if !data.AuthenticationRetransmit.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/retransmit", data.getPath()))

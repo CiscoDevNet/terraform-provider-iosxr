@@ -26,7 +26,6 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -305,14 +304,11 @@ func (data BFD) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.MultipathLocations) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MultipathLocations {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/multipath/include/locations/location[location-id='" + item.LocationId.ValueString() + "']"
 			if !item.LocationId.IsNull() && !item.LocationId.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "location-id", item.LocationId.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/location-id", item.LocationId.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"multipath/include/locations/location", cBody.Res())
 		}
 	}
 	if !data.MultihopTtlDropThreshold.IsNull() && !data.MultihopTtlDropThreshold.IsUnknown() {
@@ -363,42 +359,39 @@ func (data BFD) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.Interfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Interfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.EchoDisable.IsNull() && !item.EchoDisable.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "echo/disable", item.EchoDisable.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/echo/disable", item.EchoDisable.ValueString())
 			}
 			if !item.EchoIpv4Source.IsNull() && !item.EchoIpv4Source.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "echo/ipv4/source/ipv4-address", item.EchoIpv4Source.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/echo/ipv4/source/ipv4-address", item.EchoIpv4Source.ValueString())
 			}
 			if !item.Ipv6ChecksumDisable.IsNull() && !item.Ipv6ChecksumDisable.IsUnknown() {
 				if item.Ipv6ChecksumDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "ipv6/checksum/disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/ipv6/checksum/disable", "")
 				}
 			}
 			if !item.Disable.IsNull() && !item.Disable.IsUnknown() {
 				if item.Disable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/disable", "")
 				}
 			}
 			if !item.LocalAddress.IsNull() && !item.LocalAddress.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "local-address", item.LocalAddress.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/local-address", item.LocalAddress.ValueString())
 			}
 			if !item.TxInterval.IsNull() && !item.TxInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "tx-interval", strconv.FormatInt(item.TxInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/tx-interval", strconv.FormatInt(item.TxInterval.ValueInt64(), 10))
 			}
 			if !item.RxInterval.IsNull() && !item.RxInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "rx-interval", strconv.FormatInt(item.RxInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/rx-interval", strconv.FormatInt(item.RxInterval.ValueInt64(), 10))
 			}
 			if !item.Multiplier.IsNull() && !item.Multiplier.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "multiplier", strconv.FormatInt(item.Multiplier.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/multiplier", strconv.FormatInt(item.Multiplier.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"interfaces/interface", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -414,61 +407,65 @@ func (data BFD) toBodyXML(ctx context.Context) string {
 
 func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "echo.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EchoDisable.IsNull() {
 			data.EchoDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EchoDisable.IsNull() {
 			data.EchoDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "echo.latency.detect"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EchoLatencyDetect.IsNull() {
 			data.EchoLatencyDetect = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EchoLatencyDetect.IsNull() {
 			data.EchoLatencyDetect = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "echo.latency.detect.percentage"); value.Exists() && !data.EchoLatencyDetectPercentage.IsNull() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
-	} else {
+	} else if data.EchoLatencyDetectPercentage.IsNull() {
 		data.EchoLatencyDetectPercentage = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "echo.latency.detect.count"); value.Exists() && !data.EchoLatencyDetectCount.IsNull() {
 		data.EchoLatencyDetectCount = types.Int64Value(value.Int())
-	} else {
+	} else if data.EchoLatencyDetectCount.IsNull() {
 		data.EchoLatencyDetectCount = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "echo.startup.validate.force"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EchoStartupValidateForce.IsNull() {
 			data.EchoStartupValidateForce = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EchoStartupValidateForce.IsNull() {
 			data.EchoStartupValidateForce = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "echo.ipv4.source.ipv4-address"); value.Exists() && !data.EchoIpv4Source.IsNull() {
 		data.EchoIpv4Source = types.StringValue(value.String())
-	} else {
+	} else if data.EchoIpv4Source.IsNull() {
 		data.EchoIpv4Source = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval"); value.Exists() && !data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() {
 		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() {
 		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "trap.singlehop.pre-mapped"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TrapSinglehopPreMapped.IsNull() {
 			data.TrapSinglehopPreMapped = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TrapSinglehopPreMapped.IsNull() {
 			data.TrapSinglehopPreMapped = types.BoolNull()
 		}
@@ -504,85 +501,89 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "multihop.ttl-drop-threshold"); value.Exists() && !data.MultihopTtlDropThreshold.IsNull() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.MultihopTtlDropThreshold.IsNull() {
 		data.MultihopTtlDropThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dampening.initial-wait"); value.Exists() && !data.DampeningInitialWait.IsNull() {
 		data.DampeningInitialWait = types.Int64Value(value.Int())
-	} else {
+	} else if data.DampeningInitialWait.IsNull() {
 		data.DampeningInitialWait = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dampening.secondary-wait"); value.Exists() && !data.DampeningSecondaryWait.IsNull() {
 		data.DampeningSecondaryWait = types.Int64Value(value.Int())
-	} else {
+	} else if data.DampeningSecondaryWait.IsNull() {
 		data.DampeningSecondaryWait = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dampening.maximum-wait"); value.Exists() && !data.DampeningMaximumWait.IsNull() {
 		data.DampeningMaximumWait = types.Int64Value(value.Int())
-	} else {
+	} else if data.DampeningMaximumWait.IsNull() {
 		data.DampeningMaximumWait = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dampening.threshold"); value.Exists() && !data.DampeningThreshold.IsNull() {
 		data.DampeningThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.DampeningThreshold.IsNull() {
 		data.DampeningThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dampening.extensions.down-monitoring"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DampeningExtensionsDownMonitoring.IsNull() {
 			data.DampeningExtensionsDownMonitoring = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DampeningExtensionsDownMonitoring.IsNull() {
 			data.DampeningExtensionsDownMonitoring = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "dampening.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DampeningDisable.IsNull() {
 			data.DampeningDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DampeningDisable.IsNull() {
 			data.DampeningDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "dampening.bundle-member.l3-only-mode"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DampeningBundleMemberL3OnlyMode.IsNull() {
 			data.DampeningBundleMemberL3OnlyMode = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DampeningBundleMemberL3OnlyMode.IsNull() {
 			data.DampeningBundleMemberL3OnlyMode = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "dampening.bundle-member.initial-wait"); value.Exists() && !data.DampeningBundleMemberInitialWait.IsNull() {
 		data.DampeningBundleMemberInitialWait = types.Int64Value(value.Int())
-	} else {
+	} else if data.DampeningBundleMemberInitialWait.IsNull() {
 		data.DampeningBundleMemberInitialWait = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dampening.bundle-member.secondary-wait"); value.Exists() && !data.DampeningBundleMemberSecondaryWait.IsNull() {
 		data.DampeningBundleMemberSecondaryWait = types.Int64Value(value.Int())
-	} else {
+	} else if data.DampeningBundleMemberSecondaryWait.IsNull() {
 		data.DampeningBundleMemberSecondaryWait = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "dampening.bundle-member.maximum-wait"); value.Exists() && !data.DampeningBundleMemberMaximumWait.IsNull() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Value(value.Int())
-	} else {
+	} else if data.DampeningBundleMemberMaximumWait.IsNull() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb"); value.Exists() && !data.BundleCoexistenceBobBlb.IsNull() {
 		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
-	} else {
+	} else if data.BundleCoexistenceBobBlb.IsNull() {
 		data.BundleCoexistenceBobBlb = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv6.checksum.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6ChecksumDisable.IsNull() {
 			data.Ipv6ChecksumDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6ChecksumDisable.IsNull() {
 			data.Ipv6ChecksumDisable = types.BoolNull()
 		}
@@ -626,39 +627,27 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].EchoIpv4Source = types.StringNull()
 		}
 		if value := r.Get("ipv6.checksum.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() && !data.Interfaces[i].Ipv6ChecksumDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].Ipv6ChecksumDisable = types.BoolValue(false)
-			} else if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() {
 				data.Interfaces[i].Ipv6ChecksumDisable = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Interfaces[i].Ipv6ChecksumDisable.IsNull() {
 				data.Interfaces[i].Ipv6ChecksumDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].Ipv6ChecksumDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Interfaces[i].Disable.IsNull() && !data.Interfaces[i].Disable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Interfaces[i].Disable = types.BoolValue(false)
-			} else if !data.Interfaces[i].Disable.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Interfaces[i].Disable.IsNull() {
 				data.Interfaces[i].Disable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Interfaces[i].Disable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("local-address"); value.Exists() && !data.Interfaces[i].LocalAddress.IsNull() {
@@ -689,52 +678,64 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *BFD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/disable"); value.Exists() {
-		data.EchoDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EchoDisable.IsNull() {
+			data.EchoDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EchoDisable.IsNull() {
 			data.EchoDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/latency/detect"); value.Exists() {
-		data.EchoLatencyDetect = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/latency/detect"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EchoLatencyDetect.IsNull() {
+			data.EchoLatencyDetect = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EchoLatencyDetect.IsNull() {
 			data.EchoLatencyDetect = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/latency/detect/percentage"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/latency/detect/percentage"); value.Exists() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
 	} else if data.EchoLatencyDetectPercentage.IsNull() {
 		data.EchoLatencyDetectPercentage = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/latency/detect/count"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/latency/detect/count"); value.Exists() {
 		data.EchoLatencyDetectCount = types.Int64Value(value.Int())
 	} else if data.EchoLatencyDetectCount.IsNull() {
 		data.EchoLatencyDetectCount = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/startup/validate/force"); value.Exists() {
-		data.EchoStartupValidateForce = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/startup/validate/force"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EchoStartupValidateForce.IsNull() {
+			data.EchoStartupValidateForce = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EchoStartupValidateForce.IsNull() {
 			data.EchoStartupValidateForce = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/ipv4/source/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/ipv4/source/ipv4-address"); value.Exists() {
 		data.EchoIpv4Source = types.StringValue(value.String())
 	} else if data.EchoIpv4Source.IsNull() {
 		data.EchoIpv4Source = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/ipv4/bundle-per-member/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/ipv4/bundle-per-member/minimum-interval"); value.Exists() {
 		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Value(value.Int())
 	} else if data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() {
 		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trap/singlehop/pre-mapped"); value.Exists() {
-		data.TrapSinglehopPreMapped = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/trap/singlehop/pre-mapped"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TrapSinglehopPreMapped.IsNull() {
+			data.TrapSinglehopPreMapped = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TrapSinglehopPreMapped.IsNull() {
@@ -746,7 +747,7 @@ func (data *BFD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.MultipathLocations[i].LocationId.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/multipath/include/locations/location").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multipath/include/locations/location").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -770,77 +771,89 @@ func (data *BFD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.MultipathLocations[i].LocationId = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multihop/ttl-drop-threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multihop/ttl-drop-threshold"); value.Exists() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
 	} else if data.MultihopTtlDropThreshold.IsNull() {
 		data.MultihopTtlDropThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/initial-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/initial-wait"); value.Exists() {
 		data.DampeningInitialWait = types.Int64Value(value.Int())
 	} else if data.DampeningInitialWait.IsNull() {
 		data.DampeningInitialWait = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/secondary-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/secondary-wait"); value.Exists() {
 		data.DampeningSecondaryWait = types.Int64Value(value.Int())
 	} else if data.DampeningSecondaryWait.IsNull() {
 		data.DampeningSecondaryWait = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/maximum-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/maximum-wait"); value.Exists() {
 		data.DampeningMaximumWait = types.Int64Value(value.Int())
 	} else if data.DampeningMaximumWait.IsNull() {
 		data.DampeningMaximumWait = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/threshold"); value.Exists() {
 		data.DampeningThreshold = types.Int64Value(value.Int())
 	} else if data.DampeningThreshold.IsNull() {
 		data.DampeningThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/extensions/down-monitoring"); value.Exists() {
-		data.DampeningExtensionsDownMonitoring = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/extensions/down-monitoring"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DampeningExtensionsDownMonitoring.IsNull() {
+			data.DampeningExtensionsDownMonitoring = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DampeningExtensionsDownMonitoring.IsNull() {
 			data.DampeningExtensionsDownMonitoring = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/disable"); value.Exists() {
-		data.DampeningDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DampeningDisable.IsNull() {
+			data.DampeningDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DampeningDisable.IsNull() {
 			data.DampeningDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/l3-only-mode"); value.Exists() {
-		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/l3-only-mode"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DampeningBundleMemberL3OnlyMode.IsNull() {
+			data.DampeningBundleMemberL3OnlyMode = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DampeningBundleMemberL3OnlyMode.IsNull() {
 			data.DampeningBundleMemberL3OnlyMode = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/initial-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/initial-wait"); value.Exists() {
 		data.DampeningBundleMemberInitialWait = types.Int64Value(value.Int())
 	} else if data.DampeningBundleMemberInitialWait.IsNull() {
 		data.DampeningBundleMemberInitialWait = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/secondary-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/secondary-wait"); value.Exists() {
 		data.DampeningBundleMemberSecondaryWait = types.Int64Value(value.Int())
 	} else if data.DampeningBundleMemberSecondaryWait.IsNull() {
 		data.DampeningBundleMemberSecondaryWait = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/maximum-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/maximum-wait"); value.Exists() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Value(value.Int())
 	} else if data.DampeningBundleMemberMaximumWait.IsNull() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bundle/coexistence/bob-blb"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bundle/coexistence/bob-blb"); value.Exists() {
 		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
 	} else if data.BundleCoexistenceBobBlb.IsNull() {
 		data.BundleCoexistenceBobBlb = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/checksum/disable"); value.Exists() {
-		data.Ipv6ChecksumDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/checksum/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6ChecksumDisable.IsNull() {
+			data.Ipv6ChecksumDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6ChecksumDisable.IsNull() {
@@ -852,7 +865,7 @@ func (data *BFD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -886,7 +899,10 @@ func (data *BFD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Interfaces[i].EchoIpv4Source = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "ipv6/checksum/disable"); value.Exists() {
-			data.Interfaces[i].Ipv6ChecksumDisable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() {
+				data.Interfaces[i].Ipv6ChecksumDisable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -895,7 +911,10 @@ func (data *BFD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "disable"); value.Exists() {
-			data.Interfaces[i].Disable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].Disable.IsNull() {
+				data.Interfaces[i].Disable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -935,15 +954,21 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "echo.disable"); value.Exists() {
 		data.EchoDisable = types.BoolValue(true)
-	} else {
-		data.EchoDisable = types.BoolNull()
+	} else if !data.EchoDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EchoDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "echo.latency.detect"); value.Exists() {
 		data.EchoLatencyDetect = types.BoolValue(true)
-	} else {
-		data.EchoLatencyDetect = types.BoolNull()
+	} else if !data.EchoLatencyDetect.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EchoLatencyDetect = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "echo.latency.detect.percentage"); value.Exists() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
@@ -953,8 +978,9 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "echo.startup.validate.force"); value.Exists() {
 		data.EchoStartupValidateForce = types.BoolValue(true)
-	} else {
-		data.EchoStartupValidateForce = types.BoolNull()
+	} else if !data.EchoStartupValidateForce.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EchoStartupValidateForce = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "echo.ipv4.source.ipv4-address"); value.Exists() {
 		data.EchoIpv4Source = types.StringValue(value.String())
@@ -964,8 +990,9 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "trap.singlehop.pre-mapped"); value.Exists() {
 		data.TrapSinglehopPreMapped = types.BoolValue(true)
-	} else {
-		data.TrapSinglehopPreMapped = types.BoolNull()
+	} else if !data.TrapSinglehopPreMapped.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TrapSinglehopPreMapped = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multipath.include.locations.location"); value.Exists() {
 		data.MultipathLocations = make([]BFDMultipathLocations, 0)
@@ -995,18 +1022,21 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "dampening.extensions.down-monitoring"); value.Exists() {
 		data.DampeningExtensionsDownMonitoring = types.BoolValue(true)
-	} else {
-		data.DampeningExtensionsDownMonitoring = types.BoolNull()
+	} else if !data.DampeningExtensionsDownMonitoring.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DampeningExtensionsDownMonitoring = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "dampening.disable"); value.Exists() {
 		data.DampeningDisable = types.BoolValue(true)
-	} else {
-		data.DampeningDisable = types.BoolNull()
+	} else if !data.DampeningDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DampeningDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "dampening.bundle-member.l3-only-mode"); value.Exists() {
 		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(true)
-	} else {
-		data.DampeningBundleMemberL3OnlyMode = types.BoolNull()
+	} else if !data.DampeningBundleMemberL3OnlyMode.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "dampening.bundle-member.initial-wait"); value.Exists() {
 		data.DampeningBundleMemberInitialWait = types.Int64Value(value.Int())
@@ -1022,8 +1052,9 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "ipv6.checksum.disable"); value.Exists() {
 		data.Ipv6ChecksumDisable = types.BoolValue(true)
-	} else {
-		data.Ipv6ChecksumDisable = types.BoolNull()
+	} else if !data.Ipv6ChecksumDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv6ChecksumDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]BFDInterfaces, 0)
@@ -1040,13 +1071,15 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("ipv6.checksum.disable"); cValue.Exists() {
 				item.Ipv6ChecksumDisable = types.BoolValue(true)
-			} else {
-				item.Ipv6ChecksumDisable = types.BoolNull()
+			} else if !item.Ipv6ChecksumDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.Ipv6ChecksumDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
-			} else {
-				item.Disable = types.BoolNull()
+			} else if !item.Disable.IsNull() {
+				// Only set to false if it was previously set
+				item.Disable = types.BoolValue(false)
 			}
 			if cValue := v.Get("local-address"); cValue.Exists() {
 				item.LocalAddress = types.StringValue(cValue.String())
@@ -1071,19 +1104,24 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *BFDData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "echo.disable"); value.Exists() {
 		data.EchoDisable = types.BoolValue(true)
 	} else {
-		data.EchoDisable = types.BoolNull()
+		data.EchoDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "echo.latency.detect"); value.Exists() {
 		data.EchoLatencyDetect = types.BoolValue(true)
 	} else {
-		data.EchoLatencyDetect = types.BoolNull()
+		data.EchoLatencyDetect = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "echo.latency.detect.percentage"); value.Exists() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
@@ -1094,7 +1132,7 @@ func (data *BFDData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "echo.startup.validate.force"); value.Exists() {
 		data.EchoStartupValidateForce = types.BoolValue(true)
 	} else {
-		data.EchoStartupValidateForce = types.BoolNull()
+		data.EchoStartupValidateForce = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "echo.ipv4.source.ipv4-address"); value.Exists() {
 		data.EchoIpv4Source = types.StringValue(value.String())
@@ -1105,7 +1143,7 @@ func (data *BFDData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "trap.singlehop.pre-mapped"); value.Exists() {
 		data.TrapSinglehopPreMapped = types.BoolValue(true)
 	} else {
-		data.TrapSinglehopPreMapped = types.BoolNull()
+		data.TrapSinglehopPreMapped = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multipath.include.locations.location"); value.Exists() {
 		data.MultipathLocations = make([]BFDMultipathLocations, 0)
@@ -1136,17 +1174,17 @@ func (data *BFDData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "dampening.extensions.down-monitoring"); value.Exists() {
 		data.DampeningExtensionsDownMonitoring = types.BoolValue(true)
 	} else {
-		data.DampeningExtensionsDownMonitoring = types.BoolNull()
+		data.DampeningExtensionsDownMonitoring = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "dampening.disable"); value.Exists() {
 		data.DampeningDisable = types.BoolValue(true)
 	} else {
-		data.DampeningDisable = types.BoolNull()
+		data.DampeningDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "dampening.bundle-member.l3-only-mode"); value.Exists() {
 		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(true)
 	} else {
-		data.DampeningBundleMemberL3OnlyMode = types.BoolNull()
+		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "dampening.bundle-member.initial-wait"); value.Exists() {
 		data.DampeningBundleMemberInitialWait = types.Int64Value(value.Int())
@@ -1163,7 +1201,7 @@ func (data *BFDData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "ipv6.checksum.disable"); value.Exists() {
 		data.Ipv6ChecksumDisable = types.BoolValue(true)
 	} else {
-		data.Ipv6ChecksumDisable = types.BoolNull()
+		data.Ipv6ChecksumDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]BFDInterfaces, 0)
@@ -1181,12 +1219,12 @@ func (data *BFDData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("ipv6.checksum.disable"); cValue.Exists() {
 				item.Ipv6ChecksumDisable = types.BoolValue(true)
 			} else {
-				item.Ipv6ChecksumDisable = types.BoolNull()
+				item.Ipv6ChecksumDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolNull()
+				item.Disable = types.BoolValue(false)
 			}
 			if cValue := v.Get("local-address"); cValue.Exists() {
 				item.LocalAddress = types.StringValue(cValue.String())
@@ -1211,39 +1249,39 @@ func (data *BFDData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *BFD) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/disable"); value.Exists() {
 		data.EchoDisable = types.BoolValue(true)
 	} else {
-		data.EchoDisable = types.BoolNull()
+		data.EchoDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/latency/detect"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/latency/detect"); value.Exists() {
 		data.EchoLatencyDetect = types.BoolValue(true)
 	} else {
-		data.EchoLatencyDetect = types.BoolNull()
+		data.EchoLatencyDetect = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/latency/detect/percentage"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/latency/detect/percentage"); value.Exists() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/latency/detect/count"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/latency/detect/count"); value.Exists() {
 		data.EchoLatencyDetectCount = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/startup/validate/force"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/startup/validate/force"); value.Exists() {
 		data.EchoStartupValidateForce = types.BoolValue(true)
 	} else {
-		data.EchoStartupValidateForce = types.BoolNull()
+		data.EchoStartupValidateForce = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/ipv4/source/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/ipv4/source/ipv4-address"); value.Exists() {
 		data.EchoIpv4Source = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/ipv4/bundle-per-member/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/ipv4/bundle-per-member/minimum-interval"); value.Exists() {
 		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trap/singlehop/pre-mapped"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/trap/singlehop/pre-mapped"); value.Exists() {
 		data.TrapSinglehopPreMapped = types.BoolValue(true)
 	} else {
-		data.TrapSinglehopPreMapped = types.BoolNull()
+		data.TrapSinglehopPreMapped = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multipath/include/locations/location"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multipath/include/locations/location"); value.Exists() {
 		data.MultipathLocations = make([]BFDMultipathLocations, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := BFDMultipathLocations{}
@@ -1254,54 +1292,54 @@ func (data *BFD) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multihop/ttl-drop-threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multihop/ttl-drop-threshold"); value.Exists() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/initial-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/initial-wait"); value.Exists() {
 		data.DampeningInitialWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/secondary-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/secondary-wait"); value.Exists() {
 		data.DampeningSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/maximum-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/maximum-wait"); value.Exists() {
 		data.DampeningMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/threshold"); value.Exists() {
 		data.DampeningThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/extensions/down-monitoring"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/extensions/down-monitoring"); value.Exists() {
 		data.DampeningExtensionsDownMonitoring = types.BoolValue(true)
 	} else {
-		data.DampeningExtensionsDownMonitoring = types.BoolNull()
+		data.DampeningExtensionsDownMonitoring = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/disable"); value.Exists() {
 		data.DampeningDisable = types.BoolValue(true)
 	} else {
-		data.DampeningDisable = types.BoolNull()
+		data.DampeningDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/l3-only-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/l3-only-mode"); value.Exists() {
 		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(true)
 	} else {
-		data.DampeningBundleMemberL3OnlyMode = types.BoolNull()
+		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/initial-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/initial-wait"); value.Exists() {
 		data.DampeningBundleMemberInitialWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/secondary-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/secondary-wait"); value.Exists() {
 		data.DampeningBundleMemberSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/maximum-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/maximum-wait"); value.Exists() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bundle/coexistence/bob-blb"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bundle/coexistence/bob-blb"); value.Exists() {
 		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/checksum/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/checksum/disable"); value.Exists() {
 		data.Ipv6ChecksumDisable = types.BoolValue(true)
 	} else {
-		data.Ipv6ChecksumDisable = types.BoolNull()
+		data.Ipv6ChecksumDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
 		data.Interfaces = make([]BFDInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := BFDInterfaces{}
@@ -1317,12 +1355,12 @@ func (data *BFD) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "ipv6/checksum/disable"); cValue.Exists() {
 				item.Ipv6ChecksumDisable = types.BoolValue(true)
 			} else {
-				item.Ipv6ChecksumDisable = types.BoolNull()
+				item.Ipv6ChecksumDisable = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "disable"); cValue.Exists() {
 				item.Disable = types.BoolValue(true)
 			} else {
-				item.Disable = types.BoolNull()
+				item.Disable = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "local-address"); cValue.Exists() {
 				item.LocalAddress = types.StringValue(cValue.String())
@@ -1347,39 +1385,39 @@ func (data *BFD) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *BFDData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/disable"); value.Exists() {
 		data.EchoDisable = types.BoolValue(true)
 	} else {
 		data.EchoDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/latency/detect"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/latency/detect"); value.Exists() {
 		data.EchoLatencyDetect = types.BoolValue(true)
 	} else {
 		data.EchoLatencyDetect = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/latency/detect/percentage"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/latency/detect/percentage"); value.Exists() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/latency/detect/count"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/latency/detect/count"); value.Exists() {
 		data.EchoLatencyDetectCount = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/startup/validate/force"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/startup/validate/force"); value.Exists() {
 		data.EchoStartupValidateForce = types.BoolValue(true)
 	} else {
 		data.EchoStartupValidateForce = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/ipv4/source/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/ipv4/source/ipv4-address"); value.Exists() {
 		data.EchoIpv4Source = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/echo/ipv4/bundle-per-member/minimum-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/echo/ipv4/bundle-per-member/minimum-interval"); value.Exists() {
 		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/trap/singlehop/pre-mapped"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/trap/singlehop/pre-mapped"); value.Exists() {
 		data.TrapSinglehopPreMapped = types.BoolValue(true)
 	} else {
 		data.TrapSinglehopPreMapped = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multipath/include/locations/location"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multipath/include/locations/location"); value.Exists() {
 		data.MultipathLocations = make([]BFDMultipathLocations, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := BFDMultipathLocations{}
@@ -1390,54 +1428,54 @@ func (data *BFDData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multihop/ttl-drop-threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multihop/ttl-drop-threshold"); value.Exists() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/initial-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/initial-wait"); value.Exists() {
 		data.DampeningInitialWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/secondary-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/secondary-wait"); value.Exists() {
 		data.DampeningSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/maximum-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/maximum-wait"); value.Exists() {
 		data.DampeningMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/threshold"); value.Exists() {
 		data.DampeningThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/extensions/down-monitoring"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/extensions/down-monitoring"); value.Exists() {
 		data.DampeningExtensionsDownMonitoring = types.BoolValue(true)
 	} else {
 		data.DampeningExtensionsDownMonitoring = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/disable"); value.Exists() {
 		data.DampeningDisable = types.BoolValue(true)
 	} else {
 		data.DampeningDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/l3-only-mode"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/l3-only-mode"); value.Exists() {
 		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(true)
 	} else {
 		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/initial-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/initial-wait"); value.Exists() {
 		data.DampeningBundleMemberInitialWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/secondary-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/secondary-wait"); value.Exists() {
 		data.DampeningBundleMemberSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dampening/bundle-member/maximum-wait"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dampening/bundle-member/maximum-wait"); value.Exists() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bundle/coexistence/bob-blb"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bundle/coexistence/bob-blb"); value.Exists() {
 		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/checksum/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/checksum/disable"); value.Exists() {
 		data.Ipv6ChecksumDisable = types.BoolValue(true)
 	} else {
 		data.Ipv6ChecksumDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
 		data.Interfaces = make([]BFDInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := BFDInterfaces{}
@@ -1728,9 +1766,10 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context, state *BFD) []string {
 func (data *BFD) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Interfaces {
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.Interfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	if !data.Ipv6ChecksumDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/checksum/disable", data.getPath()))
@@ -1772,9 +1811,10 @@ func (data *BFD) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/multihop/ttl-drop-threshold", data.getPath()))
 	}
 	for i := range data.MultipathLocations {
-		keyValues := [...]string{data.MultipathLocations[i].LocationId.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multipath/include/locations/location=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[location-id=" + data.MultipathLocations[i].LocationId.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/multipath/include/locations/location%v", data.getPath(), keyPath))
 	}
 	if !data.TrapSinglehopPreMapped.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/trap/singlehop/pre-mapped", data.getPath()))

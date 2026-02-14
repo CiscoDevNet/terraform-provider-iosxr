@@ -94,7 +94,7 @@ func iosxrRouterMLDInterfaceImportStateIdFunc(resourceName string) resource.Impo
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterMLDInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-mld-cfg:/router/mld"
 	attributes = {
 	}
@@ -110,7 +110,7 @@ func testAccIosxrRouterMLDInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_mld_interface" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	router_enable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -146,7 +146,7 @@ func testAccIosxrRouterMLDInterfaceConfig_all() string {
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	dvmrp_enable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

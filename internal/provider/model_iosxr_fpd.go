@@ -146,41 +146,45 @@ func (data FPD) toBodyXML(ctx context.Context) string {
 
 func (data *FPD) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "auto-upgrade.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutoUpgradeEnable.IsNull() {
 			data.AutoUpgradeEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutoUpgradeEnable.IsNull() {
 			data.AutoUpgradeEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "auto-upgrade.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutoUpgradeDisable.IsNull() {
 			data.AutoUpgradeDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutoUpgradeDisable.IsNull() {
 			data.AutoUpgradeDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "auto-reload.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutoReloadEnable.IsNull() {
 			data.AutoReloadEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutoReloadEnable.IsNull() {
 			data.AutoReloadEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "auto-reload.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutoReloadDisable.IsNull() {
 			data.AutoReloadDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutoReloadDisable.IsNull() {
 			data.AutoReloadDisable = types.BoolNull()
 		}
@@ -192,32 +196,44 @@ func (data *FPD) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *FPD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/enable"); value.Exists() {
-		data.AutoUpgradeEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-upgrade/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutoUpgradeEnable.IsNull() {
+			data.AutoUpgradeEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutoUpgradeEnable.IsNull() {
 			data.AutoUpgradeEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/disable"); value.Exists() {
-		data.AutoUpgradeDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-upgrade/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutoUpgradeDisable.IsNull() {
+			data.AutoUpgradeDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutoUpgradeDisable.IsNull() {
 			data.AutoUpgradeDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/enable"); value.Exists() {
-		data.AutoReloadEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-reload/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutoReloadEnable.IsNull() {
+			data.AutoReloadEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutoReloadEnable.IsNull() {
 			data.AutoReloadEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/disable"); value.Exists() {
-		data.AutoReloadDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-reload/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutoReloadDisable.IsNull() {
+			data.AutoReloadDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutoReloadDisable.IsNull() {
@@ -235,25 +251,33 @@ func (data *FPD) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "auto-upgrade.enable"); value.Exists() {
 		data.AutoUpgradeEnable = types.BoolValue(true)
-	} else {
-		data.AutoUpgradeEnable = types.BoolNull()
+	} else if !data.AutoUpgradeEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutoUpgradeEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "auto-upgrade.disable"); value.Exists() {
 		data.AutoUpgradeDisable = types.BoolValue(true)
-	} else {
-		data.AutoUpgradeDisable = types.BoolNull()
+	} else if !data.AutoUpgradeDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutoUpgradeDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "auto-reload.enable"); value.Exists() {
 		data.AutoReloadEnable = types.BoolValue(true)
-	} else {
-		data.AutoReloadEnable = types.BoolNull()
+	} else if !data.AutoReloadEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutoReloadEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "auto-reload.disable"); value.Exists() {
 		data.AutoReloadDisable = types.BoolValue(true)
-	} else {
-		data.AutoReloadDisable = types.BoolNull()
+	} else if !data.AutoReloadDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutoReloadDisable = types.BoolValue(false)
 	}
 }
 
@@ -262,29 +286,34 @@ func (data *FPD) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *FPDData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "auto-upgrade.enable"); value.Exists() {
 		data.AutoUpgradeEnable = types.BoolValue(true)
 	} else {
-		data.AutoUpgradeEnable = types.BoolNull()
+		data.AutoUpgradeEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "auto-upgrade.disable"); value.Exists() {
 		data.AutoUpgradeDisable = types.BoolValue(true)
 	} else {
-		data.AutoUpgradeDisable = types.BoolNull()
+		data.AutoUpgradeDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "auto-reload.enable"); value.Exists() {
 		data.AutoReloadEnable = types.BoolValue(true)
 	} else {
-		data.AutoReloadEnable = types.BoolNull()
+		data.AutoReloadEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "auto-reload.disable"); value.Exists() {
 		data.AutoReloadDisable = types.BoolValue(true)
 	} else {
-		data.AutoReloadDisable = types.BoolNull()
+		data.AutoReloadDisable = types.BoolValue(false)
 	}
 }
 
@@ -293,25 +322,25 @@ func (data *FPDData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *FPD) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-upgrade/enable"); value.Exists() {
 		data.AutoUpgradeEnable = types.BoolValue(true)
 	} else {
-		data.AutoUpgradeEnable = types.BoolNull()
+		data.AutoUpgradeEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-upgrade/disable"); value.Exists() {
 		data.AutoUpgradeDisable = types.BoolValue(true)
 	} else {
-		data.AutoUpgradeDisable = types.BoolNull()
+		data.AutoUpgradeDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-reload/enable"); value.Exists() {
 		data.AutoReloadEnable = types.BoolValue(true)
 	} else {
-		data.AutoReloadEnable = types.BoolNull()
+		data.AutoReloadEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-reload/disable"); value.Exists() {
 		data.AutoReloadDisable = types.BoolValue(true)
 	} else {
-		data.AutoReloadDisable = types.BoolNull()
+		data.AutoReloadDisable = types.BoolValue(false)
 	}
 }
 
@@ -320,22 +349,22 @@ func (data *FPD) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *FPDData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-upgrade/enable"); value.Exists() {
 		data.AutoUpgradeEnable = types.BoolValue(true)
 	} else {
 		data.AutoUpgradeEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-upgrade/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-upgrade/disable"); value.Exists() {
 		data.AutoUpgradeDisable = types.BoolValue(true)
 	} else {
 		data.AutoUpgradeDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-reload/enable"); value.Exists() {
 		data.AutoReloadEnable = types.BoolValue(true)
 	} else {
 		data.AutoReloadEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-reload/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-reload/disable"); value.Exists() {
 		data.AutoReloadDisable = types.BoolValue(true)
 	} else {
 		data.AutoReloadDisable = types.BoolValue(false)

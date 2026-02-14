@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -782,21 +781,15 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitSourcePrefixLength = types.Int64Null()
 		}
 		if value := r.Get("permit.source.any"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].PermitSourceAny.IsNull() && !data.Sequences[i].PermitSourceAny.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].PermitSourceAny = types.BoolValue(false)
-			} else if !data.Sequences[i].PermitSourceAny.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitSourceAny.IsNull() {
 				data.Sequences[i].PermitSourceAny = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].PermitSourceAny.IsNull() {
 				data.Sequences[i].PermitSourceAny = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].PermitSourceAny = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.source.host"); value.Exists() && !data.Sequences[i].PermitSourceHost.IsNull() {
@@ -860,21 +853,15 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitDestinationPrefixLength = types.Int64Null()
 		}
 		if value := r.Get("permit.destination.any"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].PermitDestinationAny.IsNull() && !data.Sequences[i].PermitDestinationAny.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].PermitDestinationAny = types.BoolValue(false)
-			} else if !data.Sequences[i].PermitDestinationAny.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitDestinationAny.IsNull() {
 				data.Sequences[i].PermitDestinationAny = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].PermitDestinationAny.IsNull() {
 				data.Sequences[i].PermitDestinationAny = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].PermitDestinationAny = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.destination.host"); value.Exists() && !data.Sequences[i].PermitDestinationHost.IsNull() {
@@ -1103,57 +1090,39 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitNexthop3Vrf = types.StringNull()
 		}
 		if value := r.Get("permit.capture"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].PermitCapture.IsNull() && !data.Sequences[i].PermitCapture.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].PermitCapture = types.BoolValue(false)
-			} else if !data.Sequences[i].PermitCapture.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitCapture.IsNull() {
 				data.Sequences[i].PermitCapture = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].PermitCapture.IsNull() {
 				data.Sequences[i].PermitCapture = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].PermitCapture = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.log"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].PermitLog.IsNull() && !data.Sequences[i].PermitLog.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].PermitLog = types.BoolValue(false)
-			} else if !data.Sequences[i].PermitLog.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitLog.IsNull() {
 				data.Sequences[i].PermitLog = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].PermitLog.IsNull() {
 				data.Sequences[i].PermitLog = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].PermitLog = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.log-input"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].PermitLogInput.IsNull() && !data.Sequences[i].PermitLogInput.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].PermitLogInput = types.BoolValue(false)
-			} else if !data.Sequences[i].PermitLogInput.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitLogInput.IsNull() {
 				data.Sequences[i].PermitLogInput = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].PermitLogInput.IsNull() {
 				data.Sequences[i].PermitLogInput = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].PermitLogInput = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("permit.set.qos-group"); value.Exists() && !data.Sequences[i].PermitSetQosGroup.IsNull() {
@@ -1217,21 +1186,15 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenySourcePrefixLength = types.Int64Null()
 		}
 		if value := r.Get("deny.source.any"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].DenySourceAny.IsNull() && !data.Sequences[i].DenySourceAny.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].DenySourceAny = types.BoolValue(false)
-			} else if !data.Sequences[i].DenySourceAny.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenySourceAny.IsNull() {
 				data.Sequences[i].DenySourceAny = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].DenySourceAny.IsNull() {
 				data.Sequences[i].DenySourceAny = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].DenySourceAny = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.source.host"); value.Exists() && !data.Sequences[i].DenySourceHost.IsNull() {
@@ -1295,21 +1258,15 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenyDestinationPrefixLength = types.Int64Null()
 		}
 		if value := r.Get("deny.destination.any"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].DenyDestinationAny.IsNull() && !data.Sequences[i].DenyDestinationAny.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].DenyDestinationAny = types.BoolValue(false)
-			} else if !data.Sequences[i].DenyDestinationAny.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyDestinationAny.IsNull() {
 				data.Sequences[i].DenyDestinationAny = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].DenyDestinationAny.IsNull() {
 				data.Sequences[i].DenyDestinationAny = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].DenyDestinationAny = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.destination.host"); value.Exists() && !data.Sequences[i].DenyDestinationHost.IsNull() {
@@ -1493,57 +1450,39 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenyPolicePriority = types.StringNull()
 		}
 		if value := r.Get("deny.capture"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].DenyCapture.IsNull() && !data.Sequences[i].DenyCapture.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].DenyCapture = types.BoolValue(false)
-			} else if !data.Sequences[i].DenyCapture.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyCapture.IsNull() {
 				data.Sequences[i].DenyCapture = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].DenyCapture.IsNull() {
 				data.Sequences[i].DenyCapture = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].DenyCapture = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.log"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].DenyLog.IsNull() && !data.Sequences[i].DenyLog.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].DenyLog = types.BoolValue(false)
-			} else if !data.Sequences[i].DenyLog.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyLog.IsNull() {
 				data.Sequences[i].DenyLog = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].DenyLog.IsNull() {
 				data.Sequences[i].DenyLog = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].DenyLog = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.log-input"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].DenyLogInput.IsNull() && !data.Sequences[i].DenyLogInput.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].DenyLogInput = types.BoolValue(false)
-			} else if !data.Sequences[i].DenyLogInput.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyLogInput.IsNull() {
 				data.Sequences[i].DenyLogInput = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].DenyLogInput.IsNull() {
 				data.Sequences[i].DenyLogInput = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].DenyLogInput = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.set.qos-group"); value.Exists() && !data.Sequences[i].DenySetQosGroup.IsNull() {
@@ -1557,39 +1496,27 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].DenySetTtl = types.Int64Null()
 		}
 		if value := r.Get("deny.icmp-off"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].DenyIcmpOff.IsNull() && !data.Sequences[i].DenyIcmpOff.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].DenyIcmpOff = types.BoolValue(false)
-			} else if !data.Sequences[i].DenyIcmpOff.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyIcmpOff.IsNull() {
 				data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].DenyIcmpOff.IsNull() {
 				data.Sequences[i].DenyIcmpOff = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].DenyIcmpOff = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("deny.icmp-on"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Sequences[i].DenyIcmpOn.IsNull() && !data.Sequences[i].DenyIcmpOn.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Sequences[i].DenyIcmpOn = types.BoolValue(false)
-			} else if !data.Sequences[i].DenyIcmpOn.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyIcmpOn.IsNull() {
 				data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Sequences[i].DenyIcmpOn.IsNull() {
 				data.Sequences[i].DenyIcmpOn = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Sequences[i].DenyIcmpOn = types.BoolValue(false)
 			}
 		}
 	}
@@ -1604,464 +1531,461 @@ func (data IPv6AccessList) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/access-list-name", data.AccessListName.ValueString())
 	}
 	if len(data.Sequences) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Sequences {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/sequences/sequence[sequence-number='" + strconv.FormatInt(item.SequenceNumber.ValueInt64(), 10) + "']"
 			if !item.SequenceNumber.IsNull() && !item.SequenceNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "sequence-number", strconv.FormatInt(item.SequenceNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/sequence-number", strconv.FormatInt(item.SequenceNumber.ValueInt64(), 10))
 			}
 			if !item.Remark.IsNull() && !item.Remark.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "remark", item.Remark.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/remark", item.Remark.ValueString())
 			}
 			if !item.PermitProtocol.IsNull() && !item.PermitProtocol.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/protocol", item.PermitProtocol.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/protocol", item.PermitProtocol.ValueString())
 			}
 			if !item.PermitEq.IsNull() && !item.PermitEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/eq", item.PermitEq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/eq", item.PermitEq.ValueString())
 			}
 			if !item.PermitPrecedence.IsNull() && !item.PermitPrecedence.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/precedence", item.PermitPrecedence.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/precedence", item.PermitPrecedence.ValueString())
 			}
 			if !item.PermitFragmentType.IsNull() && !item.PermitFragmentType.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/fragment-type", item.PermitFragmentType.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/fragment-type", item.PermitFragmentType.ValueString())
 			}
 			if !item.PermitCounter.IsNull() && !item.PermitCounter.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/counter", item.PermitCounter.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/counter", item.PermitCounter.ValueString())
 			}
 			if !item.PermitRangeStartProtocol.IsNull() && !item.PermitRangeStartProtocol.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/range/start-protocol", item.PermitRangeStartProtocol.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/range/start-protocol", item.PermitRangeStartProtocol.ValueString())
 			}
 			if !item.PermitRangeEndProtocol.IsNull() && !item.PermitRangeEndProtocol.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/range/end-protocol", item.PermitRangeEndProtocol.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/range/end-protocol", item.PermitRangeEndProtocol.ValueString())
 			}
 			if !item.PermitSourceAddress.IsNull() && !item.PermitSourceAddress.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/address", item.PermitSourceAddress.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/address", item.PermitSourceAddress.ValueString())
 			}
 			if !item.PermitSourceWildcardMask.IsNull() && !item.PermitSourceWildcardMask.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/wildcard-mask", item.PermitSourceWildcardMask.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/wildcard-mask", item.PermitSourceWildcardMask.ValueString())
 			}
 			if !item.PermitSourcePrefixLength.IsNull() && !item.PermitSourcePrefixLength.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/prefix-length", strconv.FormatInt(item.PermitSourcePrefixLength.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/prefix-length", strconv.FormatInt(item.PermitSourcePrefixLength.ValueInt64(), 10))
 			}
 			if !item.PermitSourceAny.IsNull() && !item.PermitSourceAny.IsUnknown() {
 				if item.PermitSourceAny.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "permit/source/any", "")
+					body = helpers.SetFromXPath(body, basePath+"/permit/source/any", "")
 				}
 			}
 			if !item.PermitSourceHost.IsNull() && !item.PermitSourceHost.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/host", item.PermitSourceHost.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/host", item.PermitSourceHost.ValueString())
 			}
 			if !item.PermitSourceNetGroup.IsNull() && !item.PermitSourceNetGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/net-group", item.PermitSourceNetGroup.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/net-group", item.PermitSourceNetGroup.ValueString())
 			}
 			if !item.PermitSourcePortGroup.IsNull() && !item.PermitSourcePortGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/port-group", item.PermitSourcePortGroup.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/port-group", item.PermitSourcePortGroup.ValueString())
 			}
 			if !item.PermitSourcePortEq.IsNull() && !item.PermitSourcePortEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/port/eq", item.PermitSourcePortEq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/port/eq", item.PermitSourcePortEq.ValueString())
 			}
 			if !item.PermitSourcePortGt.IsNull() && !item.PermitSourcePortGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/port/gt", item.PermitSourcePortGt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/port/gt", item.PermitSourcePortGt.ValueString())
 			}
 			if !item.PermitSourcePortLt.IsNull() && !item.PermitSourcePortLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/port/lt", item.PermitSourcePortLt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/port/lt", item.PermitSourcePortLt.ValueString())
 			}
 			if !item.PermitSourcePortNeq.IsNull() && !item.PermitSourcePortNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/port/neq", item.PermitSourcePortNeq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/port/neq", item.PermitSourcePortNeq.ValueString())
 			}
 			if !item.PermitSourcePortRangeStart.IsNull() && !item.PermitSourcePortRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/port/range/start-value", item.PermitSourcePortRangeStart.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/port/range/start-value", item.PermitSourcePortRangeStart.ValueString())
 			}
 			if !item.PermitSourcePortRangeEnd.IsNull() && !item.PermitSourcePortRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/source/port/range/end-value", item.PermitSourcePortRangeEnd.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/source/port/range/end-value", item.PermitSourcePortRangeEnd.ValueString())
 			}
 			if !item.PermitDestinationAddress.IsNull() && !item.PermitDestinationAddress.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/address", item.PermitDestinationAddress.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/address", item.PermitDestinationAddress.ValueString())
 			}
 			if !item.PermitDestinationWildcardMask.IsNull() && !item.PermitDestinationWildcardMask.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/wildcard-mask", item.PermitDestinationWildcardMask.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/wildcard-mask", item.PermitDestinationWildcardMask.ValueString())
 			}
 			if !item.PermitDestinationPrefixLength.IsNull() && !item.PermitDestinationPrefixLength.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/prefix-length", strconv.FormatInt(item.PermitDestinationPrefixLength.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/prefix-length", strconv.FormatInt(item.PermitDestinationPrefixLength.ValueInt64(), 10))
 			}
 			if !item.PermitDestinationAny.IsNull() && !item.PermitDestinationAny.IsUnknown() {
 				if item.PermitDestinationAny.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "permit/destination/any", "")
+					body = helpers.SetFromXPath(body, basePath+"/permit/destination/any", "")
 				}
 			}
 			if !item.PermitDestinationHost.IsNull() && !item.PermitDestinationHost.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/host", item.PermitDestinationHost.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/host", item.PermitDestinationHost.ValueString())
 			}
 			if !item.PermitDestinationNetGroup.IsNull() && !item.PermitDestinationNetGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/net-group", item.PermitDestinationNetGroup.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/net-group", item.PermitDestinationNetGroup.ValueString())
 			}
 			if !item.PermitDestinationPortGroup.IsNull() && !item.PermitDestinationPortGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/port-group", item.PermitDestinationPortGroup.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/port-group", item.PermitDestinationPortGroup.ValueString())
 			}
 			if !item.PermitDestinationPortEq.IsNull() && !item.PermitDestinationPortEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/port/eq", item.PermitDestinationPortEq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/port/eq", item.PermitDestinationPortEq.ValueString())
 			}
 			if !item.PermitDestinationPortGt.IsNull() && !item.PermitDestinationPortGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/port/gt", item.PermitDestinationPortGt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/port/gt", item.PermitDestinationPortGt.ValueString())
 			}
 			if !item.PermitDestinationPortLt.IsNull() && !item.PermitDestinationPortLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/port/lt", item.PermitDestinationPortLt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/port/lt", item.PermitDestinationPortLt.ValueString())
 			}
 			if !item.PermitDestinationPortNeq.IsNull() && !item.PermitDestinationPortNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/port/neq", item.PermitDestinationPortNeq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/port/neq", item.PermitDestinationPortNeq.ValueString())
 			}
 			if !item.PermitDestinationPortRangeStart.IsNull() && !item.PermitDestinationPortRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/port/range/start-value", item.PermitDestinationPortRangeStart.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/port/range/start-value", item.PermitDestinationPortRangeStart.ValueString())
 			}
 			if !item.PermitDestinationPortRangeEnd.IsNull() && !item.PermitDestinationPortRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/destination/port/range/end-value", item.PermitDestinationPortRangeEnd.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/destination/port/range/end-value", item.PermitDestinationPortRangeEnd.ValueString())
 			}
 			if !item.PermitIcmpMessageTypeName.IsNull() && !item.PermitIcmpMessageTypeName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/icmp/message-type-name", item.PermitIcmpMessageTypeName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/icmp/message-type-name", item.PermitIcmpMessageTypeName.ValueString())
 			}
 			if !item.PermitIcmpMessageType.IsNull() && !item.PermitIcmpMessageType.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/icmp/message-type", strconv.FormatInt(item.PermitIcmpMessageType.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/icmp/message-type", strconv.FormatInt(item.PermitIcmpMessageType.ValueInt64(), 10))
 			}
 			if !item.PermitIcmpMessageCode.IsNull() && !item.PermitIcmpMessageCode.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/icmp/message-code", strconv.FormatInt(item.PermitIcmpMessageCode.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/icmp/message-code", strconv.FormatInt(item.PermitIcmpMessageCode.ValueInt64(), 10))
 			}
 			if !item.PermitDscp.IsNull() && !item.PermitDscp.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/dscp/dscp-value", item.PermitDscp.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/dscp/dscp-value", item.PermitDscp.ValueString())
 			}
 			if !item.PermitDscpEq.IsNull() && !item.PermitDscpEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/dscp/eq", item.PermitDscpEq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/dscp/eq", item.PermitDscpEq.ValueString())
 			}
 			if !item.PermitDscpGt.IsNull() && !item.PermitDscpGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/dscp/gt", item.PermitDscpGt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/dscp/gt", item.PermitDscpGt.ValueString())
 			}
 			if !item.PermitDscpLt.IsNull() && !item.PermitDscpLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/dscp/lt", item.PermitDscpLt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/dscp/lt", item.PermitDscpLt.ValueString())
 			}
 			if !item.PermitDscpNeq.IsNull() && !item.PermitDscpNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/dscp/neq", item.PermitDscpNeq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/dscp/neq", item.PermitDscpNeq.ValueString())
 			}
 			if !item.PermitDscpRangeStart.IsNull() && !item.PermitDscpRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/dscp/range/start-value", item.PermitDscpRangeStart.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/dscp/range/start-value", item.PermitDscpRangeStart.ValueString())
 			}
 			if !item.PermitDscpRangeEnd.IsNull() && !item.PermitDscpRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/dscp/range/end-value", item.PermitDscpRangeEnd.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/dscp/range/end-value", item.PermitDscpRangeEnd.ValueString())
 			}
 			if !item.PermitPacketLengthEq.IsNull() && !item.PermitPacketLengthEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/packet-length/eq", strconv.FormatInt(item.PermitPacketLengthEq.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/packet-length/eq", strconv.FormatInt(item.PermitPacketLengthEq.ValueInt64(), 10))
 			}
 			if !item.PermitPacketLengthGt.IsNull() && !item.PermitPacketLengthGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/packet-length/gt", strconv.FormatInt(item.PermitPacketLengthGt.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/packet-length/gt", strconv.FormatInt(item.PermitPacketLengthGt.ValueInt64(), 10))
 			}
 			if !item.PermitPacketLengthLt.IsNull() && !item.PermitPacketLengthLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/packet-length/lt", strconv.FormatInt(item.PermitPacketLengthLt.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/packet-length/lt", strconv.FormatInt(item.PermitPacketLengthLt.ValueInt64(), 10))
 			}
 			if !item.PermitPacketLengthNeq.IsNull() && !item.PermitPacketLengthNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/packet-length/neq", strconv.FormatInt(item.PermitPacketLengthNeq.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/packet-length/neq", strconv.FormatInt(item.PermitPacketLengthNeq.ValueInt64(), 10))
 			}
 			if !item.PermitPacketLengthRangeStart.IsNull() && !item.PermitPacketLengthRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/packet-length/range/start-value", strconv.FormatInt(item.PermitPacketLengthRangeStart.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/packet-length/range/start-value", strconv.FormatInt(item.PermitPacketLengthRangeStart.ValueInt64(), 10))
 			}
 			if !item.PermitPacketLengthRangeEnd.IsNull() && !item.PermitPacketLengthRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/packet-length/range/end-value", strconv.FormatInt(item.PermitPacketLengthRangeEnd.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/packet-length/range/end-value", strconv.FormatInt(item.PermitPacketLengthRangeEnd.ValueInt64(), 10))
 			}
 			if !item.PermitTtlEq.IsNull() && !item.PermitTtlEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/ttl/eq", strconv.FormatInt(item.PermitTtlEq.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/ttl/eq", strconv.FormatInt(item.PermitTtlEq.ValueInt64(), 10))
 			}
 			if !item.PermitTtlGt.IsNull() && !item.PermitTtlGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/ttl/gt", strconv.FormatInt(item.PermitTtlGt.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/ttl/gt", strconv.FormatInt(item.PermitTtlGt.ValueInt64(), 10))
 			}
 			if !item.PermitTtlLt.IsNull() && !item.PermitTtlLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/ttl/lt", strconv.FormatInt(item.PermitTtlLt.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/ttl/lt", strconv.FormatInt(item.PermitTtlLt.ValueInt64(), 10))
 			}
 			if !item.PermitTtlNeq.IsNull() && !item.PermitTtlNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/ttl/neq", strconv.FormatInt(item.PermitTtlNeq.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/ttl/neq", strconv.FormatInt(item.PermitTtlNeq.ValueInt64(), 10))
 			}
 			if !item.PermitTtlRangeStart.IsNull() && !item.PermitTtlRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/ttl/range/start-value", strconv.FormatInt(item.PermitTtlRangeStart.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/ttl/range/start-value", strconv.FormatInt(item.PermitTtlRangeStart.ValueInt64(), 10))
 			}
 			if !item.PermitTtlRangeEnd.IsNull() && !item.PermitTtlRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/ttl/range/end-value", strconv.FormatInt(item.PermitTtlRangeEnd.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/ttl/range/end-value", strconv.FormatInt(item.PermitTtlRangeEnd.ValueInt64(), 10))
 			}
 			if !item.PermitPoliceValue.IsNull() && !item.PermitPoliceValue.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/police/value", strconv.FormatInt(item.PermitPoliceValue.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/police/value", strconv.FormatInt(item.PermitPoliceValue.ValueInt64(), 10))
 			}
 			if !item.PermitPoliceUnit.IsNull() && !item.PermitPoliceUnit.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/police/unit", item.PermitPoliceUnit.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/police/unit", item.PermitPoliceUnit.ValueString())
 			}
 			if !item.PermitPolicePeakRate.IsNull() && !item.PermitPolicePeakRate.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/police/peak-rate", strconv.FormatInt(item.PermitPolicePeakRate.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/police/peak-rate", strconv.FormatInt(item.PermitPolicePeakRate.ValueInt64(), 10))
 			}
 			if !item.PermitPolicePeakUnit.IsNull() && !item.PermitPolicePeakUnit.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/police/peak-unit", item.PermitPolicePeakUnit.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/police/peak-unit", item.PermitPolicePeakUnit.ValueString())
 			}
 			if !item.PermitPolicePriority.IsNull() && !item.PermitPolicePriority.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/police/priority", item.PermitPolicePriority.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/police/priority", item.PermitPolicePriority.ValueString())
 			}
 			if !item.PermitNexthop1Ipv6.IsNull() && !item.PermitNexthop1Ipv6.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/nexthop1/ipv6", item.PermitNexthop1Ipv6.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/nexthop1/ipv6", item.PermitNexthop1Ipv6.ValueString())
 			}
 			if !item.PermitNexthop1Track.IsNull() && !item.PermitNexthop1Track.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/nexthop1/track", item.PermitNexthop1Track.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/nexthop1/track", item.PermitNexthop1Track.ValueString())
 			}
 			if !item.PermitNexthop1Vrf.IsNull() && !item.PermitNexthop1Vrf.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/nexthop1/vrf", item.PermitNexthop1Vrf.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/nexthop1/vrf", item.PermitNexthop1Vrf.ValueString())
 			}
 			if !item.PermitNexthop2Ipv6.IsNull() && !item.PermitNexthop2Ipv6.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/nexthop2/ipv6", item.PermitNexthop2Ipv6.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/nexthop2/ipv6", item.PermitNexthop2Ipv6.ValueString())
 			}
 			if !item.PermitNexthop2Track.IsNull() && !item.PermitNexthop2Track.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/nexthop2/track", item.PermitNexthop2Track.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/nexthop2/track", item.PermitNexthop2Track.ValueString())
 			}
 			if !item.PermitNexthop2Vrf.IsNull() && !item.PermitNexthop2Vrf.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/nexthop2/vrf", item.PermitNexthop2Vrf.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/nexthop2/vrf", item.PermitNexthop2Vrf.ValueString())
 			}
 			if !item.PermitNexthop3Ipv6.IsNull() && !item.PermitNexthop3Ipv6.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/nexthop3/ipv6", item.PermitNexthop3Ipv6.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/nexthop3/ipv6", item.PermitNexthop3Ipv6.ValueString())
 			}
 			if !item.PermitNexthop3Track.IsNull() && !item.PermitNexthop3Track.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/nexthop3/track", item.PermitNexthop3Track.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/nexthop3/track", item.PermitNexthop3Track.ValueString())
 			}
 			if !item.PermitNexthop3Vrf.IsNull() && !item.PermitNexthop3Vrf.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/nexthop3/vrf", item.PermitNexthop3Vrf.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/permit/nexthop3/vrf", item.PermitNexthop3Vrf.ValueString())
 			}
 			if !item.PermitCapture.IsNull() && !item.PermitCapture.IsUnknown() {
 				if item.PermitCapture.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "permit/capture", "")
+					body = helpers.SetFromXPath(body, basePath+"/permit/capture", "")
 				}
 			}
 			if !item.PermitLog.IsNull() && !item.PermitLog.IsUnknown() {
 				if item.PermitLog.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "permit/log", "")
+					body = helpers.SetFromXPath(body, basePath+"/permit/log", "")
 				}
 			}
 			if !item.PermitLogInput.IsNull() && !item.PermitLogInput.IsUnknown() {
 				if item.PermitLogInput.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "permit/log-input", "")
+					body = helpers.SetFromXPath(body, basePath+"/permit/log-input", "")
 				}
 			}
 			if !item.PermitSetQosGroup.IsNull() && !item.PermitSetQosGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/set/qos-group", strconv.FormatInt(item.PermitSetQosGroup.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/set/qos-group", strconv.FormatInt(item.PermitSetQosGroup.ValueInt64(), 10))
 			}
 			if !item.PermitSetTtl.IsNull() && !item.PermitSetTtl.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "permit/set/ttl", strconv.FormatInt(item.PermitSetTtl.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/permit/set/ttl", strconv.FormatInt(item.PermitSetTtl.ValueInt64(), 10))
 			}
 			if !item.DenyProtocol.IsNull() && !item.DenyProtocol.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/protocol", item.DenyProtocol.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/protocol", item.DenyProtocol.ValueString())
 			}
 			if !item.DenyEq.IsNull() && !item.DenyEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/eq", item.DenyEq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/eq", item.DenyEq.ValueString())
 			}
 			if !item.DenyPrecedence.IsNull() && !item.DenyPrecedence.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/precedence", item.DenyPrecedence.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/precedence", item.DenyPrecedence.ValueString())
 			}
 			if !item.DenyFragmentType.IsNull() && !item.DenyFragmentType.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/fragment-type", item.DenyFragmentType.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/fragment-type", item.DenyFragmentType.ValueString())
 			}
 			if !item.DenyCounter.IsNull() && !item.DenyCounter.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/counter", item.DenyCounter.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/counter", item.DenyCounter.ValueString())
 			}
 			if !item.DenyRangeStartProtocol.IsNull() && !item.DenyRangeStartProtocol.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/range/start-protocol", item.DenyRangeStartProtocol.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/range/start-protocol", item.DenyRangeStartProtocol.ValueString())
 			}
 			if !item.DenyRangeEndProtocol.IsNull() && !item.DenyRangeEndProtocol.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/range/end-protocol", item.DenyRangeEndProtocol.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/range/end-protocol", item.DenyRangeEndProtocol.ValueString())
 			}
 			if !item.DenySourceAddress.IsNull() && !item.DenySourceAddress.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/address", item.DenySourceAddress.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/address", item.DenySourceAddress.ValueString())
 			}
 			if !item.DenySourceWildcardMask.IsNull() && !item.DenySourceWildcardMask.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/wildcard-mask", item.DenySourceWildcardMask.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/wildcard-mask", item.DenySourceWildcardMask.ValueString())
 			}
 			if !item.DenySourcePrefixLength.IsNull() && !item.DenySourcePrefixLength.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/prefix-length", strconv.FormatInt(item.DenySourcePrefixLength.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/prefix-length", strconv.FormatInt(item.DenySourcePrefixLength.ValueInt64(), 10))
 			}
 			if !item.DenySourceAny.IsNull() && !item.DenySourceAny.IsUnknown() {
 				if item.DenySourceAny.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "deny/source/any", "")
+					body = helpers.SetFromXPath(body, basePath+"/deny/source/any", "")
 				}
 			}
 			if !item.DenySourceHost.IsNull() && !item.DenySourceHost.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/host", item.DenySourceHost.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/host", item.DenySourceHost.ValueString())
 			}
 			if !item.DenySourceNetGroup.IsNull() && !item.DenySourceNetGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/net-group", item.DenySourceNetGroup.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/net-group", item.DenySourceNetGroup.ValueString())
 			}
 			if !item.DenySourcePortGroup.IsNull() && !item.DenySourcePortGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/port-group", item.DenySourcePortGroup.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/port-group", item.DenySourcePortGroup.ValueString())
 			}
 			if !item.DenySourcePortEq.IsNull() && !item.DenySourcePortEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/port/eq", item.DenySourcePortEq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/port/eq", item.DenySourcePortEq.ValueString())
 			}
 			if !item.DenySourcePortGt.IsNull() && !item.DenySourcePortGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/port/gt", item.DenySourcePortGt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/port/gt", item.DenySourcePortGt.ValueString())
 			}
 			if !item.DenySourcePortLt.IsNull() && !item.DenySourcePortLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/port/lt", item.DenySourcePortLt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/port/lt", item.DenySourcePortLt.ValueString())
 			}
 			if !item.DenySourcePortNeq.IsNull() && !item.DenySourcePortNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/port/neq", item.DenySourcePortNeq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/port/neq", item.DenySourcePortNeq.ValueString())
 			}
 			if !item.DenySourcePortRangeStart.IsNull() && !item.DenySourcePortRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/port/range/start-value", item.DenySourcePortRangeStart.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/port/range/start-value", item.DenySourcePortRangeStart.ValueString())
 			}
 			if !item.DenySourcePortRangeEnd.IsNull() && !item.DenySourcePortRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/source/port/range/end-value", item.DenySourcePortRangeEnd.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/source/port/range/end-value", item.DenySourcePortRangeEnd.ValueString())
 			}
 			if !item.DenyDestinationAddress.IsNull() && !item.DenyDestinationAddress.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/address", item.DenyDestinationAddress.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/address", item.DenyDestinationAddress.ValueString())
 			}
 			if !item.DenyDestinationWildcardMask.IsNull() && !item.DenyDestinationWildcardMask.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/wildcard-mask", item.DenyDestinationWildcardMask.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/wildcard-mask", item.DenyDestinationWildcardMask.ValueString())
 			}
 			if !item.DenyDestinationPrefixLength.IsNull() && !item.DenyDestinationPrefixLength.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/prefix-length", strconv.FormatInt(item.DenyDestinationPrefixLength.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/prefix-length", strconv.FormatInt(item.DenyDestinationPrefixLength.ValueInt64(), 10))
 			}
 			if !item.DenyDestinationAny.IsNull() && !item.DenyDestinationAny.IsUnknown() {
 				if item.DenyDestinationAny.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "deny/destination/any", "")
+					body = helpers.SetFromXPath(body, basePath+"/deny/destination/any", "")
 				}
 			}
 			if !item.DenyDestinationHost.IsNull() && !item.DenyDestinationHost.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/host", item.DenyDestinationHost.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/host", item.DenyDestinationHost.ValueString())
 			}
 			if !item.DenyDestinationNetGroup.IsNull() && !item.DenyDestinationNetGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/net-group", item.DenyDestinationNetGroup.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/net-group", item.DenyDestinationNetGroup.ValueString())
 			}
 			if !item.DenyDestinationPortGroup.IsNull() && !item.DenyDestinationPortGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/port-group", item.DenyDestinationPortGroup.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/port-group", item.DenyDestinationPortGroup.ValueString())
 			}
 			if !item.DenyDestinationPortEq.IsNull() && !item.DenyDestinationPortEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/port/eq", item.DenyDestinationPortEq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/port/eq", item.DenyDestinationPortEq.ValueString())
 			}
 			if !item.DenyDestinationPortGt.IsNull() && !item.DenyDestinationPortGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/port/gt", item.DenyDestinationPortGt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/port/gt", item.DenyDestinationPortGt.ValueString())
 			}
 			if !item.DenyDestinationPortLt.IsNull() && !item.DenyDestinationPortLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/port/lt", item.DenyDestinationPortLt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/port/lt", item.DenyDestinationPortLt.ValueString())
 			}
 			if !item.DenyDestinationPortNeq.IsNull() && !item.DenyDestinationPortNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/port/neq", item.DenyDestinationPortNeq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/port/neq", item.DenyDestinationPortNeq.ValueString())
 			}
 			if !item.DenyDestinationPortRangeStart.IsNull() && !item.DenyDestinationPortRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/port/range/start-value", item.DenyDestinationPortRangeStart.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/port/range/start-value", item.DenyDestinationPortRangeStart.ValueString())
 			}
 			if !item.DenyDestinationPortRangeEnd.IsNull() && !item.DenyDestinationPortRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/destination/port/range/end-value", item.DenyDestinationPortRangeEnd.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/destination/port/range/end-value", item.DenyDestinationPortRangeEnd.ValueString())
 			}
 			if !item.DenyIcmpMessageTypeName.IsNull() && !item.DenyIcmpMessageTypeName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/icmp/message-type-name", item.DenyIcmpMessageTypeName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/icmp/message-type-name", item.DenyIcmpMessageTypeName.ValueString())
 			}
 			if !item.DenyIcmpMessageType.IsNull() && !item.DenyIcmpMessageType.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/icmp/message-type", strconv.FormatInt(item.DenyIcmpMessageType.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/icmp/message-type", strconv.FormatInt(item.DenyIcmpMessageType.ValueInt64(), 10))
 			}
 			if !item.DenyIcmpMessageCode.IsNull() && !item.DenyIcmpMessageCode.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/icmp/message-code", strconv.FormatInt(item.DenyIcmpMessageCode.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/icmp/message-code", strconv.FormatInt(item.DenyIcmpMessageCode.ValueInt64(), 10))
 			}
 			if !item.DenyDscp.IsNull() && !item.DenyDscp.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/dscp/dscp-value", item.DenyDscp.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/dscp/dscp-value", item.DenyDscp.ValueString())
 			}
 			if !item.DenyDscpEq.IsNull() && !item.DenyDscpEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/dscp/eq", item.DenyDscpEq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/dscp/eq", item.DenyDscpEq.ValueString())
 			}
 			if !item.DenyDscpGt.IsNull() && !item.DenyDscpGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/dscp/gt", item.DenyDscpGt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/dscp/gt", item.DenyDscpGt.ValueString())
 			}
 			if !item.DenyDscpLt.IsNull() && !item.DenyDscpLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/dscp/lt", item.DenyDscpLt.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/dscp/lt", item.DenyDscpLt.ValueString())
 			}
 			if !item.DenyDscpNeq.IsNull() && !item.DenyDscpNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/dscp/neq", item.DenyDscpNeq.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/dscp/neq", item.DenyDscpNeq.ValueString())
 			}
 			if !item.DenyDscpRangeStart.IsNull() && !item.DenyDscpRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/dscp/range/start-value", item.DenyDscpRangeStart.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/dscp/range/start-value", item.DenyDscpRangeStart.ValueString())
 			}
 			if !item.DenyDscpRangeEnd.IsNull() && !item.DenyDscpRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/dscp/range/end-value", item.DenyDscpRangeEnd.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/dscp/range/end-value", item.DenyDscpRangeEnd.ValueString())
 			}
 			if !item.DenyPacketLengthEq.IsNull() && !item.DenyPacketLengthEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/packet-length/eq", strconv.FormatInt(item.DenyPacketLengthEq.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/packet-length/eq", strconv.FormatInt(item.DenyPacketLengthEq.ValueInt64(), 10))
 			}
 			if !item.DenyPacketLengthGt.IsNull() && !item.DenyPacketLengthGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/packet-length/gt", strconv.FormatInt(item.DenyPacketLengthGt.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/packet-length/gt", strconv.FormatInt(item.DenyPacketLengthGt.ValueInt64(), 10))
 			}
 			if !item.DenyPacketLengthLt.IsNull() && !item.DenyPacketLengthLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/packet-length/lt", strconv.FormatInt(item.DenyPacketLengthLt.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/packet-length/lt", strconv.FormatInt(item.DenyPacketLengthLt.ValueInt64(), 10))
 			}
 			if !item.DenyPacketLengthNeq.IsNull() && !item.DenyPacketLengthNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/packet-length/neq", strconv.FormatInt(item.DenyPacketLengthNeq.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/packet-length/neq", strconv.FormatInt(item.DenyPacketLengthNeq.ValueInt64(), 10))
 			}
 			if !item.DenyPacketLengthRangeStart.IsNull() && !item.DenyPacketLengthRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/packet-length/range/start-value", strconv.FormatInt(item.DenyPacketLengthRangeStart.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/packet-length/range/start-value", strconv.FormatInt(item.DenyPacketLengthRangeStart.ValueInt64(), 10))
 			}
 			if !item.DenyPacketLengthRangeEnd.IsNull() && !item.DenyPacketLengthRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/packet-length/range/end-value", strconv.FormatInt(item.DenyPacketLengthRangeEnd.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/packet-length/range/end-value", strconv.FormatInt(item.DenyPacketLengthRangeEnd.ValueInt64(), 10))
 			}
 			if !item.DenyTtlEq.IsNull() && !item.DenyTtlEq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/ttl/eq", strconv.FormatInt(item.DenyTtlEq.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/ttl/eq", strconv.FormatInt(item.DenyTtlEq.ValueInt64(), 10))
 			}
 			if !item.DenyTtlGt.IsNull() && !item.DenyTtlGt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/ttl/gt", strconv.FormatInt(item.DenyTtlGt.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/ttl/gt", strconv.FormatInt(item.DenyTtlGt.ValueInt64(), 10))
 			}
 			if !item.DenyTtlLt.IsNull() && !item.DenyTtlLt.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/ttl/lt", strconv.FormatInt(item.DenyTtlLt.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/ttl/lt", strconv.FormatInt(item.DenyTtlLt.ValueInt64(), 10))
 			}
 			if !item.DenyTtlNeq.IsNull() && !item.DenyTtlNeq.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/ttl/neq", strconv.FormatInt(item.DenyTtlNeq.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/ttl/neq", strconv.FormatInt(item.DenyTtlNeq.ValueInt64(), 10))
 			}
 			if !item.DenyTtlRangeStart.IsNull() && !item.DenyTtlRangeStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/ttl/range/start-value", strconv.FormatInt(item.DenyTtlRangeStart.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/ttl/range/start-value", strconv.FormatInt(item.DenyTtlRangeStart.ValueInt64(), 10))
 			}
 			if !item.DenyTtlRangeEnd.IsNull() && !item.DenyTtlRangeEnd.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/ttl/range/end-value", strconv.FormatInt(item.DenyTtlRangeEnd.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/ttl/range/end-value", strconv.FormatInt(item.DenyTtlRangeEnd.ValueInt64(), 10))
 			}
 			if !item.DenyPoliceValue.IsNull() && !item.DenyPoliceValue.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/police/value", strconv.FormatInt(item.DenyPoliceValue.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/police/value", strconv.FormatInt(item.DenyPoliceValue.ValueInt64(), 10))
 			}
 			if !item.DenyPoliceUnit.IsNull() && !item.DenyPoliceUnit.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/police/unit", item.DenyPoliceUnit.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/police/unit", item.DenyPoliceUnit.ValueString())
 			}
 			if !item.DenyPolicePeakRate.IsNull() && !item.DenyPolicePeakRate.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/police/peak-rate", strconv.FormatInt(item.DenyPolicePeakRate.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/police/peak-rate", strconv.FormatInt(item.DenyPolicePeakRate.ValueInt64(), 10))
 			}
 			if !item.DenyPolicePeakUnit.IsNull() && !item.DenyPolicePeakUnit.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/police/peak-unit", item.DenyPolicePeakUnit.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/police/peak-unit", item.DenyPolicePeakUnit.ValueString())
 			}
 			if !item.DenyPolicePriority.IsNull() && !item.DenyPolicePriority.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/police/priority", item.DenyPolicePriority.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/deny/police/priority", item.DenyPolicePriority.ValueString())
 			}
 			if !item.DenyCapture.IsNull() && !item.DenyCapture.IsUnknown() {
 				if item.DenyCapture.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "deny/capture", "")
+					body = helpers.SetFromXPath(body, basePath+"/deny/capture", "")
 				}
 			}
 			if !item.DenyLog.IsNull() && !item.DenyLog.IsUnknown() {
 				if item.DenyLog.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "deny/log", "")
+					body = helpers.SetFromXPath(body, basePath+"/deny/log", "")
 				}
 			}
 			if !item.DenyLogInput.IsNull() && !item.DenyLogInput.IsUnknown() {
 				if item.DenyLogInput.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "deny/log-input", "")
+					body = helpers.SetFromXPath(body, basePath+"/deny/log-input", "")
 				}
 			}
 			if !item.DenySetQosGroup.IsNull() && !item.DenySetQosGroup.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/set/qos-group", strconv.FormatInt(item.DenySetQosGroup.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/set/qos-group", strconv.FormatInt(item.DenySetQosGroup.ValueInt64(), 10))
 			}
 			if !item.DenySetTtl.IsNull() && !item.DenySetTtl.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "deny/set/ttl", strconv.FormatInt(item.DenySetTtl.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/deny/set/ttl", strconv.FormatInt(item.DenySetTtl.ValueInt64(), 10))
 			}
 			if !item.DenyIcmpOff.IsNull() && !item.DenyIcmpOff.IsUnknown() {
 				if item.DenyIcmpOff.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "deny/icmp-off", "")
+					body = helpers.SetFromXPath(body, basePath+"/deny/icmp-off", "")
 				}
 			}
 			if !item.DenyIcmpOn.IsNull() && !item.DenyIcmpOn.IsUnknown() {
 				if item.DenyIcmpOn.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "deny/icmp-on", "")
+					body = helpers.SetFromXPath(body, basePath+"/deny/icmp-on", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"sequences/sequence", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -2075,7 +1999,7 @@ func (data IPv6AccessList) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-list-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-list-name"); value.Exists() {
 		data.AccessListName = types.StringValue(value.String())
 	} else if data.AccessListName.IsNull() {
 		data.AccessListName = types.StringNull()
@@ -2085,7 +2009,7 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/sequences/sequence").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sequences/sequence").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2164,7 +2088,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.Sequences[i].PermitSourcePrefixLength = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "permit/source/any"); value.Exists() {
-			data.Sequences[i].PermitSourceAny = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitSourceAny.IsNull() {
+				data.Sequences[i].PermitSourceAny = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2233,7 +2160,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.Sequences[i].PermitDestinationPrefixLength = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "permit/destination/any"); value.Exists() {
-			data.Sequences[i].PermitDestinationAny = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitDestinationAny.IsNull() {
+				data.Sequences[i].PermitDestinationAny = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2467,7 +2397,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.Sequences[i].PermitNexthop3Vrf = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "permit/capture"); value.Exists() {
-			data.Sequences[i].PermitCapture = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitCapture.IsNull() {
+				data.Sequences[i].PermitCapture = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2476,7 +2409,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "permit/log"); value.Exists() {
-			data.Sequences[i].PermitLog = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitLog.IsNull() {
+				data.Sequences[i].PermitLog = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2485,7 +2421,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "permit/log-input"); value.Exists() {
-			data.Sequences[i].PermitLogInput = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].PermitLogInput.IsNull() {
+				data.Sequences[i].PermitLogInput = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2554,7 +2493,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.Sequences[i].DenySourcePrefixLength = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "deny/source/any"); value.Exists() {
-			data.Sequences[i].DenySourceAny = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenySourceAny.IsNull() {
+				data.Sequences[i].DenySourceAny = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2623,7 +2565,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.Sequences[i].DenyDestinationPrefixLength = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "deny/destination/any"); value.Exists() {
-			data.Sequences[i].DenyDestinationAny = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyDestinationAny.IsNull() {
+				data.Sequences[i].DenyDestinationAny = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2812,7 +2757,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.Sequences[i].DenyPolicePriority = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "deny/capture"); value.Exists() {
-			data.Sequences[i].DenyCapture = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyCapture.IsNull() {
+				data.Sequences[i].DenyCapture = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2821,7 +2769,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "deny/log"); value.Exists() {
-			data.Sequences[i].DenyLog = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyLog.IsNull() {
+				data.Sequences[i].DenyLog = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2830,7 +2781,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "deny/log-input"); value.Exists() {
-			data.Sequences[i].DenyLogInput = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyLogInput.IsNull() {
+				data.Sequences[i].DenyLogInput = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2849,7 +2803,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.Sequences[i].DenySetTtl = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "deny/icmp-off"); value.Exists() {
-			data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyIcmpOff.IsNull() {
+				data.Sequences[i].DenyIcmpOff = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2858,7 +2815,10 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "deny/icmp-on"); value.Exists() {
-			data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Sequences[i].DenyIcmpOn.IsNull() {
+				data.Sequences[i].DenyIcmpOn = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2877,6 +2837,10 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv6AccessListSequences, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -2919,8 +2883,9 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("permit.source.any"); cValue.Exists() {
 				item.PermitSourceAny = types.BoolValue(true)
-			} else {
-				item.PermitSourceAny = types.BoolNull()
+			} else if !item.PermitSourceAny.IsNull() {
+				// Only set to false if it was previously set
+				item.PermitSourceAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.source.host"); cValue.Exists() {
 				item.PermitSourceHost = types.StringValue(cValue.String())
@@ -2960,8 +2925,9 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("permit.destination.any"); cValue.Exists() {
 				item.PermitDestinationAny = types.BoolValue(true)
-			} else {
-				item.PermitDestinationAny = types.BoolNull()
+			} else if !item.PermitDestinationAny.IsNull() {
+				// Only set to false if it was previously set
+				item.PermitDestinationAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.destination.host"); cValue.Exists() {
 				item.PermitDestinationHost = types.StringValue(cValue.String())
@@ -3100,18 +3066,21 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("permit.capture"); cValue.Exists() {
 				item.PermitCapture = types.BoolValue(true)
-			} else {
-				item.PermitCapture = types.BoolNull()
+			} else if !item.PermitCapture.IsNull() {
+				// Only set to false if it was previously set
+				item.PermitCapture = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
-			} else {
-				item.PermitLog = types.BoolNull()
+			} else if !item.PermitLog.IsNull() {
+				// Only set to false if it was previously set
+				item.PermitLog = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.log-input"); cValue.Exists() {
 				item.PermitLogInput = types.BoolValue(true)
-			} else {
-				item.PermitLogInput = types.BoolNull()
+			} else if !item.PermitLogInput.IsNull() {
+				// Only set to false if it was previously set
+				item.PermitLogInput = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.set.qos-group"); cValue.Exists() {
 				item.PermitSetQosGroup = types.Int64Value(cValue.Int())
@@ -3151,8 +3120,9 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("deny.source.any"); cValue.Exists() {
 				item.DenySourceAny = types.BoolValue(true)
-			} else {
-				item.DenySourceAny = types.BoolNull()
+			} else if !item.DenySourceAny.IsNull() {
+				// Only set to false if it was previously set
+				item.DenySourceAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.source.host"); cValue.Exists() {
 				item.DenySourceHost = types.StringValue(cValue.String())
@@ -3192,8 +3162,9 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("deny.destination.any"); cValue.Exists() {
 				item.DenyDestinationAny = types.BoolValue(true)
-			} else {
-				item.DenyDestinationAny = types.BoolNull()
+			} else if !item.DenyDestinationAny.IsNull() {
+				// Only set to false if it was previously set
+				item.DenyDestinationAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.destination.host"); cValue.Exists() {
 				item.DenyDestinationHost = types.StringValue(cValue.String())
@@ -3305,18 +3276,21 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("deny.capture"); cValue.Exists() {
 				item.DenyCapture = types.BoolValue(true)
-			} else {
-				item.DenyCapture = types.BoolNull()
+			} else if !item.DenyCapture.IsNull() {
+				// Only set to false if it was previously set
+				item.DenyCapture = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
-			} else {
-				item.DenyLog = types.BoolNull()
+			} else if !item.DenyLog.IsNull() {
+				// Only set to false if it was previously set
+				item.DenyLog = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.log-input"); cValue.Exists() {
 				item.DenyLogInput = types.BoolValue(true)
-			} else {
-				item.DenyLogInput = types.BoolNull()
+			} else if !item.DenyLogInput.IsNull() {
+				// Only set to false if it was previously set
+				item.DenyLogInput = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.set.qos-group"); cValue.Exists() {
 				item.DenySetQosGroup = types.Int64Value(cValue.Int())
@@ -3326,13 +3300,15 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
 				item.DenyIcmpOff = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOff = types.BoolNull()
+			} else if !item.DenyIcmpOff.IsNull() {
+				// Only set to false if it was previously set
+				item.DenyIcmpOff = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
 				item.DenyIcmpOn = types.BoolValue(true)
-			} else {
-				item.DenyIcmpOn = types.BoolNull()
+			} else if !item.DenyIcmpOn.IsNull() {
+				// Only set to false if it was previously set
+				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true
@@ -3344,9 +3320,14 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv6AccessListSequences, 0)
@@ -3391,7 +3372,7 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("permit.source.any"); cValue.Exists() {
 				item.PermitSourceAny = types.BoolValue(true)
 			} else {
-				item.PermitSourceAny = types.BoolNull()
+				item.PermitSourceAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.source.host"); cValue.Exists() {
 				item.PermitSourceHost = types.StringValue(cValue.String())
@@ -3432,7 +3413,7 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("permit.destination.any"); cValue.Exists() {
 				item.PermitDestinationAny = types.BoolValue(true)
 			} else {
-				item.PermitDestinationAny = types.BoolNull()
+				item.PermitDestinationAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.destination.host"); cValue.Exists() {
 				item.PermitDestinationHost = types.StringValue(cValue.String())
@@ -3572,17 +3553,17 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("permit.capture"); cValue.Exists() {
 				item.PermitCapture = types.BoolValue(true)
 			} else {
-				item.PermitCapture = types.BoolNull()
+				item.PermitCapture = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
 			} else {
-				item.PermitLog = types.BoolNull()
+				item.PermitLog = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.log-input"); cValue.Exists() {
 				item.PermitLogInput = types.BoolValue(true)
 			} else {
-				item.PermitLogInput = types.BoolNull()
+				item.PermitLogInput = types.BoolValue(false)
 			}
 			if cValue := v.Get("permit.set.qos-group"); cValue.Exists() {
 				item.PermitSetQosGroup = types.Int64Value(cValue.Int())
@@ -3623,7 +3604,7 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("deny.source.any"); cValue.Exists() {
 				item.DenySourceAny = types.BoolValue(true)
 			} else {
-				item.DenySourceAny = types.BoolNull()
+				item.DenySourceAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.source.host"); cValue.Exists() {
 				item.DenySourceHost = types.StringValue(cValue.String())
@@ -3664,7 +3645,7 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("deny.destination.any"); cValue.Exists() {
 				item.DenyDestinationAny = types.BoolValue(true)
 			} else {
-				item.DenyDestinationAny = types.BoolNull()
+				item.DenyDestinationAny = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.destination.host"); cValue.Exists() {
 				item.DenyDestinationHost = types.StringValue(cValue.String())
@@ -3777,17 +3758,17 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("deny.capture"); cValue.Exists() {
 				item.DenyCapture = types.BoolValue(true)
 			} else {
-				item.DenyCapture = types.BoolNull()
+				item.DenyCapture = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
 			} else {
-				item.DenyLog = types.BoolNull()
+				item.DenyLog = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.log-input"); cValue.Exists() {
 				item.DenyLogInput = types.BoolValue(true)
 			} else {
-				item.DenyLogInput = types.BoolNull()
+				item.DenyLogInput = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.set.qos-group"); cValue.Exists() {
 				item.DenySetQosGroup = types.Int64Value(cValue.Int())
@@ -3798,12 +3779,12 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
 				item.DenyIcmpOff = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOff = types.BoolNull()
+				item.DenyIcmpOff = types.BoolValue(false)
 			}
 			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
 				item.DenyIcmpOn = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOn = types.BoolNull()
+				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true
@@ -3815,7 +3796,7 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sequences/sequence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sequences/sequence"); value.Exists() {
 		data.Sequences = make([]IPv6AccessListSequences, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := IPv6AccessListSequences{}
@@ -3858,7 +3839,7 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "permit/source/any"); cValue.Exists() {
 				item.PermitSourceAny = types.BoolValue(true)
 			} else {
-				item.PermitSourceAny = types.BoolNull()
+				item.PermitSourceAny = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "permit/source/host"); cValue.Exists() {
 				item.PermitSourceHost = types.StringValue(cValue.String())
@@ -3899,7 +3880,7 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "permit/destination/any"); cValue.Exists() {
 				item.PermitDestinationAny = types.BoolValue(true)
 			} else {
-				item.PermitDestinationAny = types.BoolNull()
+				item.PermitDestinationAny = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "permit/destination/host"); cValue.Exists() {
 				item.PermitDestinationHost = types.StringValue(cValue.String())
@@ -4039,17 +4020,17 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "permit/capture"); cValue.Exists() {
 				item.PermitCapture = types.BoolValue(true)
 			} else {
-				item.PermitCapture = types.BoolNull()
+				item.PermitCapture = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "permit/log"); cValue.Exists() {
 				item.PermitLog = types.BoolValue(true)
 			} else {
-				item.PermitLog = types.BoolNull()
+				item.PermitLog = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "permit/log-input"); cValue.Exists() {
 				item.PermitLogInput = types.BoolValue(true)
 			} else {
-				item.PermitLogInput = types.BoolNull()
+				item.PermitLogInput = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "permit/set/qos-group"); cValue.Exists() {
 				item.PermitSetQosGroup = types.Int64Value(cValue.Int())
@@ -4090,7 +4071,7 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "deny/source/any"); cValue.Exists() {
 				item.DenySourceAny = types.BoolValue(true)
 			} else {
-				item.DenySourceAny = types.BoolNull()
+				item.DenySourceAny = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/source/host"); cValue.Exists() {
 				item.DenySourceHost = types.StringValue(cValue.String())
@@ -4131,7 +4112,7 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "deny/destination/any"); cValue.Exists() {
 				item.DenyDestinationAny = types.BoolValue(true)
 			} else {
-				item.DenyDestinationAny = types.BoolNull()
+				item.DenyDestinationAny = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/destination/host"); cValue.Exists() {
 				item.DenyDestinationHost = types.StringValue(cValue.String())
@@ -4244,17 +4225,17 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "deny/capture"); cValue.Exists() {
 				item.DenyCapture = types.BoolValue(true)
 			} else {
-				item.DenyCapture = types.BoolNull()
+				item.DenyCapture = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/log"); cValue.Exists() {
 				item.DenyLog = types.BoolValue(true)
 			} else {
-				item.DenyLog = types.BoolNull()
+				item.DenyLog = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/log-input"); cValue.Exists() {
 				item.DenyLogInput = types.BoolValue(true)
 			} else {
-				item.DenyLogInput = types.BoolNull()
+				item.DenyLogInput = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/set/qos-group"); cValue.Exists() {
 				item.DenySetQosGroup = types.Int64Value(cValue.Int())
@@ -4265,12 +4246,12 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "deny/icmp-off"); cValue.Exists() {
 				item.DenyIcmpOff = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOff = types.BoolNull()
+				item.DenyIcmpOff = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/icmp-on"); cValue.Exists() {
 				item.DenyIcmpOn = types.BoolValue(true)
 			} else {
-				item.DenyIcmpOn = types.BoolNull()
+				item.DenyIcmpOn = types.BoolValue(false)
 			}
 			data.Sequences = append(data.Sequences, item)
 			return true
@@ -4282,7 +4263,7 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sequences/sequence"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sequences/sequence"); value.Exists() {
 		data.Sequences = make([]IPv6AccessListSequences, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := IPv6AccessListSequences{}
@@ -5315,9 +5296,10 @@ func (data *IPv6AccessList) getEmptyLeafsDelete(ctx context.Context, state *IPv6
 func (data *IPv6AccessList) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Sequences {
-		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sequences/sequence=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[sequence-number=" + strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sequences/sequence%v", data.getPath(), keyPath))
 	}
 
 	return deletePaths

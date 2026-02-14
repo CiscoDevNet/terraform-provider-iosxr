@@ -36,6 +36,15 @@ func Contains(s []string, str string) bool {
 	return false
 }
 
+// GetValueSlice converts a slice of gjson.Result to a slice of Terraform attr.Value.
+func GetValueSlice(result []gjson.Result) []attr.Value {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.StringValue(result[r].String())
+	}
+	return v
+}
+
 func GetStringList(result []gjson.Result) types.List {
 	v := make([]attr.Value, len(result))
 	for r := range result {

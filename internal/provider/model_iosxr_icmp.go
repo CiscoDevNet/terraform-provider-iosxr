@@ -139,71 +139,77 @@ func (data ICMP) toBody(ctx context.Context) string {
 
 func (data *ICMP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.source.vrf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4SourceVrf.IsNull() {
 			data.Ipv4SourceVrf = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4SourceVrf.IsNull() {
 			data.Ipv4SourceVrf = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ipv4.source.rfc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4SourceRfc.IsNull() {
 			data.Ipv4SourceRfc = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4SourceRfc.IsNull() {
 			data.Ipv4SourceRfc = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableRate.IsNull() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.Ipv4RateLimitUnreachableRate.IsNull() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4RateLimitUnreachableDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableDfRate.IsNull() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.Ipv4RateLimitUnreachableDfRate.IsNull() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ipv6.source.vrf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6SourceVrf.IsNull() {
 			data.Ipv6SourceVrf = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6SourceVrf.IsNull() {
 			data.Ipv6SourceVrf = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ipv6.source.rfc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6SourceRfc.IsNull() {
 			data.Ipv6SourceRfc = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6SourceRfc.IsNull() {
 			data.Ipv6SourceRfc = types.BoolNull()
 		}
@@ -262,58 +268,76 @@ func (data ICMP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *ICMP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/source/vrf"); value.Exists() {
-		data.Ipv4SourceVrf = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/vrf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4SourceVrf.IsNull() {
+			data.Ipv4SourceVrf = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4SourceVrf.IsNull() {
 			data.Ipv4SourceVrf = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/source/rfc"); value.Exists() {
-		data.Ipv4SourceRfc = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/rfc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4SourceRfc.IsNull() {
+			data.Ipv4SourceRfc = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4SourceRfc.IsNull() {
 			data.Ipv4SourceRfc = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
 	} else if data.Ipv4RateLimitUnreachableRate.IsNull() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/disable"); value.Exists() {
-		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
+			data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4RateLimitUnreachableDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
 	} else if data.Ipv4RateLimitUnreachableDfRate.IsNull() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable"); value.Exists() {
-		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+			data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/source/vrf"); value.Exists() {
-		data.Ipv6SourceVrf = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/vrf"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6SourceVrf.IsNull() {
+			data.Ipv6SourceVrf = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6SourceVrf.IsNull() {
 			data.Ipv6SourceVrf = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/source/rfc"); value.Exists() {
-		data.Ipv6SourceRfc = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/rfc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6SourceRfc.IsNull() {
+			data.Ipv6SourceRfc = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6SourceRfc.IsNull() {
@@ -330,41 +354,51 @@ func (data *ICMP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "ipv4.source.vrf"); value.Exists() {
 		data.Ipv4SourceVrf = types.BoolValue(true)
-	} else {
-		data.Ipv4SourceVrf = types.BoolNull()
+	} else if !data.Ipv4SourceVrf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4SourceVrf = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv4.source.rfc"); value.Exists() {
 		data.Ipv4SourceRfc = types.BoolValue(true)
-	} else {
-		data.Ipv4SourceRfc = types.BoolNull()
+	} else if !data.Ipv4SourceRfc.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4SourceRfc = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
-	} else {
-		data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
+	} else if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
-	} else {
-		data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
+	} else if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv6.source.vrf"); value.Exists() {
 		data.Ipv6SourceVrf = types.BoolValue(true)
-	} else {
-		data.Ipv6SourceVrf = types.BoolNull()
+	} else if !data.Ipv6SourceVrf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv6SourceVrf = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv6.source.rfc"); value.Exists() {
 		data.Ipv6SourceRfc = types.BoolValue(true)
-	} else {
-		data.Ipv6SourceRfc = types.BoolNull()
+	} else if !data.Ipv6SourceRfc.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv6SourceRfc = types.BoolValue(false)
 	}
 }
 
@@ -372,19 +406,24 @@ func (data *ICMP) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *ICMPData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "ipv4.source.vrf"); value.Exists() {
 		data.Ipv4SourceVrf = types.BoolValue(true)
 	} else {
-		data.Ipv4SourceVrf = types.BoolNull()
+		data.Ipv4SourceVrf = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv4.source.rfc"); value.Exists() {
 		data.Ipv4SourceRfc = types.BoolValue(true)
 	} else {
-		data.Ipv4SourceRfc = types.BoolNull()
+		data.Ipv4SourceRfc = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
@@ -392,7 +431,7 @@ func (data *ICMPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
 	} else {
-		data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
@@ -400,17 +439,17 @@ func (data *ICMPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
 	} else {
-		data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv6.source.vrf"); value.Exists() {
 		data.Ipv6SourceVrf = types.BoolValue(true)
 	} else {
-		data.Ipv6SourceVrf = types.BoolNull()
+		data.Ipv6SourceVrf = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv6.source.rfc"); value.Exists() {
 		data.Ipv6SourceRfc = types.BoolValue(true)
 	} else {
-		data.Ipv6SourceRfc = types.BoolNull()
+		data.Ipv6SourceRfc = types.BoolValue(false)
 	}
 }
 
@@ -418,41 +457,41 @@ func (data *ICMPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *ICMP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/source/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/vrf"); value.Exists() {
 		data.Ipv4SourceVrf = types.BoolValue(true)
 	} else {
-		data.Ipv4SourceVrf = types.BoolNull()
+		data.Ipv4SourceVrf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/source/rfc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/rfc"); value.Exists() {
 		data.Ipv4SourceRfc = types.BoolValue(true)
 	} else {
-		data.Ipv4SourceRfc = types.BoolNull()
+		data.Ipv4SourceRfc = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
 	} else {
-		data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
 	} else {
-		data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/source/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/vrf"); value.Exists() {
 		data.Ipv6SourceVrf = types.BoolValue(true)
 	} else {
-		data.Ipv6SourceVrf = types.BoolNull()
+		data.Ipv6SourceVrf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/source/rfc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/rfc"); value.Exists() {
 		data.Ipv6SourceRfc = types.BoolValue(true)
 	} else {
-		data.Ipv6SourceRfc = types.BoolNull()
+		data.Ipv6SourceRfc = types.BoolValue(false)
 	}
 }
 
@@ -460,38 +499,38 @@ func (data *ICMP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *ICMPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/source/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/vrf"); value.Exists() {
 		data.Ipv4SourceVrf = types.BoolValue(true)
 	} else {
 		data.Ipv4SourceVrf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/source/rfc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/source/rfc"); value.Exists() {
 		data.Ipv4SourceRfc = types.BoolValue(true)
 	} else {
 		data.Ipv4SourceRfc = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
 	} else {
 		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/rate"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/rate-limit/unreachable/df/disable"); value.Exists() {
 		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
 	} else {
 		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/source/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/vrf"); value.Exists() {
 		data.Ipv6SourceVrf = types.BoolValue(true)
 	} else {
 		data.Ipv6SourceVrf = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/source/rfc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/source/rfc"); value.Exists() {
 		data.Ipv6SourceRfc = types.BoolValue(true)
 	} else {
 		data.Ipv6SourceRfc = types.BoolValue(false)

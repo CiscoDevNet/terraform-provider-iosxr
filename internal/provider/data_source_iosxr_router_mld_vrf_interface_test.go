@@ -66,10 +66,8 @@ func TestAccDataSourceIosxrRouterMLDVRFInterface(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterMLDVRFInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-mld-cfg:/router/mld"
-	attributes = {
-	}
 }
 
 `
@@ -107,7 +105,7 @@ func testAccDataSourceIosxrRouterMLDVRFInterfaceConfig() string {
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	dvmrp_enable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

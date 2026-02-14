@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -113,6 +113,24 @@ func TestAccIosxrRouterStaticIPv6Multicast(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterStaticIPv6MulticastImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		PrefixAddress := primary.Attributes["prefix_address"]
+		PrefixLength := primary.Attributes["prefix_length"]
+
+		return fmt.Sprintf("%s,%s", PrefixAddress, PrefixLength), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrRouterStaticIPv6MulticastConfig_minimum() string {
@@ -208,19 +226,3 @@ func testAccIosxrRouterStaticIPv6MulticastConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrRouterStaticIPv6MulticastImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		PrefixAddress := primary.Attributes["prefix_address"]
-		PrefixLength := primary.Attributes["prefix_length"]
-
-		return fmt.Sprintf("%s,%s", PrefixAddress, PrefixLength), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-
-// End of section. //template:end testPrerequisites

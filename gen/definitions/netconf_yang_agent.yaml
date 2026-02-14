@@ -2,6 +2,7 @@
 name: Netconf Yang Agent
 path: Cisco-IOS-XR-um-netconf-yang-cfg:/netconf-yang/agent
 doc_category: Management
+no_delete: true
 attributes:
   - yang_name: ssh
     tf_name: ssh

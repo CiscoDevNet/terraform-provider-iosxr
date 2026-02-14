@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -99,7 +98,6 @@ func (data SegmentRoutingMappingServer) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.ValueString())
 			}
 			if len(item.PrefixAddresses) > 0 {
-				body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"prefix-address", []interface{}{})
 				for cindex, citem := range item.PrefixAddresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"prefix-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -158,53 +156,59 @@ func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res
 		} else {
 			data.MappingPrefixSidAddressFamily[i].AfName = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("prefix-address"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.MappingPrefixSidAddressFamily[i].PrefixAddresses
-			data.MappingPrefixSidAddressFamily[i].PrefixAddresses = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamilyPrefixAddresses, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := SegmentRoutingMappingServerMappingPrefixSidAddressFamilyPrefixAddresses{}
-				if cValue := cr.Get("address"); cValue.Exists() {
-					citem.Address = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("length"); cValue.Exists() {
-					citem.Length = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("sid-index"); cValue.Exists() {
-					citem.SidIndex = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("range"); cValue.Exists() {
-					citem.Range = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("attached"); cValue.Exists() {
-					citem.Attached = types.BoolValue(true)
-				} else {
-					citem.Attached = types.BoolValue(false)
-				}
+		for ci := range data.MappingPrefixSidAddressFamily[i].PrefixAddresses {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString()}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.Address.ValueString() != citem.Address.ValueString() {
-						match = false
-					}
-					if existingItem.Length.ValueString() != citem.Length.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
-						if !citem.Attached.ValueBool() && existingItem.Attached.ValueBool() == false {
-							citem.Attached = existingItem.Attached
+			var cr gjson.Result
+			r.Get("prefix-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("address"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.IsNull() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address = types.StringValue(value.String())
+			} else {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address = types.StringNull()
+			}
+			if value := cr.Get("length"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.IsNull() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length = types.StringValue(value.String())
+			} else {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length = types.StringNull()
+			}
+			if value := cr.Get("sid-index"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Value(value.Int())
+			} else {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Null()
+			}
+			if value := cr.Get("range"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Value(value.Int())
+			} else {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Null()
+			}
+			if value := cr.Get("attached"); value.Exists() {
+				if !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
+					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolValue(true)
 				}
-
-				data.MappingPrefixSidAddressFamily[i].PrefixAddresses = append(data.MappingPrefixSidAddressFamily[i].PrefixAddresses, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
+					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolNull()
+				}
+			}
 		}
 	}
 }
@@ -215,37 +219,33 @@ func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res
 func (data SegmentRoutingMappingServer) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if len(data.MappingPrefixSidAddressFamily) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MappingPrefixSidAddressFamily {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/prefix-sid-map/address-families/address-family[af-name='" + item.AfName.ValueString() + "']"
 			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "af-name", item.AfName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/af-name", item.AfName.ValueString())
 			}
 			if len(item.PrefixAddresses) > 0 {
 				for _, citem := range item.PrefixAddresses {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/prefix-address[address='" + citem.Address.ValueString() + "' and length='" + citem.Length.ValueString() + "']"
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "address", citem.Address.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
 					}
 					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "length", citem.Length.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/length", citem.Length.ValueString())
 					}
 					if !citem.SidIndex.IsNull() && !citem.SidIndex.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "sid-index", strconv.FormatInt(citem.SidIndex.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/sid-index", strconv.FormatInt(citem.SidIndex.ValueInt64(), 10))
 					}
 					if !citem.Range.IsNull() && !citem.Range.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "range", strconv.FormatInt(citem.Range.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/range", strconv.FormatInt(citem.Range.ValueInt64(), 10))
 					}
 					if !citem.Attached.IsNull() && !citem.Attached.IsUnknown() {
 						if citem.Attached.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "attached", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/attached", "")
 						}
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "prefix-address", ccBody.Res())
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"prefix-sid-map/address-families/address-family", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -264,7 +264,7 @@ func (data *SegmentRoutingMappingServer) updateFromBodyXML(ctx context.Context, 
 		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid-map/address-families/address-family").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid-map/address-families/address-family").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -287,57 +287,61 @@ func (data *SegmentRoutingMappingServer) updateFromBodyXML(ctx context.Context, 
 		} else if data.MappingPrefixSidAddressFamily[i].AfName.IsNull() {
 			data.MappingPrefixSidAddressFamily[i].AfName = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "prefix-address"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.MappingPrefixSidAddressFamily[i].PrefixAddresses
-			data.MappingPrefixSidAddressFamily[i].PrefixAddresses = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamilyPrefixAddresses, 0)
+		for ci := range data.MappingPrefixSidAddressFamily[i].PrefixAddresses {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.ValueString(), data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.ValueString()}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := SegmentRoutingMappingServerMappingPrefixSidAddressFamilyPrefixAddresses{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "address"); cValue.Exists() {
-					citem.Address = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "length"); cValue.Exists() {
-					citem.Length = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "sid-index"); cValue.Exists() {
-					citem.SidIndex = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "range"); cValue.Exists() {
-					citem.Range = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "attached"); cValue.Exists() {
-					citem.Attached = types.BoolValue(true)
-				} else {
-					citem.Attached = types.BoolValue(false)
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.Address.ValueString() != citem.Address.ValueString() {
-						match = false
-					}
-					if existingItem.Length.ValueString() != citem.Length.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
-						// For presence-based boolean, if device doesn't have it and state was false, keep false
-						if !citem.Attached.ValueBool() && existingItem.Attached.ValueBool() == false {
-							citem.Attached = existingItem.Attached
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "prefix-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
 						}
+						found = false
 						break
 					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "sid-index"); value.Exists() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Value(value.Int())
+			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "range"); value.Exists() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Value(value.Int())
+			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() {
+				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "attached"); value.Exists() {
+				if !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
+					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolValue(true)
 				}
-
-				data.MappingPrefixSidAddressFamily[i].PrefixAddresses = append(data.MappingPrefixSidAddressFamily[i].PrefixAddresses, citem)
-				return true
-			})
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() {
+					data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached = types.BoolNull()
+				}
+			}
 		}
 	}
 }
@@ -349,6 +353,10 @@ func (data *SegmentRoutingMappingServer) fromBody(ctx context.Context, res gjson
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "prefix-sid-map.address-families.address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
@@ -375,8 +383,9 @@ func (data *SegmentRoutingMappingServer) fromBody(ctx context.Context, res gjson
 					}
 					if ccValue := cv.Get("attached"); ccValue.Exists() {
 						cItem.Attached = types.BoolValue(true)
-					} else {
-						cItem.Attached = types.BoolNull()
+					} else if !cItem.Attached.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Attached = types.BoolValue(false)
 					}
 					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
 					return true
@@ -392,9 +401,14 @@ func (data *SegmentRoutingMappingServer) fromBody(ctx context.Context, res gjson
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *SegmentRoutingMappingServerData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "prefix-sid-map.address-families.address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
@@ -422,7 +436,7 @@ func (data *SegmentRoutingMappingServerData) fromBody(ctx context.Context, res g
 					if ccValue := cv.Get("attached"); ccValue.Exists() {
 						cItem.Attached = types.BoolValue(true)
 					} else {
-						cItem.Attached = types.BoolNull()
+						cItem.Attached = types.BoolValue(false)
 					}
 					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
 					return true
@@ -438,7 +452,7 @@ func (data *SegmentRoutingMappingServerData) fromBody(ctx context.Context, res g
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *SegmentRoutingMappingServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingMappingServerMappingPrefixSidAddressFamily{}
@@ -462,13 +476,10 @@ func (data *SegmentRoutingMappingServer) fromBodyXML(ctx context.Context, res xm
 						cItem.Range = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "attached"); ccValue.Exists() {
-
 						cItem.Attached = types.BoolValue(true)
-
 					} else {
 						cItem.Attached = types.BoolValue(false)
 					}
-
 					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
 					return true
 				})
@@ -483,7 +494,7 @@ func (data *SegmentRoutingMappingServer) fromBodyXML(ctx context.Context, res xm
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *SegmentRoutingMappingServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingMappingServerMappingPrefixSidAddressFamily{}
@@ -509,6 +520,7 @@ func (data *SegmentRoutingMappingServerData) fromBodyXML(ctx context.Context, re
 					if ccValue := helpers.GetFromXPath(cv, "attached"); ccValue.Exists() {
 						cItem.Attached = types.BoolValue(true)
 					} else {
+						cItem.Attached = types.BoolValue(false)
 					}
 					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
 					return true
@@ -640,9 +652,10 @@ func (data *SegmentRoutingMappingServer) getEmptyLeafsDelete(ctx context.Context
 func (data *SegmentRoutingMappingServer) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.MappingPrefixSidAddressFamily {
-		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[af-name=" + data.MappingPrefixSidAddressFamily[i].AfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v", data.getPath(), keyPath))
 	}
 
 	return deletePaths

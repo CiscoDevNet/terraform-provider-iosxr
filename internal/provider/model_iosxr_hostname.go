@@ -106,7 +106,7 @@ func (data Hostname) toBodyXML(ctx context.Context) string {
 func (data *Hostname) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() && !data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringValue(value.String())
-	} else {
+	} else if data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringNull()
 	}
 }
@@ -116,7 +116,7 @@ func (data *Hostname) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *Hostname) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-network-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	} else if data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringNull()
@@ -131,6 +131,10 @@ func (data *Hostname) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	}
@@ -140,9 +144,14 @@ func (data *Hostname) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *HostnameData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
@@ -153,7 +162,7 @@ func (data *HostnameData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Hostname) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-network-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	}
 }
@@ -162,7 +171,7 @@ func (data *Hostname) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *HostnameData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/system-network-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	}
 }

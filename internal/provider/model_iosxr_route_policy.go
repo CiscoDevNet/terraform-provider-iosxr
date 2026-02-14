@@ -116,7 +116,7 @@ func (data RoutePolicy) toBodyXML(ctx context.Context) string {
 func (data *RoutePolicy) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-route-policy"); value.Exists() && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
-	} else {
+	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
 }
@@ -126,13 +126,13 @@ func (data *RoutePolicy) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RoutePolicy) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/route-policy-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/route-policy-name"); value.Exists() {
 		data.RoutePolicyName = types.StringValue(value.String())
 	} else if data.RoutePolicyName.IsNull() {
 		data.RoutePolicyName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-route-policy"); value.Exists() {
-		data.Rpl = types.StringValue(value.Raw)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-route-policy"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
 	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
@@ -146,6 +146,10 @@ func (data *RoutePolicy) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "rpl-route-policy"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
@@ -155,9 +159,14 @@ func (data *RoutePolicy) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RoutePolicyData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "rpl-route-policy"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
@@ -168,8 +177,8 @@ func (data *RoutePolicyData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RoutePolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-route-policy"); value.Exists() {
-		data.Rpl = types.StringValue(value.Raw)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-route-policy"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
@@ -177,8 +186,8 @@ func (data *RoutePolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RoutePolicyData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rpl-route-policy"); value.Exists() {
-		data.Rpl = types.StringValue(value.Raw)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-route-policy"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 

@@ -26,7 +26,6 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -529,7 +528,6 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 				body, _ = sjson.Set(body, "generic-metric.flex-algo-levels.flex-algo-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if len(item.FlexAlgosTypes) > 0 {
-				body, _ = sjson.Set(body, "generic-metric.flex-algo-levels.flex-algo-level"+"."+strconv.Itoa(index)+"."+"types.type", []interface{}{})
 				for cindex, citem := range item.FlexAlgosTypes {
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
 						body, _ = sjson.Set(body, "generic-metric.flex-algo-levels.flex-algo-level"+"."+strconv.Itoa(index)+"."+"types.type"+"."+strconv.Itoa(cindex)+"."+"type-number", strconv.FormatInt(citem.Type.ValueInt64(), 10))
@@ -794,18 +792,19 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 
 func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "metric.maximum"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MetricMaximum.IsNull() {
 			data.MetricMaximum = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MetricMaximum.IsNull() {
 			data.MetricMaximum = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "metric.default-metric"); value.Exists() && !data.MetricDefault.IsNull() {
 		data.MetricDefault = types.Int64Value(value.Int())
-	} else {
+	} else if data.MetricDefault.IsNull() {
 		data.MetricDefault = types.Int64Null()
 	}
 	for i := range data.MetricLevels {
@@ -842,27 +841,21 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 			data.MetricLevels[i].MetricDefault = types.Int64Null()
 		}
 		if value := r.Get("maximum"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.MetricLevels[i].MetricMaximum.IsNull() && !data.MetricLevels[i].MetricMaximum.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.MetricLevels[i].MetricMaximum = types.BoolValue(false)
-			} else if !data.MetricLevels[i].MetricMaximum.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MetricLevels[i].MetricMaximum.IsNull() {
 				data.MetricLevels[i].MetricMaximum = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MetricLevels[i].MetricMaximum.IsNull() {
 				data.MetricLevels[i].MetricMaximum = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.MetricLevels[i].MetricMaximum = types.BoolValue(false)
 			}
 		}
 	}
 	if value := gjson.GetBytes(res, "te-metric.flex-algo"); value.Exists() && !data.TeMetricFlexAlgo.IsNull() {
 		data.TeMetricFlexAlgo = types.Int64Value(value.Int())
-	} else {
+	} else if data.TeMetricFlexAlgo.IsNull() {
 		data.TeMetricFlexAlgo = types.Int64Null()
 	}
 	for i := range data.TeMetricFlexAlgoLevels {
@@ -901,7 +894,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 	if value := gjson.GetBytes(res, "bandwidth-metric.flex-algo"); value.Exists() && !data.BandwidthMetricFlexAlgo.IsNull() {
 		data.BandwidthMetricFlexAlgo = types.Int64Value(value.Int())
-	} else {
+	} else if data.BandwidthMetricFlexAlgo.IsNull() {
 		data.BandwidthMetricFlexAlgo = types.Int64Null()
 	}
 	for i := range data.BandwidthMetricFlexAlgoLevels {
@@ -1000,56 +993,60 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 		} else {
 			data.GenericMetricFlexAlgoLevels[i].LevelNumber = types.Int64Null()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("types.type"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes
-			data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes{}
-				if cValue := cr.Get("type-number"); cValue.Exists() {
-					citem.Type = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("flex-algo-metric-value"); cValue.Exists() {
-					citem.Metric = types.Int64Value(cValue.Int())
-				}
+		for ci := range data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes {
+			keys := [...]string{"type-number"}
+			keyValues := [...]string{strconv.FormatInt(data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type.ValueInt64(), 10)}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Type.Equal(citem.Type) {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("types.type").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes = append(data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("type-number"); value.Exists() && !data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type.IsNull() {
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type = types.Int64Value(value.Int())
+			} else {
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type = types.Int64Null()
+			}
+			if value := cr.Get("flex-algo-metric-value"); value.Exists() && !data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric.IsNull() {
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric = types.Int64Value(value.Int())
+			} else {
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric = types.Int64Null()
+			}
 		}
 	}
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MplsLdpSync.IsNull() {
 			data.MplsLdpSync = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MplsLdpSync.IsNull() {
 			data.MplsLdpSync = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "mpls.ldp.sync.level"); value.Exists() && !data.MplsLdpSyncLevel.IsNull() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
-	} else {
+	} else if data.MplsLdpSyncLevel.IsNull() {
 		data.MplsLdpSyncLevel = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "tag"); value.Exists() && !data.Tag.IsNull() {
 		data.Tag = types.Int64Value(value.Int())
-	} else {
+	} else if data.Tag.IsNull() {
 		data.Tag = types.Int64Null()
 	}
 	for i := range data.TagLevels {
@@ -1088,140 +1085,152 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.index.index-id"); value.Exists() && !data.PrefixSidStrictSpfIndexId.IsNull() {
 		data.PrefixSidStrictSpfIndexId = types.Int64Value(value.Int())
-	} else {
+	} else if data.PrefixSidStrictSpfIndexId.IsNull() {
 		data.PrefixSidStrictSpfIndexId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.index.php-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidStrictSpfIndexPhpDisable.IsNull() {
 			data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfIndexPhpDisable.IsNull() {
 			data.PrefixSidStrictSpfIndexPhpDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.index.explicit-null"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidStrictSpfIndexExplicitNull.IsNull() {
 			data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfIndexExplicitNull.IsNull() {
 			data.PrefixSidStrictSpfIndexExplicitNull = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.index.n-flag-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidStrictSpfIndexNFlagClear.IsNull() {
 			data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfIndexNFlagClear.IsNull() {
 			data.PrefixSidStrictSpfIndexNFlagClear = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.absolute.absolute-id"); value.Exists() && !data.PrefixSidStrictSpfAbsoluteId.IsNull() {
 		data.PrefixSidStrictSpfAbsoluteId = types.Int64Value(value.Int())
-	} else {
+	} else if data.PrefixSidStrictSpfAbsoluteId.IsNull() {
 		data.PrefixSidStrictSpfAbsoluteId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.absolute.php-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidStrictSpfAbsolutePhpDisable.IsNull() {
 			data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfAbsolutePhpDisable.IsNull() {
 			data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.absolute.explicit-null"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidStrictSpfAbsoluteExplicitNull.IsNull() {
 			data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfAbsoluteExplicitNull.IsNull() {
 			data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.absolute.n-flag-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidStrictSpfAbsoluteNFlagClear.IsNull() {
 			data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfAbsoluteNFlagClear.IsNull() {
 			data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.index.index-id"); value.Exists() && !data.PrefixSidIndexId.IsNull() {
 		data.PrefixSidIndexId = types.Int64Value(value.Int())
-	} else {
+	} else if data.PrefixSidIndexId.IsNull() {
 		data.PrefixSidIndexId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.index.php-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidIndexPhpDisable.IsNull() {
 			data.PrefixSidIndexPhpDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidIndexPhpDisable.IsNull() {
 			data.PrefixSidIndexPhpDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.index.explicit-null"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidIndexExplicitNull.IsNull() {
 			data.PrefixSidIndexExplicitNull = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidIndexExplicitNull.IsNull() {
 			data.PrefixSidIndexExplicitNull = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.index.n-flag-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidIndexNFlagClear.IsNull() {
 			data.PrefixSidIndexNFlagClear = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidIndexNFlagClear.IsNull() {
 			data.PrefixSidIndexNFlagClear = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.absolute.absolute-id"); value.Exists() && !data.PrefixSidAbsoluteId.IsNull() {
 		data.PrefixSidAbsoluteId = types.Int64Value(value.Int())
-	} else {
+	} else if data.PrefixSidAbsoluteId.IsNull() {
 		data.PrefixSidAbsoluteId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.absolute.php-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidAbsolutePhpDisable.IsNull() {
 			data.PrefixSidAbsolutePhpDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidAbsolutePhpDisable.IsNull() {
 			data.PrefixSidAbsolutePhpDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.absolute.explicit-null"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidAbsoluteExplicitNull.IsNull() {
 			data.PrefixSidAbsoluteExplicitNull = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidAbsoluteExplicitNull.IsNull() {
 			data.PrefixSidAbsoluteExplicitNull = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.absolute.n-flag-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PrefixSidAbsoluteNFlagClear.IsNull() {
 			data.PrefixSidAbsoluteNFlagClear = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidAbsoluteNFlagClear.IsNull() {
 			data.PrefixSidAbsoluteNFlagClear = types.BoolNull()
 		}
@@ -1260,57 +1269,39 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 			data.PrefixSidAlgorithms[i].IndexId = types.Int64Null()
 		}
 		if value := r.Get("index.php-disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.PrefixSidAlgorithms[i].IndexPhpDisable.IsNull() && !data.PrefixSidAlgorithms[i].IndexPhpDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.PrefixSidAlgorithms[i].IndexPhpDisable = types.BoolValue(false)
-			} else if !data.PrefixSidAlgorithms[i].IndexPhpDisable.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].IndexPhpDisable.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexPhpDisable = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PrefixSidAlgorithms[i].IndexPhpDisable.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexPhpDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.PrefixSidAlgorithms[i].IndexPhpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("index.explicit-null"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() && !data.PrefixSidAlgorithms[i].IndexExplicitNull.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolValue(false)
-			} else if !data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("index.n-flag-clear"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() && !data.PrefixSidAlgorithms[i].IndexNFlagClear.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolValue(false)
-			} else if !data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() {
 				data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.absolute-id"); value.Exists() && !data.PrefixSidAlgorithms[i].AbsoluteId.IsNull() {
@@ -1319,57 +1310,39 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 			data.PrefixSidAlgorithms[i].AbsoluteId = types.Int64Null()
 		}
 		if value := r.Get("absolute.php-disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.PrefixSidAlgorithms[i].AbsolutePhpDisable.IsNull() && !data.PrefixSidAlgorithms[i].AbsolutePhpDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.PrefixSidAlgorithms[i].AbsolutePhpDisable = types.BoolValue(false)
-			} else if !data.PrefixSidAlgorithms[i].AbsolutePhpDisable.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].AbsolutePhpDisable.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsolutePhpDisable = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PrefixSidAlgorithms[i].AbsolutePhpDisable.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsolutePhpDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.PrefixSidAlgorithms[i].AbsolutePhpDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.explicit-null"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() && !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolValue(false)
-			} else if !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("absolute.n-flag-clear"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() && !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolValue(false)
-			} else if !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() {
 				data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolValue(false)
 			}
 		}
 	}
@@ -1402,21 +1375,15 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 			data.AdjacencySidIndices[i].IndexNumber = types.Int64Null()
 		}
 		if value := r.Get("protected"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.AdjacencySidIndices[i].Protected.IsNull() && !data.AdjacencySidIndices[i].Protected.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.AdjacencySidIndices[i].Protected = types.BoolValue(false)
-			} else if !data.AdjacencySidIndices[i].Protected.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.AdjacencySidIndices[i].Protected.IsNull() {
 				data.AdjacencySidIndices[i].Protected = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.AdjacencySidIndices[i].Protected.IsNull() {
 				data.AdjacencySidIndices[i].Protected = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.AdjacencySidIndices[i].Protected = types.BoolValue(false)
 			}
 		}
 	}
@@ -1449,40 +1416,36 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 			data.AdjacencySidAbsolutes[i].AbsoluteNumber = types.Int64Null()
 		}
 		if value := r.Get("protected"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.AdjacencySidAbsolutes[i].Protected.IsNull() && !data.AdjacencySidAbsolutes[i].Protected.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.AdjacencySidAbsolutes[i].Protected = types.BoolValue(false)
-			} else if !data.AdjacencySidAbsolutes[i].Protected.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.AdjacencySidAbsolutes[i].Protected.IsNull() {
 				data.AdjacencySidAbsolutes[i].Protected = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.AdjacencySidAbsolutes[i].Protected.IsNull() {
 				data.AdjacencySidAbsolutes[i].Protected = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.AdjacencySidAbsolutes[i].Protected = types.BoolValue(false)
 			}
 		}
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.enable.per-prefix"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.FastReroutePerPrefix.IsNull() {
 			data.FastReroutePerPrefix = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerPrefix.IsNull() {
 			data.FastReroutePerPrefix = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.enable.per-link"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.FastReroutePerLink.IsNull() {
 			data.FastReroutePerLink = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerLink.IsNull() {
 			data.FastReroutePerLink = types.BoolNull()
 		}
@@ -1516,48 +1479,37 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 			data.FastRerouteLevels[i].LevelNumber = types.Int64Null()
 		}
 		if value := r.Get("per-prefix"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.FastRerouteLevels[i].PerPrefix.IsNull() && !data.FastRerouteLevels[i].PerPrefix.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.FastRerouteLevels[i].PerPrefix = types.BoolValue(false)
-			} else if !data.FastRerouteLevels[i].PerPrefix.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.FastRerouteLevels[i].PerPrefix.IsNull() {
 				data.FastRerouteLevels[i].PerPrefix = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.FastRerouteLevels[i].PerPrefix.IsNull() {
 				data.FastRerouteLevels[i].PerPrefix = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.FastRerouteLevels[i].PerPrefix = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("per-link"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.FastRerouteLevels[i].PerLink.IsNull() && !data.FastRerouteLevels[i].PerLink.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.FastRerouteLevels[i].PerLink = types.BoolValue(false)
-			} else if !data.FastRerouteLevels[i].PerLink.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.FastRerouteLevels[i].PerLink.IsNull() {
 				data.FastRerouteLevels[i].PerLink = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.FastRerouteLevels[i].PerLink.IsNull() {
 				data.FastRerouteLevels[i].PerLink = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.FastRerouteLevels[i].PerLink = types.BoolValue(false)
 			}
 		}
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.default-backup-path"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.FastReroutePerPrefixTiebreakerDefault.IsNull() {
 			data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerPrefixTiebreakerDefault.IsNull() {
 			data.FastReroutePerPrefixTiebreakerDefault = types.BoolNull()
 		}
@@ -1593,7 +1545,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Null()
 	}
 	for i := range data.FastReroutePerPrefixTiebreakerNodeProtectingLevels {
@@ -1632,7 +1584,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Null()
 	}
 	for i := range data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels {
@@ -1671,7 +1623,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Null()
 	}
 	for i := range data.FastReroutePerPrefixTiebreakerLcDisjointLevels {
@@ -1710,7 +1662,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.maximum-metric"); value.Exists() && !data.FastReroutePerPrefixRemoteLfaMaximumMetric.IsNull() {
 		data.FastReroutePerPrefixRemoteLfaMaximumMetric = types.Int64Value(value.Int())
-	} else {
+	} else if data.FastReroutePerPrefixRemoteLfaMaximumMetric.IsNull() {
 		data.FastReroutePerPrefixRemoteLfaMaximumMetric = types.Int64Null()
 	}
 	for i := range data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels {
@@ -1748,11 +1700,12 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 		}
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() {
 			data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() {
 			data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolNull()
 		}
@@ -1787,11 +1740,12 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 		}
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.ti-lfa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.FastReroutePerPrefixTiLfa.IsNull() {
 			data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerPrefixTiLfa.IsNull() {
 			data.FastReroutePerPrefixTiLfa = types.BoolNull()
 		}
@@ -1963,17 +1917,17 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 	if value := gjson.GetBytes(res, "link-group.link-group-string"); value.Exists() && !data.LinkGroupName.IsNull() {
 		data.LinkGroupName = types.StringValue(value.String())
-	} else {
+	} else if data.LinkGroupName.IsNull() {
 		data.LinkGroupName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "link-group.level"); value.Exists() && !data.LinkGroupLevel.IsNull() {
 		data.LinkGroupLevel = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkGroupLevel.IsNull() {
 		data.LinkGroupLevel = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "weight"); value.Exists() && !data.Weight.IsNull() {
 		data.Weight = types.Int64Value(value.Int())
-	} else {
+	} else if data.Weight.IsNull() {
 		data.Weight = types.Int64Null()
 	}
 	for i := range data.WeightLevels {
@@ -2012,7 +1966,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 	if value := gjson.GetBytes(res, "auto-metric.proactive-protect"); value.Exists() && !data.AutoMetricProactiveProtectMetric.IsNull() {
 		data.AutoMetricProactiveProtectMetric = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoMetricProactiveProtectMetric.IsNull() {
 		data.AutoMetricProactiveProtectMetric = types.Int64Null()
 	}
 	for i := range data.AutoMetricProactiveProtectMetricLevels {
@@ -2051,7 +2005,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 	if value := gjson.GetBytes(res, "advertise.prefix-advertisement.route-policy"); value.Exists() && !data.AdvertisePrefixRoutePolicy.IsNull() {
 		data.AdvertisePrefixRoutePolicy = types.StringValue(value.String())
-	} else {
+	} else if data.AdvertisePrefixRoutePolicy.IsNull() {
 		data.AdvertisePrefixRoutePolicy = types.StringNull()
 	}
 	for i := range data.AdvertisePrefixRoutePolicyLevels {
@@ -2099,10 +2053,15 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "metric.maximum"); value.Exists() {
 		data.MetricMaximum = types.BoolValue(true)
-	} else {
-		data.MetricMaximum = types.BoolNull()
+	} else if !data.MetricMaximum.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MetricMaximum = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "metric.default-metric"); value.Exists() {
 		data.MetricDefault = types.Int64Value(value.Int())
@@ -2119,8 +2078,9 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			}
 			if cValue := v.Get("maximum"); cValue.Exists() {
 				item.MetricMaximum = types.BoolValue(true)
-			} else {
-				item.MetricMaximum = types.BoolNull()
+			} else if !item.MetricMaximum.IsNull() {
+				// Only set to false if it was previously set
+				item.MetricMaximum = types.BoolValue(false)
 			}
 			data.MetricLevels = append(data.MetricLevels, item)
 			return true
@@ -2201,8 +2161,9 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 	}
 	if value := res.Get(prefix + "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
-	} else {
-		data.MplsLdpSync = types.BoolNull()
+	} else if !data.MplsLdpSync.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MplsLdpSync = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mpls.ldp.sync.level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
@@ -2229,72 +2190,84 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.index.php-disable"); value.Exists() {
 		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolNull()
+	} else if !data.PrefixSidStrictSpfIndexPhpDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.index.explicit-null"); value.Exists() {
 		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolNull()
+	} else if !data.PrefixSidStrictSpfIndexExplicitNull.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.index.n-flag-clear"); value.Exists() {
 		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolNull()
+	} else if !data.PrefixSidStrictSpfIndexNFlagClear.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.absolute.absolute-id"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteId = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.absolute.php-disable"); value.Exists() {
 		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolNull()
+	} else if !data.PrefixSidStrictSpfAbsolutePhpDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.absolute.explicit-null"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolNull()
+	} else if !data.PrefixSidStrictSpfAbsoluteExplicitNull.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.absolute.n-flag-clear"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolNull()
+	} else if !data.PrefixSidStrictSpfAbsoluteNFlagClear.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.index.index-id"); value.Exists() {
 		data.PrefixSidIndexId = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "prefix-sid.index.php-disable"); value.Exists() {
 		data.PrefixSidIndexPhpDisable = types.BoolValue(true)
-	} else {
-		data.PrefixSidIndexPhpDisable = types.BoolNull()
+	} else if !data.PrefixSidIndexPhpDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidIndexPhpDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.index.explicit-null"); value.Exists() {
 		data.PrefixSidIndexExplicitNull = types.BoolValue(true)
-	} else {
-		data.PrefixSidIndexExplicitNull = types.BoolNull()
+	} else if !data.PrefixSidIndexExplicitNull.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidIndexExplicitNull = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.index.n-flag-clear"); value.Exists() {
 		data.PrefixSidIndexNFlagClear = types.BoolValue(true)
-	} else {
-		data.PrefixSidIndexNFlagClear = types.BoolNull()
+	} else if !data.PrefixSidIndexNFlagClear.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidIndexNFlagClear = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.absolute.absolute-id"); value.Exists() {
 		data.PrefixSidAbsoluteId = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "prefix-sid.absolute.php-disable"); value.Exists() {
 		data.PrefixSidAbsolutePhpDisable = types.BoolValue(true)
-	} else {
-		data.PrefixSidAbsolutePhpDisable = types.BoolNull()
+	} else if !data.PrefixSidAbsolutePhpDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidAbsolutePhpDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.absolute.explicit-null"); value.Exists() {
 		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(true)
-	} else {
-		data.PrefixSidAbsoluteExplicitNull = types.BoolNull()
+	} else if !data.PrefixSidAbsoluteExplicitNull.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.absolute.n-flag-clear"); value.Exists() {
 		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(true)
-	} else {
-		data.PrefixSidAbsoluteNFlagClear = types.BoolNull()
+	} else if !data.PrefixSidAbsoluteNFlagClear.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.algorithms.algorithm"); value.Exists() {
 		data.PrefixSidAlgorithms = make([]RouterISISInterfaceAddressFamilyPrefixSidAlgorithms, 0)
@@ -2308,36 +2281,42 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			}
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
 				item.IndexPhpDisable = types.BoolValue(true)
-			} else {
-				item.IndexPhpDisable = types.BoolNull()
+			} else if !item.IndexPhpDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.IndexPhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
-			} else {
-				item.IndexExplicitNull = types.BoolNull()
+			} else if !item.IndexExplicitNull.IsNull() {
+				// Only set to false if it was previously set
+				item.IndexExplicitNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("index.n-flag-clear"); cValue.Exists() {
 				item.IndexNFlagClear = types.BoolValue(true)
-			} else {
-				item.IndexNFlagClear = types.BoolNull()
+			} else if !item.IndexNFlagClear.IsNull() {
+				// Only set to false if it was previously set
+				item.IndexNFlagClear = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
 				item.AbsolutePhpDisable = types.BoolValue(true)
-			} else {
-				item.AbsolutePhpDisable = types.BoolNull()
+			} else if !item.AbsolutePhpDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.AbsolutePhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
-			} else {
-				item.AbsoluteExplicitNull = types.BoolNull()
+			} else if !item.AbsoluteExplicitNull.IsNull() {
+				// Only set to false if it was previously set
+				item.AbsoluteExplicitNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.n-flag-clear"); cValue.Exists() {
 				item.AbsoluteNFlagClear = types.BoolValue(true)
-			} else {
-				item.AbsoluteNFlagClear = types.BoolNull()
+			} else if !item.AbsoluteNFlagClear.IsNull() {
+				// Only set to false if it was previously set
+				item.AbsoluteNFlagClear = types.BoolValue(false)
 			}
 			data.PrefixSidAlgorithms = append(data.PrefixSidAlgorithms, item)
 			return true
@@ -2352,8 +2331,9 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			}
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
-			} else {
-				item.Protected = types.BoolNull()
+			} else if !item.Protected.IsNull() {
+				// Only set to false if it was previously set
+				item.Protected = types.BoolValue(false)
 			}
 			data.AdjacencySidIndices = append(data.AdjacencySidIndices, item)
 			return true
@@ -2368,8 +2348,9 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			}
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
-			} else {
-				item.Protected = types.BoolNull()
+			} else if !item.Protected.IsNull() {
+				// Only set to false if it was previously set
+				item.Protected = types.BoolValue(false)
 			}
 			data.AdjacencySidAbsolutes = append(data.AdjacencySidAbsolutes, item)
 			return true
@@ -2377,13 +2358,15 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 	}
 	if value := res.Get(prefix + "fast-reroute.enable.per-prefix"); value.Exists() {
 		data.FastReroutePerPrefix = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefix = types.BoolNull()
+	} else if !data.FastReroutePerPrefix.IsNull() {
+		// Only set to false if it was previously set in state
+		data.FastReroutePerPrefix = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.enable.per-link"); value.Exists() {
 		data.FastReroutePerLink = types.BoolValue(true)
-	} else {
-		data.FastReroutePerLink = types.BoolNull()
+	} else if !data.FastReroutePerLink.IsNull() {
+		// Only set to false if it was previously set in state
+		data.FastReroutePerLink = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.enable-levels.enable-level"); value.Exists() {
 		data.FastRerouteLevels = make([]RouterISISInterfaceAddressFamilyFastRerouteLevels, 0)
@@ -2394,13 +2377,15 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 			}
 			if cValue := v.Get("per-prefix"); cValue.Exists() {
 				item.PerPrefix = types.BoolValue(true)
-			} else {
-				item.PerPrefix = types.BoolNull()
+			} else if !item.PerPrefix.IsNull() {
+				// Only set to false if it was previously set
+				item.PerPrefix = types.BoolValue(false)
 			}
 			if cValue := v.Get("per-link"); cValue.Exists() {
 				item.PerLink = types.BoolValue(true)
-			} else {
-				item.PerLink = types.BoolNull()
+			} else if !item.PerLink.IsNull() {
+				// Only set to false if it was previously set
+				item.PerLink = types.BoolValue(false)
 			}
 			data.FastRerouteLevels = append(data.FastRerouteLevels, item)
 			return true
@@ -2408,8 +2393,9 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 	}
 	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.default-backup-path"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixTiebreakerDefault = types.BoolNull()
+	} else if !data.FastReroutePerPrefixTiebreakerDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.default-backup-path-levels.default-backup-path-level"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerDefaultLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerDefaultLevels, 0)
@@ -2492,8 +2478,9 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 	}
 	if value := res.Get(prefix + "fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolNull()
+	} else if !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp-levels.mpls-ldp-level"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels, 0)
@@ -2508,8 +2495,9 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 	}
 	if value := res.Get(prefix + "fast-reroute.per-prefix.ti-lfa"); value.Exists() {
 		data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixTiLfa = types.BoolNull()
+	} else if !data.FastReroutePerPrefixTiLfa.IsNull() {
+		// Only set to false if it was previously set in state
+		data.FastReroutePerPrefixTiLfa = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.per-prefix.ti-lfa-levels.ti-lfa-level"); value.Exists() {
 		data.FastReroutePerPrefixTiLfaLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiLfaLevels, 0)
@@ -2642,14 +2630,19 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "metric.maximum"); value.Exists() {
 		data.MetricMaximum = types.BoolValue(true)
 	} else {
-		data.MetricMaximum = types.BoolNull()
+		data.MetricMaximum = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "metric.default-metric"); value.Exists() {
 		data.MetricDefault = types.Int64Value(value.Int())
@@ -2667,7 +2660,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 			if cValue := v.Get("maximum"); cValue.Exists() {
 				item.MetricMaximum = types.BoolValue(true)
 			} else {
-				item.MetricMaximum = types.BoolNull()
+				item.MetricMaximum = types.BoolValue(false)
 			}
 			data.MetricLevels = append(data.MetricLevels, item)
 			return true
@@ -2749,7 +2742,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := res.Get(prefix + "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
-		data.MplsLdpSync = types.BoolNull()
+		data.MplsLdpSync = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mpls.ldp.sync.level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
@@ -2777,17 +2770,17 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := res.Get(prefix + "prefix-sid.strict-spf.index.php-disable"); value.Exists() {
 		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(true)
 	} else {
-		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolNull()
+		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.index.explicit-null"); value.Exists() {
 		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(true)
 	} else {
-		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolNull()
+		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.index.n-flag-clear"); value.Exists() {
 		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(true)
 	} else {
-		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolNull()
+		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.absolute.absolute-id"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteId = types.Int64Value(value.Int())
@@ -2795,17 +2788,17 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := res.Get(prefix + "prefix-sid.strict-spf.absolute.php-disable"); value.Exists() {
 		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(true)
 	} else {
-		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolNull()
+		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.absolute.explicit-null"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(true)
 	} else {
-		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolNull()
+		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.strict-spf.absolute.n-flag-clear"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(true)
 	} else {
-		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolNull()
+		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.index.index-id"); value.Exists() {
 		data.PrefixSidIndexId = types.Int64Value(value.Int())
@@ -2813,17 +2806,17 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := res.Get(prefix + "prefix-sid.index.php-disable"); value.Exists() {
 		data.PrefixSidIndexPhpDisable = types.BoolValue(true)
 	} else {
-		data.PrefixSidIndexPhpDisable = types.BoolNull()
+		data.PrefixSidIndexPhpDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.index.explicit-null"); value.Exists() {
 		data.PrefixSidIndexExplicitNull = types.BoolValue(true)
 	} else {
-		data.PrefixSidIndexExplicitNull = types.BoolNull()
+		data.PrefixSidIndexExplicitNull = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.index.n-flag-clear"); value.Exists() {
 		data.PrefixSidIndexNFlagClear = types.BoolValue(true)
 	} else {
-		data.PrefixSidIndexNFlagClear = types.BoolNull()
+		data.PrefixSidIndexNFlagClear = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.absolute.absolute-id"); value.Exists() {
 		data.PrefixSidAbsoluteId = types.Int64Value(value.Int())
@@ -2831,17 +2824,17 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := res.Get(prefix + "prefix-sid.absolute.php-disable"); value.Exists() {
 		data.PrefixSidAbsolutePhpDisable = types.BoolValue(true)
 	} else {
-		data.PrefixSidAbsolutePhpDisable = types.BoolNull()
+		data.PrefixSidAbsolutePhpDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.absolute.explicit-null"); value.Exists() {
 		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(true)
 	} else {
-		data.PrefixSidAbsoluteExplicitNull = types.BoolNull()
+		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.absolute.n-flag-clear"); value.Exists() {
 		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(true)
 	} else {
-		data.PrefixSidAbsoluteNFlagClear = types.BoolNull()
+		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "prefix-sid.algorithms.algorithm"); value.Exists() {
 		data.PrefixSidAlgorithms = make([]RouterISISInterfaceAddressFamilyPrefixSidAlgorithms, 0)
@@ -2856,17 +2849,17 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
 				item.IndexPhpDisable = types.BoolValue(true)
 			} else {
-				item.IndexPhpDisable = types.BoolNull()
+				item.IndexPhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
 				item.IndexExplicitNull = types.BoolValue(true)
 			} else {
-				item.IndexExplicitNull = types.BoolNull()
+				item.IndexExplicitNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("index.n-flag-clear"); cValue.Exists() {
 				item.IndexNFlagClear = types.BoolValue(true)
 			} else {
-				item.IndexNFlagClear = types.BoolNull()
+				item.IndexNFlagClear = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
@@ -2874,17 +2867,17 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
 				item.AbsolutePhpDisable = types.BoolValue(true)
 			} else {
-				item.AbsolutePhpDisable = types.BoolNull()
+				item.AbsolutePhpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
 				item.AbsoluteExplicitNull = types.BoolValue(true)
 			} else {
-				item.AbsoluteExplicitNull = types.BoolNull()
+				item.AbsoluteExplicitNull = types.BoolValue(false)
 			}
 			if cValue := v.Get("absolute.n-flag-clear"); cValue.Exists() {
 				item.AbsoluteNFlagClear = types.BoolValue(true)
 			} else {
-				item.AbsoluteNFlagClear = types.BoolNull()
+				item.AbsoluteNFlagClear = types.BoolValue(false)
 			}
 			data.PrefixSidAlgorithms = append(data.PrefixSidAlgorithms, item)
 			return true
@@ -2900,7 +2893,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
 			} else {
-				item.Protected = types.BoolNull()
+				item.Protected = types.BoolValue(false)
 			}
 			data.AdjacencySidIndices = append(data.AdjacencySidIndices, item)
 			return true
@@ -2916,7 +2909,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 			if cValue := v.Get("protected"); cValue.Exists() {
 				item.Protected = types.BoolValue(true)
 			} else {
-				item.Protected = types.BoolNull()
+				item.Protected = types.BoolValue(false)
 			}
 			data.AdjacencySidAbsolutes = append(data.AdjacencySidAbsolutes, item)
 			return true
@@ -2925,12 +2918,12 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := res.Get(prefix + "fast-reroute.enable.per-prefix"); value.Exists() {
 		data.FastReroutePerPrefix = types.BoolValue(true)
 	} else {
-		data.FastReroutePerPrefix = types.BoolNull()
+		data.FastReroutePerPrefix = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.enable.per-link"); value.Exists() {
 		data.FastReroutePerLink = types.BoolValue(true)
 	} else {
-		data.FastReroutePerLink = types.BoolNull()
+		data.FastReroutePerLink = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.enable-levels.enable-level"); value.Exists() {
 		data.FastRerouteLevels = make([]RouterISISInterfaceAddressFamilyFastRerouteLevels, 0)
@@ -2942,12 +2935,12 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 			if cValue := v.Get("per-prefix"); cValue.Exists() {
 				item.PerPrefix = types.BoolValue(true)
 			} else {
-				item.PerPrefix = types.BoolNull()
+				item.PerPrefix = types.BoolValue(false)
 			}
 			if cValue := v.Get("per-link"); cValue.Exists() {
 				item.PerLink = types.BoolValue(true)
 			} else {
-				item.PerLink = types.BoolNull()
+				item.PerLink = types.BoolValue(false)
 			}
 			data.FastRerouteLevels = append(data.FastRerouteLevels, item)
 			return true
@@ -2956,7 +2949,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.default-backup-path"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(true)
 	} else {
-		data.FastReroutePerPrefixTiebreakerDefault = types.BoolNull()
+		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.default-backup-path-levels.default-backup-path-level"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerDefaultLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerDefaultLevels, 0)
@@ -3040,7 +3033,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := res.Get(prefix + "fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
 	} else {
-		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolNull()
+		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.per-prefix.remote-lfa.tunnel.mpls-ldp-levels.mpls-ldp-level"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels, 0)
@@ -3056,7 +3049,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := res.Get(prefix + "fast-reroute.per-prefix.ti-lfa"); value.Exists() {
 		data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
 	} else {
-		data.FastReroutePerPrefixTiLfa = types.BoolNull()
+		data.FastReroutePerPrefixTiLfa = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "fast-reroute.per-prefix.ti-lfa-levels.ti-lfa-level"); value.Exists() {
 		data.FastReroutePerPrefixTiLfaLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiLfaLevels, 0)
@@ -4551,25 +4544,28 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.AdvertisePrefixRoutePolicyLevels {
-		keyValues := [...]string{strconv.FormatInt(data.AdvertisePrefixRoutePolicyLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/prefix-advertisement/route-policy-levels/route-policy-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.AdvertisePrefixRoutePolicyLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/prefix-advertisement/route-policy-levels/route-policy-level%v", data.getPath(), keyPath))
 	}
 	if !data.AdvertisePrefixRoutePolicy.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/prefix-advertisement/route-policy", data.getPath()))
 	}
 	for i := range data.AutoMetricProactiveProtectMetricLevels {
-		keyValues := [...]string{strconv.FormatInt(data.AutoMetricProactiveProtectMetricLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-metric/proactive-protect-levels/proactive-protect-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.AutoMetricProactiveProtectMetricLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-metric/proactive-protect-levels/proactive-protect-level%v", data.getPath(), keyPath))
 	}
 	if !data.AutoMetricProactiveProtectMetric.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-metric/proactive-protect", data.getPath()))
 	}
 	for i := range data.WeightLevels {
-		keyValues := [...]string{strconv.FormatInt(data.WeightLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/weight-levels/weight-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.WeightLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/weight-levels/weight-level%v", data.getPath(), keyPath))
 	}
 	if !data.Weight.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/weight", data.getPath()))
@@ -4581,85 +4577,97 @@ func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/link-group/link-group-string", data.getPath()))
 	}
 	for i := range data.FastReroutePerLinkLfaCandidateInterfaces {
-		keyValues := [...]string{data.FastReroutePerLinkLfaCandidateInterfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/lfa-candidate/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[lfa-interface-name=" + data.FastReroutePerLinkLfaCandidateInterfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/lfa-candidate/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	for i := range data.FastReroutePerLinkExcludeInterfaces {
-		keyValues := [...]string{data.FastReroutePerLinkExcludeInterfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/exclude/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[exclude-interface-name=" + data.FastReroutePerLinkExcludeInterfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/exclude/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	for i := range data.FastReroutePerPrefixLfaCandidateInterfaces {
-		keyValues := [...]string{data.FastReroutePerPrefixLfaCandidateInterfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/lfa-candidate/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[lfa-interface-name=" + data.FastReroutePerPrefixLfaCandidateInterfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/lfa-candidate/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	for i := range data.FastReroutePerPrefixExcludeInterfaces {
-		keyValues := [...]string{data.FastReroutePerPrefixExcludeInterfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/exclude/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[exclude-interface-name=" + data.FastReroutePerPrefixExcludeInterfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/exclude/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	for i := range data.FastReroutePerPrefixTiLfaLevels {
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiLfaLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixTiLfaLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level%v", data.getPath(), keyPath))
 	}
 	if !data.FastReroutePerPrefixTiLfa.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/ti-lfa", data.getPath()))
 	}
 	for i := range data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels {
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level%v", data.getPath(), keyPath))
 	}
 	if !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp", data.getPath()))
 	}
 	for i := range data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels {
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level%v", data.getPath(), keyPath))
 	}
 	if !data.FastReroutePerPrefixRemoteLfaMaximumMetric.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/maximum-metric", data.getPath()))
 	}
 	for i := range data.FastReroutePerPrefixTiebreakerLcDisjointLevels {
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiebreakerLcDisjointLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixTiebreakerLcDisjointLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level%v", data.getPath(), keyPath))
 	}
 	if !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index", data.getPath()))
 	}
 	for i := range data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels {
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level%v", data.getPath(), keyPath))
 	}
 	if !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index", data.getPath()))
 	}
 	for i := range data.FastReroutePerPrefixTiebreakerNodeProtectingLevels {
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiebreakerNodeProtectingLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixTiebreakerNodeProtectingLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level%v", data.getPath(), keyPath))
 	}
 	if !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/node-protecting/index", data.getPath()))
 	}
 	for i := range data.FastReroutePerPrefixTiebreakerDefaultLevels {
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiebreakerDefaultLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixTiebreakerDefaultLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level%v", data.getPath(), keyPath))
 	}
 	if !data.FastReroutePerPrefixTiebreakerDefault.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/default-backup-path", data.getPath()))
 	}
 	for i := range data.FastRerouteLevels {
-		keyValues := [...]string{strconv.FormatInt(data.FastRerouteLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/enable-levels/enable-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.FastRerouteLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/enable-levels/enable-level%v", data.getPath(), keyPath))
 	}
 	if !data.FastReroutePerLink.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/enable/per-link", data.getPath()))
@@ -4668,19 +4676,22 @@ func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/enable/per-prefix", data.getPath()))
 	}
 	for i := range data.AdjacencySidAbsolutes {
-		keyValues := [...]string{strconv.FormatInt(data.AdjacencySidAbsolutes[i].AbsoluteNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency-sid/absolutes/absolute=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[absolute-number=" + strconv.FormatInt(data.AdjacencySidAbsolutes[i].AbsoluteNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency-sid/absolutes/absolute%v", data.getPath(), keyPath))
 	}
 	for i := range data.AdjacencySidIndices {
-		keyValues := [...]string{strconv.FormatInt(data.AdjacencySidIndices[i].IndexNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency-sid/indices/index=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[index-number=" + strconv.FormatInt(data.AdjacencySidIndices[i].IndexNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency-sid/indices/index%v", data.getPath(), keyPath))
 	}
 	for i := range data.PrefixSidAlgorithms {
-		keyValues := [...]string{strconv.FormatInt(data.PrefixSidAlgorithms[i].Algorithm.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid/algorithms/algorithm=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[algorithm-number=" + strconv.FormatInt(data.PrefixSidAlgorithms[i].Algorithm.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid/algorithms/algorithm%v", data.getPath(), keyPath))
 	}
 	if !data.PrefixSidAbsoluteNFlagClear.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid/absolute", data.getPath()))
@@ -4731,9 +4742,10 @@ func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid/strict-spf/index", data.getPath()))
 	}
 	for i := range data.TagLevels {
-		keyValues := [...]string{strconv.FormatInt(data.TagLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tag-levels/tag-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.TagLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/tag-levels/tag-level%v", data.getPath(), keyPath))
 	}
 	if !data.Tag.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/tag", data.getPath()))
@@ -4745,35 +4757,40 @@ func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/sync", data.getPath()))
 	}
 	for i := range data.GenericMetricFlexAlgoLevels {
-		keyValues := [...]string{strconv.FormatInt(data.GenericMetricFlexAlgoLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/generic-metric/flex-algo-levels/flex-algo-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.GenericMetricFlexAlgoLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/generic-metric/flex-algo-levels/flex-algo-level%v", data.getPath(), keyPath))
 	}
 	for i := range data.GenericMetricFlexAlgos {
-		keyValues := [...]string{strconv.FormatInt(data.GenericMetricFlexAlgos[i].Type.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/generic-metric/flex-algo/types/type=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[type-number=" + strconv.FormatInt(data.GenericMetricFlexAlgos[i].Type.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/generic-metric/flex-algo/types/type%v", data.getPath(), keyPath))
 	}
 	for i := range data.BandwidthMetricFlexAlgoLevels {
-		keyValues := [...]string{strconv.FormatInt(data.BandwidthMetricFlexAlgoLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth-metric/flex-algo-levels/flex-algo-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.BandwidthMetricFlexAlgoLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth-metric/flex-algo-levels/flex-algo-level%v", data.getPath(), keyPath))
 	}
 	if !data.BandwidthMetricFlexAlgo.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth-metric/flex-algo", data.getPath()))
 	}
 	for i := range data.TeMetricFlexAlgoLevels {
-		keyValues := [...]string{strconv.FormatInt(data.TeMetricFlexAlgoLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/te-metric/flex-algo-levels/flex-algo-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.TeMetricFlexAlgoLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/te-metric/flex-algo-levels/flex-algo-level%v", data.getPath(), keyPath))
 	}
 	if !data.TeMetricFlexAlgo.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/te-metric/flex-algo", data.getPath()))
 	}
 	for i := range data.MetricLevels {
-		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-levels/metric-level=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[level-number=" + strconv.FormatInt(data.MetricLevels[i].LevelNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-levels/metric-level%v", data.getPath(), keyPath))
 	}
 	if !data.MetricDefault.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric/default-metric", data.getPath()))
@@ -4806,93 +4823,77 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 		body = helpers.SetFromXPath(body, data.getXPath()+"/metric/default-metric", strconv.FormatInt(data.MetricDefault.ValueInt64(), 10))
 	}
 	if len(data.MetricLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MetricLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/metric-levels/metric-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.MetricDefault.IsNull() && !item.MetricDefault.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "default-metric", strconv.FormatInt(item.MetricDefault.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/default-metric", strconv.FormatInt(item.MetricDefault.ValueInt64(), 10))
 			}
 			if !item.MetricMaximum.IsNull() && !item.MetricMaximum.IsUnknown() {
 				if item.MetricMaximum.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "maximum", "")
+					body = helpers.SetFromXPath(body, basePath+"/maximum", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"metric-levels/metric-level", cBody.Res())
 		}
 	}
 	if !data.TeMetricFlexAlgo.IsNull() && !data.TeMetricFlexAlgo.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/te-metric/flex-algo", strconv.FormatInt(data.TeMetricFlexAlgo.ValueInt64(), 10))
 	}
 	if len(data.TeMetricFlexAlgoLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.TeMetricFlexAlgoLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/te-metric/flex-algo-levels/flex-algo-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.FlexAlgo.IsNull() && !item.FlexAlgo.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "flex-algo", strconv.FormatInt(item.FlexAlgo.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/flex-algo", strconv.FormatInt(item.FlexAlgo.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"te-metric/flex-algo-levels/flex-algo-level", cBody.Res())
 		}
 	}
 	if !data.BandwidthMetricFlexAlgo.IsNull() && !data.BandwidthMetricFlexAlgo.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/bandwidth-metric/flex-algo", strconv.FormatInt(data.BandwidthMetricFlexAlgo.ValueInt64(), 10))
 	}
 	if len(data.BandwidthMetricFlexAlgoLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BandwidthMetricFlexAlgoLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bandwidth-metric/flex-algo-levels/flex-algo-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.FlexAlgo.IsNull() && !item.FlexAlgo.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "flex-algo", strconv.FormatInt(item.FlexAlgo.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/flex-algo", strconv.FormatInt(item.FlexAlgo.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bandwidth-metric/flex-algo-levels/flex-algo-level", cBody.Res())
 		}
 	}
 	if len(data.GenericMetricFlexAlgos) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.GenericMetricFlexAlgos {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/generic-metric/flex-algo/types/type[type-number='" + strconv.FormatInt(item.Type.ValueInt64(), 10) + "']"
 			if !item.Type.IsNull() && !item.Type.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type-number", strconv.FormatInt(item.Type.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type-number", strconv.FormatInt(item.Type.ValueInt64(), 10))
 			}
 			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "flex-algo-metric-value", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/flex-algo-metric-value", strconv.FormatInt(item.Metric.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"generic-metric/flex-algo/types/type", cBody.Res())
 		}
 	}
 	if len(data.GenericMetricFlexAlgoLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.GenericMetricFlexAlgoLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/generic-metric/flex-algo-levels/flex-algo-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if len(item.FlexAlgosTypes) > 0 {
 				for _, citem := range item.FlexAlgosTypes {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/types/type[type-number='" + strconv.FormatInt(citem.Type.ValueInt64(), 10) + "']"
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "type-number", strconv.FormatInt(citem.Type.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/type-number", strconv.FormatInt(citem.Type.ValueInt64(), 10))
 					}
 					if !citem.Metric.IsNull() && !citem.Metric.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "flex-algo-metric-value", strconv.FormatInt(citem.Metric.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/flex-algo-metric-value", strconv.FormatInt(citem.Metric.ValueInt64(), 10))
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "types/type", ccBody.Res())
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"generic-metric/flex-algo-levels/flex-algo-level", cBody.Res())
 		}
 	}
 	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.IsUnknown() {
@@ -4907,17 +4908,14 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 		body = helpers.SetFromXPath(body, data.getXPath()+"/tag", strconv.FormatInt(data.Tag.ValueInt64(), 10))
 	}
 	if len(data.TagLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.TagLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/tag-levels/tag-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.Tag.IsNull() && !item.Tag.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"tag-levels/tag-level", cBody.Res())
 		}
 	}
 	if !data.PrefixSidStrictSpfIndexId.IsNull() && !data.PrefixSidStrictSpfIndexId.IsUnknown() {
@@ -4993,82 +4991,73 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 		}
 	}
 	if len(data.PrefixSidAlgorithms) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.PrefixSidAlgorithms {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/prefix-sid/algorithms/algorithm[algorithm-number='" + strconv.FormatInt(item.Algorithm.ValueInt64(), 10) + "']"
 			if !item.Algorithm.IsNull() && !item.Algorithm.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "algorithm-number", strconv.FormatInt(item.Algorithm.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/algorithm-number", strconv.FormatInt(item.Algorithm.ValueInt64(), 10))
 			}
 			if !item.IndexId.IsNull() && !item.IndexId.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "index/index-id", strconv.FormatInt(item.IndexId.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/index/index-id", strconv.FormatInt(item.IndexId.ValueInt64(), 10))
 			}
 			if !item.IndexPhpDisable.IsNull() && !item.IndexPhpDisable.IsUnknown() {
 				if item.IndexPhpDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "index/php-disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/index/php-disable", "")
 				}
 			}
 			if !item.IndexExplicitNull.IsNull() && !item.IndexExplicitNull.IsUnknown() {
 				if item.IndexExplicitNull.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "index/explicit-null", "")
+					body = helpers.SetFromXPath(body, basePath+"/index/explicit-null", "")
 				}
 			}
 			if !item.IndexNFlagClear.IsNull() && !item.IndexNFlagClear.IsUnknown() {
 				if item.IndexNFlagClear.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "index/n-flag-clear", "")
+					body = helpers.SetFromXPath(body, basePath+"/index/n-flag-clear", "")
 				}
 			}
 			if !item.AbsoluteId.IsNull() && !item.AbsoluteId.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "absolute/absolute-id", strconv.FormatInt(item.AbsoluteId.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/absolute/absolute-id", strconv.FormatInt(item.AbsoluteId.ValueInt64(), 10))
 			}
 			if !item.AbsolutePhpDisable.IsNull() && !item.AbsolutePhpDisable.IsUnknown() {
 				if item.AbsolutePhpDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "absolute/php-disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/absolute/php-disable", "")
 				}
 			}
 			if !item.AbsoluteExplicitNull.IsNull() && !item.AbsoluteExplicitNull.IsUnknown() {
 				if item.AbsoluteExplicitNull.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "absolute/explicit-null", "")
+					body = helpers.SetFromXPath(body, basePath+"/absolute/explicit-null", "")
 				}
 			}
 			if !item.AbsoluteNFlagClear.IsNull() && !item.AbsoluteNFlagClear.IsUnknown() {
 				if item.AbsoluteNFlagClear.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "absolute/n-flag-clear", "")
+					body = helpers.SetFromXPath(body, basePath+"/absolute/n-flag-clear", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"prefix-sid/algorithms/algorithm", cBody.Res())
 		}
 	}
 	if len(data.AdjacencySidIndices) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AdjacencySidIndices {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/adjacency-sid/indices/index[index-number='" + strconv.FormatInt(item.IndexNumber.ValueInt64(), 10) + "']"
 			if !item.IndexNumber.IsNull() && !item.IndexNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "index-number", strconv.FormatInt(item.IndexNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/index-number", strconv.FormatInt(item.IndexNumber.ValueInt64(), 10))
 			}
 			if !item.Protected.IsNull() && !item.Protected.IsUnknown() {
 				if item.Protected.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "protected", "")
+					body = helpers.SetFromXPath(body, basePath+"/protected", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"adjacency-sid/indices/index", cBody.Res())
 		}
 	}
 	if len(data.AdjacencySidAbsolutes) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AdjacencySidAbsolutes {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/adjacency-sid/absolutes/absolute[absolute-number='" + strconv.FormatInt(item.AbsoluteNumber.ValueInt64(), 10) + "']"
 			if !item.AbsoluteNumber.IsNull() && !item.AbsoluteNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "absolute-number", strconv.FormatInt(item.AbsoluteNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/absolute-number", strconv.FormatInt(item.AbsoluteNumber.ValueInt64(), 10))
 			}
 			if !item.Protected.IsNull() && !item.Protected.IsUnknown() {
 				if item.Protected.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "protected", "")
+					body = helpers.SetFromXPath(body, basePath+"/protected", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"adjacency-sid/absolutes/absolute", cBody.Res())
 		}
 	}
 	if !data.FastReroutePerPrefix.IsNull() && !data.FastReroutePerPrefix.IsUnknown() {
@@ -5082,24 +5071,21 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 		}
 	}
 	if len(data.FastRerouteLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastRerouteLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/enable-levels/enable-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.PerPrefix.IsNull() && !item.PerPrefix.IsUnknown() {
 				if item.PerPrefix.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "per-prefix", "")
+					body = helpers.SetFromXPath(body, basePath+"/per-prefix", "")
 				}
 			}
 			if !item.PerLink.IsNull() && !item.PerLink.IsUnknown() {
 				if item.PerLink.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "per-link", "")
+					body = helpers.SetFromXPath(body, basePath+"/per-link", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/enable-levels/enable-level", cBody.Res())
 		}
 	}
 	if !data.FastReroutePerPrefixTiebreakerDefault.IsNull() && !data.FastReroutePerPrefixTiebreakerDefault.IsUnknown() {
@@ -5108,82 +5094,67 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 		}
 	}
 	if len(data.FastReroutePerPrefixTiebreakerDefaultLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerPrefixTiebreakerDefaultLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level", cBody.Res())
 		}
 	}
 	if !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting/index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.ValueInt64(), 10))
 	}
 	if len(data.FastReroutePerPrefixTiebreakerNodeProtectingLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerPrefixTiebreakerNodeProtectingLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.Index.IsNull() && !item.Index.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "index", strconv.FormatInt(item.Index.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level", cBody.Res())
 		}
 	}
 	if !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.ValueInt64(), 10))
 	}
 	if len(data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.Index.IsNull() && !item.Index.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "index", strconv.FormatInt(item.Index.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level", cBody.Res())
 		}
 	}
 	if !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() && !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index", strconv.FormatInt(data.FastReroutePerPrefixTiebreakerLcDisjointIndex.ValueInt64(), 10))
 	}
 	if len(data.FastReroutePerPrefixTiebreakerLcDisjointLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerPrefixTiebreakerLcDisjointLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.Index.IsNull() && !item.Index.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "index", strconv.FormatInt(item.Index.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level", cBody.Res())
 		}
 	}
 	if !data.FastReroutePerPrefixRemoteLfaMaximumMetric.IsNull() && !data.FastReroutePerPrefixRemoteLfaMaximumMetric.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric", strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaMaximumMetric.ValueInt64(), 10))
 	}
 	if len(data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.MaximumMetric.IsNull() && !item.MaximumMetric.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "maximum-metric", strconv.FormatInt(item.MaximumMetric.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/maximum-metric", strconv.FormatInt(item.MaximumMetric.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level", cBody.Res())
 		}
 	}
 	if !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() && !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsUnknown() {
@@ -5192,14 +5163,11 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 		}
 	}
 	if len(data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level", cBody.Res())
 		}
 	}
 	if !data.FastReroutePerPrefixTiLfa.IsNull() && !data.FastReroutePerPrefixTiLfa.IsUnknown() {
@@ -5208,70 +5176,55 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 		}
 	}
 	if len(data.FastReroutePerPrefixTiLfaLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerPrefixTiLfaLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level", cBody.Res())
 		}
 	}
 	if len(data.FastReroutePerPrefixExcludeInterfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerPrefixExcludeInterfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-prefix/exclude/interfaces/interface[exclude-interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "exclude-interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/exclude-interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.Level.IsNull() && !item.Level.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level", strconv.FormatInt(item.Level.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level", strconv.FormatInt(item.Level.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-prefix/exclude/interfaces/interface", cBody.Res())
 		}
 	}
 	if len(data.FastReroutePerPrefixLfaCandidateInterfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerPrefixLfaCandidateInterfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-prefix/lfa-candidate/interfaces/interface[lfa-interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lfa-interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/lfa-interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.Level.IsNull() && !item.Level.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level", strconv.FormatInt(item.Level.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level", strconv.FormatInt(item.Level.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-prefix/lfa-candidate/interfaces/interface", cBody.Res())
 		}
 	}
 	if len(data.FastReroutePerLinkExcludeInterfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerLinkExcludeInterfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-link/exclude/interfaces/interface[exclude-interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "exclude-interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/exclude-interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.Level.IsNull() && !item.Level.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level", strconv.FormatInt(item.Level.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level", strconv.FormatInt(item.Level.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-link/exclude/interfaces/interface", cBody.Res())
 		}
 	}
 	if len(data.FastReroutePerLinkLfaCandidateInterfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.FastReroutePerLinkLfaCandidateInterfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/fast-reroute/per-link/lfa-candidate/interfaces/interface[lfa-interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "lfa-interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/lfa-interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.Level.IsNull() && !item.Level.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level", strconv.FormatInt(item.Level.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level", strconv.FormatInt(item.Level.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"fast-reroute/per-link/lfa-candidate/interfaces/interface", cBody.Res())
 		}
 	}
 	if !data.LinkGroupName.IsNull() && !data.LinkGroupName.IsUnknown() {
@@ -5284,51 +5237,42 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 		body = helpers.SetFromXPath(body, data.getXPath()+"/weight", strconv.FormatInt(data.Weight.ValueInt64(), 10))
 	}
 	if len(data.WeightLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.WeightLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/weight-levels/weight-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.Weight.IsNull() && !item.Weight.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "weight", strconv.FormatInt(item.Weight.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/weight", strconv.FormatInt(item.Weight.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"weight-levels/weight-level", cBody.Res())
 		}
 	}
 	if !data.AutoMetricProactiveProtectMetric.IsNull() && !data.AutoMetricProactiveProtectMetric.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/auto-metric/proactive-protect", strconv.FormatInt(data.AutoMetricProactiveProtectMetric.ValueInt64(), 10))
 	}
 	if len(data.AutoMetricProactiveProtectMetricLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutoMetricProactiveProtectMetricLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/auto-metric/proactive-protect-levels/proactive-protect-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.ProactiveProtect.IsNull() && !item.ProactiveProtect.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "proactive-protect", strconv.FormatInt(item.ProactiveProtect.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/proactive-protect", strconv.FormatInt(item.ProactiveProtect.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"auto-metric/proactive-protect-levels/proactive-protect-level", cBody.Res())
 		}
 	}
 	if !data.AdvertisePrefixRoutePolicy.IsNull() && !data.AdvertisePrefixRoutePolicy.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/advertise/prefix-advertisement/route-policy", data.AdvertisePrefixRoutePolicy.ValueString())
 	}
 	if len(data.AdvertisePrefixRoutePolicyLevels) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AdvertisePrefixRoutePolicyLevels {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/advertise/prefix-advertisement/route-policy-levels/route-policy-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "route-policy", item.RoutePolicy.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/route-policy", item.RoutePolicy.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"advertise/prefix-advertisement/route-policy-levels/route-policy-level", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -5343,25 +5287,28 @@ func (data RouterISISInterfaceAddressFamily) toBodyXML(ctx context.Context) stri
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/af-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/af-name"); value.Exists() {
 		data.AfName = types.StringValue(value.String())
 	} else if data.AfName.IsNull() {
 		data.AfName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/saf-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/saf-name"); value.Exists() {
 		data.SafName = types.StringValue(value.String())
 	} else if data.SafName.IsNull() {
 		data.SafName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/metric/maximum"); value.Exists() {
-		data.MetricMaximum = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/metric/maximum"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MetricMaximum.IsNull() {
+			data.MetricMaximum = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MetricMaximum.IsNull() {
 			data.MetricMaximum = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/metric/default-metric"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/metric/default-metric"); value.Exists() {
 		data.MetricDefault = types.Int64Value(value.Int())
 	} else if data.MetricDefault.IsNull() {
 		data.MetricDefault = types.Int64Null()
@@ -5371,7 +5318,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/metric-levels/metric-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/metric-levels/metric-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5400,7 +5347,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.MetricLevels[i].MetricDefault = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "maximum"); value.Exists() {
-			data.MetricLevels[i].MetricMaximum = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MetricLevels[i].MetricMaximum.IsNull() {
+				data.MetricLevels[i].MetricMaximum = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5409,7 +5359,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/te-metric/flex-algo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/te-metric/flex-algo"); value.Exists() {
 		data.TeMetricFlexAlgo = types.Int64Value(value.Int())
 	} else if data.TeMetricFlexAlgo.IsNull() {
 		data.TeMetricFlexAlgo = types.Int64Null()
@@ -5419,7 +5369,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.TeMetricFlexAlgoLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/te-metric/flex-algo-levels/flex-algo-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/te-metric/flex-algo-levels/flex-algo-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5448,7 +5398,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.TeMetricFlexAlgoLevels[i].FlexAlgo = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth-metric/flex-algo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth-metric/flex-algo"); value.Exists() {
 		data.BandwidthMetricFlexAlgo = types.Int64Value(value.Int())
 	} else if data.BandwidthMetricFlexAlgo.IsNull() {
 		data.BandwidthMetricFlexAlgo = types.Int64Null()
@@ -5458,7 +5408,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.BandwidthMetricFlexAlgoLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth-metric/flex-algo-levels/flex-algo-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth-metric/flex-algo-levels/flex-algo-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5492,7 +5442,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.GenericMetricFlexAlgos[i].Type.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/generic-metric/flex-algo/types/type").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/generic-metric/flex-algo/types/type").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5526,7 +5476,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.GenericMetricFlexAlgoLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/generic-metric/flex-algo-levels/flex-algo-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/generic-metric/flex-algo-levels/flex-algo-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5549,55 +5499,58 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		} else if data.GenericMetricFlexAlgoLevels[i].LevelNumber.IsNull() {
 			data.GenericMetricFlexAlgoLevels[i].LevelNumber = types.Int64Null()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "types/type"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes
-			data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes, 0)
+		for ci := range data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes {
+			keys := [...]string{"type-number"}
+			keyValues := [...]string{strconv.FormatInt(data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type.ValueInt64(), 10)}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "type-number"); cValue.Exists() {
-					citem.Type = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "flex-algo-metric-value"); cValue.Exists() {
-					citem.Metric = types.Int64Value(cValue.Int())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Type.Equal(citem.Type) {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "types/type").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes = append(data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "type-number"); value.Exists() {
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type = types.Int64Value(value.Int())
+			} else if data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type.IsNull() {
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Type = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "flex-algo-metric-value"); value.Exists() {
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric = types.Int64Value(value.Int())
+			} else if data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric.IsNull() {
+				data.GenericMetricFlexAlgoLevels[i].FlexAlgosTypes[ci].Metric = types.Int64Null()
+			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
-		data.MplsLdpSync = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MplsLdpSync.IsNull() {
+			data.MplsLdpSync = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MplsLdpSync.IsNull() {
 			data.MplsLdpSync = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mpls/ldp/sync/level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	} else if data.MplsLdpSyncLevel.IsNull() {
 		data.MplsLdpSyncLevel = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tag"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tag"); value.Exists() {
 		data.Tag = types.Int64Value(value.Int())
 	} else if data.Tag.IsNull() {
 		data.Tag = types.Int64Null()
@@ -5607,7 +5560,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.TagLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/tag-levels/tag-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tag-levels/tag-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5636,116 +5589,152 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.TagLevels[i].Tag = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/index-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/index-id"); value.Exists() {
 		data.PrefixSidStrictSpfIndexId = types.Int64Value(value.Int())
 	} else if data.PrefixSidStrictSpfIndexId.IsNull() {
 		data.PrefixSidStrictSpfIndexId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/php-disable"); value.Exists() {
-		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/php-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidStrictSpfIndexPhpDisable.IsNull() {
+			data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfIndexPhpDisable.IsNull() {
 			data.PrefixSidStrictSpfIndexPhpDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/explicit-null"); value.Exists() {
-		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/explicit-null"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidStrictSpfIndexExplicitNull.IsNull() {
+			data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfIndexExplicitNull.IsNull() {
 			data.PrefixSidStrictSpfIndexExplicitNull = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/n-flag-clear"); value.Exists() {
-		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/n-flag-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidStrictSpfIndexNFlagClear.IsNull() {
+			data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfIndexNFlagClear.IsNull() {
 			data.PrefixSidStrictSpfIndexNFlagClear = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/absolute-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/absolute-id"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteId = types.Int64Value(value.Int())
 	} else if data.PrefixSidStrictSpfAbsoluteId.IsNull() {
 		data.PrefixSidStrictSpfAbsoluteId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/php-disable"); value.Exists() {
-		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/php-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidStrictSpfAbsolutePhpDisable.IsNull() {
+			data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfAbsolutePhpDisable.IsNull() {
 			data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/explicit-null"); value.Exists() {
-		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/explicit-null"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidStrictSpfAbsoluteExplicitNull.IsNull() {
+			data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfAbsoluteExplicitNull.IsNull() {
 			data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/n-flag-clear"); value.Exists() {
-		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/n-flag-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidStrictSpfAbsoluteNFlagClear.IsNull() {
+			data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidStrictSpfAbsoluteNFlagClear.IsNull() {
 			data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/index-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/index-id"); value.Exists() {
 		data.PrefixSidIndexId = types.Int64Value(value.Int())
 	} else if data.PrefixSidIndexId.IsNull() {
 		data.PrefixSidIndexId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/php-disable"); value.Exists() {
-		data.PrefixSidIndexPhpDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/php-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidIndexPhpDisable.IsNull() {
+			data.PrefixSidIndexPhpDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidIndexPhpDisable.IsNull() {
 			data.PrefixSidIndexPhpDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/explicit-null"); value.Exists() {
-		data.PrefixSidIndexExplicitNull = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/explicit-null"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidIndexExplicitNull.IsNull() {
+			data.PrefixSidIndexExplicitNull = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidIndexExplicitNull.IsNull() {
 			data.PrefixSidIndexExplicitNull = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/n-flag-clear"); value.Exists() {
-		data.PrefixSidIndexNFlagClear = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/n-flag-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidIndexNFlagClear.IsNull() {
+			data.PrefixSidIndexNFlagClear = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidIndexNFlagClear.IsNull() {
 			data.PrefixSidIndexNFlagClear = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/absolute-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/absolute-id"); value.Exists() {
 		data.PrefixSidAbsoluteId = types.Int64Value(value.Int())
 	} else if data.PrefixSidAbsoluteId.IsNull() {
 		data.PrefixSidAbsoluteId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/php-disable"); value.Exists() {
-		data.PrefixSidAbsolutePhpDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/php-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidAbsolutePhpDisable.IsNull() {
+			data.PrefixSidAbsolutePhpDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidAbsolutePhpDisable.IsNull() {
 			data.PrefixSidAbsolutePhpDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/explicit-null"); value.Exists() {
-		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/explicit-null"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidAbsoluteExplicitNull.IsNull() {
+			data.PrefixSidAbsoluteExplicitNull = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidAbsoluteExplicitNull.IsNull() {
 			data.PrefixSidAbsoluteExplicitNull = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/n-flag-clear"); value.Exists() {
-		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/n-flag-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixSidAbsoluteNFlagClear.IsNull() {
+			data.PrefixSidAbsoluteNFlagClear = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PrefixSidAbsoluteNFlagClear.IsNull() {
@@ -5757,7 +5746,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.PrefixSidAlgorithms[i].Algorithm.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/algorithms/algorithm").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/algorithms/algorithm").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5786,7 +5775,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.PrefixSidAlgorithms[i].IndexId = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "index/php-disable"); value.Exists() {
-			data.PrefixSidAlgorithms[i].IndexPhpDisable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].IndexPhpDisable.IsNull() {
+				data.PrefixSidAlgorithms[i].IndexPhpDisable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5795,7 +5787,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			}
 		}
 		if value := helpers.GetFromXPath(r, "index/explicit-null"); value.Exists() {
-			data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() {
+				data.PrefixSidAlgorithms[i].IndexExplicitNull = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5804,7 +5799,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			}
 		}
 		if value := helpers.GetFromXPath(r, "index/n-flag-clear"); value.Exists() {
-			data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() {
+				data.PrefixSidAlgorithms[i].IndexNFlagClear = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5818,7 +5816,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.PrefixSidAlgorithms[i].AbsoluteId = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "absolute/php-disable"); value.Exists() {
-			data.PrefixSidAlgorithms[i].AbsolutePhpDisable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].AbsolutePhpDisable.IsNull() {
+				data.PrefixSidAlgorithms[i].AbsolutePhpDisable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5827,7 +5828,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			}
 		}
 		if value := helpers.GetFromXPath(r, "absolute/explicit-null"); value.Exists() {
-			data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() {
+				data.PrefixSidAlgorithms[i].AbsoluteExplicitNull = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5836,7 +5840,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			}
 		}
 		if value := helpers.GetFromXPath(r, "absolute/n-flag-clear"); value.Exists() {
-			data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() {
+				data.PrefixSidAlgorithms[i].AbsoluteNFlagClear = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5850,7 +5857,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.AdjacencySidIndices[i].IndexNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/adjacency-sid/indices/index").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/adjacency-sid/indices/index").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5874,7 +5881,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.AdjacencySidIndices[i].IndexNumber = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "protected"); value.Exists() {
-			data.AdjacencySidIndices[i].Protected = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.AdjacencySidIndices[i].Protected.IsNull() {
+				data.AdjacencySidIndices[i].Protected = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5888,7 +5898,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.AdjacencySidAbsolutes[i].AbsoluteNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/adjacency-sid/absolutes/absolute").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/adjacency-sid/absolutes/absolute").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5912,7 +5922,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.AdjacencySidAbsolutes[i].AbsoluteNumber = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "protected"); value.Exists() {
-			data.AdjacencySidAbsolutes[i].Protected = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.AdjacencySidAbsolutes[i].Protected.IsNull() {
+				data.AdjacencySidAbsolutes[i].Protected = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5921,16 +5934,22 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/enable/per-prefix"); value.Exists() {
-		data.FastReroutePerPrefix = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/enable/per-prefix"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FastReroutePerPrefix.IsNull() {
+			data.FastReroutePerPrefix = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerPrefix.IsNull() {
 			data.FastReroutePerPrefix = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/enable/per-link"); value.Exists() {
-		data.FastReroutePerLink = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/enable/per-link"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FastReroutePerLink.IsNull() {
+			data.FastReroutePerLink = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerLink.IsNull() {
@@ -5942,7 +5961,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.FastRerouteLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/enable-levels/enable-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/enable-levels/enable-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5966,7 +5985,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.FastRerouteLevels[i].LevelNumber = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "per-prefix"); value.Exists() {
-			data.FastRerouteLevels[i].PerPrefix = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.FastRerouteLevels[i].PerPrefix.IsNull() {
+				data.FastRerouteLevels[i].PerPrefix = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5975,7 +5997,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			}
 		}
 		if value := helpers.GetFromXPath(r, "per-link"); value.Exists() {
-			data.FastRerouteLevels[i].PerLink = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.FastRerouteLevels[i].PerLink.IsNull() {
+				data.FastRerouteLevels[i].PerLink = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -5984,8 +6009,11 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FastReroutePerPrefixTiebreakerDefault.IsNull() {
+			data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerPrefixTiebreakerDefault.IsNull() {
@@ -5997,7 +6025,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiebreakerDefaultLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6021,7 +6049,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.FastReroutePerPrefixTiebreakerDefaultLevels[i].LevelNumber = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting/index"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting/index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Null()
@@ -6031,7 +6059,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiebreakerNodeProtectingLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6060,7 +6088,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.FastReroutePerPrefixTiebreakerNodeProtectingLevels[i].Index = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Null()
@@ -6070,7 +6098,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6099,7 +6127,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels[i].Index = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Null()
@@ -6109,7 +6137,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiebreakerLcDisjointLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6138,7 +6166,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.FastReroutePerPrefixTiebreakerLcDisjointLevels[i].Index = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaMaximumMetric = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixRemoteLfaMaximumMetric.IsNull() {
 		data.FastReroutePerPrefixRemoteLfaMaximumMetric = types.Int64Null()
@@ -6148,7 +6176,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6177,8 +6205,11 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels[i].MaximumMetric = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp"); value.Exists() {
-		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() {
+			data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() {
@@ -6190,7 +6221,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6214,8 +6245,11 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels[i].LevelNumber = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa"); value.Exists() {
-		data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FastReroutePerPrefixTiLfa.IsNull() {
+			data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroutePerPrefixTiLfa.IsNull() {
@@ -6227,7 +6261,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixTiLfaLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6256,7 +6290,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{data.FastReroutePerPrefixExcludeInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/exclude/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/exclude/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6290,7 +6324,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{data.FastReroutePerPrefixLfaCandidateInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/lfa-candidate/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/lfa-candidate/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6324,7 +6358,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{data.FastReroutePerLinkExcludeInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-link/exclude/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-link/exclude/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6358,7 +6392,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{data.FastReroutePerLinkLfaCandidateInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-link/lfa-candidate/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-link/lfa-candidate/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6387,17 +6421,17 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.FastReroutePerLinkLfaCandidateInterfaces[i].Level = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-group/link-group-string"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-group/link-group-string"); value.Exists() {
 		data.LinkGroupName = types.StringValue(value.String())
 	} else if data.LinkGroupName.IsNull() {
 		data.LinkGroupName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-group/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-group/level"); value.Exists() {
 		data.LinkGroupLevel = types.Int64Value(value.Int())
 	} else if data.LinkGroupLevel.IsNull() {
 		data.LinkGroupLevel = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/weight"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/weight"); value.Exists() {
 		data.Weight = types.Int64Value(value.Int())
 	} else if data.Weight.IsNull() {
 		data.Weight = types.Int64Null()
@@ -6407,7 +6441,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.WeightLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/weight-levels/weight-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/weight-levels/weight-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6436,7 +6470,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.WeightLevels[i].Weight = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-metric/proactive-protect"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-metric/proactive-protect"); value.Exists() {
 		data.AutoMetricProactiveProtectMetric = types.Int64Value(value.Int())
 	} else if data.AutoMetricProactiveProtectMetric.IsNull() {
 		data.AutoMetricProactiveProtectMetric = types.Int64Null()
@@ -6446,7 +6480,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.AutoMetricProactiveProtectMetricLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-metric/proactive-protect-levels/proactive-protect-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-metric/proactive-protect-levels/proactive-protect-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6475,7 +6509,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 			data.AutoMetricProactiveProtectMetricLevels[i].ProactiveProtect = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/prefix-advertisement/route-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise/prefix-advertisement/route-policy"); value.Exists() {
 		data.AdvertisePrefixRoutePolicy = types.StringValue(value.String())
 	} else if data.AdvertisePrefixRoutePolicy.IsNull() {
 		data.AdvertisePrefixRoutePolicy = types.StringNull()
@@ -6485,7 +6519,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 		keyValues := [...]string{strconv.FormatInt(data.AdvertisePrefixRoutePolicyLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/prefix-advertisement/route-policy-levels/route-policy-level").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise/prefix-advertisement/route-policy-levels/route-policy-level").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6521,558 +6555,15 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBodyXML(ctx context.Cont
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterISISInterfaceAddressFamily) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/metric/maximum"); value.Exists() {
-		data.MetricMaximum = types.BoolValue(true)
-	} else {
-		data.MetricMaximum = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/metric/default-metric"); value.Exists() {
-		data.MetricDefault = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/metric-levels/metric-level"); value.Exists() {
-		data.MetricLevels = make([]RouterISISInterfaceAddressFamilyMetricLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyMetricLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "default-metric"); cValue.Exists() {
-				item.MetricDefault = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "maximum"); cValue.Exists() {
-				item.MetricMaximum = types.BoolValue(true)
-			} else {
-				item.MetricMaximum = types.BoolNull()
-			}
-			data.MetricLevels = append(data.MetricLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/te-metric/flex-algo"); value.Exists() {
-		data.TeMetricFlexAlgo = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/te-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
-		data.TeMetricFlexAlgoLevels = make([]RouterISISInterfaceAddressFamilyTeMetricFlexAlgoLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyTeMetricFlexAlgoLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "flex-algo"); cValue.Exists() {
-				item.FlexAlgo = types.Int64Value(cValue.Int())
-			}
-			data.TeMetricFlexAlgoLevels = append(data.TeMetricFlexAlgoLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth-metric/flex-algo"); value.Exists() {
-		data.BandwidthMetricFlexAlgo = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
-		data.BandwidthMetricFlexAlgoLevels = make([]RouterISISInterfaceAddressFamilyBandwidthMetricFlexAlgoLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyBandwidthMetricFlexAlgoLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "flex-algo"); cValue.Exists() {
-				item.FlexAlgo = types.Int64Value(cValue.Int())
-			}
-			data.BandwidthMetricFlexAlgoLevels = append(data.BandwidthMetricFlexAlgoLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/generic-metric/flex-algo/types/type"); value.Exists() {
-		data.GenericMetricFlexAlgos = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgos, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgos{}
-			if cValue := helpers.GetFromXPath(v, "type-number"); cValue.Exists() {
-				item.Type = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "flex-algo-metric-value"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
-			}
-			data.GenericMetricFlexAlgos = append(data.GenericMetricFlexAlgos, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/generic-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
-		data.GenericMetricFlexAlgoLevels = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "types/type"); cValue.Exists() {
-				item.FlexAlgosTypes = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes{}
-					if ccValue := helpers.GetFromXPath(cv, "type-number"); ccValue.Exists() {
-						cItem.Type = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "flex-algo-metric-value"); ccValue.Exists() {
-						cItem.Metric = types.Int64Value(ccValue.Int())
-					}
-					item.FlexAlgosTypes = append(item.FlexAlgosTypes, cItem)
-					return true
-				})
-			}
-			data.GenericMetricFlexAlgoLevels = append(data.GenericMetricFlexAlgoLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
-		data.MplsLdpSync = types.BoolValue(true)
-	} else {
-		data.MplsLdpSync = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync/level"); value.Exists() {
-		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tag"); value.Exists() {
-		data.Tag = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tag-levels/tag-level"); value.Exists() {
-		data.TagLevels = make([]RouterISISInterfaceAddressFamilyTagLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyTagLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "tag"); cValue.Exists() {
-				item.Tag = types.Int64Value(cValue.Int())
-			}
-			data.TagLevels = append(data.TagLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/index-id"); value.Exists() {
-		data.PrefixSidStrictSpfIndexId = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/php-disable"); value.Exists() {
-		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/explicit-null"); value.Exists() {
-		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/n-flag-clear"); value.Exists() {
-		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/absolute-id"); value.Exists() {
-		data.PrefixSidStrictSpfAbsoluteId = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/php-disable"); value.Exists() {
-		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/explicit-null"); value.Exists() {
-		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/n-flag-clear"); value.Exists() {
-		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(true)
-	} else {
-		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/index-id"); value.Exists() {
-		data.PrefixSidIndexId = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/php-disable"); value.Exists() {
-		data.PrefixSidIndexPhpDisable = types.BoolValue(true)
-	} else {
-		data.PrefixSidIndexPhpDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/explicit-null"); value.Exists() {
-		data.PrefixSidIndexExplicitNull = types.BoolValue(true)
-	} else {
-		data.PrefixSidIndexExplicitNull = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/n-flag-clear"); value.Exists() {
-		data.PrefixSidIndexNFlagClear = types.BoolValue(true)
-	} else {
-		data.PrefixSidIndexNFlagClear = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/absolute-id"); value.Exists() {
-		data.PrefixSidAbsoluteId = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/php-disable"); value.Exists() {
-		data.PrefixSidAbsolutePhpDisable = types.BoolValue(true)
-	} else {
-		data.PrefixSidAbsolutePhpDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/explicit-null"); value.Exists() {
-		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(true)
-	} else {
-		data.PrefixSidAbsoluteExplicitNull = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/n-flag-clear"); value.Exists() {
-		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(true)
-	} else {
-		data.PrefixSidAbsoluteNFlagClear = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/algorithms/algorithm"); value.Exists() {
-		data.PrefixSidAlgorithms = make([]RouterISISInterfaceAddressFamilyPrefixSidAlgorithms, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyPrefixSidAlgorithms{}
-			if cValue := helpers.GetFromXPath(v, "algorithm-number"); cValue.Exists() {
-				item.Algorithm = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "index/index-id"); cValue.Exists() {
-				item.IndexId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "index/php-disable"); cValue.Exists() {
-				item.IndexPhpDisable = types.BoolValue(true)
-			} else {
-				item.IndexPhpDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "index/explicit-null"); cValue.Exists() {
-				item.IndexExplicitNull = types.BoolValue(true)
-			} else {
-				item.IndexExplicitNull = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "index/n-flag-clear"); cValue.Exists() {
-				item.IndexNFlagClear = types.BoolValue(true)
-			} else {
-				item.IndexNFlagClear = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "absolute/absolute-id"); cValue.Exists() {
-				item.AbsoluteId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "absolute/php-disable"); cValue.Exists() {
-				item.AbsolutePhpDisable = types.BoolValue(true)
-			} else {
-				item.AbsolutePhpDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "absolute/explicit-null"); cValue.Exists() {
-				item.AbsoluteExplicitNull = types.BoolValue(true)
-			} else {
-				item.AbsoluteExplicitNull = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "absolute/n-flag-clear"); cValue.Exists() {
-				item.AbsoluteNFlagClear = types.BoolValue(true)
-			} else {
-				item.AbsoluteNFlagClear = types.BoolNull()
-			}
-			data.PrefixSidAlgorithms = append(data.PrefixSidAlgorithms, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/adjacency-sid/indices/index"); value.Exists() {
-		data.AdjacencySidIndices = make([]RouterISISInterfaceAddressFamilyAdjacencySidIndices, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyAdjacencySidIndices{}
-			if cValue := helpers.GetFromXPath(v, "index-number"); cValue.Exists() {
-				item.IndexNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "protected"); cValue.Exists() {
-				item.Protected = types.BoolValue(true)
-			} else {
-				item.Protected = types.BoolNull()
-			}
-			data.AdjacencySidIndices = append(data.AdjacencySidIndices, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/adjacency-sid/absolutes/absolute"); value.Exists() {
-		data.AdjacencySidAbsolutes = make([]RouterISISInterfaceAddressFamilyAdjacencySidAbsolutes, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyAdjacencySidAbsolutes{}
-			if cValue := helpers.GetFromXPath(v, "absolute-number"); cValue.Exists() {
-				item.AbsoluteNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "protected"); cValue.Exists() {
-				item.Protected = types.BoolValue(true)
-			} else {
-				item.Protected = types.BoolNull()
-			}
-			data.AdjacencySidAbsolutes = append(data.AdjacencySidAbsolutes, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/enable/per-prefix"); value.Exists() {
-		data.FastReroutePerPrefix = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefix = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/enable/per-link"); value.Exists() {
-		data.FastReroutePerLink = types.BoolValue(true)
-	} else {
-		data.FastReroutePerLink = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/enable-levels/enable-level"); value.Exists() {
-		data.FastRerouteLevels = make([]RouterISISInterfaceAddressFamilyFastRerouteLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastRerouteLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "per-prefix"); cValue.Exists() {
-				item.PerPrefix = types.BoolValue(true)
-			} else {
-				item.PerPrefix = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "per-link"); cValue.Exists() {
-				item.PerLink = types.BoolValue(true)
-			} else {
-				item.PerLink = types.BoolNull()
-			}
-			data.FastRerouteLevels = append(data.FastRerouteLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixTiebreakerDefault = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerDefaultLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerDefaultLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerDefaultLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixTiebreakerDefaultLevels = append(data.FastReroutePerPrefixTiebreakerDefaultLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting/index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerNodeProtectingLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerNodeProtectingLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerNodeProtectingLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "index"); cValue.Exists() {
-				item.Index = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixTiebreakerNodeProtectingLevels = append(data.FastReroutePerPrefixTiebreakerNodeProtectingLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerSrlgDisjointLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerSrlgDisjointLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "index"); cValue.Exists() {
-				item.Index = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels = append(data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level"); value.Exists() {
-		data.FastReroutePerPrefixTiebreakerLcDisjointLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerLcDisjointLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerLcDisjointLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "index"); cValue.Exists() {
-				item.Index = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixTiebreakerLcDisjointLevels = append(data.FastReroutePerPrefixTiebreakerLcDisjointLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric"); value.Exists() {
-		data.FastReroutePerPrefixRemoteLfaMaximumMetric = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level"); value.Exists() {
-		data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaMaximumMetricLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaMaximumMetricLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "maximum-metric"); cValue.Exists() {
-				item.MaximumMetric = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels = append(data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp"); value.Exists() {
-		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level"); value.Exists() {
-		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels = append(data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa"); value.Exists() {
-		data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
-	} else {
-		data.FastReroutePerPrefixTiLfa = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level"); value.Exists() {
-		data.FastReroutePerPrefixTiLfaLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiLfaLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiLfaLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixTiLfaLevels = append(data.FastReroutePerPrefixTiLfaLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/exclude/interfaces/interface"); value.Exists() {
-		data.FastReroutePerPrefixExcludeInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixExcludeInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixExcludeInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "exclude-interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "level"); cValue.Exists() {
-				item.Level = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixExcludeInterfaces = append(data.FastReroutePerPrefixExcludeInterfaces, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/lfa-candidate/interfaces/interface"); value.Exists() {
-		data.FastReroutePerPrefixLfaCandidateInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixLfaCandidateInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixLfaCandidateInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "lfa-interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "level"); cValue.Exists() {
-				item.Level = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerPrefixLfaCandidateInterfaces = append(data.FastReroutePerPrefixLfaCandidateInterfaces, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-link/exclude/interfaces/interface"); value.Exists() {
-		data.FastReroutePerLinkExcludeInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerLinkExcludeInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerLinkExcludeInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "exclude-interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "level"); cValue.Exists() {
-				item.Level = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerLinkExcludeInterfaces = append(data.FastReroutePerLinkExcludeInterfaces, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-link/lfa-candidate/interfaces/interface"); value.Exists() {
-		data.FastReroutePerLinkLfaCandidateInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerLinkLfaCandidateInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerLinkLfaCandidateInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "lfa-interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "level"); cValue.Exists() {
-				item.Level = types.Int64Value(cValue.Int())
-			}
-			data.FastReroutePerLinkLfaCandidateInterfaces = append(data.FastReroutePerLinkLfaCandidateInterfaces, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-group/link-group-string"); value.Exists() {
-		data.LinkGroupName = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-group/level"); value.Exists() {
-		data.LinkGroupLevel = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/weight"); value.Exists() {
-		data.Weight = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/weight-levels/weight-level"); value.Exists() {
-		data.WeightLevels = make([]RouterISISInterfaceAddressFamilyWeightLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyWeightLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "weight"); cValue.Exists() {
-				item.Weight = types.Int64Value(cValue.Int())
-			}
-			data.WeightLevels = append(data.WeightLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-metric/proactive-protect"); value.Exists() {
-		data.AutoMetricProactiveProtectMetric = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-metric/proactive-protect-levels/proactive-protect-level"); value.Exists() {
-		data.AutoMetricProactiveProtectMetricLevels = make([]RouterISISInterfaceAddressFamilyAutoMetricProactiveProtectMetricLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyAutoMetricProactiveProtectMetricLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "proactive-protect"); cValue.Exists() {
-				item.ProactiveProtect = types.Int64Value(cValue.Int())
-			}
-			data.AutoMetricProactiveProtectMetricLevels = append(data.AutoMetricProactiveProtectMetricLevels, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/prefix-advertisement/route-policy"); value.Exists() {
-		data.AdvertisePrefixRoutePolicy = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/prefix-advertisement/route-policy-levels/route-policy-level"); value.Exists() {
-		data.AdvertisePrefixRoutePolicyLevels = make([]RouterISISInterfaceAddressFamilyAdvertisePrefixRoutePolicyLevels, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterISISInterfaceAddressFamilyAdvertisePrefixRoutePolicyLevels{}
-			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
-				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "route-policy"); cValue.Exists() {
-				item.RoutePolicy = types.StringValue(cValue.String())
-			}
-			data.AdvertisePrefixRoutePolicyLevels = append(data.AdvertisePrefixRoutePolicyLevels, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/metric/maximum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/metric/maximum"); value.Exists() {
 		data.MetricMaximum = types.BoolValue(true)
 	} else {
 		data.MetricMaximum = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/metric/default-metric"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/metric/default-metric"); value.Exists() {
 		data.MetricDefault = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/metric-levels/metric-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/metric-levels/metric-level"); value.Exists() {
 		data.MetricLevels = make([]RouterISISInterfaceAddressFamilyMetricLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyMetricLevels{}
@@ -7091,10 +6582,10 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/te-metric/flex-algo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/te-metric/flex-algo"); value.Exists() {
 		data.TeMetricFlexAlgo = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/te-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/te-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
 		data.TeMetricFlexAlgoLevels = make([]RouterISISInterfaceAddressFamilyTeMetricFlexAlgoLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyTeMetricFlexAlgoLevels{}
@@ -7108,10 +6599,10 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth-metric/flex-algo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth-metric/flex-algo"); value.Exists() {
 		data.BandwidthMetricFlexAlgo = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
 		data.BandwidthMetricFlexAlgoLevels = make([]RouterISISInterfaceAddressFamilyBandwidthMetricFlexAlgoLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyBandwidthMetricFlexAlgoLevels{}
@@ -7125,7 +6616,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/generic-metric/flex-algo/types/type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/generic-metric/flex-algo/types/type"); value.Exists() {
 		data.GenericMetricFlexAlgos = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgos, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgos{}
@@ -7139,7 +6630,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/generic-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/generic-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
 		data.GenericMetricFlexAlgoLevels = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevels{}
@@ -7164,18 +6655,18 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
 		data.MplsLdpSync = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mpls/ldp/sync/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mpls/ldp/sync/level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tag"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tag"); value.Exists() {
 		data.Tag = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/tag-levels/tag-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tag-levels/tag-level"); value.Exists() {
 		data.TagLevels = make([]RouterISISInterfaceAddressFamilyTagLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyTagLevels{}
@@ -7189,79 +6680,79 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/index-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/index-id"); value.Exists() {
 		data.PrefixSidStrictSpfIndexId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/php-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/php-disable"); value.Exists() {
 		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(true)
 	} else {
 		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/explicit-null"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/explicit-null"); value.Exists() {
 		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(true)
 	} else {
 		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/index/n-flag-clear"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/n-flag-clear"); value.Exists() {
 		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(true)
 	} else {
 		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/absolute-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/absolute-id"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/php-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/php-disable"); value.Exists() {
 		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(true)
 	} else {
 		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/explicit-null"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/explicit-null"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(true)
 	} else {
 		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/strict-spf/absolute/n-flag-clear"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/n-flag-clear"); value.Exists() {
 		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(true)
 	} else {
 		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/index-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/index-id"); value.Exists() {
 		data.PrefixSidIndexId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/php-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/php-disable"); value.Exists() {
 		data.PrefixSidIndexPhpDisable = types.BoolValue(true)
 	} else {
 		data.PrefixSidIndexPhpDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/explicit-null"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/explicit-null"); value.Exists() {
 		data.PrefixSidIndexExplicitNull = types.BoolValue(true)
 	} else {
 		data.PrefixSidIndexExplicitNull = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/index/n-flag-clear"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/n-flag-clear"); value.Exists() {
 		data.PrefixSidIndexNFlagClear = types.BoolValue(true)
 	} else {
 		data.PrefixSidIndexNFlagClear = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/absolute-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/absolute-id"); value.Exists() {
 		data.PrefixSidAbsoluteId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/php-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/php-disable"); value.Exists() {
 		data.PrefixSidAbsolutePhpDisable = types.BoolValue(true)
 	} else {
 		data.PrefixSidAbsolutePhpDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/explicit-null"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/explicit-null"); value.Exists() {
 		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(true)
 	} else {
 		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/absolute/n-flag-clear"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/n-flag-clear"); value.Exists() {
 		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(true)
 	} else {
 		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid/algorithms/algorithm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/algorithms/algorithm"); value.Exists() {
 		data.PrefixSidAlgorithms = make([]RouterISISInterfaceAddressFamilyPrefixSidAlgorithms, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyPrefixSidAlgorithms{}
@@ -7308,7 +6799,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/adjacency-sid/indices/index"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/adjacency-sid/indices/index"); value.Exists() {
 		data.AdjacencySidIndices = make([]RouterISISInterfaceAddressFamilyAdjacencySidIndices, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyAdjacencySidIndices{}
@@ -7324,7 +6815,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/adjacency-sid/absolutes/absolute"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/adjacency-sid/absolutes/absolute"); value.Exists() {
 		data.AdjacencySidAbsolutes = make([]RouterISISInterfaceAddressFamilyAdjacencySidAbsolutes, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyAdjacencySidAbsolutes{}
@@ -7340,17 +6831,17 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/enable/per-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/enable/per-prefix"); value.Exists() {
 		data.FastReroutePerPrefix = types.BoolValue(true)
 	} else {
 		data.FastReroutePerPrefix = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/enable/per-link"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/enable/per-link"); value.Exists() {
 		data.FastReroutePerLink = types.BoolValue(true)
 	} else {
 		data.FastReroutePerLink = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/enable-levels/enable-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/enable-levels/enable-level"); value.Exists() {
 		data.FastRerouteLevels = make([]RouterISISInterfaceAddressFamilyFastRerouteLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastRerouteLevels{}
@@ -7371,12 +6862,12 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(true)
 	} else {
 		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerDefaultLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerDefaultLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerDefaultLevels{}
@@ -7387,10 +6878,10 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting/index"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting/index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerNodeProtectingLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerNodeProtectingLevels{}
@@ -7404,10 +6895,10 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerSrlgDisjointLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerSrlgDisjointLevels{}
@@ -7421,10 +6912,10 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerLcDisjointLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerLcDisjointLevels{}
@@ -7438,10 +6929,10 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaMaximumMetric = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaMaximumMetricLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaMaximumMetricLevels{}
@@ -7455,12 +6946,12 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
 	} else {
 		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels{}
@@ -7471,12 +6962,12 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa"); value.Exists() {
 		data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
 	} else {
 		data.FastReroutePerPrefixTiLfa = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level"); value.Exists() {
 		data.FastReroutePerPrefixTiLfaLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiLfaLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiLfaLevels{}
@@ -7487,7 +6978,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/exclude/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/exclude/interfaces/interface"); value.Exists() {
 		data.FastReroutePerPrefixExcludeInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixExcludeInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixExcludeInterfaces{}
@@ -7501,7 +6992,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-prefix/lfa-candidate/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/lfa-candidate/interfaces/interface"); value.Exists() {
 		data.FastReroutePerPrefixLfaCandidateInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixLfaCandidateInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixLfaCandidateInterfaces{}
@@ -7515,7 +7006,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-link/exclude/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-link/exclude/interfaces/interface"); value.Exists() {
 		data.FastReroutePerLinkExcludeInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerLinkExcludeInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerLinkExcludeInterfaces{}
@@ -7529,7 +7020,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/fast-reroute/per-link/lfa-candidate/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-link/lfa-candidate/interfaces/interface"); value.Exists() {
 		data.FastReroutePerLinkLfaCandidateInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerLinkLfaCandidateInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyFastReroutePerLinkLfaCandidateInterfaces{}
@@ -7543,16 +7034,16 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-group/link-group-string"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-group/link-group-string"); value.Exists() {
 		data.LinkGroupName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-group/level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-group/level"); value.Exists() {
 		data.LinkGroupLevel = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/weight"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/weight"); value.Exists() {
 		data.Weight = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/weight-levels/weight-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/weight-levels/weight-level"); value.Exists() {
 		data.WeightLevels = make([]RouterISISInterfaceAddressFamilyWeightLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyWeightLevels{}
@@ -7566,10 +7057,10 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-metric/proactive-protect"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-metric/proactive-protect"); value.Exists() {
 		data.AutoMetricProactiveProtectMetric = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/auto-metric/proactive-protect-levels/proactive-protect-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-metric/proactive-protect-levels/proactive-protect-level"); value.Exists() {
 		data.AutoMetricProactiveProtectMetricLevels = make([]RouterISISInterfaceAddressFamilyAutoMetricProactiveProtectMetricLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyAutoMetricProactiveProtectMetricLevels{}
@@ -7583,10 +7074,553 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/prefix-advertisement/route-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise/prefix-advertisement/route-policy"); value.Exists() {
 		data.AdvertisePrefixRoutePolicy = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise/prefix-advertisement/route-policy-levels/route-policy-level"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise/prefix-advertisement/route-policy-levels/route-policy-level"); value.Exists() {
+		data.AdvertisePrefixRoutePolicyLevels = make([]RouterISISInterfaceAddressFamilyAdvertisePrefixRoutePolicyLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyAdvertisePrefixRoutePolicyLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			data.AdvertisePrefixRoutePolicyLevels = append(data.AdvertisePrefixRoutePolicyLevels, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RouterISISInterfaceAddressFamilyData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/metric/maximum"); value.Exists() {
+		data.MetricMaximum = types.BoolValue(true)
+	} else {
+		data.MetricMaximum = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/metric/default-metric"); value.Exists() {
+		data.MetricDefault = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/metric-levels/metric-level"); value.Exists() {
+		data.MetricLevels = make([]RouterISISInterfaceAddressFamilyMetricLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyMetricLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "default-metric"); cValue.Exists() {
+				item.MetricDefault = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "maximum"); cValue.Exists() {
+				item.MetricMaximum = types.BoolValue(true)
+			} else {
+				item.MetricMaximum = types.BoolValue(false)
+			}
+			data.MetricLevels = append(data.MetricLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/te-metric/flex-algo"); value.Exists() {
+		data.TeMetricFlexAlgo = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/te-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
+		data.TeMetricFlexAlgoLevels = make([]RouterISISInterfaceAddressFamilyTeMetricFlexAlgoLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyTeMetricFlexAlgoLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "flex-algo"); cValue.Exists() {
+				item.FlexAlgo = types.Int64Value(cValue.Int())
+			}
+			data.TeMetricFlexAlgoLevels = append(data.TeMetricFlexAlgoLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth-metric/flex-algo"); value.Exists() {
+		data.BandwidthMetricFlexAlgo = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
+		data.BandwidthMetricFlexAlgoLevels = make([]RouterISISInterfaceAddressFamilyBandwidthMetricFlexAlgoLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyBandwidthMetricFlexAlgoLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "flex-algo"); cValue.Exists() {
+				item.FlexAlgo = types.Int64Value(cValue.Int())
+			}
+			data.BandwidthMetricFlexAlgoLevels = append(data.BandwidthMetricFlexAlgoLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/generic-metric/flex-algo/types/type"); value.Exists() {
+		data.GenericMetricFlexAlgos = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgos, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgos{}
+			if cValue := helpers.GetFromXPath(v, "type-number"); cValue.Exists() {
+				item.Type = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "flex-algo-metric-value"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.GenericMetricFlexAlgos = append(data.GenericMetricFlexAlgos, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/generic-metric/flex-algo-levels/flex-algo-level"); value.Exists() {
+		data.GenericMetricFlexAlgoLevels = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "types/type"); cValue.Exists() {
+				item.FlexAlgosTypes = make([]RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RouterISISInterfaceAddressFamilyGenericMetricFlexAlgoLevelsFlexAlgosTypes{}
+					if ccValue := helpers.GetFromXPath(cv, "type-number"); ccValue.Exists() {
+						cItem.Type = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "flex-algo-metric-value"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.FlexAlgosTypes = append(item.FlexAlgosTypes, cItem)
+					return true
+				})
+			}
+			data.GenericMetricFlexAlgoLevels = append(data.GenericMetricFlexAlgoLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mpls/ldp/sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	} else {
+		data.MplsLdpSync = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mpls/ldp/sync/level"); value.Exists() {
+		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tag"); value.Exists() {
+		data.Tag = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tag-levels/tag-level"); value.Exists() {
+		data.TagLevels = make([]RouterISISInterfaceAddressFamilyTagLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyTagLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			data.TagLevels = append(data.TagLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/index-id"); value.Exists() {
+		data.PrefixSidStrictSpfIndexId = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/php-disable"); value.Exists() {
+		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(true)
+	} else {
+		data.PrefixSidStrictSpfIndexPhpDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/explicit-null"); value.Exists() {
+		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(true)
+	} else {
+		data.PrefixSidStrictSpfIndexExplicitNull = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/index/n-flag-clear"); value.Exists() {
+		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(true)
+	} else {
+		data.PrefixSidStrictSpfIndexNFlagClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/absolute-id"); value.Exists() {
+		data.PrefixSidStrictSpfAbsoluteId = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/php-disable"); value.Exists() {
+		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(true)
+	} else {
+		data.PrefixSidStrictSpfAbsolutePhpDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/explicit-null"); value.Exists() {
+		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(true)
+	} else {
+		data.PrefixSidStrictSpfAbsoluteExplicitNull = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/strict-spf/absolute/n-flag-clear"); value.Exists() {
+		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(true)
+	} else {
+		data.PrefixSidStrictSpfAbsoluteNFlagClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/index-id"); value.Exists() {
+		data.PrefixSidIndexId = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/php-disable"); value.Exists() {
+		data.PrefixSidIndexPhpDisable = types.BoolValue(true)
+	} else {
+		data.PrefixSidIndexPhpDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/explicit-null"); value.Exists() {
+		data.PrefixSidIndexExplicitNull = types.BoolValue(true)
+	} else {
+		data.PrefixSidIndexExplicitNull = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/index/n-flag-clear"); value.Exists() {
+		data.PrefixSidIndexNFlagClear = types.BoolValue(true)
+	} else {
+		data.PrefixSidIndexNFlagClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/absolute-id"); value.Exists() {
+		data.PrefixSidAbsoluteId = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/php-disable"); value.Exists() {
+		data.PrefixSidAbsolutePhpDisable = types.BoolValue(true)
+	} else {
+		data.PrefixSidAbsolutePhpDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/explicit-null"); value.Exists() {
+		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(true)
+	} else {
+		data.PrefixSidAbsoluteExplicitNull = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/absolute/n-flag-clear"); value.Exists() {
+		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(true)
+	} else {
+		data.PrefixSidAbsoluteNFlagClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid/algorithms/algorithm"); value.Exists() {
+		data.PrefixSidAlgorithms = make([]RouterISISInterfaceAddressFamilyPrefixSidAlgorithms, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyPrefixSidAlgorithms{}
+			if cValue := helpers.GetFromXPath(v, "algorithm-number"); cValue.Exists() {
+				item.Algorithm = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "index/index-id"); cValue.Exists() {
+				item.IndexId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "index/php-disable"); cValue.Exists() {
+				item.IndexPhpDisable = types.BoolValue(true)
+			} else {
+				item.IndexPhpDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "index/explicit-null"); cValue.Exists() {
+				item.IndexExplicitNull = types.BoolValue(true)
+			} else {
+				item.IndexExplicitNull = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "index/n-flag-clear"); cValue.Exists() {
+				item.IndexNFlagClear = types.BoolValue(true)
+			} else {
+				item.IndexNFlagClear = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "absolute/absolute-id"); cValue.Exists() {
+				item.AbsoluteId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "absolute/php-disable"); cValue.Exists() {
+				item.AbsolutePhpDisable = types.BoolValue(true)
+			} else {
+				item.AbsolutePhpDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "absolute/explicit-null"); cValue.Exists() {
+				item.AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				item.AbsoluteExplicitNull = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "absolute/n-flag-clear"); cValue.Exists() {
+				item.AbsoluteNFlagClear = types.BoolValue(true)
+			} else {
+				item.AbsoluteNFlagClear = types.BoolValue(false)
+			}
+			data.PrefixSidAlgorithms = append(data.PrefixSidAlgorithms, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/adjacency-sid/indices/index"); value.Exists() {
+		data.AdjacencySidIndices = make([]RouterISISInterfaceAddressFamilyAdjacencySidIndices, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyAdjacencySidIndices{}
+			if cValue := helpers.GetFromXPath(v, "index-number"); cValue.Exists() {
+				item.IndexNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protected"); cValue.Exists() {
+				item.Protected = types.BoolValue(true)
+			} else {
+				item.Protected = types.BoolValue(false)
+			}
+			data.AdjacencySidIndices = append(data.AdjacencySidIndices, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/adjacency-sid/absolutes/absolute"); value.Exists() {
+		data.AdjacencySidAbsolutes = make([]RouterISISInterfaceAddressFamilyAdjacencySidAbsolutes, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyAdjacencySidAbsolutes{}
+			if cValue := helpers.GetFromXPath(v, "absolute-number"); cValue.Exists() {
+				item.AbsoluteNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protected"); cValue.Exists() {
+				item.Protected = types.BoolValue(true)
+			} else {
+				item.Protected = types.BoolValue(false)
+			}
+			data.AdjacencySidAbsolutes = append(data.AdjacencySidAbsolutes, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/enable/per-prefix"); value.Exists() {
+		data.FastReroutePerPrefix = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefix = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/enable/per-link"); value.Exists() {
+		data.FastReroutePerLink = types.BoolValue(true)
+	} else {
+		data.FastReroutePerLink = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/enable-levels/enable-level"); value.Exists() {
+		data.FastRerouteLevels = make([]RouterISISInterfaceAddressFamilyFastRerouteLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastRerouteLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "per-prefix"); cValue.Exists() {
+				item.PerPrefix = types.BoolValue(true)
+			} else {
+				item.PerPrefix = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "per-link"); cValue.Exists() {
+				item.PerLink = types.BoolValue(true)
+			} else {
+				item.PerLink = types.BoolValue(false)
+			}
+			data.FastRerouteLevels = append(data.FastRerouteLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixTiebreakerDefault = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/default-backup-path-levels/default-backup-path-level"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerDefaultLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerDefaultLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerDefaultLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixTiebreakerDefaultLevels = append(data.FastReroutePerPrefixTiebreakerDefaultLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting/index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/node-protecting-levels/node-protecting-level"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerNodeProtectingLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerNodeProtectingLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerNodeProtectingLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixTiebreakerNodeProtectingLevels = append(data.FastReroutePerPrefixTiebreakerNodeProtectingLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/srlg-disjoint-levels/srlg-disjoint-level"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerSrlgDisjointLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerSrlgDisjointLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels = append(data.FastReroutePerPrefixTiebreakerSrlgDisjointLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/tiebreaker/lc-disjoint-levels/lc-disjoint-level"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerLcDisjointLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerLcDisjointLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiebreakerLcDisjointLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixTiebreakerLcDisjointLevels = append(data.FastReroutePerPrefixTiebreakerLcDisjointLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric"); value.Exists() {
+		data.FastReroutePerPrefixRemoteLfaMaximumMetric = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/maximum-metric-levels/maximum-metric-level"); value.Exists() {
+		data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaMaximumMetricLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaMaximumMetricLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "maximum-metric"); cValue.Exists() {
+				item.MaximumMetric = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels = append(data.FastReroutePerPrefixRemoteLfaMaximumMetricLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp"); value.Exists() {
+		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp-levels/mpls-ldp-level"); value.Exists() {
+		data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels = append(data.FastReroutePerPrefixRemoteLfaTunnelMplsLdpLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa"); value.Exists() {
+		data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixTiLfa = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/ti-lfa-levels/ti-lfa-level"); value.Exists() {
+		data.FastReroutePerPrefixTiLfaLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiLfaLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixTiLfaLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixTiLfaLevels = append(data.FastReroutePerPrefixTiLfaLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/exclude/interfaces/interface"); value.Exists() {
+		data.FastReroutePerPrefixExcludeInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixExcludeInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixExcludeInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "exclude-interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixExcludeInterfaces = append(data.FastReroutePerPrefixExcludeInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-prefix/lfa-candidate/interfaces/interface"); value.Exists() {
+		data.FastReroutePerPrefixLfaCandidateInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixLfaCandidateInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixLfaCandidateInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "lfa-interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerPrefixLfaCandidateInterfaces = append(data.FastReroutePerPrefixLfaCandidateInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-link/exclude/interfaces/interface"); value.Exists() {
+		data.FastReroutePerLinkExcludeInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerLinkExcludeInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerLinkExcludeInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "exclude-interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerLinkExcludeInterfaces = append(data.FastReroutePerLinkExcludeInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-link/lfa-candidate/interfaces/interface"); value.Exists() {
+		data.FastReroutePerLinkLfaCandidateInterfaces = make([]RouterISISInterfaceAddressFamilyFastReroutePerLinkLfaCandidateInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerLinkLfaCandidateInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "lfa-interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			data.FastReroutePerLinkLfaCandidateInterfaces = append(data.FastReroutePerLinkLfaCandidateInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-group/link-group-string"); value.Exists() {
+		data.LinkGroupName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-group/level"); value.Exists() {
+		data.LinkGroupLevel = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/weight"); value.Exists() {
+		data.Weight = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/weight-levels/weight-level"); value.Exists() {
+		data.WeightLevels = make([]RouterISISInterfaceAddressFamilyWeightLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyWeightLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "weight"); cValue.Exists() {
+				item.Weight = types.Int64Value(cValue.Int())
+			}
+			data.WeightLevels = append(data.WeightLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-metric/proactive-protect"); value.Exists() {
+		data.AutoMetricProactiveProtectMetric = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/auto-metric/proactive-protect-levels/proactive-protect-level"); value.Exists() {
+		data.AutoMetricProactiveProtectMetricLevels = make([]RouterISISInterfaceAddressFamilyAutoMetricProactiveProtectMetricLevels, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterISISInterfaceAddressFamilyAutoMetricProactiveProtectMetricLevels{}
+			if cValue := helpers.GetFromXPath(v, "level-number"); cValue.Exists() {
+				item.LevelNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "proactive-protect"); cValue.Exists() {
+				item.ProactiveProtect = types.Int64Value(cValue.Int())
+			}
+			data.AutoMetricProactiveProtectMetricLevels = append(data.AutoMetricProactiveProtectMetricLevels, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise/prefix-advertisement/route-policy"); value.Exists() {
+		data.AdvertisePrefixRoutePolicy = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise/prefix-advertisement/route-policy-levels/route-policy-level"); value.Exists() {
 		data.AdvertisePrefixRoutePolicyLevels = make([]RouterISISInterfaceAddressFamilyAdvertisePrefixRoutePolicyLevels, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterISISInterfaceAddressFamilyAdvertisePrefixRoutePolicyLevels{}

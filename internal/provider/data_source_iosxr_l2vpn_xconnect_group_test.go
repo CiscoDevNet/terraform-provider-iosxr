@@ -78,16 +78,12 @@ func TestAccDataSourceIosxrL2VPNXconnectGroup(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrL2VPNXconnectGroupPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
-	attributes = {
-	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
-	attributes = {
-	}
 	lists = [
 		{
 			name = "route-policy"
@@ -100,7 +96,7 @@ resource "iosxr_gnmi" "PreReq1" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
 `
@@ -160,7 +156,7 @@ func testAccDataSourceIosxrL2VPNXconnectGroupConfig() string {
 	config += `		autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_both = true` + "\n"
 	config += `		autodiscovery_bgp_route_policy_export = "EXPORT_POLICY"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

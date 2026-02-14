@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -643,7 +642,6 @@ func (data IPSLA) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.mpls.lsp.trace.statistics.hourly.distribution.interval", strconv.FormatInt(item.MplsLspTraceStatisticsHourlyDistributionInterval.ValueInt64(), 10))
 			}
 			if len(item.IcmpEchoStatisticsIntervals) > 0 {
-				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.icmp.echo.statistics.intervals.interval", []interface{}{})
 				for cindex, citem := range item.IcmpEchoStatisticsIntervals {
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
 						body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.icmp.echo.statistics.intervals.interval"+"."+strconv.Itoa(cindex)+"."+"interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
@@ -654,7 +652,6 @@ func (data IPSLA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.UdpEchoStatisticsIntervals) > 0 {
-				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.udp.echo.statistics.intervals.interval", []interface{}{})
 				for cindex, citem := range item.UdpEchoStatisticsIntervals {
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
 						body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.udp.echo.statistics.intervals.interval"+"."+strconv.Itoa(cindex)+"."+"interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
@@ -665,7 +662,6 @@ func (data IPSLA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.UdpJitterStatisticsIntervals) > 0 {
-				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.udp.jitter.statistics.intervals.interval", []interface{}{})
 				for cindex, citem := range item.UdpJitterStatisticsIntervals {
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
 						body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.udp.jitter.statistics.intervals.interval"+"."+strconv.Itoa(cindex)+"."+"interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
@@ -676,7 +672,6 @@ func (data IPSLA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.MplsLspPingStatisticsIntervals) > 0 {
-				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.mpls.lsp.ping.statistics.intervals.interval", []interface{}{})
 				for cindex, citem := range item.MplsLspPingStatisticsIntervals {
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
 						body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.mpls.lsp.ping.statistics.intervals.interval"+"."+strconv.Itoa(cindex)+"."+"interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
@@ -759,20 +754,21 @@ func (data IPSLA) toBody(ctx context.Context) string {
 func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "low-memory"); value.Exists() && !data.LowMemory.IsNull() {
 		data.LowMemory = types.Int64Value(value.Int())
-	} else {
+	} else if data.LowMemory.IsNull() {
 		data.LowMemory = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "key-chain"); value.Exists() && !data.KeyChain.IsNull() {
 		data.KeyChain = types.StringValue(value.String())
-	} else {
+	} else if data.KeyChain.IsNull() {
 		data.KeyChain = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "hw-timestamp.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.HwTimestampDisable.IsNull() {
 			data.HwTimestampDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.HwTimestampDisable.IsNull() {
 			data.HwTimestampDisable = types.BoolNull()
 		}
@@ -806,21 +802,15 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].OperationNumber = types.Int64Null()
 		}
 		if value := r.Get("type.icmp.echo"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].IcmpEcho.IsNull() && !data.Operations[i].IcmpEcho.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].IcmpEcho = types.BoolValue(false)
-			} else if !data.Operations[i].IcmpEcho.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpEcho.IsNull() {
 				data.Operations[i].IcmpEcho = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].IcmpEcho.IsNull() {
 				data.Operations[i].IcmpEcho = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].IcmpEcho = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.echo.tag"); value.Exists() && !data.Operations[i].IcmpEchoTag.IsNull() {
@@ -879,39 +869,27 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].IcmpEchoHistoryBuckets = types.Int64Null()
 		}
 		if value := r.Get("type.icmp.echo.history.filter.all"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() && !data.Operations[i].IcmpEchoHistoryFilterAll.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolValue(false)
-			} else if !data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.echo.history.filter.failures"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() && !data.Operations[i].IcmpEchoHistoryFilterFailures.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolValue(false)
-			} else if !data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.echo.history.lives"); value.Exists() && !data.Operations[i].IcmpEchoHistoryLives.IsNull() {
@@ -934,53 +912,50 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Operations[i].IcmpEchoStatisticsHourlyDistributionInterval = types.Int64Null()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("type.icmp.echo.statistics.intervals.interval"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Operations[i].IcmpEchoStatisticsIntervals
-			data.Operations[i].IcmpEchoStatisticsIntervals = make([]IPSLAOperationsIcmpEchoStatisticsIntervals, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := IPSLAOperationsIcmpEchoStatisticsIntervals{}
-				if cValue := cr.Get("interval-time"); cValue.Exists() {
-					citem.Interval = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("buckets"); cValue.Exists() {
-					citem.Buckets = types.Int64Value(cValue.Int())
-				}
+		for ci := range data.Operations[i].IcmpEchoStatisticsIntervals {
+			keys := [...]string{"interval-time"}
+			keyValues := [...]string{strconv.FormatInt(data.Operations[i].IcmpEchoStatisticsIntervals[ci].Interval.ValueInt64(), 10)}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Interval.Equal(citem.Interval) {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("type.icmp.echo.statistics.intervals.interval").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Operations[i].IcmpEchoStatisticsIntervals = append(data.Operations[i].IcmpEchoStatisticsIntervals, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("interval-time"); value.Exists() && !data.Operations[i].IcmpEchoStatisticsIntervals[ci].Interval.IsNull() {
+				data.Operations[i].IcmpEchoStatisticsIntervals[ci].Interval = types.Int64Value(value.Int())
+			} else {
+				data.Operations[i].IcmpEchoStatisticsIntervals[ci].Interval = types.Int64Null()
+			}
+			if value := cr.Get("buckets"); value.Exists() && !data.Operations[i].IcmpEchoStatisticsIntervals[ci].Buckets.IsNull() {
+				data.Operations[i].IcmpEchoStatisticsIntervals[ci].Buckets = types.Int64Value(value.Int())
+			} else {
+				data.Operations[i].IcmpEchoStatisticsIntervals[ci].Buckets = types.Int64Null()
+			}
 		}
 		if value := r.Get("type.icmp.path-echo"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].IcmpPathEcho.IsNull() && !data.Operations[i].IcmpPathEcho.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].IcmpPathEcho = types.BoolValue(false)
-			} else if !data.Operations[i].IcmpPathEcho.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpPathEcho.IsNull() {
 				data.Operations[i].IcmpPathEcho = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].IcmpPathEcho.IsNull() {
 				data.Operations[i].IcmpPathEcho = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].IcmpPathEcho = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.path-echo.tag"); value.Exists() && !data.Operations[i].IcmpPathEchoTag.IsNull() {
@@ -1024,39 +999,27 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].IcmpPathEchoHistoryBuckets = types.Int64Null()
 		}
 		if value := r.Get("type.icmp.path-echo.history.filter.all"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() && !data.Operations[i].IcmpPathEchoHistoryFilterAll.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolValue(false)
-			} else if !data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.path-echo.history.filter.failures"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() && !data.Operations[i].IcmpPathEchoHistoryFilterFailures.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolValue(false)
-			} else if !data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.path-echo.history.lives"); value.Exists() && !data.Operations[i].IcmpPathEchoHistoryLives.IsNull() {
@@ -1095,21 +1058,15 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].IcmpPathEchoStatisticsHourlyMaximumPaths = types.Int64Null()
 		}
 		if value := r.Get("type.icmp.path-jitter"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].IcmpPathJitter.IsNull() && !data.Operations[i].IcmpPathJitter.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].IcmpPathJitter = types.BoolValue(false)
-			} else if !data.Operations[i].IcmpPathJitter.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpPathJitter.IsNull() {
 				data.Operations[i].IcmpPathJitter = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].IcmpPathJitter.IsNull() {
 				data.Operations[i].IcmpPathJitter = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].IcmpPathJitter = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.icmp.path-jitter.tag"); value.Exists() && !data.Operations[i].IcmpPathJitterTag.IsNull() {
@@ -1158,21 +1115,15 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].IcmpPathJitterDestinationIpv4 = types.StringNull()
 		}
 		if value := r.Get("type.udp.echo"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].UdpEcho.IsNull() && !data.Operations[i].UdpEcho.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].UdpEcho = types.BoolValue(false)
-			} else if !data.Operations[i].UdpEcho.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEcho.IsNull() {
 				data.Operations[i].UdpEcho = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].UdpEcho.IsNull() {
 				data.Operations[i].UdpEcho = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].UdpEcho = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.tag"); value.Exists() && !data.Operations[i].UdpEchoTag.IsNull() {
@@ -1216,39 +1167,27 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].UdpEchoDestinationPort = types.Int64Null()
 		}
 		if value := r.Get("type.udp.echo.control.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].UdpEchoControlDisable.IsNull() && !data.Operations[i].UdpEchoControlDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].UdpEchoControlDisable = types.BoolValue(false)
-			} else if !data.Operations[i].UdpEchoControlDisable.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEchoControlDisable.IsNull() {
 				data.Operations[i].UdpEchoControlDisable = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].UdpEchoControlDisable.IsNull() {
 				data.Operations[i].UdpEchoControlDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].UdpEchoControlDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.verify-data"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].UdpEchoVerifyData.IsNull() && !data.Operations[i].UdpEchoVerifyData.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].UdpEchoVerifyData = types.BoolValue(false)
-			} else if !data.Operations[i].UdpEchoVerifyData.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEchoVerifyData.IsNull() {
 				data.Operations[i].UdpEchoVerifyData = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].UdpEchoVerifyData.IsNull() {
 				data.Operations[i].UdpEchoVerifyData = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].UdpEchoVerifyData = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.tos"); value.Exists() && !data.Operations[i].UdpEchoTos.IsNull() {
@@ -1276,36 +1215,39 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Operations[i].UdpEchoStatisticsHourlyDistributionInterval = types.Int64Null()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("type.udp.echo.statistics.intervals.interval"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Operations[i].UdpEchoStatisticsIntervals
-			data.Operations[i].UdpEchoStatisticsIntervals = make([]IPSLAOperationsUdpEchoStatisticsIntervals, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := IPSLAOperationsUdpEchoStatisticsIntervals{}
-				if cValue := cr.Get("interval-time"); cValue.Exists() {
-					citem.Interval = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("buckets"); cValue.Exists() {
-					citem.Buckets = types.Int64Value(cValue.Int())
-				}
+		for ci := range data.Operations[i].UdpEchoStatisticsIntervals {
+			keys := [...]string{"interval-time"}
+			keyValues := [...]string{strconv.FormatInt(data.Operations[i].UdpEchoStatisticsIntervals[ci].Interval.ValueInt64(), 10)}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Interval.Equal(citem.Interval) {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("type.udp.echo.statistics.intervals.interval").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Operations[i].UdpEchoStatisticsIntervals = append(data.Operations[i].UdpEchoStatisticsIntervals, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("interval-time"); value.Exists() && !data.Operations[i].UdpEchoStatisticsIntervals[ci].Interval.IsNull() {
+				data.Operations[i].UdpEchoStatisticsIntervals[ci].Interval = types.Int64Value(value.Int())
+			} else {
+				data.Operations[i].UdpEchoStatisticsIntervals[ci].Interval = types.Int64Null()
+			}
+			if value := cr.Get("buckets"); value.Exists() && !data.Operations[i].UdpEchoStatisticsIntervals[ci].Buckets.IsNull() {
+				data.Operations[i].UdpEchoStatisticsIntervals[ci].Buckets = types.Int64Value(value.Int())
+			} else {
+				data.Operations[i].UdpEchoStatisticsIntervals[ci].Buckets = types.Int64Null()
+			}
 		}
 		if value := r.Get("type.udp.echo.history.buckets"); value.Exists() && !data.Operations[i].UdpEchoHistoryBuckets.IsNull() {
 			data.Operations[i].UdpEchoHistoryBuckets = types.Int64Value(value.Int())
@@ -1313,39 +1255,27 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].UdpEchoHistoryBuckets = types.Int64Null()
 		}
 		if value := r.Get("type.udp.echo.history.filter.all"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].UdpEchoHistoryFilterAll.IsNull() && !data.Operations[i].UdpEchoHistoryFilterAll.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].UdpEchoHistoryFilterAll = types.BoolValue(false)
-			} else if !data.Operations[i].UdpEchoHistoryFilterAll.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].UdpEchoHistoryFilterAll = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].UdpEchoHistoryFilterAll.IsNull() {
 				data.Operations[i].UdpEchoHistoryFilterAll = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].UdpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.history.filter.failures"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() && !data.Operations[i].UdpEchoHistoryFilterFailures.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolValue(false)
-			} else if !data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() {
 				data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.echo.history.lives"); value.Exists() && !data.Operations[i].UdpEchoHistoryLives.IsNull() {
@@ -1354,21 +1284,15 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].UdpEchoHistoryLives = types.Int64Null()
 		}
 		if value := r.Get("type.udp.jitter"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].UdpJitter.IsNull() && !data.Operations[i].UdpJitter.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].UdpJitter = types.BoolValue(false)
-			} else if !data.Operations[i].UdpJitter.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpJitter.IsNull() {
 				data.Operations[i].UdpJitter = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].UdpJitter.IsNull() {
 				data.Operations[i].UdpJitter = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].UdpJitter = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.jitter.tag"); value.Exists() && !data.Operations[i].UdpJitterTag.IsNull() {
@@ -1432,39 +1356,27 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Operations[i].UdpJitterVrf = types.StringNull()
 		}
 		if value := r.Get("type.udp.jitter.control.disable"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].UdpJitterControlDisable.IsNull() && !data.Operations[i].UdpJitterControlDisable.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].UdpJitterControlDisable = types.BoolValue(false)
-			} else if !data.Operations[i].UdpJitterControlDisable.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpJitterControlDisable.IsNull() {
 				data.Operations[i].UdpJitterControlDisable = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].UdpJitterControlDisable.IsNull() {
 				data.Operations[i].UdpJitterControlDisable = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].UdpJitterControlDisable = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.jitter.verify-data"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].UdpJitterVerifyData.IsNull() && !data.Operations[i].UdpJitterVerifyData.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].UdpJitterVerifyData = types.BoolValue(false)
-			} else if !data.Operations[i].UdpJitterVerifyData.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpJitterVerifyData.IsNull() {
 				data.Operations[i].UdpJitterVerifyData = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].UdpJitterVerifyData.IsNull() {
 				data.Operations[i].UdpJitterVerifyData = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].UdpJitterVerifyData = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.udp.jitter.statistics.hourly.buckets"); value.Exists() && !data.Operations[i].UdpJitterStatisticsHourlyBuckets.IsNull() {
@@ -1482,53 +1394,50 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Operations[i].UdpJitterStatisticsHourlyDistributionInterval = types.Int64Null()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("type.udp.jitter.statistics.intervals.interval"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Operations[i].UdpJitterStatisticsIntervals
-			data.Operations[i].UdpJitterStatisticsIntervals = make([]IPSLAOperationsUdpJitterStatisticsIntervals, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := IPSLAOperationsUdpJitterStatisticsIntervals{}
-				if cValue := cr.Get("interval-time"); cValue.Exists() {
-					citem.Interval = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("buckets"); cValue.Exists() {
-					citem.Buckets = types.Int64Value(cValue.Int())
-				}
+		for ci := range data.Operations[i].UdpJitterStatisticsIntervals {
+			keys := [...]string{"interval-time"}
+			keyValues := [...]string{strconv.FormatInt(data.Operations[i].UdpJitterStatisticsIntervals[ci].Interval.ValueInt64(), 10)}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Interval.Equal(citem.Interval) {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("type.udp.jitter.statistics.intervals.interval").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Operations[i].UdpJitterStatisticsIntervals = append(data.Operations[i].UdpJitterStatisticsIntervals, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("interval-time"); value.Exists() && !data.Operations[i].UdpJitterStatisticsIntervals[ci].Interval.IsNull() {
+				data.Operations[i].UdpJitterStatisticsIntervals[ci].Interval = types.Int64Value(value.Int())
+			} else {
+				data.Operations[i].UdpJitterStatisticsIntervals[ci].Interval = types.Int64Null()
+			}
+			if value := cr.Get("buckets"); value.Exists() && !data.Operations[i].UdpJitterStatisticsIntervals[ci].Buckets.IsNull() {
+				data.Operations[i].UdpJitterStatisticsIntervals[ci].Buckets = types.Int64Value(value.Int())
+			} else {
+				data.Operations[i].UdpJitterStatisticsIntervals[ci].Buckets = types.Int64Null()
+			}
 		}
 		if value := r.Get("type.mpls.lsp.ping"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].MplsLspPing.IsNull() && !data.Operations[i].MplsLspPing.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].MplsLspPing = types.BoolValue(false)
-			} else if !data.Operations[i].MplsLspPing.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].MplsLspPing.IsNull() {
 				data.Operations[i].MplsLspPing = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].MplsLspPing.IsNull() {
 				data.Operations[i].MplsLspPing = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].MplsLspPing = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.mpls.lsp.ping.tag"); value.Exists() && !data.Operations[i].MplsLspPingTag.IsNull() {
@@ -1596,53 +1505,50 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Operations[i].MplsLspPingStatisticsHourlyDistributionInterval = types.Int64Null()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("type.mpls.lsp.ping.statistics.intervals.interval"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Operations[i].MplsLspPingStatisticsIntervals
-			data.Operations[i].MplsLspPingStatisticsIntervals = make([]IPSLAOperationsMplsLspPingStatisticsIntervals, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := IPSLAOperationsMplsLspPingStatisticsIntervals{}
-				if cValue := cr.Get("interval-time"); cValue.Exists() {
-					citem.Interval = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("buckets"); cValue.Exists() {
-					citem.Buckets = types.Int64Value(cValue.Int())
-				}
+		for ci := range data.Operations[i].MplsLspPingStatisticsIntervals {
+			keys := [...]string{"interval-time"}
+			keyValues := [...]string{strconv.FormatInt(data.Operations[i].MplsLspPingStatisticsIntervals[ci].Interval.ValueInt64(), 10)}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Interval.Equal(citem.Interval) {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("type.mpls.lsp.ping.statistics.intervals.interval").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Operations[i].MplsLspPingStatisticsIntervals = append(data.Operations[i].MplsLspPingStatisticsIntervals, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("interval-time"); value.Exists() && !data.Operations[i].MplsLspPingStatisticsIntervals[ci].Interval.IsNull() {
+				data.Operations[i].MplsLspPingStatisticsIntervals[ci].Interval = types.Int64Value(value.Int())
+			} else {
+				data.Operations[i].MplsLspPingStatisticsIntervals[ci].Interval = types.Int64Null()
+			}
+			if value := cr.Get("buckets"); value.Exists() && !data.Operations[i].MplsLspPingStatisticsIntervals[ci].Buckets.IsNull() {
+				data.Operations[i].MplsLspPingStatisticsIntervals[ci].Buckets = types.Int64Value(value.Int())
+			} else {
+				data.Operations[i].MplsLspPingStatisticsIntervals[ci].Buckets = types.Int64Null()
+			}
 		}
 		if value := r.Get("type.mpls.lsp.trace"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Operations[i].MplsLspTrace.IsNull() && !data.Operations[i].MplsLspTrace.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Operations[i].MplsLspTrace = types.BoolValue(false)
-			} else if !data.Operations[i].MplsLspTrace.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].MplsLspTrace.IsNull() {
 				data.Operations[i].MplsLspTrace = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Operations[i].MplsLspTrace.IsNull() {
 				data.Operations[i].MplsLspTrace = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Operations[i].MplsLspTrace = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("type.mpls.lsp.trace.tag"); value.Exists() && !data.Operations[i].MplsLspTraceTag.IsNull() {
@@ -1735,21 +1641,15 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Schedules[i].OperationNumber = types.Int64Null()
 		}
 		if value := r.Get("life.forever"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Schedules[i].LifeForever.IsNull() && !data.Schedules[i].LifeForever.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Schedules[i].LifeForever = types.BoolValue(false)
-			} else if !data.Schedules[i].LifeForever.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Schedules[i].LifeForever.IsNull() {
 				data.Schedules[i].LifeForever = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Schedules[i].LifeForever.IsNull() {
 				data.Schedules[i].LifeForever = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Schedules[i].LifeForever = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("life.length-of-time"); value.Exists() && !data.Schedules[i].LifeTime.IsNull() {
@@ -1788,21 +1688,15 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Schedules[i].StartYear = types.Int64Null()
 		}
 		if value := r.Get("start-time.pending"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Schedules[i].StartPending.IsNull() && !data.Schedules[i].StartPending.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Schedules[i].StartPending = types.BoolValue(false)
-			} else if !data.Schedules[i].StartPending.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Schedules[i].StartPending.IsNull() {
 				data.Schedules[i].StartPending = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Schedules[i].StartPending.IsNull() {
 				data.Schedules[i].StartPending = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Schedules[i].StartPending = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("start-time.after.time.hour"); value.Exists() && !data.Schedules[i].StartAfterHour.IsNull() {
@@ -1821,39 +1715,27 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Schedules[i].StartAfterSecond = types.Int64Null()
 		}
 		if value := r.Get("start-time.now"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Schedules[i].StartNow.IsNull() && !data.Schedules[i].StartNow.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Schedules[i].StartNow = types.BoolValue(false)
-			} else if !data.Schedules[i].StartNow.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Schedules[i].StartNow.IsNull() {
 				data.Schedules[i].StartNow = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Schedules[i].StartNow.IsNull() {
 				data.Schedules[i].StartNow = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Schedules[i].StartNow = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("recurring"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Schedules[i].Recurring.IsNull() && !data.Schedules[i].Recurring.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Schedules[i].Recurring = types.BoolValue(false)
-			} else if !data.Schedules[i].Recurring.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Schedules[i].Recurring.IsNull() {
 				data.Schedules[i].Recurring = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Schedules[i].Recurring.IsNull() {
 				data.Schedules[i].Recurring = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Schedules[i].Recurring = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("ageout"); value.Exists() && !data.Schedules[i].Ageout.IsNull() {
@@ -1863,23 +1745,24 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	if value := gjson.GetBytes(res, "server.twamp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ServerTwamp.IsNull() {
 			data.ServerTwamp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ServerTwamp.IsNull() {
 			data.ServerTwamp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "server.twamp.port"); value.Exists() && !data.ServerTwampPort.IsNull() {
 		data.ServerTwampPort = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerTwampPort.IsNull() {
 		data.ServerTwampPort = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "server.twamp.timer.inactivity"); value.Exists() && !data.ServerTwampTimerInactivity.IsNull() {
 		data.ServerTwampTimerInactivity = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServerTwampTimerInactivity.IsNull() {
 		data.ServerTwampTimerInactivity = types.Int64Null()
 	}
 }
@@ -1901,493 +1784,483 @@ func (data IPSLA) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.Operations) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Operations {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/operations/operation[operation-number='" + strconv.FormatInt(item.OperationNumber.ValueInt64(), 10) + "']"
 			if !item.OperationNumber.IsNull() && !item.OperationNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "operation-number", strconv.FormatInt(item.OperationNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/operation-number", strconv.FormatInt(item.OperationNumber.ValueInt64(), 10))
 			}
 			if !item.IcmpEcho.IsNull() && !item.IcmpEcho.IsUnknown() {
 				if item.IcmpEcho.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/icmp/echo", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo", "")
 				}
 			}
 			if !item.IcmpEchoTag.IsNull() && !item.IcmpEchoTag.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/tag", item.IcmpEchoTag.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/tag", item.IcmpEchoTag.ValueString())
 			}
 			if !item.IcmpEchoFrequency.IsNull() && !item.IcmpEchoFrequency.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/frequency", strconv.FormatInt(item.IcmpEchoFrequency.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/frequency", strconv.FormatInt(item.IcmpEchoFrequency.ValueInt64(), 10))
 			}
 			if !item.IcmpEchoDatasizeRequest.IsNull() && !item.IcmpEchoDatasizeRequest.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.IcmpEchoDatasizeRequest.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.IcmpEchoDatasizeRequest.ValueInt64(), 10))
 			}
 			if !item.IcmpEchoTimeout.IsNull() && !item.IcmpEchoTimeout.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/timeout", strconv.FormatInt(item.IcmpEchoTimeout.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/timeout", strconv.FormatInt(item.IcmpEchoTimeout.ValueInt64(), 10))
 			}
 			if !item.IcmpEchoSourceIpv4.IsNull() && !item.IcmpEchoSourceIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/source/address/ipv4-address", item.IcmpEchoSourceIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/source/address/ipv4-address", item.IcmpEchoSourceIpv4.ValueString())
 			}
 			if !item.IcmpEchoSourceIpv6.IsNull() && !item.IcmpEchoSourceIpv6.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/source/address/ipv6-address", item.IcmpEchoSourceIpv6.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/source/address/ipv6-address", item.IcmpEchoSourceIpv6.ValueString())
 			}
 			if !item.IcmpEchoTos.IsNull() && !item.IcmpEchoTos.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/tos", strconv.FormatInt(item.IcmpEchoTos.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/tos", strconv.FormatInt(item.IcmpEchoTos.ValueInt64(), 10))
 			}
 			if !item.IcmpEchoVrf.IsNull() && !item.IcmpEchoVrf.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/vrf", item.IcmpEchoVrf.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/vrf", item.IcmpEchoVrf.ValueString())
 			}
 			if !item.IcmpEchoDestinationIpv4.IsNull() && !item.IcmpEchoDestinationIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/destination/address/ipv4-address", item.IcmpEchoDestinationIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/destination/address/ipv4-address", item.IcmpEchoDestinationIpv4.ValueString())
 			}
 			if !item.IcmpEchoDestinationIpv6.IsNull() && !item.IcmpEchoDestinationIpv6.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/destination/address/ipv6-address", item.IcmpEchoDestinationIpv6.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/destination/address/ipv6-address", item.IcmpEchoDestinationIpv6.ValueString())
 			}
 			if !item.IcmpEchoHistoryBuckets.IsNull() && !item.IcmpEchoHistoryBuckets.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/history/buckets", strconv.FormatInt(item.IcmpEchoHistoryBuckets.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/history/buckets", strconv.FormatInt(item.IcmpEchoHistoryBuckets.ValueInt64(), 10))
 			}
 			if !item.IcmpEchoHistoryFilterAll.IsNull() && !item.IcmpEchoHistoryFilterAll.IsUnknown() {
 				if item.IcmpEchoHistoryFilterAll.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/history/filter/all", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/history/filter/all", "")
 				}
 			}
 			if !item.IcmpEchoHistoryFilterFailures.IsNull() && !item.IcmpEchoHistoryFilterFailures.IsUnknown() {
 				if item.IcmpEchoHistoryFilterFailures.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/history/filter/failures", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/history/filter/failures", "")
 				}
 			}
 			if !item.IcmpEchoHistoryLives.IsNull() && !item.IcmpEchoHistoryLives.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/history/lives", strconv.FormatInt(item.IcmpEchoHistoryLives.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/history/lives", strconv.FormatInt(item.IcmpEchoHistoryLives.ValueInt64(), 10))
 			}
 			if !item.IcmpEchoStatisticsHourlyBuckets.IsNull() && !item.IcmpEchoStatisticsHourlyBuckets.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/statistics/hourly/buckets", strconv.FormatInt(item.IcmpEchoStatisticsHourlyBuckets.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/statistics/hourly/buckets", strconv.FormatInt(item.IcmpEchoStatisticsHourlyBuckets.ValueInt64(), 10))
 			}
 			if !item.IcmpEchoStatisticsHourlyDistributionCount.IsNull() && !item.IcmpEchoStatisticsHourlyDistributionCount.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/statistics/hourly/distribution/count", strconv.FormatInt(item.IcmpEchoStatisticsHourlyDistributionCount.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/statistics/hourly/distribution/count", strconv.FormatInt(item.IcmpEchoStatisticsHourlyDistributionCount.ValueInt64(), 10))
 			}
 			if !item.IcmpEchoStatisticsHourlyDistributionInterval.IsNull() && !item.IcmpEchoStatisticsHourlyDistributionInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/echo/statistics/hourly/distribution/interval", strconv.FormatInt(item.IcmpEchoStatisticsHourlyDistributionInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/echo/statistics/hourly/distribution/interval", strconv.FormatInt(item.IcmpEchoStatisticsHourlyDistributionInterval.ValueInt64(), 10))
 			}
 			if len(item.IcmpEchoStatisticsIntervals) > 0 {
 				for _, citem := range item.IcmpEchoStatisticsIntervals {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/type/icmp/echo/statistics/intervals/interval[interval-time='" + strconv.FormatInt(citem.Interval.ValueInt64(), 10) + "']"
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
 					}
 					if !citem.Buckets.IsNull() && !citem.Buckets.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "buckets", strconv.FormatInt(citem.Buckets.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/buckets", strconv.FormatInt(citem.Buckets.ValueInt64(), 10))
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "type/icmp/echo/statistics/intervals/interval", ccBody.Res())
 				}
 			}
 			if !item.IcmpPathEcho.IsNull() && !item.IcmpPathEcho.IsUnknown() {
 				if item.IcmpPathEcho.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo", "")
 				}
 			}
 			if !item.IcmpPathEchoTag.IsNull() && !item.IcmpPathEchoTag.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/tag", item.IcmpPathEchoTag.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/tag", item.IcmpPathEchoTag.ValueString())
 			}
 			if !item.IcmpPathEchoFrequency.IsNull() && !item.IcmpPathEchoFrequency.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/frequency", strconv.FormatInt(item.IcmpPathEchoFrequency.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/frequency", strconv.FormatInt(item.IcmpPathEchoFrequency.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoDatasizeRequest.IsNull() && !item.IcmpPathEchoDatasizeRequest.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.IcmpPathEchoDatasizeRequest.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.IcmpPathEchoDatasizeRequest.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoTimeout.IsNull() && !item.IcmpPathEchoTimeout.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/timeout", strconv.FormatInt(item.IcmpPathEchoTimeout.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/timeout", strconv.FormatInt(item.IcmpPathEchoTimeout.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoSourceIpv4.IsNull() && !item.IcmpPathEchoSourceIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/source/address/ipv4-address", item.IcmpPathEchoSourceIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/source/address/ipv4-address", item.IcmpPathEchoSourceIpv4.ValueString())
 			}
 			if !item.IcmpPathEchoTos.IsNull() && !item.IcmpPathEchoTos.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/tos", strconv.FormatInt(item.IcmpPathEchoTos.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/tos", strconv.FormatInt(item.IcmpPathEchoTos.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoDestinationIpv4.IsNull() && !item.IcmpPathEchoDestinationIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/destination/address/address", item.IcmpPathEchoDestinationIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/destination/address/address", item.IcmpPathEchoDestinationIpv4.ValueString())
 			}
 			if !item.IcmpPathEchoHistoryBuckets.IsNull() && !item.IcmpPathEchoHistoryBuckets.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/history/buckets", strconv.FormatInt(item.IcmpPathEchoHistoryBuckets.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/history/buckets", strconv.FormatInt(item.IcmpPathEchoHistoryBuckets.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoHistoryFilterAll.IsNull() && !item.IcmpPathEchoHistoryFilterAll.IsUnknown() {
 				if item.IcmpPathEchoHistoryFilterAll.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/history/filter/all", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/history/filter/all", "")
 				}
 			}
 			if !item.IcmpPathEchoHistoryFilterFailures.IsNull() && !item.IcmpPathEchoHistoryFilterFailures.IsUnknown() {
 				if item.IcmpPathEchoHistoryFilterFailures.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/history/filter/failures", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/history/filter/failures", "")
 				}
 			}
 			if !item.IcmpPathEchoHistoryLives.IsNull() && !item.IcmpPathEchoHistoryLives.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/history/lives", strconv.FormatInt(item.IcmpPathEchoHistoryLives.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/history/lives", strconv.FormatInt(item.IcmpPathEchoHistoryLives.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoHistorySamples.IsNull() && !item.IcmpPathEchoHistorySamples.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/history/samples", strconv.FormatInt(item.IcmpPathEchoHistorySamples.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/history/samples", strconv.FormatInt(item.IcmpPathEchoHistorySamples.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoStatisticsHourlyBuckets.IsNull() && !item.IcmpPathEchoStatisticsHourlyBuckets.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/statistics/hourly/buckets", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyBuckets.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/statistics/hourly/buckets", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyBuckets.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoStatisticsHourlyDistributionCount.IsNull() && !item.IcmpPathEchoStatisticsHourlyDistributionCount.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/statistics/hourly/distribution/count", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyDistributionCount.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/statistics/hourly/distribution/count", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyDistributionCount.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoStatisticsHourlyDistributionInterval.IsNull() && !item.IcmpPathEchoStatisticsHourlyDistributionInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/statistics/hourly/distribution/interval", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyDistributionInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/statistics/hourly/distribution/interval", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyDistributionInterval.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoStatisticsHourlyMaximumHops.IsNull() && !item.IcmpPathEchoStatisticsHourlyMaximumHops.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/statistics/hourly/maximum/hops", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyMaximumHops.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/statistics/hourly/maximum/hops", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyMaximumHops.ValueInt64(), 10))
 			}
 			if !item.IcmpPathEchoStatisticsHourlyMaximumPaths.IsNull() && !item.IcmpPathEchoStatisticsHourlyMaximumPaths.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-echo/statistics/hourly/maximum/paths", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyMaximumPaths.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-echo/statistics/hourly/maximum/paths", strconv.FormatInt(item.IcmpPathEchoStatisticsHourlyMaximumPaths.ValueInt64(), 10))
 			}
 			if !item.IcmpPathJitter.IsNull() && !item.IcmpPathJitter.IsUnknown() {
 				if item.IcmpPathJitter.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter", "")
 				}
 			}
 			if !item.IcmpPathJitterTag.IsNull() && !item.IcmpPathJitterTag.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter/tag", item.IcmpPathJitterTag.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter/tag", item.IcmpPathJitterTag.ValueString())
 			}
 			if !item.IcmpPathJitterFrequency.IsNull() && !item.IcmpPathJitterFrequency.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter/frequency", strconv.FormatInt(item.IcmpPathJitterFrequency.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter/frequency", strconv.FormatInt(item.IcmpPathJitterFrequency.ValueInt64(), 10))
 			}
 			if !item.IcmpPathJitterDatasizeRequest.IsNull() && !item.IcmpPathJitterDatasizeRequest.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.IcmpPathJitterDatasizeRequest.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.IcmpPathJitterDatasizeRequest.ValueInt64(), 10))
 			}
 			if !item.IcmpPathJitterTimeout.IsNull() && !item.IcmpPathJitterTimeout.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter/timeout", strconv.FormatInt(item.IcmpPathJitterTimeout.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter/timeout", strconv.FormatInt(item.IcmpPathJitterTimeout.ValueInt64(), 10))
 			}
 			if !item.IcmpPathJitterSourceIpv4.IsNull() && !item.IcmpPathJitterSourceIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter/source/address/ipv4-address", item.IcmpPathJitterSourceIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter/source/address/ipv4-address", item.IcmpPathJitterSourceIpv4.ValueString())
 			}
 			if !item.IcmpPathJitterPacketCount.IsNull() && !item.IcmpPathJitterPacketCount.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter/packet/count", strconv.FormatInt(item.IcmpPathJitterPacketCount.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter/packet/count", strconv.FormatInt(item.IcmpPathJitterPacketCount.ValueInt64(), 10))
 			}
 			if !item.IcmpPathJitterPacketInterval.IsNull() && !item.IcmpPathJitterPacketInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter/packet/interval", strconv.FormatInt(item.IcmpPathJitterPacketInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter/packet/interval", strconv.FormatInt(item.IcmpPathJitterPacketInterval.ValueInt64(), 10))
 			}
 			if !item.IcmpPathJitterTos.IsNull() && !item.IcmpPathJitterTos.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter/tos", strconv.FormatInt(item.IcmpPathJitterTos.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter/tos", strconv.FormatInt(item.IcmpPathJitterTos.ValueInt64(), 10))
 			}
 			if !item.IcmpPathJitterDestinationIpv4.IsNull() && !item.IcmpPathJitterDestinationIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/icmp/path-jitter/destination/address/address", item.IcmpPathJitterDestinationIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/icmp/path-jitter/destination/address/address", item.IcmpPathJitterDestinationIpv4.ValueString())
 			}
 			if !item.UdpEcho.IsNull() && !item.UdpEcho.IsUnknown() {
 				if item.UdpEcho.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/udp/echo", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/udp/echo", "")
 				}
 			}
 			if !item.UdpEchoTag.IsNull() && !item.UdpEchoTag.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/tag", item.UdpEchoTag.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/tag", item.UdpEchoTag.ValueString())
 			}
 			if !item.UdpEchoFrequency.IsNull() && !item.UdpEchoFrequency.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/frequency", strconv.FormatInt(item.UdpEchoFrequency.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/frequency", strconv.FormatInt(item.UdpEchoFrequency.ValueInt64(), 10))
 			}
 			if !item.UdpEchoDatasizeRequest.IsNull() && !item.UdpEchoDatasizeRequest.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.UdpEchoDatasizeRequest.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.UdpEchoDatasizeRequest.ValueInt64(), 10))
 			}
 			if !item.UdpEchoTimeout.IsNull() && !item.UdpEchoTimeout.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/timeout", strconv.FormatInt(item.UdpEchoTimeout.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/timeout", strconv.FormatInt(item.UdpEchoTimeout.ValueInt64(), 10))
 			}
 			if !item.UdpEchoSourceIpv4.IsNull() && !item.UdpEchoSourceIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/source/address/ipv4-address", item.UdpEchoSourceIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/source/address/ipv4-address", item.UdpEchoSourceIpv4.ValueString())
 			}
 			if !item.UdpEchoSourcePort.IsNull() && !item.UdpEchoSourcePort.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/source/port", strconv.FormatInt(item.UdpEchoSourcePort.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/source/port", strconv.FormatInt(item.UdpEchoSourcePort.ValueInt64(), 10))
 			}
 			if !item.UdpEchoDestinationIpv4.IsNull() && !item.UdpEchoDestinationIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/destination/address", item.UdpEchoDestinationIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/destination/address", item.UdpEchoDestinationIpv4.ValueString())
 			}
 			if !item.UdpEchoDestinationPort.IsNull() && !item.UdpEchoDestinationPort.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/destination/port", strconv.FormatInt(item.UdpEchoDestinationPort.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/destination/port", strconv.FormatInt(item.UdpEchoDestinationPort.ValueInt64(), 10))
 			}
 			if !item.UdpEchoControlDisable.IsNull() && !item.UdpEchoControlDisable.IsUnknown() {
 				if item.UdpEchoControlDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/udp/echo/control/disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/control/disable", "")
 				}
 			}
 			if !item.UdpEchoVerifyData.IsNull() && !item.UdpEchoVerifyData.IsUnknown() {
 				if item.UdpEchoVerifyData.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/udp/echo/verify-data", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/verify-data", "")
 				}
 			}
 			if !item.UdpEchoTos.IsNull() && !item.UdpEchoTos.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/tos", strconv.FormatInt(item.UdpEchoTos.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/tos", strconv.FormatInt(item.UdpEchoTos.ValueInt64(), 10))
 			}
 			if !item.UdpEchoVrf.IsNull() && !item.UdpEchoVrf.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/vrf", item.UdpEchoVrf.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/vrf", item.UdpEchoVrf.ValueString())
 			}
 			if !item.UdpEchoStatisticsHourlyBuckets.IsNull() && !item.UdpEchoStatisticsHourlyBuckets.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/statistics/hourly/buckets", strconv.FormatInt(item.UdpEchoStatisticsHourlyBuckets.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/statistics/hourly/buckets", strconv.FormatInt(item.UdpEchoStatisticsHourlyBuckets.ValueInt64(), 10))
 			}
 			if !item.UdpEchoStatisticsHourlyDistributionCount.IsNull() && !item.UdpEchoStatisticsHourlyDistributionCount.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/statistics/hourly/distribution/count", strconv.FormatInt(item.UdpEchoStatisticsHourlyDistributionCount.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/statistics/hourly/distribution/count", strconv.FormatInt(item.UdpEchoStatisticsHourlyDistributionCount.ValueInt64(), 10))
 			}
 			if !item.UdpEchoStatisticsHourlyDistributionInterval.IsNull() && !item.UdpEchoStatisticsHourlyDistributionInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/statistics/hourly/distribution/interval", strconv.FormatInt(item.UdpEchoStatisticsHourlyDistributionInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/statistics/hourly/distribution/interval", strconv.FormatInt(item.UdpEchoStatisticsHourlyDistributionInterval.ValueInt64(), 10))
 			}
 			if len(item.UdpEchoStatisticsIntervals) > 0 {
 				for _, citem := range item.UdpEchoStatisticsIntervals {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/type/udp/echo/statistics/intervals/interval[interval-time='" + strconv.FormatInt(citem.Interval.ValueInt64(), 10) + "']"
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
 					}
 					if !citem.Buckets.IsNull() && !citem.Buckets.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "buckets", strconv.FormatInt(citem.Buckets.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/buckets", strconv.FormatInt(citem.Buckets.ValueInt64(), 10))
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "type/udp/echo/statistics/intervals/interval", ccBody.Res())
 				}
 			}
 			if !item.UdpEchoHistoryBuckets.IsNull() && !item.UdpEchoHistoryBuckets.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/history/buckets", strconv.FormatInt(item.UdpEchoHistoryBuckets.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/history/buckets", strconv.FormatInt(item.UdpEchoHistoryBuckets.ValueInt64(), 10))
 			}
 			if !item.UdpEchoHistoryFilterAll.IsNull() && !item.UdpEchoHistoryFilterAll.IsUnknown() {
 				if item.UdpEchoHistoryFilterAll.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/udp/echo/history/filter/all", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/history/filter/all", "")
 				}
 			}
 			if !item.UdpEchoHistoryFilterFailures.IsNull() && !item.UdpEchoHistoryFilterFailures.IsUnknown() {
 				if item.UdpEchoHistoryFilterFailures.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/udp/echo/history/filter/failures", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/history/filter/failures", "")
 				}
 			}
 			if !item.UdpEchoHistoryLives.IsNull() && !item.UdpEchoHistoryLives.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/echo/history/lives", strconv.FormatInt(item.UdpEchoHistoryLives.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/echo/history/lives", strconv.FormatInt(item.UdpEchoHistoryLives.ValueInt64(), 10))
 			}
 			if !item.UdpJitter.IsNull() && !item.UdpJitter.IsUnknown() {
 				if item.UdpJitter.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/udp/jitter", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter", "")
 				}
 			}
 			if !item.UdpJitterTag.IsNull() && !item.UdpJitterTag.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/tag", item.UdpJitterTag.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/tag", item.UdpJitterTag.ValueString())
 			}
 			if !item.UdpJitterFrequency.IsNull() && !item.UdpJitterFrequency.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/frequency", strconv.FormatInt(item.UdpJitterFrequency.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/frequency", strconv.FormatInt(item.UdpJitterFrequency.ValueInt64(), 10))
 			}
 			if !item.UdpJitterDatasizeRequest.IsNull() && !item.UdpJitterDatasizeRequest.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.UdpJitterDatasizeRequest.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.UdpJitterDatasizeRequest.ValueInt64(), 10))
 			}
 			if !item.UdpJitterTimeout.IsNull() && !item.UdpJitterTimeout.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/timeout", strconv.FormatInt(item.UdpJitterTimeout.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/timeout", strconv.FormatInt(item.UdpJitterTimeout.ValueInt64(), 10))
 			}
 			if !item.UdpJitterSourceIpv4.IsNull() && !item.UdpJitterSourceIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/source/address/ipv4-address", item.UdpJitterSourceIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/source/address/ipv4-address", item.UdpJitterSourceIpv4.ValueString())
 			}
 			if !item.UdpJitterSourcePort.IsNull() && !item.UdpJitterSourcePort.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/source/port", strconv.FormatInt(item.UdpJitterSourcePort.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/source/port", strconv.FormatInt(item.UdpJitterSourcePort.ValueInt64(), 10))
 			}
 			if !item.UdpJitterDestinationIpv4.IsNull() && !item.UdpJitterDestinationIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/destination/address", item.UdpJitterDestinationIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/destination/address", item.UdpJitterDestinationIpv4.ValueString())
 			}
 			if !item.UdpJitterDestinationPort.IsNull() && !item.UdpJitterDestinationPort.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/destination/port", strconv.FormatInt(item.UdpJitterDestinationPort.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/destination/port", strconv.FormatInt(item.UdpJitterDestinationPort.ValueInt64(), 10))
 			}
 			if !item.UdpJitterPacketCount.IsNull() && !item.UdpJitterPacketCount.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/packet/count", strconv.FormatInt(item.UdpJitterPacketCount.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/packet/count", strconv.FormatInt(item.UdpJitterPacketCount.ValueInt64(), 10))
 			}
 			if !item.UdpJitterPacketInterval.IsNull() && !item.UdpJitterPacketInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/packet/interval", strconv.FormatInt(item.UdpJitterPacketInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/packet/interval", strconv.FormatInt(item.UdpJitterPacketInterval.ValueInt64(), 10))
 			}
 			if !item.UdpJitterTos.IsNull() && !item.UdpJitterTos.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/tos", strconv.FormatInt(item.UdpJitterTos.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/tos", strconv.FormatInt(item.UdpJitterTos.ValueInt64(), 10))
 			}
 			if !item.UdpJitterVrf.IsNull() && !item.UdpJitterVrf.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/vrf", item.UdpJitterVrf.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/vrf", item.UdpJitterVrf.ValueString())
 			}
 			if !item.UdpJitterControlDisable.IsNull() && !item.UdpJitterControlDisable.IsUnknown() {
 				if item.UdpJitterControlDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/control/disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/control/disable", "")
 				}
 			}
 			if !item.UdpJitterVerifyData.IsNull() && !item.UdpJitterVerifyData.IsUnknown() {
 				if item.UdpJitterVerifyData.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/verify-data", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/verify-data", "")
 				}
 			}
 			if !item.UdpJitterStatisticsHourlyBuckets.IsNull() && !item.UdpJitterStatisticsHourlyBuckets.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/statistics/hourly/buckets", strconv.FormatInt(item.UdpJitterStatisticsHourlyBuckets.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/statistics/hourly/buckets", strconv.FormatInt(item.UdpJitterStatisticsHourlyBuckets.ValueInt64(), 10))
 			}
 			if !item.UdpJitterStatisticsHourlyDistributionCount.IsNull() && !item.UdpJitterStatisticsHourlyDistributionCount.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/statistics/hourly/distribution/count", strconv.FormatInt(item.UdpJitterStatisticsHourlyDistributionCount.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/statistics/hourly/distribution/count", strconv.FormatInt(item.UdpJitterStatisticsHourlyDistributionCount.ValueInt64(), 10))
 			}
 			if !item.UdpJitterStatisticsHourlyDistributionInterval.IsNull() && !item.UdpJitterStatisticsHourlyDistributionInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/udp/jitter/statistics/hourly/distribution/interval", strconv.FormatInt(item.UdpJitterStatisticsHourlyDistributionInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/udp/jitter/statistics/hourly/distribution/interval", strconv.FormatInt(item.UdpJitterStatisticsHourlyDistributionInterval.ValueInt64(), 10))
 			}
 			if len(item.UdpJitterStatisticsIntervals) > 0 {
 				for _, citem := range item.UdpJitterStatisticsIntervals {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/type/udp/jitter/statistics/intervals/interval[interval-time='" + strconv.FormatInt(citem.Interval.ValueInt64(), 10) + "']"
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
 					}
 					if !citem.Buckets.IsNull() && !citem.Buckets.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "buckets", strconv.FormatInt(citem.Buckets.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/buckets", strconv.FormatInt(citem.Buckets.ValueInt64(), 10))
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "type/udp/jitter/statistics/intervals/interval", ccBody.Res())
 				}
 			}
 			if !item.MplsLspPing.IsNull() && !item.MplsLspPing.IsUnknown() {
 				if item.MplsLspPing.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping", "")
 				}
 			}
 			if !item.MplsLspPingTag.IsNull() && !item.MplsLspPingTag.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/tag", item.MplsLspPingTag.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/tag", item.MplsLspPingTag.ValueString())
 			}
 			if !item.MplsLspPingFrequency.IsNull() && !item.MplsLspPingFrequency.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/frequency", strconv.FormatInt(item.MplsLspPingFrequency.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/frequency", strconv.FormatInt(item.MplsLspPingFrequency.ValueInt64(), 10))
 			}
 			if !item.MplsLspPingDatasizeRequest.IsNull() && !item.MplsLspPingDatasizeRequest.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.MplsLspPingDatasizeRequest.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/datasize/request/enter-request-datasize-in-byte", strconv.FormatInt(item.MplsLspPingDatasizeRequest.ValueInt64(), 10))
 			}
 			if !item.MplsLspPingTimeout.IsNull() && !item.MplsLspPingTimeout.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/timeout", strconv.FormatInt(item.MplsLspPingTimeout.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/timeout", strconv.FormatInt(item.MplsLspPingTimeout.ValueInt64(), 10))
 			}
 			if !item.MplsLspPingSourceIpv4.IsNull() && !item.MplsLspPingSourceIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/source/address/ipv4-address", item.MplsLspPingSourceIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/source/address/ipv4-address", item.MplsLspPingSourceIpv4.ValueString())
 			}
 			if !item.MplsLspPingTargetIpv4.IsNull() && !item.MplsLspPingTargetIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/target/ipv4/address", item.MplsLspPingTargetIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/target/ipv4/address", item.MplsLspPingTargetIpv4.ValueString())
 			}
 			if !item.MplsLspPingTargetIpv4Mask.IsNull() && !item.MplsLspPingTargetIpv4Mask.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/target/ipv4/mask", item.MplsLspPingTargetIpv4Mask.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/target/ipv4/mask", item.MplsLspPingTargetIpv4Mask.ValueString())
 			}
 			if !item.MplsLspPingTargetTeTunnel.IsNull() && !item.MplsLspPingTargetTeTunnel.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/target/traffic-eng/tunnel", strconv.FormatInt(item.MplsLspPingTargetTeTunnel.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/target/traffic-eng/tunnel", strconv.FormatInt(item.MplsLspPingTargetTeTunnel.ValueInt64(), 10))
 			}
 			if !item.MplsLspPingTargetPseudowireAddress.IsNull() && !item.MplsLspPingTargetPseudowireAddress.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/target/pseudowire/address", item.MplsLspPingTargetPseudowireAddress.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/target/pseudowire/address", item.MplsLspPingTargetPseudowireAddress.ValueString())
 			}
 			if !item.MplsLspPingTargetPseudowireVcId.IsNull() && !item.MplsLspPingTargetPseudowireVcId.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/target/pseudowire/virtual-circuit-id", strconv.FormatInt(item.MplsLspPingTargetPseudowireVcId.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/target/pseudowire/virtual-circuit-id", strconv.FormatInt(item.MplsLspPingTargetPseudowireVcId.ValueInt64(), 10))
 			}
 			if !item.MplsLspPingStatisticsHourlyBuckets.IsNull() && !item.MplsLspPingStatisticsHourlyBuckets.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/statistics/hourly/buckets", strconv.FormatInt(item.MplsLspPingStatisticsHourlyBuckets.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/statistics/hourly/buckets", strconv.FormatInt(item.MplsLspPingStatisticsHourlyBuckets.ValueInt64(), 10))
 			}
 			if !item.MplsLspPingStatisticsHourlyDistributionCount.IsNull() && !item.MplsLspPingStatisticsHourlyDistributionCount.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/statistics/hourly/distribution/count", strconv.FormatInt(item.MplsLspPingStatisticsHourlyDistributionCount.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/statistics/hourly/distribution/count", strconv.FormatInt(item.MplsLspPingStatisticsHourlyDistributionCount.ValueInt64(), 10))
 			}
 			if !item.MplsLspPingStatisticsHourlyDistributionInterval.IsNull() && !item.MplsLspPingStatisticsHourlyDistributionInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/ping/statistics/hourly/distribution/interval", strconv.FormatInt(item.MplsLspPingStatisticsHourlyDistributionInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/ping/statistics/hourly/distribution/interval", strconv.FormatInt(item.MplsLspPingStatisticsHourlyDistributionInterval.ValueInt64(), 10))
 			}
 			if len(item.MplsLspPingStatisticsIntervals) > 0 {
 				for _, citem := range item.MplsLspPingStatisticsIntervals {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/type/mpls/lsp/ping/statistics/intervals/interval[interval-time='" + strconv.FormatInt(citem.Interval.ValueInt64(), 10) + "']"
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
 					}
 					if !citem.Buckets.IsNull() && !citem.Buckets.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "buckets", strconv.FormatInt(citem.Buckets.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/buckets", strconv.FormatInt(citem.Buckets.ValueInt64(), 10))
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "type/mpls/lsp/ping/statistics/intervals/interval", ccBody.Res())
 				}
 			}
 			if !item.MplsLspTrace.IsNull() && !item.MplsLspTrace.IsUnknown() {
 				if item.MplsLspTrace.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace", "")
+					body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace", "")
 				}
 			}
 			if !item.MplsLspTraceTag.IsNull() && !item.MplsLspTraceTag.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/tag", item.MplsLspTraceTag.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/tag", item.MplsLspTraceTag.ValueString())
 			}
 			if !item.MplsLspTraceFrequency.IsNull() && !item.MplsLspTraceFrequency.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/frequency", strconv.FormatInt(item.MplsLspTraceFrequency.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/frequency", strconv.FormatInt(item.MplsLspTraceFrequency.ValueInt64(), 10))
 			}
 			if !item.MplsLspTraceTimeout.IsNull() && !item.MplsLspTraceTimeout.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/timeout", strconv.FormatInt(item.MplsLspTraceTimeout.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/timeout", strconv.FormatInt(item.MplsLspTraceTimeout.ValueInt64(), 10))
 			}
 			if !item.MplsLspTraceSourceIpv4.IsNull() && !item.MplsLspTraceSourceIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/source/address/ipv4-address", item.MplsLspTraceSourceIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/source/address/ipv4-address", item.MplsLspTraceSourceIpv4.ValueString())
 			}
 			if !item.MplsLspTraceTargetIpv4.IsNull() && !item.MplsLspTraceTargetIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/target/ipv4/address", item.MplsLspTraceTargetIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/target/ipv4/address", item.MplsLspTraceTargetIpv4.ValueString())
 			}
 			if !item.MplsLspTraceTargetIpv4Mask.IsNull() && !item.MplsLspTraceTargetIpv4Mask.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/target/ipv4/mask", item.MplsLspTraceTargetIpv4Mask.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/target/ipv4/mask", item.MplsLspTraceTargetIpv4Mask.ValueString())
 			}
 			if !item.MplsLspTraceTargetTeTunnel.IsNull() && !item.MplsLspTraceTargetTeTunnel.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/target/traffic-eng/tunnel", strconv.FormatInt(item.MplsLspTraceTargetTeTunnel.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/target/traffic-eng/tunnel", strconv.FormatInt(item.MplsLspTraceTargetTeTunnel.ValueInt64(), 10))
 			}
 			if !item.MplsLspTraceTargetPseudowireAddress.IsNull() && !item.MplsLspTraceTargetPseudowireAddress.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/target/pseudowire/address", item.MplsLspTraceTargetPseudowireAddress.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/target/pseudowire/address", item.MplsLspTraceTargetPseudowireAddress.ValueString())
 			}
 			if !item.MplsLspTraceTargetPseudowireVcId.IsNull() && !item.MplsLspTraceTargetPseudowireVcId.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/target/pseudowire/virtual-circuit-id", strconv.FormatInt(item.MplsLspTraceTargetPseudowireVcId.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/target/pseudowire/virtual-circuit-id", strconv.FormatInt(item.MplsLspTraceTargetPseudowireVcId.ValueInt64(), 10))
 			}
 			if !item.MplsLspTraceStatisticsHourlyBuckets.IsNull() && !item.MplsLspTraceStatisticsHourlyBuckets.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/statistics/hourly/buckets", strconv.FormatInt(item.MplsLspTraceStatisticsHourlyBuckets.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/statistics/hourly/buckets", strconv.FormatInt(item.MplsLspTraceStatisticsHourlyBuckets.ValueInt64(), 10))
 			}
 			if !item.MplsLspTraceStatisticsHourlyDistributionCount.IsNull() && !item.MplsLspTraceStatisticsHourlyDistributionCount.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/statistics/hourly/distribution/count", strconv.FormatInt(item.MplsLspTraceStatisticsHourlyDistributionCount.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/statistics/hourly/distribution/count", strconv.FormatInt(item.MplsLspTraceStatisticsHourlyDistributionCount.ValueInt64(), 10))
 			}
 			if !item.MplsLspTraceStatisticsHourlyDistributionInterval.IsNull() && !item.MplsLspTraceStatisticsHourlyDistributionInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "type/mpls/lsp/trace/statistics/hourly/distribution/interval", strconv.FormatInt(item.MplsLspTraceStatisticsHourlyDistributionInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/type/mpls/lsp/trace/statistics/hourly/distribution/interval", strconv.FormatInt(item.MplsLspTraceStatisticsHourlyDistributionInterval.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"operations/operation", cBody.Res())
 		}
 	}
 	if len(data.Schedules) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Schedules {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/schedule/operations/operation[operation-number='" + strconv.FormatInt(item.OperationNumber.ValueInt64(), 10) + "']"
 			if !item.OperationNumber.IsNull() && !item.OperationNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "operation-number", strconv.FormatInt(item.OperationNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/operation-number", strconv.FormatInt(item.OperationNumber.ValueInt64(), 10))
 			}
 			if !item.LifeForever.IsNull() && !item.LifeForever.IsUnknown() {
 				if item.LifeForever.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "life/forever", "")
+					body = helpers.SetFromXPath(body, basePath+"/life/forever", "")
 				}
 			}
 			if !item.LifeTime.IsNull() && !item.LifeTime.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "life/length-of-time", strconv.FormatInt(item.LifeTime.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/life/length-of-time", strconv.FormatInt(item.LifeTime.ValueInt64(), 10))
 			}
 			if !item.StartHour.IsNull() && !item.StartHour.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "start-time/time-and-date/hour", strconv.FormatInt(item.StartHour.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/start-time/time-and-date/hour", strconv.FormatInt(item.StartHour.ValueInt64(), 10))
 			}
 			if !item.StartMinute.IsNull() && !item.StartMinute.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "start-time/time-and-date/minute", strconv.FormatInt(item.StartMinute.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/start-time/time-and-date/minute", strconv.FormatInt(item.StartMinute.ValueInt64(), 10))
 			}
 			if !item.StartSecond.IsNull() && !item.StartSecond.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "start-time/time-and-date/second", strconv.FormatInt(item.StartSecond.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/start-time/time-and-date/second", strconv.FormatInt(item.StartSecond.ValueInt64(), 10))
 			}
 			if !item.StartMonth.IsNull() && !item.StartMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "start-time/time-and-date/month", item.StartMonth.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/start-time/time-and-date/month", item.StartMonth.ValueString())
 			}
 			if !item.StartDayOfMonth.IsNull() && !item.StartDayOfMonth.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "start-time/time-and-date/day-of-month", strconv.FormatInt(item.StartDayOfMonth.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/start-time/time-and-date/day-of-month", strconv.FormatInt(item.StartDayOfMonth.ValueInt64(), 10))
 			}
 			if !item.StartYear.IsNull() && !item.StartYear.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "start-time/time-and-date/year", strconv.FormatInt(item.StartYear.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/start-time/time-and-date/year", strconv.FormatInt(item.StartYear.ValueInt64(), 10))
 			}
 			if !item.StartPending.IsNull() && !item.StartPending.IsUnknown() {
 				if item.StartPending.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "start-time/pending", "")
+					body = helpers.SetFromXPath(body, basePath+"/start-time/pending", "")
 				}
 			}
 			if !item.StartAfterHour.IsNull() && !item.StartAfterHour.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "start-time/after/time/hour", strconv.FormatInt(item.StartAfterHour.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/start-time/after/time/hour", strconv.FormatInt(item.StartAfterHour.ValueInt64(), 10))
 			}
 			if !item.StartAfterMinute.IsNull() && !item.StartAfterMinute.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "start-time/after/time/minute", strconv.FormatInt(item.StartAfterMinute.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/start-time/after/time/minute", strconv.FormatInt(item.StartAfterMinute.ValueInt64(), 10))
 			}
 			if !item.StartAfterSecond.IsNull() && !item.StartAfterSecond.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "start-time/after/time/second", strconv.FormatInt(item.StartAfterSecond.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/start-time/after/time/second", strconv.FormatInt(item.StartAfterSecond.ValueInt64(), 10))
 			}
 			if !item.StartNow.IsNull() && !item.StartNow.IsUnknown() {
 				if item.StartNow.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "start-time/now", "")
+					body = helpers.SetFromXPath(body, basePath+"/start-time/now", "")
 				}
 			}
 			if !item.Recurring.IsNull() && !item.Recurring.IsUnknown() {
 				if item.Recurring.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "recurring", "")
+					body = helpers.SetFromXPath(body, basePath+"/recurring", "")
 				}
 			}
 			if !item.Ageout.IsNull() && !item.Ageout.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ageout", strconv.FormatInt(item.Ageout.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/ageout", strconv.FormatInt(item.Ageout.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"schedule/operations/operation", cBody.Res())
 		}
 	}
 	if !data.ServerTwamp.IsNull() && !data.ServerTwamp.IsUnknown() {
@@ -2412,18 +2285,21 @@ func (data IPSLA) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/low-memory"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/low-memory"); value.Exists() {
 		data.LowMemory = types.Int64Value(value.Int())
 	} else if data.LowMemory.IsNull() {
 		data.LowMemory = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/key-chain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key-chain"); value.Exists() {
 		data.KeyChain = types.StringValue(value.String())
 	} else if data.KeyChain.IsNull() {
 		data.KeyChain = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hw-timestamp/disable"); value.Exists() {
-		data.HwTimestampDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hw-timestamp/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.HwTimestampDisable.IsNull() {
+			data.HwTimestampDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.HwTimestampDisable.IsNull() {
@@ -2435,7 +2311,7 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.Operations[i].OperationNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/operations/operation").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/operations/operation").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2459,7 +2335,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Operations[i].OperationNumber = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "type/icmp/echo"); value.Exists() {
-			data.Operations[i].IcmpEcho = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpEcho.IsNull() {
+				data.Operations[i].IcmpEcho = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2523,7 +2402,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Operations[i].IcmpEchoHistoryBuckets = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "type/icmp/echo/history/filter/all"); value.Exists() {
-			data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() {
+				data.Operations[i].IcmpEchoHistoryFilterAll = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2532,7 +2414,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "type/icmp/echo/history/filter/failures"); value.Exists() {
-			data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() {
+				data.Operations[i].IcmpEchoHistoryFilterFailures = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2560,42 +2445,45 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.Operations[i].IcmpEchoStatisticsHourlyDistributionInterval.IsNull() {
 			data.Operations[i].IcmpEchoStatisticsHourlyDistributionInterval = types.Int64Null()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "type/icmp/echo/statistics/intervals/interval"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Operations[i].IcmpEchoStatisticsIntervals
-			data.Operations[i].IcmpEchoStatisticsIntervals = make([]IPSLAOperationsIcmpEchoStatisticsIntervals, 0)
+		for ci := range data.Operations[i].IcmpEchoStatisticsIntervals {
+			keys := [...]string{"interval-time"}
+			keyValues := [...]string{strconv.FormatInt(data.Operations[i].IcmpEchoStatisticsIntervals[ci].Interval.ValueInt64(), 10)}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := IPSLAOperationsIcmpEchoStatisticsIntervals{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "interval-time"); cValue.Exists() {
-					citem.Interval = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "buckets"); cValue.Exists() {
-					citem.Buckets = types.Int64Value(cValue.Int())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Interval.Equal(citem.Interval) {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "type/icmp/echo/statistics/intervals/interval").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Operations[i].IcmpEchoStatisticsIntervals = append(data.Operations[i].IcmpEchoStatisticsIntervals, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "interval-time"); value.Exists() {
+				data.Operations[i].IcmpEchoStatisticsIntervals[ci].Interval = types.Int64Value(value.Int())
+			} else if data.Operations[i].IcmpEchoStatisticsIntervals[ci].Interval.IsNull() {
+				data.Operations[i].IcmpEchoStatisticsIntervals[ci].Interval = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "buckets"); value.Exists() {
+				data.Operations[i].IcmpEchoStatisticsIntervals[ci].Buckets = types.Int64Value(value.Int())
+			} else if data.Operations[i].IcmpEchoStatisticsIntervals[ci].Buckets.IsNull() {
+				data.Operations[i].IcmpEchoStatisticsIntervals[ci].Buckets = types.Int64Null()
+			}
 		}
 		if value := helpers.GetFromXPath(r, "type/icmp/path-echo"); value.Exists() {
-			data.Operations[i].IcmpPathEcho = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpPathEcho.IsNull() {
+				data.Operations[i].IcmpPathEcho = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2644,7 +2532,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Operations[i].IcmpPathEchoHistoryBuckets = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "type/icmp/path-echo/history/filter/all"); value.Exists() {
-			data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() {
+				data.Operations[i].IcmpPathEchoHistoryFilterAll = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2653,7 +2544,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "type/icmp/path-echo/history/filter/failures"); value.Exists() {
-			data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() {
+				data.Operations[i].IcmpPathEchoHistoryFilterFailures = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2697,7 +2591,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Operations[i].IcmpPathEchoStatisticsHourlyMaximumPaths = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "type/icmp/path-jitter"); value.Exists() {
-			data.Operations[i].IcmpPathJitter = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].IcmpPathJitter.IsNull() {
+				data.Operations[i].IcmpPathJitter = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2751,7 +2648,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Operations[i].IcmpPathJitterDestinationIpv4 = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "type/udp/echo"); value.Exists() {
-			data.Operations[i].UdpEcho = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEcho.IsNull() {
+				data.Operations[i].UdpEcho = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2800,7 +2700,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Operations[i].UdpEchoDestinationPort = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "type/udp/echo/control/disable"); value.Exists() {
-			data.Operations[i].UdpEchoControlDisable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEchoControlDisable.IsNull() {
+				data.Operations[i].UdpEchoControlDisable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2809,7 +2712,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "type/udp/echo/verify-data"); value.Exists() {
-			data.Operations[i].UdpEchoVerifyData = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEchoVerifyData.IsNull() {
+				data.Operations[i].UdpEchoVerifyData = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2842,39 +2748,39 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.Operations[i].UdpEchoStatisticsHourlyDistributionInterval.IsNull() {
 			data.Operations[i].UdpEchoStatisticsHourlyDistributionInterval = types.Int64Null()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "type/udp/echo/statistics/intervals/interval"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Operations[i].UdpEchoStatisticsIntervals
-			data.Operations[i].UdpEchoStatisticsIntervals = make([]IPSLAOperationsUdpEchoStatisticsIntervals, 0)
+		for ci := range data.Operations[i].UdpEchoStatisticsIntervals {
+			keys := [...]string{"interval-time"}
+			keyValues := [...]string{strconv.FormatInt(data.Operations[i].UdpEchoStatisticsIntervals[ci].Interval.ValueInt64(), 10)}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := IPSLAOperationsUdpEchoStatisticsIntervals{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "interval-time"); cValue.Exists() {
-					citem.Interval = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "buckets"); cValue.Exists() {
-					citem.Buckets = types.Int64Value(cValue.Int())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Interval.Equal(citem.Interval) {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "type/udp/echo/statistics/intervals/interval").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Operations[i].UdpEchoStatisticsIntervals = append(data.Operations[i].UdpEchoStatisticsIntervals, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "interval-time"); value.Exists() {
+				data.Operations[i].UdpEchoStatisticsIntervals[ci].Interval = types.Int64Value(value.Int())
+			} else if data.Operations[i].UdpEchoStatisticsIntervals[ci].Interval.IsNull() {
+				data.Operations[i].UdpEchoStatisticsIntervals[ci].Interval = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "buckets"); value.Exists() {
+				data.Operations[i].UdpEchoStatisticsIntervals[ci].Buckets = types.Int64Value(value.Int())
+			} else if data.Operations[i].UdpEchoStatisticsIntervals[ci].Buckets.IsNull() {
+				data.Operations[i].UdpEchoStatisticsIntervals[ci].Buckets = types.Int64Null()
+			}
 		}
 		if value := helpers.GetFromXPath(r, "type/udp/echo/history/buckets"); value.Exists() {
 			data.Operations[i].UdpEchoHistoryBuckets = types.Int64Value(value.Int())
@@ -2882,7 +2788,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Operations[i].UdpEchoHistoryBuckets = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "type/udp/echo/history/filter/all"); value.Exists() {
-			data.Operations[i].UdpEchoHistoryFilterAll = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEchoHistoryFilterAll.IsNull() {
+				data.Operations[i].UdpEchoHistoryFilterAll = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2891,7 +2800,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "type/udp/echo/history/filter/failures"); value.Exists() {
-			data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() {
+				data.Operations[i].UdpEchoHistoryFilterFailures = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2905,7 +2817,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Operations[i].UdpEchoHistoryLives = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "type/udp/jitter"); value.Exists() {
-			data.Operations[i].UdpJitter = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpJitter.IsNull() {
+				data.Operations[i].UdpJitter = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2974,7 +2889,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Operations[i].UdpJitterVrf = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "type/udp/jitter/control/disable"); value.Exists() {
-			data.Operations[i].UdpJitterControlDisable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpJitterControlDisable.IsNull() {
+				data.Operations[i].UdpJitterControlDisable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2983,7 +2901,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "type/udp/jitter/verify-data"); value.Exists() {
-			data.Operations[i].UdpJitterVerifyData = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].UdpJitterVerifyData.IsNull() {
+				data.Operations[i].UdpJitterVerifyData = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3006,42 +2927,45 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.Operations[i].UdpJitterStatisticsHourlyDistributionInterval.IsNull() {
 			data.Operations[i].UdpJitterStatisticsHourlyDistributionInterval = types.Int64Null()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "type/udp/jitter/statistics/intervals/interval"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Operations[i].UdpJitterStatisticsIntervals
-			data.Operations[i].UdpJitterStatisticsIntervals = make([]IPSLAOperationsUdpJitterStatisticsIntervals, 0)
+		for ci := range data.Operations[i].UdpJitterStatisticsIntervals {
+			keys := [...]string{"interval-time"}
+			keyValues := [...]string{strconv.FormatInt(data.Operations[i].UdpJitterStatisticsIntervals[ci].Interval.ValueInt64(), 10)}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := IPSLAOperationsUdpJitterStatisticsIntervals{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "interval-time"); cValue.Exists() {
-					citem.Interval = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "buckets"); cValue.Exists() {
-					citem.Buckets = types.Int64Value(cValue.Int())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Interval.Equal(citem.Interval) {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "type/udp/jitter/statistics/intervals/interval").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Operations[i].UdpJitterStatisticsIntervals = append(data.Operations[i].UdpJitterStatisticsIntervals, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "interval-time"); value.Exists() {
+				data.Operations[i].UdpJitterStatisticsIntervals[ci].Interval = types.Int64Value(value.Int())
+			} else if data.Operations[i].UdpJitterStatisticsIntervals[ci].Interval.IsNull() {
+				data.Operations[i].UdpJitterStatisticsIntervals[ci].Interval = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "buckets"); value.Exists() {
+				data.Operations[i].UdpJitterStatisticsIntervals[ci].Buckets = types.Int64Value(value.Int())
+			} else if data.Operations[i].UdpJitterStatisticsIntervals[ci].Buckets.IsNull() {
+				data.Operations[i].UdpJitterStatisticsIntervals[ci].Buckets = types.Int64Null()
+			}
 		}
 		if value := helpers.GetFromXPath(r, "type/mpls/lsp/ping"); value.Exists() {
-			data.Operations[i].MplsLspPing = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].MplsLspPing.IsNull() {
+				data.Operations[i].MplsLspPing = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3114,42 +3038,45 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.Operations[i].MplsLspPingStatisticsHourlyDistributionInterval.IsNull() {
 			data.Operations[i].MplsLspPingStatisticsHourlyDistributionInterval = types.Int64Null()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "type/mpls/lsp/ping/statistics/intervals/interval"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Operations[i].MplsLspPingStatisticsIntervals
-			data.Operations[i].MplsLspPingStatisticsIntervals = make([]IPSLAOperationsMplsLspPingStatisticsIntervals, 0)
+		for ci := range data.Operations[i].MplsLspPingStatisticsIntervals {
+			keys := [...]string{"interval-time"}
+			keyValues := [...]string{strconv.FormatInt(data.Operations[i].MplsLspPingStatisticsIntervals[ci].Interval.ValueInt64(), 10)}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := IPSLAOperationsMplsLspPingStatisticsIntervals{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "interval-time"); cValue.Exists() {
-					citem.Interval = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "buckets"); cValue.Exists() {
-					citem.Buckets = types.Int64Value(cValue.Int())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if !existingItem.Interval.Equal(citem.Interval) {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "type/mpls/lsp/ping/statistics/intervals/interval").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Operations[i].MplsLspPingStatisticsIntervals = append(data.Operations[i].MplsLspPingStatisticsIntervals, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "interval-time"); value.Exists() {
+				data.Operations[i].MplsLspPingStatisticsIntervals[ci].Interval = types.Int64Value(value.Int())
+			} else if data.Operations[i].MplsLspPingStatisticsIntervals[ci].Interval.IsNull() {
+				data.Operations[i].MplsLspPingStatisticsIntervals[ci].Interval = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "buckets"); value.Exists() {
+				data.Operations[i].MplsLspPingStatisticsIntervals[ci].Buckets = types.Int64Value(value.Int())
+			} else if data.Operations[i].MplsLspPingStatisticsIntervals[ci].Buckets.IsNull() {
+				data.Operations[i].MplsLspPingStatisticsIntervals[ci].Buckets = types.Int64Null()
+			}
 		}
 		if value := helpers.GetFromXPath(r, "type/mpls/lsp/trace"); value.Exists() {
-			data.Operations[i].MplsLspTrace = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Operations[i].MplsLspTrace.IsNull() {
+				data.Operations[i].MplsLspTrace = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3223,7 +3150,7 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.Schedules[i].OperationNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/schedule/operations/operation").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/schedule/operations/operation").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3247,7 +3174,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Schedules[i].OperationNumber = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "life/forever"); value.Exists() {
-			data.Schedules[i].LifeForever = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Schedules[i].LifeForever.IsNull() {
+				data.Schedules[i].LifeForever = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3291,7 +3221,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Schedules[i].StartYear = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "start-time/pending"); value.Exists() {
-			data.Schedules[i].StartPending = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Schedules[i].StartPending.IsNull() {
+				data.Schedules[i].StartPending = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3315,7 +3248,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Schedules[i].StartAfterSecond = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "start-time/now"); value.Exists() {
-			data.Schedules[i].StartNow = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Schedules[i].StartNow.IsNull() {
+				data.Schedules[i].StartNow = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3324,7 +3260,10 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 		}
 		if value := helpers.GetFromXPath(r, "recurring"); value.Exists() {
-			data.Schedules[i].Recurring = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Schedules[i].Recurring.IsNull() {
+				data.Schedules[i].Recurring = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -3338,20 +3277,23 @@ func (data *IPSLA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Schedules[i].Ageout = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/twamp"); value.Exists() {
-		data.ServerTwamp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/twamp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerTwamp.IsNull() {
+			data.ServerTwamp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ServerTwamp.IsNull() {
 			data.ServerTwamp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/twamp/port"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/twamp/port"); value.Exists() {
 		data.ServerTwampPort = types.Int64Value(value.Int())
 	} else if data.ServerTwampPort.IsNull() {
 		data.ServerTwampPort = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/twamp/timer/inactivity"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/twamp/timer/inactivity"); value.Exists() {
 		data.ServerTwampTimerInactivity = types.Int64Value(value.Int())
 	} else if data.ServerTwampTimerInactivity.IsNull() {
 		data.ServerTwampTimerInactivity = types.Int64Null()
@@ -3366,6 +3308,10 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "low-memory"); value.Exists() {
 		data.LowMemory = types.Int64Value(value.Int())
 	}
@@ -3374,8 +3320,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "hw-timestamp.disable"); value.Exists() {
 		data.HwTimestampDisable = types.BoolValue(true)
-	} else {
-		data.HwTimestampDisable = types.BoolNull()
+	} else if !data.HwTimestampDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.HwTimestampDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "operations.operation"); value.Exists() {
 		data.Operations = make([]IPSLAOperations, 0)
@@ -3386,8 +3333,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.icmp.echo"); cValue.Exists() {
 				item.IcmpEcho = types.BoolValue(true)
-			} else {
-				item.IcmpEcho = types.BoolNull()
+			} else if !item.IcmpEcho.IsNull() {
+				// Only set to false if it was previously set
+				item.IcmpEcho = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.echo.tag"); cValue.Exists() {
 				item.IcmpEchoTag = types.StringValue(cValue.String())
@@ -3424,13 +3372,15 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.icmp.echo.history.filter.all"); cValue.Exists() {
 				item.IcmpEchoHistoryFilterAll = types.BoolValue(true)
-			} else {
-				item.IcmpEchoHistoryFilterAll = types.BoolNull()
+			} else if !item.IcmpEchoHistoryFilterAll.IsNull() {
+				// Only set to false if it was previously set
+				item.IcmpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.echo.history.filter.failures"); cValue.Exists() {
 				item.IcmpEchoHistoryFilterFailures = types.BoolValue(true)
-			} else {
-				item.IcmpEchoHistoryFilterFailures = types.BoolNull()
+			} else if !item.IcmpEchoHistoryFilterFailures.IsNull() {
+				// Only set to false if it was previously set
+				item.IcmpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.echo.history.lives"); cValue.Exists() {
 				item.IcmpEchoHistoryLives = types.Int64Value(cValue.Int())
@@ -3460,8 +3410,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.icmp.path-echo"); cValue.Exists() {
 				item.IcmpPathEcho = types.BoolValue(true)
-			} else {
-				item.IcmpPathEcho = types.BoolNull()
+			} else if !item.IcmpPathEcho.IsNull() {
+				// Only set to false if it was previously set
+				item.IcmpPathEcho = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-echo.tag"); cValue.Exists() {
 				item.IcmpPathEchoTag = types.StringValue(cValue.String())
@@ -3489,13 +3440,15 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.icmp.path-echo.history.filter.all"); cValue.Exists() {
 				item.IcmpPathEchoHistoryFilterAll = types.BoolValue(true)
-			} else {
-				item.IcmpPathEchoHistoryFilterAll = types.BoolNull()
+			} else if !item.IcmpPathEchoHistoryFilterAll.IsNull() {
+				// Only set to false if it was previously set
+				item.IcmpPathEchoHistoryFilterAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-echo.history.filter.failures"); cValue.Exists() {
 				item.IcmpPathEchoHistoryFilterFailures = types.BoolValue(true)
-			} else {
-				item.IcmpPathEchoHistoryFilterFailures = types.BoolNull()
+			} else if !item.IcmpPathEchoHistoryFilterFailures.IsNull() {
+				// Only set to false if it was previously set
+				item.IcmpPathEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-echo.history.lives"); cValue.Exists() {
 				item.IcmpPathEchoHistoryLives = types.Int64Value(cValue.Int())
@@ -3520,8 +3473,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.icmp.path-jitter"); cValue.Exists() {
 				item.IcmpPathJitter = types.BoolValue(true)
-			} else {
-				item.IcmpPathJitter = types.BoolNull()
+			} else if !item.IcmpPathJitter.IsNull() {
+				// Only set to false if it was previously set
+				item.IcmpPathJitter = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-jitter.tag"); cValue.Exists() {
 				item.IcmpPathJitterTag = types.StringValue(cValue.String())
@@ -3552,8 +3506,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.udp.echo"); cValue.Exists() {
 				item.UdpEcho = types.BoolValue(true)
-			} else {
-				item.UdpEcho = types.BoolNull()
+			} else if !item.UdpEcho.IsNull() {
+				// Only set to false if it was previously set
+				item.UdpEcho = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.tag"); cValue.Exists() {
 				item.UdpEchoTag = types.StringValue(cValue.String())
@@ -3581,13 +3536,15 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.udp.echo.control.disable"); cValue.Exists() {
 				item.UdpEchoControlDisable = types.BoolValue(true)
-			} else {
-				item.UdpEchoControlDisable = types.BoolNull()
+			} else if !item.UdpEchoControlDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.UdpEchoControlDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.verify-data"); cValue.Exists() {
 				item.UdpEchoVerifyData = types.BoolValue(true)
-			} else {
-				item.UdpEchoVerifyData = types.BoolNull()
+			} else if !item.UdpEchoVerifyData.IsNull() {
+				// Only set to false if it was previously set
+				item.UdpEchoVerifyData = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.tos"); cValue.Exists() {
 				item.UdpEchoTos = types.Int64Value(cValue.Int())
@@ -3623,21 +3580,24 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.udp.echo.history.filter.all"); cValue.Exists() {
 				item.UdpEchoHistoryFilterAll = types.BoolValue(true)
-			} else {
-				item.UdpEchoHistoryFilterAll = types.BoolNull()
+			} else if !item.UdpEchoHistoryFilterAll.IsNull() {
+				// Only set to false if it was previously set
+				item.UdpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.history.filter.failures"); cValue.Exists() {
 				item.UdpEchoHistoryFilterFailures = types.BoolValue(true)
-			} else {
-				item.UdpEchoHistoryFilterFailures = types.BoolNull()
+			} else if !item.UdpEchoHistoryFilterFailures.IsNull() {
+				// Only set to false if it was previously set
+				item.UdpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.history.lives"); cValue.Exists() {
 				item.UdpEchoHistoryLives = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("type.udp.jitter"); cValue.Exists() {
 				item.UdpJitter = types.BoolValue(true)
-			} else {
-				item.UdpJitter = types.BoolNull()
+			} else if !item.UdpJitter.IsNull() {
+				// Only set to false if it was previously set
+				item.UdpJitter = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.jitter.tag"); cValue.Exists() {
 				item.UdpJitterTag = types.StringValue(cValue.String())
@@ -3677,13 +3637,15 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.udp.jitter.control.disable"); cValue.Exists() {
 				item.UdpJitterControlDisable = types.BoolValue(true)
-			} else {
-				item.UdpJitterControlDisable = types.BoolNull()
+			} else if !item.UdpJitterControlDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.UdpJitterControlDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.jitter.verify-data"); cValue.Exists() {
 				item.UdpJitterVerifyData = types.BoolValue(true)
-			} else {
-				item.UdpJitterVerifyData = types.BoolNull()
+			} else if !item.UdpJitterVerifyData.IsNull() {
+				// Only set to false if it was previously set
+				item.UdpJitterVerifyData = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.jitter.statistics.hourly.buckets"); cValue.Exists() {
 				item.UdpJitterStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
@@ -3710,8 +3672,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.mpls.lsp.ping"); cValue.Exists() {
 				item.MplsLspPing = types.BoolValue(true)
-			} else {
-				item.MplsLspPing = types.BoolNull()
+			} else if !item.MplsLspPing.IsNull() {
+				// Only set to false if it was previously set
+				item.MplsLspPing = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.mpls.lsp.ping.tag"); cValue.Exists() {
 				item.MplsLspPingTag = types.StringValue(cValue.String())
@@ -3768,8 +3731,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("type.mpls.lsp.trace"); cValue.Exists() {
 				item.MplsLspTrace = types.BoolValue(true)
-			} else {
-				item.MplsLspTrace = types.BoolNull()
+			} else if !item.MplsLspTrace.IsNull() {
+				// Only set to false if it was previously set
+				item.MplsLspTrace = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.mpls.lsp.trace.tag"); cValue.Exists() {
 				item.MplsLspTraceTag = types.StringValue(cValue.String())
@@ -3820,8 +3784,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("life.forever"); cValue.Exists() {
 				item.LifeForever = types.BoolValue(true)
-			} else {
-				item.LifeForever = types.BoolNull()
+			} else if !item.LifeForever.IsNull() {
+				// Only set to false if it was previously set
+				item.LifeForever = types.BoolValue(false)
 			}
 			if cValue := v.Get("life.length-of-time"); cValue.Exists() {
 				item.LifeTime = types.Int64Value(cValue.Int())
@@ -3846,8 +3811,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("start-time.pending"); cValue.Exists() {
 				item.StartPending = types.BoolValue(true)
-			} else {
-				item.StartPending = types.BoolNull()
+			} else if !item.StartPending.IsNull() {
+				// Only set to false if it was previously set
+				item.StartPending = types.BoolValue(false)
 			}
 			if cValue := v.Get("start-time.after.time.hour"); cValue.Exists() {
 				item.StartAfterHour = types.Int64Value(cValue.Int())
@@ -3860,13 +3826,15 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("start-time.now"); cValue.Exists() {
 				item.StartNow = types.BoolValue(true)
-			} else {
-				item.StartNow = types.BoolNull()
+			} else if !item.StartNow.IsNull() {
+				// Only set to false if it was previously set
+				item.StartNow = types.BoolValue(false)
 			}
 			if cValue := v.Get("recurring"); cValue.Exists() {
 				item.Recurring = types.BoolValue(true)
-			} else {
-				item.Recurring = types.BoolNull()
+			} else if !item.Recurring.IsNull() {
+				// Only set to false if it was previously set
+				item.Recurring = types.BoolValue(false)
 			}
 			if cValue := v.Get("ageout"); cValue.Exists() {
 				item.Ageout = types.Int64Value(cValue.Int())
@@ -3877,8 +3845,9 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "server.twamp"); value.Exists() {
 		data.ServerTwamp = types.BoolValue(true)
-	} else {
-		data.ServerTwamp = types.BoolNull()
+	} else if !data.ServerTwamp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ServerTwamp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "server.twamp.port"); value.Exists() {
 		data.ServerTwampPort = types.Int64Value(value.Int())
@@ -3892,9 +3861,14 @@ func (data *IPSLA) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "low-memory"); value.Exists() {
 		data.LowMemory = types.Int64Value(value.Int())
@@ -3905,7 +3879,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "hw-timestamp.disable"); value.Exists() {
 		data.HwTimestampDisable = types.BoolValue(true)
 	} else {
-		data.HwTimestampDisable = types.BoolNull()
+		data.HwTimestampDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "operations.operation"); value.Exists() {
 		data.Operations = make([]IPSLAOperations, 0)
@@ -3917,7 +3891,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.echo"); cValue.Exists() {
 				item.IcmpEcho = types.BoolValue(true)
 			} else {
-				item.IcmpEcho = types.BoolNull()
+				item.IcmpEcho = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.echo.tag"); cValue.Exists() {
 				item.IcmpEchoTag = types.StringValue(cValue.String())
@@ -3955,12 +3929,12 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.echo.history.filter.all"); cValue.Exists() {
 				item.IcmpEchoHistoryFilterAll = types.BoolValue(true)
 			} else {
-				item.IcmpEchoHistoryFilterAll = types.BoolNull()
+				item.IcmpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.echo.history.filter.failures"); cValue.Exists() {
 				item.IcmpEchoHistoryFilterFailures = types.BoolValue(true)
 			} else {
-				item.IcmpEchoHistoryFilterFailures = types.BoolNull()
+				item.IcmpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.echo.history.lives"); cValue.Exists() {
 				item.IcmpEchoHistoryLives = types.Int64Value(cValue.Int())
@@ -3991,7 +3965,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.path-echo"); cValue.Exists() {
 				item.IcmpPathEcho = types.BoolValue(true)
 			} else {
-				item.IcmpPathEcho = types.BoolNull()
+				item.IcmpPathEcho = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-echo.tag"); cValue.Exists() {
 				item.IcmpPathEchoTag = types.StringValue(cValue.String())
@@ -4020,12 +3994,12 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.path-echo.history.filter.all"); cValue.Exists() {
 				item.IcmpPathEchoHistoryFilterAll = types.BoolValue(true)
 			} else {
-				item.IcmpPathEchoHistoryFilterAll = types.BoolNull()
+				item.IcmpPathEchoHistoryFilterAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-echo.history.filter.failures"); cValue.Exists() {
 				item.IcmpPathEchoHistoryFilterFailures = types.BoolValue(true)
 			} else {
-				item.IcmpPathEchoHistoryFilterFailures = types.BoolNull()
+				item.IcmpPathEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-echo.history.lives"); cValue.Exists() {
 				item.IcmpPathEchoHistoryLives = types.Int64Value(cValue.Int())
@@ -4051,7 +4025,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.icmp.path-jitter"); cValue.Exists() {
 				item.IcmpPathJitter = types.BoolValue(true)
 			} else {
-				item.IcmpPathJitter = types.BoolNull()
+				item.IcmpPathJitter = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.icmp.path-jitter.tag"); cValue.Exists() {
 				item.IcmpPathJitterTag = types.StringValue(cValue.String())
@@ -4083,7 +4057,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.echo"); cValue.Exists() {
 				item.UdpEcho = types.BoolValue(true)
 			} else {
-				item.UdpEcho = types.BoolNull()
+				item.UdpEcho = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.tag"); cValue.Exists() {
 				item.UdpEchoTag = types.StringValue(cValue.String())
@@ -4112,12 +4086,12 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.echo.control.disable"); cValue.Exists() {
 				item.UdpEchoControlDisable = types.BoolValue(true)
 			} else {
-				item.UdpEchoControlDisable = types.BoolNull()
+				item.UdpEchoControlDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.verify-data"); cValue.Exists() {
 				item.UdpEchoVerifyData = types.BoolValue(true)
 			} else {
-				item.UdpEchoVerifyData = types.BoolNull()
+				item.UdpEchoVerifyData = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.tos"); cValue.Exists() {
 				item.UdpEchoTos = types.Int64Value(cValue.Int())
@@ -4154,12 +4128,12 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.echo.history.filter.all"); cValue.Exists() {
 				item.UdpEchoHistoryFilterAll = types.BoolValue(true)
 			} else {
-				item.UdpEchoHistoryFilterAll = types.BoolNull()
+				item.UdpEchoHistoryFilterAll = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.history.filter.failures"); cValue.Exists() {
 				item.UdpEchoHistoryFilterFailures = types.BoolValue(true)
 			} else {
-				item.UdpEchoHistoryFilterFailures = types.BoolNull()
+				item.UdpEchoHistoryFilterFailures = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.echo.history.lives"); cValue.Exists() {
 				item.UdpEchoHistoryLives = types.Int64Value(cValue.Int())
@@ -4167,7 +4141,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.jitter"); cValue.Exists() {
 				item.UdpJitter = types.BoolValue(true)
 			} else {
-				item.UdpJitter = types.BoolNull()
+				item.UdpJitter = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.jitter.tag"); cValue.Exists() {
 				item.UdpJitterTag = types.StringValue(cValue.String())
@@ -4208,12 +4182,12 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.udp.jitter.control.disable"); cValue.Exists() {
 				item.UdpJitterControlDisable = types.BoolValue(true)
 			} else {
-				item.UdpJitterControlDisable = types.BoolNull()
+				item.UdpJitterControlDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.jitter.verify-data"); cValue.Exists() {
 				item.UdpJitterVerifyData = types.BoolValue(true)
 			} else {
-				item.UdpJitterVerifyData = types.BoolNull()
+				item.UdpJitterVerifyData = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.udp.jitter.statistics.hourly.buckets"); cValue.Exists() {
 				item.UdpJitterStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
@@ -4241,7 +4215,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.mpls.lsp.ping"); cValue.Exists() {
 				item.MplsLspPing = types.BoolValue(true)
 			} else {
-				item.MplsLspPing = types.BoolNull()
+				item.MplsLspPing = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.mpls.lsp.ping.tag"); cValue.Exists() {
 				item.MplsLspPingTag = types.StringValue(cValue.String())
@@ -4299,7 +4273,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("type.mpls.lsp.trace"); cValue.Exists() {
 				item.MplsLspTrace = types.BoolValue(true)
 			} else {
-				item.MplsLspTrace = types.BoolNull()
+				item.MplsLspTrace = types.BoolValue(false)
 			}
 			if cValue := v.Get("type.mpls.lsp.trace.tag"); cValue.Exists() {
 				item.MplsLspTraceTag = types.StringValue(cValue.String())
@@ -4351,7 +4325,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("life.forever"); cValue.Exists() {
 				item.LifeForever = types.BoolValue(true)
 			} else {
-				item.LifeForever = types.BoolNull()
+				item.LifeForever = types.BoolValue(false)
 			}
 			if cValue := v.Get("life.length-of-time"); cValue.Exists() {
 				item.LifeTime = types.Int64Value(cValue.Int())
@@ -4377,7 +4351,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-time.pending"); cValue.Exists() {
 				item.StartPending = types.BoolValue(true)
 			} else {
-				item.StartPending = types.BoolNull()
+				item.StartPending = types.BoolValue(false)
 			}
 			if cValue := v.Get("start-time.after.time.hour"); cValue.Exists() {
 				item.StartAfterHour = types.Int64Value(cValue.Int())
@@ -4391,12 +4365,12 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("start-time.now"); cValue.Exists() {
 				item.StartNow = types.BoolValue(true)
 			} else {
-				item.StartNow = types.BoolNull()
+				item.StartNow = types.BoolValue(false)
 			}
 			if cValue := v.Get("recurring"); cValue.Exists() {
 				item.Recurring = types.BoolValue(true)
 			} else {
-				item.Recurring = types.BoolNull()
+				item.Recurring = types.BoolValue(false)
 			}
 			if cValue := v.Get("ageout"); cValue.Exists() {
 				item.Ageout = types.Int64Value(cValue.Int())
@@ -4408,7 +4382,7 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "server.twamp"); value.Exists() {
 		data.ServerTwamp = types.BoolValue(true)
 	} else {
-		data.ServerTwamp = types.BoolNull()
+		data.ServerTwamp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "server.twamp.port"); value.Exists() {
 		data.ServerTwampPort = types.Int64Value(value.Int())
@@ -4422,544 +4396,18 @@ func (data *IPSLAData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPSLA) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/low-memory"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/low-memory"); value.Exists() {
 		data.LowMemory = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/key-chain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key-chain"); value.Exists() {
 		data.KeyChain = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hw-timestamp/disable"); value.Exists() {
-		data.HwTimestampDisable = types.BoolValue(true)
-	} else {
-		data.HwTimestampDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/operations/operation"); value.Exists() {
-		data.Operations = make([]IPSLAOperations, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := IPSLAOperations{}
-			if cValue := helpers.GetFromXPath(v, "operation-number"); cValue.Exists() {
-				item.OperationNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo"); cValue.Exists() {
-				item.IcmpEcho = types.BoolValue(true)
-			} else {
-				item.IcmpEcho = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/tag"); cValue.Exists() {
-				item.IcmpEchoTag = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/frequency"); cValue.Exists() {
-				item.IcmpEchoFrequency = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
-				item.IcmpEchoDatasizeRequest = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/timeout"); cValue.Exists() {
-				item.IcmpEchoTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/source/address/ipv4-address"); cValue.Exists() {
-				item.IcmpEchoSourceIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/source/address/ipv6-address"); cValue.Exists() {
-				item.IcmpEchoSourceIpv6 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/tos"); cValue.Exists() {
-				item.IcmpEchoTos = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/vrf"); cValue.Exists() {
-				item.IcmpEchoVrf = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/destination/address/ipv4-address"); cValue.Exists() {
-				item.IcmpEchoDestinationIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/destination/address/ipv6-address"); cValue.Exists() {
-				item.IcmpEchoDestinationIpv6 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/history/buckets"); cValue.Exists() {
-				item.IcmpEchoHistoryBuckets = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/history/filter/all"); cValue.Exists() {
-				item.IcmpEchoHistoryFilterAll = types.BoolValue(true)
-			} else {
-				item.IcmpEchoHistoryFilterAll = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/history/filter/failures"); cValue.Exists() {
-				item.IcmpEchoHistoryFilterFailures = types.BoolValue(true)
-			} else {
-				item.IcmpEchoHistoryFilterFailures = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/history/lives"); cValue.Exists() {
-				item.IcmpEchoHistoryLives = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/statistics/hourly/buckets"); cValue.Exists() {
-				item.IcmpEchoStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/statistics/hourly/distribution/count"); cValue.Exists() {
-				item.IcmpEchoStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/statistics/hourly/distribution/interval"); cValue.Exists() {
-				item.IcmpEchoStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/statistics/intervals/interval"); cValue.Exists() {
-				item.IcmpEchoStatisticsIntervals = make([]IPSLAOperationsIcmpEchoStatisticsIntervals, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := IPSLAOperationsIcmpEchoStatisticsIntervals{}
-					if ccValue := helpers.GetFromXPath(cv, "interval-time"); ccValue.Exists() {
-						cItem.Interval = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "buckets"); ccValue.Exists() {
-						cItem.Buckets = types.Int64Value(ccValue.Int())
-					}
-					item.IcmpEchoStatisticsIntervals = append(item.IcmpEchoStatisticsIntervals, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo"); cValue.Exists() {
-				item.IcmpPathEcho = types.BoolValue(true)
-			} else {
-				item.IcmpPathEcho = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/tag"); cValue.Exists() {
-				item.IcmpPathEchoTag = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/frequency"); cValue.Exists() {
-				item.IcmpPathEchoFrequency = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
-				item.IcmpPathEchoDatasizeRequest = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/timeout"); cValue.Exists() {
-				item.IcmpPathEchoTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/source/address/ipv4-address"); cValue.Exists() {
-				item.IcmpPathEchoSourceIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/tos"); cValue.Exists() {
-				item.IcmpPathEchoTos = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/destination/address/address"); cValue.Exists() {
-				item.IcmpPathEchoDestinationIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/buckets"); cValue.Exists() {
-				item.IcmpPathEchoHistoryBuckets = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/filter/all"); cValue.Exists() {
-				item.IcmpPathEchoHistoryFilterAll = types.BoolValue(true)
-			} else {
-				item.IcmpPathEchoHistoryFilterAll = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/filter/failures"); cValue.Exists() {
-				item.IcmpPathEchoHistoryFilterFailures = types.BoolValue(true)
-			} else {
-				item.IcmpPathEchoHistoryFilterFailures = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/lives"); cValue.Exists() {
-				item.IcmpPathEchoHistoryLives = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/samples"); cValue.Exists() {
-				item.IcmpPathEchoHistorySamples = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/buckets"); cValue.Exists() {
-				item.IcmpPathEchoStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/distribution/count"); cValue.Exists() {
-				item.IcmpPathEchoStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/distribution/interval"); cValue.Exists() {
-				item.IcmpPathEchoStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/maximum/hops"); cValue.Exists() {
-				item.IcmpPathEchoStatisticsHourlyMaximumHops = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/maximum/paths"); cValue.Exists() {
-				item.IcmpPathEchoStatisticsHourlyMaximumPaths = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter"); cValue.Exists() {
-				item.IcmpPathJitter = types.BoolValue(true)
-			} else {
-				item.IcmpPathJitter = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/tag"); cValue.Exists() {
-				item.IcmpPathJitterTag = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/frequency"); cValue.Exists() {
-				item.IcmpPathJitterFrequency = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
-				item.IcmpPathJitterDatasizeRequest = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/timeout"); cValue.Exists() {
-				item.IcmpPathJitterTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/source/address/ipv4-address"); cValue.Exists() {
-				item.IcmpPathJitterSourceIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/packet/count"); cValue.Exists() {
-				item.IcmpPathJitterPacketCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/packet/interval"); cValue.Exists() {
-				item.IcmpPathJitterPacketInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/tos"); cValue.Exists() {
-				item.IcmpPathJitterTos = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/destination/address/address"); cValue.Exists() {
-				item.IcmpPathJitterDestinationIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo"); cValue.Exists() {
-				item.UdpEcho = types.BoolValue(true)
-			} else {
-				item.UdpEcho = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/tag"); cValue.Exists() {
-				item.UdpEchoTag = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/frequency"); cValue.Exists() {
-				item.UdpEchoFrequency = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
-				item.UdpEchoDatasizeRequest = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/timeout"); cValue.Exists() {
-				item.UdpEchoTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/source/address/ipv4-address"); cValue.Exists() {
-				item.UdpEchoSourceIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/source/port"); cValue.Exists() {
-				item.UdpEchoSourcePort = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/destination/address"); cValue.Exists() {
-				item.UdpEchoDestinationIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/destination/port"); cValue.Exists() {
-				item.UdpEchoDestinationPort = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/control/disable"); cValue.Exists() {
-				item.UdpEchoControlDisable = types.BoolValue(true)
-			} else {
-				item.UdpEchoControlDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/verify-data"); cValue.Exists() {
-				item.UdpEchoVerifyData = types.BoolValue(true)
-			} else {
-				item.UdpEchoVerifyData = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/tos"); cValue.Exists() {
-				item.UdpEchoTos = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/vrf"); cValue.Exists() {
-				item.UdpEchoVrf = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/statistics/hourly/buckets"); cValue.Exists() {
-				item.UdpEchoStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/statistics/hourly/distribution/count"); cValue.Exists() {
-				item.UdpEchoStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/statistics/hourly/distribution/interval"); cValue.Exists() {
-				item.UdpEchoStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/statistics/intervals/interval"); cValue.Exists() {
-				item.UdpEchoStatisticsIntervals = make([]IPSLAOperationsUdpEchoStatisticsIntervals, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := IPSLAOperationsUdpEchoStatisticsIntervals{}
-					if ccValue := helpers.GetFromXPath(cv, "interval-time"); ccValue.Exists() {
-						cItem.Interval = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "buckets"); ccValue.Exists() {
-						cItem.Buckets = types.Int64Value(ccValue.Int())
-					}
-					item.UdpEchoStatisticsIntervals = append(item.UdpEchoStatisticsIntervals, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/history/buckets"); cValue.Exists() {
-				item.UdpEchoHistoryBuckets = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/history/filter/all"); cValue.Exists() {
-				item.UdpEchoHistoryFilterAll = types.BoolValue(true)
-			} else {
-				item.UdpEchoHistoryFilterAll = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/history/filter/failures"); cValue.Exists() {
-				item.UdpEchoHistoryFilterFailures = types.BoolValue(true)
-			} else {
-				item.UdpEchoHistoryFilterFailures = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/echo/history/lives"); cValue.Exists() {
-				item.UdpEchoHistoryLives = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter"); cValue.Exists() {
-				item.UdpJitter = types.BoolValue(true)
-			} else {
-				item.UdpJitter = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/tag"); cValue.Exists() {
-				item.UdpJitterTag = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/frequency"); cValue.Exists() {
-				item.UdpJitterFrequency = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
-				item.UdpJitterDatasizeRequest = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/timeout"); cValue.Exists() {
-				item.UdpJitterTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/source/address/ipv4-address"); cValue.Exists() {
-				item.UdpJitterSourceIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/source/port"); cValue.Exists() {
-				item.UdpJitterSourcePort = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/destination/address"); cValue.Exists() {
-				item.UdpJitterDestinationIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/destination/port"); cValue.Exists() {
-				item.UdpJitterDestinationPort = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/packet/count"); cValue.Exists() {
-				item.UdpJitterPacketCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/packet/interval"); cValue.Exists() {
-				item.UdpJitterPacketInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/tos"); cValue.Exists() {
-				item.UdpJitterTos = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/vrf"); cValue.Exists() {
-				item.UdpJitterVrf = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/control/disable"); cValue.Exists() {
-				item.UdpJitterControlDisable = types.BoolValue(true)
-			} else {
-				item.UdpJitterControlDisable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/verify-data"); cValue.Exists() {
-				item.UdpJitterVerifyData = types.BoolValue(true)
-			} else {
-				item.UdpJitterVerifyData = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/statistics/hourly/buckets"); cValue.Exists() {
-				item.UdpJitterStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/statistics/hourly/distribution/count"); cValue.Exists() {
-				item.UdpJitterStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/statistics/hourly/distribution/interval"); cValue.Exists() {
-				item.UdpJitterStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/statistics/intervals/interval"); cValue.Exists() {
-				item.UdpJitterStatisticsIntervals = make([]IPSLAOperationsUdpJitterStatisticsIntervals, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := IPSLAOperationsUdpJitterStatisticsIntervals{}
-					if ccValue := helpers.GetFromXPath(cv, "interval-time"); ccValue.Exists() {
-						cItem.Interval = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "buckets"); ccValue.Exists() {
-						cItem.Buckets = types.Int64Value(ccValue.Int())
-					}
-					item.UdpJitterStatisticsIntervals = append(item.UdpJitterStatisticsIntervals, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping"); cValue.Exists() {
-				item.MplsLspPing = types.BoolValue(true)
-			} else {
-				item.MplsLspPing = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/tag"); cValue.Exists() {
-				item.MplsLspPingTag = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/frequency"); cValue.Exists() {
-				item.MplsLspPingFrequency = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
-				item.MplsLspPingDatasizeRequest = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/timeout"); cValue.Exists() {
-				item.MplsLspPingTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/source/address/ipv4-address"); cValue.Exists() {
-				item.MplsLspPingSourceIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/ipv4/address"); cValue.Exists() {
-				item.MplsLspPingTargetIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/ipv4/mask"); cValue.Exists() {
-				item.MplsLspPingTargetIpv4Mask = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/traffic-eng/tunnel"); cValue.Exists() {
-				item.MplsLspPingTargetTeTunnel = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/pseudowire/address"); cValue.Exists() {
-				item.MplsLspPingTargetPseudowireAddress = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/pseudowire/virtual-circuit-id"); cValue.Exists() {
-				item.MplsLspPingTargetPseudowireVcId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/statistics/hourly/buckets"); cValue.Exists() {
-				item.MplsLspPingStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/statistics/hourly/distribution/count"); cValue.Exists() {
-				item.MplsLspPingStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/statistics/hourly/distribution/interval"); cValue.Exists() {
-				item.MplsLspPingStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/statistics/intervals/interval"); cValue.Exists() {
-				item.MplsLspPingStatisticsIntervals = make([]IPSLAOperationsMplsLspPingStatisticsIntervals, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := IPSLAOperationsMplsLspPingStatisticsIntervals{}
-					if ccValue := helpers.GetFromXPath(cv, "interval-time"); ccValue.Exists() {
-						cItem.Interval = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "buckets"); ccValue.Exists() {
-						cItem.Buckets = types.Int64Value(ccValue.Int())
-					}
-					item.MplsLspPingStatisticsIntervals = append(item.MplsLspPingStatisticsIntervals, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace"); cValue.Exists() {
-				item.MplsLspTrace = types.BoolValue(true)
-			} else {
-				item.MplsLspTrace = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/tag"); cValue.Exists() {
-				item.MplsLspTraceTag = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/frequency"); cValue.Exists() {
-				item.MplsLspTraceFrequency = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/timeout"); cValue.Exists() {
-				item.MplsLspTraceTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/source/address/ipv4-address"); cValue.Exists() {
-				item.MplsLspTraceSourceIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/ipv4/address"); cValue.Exists() {
-				item.MplsLspTraceTargetIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/ipv4/mask"); cValue.Exists() {
-				item.MplsLspTraceTargetIpv4Mask = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/traffic-eng/tunnel"); cValue.Exists() {
-				item.MplsLspTraceTargetTeTunnel = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/pseudowire/address"); cValue.Exists() {
-				item.MplsLspTraceTargetPseudowireAddress = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/pseudowire/virtual-circuit-id"); cValue.Exists() {
-				item.MplsLspTraceTargetPseudowireVcId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/statistics/hourly/buckets"); cValue.Exists() {
-				item.MplsLspTraceStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/statistics/hourly/distribution/count"); cValue.Exists() {
-				item.MplsLspTraceStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/statistics/hourly/distribution/interval"); cValue.Exists() {
-				item.MplsLspTraceStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
-			}
-			data.Operations = append(data.Operations, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/schedule/operations/operation"); value.Exists() {
-		data.Schedules = make([]IPSLASchedules, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := IPSLASchedules{}
-			if cValue := helpers.GetFromXPath(v, "operation-number"); cValue.Exists() {
-				item.OperationNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "life/forever"); cValue.Exists() {
-				item.LifeForever = types.BoolValue(true)
-			} else {
-				item.LifeForever = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "life/length-of-time"); cValue.Exists() {
-				item.LifeTime = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/hour"); cValue.Exists() {
-				item.StartHour = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/minute"); cValue.Exists() {
-				item.StartMinute = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/second"); cValue.Exists() {
-				item.StartSecond = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/month"); cValue.Exists() {
-				item.StartMonth = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/day-of-month"); cValue.Exists() {
-				item.StartDayOfMonth = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/year"); cValue.Exists() {
-				item.StartYear = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/pending"); cValue.Exists() {
-				item.StartPending = types.BoolValue(true)
-			} else {
-				item.StartPending = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/after/time/hour"); cValue.Exists() {
-				item.StartAfterHour = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/after/time/minute"); cValue.Exists() {
-				item.StartAfterMinute = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/after/time/second"); cValue.Exists() {
-				item.StartAfterSecond = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "start-time/now"); cValue.Exists() {
-				item.StartNow = types.BoolValue(true)
-			} else {
-				item.StartNow = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "recurring"); cValue.Exists() {
-				item.Recurring = types.BoolValue(true)
-			} else {
-				item.Recurring = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "ageout"); cValue.Exists() {
-				item.Ageout = types.Int64Value(cValue.Int())
-			}
-			data.Schedules = append(data.Schedules, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/twamp"); value.Exists() {
-		data.ServerTwamp = types.BoolValue(true)
-	} else {
-		data.ServerTwamp = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/twamp/port"); value.Exists() {
-		data.ServerTwampPort = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/twamp/timer/inactivity"); value.Exists() {
-		data.ServerTwampTimerInactivity = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *IPSLAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/low-memory"); value.Exists() {
-		data.LowMemory = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/key-chain"); value.Exists() {
-		data.KeyChain = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hw-timestamp/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hw-timestamp/disable"); value.Exists() {
 		data.HwTimestampDisable = types.BoolValue(true)
 	} else {
 		data.HwTimestampDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/operations/operation"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/operations/operation"); value.Exists() {
 		data.Operations = make([]IPSLAOperations, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := IPSLAOperations{}
@@ -5393,7 +4841,7 @@ func (data *IPSLAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/schedule/operations/operation"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/schedule/operations/operation"); value.Exists() {
 		data.Schedules = make([]IPSLASchedules, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := IPSLASchedules{}
@@ -5457,15 +4905,541 @@ func (data *IPSLAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/twamp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/twamp"); value.Exists() {
 		data.ServerTwamp = types.BoolValue(true)
 	} else {
 		data.ServerTwamp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/twamp/port"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/twamp/port"); value.Exists() {
 		data.ServerTwampPort = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server/twamp/timer/inactivity"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/twamp/timer/inactivity"); value.Exists() {
+		data.ServerTwampTimerInactivity = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *IPSLAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/low-memory"); value.Exists() {
+		data.LowMemory = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key-chain"); value.Exists() {
+		data.KeyChain = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hw-timestamp/disable"); value.Exists() {
+		data.HwTimestampDisable = types.BoolValue(true)
+	} else {
+		data.HwTimestampDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/operations/operation"); value.Exists() {
+		data.Operations = make([]IPSLAOperations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := IPSLAOperations{}
+			if cValue := helpers.GetFromXPath(v, "operation-number"); cValue.Exists() {
+				item.OperationNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo"); cValue.Exists() {
+				item.IcmpEcho = types.BoolValue(true)
+			} else {
+				item.IcmpEcho = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/tag"); cValue.Exists() {
+				item.IcmpEchoTag = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/frequency"); cValue.Exists() {
+				item.IcmpEchoFrequency = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
+				item.IcmpEchoDatasizeRequest = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/timeout"); cValue.Exists() {
+				item.IcmpEchoTimeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/source/address/ipv4-address"); cValue.Exists() {
+				item.IcmpEchoSourceIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/source/address/ipv6-address"); cValue.Exists() {
+				item.IcmpEchoSourceIpv6 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/tos"); cValue.Exists() {
+				item.IcmpEchoTos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/vrf"); cValue.Exists() {
+				item.IcmpEchoVrf = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/destination/address/ipv4-address"); cValue.Exists() {
+				item.IcmpEchoDestinationIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/destination/address/ipv6-address"); cValue.Exists() {
+				item.IcmpEchoDestinationIpv6 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/history/buckets"); cValue.Exists() {
+				item.IcmpEchoHistoryBuckets = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/history/filter/all"); cValue.Exists() {
+				item.IcmpEchoHistoryFilterAll = types.BoolValue(true)
+			} else {
+				item.IcmpEchoHistoryFilterAll = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/history/filter/failures"); cValue.Exists() {
+				item.IcmpEchoHistoryFilterFailures = types.BoolValue(true)
+			} else {
+				item.IcmpEchoHistoryFilterFailures = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/history/lives"); cValue.Exists() {
+				item.IcmpEchoHistoryLives = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/statistics/hourly/buckets"); cValue.Exists() {
+				item.IcmpEchoStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/statistics/hourly/distribution/count"); cValue.Exists() {
+				item.IcmpEchoStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/statistics/hourly/distribution/interval"); cValue.Exists() {
+				item.IcmpEchoStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/echo/statistics/intervals/interval"); cValue.Exists() {
+				item.IcmpEchoStatisticsIntervals = make([]IPSLAOperationsIcmpEchoStatisticsIntervals, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := IPSLAOperationsIcmpEchoStatisticsIntervals{}
+					if ccValue := helpers.GetFromXPath(cv, "interval-time"); ccValue.Exists() {
+						cItem.Interval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "buckets"); ccValue.Exists() {
+						cItem.Buckets = types.Int64Value(ccValue.Int())
+					}
+					item.IcmpEchoStatisticsIntervals = append(item.IcmpEchoStatisticsIntervals, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo"); cValue.Exists() {
+				item.IcmpPathEcho = types.BoolValue(true)
+			} else {
+				item.IcmpPathEcho = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/tag"); cValue.Exists() {
+				item.IcmpPathEchoTag = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/frequency"); cValue.Exists() {
+				item.IcmpPathEchoFrequency = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
+				item.IcmpPathEchoDatasizeRequest = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/timeout"); cValue.Exists() {
+				item.IcmpPathEchoTimeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/source/address/ipv4-address"); cValue.Exists() {
+				item.IcmpPathEchoSourceIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/tos"); cValue.Exists() {
+				item.IcmpPathEchoTos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/destination/address/address"); cValue.Exists() {
+				item.IcmpPathEchoDestinationIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/buckets"); cValue.Exists() {
+				item.IcmpPathEchoHistoryBuckets = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/filter/all"); cValue.Exists() {
+				item.IcmpPathEchoHistoryFilterAll = types.BoolValue(true)
+			} else {
+				item.IcmpPathEchoHistoryFilterAll = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/filter/failures"); cValue.Exists() {
+				item.IcmpPathEchoHistoryFilterFailures = types.BoolValue(true)
+			} else {
+				item.IcmpPathEchoHistoryFilterFailures = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/lives"); cValue.Exists() {
+				item.IcmpPathEchoHistoryLives = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/history/samples"); cValue.Exists() {
+				item.IcmpPathEchoHistorySamples = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/buckets"); cValue.Exists() {
+				item.IcmpPathEchoStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/distribution/count"); cValue.Exists() {
+				item.IcmpPathEchoStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/distribution/interval"); cValue.Exists() {
+				item.IcmpPathEchoStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/maximum/hops"); cValue.Exists() {
+				item.IcmpPathEchoStatisticsHourlyMaximumHops = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-echo/statistics/hourly/maximum/paths"); cValue.Exists() {
+				item.IcmpPathEchoStatisticsHourlyMaximumPaths = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter"); cValue.Exists() {
+				item.IcmpPathJitter = types.BoolValue(true)
+			} else {
+				item.IcmpPathJitter = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/tag"); cValue.Exists() {
+				item.IcmpPathJitterTag = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/frequency"); cValue.Exists() {
+				item.IcmpPathJitterFrequency = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
+				item.IcmpPathJitterDatasizeRequest = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/timeout"); cValue.Exists() {
+				item.IcmpPathJitterTimeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/source/address/ipv4-address"); cValue.Exists() {
+				item.IcmpPathJitterSourceIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/packet/count"); cValue.Exists() {
+				item.IcmpPathJitterPacketCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/packet/interval"); cValue.Exists() {
+				item.IcmpPathJitterPacketInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/tos"); cValue.Exists() {
+				item.IcmpPathJitterTos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/icmp/path-jitter/destination/address/address"); cValue.Exists() {
+				item.IcmpPathJitterDestinationIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo"); cValue.Exists() {
+				item.UdpEcho = types.BoolValue(true)
+			} else {
+				item.UdpEcho = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/tag"); cValue.Exists() {
+				item.UdpEchoTag = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/frequency"); cValue.Exists() {
+				item.UdpEchoFrequency = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
+				item.UdpEchoDatasizeRequest = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/timeout"); cValue.Exists() {
+				item.UdpEchoTimeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/source/address/ipv4-address"); cValue.Exists() {
+				item.UdpEchoSourceIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/source/port"); cValue.Exists() {
+				item.UdpEchoSourcePort = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/destination/address"); cValue.Exists() {
+				item.UdpEchoDestinationIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/destination/port"); cValue.Exists() {
+				item.UdpEchoDestinationPort = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/control/disable"); cValue.Exists() {
+				item.UdpEchoControlDisable = types.BoolValue(true)
+			} else {
+				item.UdpEchoControlDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/verify-data"); cValue.Exists() {
+				item.UdpEchoVerifyData = types.BoolValue(true)
+			} else {
+				item.UdpEchoVerifyData = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/tos"); cValue.Exists() {
+				item.UdpEchoTos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/vrf"); cValue.Exists() {
+				item.UdpEchoVrf = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/statistics/hourly/buckets"); cValue.Exists() {
+				item.UdpEchoStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/statistics/hourly/distribution/count"); cValue.Exists() {
+				item.UdpEchoStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/statistics/hourly/distribution/interval"); cValue.Exists() {
+				item.UdpEchoStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/statistics/intervals/interval"); cValue.Exists() {
+				item.UdpEchoStatisticsIntervals = make([]IPSLAOperationsUdpEchoStatisticsIntervals, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := IPSLAOperationsUdpEchoStatisticsIntervals{}
+					if ccValue := helpers.GetFromXPath(cv, "interval-time"); ccValue.Exists() {
+						cItem.Interval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "buckets"); ccValue.Exists() {
+						cItem.Buckets = types.Int64Value(ccValue.Int())
+					}
+					item.UdpEchoStatisticsIntervals = append(item.UdpEchoStatisticsIntervals, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/history/buckets"); cValue.Exists() {
+				item.UdpEchoHistoryBuckets = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/history/filter/all"); cValue.Exists() {
+				item.UdpEchoHistoryFilterAll = types.BoolValue(true)
+			} else {
+				item.UdpEchoHistoryFilterAll = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/history/filter/failures"); cValue.Exists() {
+				item.UdpEchoHistoryFilterFailures = types.BoolValue(true)
+			} else {
+				item.UdpEchoHistoryFilterFailures = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/echo/history/lives"); cValue.Exists() {
+				item.UdpEchoHistoryLives = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter"); cValue.Exists() {
+				item.UdpJitter = types.BoolValue(true)
+			} else {
+				item.UdpJitter = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/tag"); cValue.Exists() {
+				item.UdpJitterTag = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/frequency"); cValue.Exists() {
+				item.UdpJitterFrequency = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
+				item.UdpJitterDatasizeRequest = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/timeout"); cValue.Exists() {
+				item.UdpJitterTimeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/source/address/ipv4-address"); cValue.Exists() {
+				item.UdpJitterSourceIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/source/port"); cValue.Exists() {
+				item.UdpJitterSourcePort = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/destination/address"); cValue.Exists() {
+				item.UdpJitterDestinationIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/destination/port"); cValue.Exists() {
+				item.UdpJitterDestinationPort = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/packet/count"); cValue.Exists() {
+				item.UdpJitterPacketCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/packet/interval"); cValue.Exists() {
+				item.UdpJitterPacketInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/tos"); cValue.Exists() {
+				item.UdpJitterTos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/vrf"); cValue.Exists() {
+				item.UdpJitterVrf = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/control/disable"); cValue.Exists() {
+				item.UdpJitterControlDisable = types.BoolValue(true)
+			} else {
+				item.UdpJitterControlDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/verify-data"); cValue.Exists() {
+				item.UdpJitterVerifyData = types.BoolValue(true)
+			} else {
+				item.UdpJitterVerifyData = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/statistics/hourly/buckets"); cValue.Exists() {
+				item.UdpJitterStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/statistics/hourly/distribution/count"); cValue.Exists() {
+				item.UdpJitterStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/statistics/hourly/distribution/interval"); cValue.Exists() {
+				item.UdpJitterStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/udp/jitter/statistics/intervals/interval"); cValue.Exists() {
+				item.UdpJitterStatisticsIntervals = make([]IPSLAOperationsUdpJitterStatisticsIntervals, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := IPSLAOperationsUdpJitterStatisticsIntervals{}
+					if ccValue := helpers.GetFromXPath(cv, "interval-time"); ccValue.Exists() {
+						cItem.Interval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "buckets"); ccValue.Exists() {
+						cItem.Buckets = types.Int64Value(ccValue.Int())
+					}
+					item.UdpJitterStatisticsIntervals = append(item.UdpJitterStatisticsIntervals, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping"); cValue.Exists() {
+				item.MplsLspPing = types.BoolValue(true)
+			} else {
+				item.MplsLspPing = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/tag"); cValue.Exists() {
+				item.MplsLspPingTag = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/frequency"); cValue.Exists() {
+				item.MplsLspPingFrequency = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/datasize/request/enter-request-datasize-in-byte"); cValue.Exists() {
+				item.MplsLspPingDatasizeRequest = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/timeout"); cValue.Exists() {
+				item.MplsLspPingTimeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/source/address/ipv4-address"); cValue.Exists() {
+				item.MplsLspPingSourceIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/ipv4/address"); cValue.Exists() {
+				item.MplsLspPingTargetIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/ipv4/mask"); cValue.Exists() {
+				item.MplsLspPingTargetIpv4Mask = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/traffic-eng/tunnel"); cValue.Exists() {
+				item.MplsLspPingTargetTeTunnel = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/pseudowire/address"); cValue.Exists() {
+				item.MplsLspPingTargetPseudowireAddress = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/target/pseudowire/virtual-circuit-id"); cValue.Exists() {
+				item.MplsLspPingTargetPseudowireVcId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/statistics/hourly/buckets"); cValue.Exists() {
+				item.MplsLspPingStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/statistics/hourly/distribution/count"); cValue.Exists() {
+				item.MplsLspPingStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/statistics/hourly/distribution/interval"); cValue.Exists() {
+				item.MplsLspPingStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/ping/statistics/intervals/interval"); cValue.Exists() {
+				item.MplsLspPingStatisticsIntervals = make([]IPSLAOperationsMplsLspPingStatisticsIntervals, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := IPSLAOperationsMplsLspPingStatisticsIntervals{}
+					if ccValue := helpers.GetFromXPath(cv, "interval-time"); ccValue.Exists() {
+						cItem.Interval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "buckets"); ccValue.Exists() {
+						cItem.Buckets = types.Int64Value(ccValue.Int())
+					}
+					item.MplsLspPingStatisticsIntervals = append(item.MplsLspPingStatisticsIntervals, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace"); cValue.Exists() {
+				item.MplsLspTrace = types.BoolValue(true)
+			} else {
+				item.MplsLspTrace = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/tag"); cValue.Exists() {
+				item.MplsLspTraceTag = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/frequency"); cValue.Exists() {
+				item.MplsLspTraceFrequency = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/timeout"); cValue.Exists() {
+				item.MplsLspTraceTimeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/source/address/ipv4-address"); cValue.Exists() {
+				item.MplsLspTraceSourceIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/ipv4/address"); cValue.Exists() {
+				item.MplsLspTraceTargetIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/ipv4/mask"); cValue.Exists() {
+				item.MplsLspTraceTargetIpv4Mask = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/traffic-eng/tunnel"); cValue.Exists() {
+				item.MplsLspTraceTargetTeTunnel = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/pseudowire/address"); cValue.Exists() {
+				item.MplsLspTraceTargetPseudowireAddress = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/target/pseudowire/virtual-circuit-id"); cValue.Exists() {
+				item.MplsLspTraceTargetPseudowireVcId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/statistics/hourly/buckets"); cValue.Exists() {
+				item.MplsLspTraceStatisticsHourlyBuckets = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/statistics/hourly/distribution/count"); cValue.Exists() {
+				item.MplsLspTraceStatisticsHourlyDistributionCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "type/mpls/lsp/trace/statistics/hourly/distribution/interval"); cValue.Exists() {
+				item.MplsLspTraceStatisticsHourlyDistributionInterval = types.Int64Value(cValue.Int())
+			}
+			data.Operations = append(data.Operations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/schedule/operations/operation"); value.Exists() {
+		data.Schedules = make([]IPSLASchedules, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := IPSLASchedules{}
+			if cValue := helpers.GetFromXPath(v, "operation-number"); cValue.Exists() {
+				item.OperationNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "life/forever"); cValue.Exists() {
+				item.LifeForever = types.BoolValue(true)
+			} else {
+				item.LifeForever = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "life/length-of-time"); cValue.Exists() {
+				item.LifeTime = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/hour"); cValue.Exists() {
+				item.StartHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/minute"); cValue.Exists() {
+				item.StartMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/second"); cValue.Exists() {
+				item.StartSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/month"); cValue.Exists() {
+				item.StartMonth = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/day-of-month"); cValue.Exists() {
+				item.StartDayOfMonth = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/time-and-date/year"); cValue.Exists() {
+				item.StartYear = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/pending"); cValue.Exists() {
+				item.StartPending = types.BoolValue(true)
+			} else {
+				item.StartPending = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/after/time/hour"); cValue.Exists() {
+				item.StartAfterHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/after/time/minute"); cValue.Exists() {
+				item.StartAfterMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/after/time/second"); cValue.Exists() {
+				item.StartAfterSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "start-time/now"); cValue.Exists() {
+				item.StartNow = types.BoolValue(true)
+			} else {
+				item.StartNow = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "recurring"); cValue.Exists() {
+				item.Recurring = types.BoolValue(true)
+			} else {
+				item.Recurring = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ageout"); cValue.Exists() {
+				item.Ageout = types.Int64Value(cValue.Int())
+			}
+			data.Schedules = append(data.Schedules, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/twamp"); value.Exists() {
+		data.ServerTwamp = types.BoolValue(true)
+	} else {
+		data.ServerTwamp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/twamp/port"); value.Exists() {
+		data.ServerTwampPort = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/twamp/timer/inactivity"); value.Exists() {
 		data.ServerTwampTimerInactivity = types.Int64Value(value.Int())
 	}
 }
@@ -6296,14 +6270,16 @@ func (data *IPSLA) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/twamp", data.getPath()))
 	}
 	for i := range data.Schedules {
-		keyValues := [...]string{strconv.FormatInt(data.Schedules[i].OperationNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/operations/operation=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[operation-number=" + strconv.FormatInt(data.Schedules[i].OperationNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/operations/operation%v", data.getPath(), keyPath))
 	}
 	for i := range data.Operations {
-		keyValues := [...]string{strconv.FormatInt(data.Operations[i].OperationNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/operations/operation=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[operation-number=" + strconv.FormatInt(data.Operations[i].OperationNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/operations/operation%v", data.getPath(), keyPath))
 	}
 	if !data.HwTimestampDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hw-timestamp/disable", data.getPath()))

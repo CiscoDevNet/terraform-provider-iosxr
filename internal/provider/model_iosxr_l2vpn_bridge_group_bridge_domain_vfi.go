@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -492,7 +491,6 @@ func (data L2VPNBridgeGroupBridgeDomainVFI) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"mld.snooping.profile", item.MldSnoopingProfile.ValueString())
 			}
 			if len(item.StaticMacAddresses) > 0 {
-				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"static-mac-addresses.static-mac-address", []interface{}{})
 				for cindex, citem := range item.StaticMacAddresses {
 					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"static-mac-addresses.static-mac-address"+"."+strconv.Itoa(cindex)+"."+"mac-address", citem.MacAddress.ValueString())
@@ -511,67 +509,70 @@ func (data L2VPNBridgeGroupBridgeDomainVFI) toBody(ctx context.Context) string {
 func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "vpn-id"); value.Exists() && !data.VpnId.IsNull() {
 		data.VpnId = types.Int64Value(value.Int())
-	} else {
+	} else if data.VpnId.IsNull() {
 		data.VpnId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgp.IsNull() {
 			data.AutodiscoveryBgp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgp.IsNull() {
 			data.AutodiscoveryBgp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.rd.auto"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpRdAuto.IsNull() {
 			data.AutodiscoveryBgpRdAuto = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpRdAuto.IsNull() {
 			data.AutodiscoveryBgpRdAuto = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.rd.two-byte-as-number"); value.Exists() && !data.AutodiscoveryBgpRdTwoByteAsNumber.IsNull() {
 		data.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpRdTwoByteAsNumber.IsNull() {
 		data.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.AutodiscoveryBgpRdTwoByteAsIndex.IsNull() {
 		data.AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpRdTwoByteAsIndex.IsNull() {
 		data.AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.rd.four-byte-as-number"); value.Exists() && !data.AutodiscoveryBgpRdFourByteAsNumber.IsNull() {
 		data.AutodiscoveryBgpRdFourByteAsNumber = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpRdFourByteAsNumber.IsNull() {
 		data.AutodiscoveryBgpRdFourByteAsNumber = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.AutodiscoveryBgpRdFourByteAsIndex.IsNull() {
 		data.AutodiscoveryBgpRdFourByteAsIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpRdFourByteAsIndex.IsNull() {
 		data.AutodiscoveryBgpRdFourByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.rd.ipv4-address"); value.Exists() && !data.AutodiscoveryBgpRdIpv4Address.IsNull() {
 		data.AutodiscoveryBgpRdIpv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.AutodiscoveryBgpRdIpv4Address.IsNull() {
 		data.AutodiscoveryBgpRdIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.AutodiscoveryBgpRdIpv4AddressIndex.IsNull() {
 		data.AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpRdIpv4AddressIndex.IsNull() {
 		data.AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Null()
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
@@ -881,186 +882,200 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBody(ctx context.Context,
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.control-word"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpControlWord.IsNull() {
 			data.AutodiscoveryBgpControlWord = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpControlWord.IsNull() {
 			data.AutodiscoveryBgpControlWord = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolBgp.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgp.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.ve-id"); value.Exists() && !data.AutodiscoveryBgpSignalingProtocolBgpVeId.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeId = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpSignalingProtocolBgpVeId.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.ve-range"); value.Exists() && !data.AutodiscoveryBgpSignalingProtocolBgpVeRange.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeRange = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpSignalingProtocolBgpVeRange.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeRange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.ldp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolLdp.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdp.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.two-byte-as-number"); value.Exists() && !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.two-byte-as-assigned-number"); value.Exists() && !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsFormat.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsFormat = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsFormat.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsFormat = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.ipv4-address"); value.Exists() && !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4Address.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4Address.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.ipv4-address-assigned-number"); value.Exists() && !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4AddressIndex.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4AddressIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4AddressIndex.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4AddressIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.transmit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.receive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.both"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.table-policy"); value.Exists() && !data.AutodiscoveryBgpTablePolicy.IsNull() {
 		data.AutodiscoveryBgpTablePolicy = types.StringValue(value.String())
-	} else {
+	} else if data.AutodiscoveryBgpTablePolicy.IsNull() {
 		data.AutodiscoveryBgpTablePolicy = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "autodiscovery.bgp.route-policy.export"); value.Exists() && !data.AutodiscoveryBgpRoutePolicyExport.IsNull() {
 		data.AutodiscoveryBgpRoutePolicyExport = types.StringValue(value.String())
-	} else {
+	} else if data.AutodiscoveryBgpRoutePolicyExport.IsNull() {
 		data.AutodiscoveryBgpRoutePolicyExport = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "multicast.p2mp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastP2mp.IsNull() {
 			data.MulticastP2mp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastP2mp.IsNull() {
 			data.MulticastP2mp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "multicast.p2mp.transport.rsvp-te"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastP2mpTransportRsvpTe.IsNull() {
 			data.MulticastP2mpTransportRsvpTe = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastP2mpTransportRsvpTe.IsNull() {
 			data.MulticastP2mpTransportRsvpTe = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "multicast.p2mp.transport.rsvp-te.attribute-set.p2mp-te"); value.Exists() && !data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe.IsNull() {
 		data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe = types.StringValue(value.String())
-	} else {
+	} else if data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe.IsNull() {
 		data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "multicast.p2mp.signaling-protocol.bgp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastP2mpSignalingProtocolBgp.IsNull() {
 			data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastP2mpSignalingProtocolBgp.IsNull() {
 			data.MulticastP2mpSignalingProtocolBgp = types.BoolNull()
 		}
@@ -1098,33 +1113,34 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBody(ctx context.Context,
 		} else {
 			data.Neighbors[i].PwId = types.Int64Null()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("static-mac-addresses.static-mac-address"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.Neighbors[i].StaticMacAddresses
-			data.Neighbors[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainVFINeighborsStaticMacAddresses, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := L2VPNBridgeGroupBridgeDomainVFINeighborsStaticMacAddresses{}
-				if cValue := cr.Get("mac-address"); cValue.Exists() {
-					citem.MacAddress = types.StringValue(cValue.String())
-				}
+		for ci := range data.Neighbors[i].StaticMacAddresses {
+			keys := [...]string{"mac-address"}
+			keyValues := [...]string{data.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("static-mac-addresses.static-mac-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Neighbors[i].StaticMacAddresses = append(data.Neighbors[i].StaticMacAddresses, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("mac-address"); value.Exists() && !data.Neighbors[i].StaticMacAddresses[ci].MacAddress.IsNull() {
+				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
+			} else {
+				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
+			}
 		}
 		if value := r.Get("mpls.static.label.local"); value.Exists() && !data.Neighbors[i].MplsStaticLabelLocal.IsNull() {
 			data.Neighbors[i].MplsStaticLabelLocal = types.Int64Value(value.Int())
@@ -1147,21 +1163,15 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBody(ctx context.Context,
 			data.Neighbors[i].DhcpIpv4SnoopingProfile = types.StringNull()
 		}
 		if value := r.Get("dhcp.ipv4.none"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Neighbors[i].DhcpIpv4None.IsNull() && !data.Neighbors[i].DhcpIpv4None.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Neighbors[i].DhcpIpv4None = types.BoolValue(false)
-			} else if !data.Neighbors[i].DhcpIpv4None.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Neighbors[i].DhcpIpv4None.IsNull() {
 				data.Neighbors[i].DhcpIpv4None = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Neighbors[i].DhcpIpv4None.IsNull() {
 				data.Neighbors[i].DhcpIpv4None = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Neighbors[i].DhcpIpv4None = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("igmp.snooping.profile"); value.Exists() && !data.Neighbors[i].IgmpSnoopingProfile.IsNull() {
@@ -1222,129 +1232,102 @@ func (data L2VPNBridgeGroupBridgeDomainVFI) toBodyXML(ctx context.Context) strin
 		body = helpers.SetFromXPath(body, data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address-assigned-number", strconv.FormatInt(data.AutodiscoveryBgpRdIpv4AddressIndex.ValueInt64(), 10))
 	}
 	if len(data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt[two-byte-as-number='" + strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.TwoByteAsNumber.IsNull() && !item.TwoByteAsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt[four-byte-as-number='" + strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.FourByteAsNumber.IsNull() && !item.FourByteAsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt[ipv4-address='" + item.Ipv4Address.ValueString() + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
 	if len(data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt[two-byte-as-number='" + strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.TwoByteAsNumber.IsNull() && !item.TwoByteAsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt[four-byte-as-number='" + strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.FourByteAsNumber.IsNull() && !item.FourByteAsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt[ipv4-address='" + item.Ipv4Address.ValueString() + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
 	if len(data.AutodiscoveryBgpRouteTargetTwoByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutodiscoveryBgpRouteTargetTwoByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt[two-byte-as-number='" + strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.TwoByteAsNumber.IsNull() && !item.TwoByteAsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/two-byte-as-number", strconv.FormatInt(item.TwoByteAsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.AutodiscoveryBgpRouteTargetFourByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutodiscoveryBgpRouteTargetFourByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt[four-byte-as-number='" + strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10) + "' and assigned-number='" + strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10) + "']"
 			if !item.FourByteAsNumber.IsNull() && !item.FourByteAsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/four-byte-as-number", strconv.FormatInt(item.FourByteAsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.AutodiscoveryBgpRouteTargetIpv4AddressFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AutodiscoveryBgpRouteTargetIpv4AddressFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt[ipv4-address='" + item.Ipv4Address.ValueString() + "' and assigned-number='" + strconv.FormatInt(item.Index.ValueInt64(), 10) + "']"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
 			if !item.Index.IsNull() && !item.Index.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.Index.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
 	if !data.AutodiscoveryBgpControlWord.IsNull() && !data.AutodiscoveryBgpControlWord.IsUnknown() {
@@ -1445,49 +1428,45 @@ func (data L2VPNBridgeGroupBridgeDomainVFI) toBodyXML(ctx context.Context) strin
 		}
 	}
 	if len(data.Neighbors) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Neighbors {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/neighbors/neighbor[address='" + item.Address.ValueString() + "' and pw-id='" + strconv.FormatInt(item.PwId.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.PwId.IsNull() && !item.PwId.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "pw-id", strconv.FormatInt(item.PwId.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/pw-id", strconv.FormatInt(item.PwId.ValueInt64(), 10))
 			}
 			if len(item.StaticMacAddresses) > 0 {
 				for _, citem := range item.StaticMacAddresses {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/static-mac-addresses/static-mac-address[mac-address='" + citem.MacAddress.ValueString() + "']"
 					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "mac-address", citem.MacAddress.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/mac-address", citem.MacAddress.ValueString())
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "static-mac-addresses/static-mac-address", ccBody.Res())
 				}
 			}
 			if !item.MplsStaticLabelLocal.IsNull() && !item.MplsStaticLabelLocal.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "mpls/static/label/local", strconv.FormatInt(item.MplsStaticLabelLocal.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/mpls/static/label/local", strconv.FormatInt(item.MplsStaticLabelLocal.ValueInt64(), 10))
 			}
 			if !item.MplsStaticLabelRemote.IsNull() && !item.MplsStaticLabelRemote.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "mpls/static/label/remote", strconv.FormatInt(item.MplsStaticLabelRemote.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/mpls/static/label/remote", strconv.FormatInt(item.MplsStaticLabelRemote.ValueInt64(), 10))
 			}
 			if !item.PwClass.IsNull() && !item.PwClass.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "pw-class", item.PwClass.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/pw-class", item.PwClass.ValueString())
 			}
 			if !item.DhcpIpv4SnoopingProfile.IsNull() && !item.DhcpIpv4SnoopingProfile.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "dhcp/ipv4/snoop/profile", item.DhcpIpv4SnoopingProfile.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/dhcp/ipv4/snoop/profile", item.DhcpIpv4SnoopingProfile.ValueString())
 			}
 			if !item.DhcpIpv4None.IsNull() && !item.DhcpIpv4None.IsUnknown() {
 				if item.DhcpIpv4None.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "dhcp/ipv4/none", "")
+					body = helpers.SetFromXPath(body, basePath+"/dhcp/ipv4/none", "")
 				}
 			}
 			if !item.IgmpSnoopingProfile.IsNull() && !item.IgmpSnoopingProfile.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "igmp/snooping/profile", item.IgmpSnoopingProfile.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/igmp/snooping/profile", item.IgmpSnoopingProfile.ValueString())
 			}
 			if !item.MldSnoopingProfile.IsNull() && !item.MldSnoopingProfile.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "mld/snooping/profile", item.MldSnoopingProfile.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/mld/snooping/profile", item.MldSnoopingProfile.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"neighbors/neighbor", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -1501,66 +1480,75 @@ func (data L2VPNBridgeGroupBridgeDomainVFI) toBodyXML(ctx context.Context) strin
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vfi-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vfi-name"); value.Exists() {
 		data.VfiName = types.StringValue(value.String())
 	} else if data.VfiName.IsNull() {
 		data.VfiName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vpn-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vpn-id"); value.Exists() {
 		data.VpnId = types.Int64Value(value.Int())
 	} else if data.VpnId.IsNull() {
 		data.VpnId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Shutdown.IsNull() {
+			data.Shutdown = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp"); value.Exists() {
-		data.AutodiscoveryBgp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgp.IsNull() {
+			data.AutodiscoveryBgp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgp.IsNull() {
 			data.AutodiscoveryBgp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/auto"); value.Exists() {
-		data.AutodiscoveryBgpRdAuto = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/auto"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpRdAuto.IsNull() {
+			data.AutodiscoveryBgpRdAuto = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpRdAuto.IsNull() {
 			data.AutodiscoveryBgpRdAuto = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpRdTwoByteAsNumber.IsNull() {
 		data.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpRdTwoByteAsIndex.IsNull() {
 		data.AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpRdFourByteAsNumber.IsNull() {
 		data.AutodiscoveryBgpRdFourByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpRdFourByteAsIndex.IsNull() {
 		data.AutodiscoveryBgpRdFourByteAsIndex = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address"); value.Exists() {
 		data.AutodiscoveryBgpRdIpv4Address = types.StringValue(value.String())
 	} else if data.AutodiscoveryBgpRdIpv4Address.IsNull() {
 		data.AutodiscoveryBgpRdIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpRdIpv4AddressIndex.IsNull() {
 		data.AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Null()
@@ -1570,7 +1558,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1604,7 +1592,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1638,7 +1626,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1672,7 +1660,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1706,7 +1694,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1740,7 +1728,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1774,7 +1762,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1808,7 +1796,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1842,7 +1830,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{data.AutodiscoveryBgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetIpv4AddressFormat[i].Index.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1871,157 +1859,199 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 			data.AutodiscoveryBgpRouteTargetIpv4AddressFormat[i].Index = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/control-word"); value.Exists() {
-		data.AutodiscoveryBgpControlWord = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/control-word"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpControlWord.IsNull() {
+			data.AutodiscoveryBgpControlWord = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpControlWord.IsNull() {
 			data.AutodiscoveryBgpControlWord = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolBgp.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgp.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-id"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeId = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpSignalingProtocolBgpVeId.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-range"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeRange = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpSignalingProtocolBgpVeRange.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeRange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/static"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolLdp.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdp.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsFormat = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsFormat.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsFormat = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4Address = types.StringValue(value.String())
 	} else if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4Address.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4AddressIndex = types.Int64Value(value.Int())
 	} else if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4AddressIndex.IsNull() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4AddressIndex = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/transmit"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/transmit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/receive"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/receive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/both"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/both"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/static"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.IsNull() {
+			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/table-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/table-policy"); value.Exists() {
 		data.AutodiscoveryBgpTablePolicy = types.StringValue(value.String())
 	} else if data.AutodiscoveryBgpTablePolicy.IsNull() {
 		data.AutodiscoveryBgpTablePolicy = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-policy/export"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-policy/export"); value.Exists() {
 		data.AutodiscoveryBgpRoutePolicyExport = types.StringValue(value.String())
 	} else if data.AutodiscoveryBgpRoutePolicyExport.IsNull() {
 		data.AutodiscoveryBgpRoutePolicyExport = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp"); value.Exists() {
-		data.MulticastP2mp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MulticastP2mp.IsNull() {
+			data.MulticastP2mp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastP2mp.IsNull() {
 			data.MulticastP2mp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te"); value.Exists() {
-		data.MulticastP2mpTransportRsvpTe = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MulticastP2mpTransportRsvpTe.IsNull() {
+			data.MulticastP2mpTransportRsvpTe = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastP2mpTransportRsvpTe.IsNull() {
 			data.MulticastP2mpTransportRsvpTe = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te/attribute-set/p2mp-te"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te/attribute-set/p2mp-te"); value.Exists() {
 		data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe = types.StringValue(value.String())
 	} else if data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe.IsNull() {
 		data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp/signaling-protocol/bgp"); value.Exists() {
-		data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp/signaling-protocol/bgp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MulticastP2mpSignalingProtocolBgp.IsNull() {
+			data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MulticastP2mpSignalingProtocolBgp.IsNull() {
@@ -2033,7 +2063,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		keyValues := [...]string{data.Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbors/neighbor").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2061,36 +2091,35 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 		} else if data.Neighbors[i].PwId.IsNull() {
 			data.Neighbors[i].PwId = types.Int64Null()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.Neighbors[i].StaticMacAddresses
-			data.Neighbors[i].StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainVFINeighborsStaticMacAddresses, 0)
+		for ci := range data.Neighbors[i].StaticMacAddresses {
+			keys := [...]string{"mac-address"}
+			keyValues := [...]string{data.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := L2VPNBridgeGroupBridgeDomainVFINeighborsStaticMacAddresses{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "mac-address"); cValue.Exists() {
-					citem.MacAddress = types.StringValue(cValue.String())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.MacAddress.ValueString() != citem.MacAddress.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.Neighbors[i].StaticMacAddresses = append(data.Neighbors[i].StaticMacAddresses, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "mac-address"); value.Exists() {
+				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
 		}
 		if value := helpers.GetFromXPath(r, "mpls/static/label/local"); value.Exists() {
 			data.Neighbors[i].MplsStaticLabelLocal = types.Int64Value(value.Int())
@@ -2113,7 +2142,10 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) updateFromBodyXML(ctx context.Conte
 			data.Neighbors[i].DhcpIpv4SnoopingProfile = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "dhcp/ipv4/none"); value.Exists() {
-			data.Neighbors[i].DhcpIpv4None = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Neighbors[i].DhcpIpv4None.IsNull() {
+				data.Neighbors[i].DhcpIpv4None = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2142,23 +2174,30 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBody(ctx context.Context, res g
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "vpn-id"); value.Exists() {
 		data.VpnId = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
-	} else {
-		data.Shutdown = types.BoolNull()
+	} else if !data.Shutdown.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Shutdown = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp"); value.Exists() {
 		data.AutodiscoveryBgp = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgp = types.BoolNull()
+	} else if !data.AutodiscoveryBgp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.rd.auto"); value.Exists() {
 		data.AutodiscoveryBgpRdAuto = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpRdAuto = types.BoolNull()
+	} else if !data.AutodiscoveryBgpRdAuto.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpRdAuto = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.rd.two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
@@ -2306,13 +2345,15 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBody(ctx context.Context, res g
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.control-word"); value.Exists() {
 		data.AutodiscoveryBgpControlWord = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpControlWord = types.BoolNull()
+	} else if !data.AutodiscoveryBgpControlWord.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpControlWord = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolBgp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.ve-id"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeId = types.Int64Value(value.Int())
@@ -2322,28 +2363,33 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBody(ctx context.Context, res g
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.static"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolLdp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber = types.Int64Value(value.Int())
@@ -2359,23 +2405,27 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBody(ctx context.Context, res g
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.transmit"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.receive"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.both"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.static"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolNull()
+	} else if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.table-policy"); value.Exists() {
 		data.AutodiscoveryBgpTablePolicy = types.StringValue(value.String())
@@ -2385,21 +2435,24 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBody(ctx context.Context, res g
 	}
 	if value := res.Get(prefix + "multicast.p2mp"); value.Exists() {
 		data.MulticastP2mp = types.BoolValue(true)
-	} else {
-		data.MulticastP2mp = types.BoolNull()
+	} else if !data.MulticastP2mp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastP2mp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.p2mp.transport.rsvp-te"); value.Exists() {
 		data.MulticastP2mpTransportRsvpTe = types.BoolValue(true)
-	} else {
-		data.MulticastP2mpTransportRsvpTe = types.BoolNull()
+	} else if !data.MulticastP2mpTransportRsvpTe.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastP2mpTransportRsvpTe = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.p2mp.transport.rsvp-te.attribute-set.p2mp-te"); value.Exists() {
 		data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe = types.StringValue(value.String())
 	}
 	if value := res.Get(prefix + "multicast.p2mp.signaling-protocol.bgp"); value.Exists() {
 		data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(true)
-	} else {
-		data.MulticastP2mpSignalingProtocolBgp = types.BoolNull()
+	} else if !data.MulticastP2mpSignalingProtocolBgp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainVFINeighbors, 0)
@@ -2436,8 +2489,9 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBody(ctx context.Context, res g
 			}
 			if cValue := v.Get("dhcp.ipv4.none"); cValue.Exists() {
 				item.DhcpIpv4None = types.BoolValue(true)
-			} else {
-				item.DhcpIpv4None = types.BoolNull()
+			} else if !item.DhcpIpv4None.IsNull() {
+				// Only set to false if it was previously set
+				item.DhcpIpv4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("igmp.snooping.profile"); cValue.Exists() {
 				item.IgmpSnoopingProfile = types.StringValue(cValue.String())
@@ -2455,9 +2509,14 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBody(ctx context.Context, res g
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "vpn-id"); value.Exists() {
 		data.VpnId = types.Int64Value(value.Int())
@@ -2465,17 +2524,17 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBody(ctx context.Context, r
 	if value := res.Get(prefix + "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
-		data.Shutdown = types.BoolNull()
+		data.Shutdown = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp"); value.Exists() {
 		data.AutodiscoveryBgp = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgp = types.BoolNull()
+		data.AutodiscoveryBgp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.rd.auto"); value.Exists() {
 		data.AutodiscoveryBgpRdAuto = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpRdAuto = types.BoolNull()
+		data.AutodiscoveryBgpRdAuto = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.rd.two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
@@ -2624,12 +2683,12 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBody(ctx context.Context, r
 	if value := res.Get(prefix + "autodiscovery.bgp.control-word"); value.Exists() {
 		data.AutodiscoveryBgpControlWord = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpControlWord = types.BoolNull()
+		data.AutodiscoveryBgpControlWord = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.ve-id"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeId = types.Int64Value(value.Int())
@@ -2640,27 +2699,27 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBody(ctx context.Context, r
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.transmit"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.receive"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.both"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.load-balancing.flow-label.static"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber = types.Int64Value(value.Int())
@@ -2677,22 +2736,22 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBody(ctx context.Context, r
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.transmit"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.receive"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.both"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.ldp.vpls-id.load-balancing.flow-label.static"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "autodiscovery.bgp.table-policy"); value.Exists() {
 		data.AutodiscoveryBgpTablePolicy = types.StringValue(value.String())
@@ -2703,12 +2762,12 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBody(ctx context.Context, r
 	if value := res.Get(prefix + "multicast.p2mp"); value.Exists() {
 		data.MulticastP2mp = types.BoolValue(true)
 	} else {
-		data.MulticastP2mp = types.BoolNull()
+		data.MulticastP2mp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.p2mp.transport.rsvp-te"); value.Exists() {
 		data.MulticastP2mpTransportRsvpTe = types.BoolValue(true)
 	} else {
-		data.MulticastP2mpTransportRsvpTe = types.BoolNull()
+		data.MulticastP2mpTransportRsvpTe = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "multicast.p2mp.transport.rsvp-te.attribute-set.p2mp-te"); value.Exists() {
 		data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe = types.StringValue(value.String())
@@ -2716,7 +2775,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBody(ctx context.Context, r
 	if value := res.Get(prefix + "multicast.p2mp.signaling-protocol.bgp"); value.Exists() {
 		data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(true)
 	} else {
-		data.MulticastP2mpSignalingProtocolBgp = types.BoolNull()
+		data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainVFINeighbors, 0)
@@ -2754,7 +2813,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBody(ctx context.Context, r
 			if cValue := v.Get("dhcp.ipv4.none"); cValue.Exists() {
 				item.DhcpIpv4None = types.BoolValue(true)
 			} else {
-				item.DhcpIpv4None = types.BoolNull()
+				item.DhcpIpv4None = types.BoolValue(false)
 			}
 			if cValue := v.Get("igmp.snooping.profile"); cValue.Exists() {
 				item.IgmpSnoopingProfile = types.StringValue(cValue.String())
@@ -2772,43 +2831,43 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBody(ctx context.Context, r
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vpn-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vpn-id"); value.Exists() {
 		data.VpnId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
-		data.Shutdown = types.BoolNull()
+		data.Shutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp"); value.Exists() {
 		data.AutodiscoveryBgp = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgp = types.BoolNull()
+		data.AutodiscoveryBgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/auto"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/auto"); value.Exists() {
 		data.AutodiscoveryBgpRdAuto = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpRdAuto = types.BoolNull()
+		data.AutodiscoveryBgpRdAuto = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address"); value.Exists() {
 		data.AutodiscoveryBgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportTwoByteAsFormat{}
@@ -2822,7 +2881,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportFourByteAsFormat{}
@@ -2836,7 +2895,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportIpv4AddressFormat{}
@@ -2850,7 +2909,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportTwoByteAsFormat{}
@@ -2864,7 +2923,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportFourByteAsFormat{}
@@ -2878,7 +2937,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportIpv4AddressFormat{}
@@ -2892,7 +2951,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetTwoByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetTwoByteAsFormat{}
@@ -2906,7 +2965,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetFourByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetFourByteAsFormat{}
@@ -2920,7 +2979,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetIpv4AddressFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetIpv4AddressFormat{}
@@ -2934,104 +2993,104 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/control-word"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/control-word"); value.Exists() {
 		data.AutodiscoveryBgpControlWord = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpControlWord = types.BoolNull()
+		data.AutodiscoveryBgpControlWord = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-id"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-range"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/static"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsFormat = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/transmit"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/receive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/receive"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/both"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/static"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(true)
 	} else {
-		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolNull()
+		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/table-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/table-policy"); value.Exists() {
 		data.AutodiscoveryBgpTablePolicy = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-policy/export"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-policy/export"); value.Exists() {
 		data.AutodiscoveryBgpRoutePolicyExport = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp"); value.Exists() {
 		data.MulticastP2mp = types.BoolValue(true)
 	} else {
-		data.MulticastP2mp = types.BoolNull()
+		data.MulticastP2mp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te"); value.Exists() {
 		data.MulticastP2mpTransportRsvpTe = types.BoolValue(true)
 	} else {
-		data.MulticastP2mpTransportRsvpTe = types.BoolNull()
+		data.MulticastP2mpTransportRsvpTe = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te/attribute-set/p2mp-te"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te/attribute-set/p2mp-te"); value.Exists() {
 		data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp/signaling-protocol/bgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp/signaling-protocol/bgp"); value.Exists() {
 		data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(true)
 	} else {
-		data.MulticastP2mpSignalingProtocolBgp = types.BoolNull()
+		data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainVFINeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFINeighbors{}
@@ -3067,7 +3126,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 			if cValue := helpers.GetFromXPath(v, "dhcp/ipv4/none"); cValue.Exists() {
 				item.DhcpIpv4None = types.BoolValue(true)
 			} else {
-				item.DhcpIpv4None = types.BoolNull()
+				item.DhcpIpv4None = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "igmp/snooping/profile"); cValue.Exists() {
 				item.IgmpSnoopingProfile = types.StringValue(cValue.String())
@@ -3085,43 +3144,43 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) fromBodyXML(ctx context.Context, re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vpn-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vpn-id"); value.Exists() {
 		data.VpnId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		data.Shutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp"); value.Exists() {
 		data.AutodiscoveryBgp = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/auto"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/auto"); value.Exists() {
 		data.AutodiscoveryBgpRdAuto = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpRdAuto = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address"); value.Exists() {
 		data.AutodiscoveryBgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportTwoByteAsFormat{}
@@ -3135,7 +3194,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportFourByteAsFormat{}
@@ -3149,7 +3208,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetImportIpv4AddressFormat{}
@@ -3163,7 +3222,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportTwoByteAsFormat{}
@@ -3177,7 +3236,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportFourByteAsFormat{}
@@ -3191,7 +3250,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetExportIpv4AddressFormat{}
@@ -3205,7 +3264,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetTwoByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetTwoByteAsFormat{}
@@ -3219,7 +3278,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetFourByteAsFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetFourByteAsFormat{}
@@ -3233,7 +3292,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.AutodiscoveryBgpRouteTargetIpv4AddressFormat = make([]L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFIAutodiscoveryBgpRouteTargetIpv4AddressFormat{}
@@ -3247,104 +3306,104 @@ func (data *L2VPNBridgeGroupBridgeDomainVFIData) fromBodyXML(ctx context.Context
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/control-word"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/control-word"); value.Exists() {
 		data.AutodiscoveryBgpControlWord = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpControlWord = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolBgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-id"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/ve-range"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpVeRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/static"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolLdp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdTwoByteAsFormat = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address-assigned-number"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/transmit"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/receive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/receive"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/both"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/static"); value.Exists() {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(true)
 	} else {
 		data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/table-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/table-policy"); value.Exists() {
 		data.AutodiscoveryBgpTablePolicy = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/autodiscovery/bgp/route-policy/export"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/autodiscovery/bgp/route-policy/export"); value.Exists() {
 		data.AutodiscoveryBgpRoutePolicyExport = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp"); value.Exists() {
 		data.MulticastP2mp = types.BoolValue(true)
 	} else {
 		data.MulticastP2mp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te"); value.Exists() {
 		data.MulticastP2mpTransportRsvpTe = types.BoolValue(true)
 	} else {
 		data.MulticastP2mpTransportRsvpTe = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te/attribute-set/p2mp-te"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp/transport/rsvp-te/attribute-set/p2mp-te"); value.Exists() {
 		data.MulticastP2mpTransportRsvpTeAttributeSetP2mpTe = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast/p2mp/signaling-protocol/bgp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast/p2mp/signaling-protocol/bgp"); value.Exists() {
 		data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(true)
 	} else {
 		data.MulticastP2mpSignalingProtocolBgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainVFINeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := L2VPNBridgeGroupBridgeDomainVFINeighbors{}
@@ -4123,9 +4182,11 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) getEmptyLeafsDelete(ctx context.Con
 func (data *L2VPNBridgeGroupBridgeDomainVFI) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Neighbors {
-		keyValues := [...]string{data.Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.Neighbors[i].Address.ValueString() + "]"
+		keyPath += "[pw-id=" + strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor%v", data.getPath(), keyPath))
 	}
 	if !data.MulticastP2mpSignalingProtocolBgp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast/p2mp/signaling-protocol/bgp", data.getPath()))
@@ -4197,49 +4258,67 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) getDeletePaths(ctx context.Context)
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/control-word", data.getPath()))
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetIpv4AddressFormat {
-		keyValues := [...]string{data.AutodiscoveryBgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetIpv4AddressFormat[i].Index.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ipv4-address=" + data.AutodiscoveryBgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString() + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetIpv4AddressFormat[i].Index.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[four-byte-as-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[two-byte-as-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
-		keyValues := [...]string{data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ipv4-address=" + data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString() + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[four-byte-as-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[two-byte-as-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
-		keyValues := [...]string{data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ipv4-address=" + data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString() + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[four-byte-as-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat[i].FourByteAsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10), strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[two-byte-as-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[i].TwoByteAsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	if !data.AutodiscoveryBgpRdIpv4AddressIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/rd/ipv4-address-assigned-number", data.getPath()))

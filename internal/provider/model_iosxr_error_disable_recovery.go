@@ -261,102 +261,102 @@ func (data ErrorDisableRecovery) toBodyXML(ctx context.Context) string {
 func (data *ErrorDisableRecovery) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "link-oam-session-down.interval"); value.Exists() && !data.LinkOamSessionDownInterval.IsNull() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkOamSessionDownInterval.IsNull() {
 		data.LinkOamSessionDownInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "link-oam-discovery-timeout.interval"); value.Exists() && !data.LinkOamDiscoveryTimeoutInterval.IsNull() {
 		data.LinkOamDiscoveryTimeoutInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkOamDiscoveryTimeoutInterval.IsNull() {
 		data.LinkOamDiscoveryTimeoutInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "link-oam-capabilities-conflict.interval"); value.Exists() && !data.LinkOamCapabilitiesConflictInterval.IsNull() {
 		data.LinkOamCapabilitiesConflictInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkOamCapabilitiesConflictInterval.IsNull() {
 		data.LinkOamCapabilitiesConflictInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "link-oam-miswired.interval"); value.Exists() && !data.LinkOamMiswiredInterval.IsNull() {
 		data.LinkOamMiswiredInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkOamMiswiredInterval.IsNull() {
 		data.LinkOamMiswiredInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "link-oam-link-fault.interval"); value.Exists() && !data.LinkOamLinkFaultInterval.IsNull() {
 		data.LinkOamLinkFaultInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkOamLinkFaultInterval.IsNull() {
 		data.LinkOamLinkFaultInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "link-oam-dying-gasp.interval"); value.Exists() && !data.LinkOamDyingGaspInterval.IsNull() {
 		data.LinkOamDyingGaspInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkOamDyingGaspInterval.IsNull() {
 		data.LinkOamDyingGaspInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "link-oam-critical-event.interval"); value.Exists() && !data.LinkOamCriticalEventInterval.IsNull() {
 		data.LinkOamCriticalEventInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkOamCriticalEventInterval.IsNull() {
 		data.LinkOamCriticalEventInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "link-oam-threshold-breached.interval"); value.Exists() && !data.LinkOamThresholdBreachedInterval.IsNull() {
 		data.LinkOamThresholdBreachedInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkOamThresholdBreachedInterval.IsNull() {
 		data.LinkOamThresholdBreachedInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "stp-bpdu-guard.interval"); value.Exists() && !data.StpBpduGuardInterval.IsNull() {
 		data.StpBpduGuardInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.StpBpduGuardInterval.IsNull() {
 		data.StpBpduGuardInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "stp-legacy-bpdu.interval"); value.Exists() && !data.StpLegacyBpduInterval.IsNull() {
 		data.StpLegacyBpduInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.StpLegacyBpduInterval.IsNull() {
 		data.StpLegacyBpduInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "cluster-udld.interval"); value.Exists() && !data.ClusterUdldInterval.IsNull() {
 		data.ClusterUdldInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClusterUdldInterval.IsNull() {
 		data.ClusterUdldInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "cluster-minlinks.interval"); value.Exists() && !data.ClusterMinlinksInterval.IsNull() {
 		data.ClusterMinlinksInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClusterMinlinksInterval.IsNull() {
 		data.ClusterMinlinksInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "udld-unidirectional.interval"); value.Exists() && !data.UdldUnidirectionalInterval.IsNull() {
 		data.UdldUnidirectionalInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.UdldUnidirectionalInterval.IsNull() {
 		data.UdldUnidirectionalInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "udld-neighbor-mismatch.interval"); value.Exists() && !data.UdldNeighborMismatchInterval.IsNull() {
 		data.UdldNeighborMismatchInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.UdldNeighborMismatchInterval.IsNull() {
 		data.UdldNeighborMismatchInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "udld-timeout.interval"); value.Exists() && !data.UdldTimeoutInterval.IsNull() {
 		data.UdldTimeoutInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.UdldTimeoutInterval.IsNull() {
 		data.UdldTimeoutInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "udld-loopback.interval"); value.Exists() && !data.UdldLoopbackInterval.IsNull() {
 		data.UdldLoopbackInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.UdldLoopbackInterval.IsNull() {
 		data.UdldLoopbackInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "pvrst-pvid-mismatch.interval"); value.Exists() && !data.PvrstPvidMismatchInterval.IsNull() {
 		data.PvrstPvidMismatchInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.PvrstPvidMismatchInterval.IsNull() {
 		data.PvrstPvidMismatchInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "l2vpn-bport-mac-move.interval"); value.Exists() && !data.L2vpnBportMacMoveInterval.IsNull() {
 		data.L2vpnBportMacMoveInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.L2vpnBportMacMoveInterval.IsNull() {
 		data.L2vpnBportMacMoveInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ot-track-state-change.interval"); value.Exists() && !data.OtTrackStateChangeInterval.IsNull() {
 		data.OtTrackStateChangeInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.OtTrackStateChangeInterval.IsNull() {
 		data.OtTrackStateChangeInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "link-oam-dampening.interval"); value.Exists() && !data.LinkOamDampeningInterval.IsNull() {
 		data.LinkOamDampeningInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LinkOamDampeningInterval.IsNull() {
 		data.LinkOamDampeningInterval = types.Int64Null()
 	}
 }
@@ -366,102 +366,102 @@ func (data *ErrorDisableRecovery) updateFromBody(ctx context.Context, res []byte
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *ErrorDisableRecovery) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-session-down/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-session-down/interval"); value.Exists() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamSessionDownInterval.IsNull() {
 		data.LinkOamSessionDownInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-discovery-timeout/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-discovery-timeout/interval"); value.Exists() {
 		data.LinkOamDiscoveryTimeoutInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamDiscoveryTimeoutInterval.IsNull() {
 		data.LinkOamDiscoveryTimeoutInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-capabilities-conflict/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-capabilities-conflict/interval"); value.Exists() {
 		data.LinkOamCapabilitiesConflictInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamCapabilitiesConflictInterval.IsNull() {
 		data.LinkOamCapabilitiesConflictInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-miswired/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-miswired/interval"); value.Exists() {
 		data.LinkOamMiswiredInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamMiswiredInterval.IsNull() {
 		data.LinkOamMiswiredInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-link-fault/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-link-fault/interval"); value.Exists() {
 		data.LinkOamLinkFaultInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamLinkFaultInterval.IsNull() {
 		data.LinkOamLinkFaultInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-dying-gasp/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-dying-gasp/interval"); value.Exists() {
 		data.LinkOamDyingGaspInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamDyingGaspInterval.IsNull() {
 		data.LinkOamDyingGaspInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-critical-event/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-critical-event/interval"); value.Exists() {
 		data.LinkOamCriticalEventInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamCriticalEventInterval.IsNull() {
 		data.LinkOamCriticalEventInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-threshold-breached/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-threshold-breached/interval"); value.Exists() {
 		data.LinkOamThresholdBreachedInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamThresholdBreachedInterval.IsNull() {
 		data.LinkOamThresholdBreachedInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/stp-bpdu-guard/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/stp-bpdu-guard/interval"); value.Exists() {
 		data.StpBpduGuardInterval = types.Int64Value(value.Int())
 	} else if data.StpBpduGuardInterval.IsNull() {
 		data.StpBpduGuardInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/stp-legacy-bpdu/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/stp-legacy-bpdu/interval"); value.Exists() {
 		data.StpLegacyBpduInterval = types.Int64Value(value.Int())
 	} else if data.StpLegacyBpduInterval.IsNull() {
 		data.StpLegacyBpduInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cluster-udld/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cluster-udld/interval"); value.Exists() {
 		data.ClusterUdldInterval = types.Int64Value(value.Int())
 	} else if data.ClusterUdldInterval.IsNull() {
 		data.ClusterUdldInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cluster-minlinks/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cluster-minlinks/interval"); value.Exists() {
 		data.ClusterMinlinksInterval = types.Int64Value(value.Int())
 	} else if data.ClusterMinlinksInterval.IsNull() {
 		data.ClusterMinlinksInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-unidirectional/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-unidirectional/interval"); value.Exists() {
 		data.UdldUnidirectionalInterval = types.Int64Value(value.Int())
 	} else if data.UdldUnidirectionalInterval.IsNull() {
 		data.UdldUnidirectionalInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-neighbor-mismatch/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-neighbor-mismatch/interval"); value.Exists() {
 		data.UdldNeighborMismatchInterval = types.Int64Value(value.Int())
 	} else if data.UdldNeighborMismatchInterval.IsNull() {
 		data.UdldNeighborMismatchInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-timeout/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-timeout/interval"); value.Exists() {
 		data.UdldTimeoutInterval = types.Int64Value(value.Int())
 	} else if data.UdldTimeoutInterval.IsNull() {
 		data.UdldTimeoutInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-loopback/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-loopback/interval"); value.Exists() {
 		data.UdldLoopbackInterval = types.Int64Value(value.Int())
 	} else if data.UdldLoopbackInterval.IsNull() {
 		data.UdldLoopbackInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pvrst-pvid-mismatch/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pvrst-pvid-mismatch/interval"); value.Exists() {
 		data.PvrstPvidMismatchInterval = types.Int64Value(value.Int())
 	} else if data.PvrstPvidMismatchInterval.IsNull() {
 		data.PvrstPvidMismatchInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/l2vpn-bport-mac-move/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/l2vpn-bport-mac-move/interval"); value.Exists() {
 		data.L2vpnBportMacMoveInterval = types.Int64Value(value.Int())
 	} else if data.L2vpnBportMacMoveInterval.IsNull() {
 		data.L2vpnBportMacMoveInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ot-track-state-change/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ot-track-state-change/interval"); value.Exists() {
 		data.OtTrackStateChangeInterval = types.Int64Value(value.Int())
 	} else if data.OtTrackStateChangeInterval.IsNull() {
 		data.OtTrackStateChangeInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-dampening/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-dampening/interval"); value.Exists() {
 		data.LinkOamDampeningInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamDampeningInterval.IsNull() {
 		data.LinkOamDampeningInterval = types.Int64Null()
@@ -476,6 +476,10 @@ func (data *ErrorDisableRecovery) fromBody(ctx context.Context, res gjson.Result
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "link-oam-session-down.interval"); value.Exists() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
@@ -544,9 +548,14 @@ func (data *ErrorDisableRecovery) fromBody(ctx context.Context, res gjson.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *ErrorDisableRecoveryData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "link-oam-session-down.interval"); value.Exists() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
@@ -615,64 +624,64 @@ func (data *ErrorDisableRecoveryData) fromBody(ctx context.Context, res gjson.Re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *ErrorDisableRecovery) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-session-down/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-session-down/interval"); value.Exists() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-discovery-timeout/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-discovery-timeout/interval"); value.Exists() {
 		data.LinkOamDiscoveryTimeoutInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-capabilities-conflict/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-capabilities-conflict/interval"); value.Exists() {
 		data.LinkOamCapabilitiesConflictInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-miswired/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-miswired/interval"); value.Exists() {
 		data.LinkOamMiswiredInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-link-fault/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-link-fault/interval"); value.Exists() {
 		data.LinkOamLinkFaultInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-dying-gasp/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-dying-gasp/interval"); value.Exists() {
 		data.LinkOamDyingGaspInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-critical-event/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-critical-event/interval"); value.Exists() {
 		data.LinkOamCriticalEventInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-threshold-breached/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-threshold-breached/interval"); value.Exists() {
 		data.LinkOamThresholdBreachedInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/stp-bpdu-guard/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/stp-bpdu-guard/interval"); value.Exists() {
 		data.StpBpduGuardInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/stp-legacy-bpdu/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/stp-legacy-bpdu/interval"); value.Exists() {
 		data.StpLegacyBpduInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cluster-udld/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cluster-udld/interval"); value.Exists() {
 		data.ClusterUdldInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cluster-minlinks/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cluster-minlinks/interval"); value.Exists() {
 		data.ClusterMinlinksInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-unidirectional/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-unidirectional/interval"); value.Exists() {
 		data.UdldUnidirectionalInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-neighbor-mismatch/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-neighbor-mismatch/interval"); value.Exists() {
 		data.UdldNeighborMismatchInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-timeout/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-timeout/interval"); value.Exists() {
 		data.UdldTimeoutInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-loopback/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-loopback/interval"); value.Exists() {
 		data.UdldLoopbackInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pvrst-pvid-mismatch/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pvrst-pvid-mismatch/interval"); value.Exists() {
 		data.PvrstPvidMismatchInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/l2vpn-bport-mac-move/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/l2vpn-bport-mac-move/interval"); value.Exists() {
 		data.L2vpnBportMacMoveInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ot-track-state-change/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ot-track-state-change/interval"); value.Exists() {
 		data.OtTrackStateChangeInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-dampening/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-dampening/interval"); value.Exists() {
 		data.LinkOamDampeningInterval = types.Int64Value(value.Int())
 	}
 }
@@ -682,64 +691,64 @@ func (data *ErrorDisableRecovery) fromBodyXML(ctx context.Context, res xmldot.Re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *ErrorDisableRecoveryData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-session-down/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-session-down/interval"); value.Exists() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-discovery-timeout/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-discovery-timeout/interval"); value.Exists() {
 		data.LinkOamDiscoveryTimeoutInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-capabilities-conflict/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-capabilities-conflict/interval"); value.Exists() {
 		data.LinkOamCapabilitiesConflictInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-miswired/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-miswired/interval"); value.Exists() {
 		data.LinkOamMiswiredInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-link-fault/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-link-fault/interval"); value.Exists() {
 		data.LinkOamLinkFaultInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-dying-gasp/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-dying-gasp/interval"); value.Exists() {
 		data.LinkOamDyingGaspInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-critical-event/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-critical-event/interval"); value.Exists() {
 		data.LinkOamCriticalEventInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-threshold-breached/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-threshold-breached/interval"); value.Exists() {
 		data.LinkOamThresholdBreachedInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/stp-bpdu-guard/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/stp-bpdu-guard/interval"); value.Exists() {
 		data.StpBpduGuardInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/stp-legacy-bpdu/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/stp-legacy-bpdu/interval"); value.Exists() {
 		data.StpLegacyBpduInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cluster-udld/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cluster-udld/interval"); value.Exists() {
 		data.ClusterUdldInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/cluster-minlinks/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/cluster-minlinks/interval"); value.Exists() {
 		data.ClusterMinlinksInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-unidirectional/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-unidirectional/interval"); value.Exists() {
 		data.UdldUnidirectionalInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-neighbor-mismatch/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-neighbor-mismatch/interval"); value.Exists() {
 		data.UdldNeighborMismatchInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-timeout/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-timeout/interval"); value.Exists() {
 		data.UdldTimeoutInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/udld-loopback/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/udld-loopback/interval"); value.Exists() {
 		data.UdldLoopbackInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pvrst-pvid-mismatch/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pvrst-pvid-mismatch/interval"); value.Exists() {
 		data.PvrstPvidMismatchInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/l2vpn-bport-mac-move/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/l2vpn-bport-mac-move/interval"); value.Exists() {
 		data.L2vpnBportMacMoveInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ot-track-state-change/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ot-track-state-change/interval"); value.Exists() {
 		data.OtTrackStateChangeInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-oam-dampening/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-oam-dampening/interval"); value.Exists() {
 		data.LinkOamDampeningInterval = types.Int64Value(value.Int())
 	}
 }

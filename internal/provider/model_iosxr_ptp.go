@@ -26,7 +26,6 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -463,32 +462,33 @@ func (data PTP) toBody(ctx context.Context) string {
 func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "frequency.priority"); value.Exists() && !data.FrequencyPriority.IsNull() {
 		data.FrequencyPriority = types.Int64Value(value.Int())
-	} else {
+	} else if data.FrequencyPriority.IsNull() {
 		data.FrequencyPriority = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "time-of-day.priority"); value.Exists() && !data.TimeOfDayPriority.IsNull() {
 		data.TimeOfDayPriority = types.Int64Value(value.Int())
-	} else {
+	} else if data.TimeOfDayPriority.IsNull() {
 		data.TimeOfDayPriority = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv6-verify-checksum"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6VerifyChecksum.IsNull() {
 			data.Ipv6VerifyChecksum = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6VerifyChecksum.IsNull() {
 			data.Ipv6VerifyChecksum = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "min-clock-class"); value.Exists() && !data.MinClockClass.IsNull() {
 		data.MinClockClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.MinClockClass.IsNull() {
 		data.MinClockClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "utc-offset.baseline"); value.Exists() && !data.UtcOffsetBaseline.IsNull() {
 		data.UtcOffsetBaseline = types.Int64Value(value.Int())
-	} else {
+	} else if data.UtcOffsetBaseline.IsNull() {
 		data.UtcOffsetBaseline = types.Int64Null()
 	}
 	for i := range data.UtcOffsets {
@@ -527,425 +527,457 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "uncalibrated-clock-class.clock-class"); value.Exists() && !data.UncalibratedClockClassClockClass.IsNull() {
 		data.UncalibratedClockClassClockClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.UncalibratedClockClassClockClass.IsNull() {
 		data.UncalibratedClockClassClockClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "uncalibrated-clock-class.unless-from-holdover"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.UncalibratedClockClassUnlessFromHoldover.IsNull() {
 			data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.UncalibratedClockClassUnlessFromHoldover.IsNull() {
 			data.UncalibratedClockClassUnlessFromHoldover = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "uncalibrated-traceable-override"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.UncalibratedTraceableOverride.IsNull() {
 			data.UncalibratedTraceableOverride = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.UncalibratedTraceableOverride.IsNull() {
 			data.UncalibratedTraceableOverride = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "startup-clock-class"); value.Exists() && !data.StartupClockClass.IsNull() {
 		data.StartupClockClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.StartupClockClass.IsNull() {
 		data.StartupClockClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "freerun-clock-class"); value.Exists() && !data.FreerunClockClass.IsNull() {
 		data.FreerunClockClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.FreerunClockClass.IsNull() {
 		data.FreerunClockClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "double-failure-clock-class"); value.Exists() && !data.DoubleFailureClockClass.IsNull() {
 		data.DoubleFailureClockClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.DoubleFailureClockClass.IsNull() {
 		data.DoubleFailureClockClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "transparent-clock.domain.all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TransparentClockDomainAll.IsNull() {
 			data.TransparentClockDomainAll = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TransparentClockDomainAll.IsNull() {
 			data.TransparentClockDomainAll = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "physical-layer-frequency"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PhysicalLayerFrequency.IsNull() {
 			data.PhysicalLayerFrequency = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PhysicalLayerFrequency.IsNull() {
 			data.PhysicalLayerFrequency = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "network-type.high-pdv"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.NetworkTypeHighPdv.IsNull() {
 			data.NetworkTypeHighPdv = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.NetworkTypeHighPdv.IsNull() {
 			data.NetworkTypeHighPdv = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "servo-slow-tracking"); value.Exists() && !data.ServoSlowTracking.IsNull() {
 		data.ServoSlowTracking = types.Int64Value(value.Int())
-	} else {
+	} else if data.ServoSlowTracking.IsNull() {
 		data.ServoSlowTracking = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "holdover-spec-clock-class"); value.Exists() && !data.HoldoverSpecClockClass.IsNull() {
 		data.HoldoverSpecClockClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.HoldoverSpecClockClass.IsNull() {
 		data.HoldoverSpecClockClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "holdover-spec-duration"); value.Exists() && !data.HoldoverSpecDuration.IsNull() {
 		data.HoldoverSpecDuration = types.Int64Value(value.Int())
-	} else {
+	} else if data.HoldoverSpecDuration.IsNull() {
 		data.HoldoverSpecDuration = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "holdover-spec-traceable-override"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.HoldoverSpecTraceableOverride.IsNull() {
 			data.HoldoverSpecTraceableOverride = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.HoldoverSpecTraceableOverride.IsNull() {
 			data.HoldoverSpecTraceableOverride = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "apts"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Apts.IsNull() {
 			data.Apts = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Apts.IsNull() {
 			data.Apts = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "phase-difference-threshold-breach"); value.Exists() && !data.PhaseDifferenceThresholdBreach.IsNull() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Value(value.Int())
-	} else {
+	} else if data.PhaseDifferenceThresholdBreach.IsNull() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "detect-ptsf-unusable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DetectPtsfUnusable.IsNull() {
 			data.DetectPtsfUnusable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DetectPtsfUnusable.IsNull() {
 			data.DetectPtsfUnusable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "performance-monitoring"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PerformanceMonitoring.IsNull() {
 			data.PerformanceMonitoring = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PerformanceMonitoring.IsNull() {
 			data.PerformanceMonitoring = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "log.best-primary-clock.changes"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LogBestPrimaryClockChanges.IsNull() {
 			data.LogBestPrimaryClockChanges = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LogBestPrimaryClockChanges.IsNull() {
 			data.LogBestPrimaryClockChanges = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "log.Cisco-IOS-XR-um-ptp-log-servo-cfg:servo.events"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LogServoEvents.IsNull() {
 			data.LogServoEvents = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LogServoEvents.IsNull() {
 			data.LogServoEvents = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "virtual-port"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.VirtualPort.IsNull() {
 			data.VirtualPort = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.VirtualPort.IsNull() {
 			data.VirtualPort = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "virtual-port.priority1"); value.Exists() && !data.VirtualPortPriority1.IsNull() {
 		data.VirtualPortPriority1 = types.Int64Value(value.Int())
-	} else {
+	} else if data.VirtualPortPriority1.IsNull() {
 		data.VirtualPortPriority1 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "virtual-port.priority2"); value.Exists() && !data.VirtualPortPriority2.IsNull() {
 		data.VirtualPortPriority2 = types.Int64Value(value.Int())
-	} else {
+	} else if data.VirtualPortPriority2.IsNull() {
 		data.VirtualPortPriority2 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "virtual-port.clock-class"); value.Exists() && !data.VirtualPortClockClass.IsNull() {
 		data.VirtualPortClockClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.VirtualPortClockClass.IsNull() {
 		data.VirtualPortClockClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "virtual-port.clock-accuracy"); value.Exists() && !data.VirtualPortClockAccuracy.IsNull() {
 		data.VirtualPortClockAccuracy = types.Int64Value(value.Int())
-	} else {
+	} else if data.VirtualPortClockAccuracy.IsNull() {
 		data.VirtualPortClockAccuracy = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "virtual-port.offset-scaled-log-variance"); value.Exists() && !data.VirtualPortOffsetScaledLogVariance.IsNull() {
 		data.VirtualPortOffsetScaledLogVariance = types.Int64Value(value.Int())
-	} else {
+	} else if data.VirtualPortOffsetScaledLogVariance.IsNull() {
 		data.VirtualPortOffsetScaledLogVariance = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "virtual-port.local-priority"); value.Exists() && !data.VirtualPortLocalPriority.IsNull() {
 		data.VirtualPortLocalPriority = types.Int64Value(value.Int())
-	} else {
+	} else if data.VirtualPortLocalPriority.IsNull() {
 		data.VirtualPortLocalPriority = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "virtual-port.gm-threshold-breach"); value.Exists() && !data.VirtualPortGmThresholdBreach.IsNull() {
 		data.VirtualPortGmThresholdBreach = types.Int64Value(value.Int())
-	} else {
+	} else if data.VirtualPortGmThresholdBreach.IsNull() {
 		data.VirtualPortGmThresholdBreach = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "clock.identity.mac-address.custom"); value.Exists() && !data.ClockIdentityMacAddressCustom.IsNull() {
 		data.ClockIdentityMacAddressCustom = types.StringValue(value.String())
-	} else {
+	} else if data.ClockIdentityMacAddressCustom.IsNull() {
 		data.ClockIdentityMacAddressCustom = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "clock.identity.mac-address.router"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockIdentityMacAddressRouter.IsNull() {
 			data.ClockIdentityMacAddressRouter = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockIdentityMacAddressRouter.IsNull() {
 			data.ClockIdentityMacAddressRouter = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.identity.eui-64"); value.Exists() && !data.ClockIdentityEui64.IsNull() {
 		data.ClockIdentityEui64 = types.StringValue(value.String())
-	} else {
+	} else if data.ClockIdentityEui64.IsNull() {
 		data.ClockIdentityEui64 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "clock.domain"); value.Exists() && !data.ClockDomain.IsNull() {
 		data.ClockDomain = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClockDomain.IsNull() {
 		data.ClockDomain = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "clock.priority1"); value.Exists() && !data.ClockPriority1.IsNull() {
 		data.ClockPriority1 = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClockPriority1.IsNull() {
 		data.ClockPriority1 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "clock.priority2"); value.Exists() && !data.ClockPriority2.IsNull() {
 		data.ClockPriority2 = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClockPriority2.IsNull() {
 		data.ClockPriority2 = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "clock.clock-class"); value.Exists() && !data.ClockClockClass.IsNull() {
 		data.ClockClockClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.ClockClockClass.IsNull() {
 		data.ClockClockClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "clock.timescale.ptp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimescalePtp.IsNull() {
 			data.ClockTimescalePtp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimescalePtp.IsNull() {
 			data.ClockTimescalePtp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.timescale.arb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimescaleArb.IsNull() {
 			data.ClockTimescaleArb = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimescaleArb.IsNull() {
 			data.ClockTimescaleArb = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.time-source.atomic-clock"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceAtomicClock.IsNull() {
 			data.ClockTimeSourceAtomicClock = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceAtomicClock.IsNull() {
 			data.ClockTimeSourceAtomicClock = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.time-source.gps"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceGps.IsNull() {
 			data.ClockTimeSourceGps = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceGps.IsNull() {
 			data.ClockTimeSourceGps = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.time-source.terrestrial-radio"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceTerrestrialRadio.IsNull() {
 			data.ClockTimeSourceTerrestrialRadio = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceTerrestrialRadio.IsNull() {
 			data.ClockTimeSourceTerrestrialRadio = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.time-source.ptp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourcePtp.IsNull() {
 			data.ClockTimeSourcePtp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourcePtp.IsNull() {
 			data.ClockTimeSourcePtp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.time-source.ntp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceNtp.IsNull() {
 			data.ClockTimeSourceNtp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceNtp.IsNull() {
 			data.ClockTimeSourceNtp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.time-source.hand-set"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceHandSet.IsNull() {
 			data.ClockTimeSourceHandSet = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceHandSet.IsNull() {
 			data.ClockTimeSourceHandSet = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.time-source.other"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceOther.IsNull() {
 			data.ClockTimeSourceOther = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceOther.IsNull() {
 			data.ClockTimeSourceOther = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.time-source.internal-oscillator"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceInternalOscillator.IsNull() {
 			data.ClockTimeSourceInternalOscillator = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceInternalOscillator.IsNull() {
 			data.ClockTimeSourceInternalOscillator = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.profile.g-8265-1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82651.IsNull() {
 			data.ClockProfileG82651 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82651.IsNull() {
 			data.ClockProfileG82651 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.profile.g-8265-1.clock-type.primary"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82651ClockTypeMaster.IsNull() {
 			data.ClockProfileG82651ClockTypeMaster = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82651ClockTypeMaster.IsNull() {
 			data.ClockProfileG82651ClockTypeMaster = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.profile.g-8265-1.clock-type.subordinate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82651ClockTypeSlave.IsNull() {
 			data.ClockProfileG82651ClockTypeSlave = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82651ClockTypeSlave.IsNull() {
 			data.ClockProfileG82651ClockTypeSlave = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.profile.g-8275-1.clock-type.t-bc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82751ClockTypeTBc.IsNull() {
 			data.ClockProfileG82751ClockTypeTBc = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82751ClockTypeTBc.IsNull() {
 			data.ClockProfileG82751ClockTypeTBc = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.profile.g-8275-1.clock-type.t-gm"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82751ClockTypeTGm.IsNull() {
 			data.ClockProfileG82751ClockTypeTGm = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82751ClockTypeTGm.IsNull() {
 			data.ClockProfileG82751ClockTypeTGm = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.profile.g-8275-1.clock-type.t-tsc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82751ClockTypeTTsc.IsNull() {
 			data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82751ClockTypeTTsc.IsNull() {
 			data.ClockProfileG82751ClockTypeTTsc = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.profile.g-8275-2.clock-type.t-bc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82752ClockTypeTBc.IsNull() {
 			data.ClockProfileG82752ClockTypeTBc = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82752ClockTypeTBc.IsNull() {
 			data.ClockProfileG82752ClockTypeTBc = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.profile.g-8275-2.clock-type.t-gm"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82752ClockTypeTGm.IsNull() {
 			data.ClockProfileG82752ClockTypeTGm = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82752ClockTypeTGm.IsNull() {
 			data.ClockProfileG82752ClockTypeTGm = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "clock.profile.g-8275-2.clock-type.t-tsc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82752ClockTypeTTsc.IsNull() {
 			data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82752ClockTypeTTsc.IsNull() {
 			data.ClockProfileG82752ClockTypeTTsc = types.BoolNull()
 		}
@@ -975,17 +1007,14 @@ func (data PTP) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/utc-offset/baseline", strconv.FormatInt(data.UtcOffsetBaseline.ValueInt64(), 10))
 	}
 	if len(data.UtcOffsets) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.UtcOffsets {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/utc-offset/offsets/offset[date='" + item.Date.ValueString() + "']"
 			if !item.Date.IsNull() && !item.Date.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "date", item.Date.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/date", item.Date.ValueString())
 			}
 			if !item.OffsetValue.IsNull() && !item.OffsetValue.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "offset-value", strconv.FormatInt(item.OffsetValue.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/offset-value", strconv.FormatInt(item.OffsetValue.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"utc-offset/offsets/offset", cBody.Res())
 		}
 	}
 	if !data.UncalibratedClockClassClockClass.IsNull() && !data.UncalibratedClockClassClockClass.IsUnknown() {
@@ -1222,30 +1251,33 @@ func (data PTP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/frequency/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/frequency/priority"); value.Exists() {
 		data.FrequencyPriority = types.Int64Value(value.Int())
 	} else if data.FrequencyPriority.IsNull() {
 		data.FrequencyPriority = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/time-of-day/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/time-of-day/priority"); value.Exists() {
 		data.TimeOfDayPriority = types.Int64Value(value.Int())
 	} else if data.TimeOfDayPriority.IsNull() {
 		data.TimeOfDayPriority = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6-verify-checksum"); value.Exists() {
-		data.Ipv6VerifyChecksum = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6-verify-checksum"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6VerifyChecksum.IsNull() {
+			data.Ipv6VerifyChecksum = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6VerifyChecksum.IsNull() {
 			data.Ipv6VerifyChecksum = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/min-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/min-clock-class"); value.Exists() {
 		data.MinClockClass = types.Int64Value(value.Int())
 	} else if data.MinClockClass.IsNull() {
 		data.MinClockClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/utc-offset/baseline"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/utc-offset/baseline"); value.Exists() {
 		data.UtcOffsetBaseline = types.Int64Value(value.Int())
 	} else if data.UtcOffsetBaseline.IsNull() {
 		data.UtcOffsetBaseline = types.Int64Null()
@@ -1255,7 +1287,7 @@ func (data *PTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.UtcOffsets[i].Date.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/utc-offset/offsets/offset").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/utc-offset/offsets/offset").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1284,361 +1316,457 @@ func (data *PTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.UtcOffsets[i].OffsetValue = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/uncalibrated-clock-class/clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/uncalibrated-clock-class/clock-class"); value.Exists() {
 		data.UncalibratedClockClassClockClass = types.Int64Value(value.Int())
 	} else if data.UncalibratedClockClassClockClass.IsNull() {
 		data.UncalibratedClockClassClockClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/uncalibrated-clock-class/unless-from-holdover"); value.Exists() {
-		data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/uncalibrated-clock-class/unless-from-holdover"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UncalibratedClockClassUnlessFromHoldover.IsNull() {
+			data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.UncalibratedClockClassUnlessFromHoldover.IsNull() {
 			data.UncalibratedClockClassUnlessFromHoldover = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/uncalibrated-traceable-override"); value.Exists() {
-		data.UncalibratedTraceableOverride = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/uncalibrated-traceable-override"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UncalibratedTraceableOverride.IsNull() {
+			data.UncalibratedTraceableOverride = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.UncalibratedTraceableOverride.IsNull() {
 			data.UncalibratedTraceableOverride = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/startup-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/startup-clock-class"); value.Exists() {
 		data.StartupClockClass = types.Int64Value(value.Int())
 	} else if data.StartupClockClass.IsNull() {
 		data.StartupClockClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/freerun-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/freerun-clock-class"); value.Exists() {
 		data.FreerunClockClass = types.Int64Value(value.Int())
 	} else if data.FreerunClockClass.IsNull() {
 		data.FreerunClockClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/double-failure-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/double-failure-clock-class"); value.Exists() {
 		data.DoubleFailureClockClass = types.Int64Value(value.Int())
 	} else if data.DoubleFailureClockClass.IsNull() {
 		data.DoubleFailureClockClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transparent-clock/domain/all"); value.Exists() {
-		data.TransparentClockDomainAll = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transparent-clock/domain/all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransparentClockDomainAll.IsNull() {
+			data.TransparentClockDomainAll = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TransparentClockDomainAll.IsNull() {
 			data.TransparentClockDomainAll = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/physical-layer-frequency"); value.Exists() {
-		data.PhysicalLayerFrequency = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/physical-layer-frequency"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PhysicalLayerFrequency.IsNull() {
+			data.PhysicalLayerFrequency = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PhysicalLayerFrequency.IsNull() {
 			data.PhysicalLayerFrequency = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/network-type/high-pdv"); value.Exists() {
-		data.NetworkTypeHighPdv = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/network-type/high-pdv"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.NetworkTypeHighPdv.IsNull() {
+			data.NetworkTypeHighPdv = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.NetworkTypeHighPdv.IsNull() {
 			data.NetworkTypeHighPdv = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/servo-slow-tracking"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/servo-slow-tracking"); value.Exists() {
 		data.ServoSlowTracking = types.Int64Value(value.Int())
 	} else if data.ServoSlowTracking.IsNull() {
 		data.ServoSlowTracking = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdover-spec-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdover-spec-clock-class"); value.Exists() {
 		data.HoldoverSpecClockClass = types.Int64Value(value.Int())
 	} else if data.HoldoverSpecClockClass.IsNull() {
 		data.HoldoverSpecClockClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdover-spec-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdover-spec-duration"); value.Exists() {
 		data.HoldoverSpecDuration = types.Int64Value(value.Int())
 	} else if data.HoldoverSpecDuration.IsNull() {
 		data.HoldoverSpecDuration = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdover-spec-traceable-override"); value.Exists() {
-		data.HoldoverSpecTraceableOverride = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdover-spec-traceable-override"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.HoldoverSpecTraceableOverride.IsNull() {
+			data.HoldoverSpecTraceableOverride = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.HoldoverSpecTraceableOverride.IsNull() {
 			data.HoldoverSpecTraceableOverride = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/apts"); value.Exists() {
-		data.Apts = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/apts"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Apts.IsNull() {
+			data.Apts = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Apts.IsNull() {
 			data.Apts = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/phase-difference-threshold-breach"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/phase-difference-threshold-breach"); value.Exists() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Value(value.Int())
 	} else if data.PhaseDifferenceThresholdBreach.IsNull() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/detect-ptsf-unusable"); value.Exists() {
-		data.DetectPtsfUnusable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/detect-ptsf-unusable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DetectPtsfUnusable.IsNull() {
+			data.DetectPtsfUnusable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DetectPtsfUnusable.IsNull() {
 			data.DetectPtsfUnusable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/performance-monitoring"); value.Exists() {
-		data.PerformanceMonitoring = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/performance-monitoring"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PerformanceMonitoring.IsNull() {
+			data.PerformanceMonitoring = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PerformanceMonitoring.IsNull() {
 			data.PerformanceMonitoring = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/best-primary-clock/changes"); value.Exists() {
-		data.LogBestPrimaryClockChanges = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/best-primary-clock/changes"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogBestPrimaryClockChanges.IsNull() {
+			data.LogBestPrimaryClockChanges = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LogBestPrimaryClockChanges.IsNull() {
 			data.LogBestPrimaryClockChanges = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/Cisco-IOS-XR-um-ptp-log-servo-cfg:servo/events"); value.Exists() {
-		data.LogServoEvents = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/Cisco-IOS-XR-um-ptp-log-servo-cfg:servo/events"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogServoEvents.IsNull() {
+			data.LogServoEvents = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LogServoEvents.IsNull() {
 			data.LogServoEvents = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port"); value.Exists() {
-		data.VirtualPort = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.VirtualPort.IsNull() {
+			data.VirtualPort = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.VirtualPort.IsNull() {
 			data.VirtualPort = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/priority1"); value.Exists() {
 		data.VirtualPortPriority1 = types.Int64Value(value.Int())
 	} else if data.VirtualPortPriority1.IsNull() {
 		data.VirtualPortPriority1 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/priority2"); value.Exists() {
 		data.VirtualPortPriority2 = types.Int64Value(value.Int())
 	} else if data.VirtualPortPriority2.IsNull() {
 		data.VirtualPortPriority2 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/clock-class"); value.Exists() {
 		data.VirtualPortClockClass = types.Int64Value(value.Int())
 	} else if data.VirtualPortClockClass.IsNull() {
 		data.VirtualPortClockClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/clock-accuracy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/clock-accuracy"); value.Exists() {
 		data.VirtualPortClockAccuracy = types.Int64Value(value.Int())
 	} else if data.VirtualPortClockAccuracy.IsNull() {
 		data.VirtualPortClockAccuracy = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/offset-scaled-log-variance"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/offset-scaled-log-variance"); value.Exists() {
 		data.VirtualPortOffsetScaledLogVariance = types.Int64Value(value.Int())
 	} else if data.VirtualPortOffsetScaledLogVariance.IsNull() {
 		data.VirtualPortOffsetScaledLogVariance = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/local-priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/local-priority"); value.Exists() {
 		data.VirtualPortLocalPriority = types.Int64Value(value.Int())
 	} else if data.VirtualPortLocalPriority.IsNull() {
 		data.VirtualPortLocalPriority = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/gm-threshold-breach"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/gm-threshold-breach"); value.Exists() {
 		data.VirtualPortGmThresholdBreach = types.Int64Value(value.Int())
 	} else if data.VirtualPortGmThresholdBreach.IsNull() {
 		data.VirtualPortGmThresholdBreach = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/identity/mac-address/custom"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/identity/mac-address/custom"); value.Exists() {
 		data.ClockIdentityMacAddressCustom = types.StringValue(value.String())
 	} else if data.ClockIdentityMacAddressCustom.IsNull() {
 		data.ClockIdentityMacAddressCustom = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/identity/mac-address/router"); value.Exists() {
-		data.ClockIdentityMacAddressRouter = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/identity/mac-address/router"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockIdentityMacAddressRouter.IsNull() {
+			data.ClockIdentityMacAddressRouter = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockIdentityMacAddressRouter.IsNull() {
 			data.ClockIdentityMacAddressRouter = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/identity/eui-64"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/identity/eui-64"); value.Exists() {
 		data.ClockIdentityEui64 = types.StringValue(value.String())
 	} else if data.ClockIdentityEui64.IsNull() {
 		data.ClockIdentityEui64 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/domain"); value.Exists() {
 		data.ClockDomain = types.Int64Value(value.Int())
 	} else if data.ClockDomain.IsNull() {
 		data.ClockDomain = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/priority1"); value.Exists() {
 		data.ClockPriority1 = types.Int64Value(value.Int())
 	} else if data.ClockPriority1.IsNull() {
 		data.ClockPriority1 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/priority2"); value.Exists() {
 		data.ClockPriority2 = types.Int64Value(value.Int())
 	} else if data.ClockPriority2.IsNull() {
 		data.ClockPriority2 = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/clock-class"); value.Exists() {
 		data.ClockClockClass = types.Int64Value(value.Int())
 	} else if data.ClockClockClass.IsNull() {
 		data.ClockClockClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/timescale/ptp"); value.Exists() {
-		data.ClockTimescalePtp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/timescale/ptp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimescalePtp.IsNull() {
+			data.ClockTimescalePtp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimescalePtp.IsNull() {
 			data.ClockTimescalePtp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/timescale/arb"); value.Exists() {
-		data.ClockTimescaleArb = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/timescale/arb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimescaleArb.IsNull() {
+			data.ClockTimescaleArb = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimescaleArb.IsNull() {
 			data.ClockTimescaleArb = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/atomic-clock"); value.Exists() {
-		data.ClockTimeSourceAtomicClock = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/atomic-clock"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimeSourceAtomicClock.IsNull() {
+			data.ClockTimeSourceAtomicClock = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceAtomicClock.IsNull() {
 			data.ClockTimeSourceAtomicClock = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/gps"); value.Exists() {
-		data.ClockTimeSourceGps = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/gps"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimeSourceGps.IsNull() {
+			data.ClockTimeSourceGps = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceGps.IsNull() {
 			data.ClockTimeSourceGps = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/terrestrial-radio"); value.Exists() {
-		data.ClockTimeSourceTerrestrialRadio = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/terrestrial-radio"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimeSourceTerrestrialRadio.IsNull() {
+			data.ClockTimeSourceTerrestrialRadio = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceTerrestrialRadio.IsNull() {
 			data.ClockTimeSourceTerrestrialRadio = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/ptp"); value.Exists() {
-		data.ClockTimeSourcePtp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/ptp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimeSourcePtp.IsNull() {
+			data.ClockTimeSourcePtp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourcePtp.IsNull() {
 			data.ClockTimeSourcePtp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/ntp"); value.Exists() {
-		data.ClockTimeSourceNtp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/ntp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimeSourceNtp.IsNull() {
+			data.ClockTimeSourceNtp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceNtp.IsNull() {
 			data.ClockTimeSourceNtp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/hand-set"); value.Exists() {
-		data.ClockTimeSourceHandSet = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/hand-set"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimeSourceHandSet.IsNull() {
+			data.ClockTimeSourceHandSet = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceHandSet.IsNull() {
 			data.ClockTimeSourceHandSet = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/other"); value.Exists() {
-		data.ClockTimeSourceOther = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/other"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimeSourceOther.IsNull() {
+			data.ClockTimeSourceOther = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceOther.IsNull() {
 			data.ClockTimeSourceOther = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/internal-oscillator"); value.Exists() {
-		data.ClockTimeSourceInternalOscillator = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/internal-oscillator"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockTimeSourceInternalOscillator.IsNull() {
+			data.ClockTimeSourceInternalOscillator = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockTimeSourceInternalOscillator.IsNull() {
 			data.ClockTimeSourceInternalOscillator = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8265-1"); value.Exists() {
-		data.ClockProfileG82651 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8265-1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockProfileG82651.IsNull() {
+			data.ClockProfileG82651 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82651.IsNull() {
 			data.ClockProfileG82651 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/primary"); value.Exists() {
-		data.ClockProfileG82651ClockTypeMaster = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/primary"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockProfileG82651ClockTypeMaster.IsNull() {
+			data.ClockProfileG82651ClockTypeMaster = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82651ClockTypeMaster.IsNull() {
 			data.ClockProfileG82651ClockTypeMaster = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/subordinate"); value.Exists() {
-		data.ClockProfileG82651ClockTypeSlave = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/subordinate"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockProfileG82651ClockTypeSlave.IsNull() {
+			data.ClockProfileG82651ClockTypeSlave = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82651ClockTypeSlave.IsNull() {
 			data.ClockProfileG82651ClockTypeSlave = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-bc"); value.Exists() {
-		data.ClockProfileG82751ClockTypeTBc = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-bc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockProfileG82751ClockTypeTBc.IsNull() {
+			data.ClockProfileG82751ClockTypeTBc = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82751ClockTypeTBc.IsNull() {
 			data.ClockProfileG82751ClockTypeTBc = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-gm"); value.Exists() {
-		data.ClockProfileG82751ClockTypeTGm = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-gm"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockProfileG82751ClockTypeTGm.IsNull() {
+			data.ClockProfileG82751ClockTypeTGm = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82751ClockTypeTGm.IsNull() {
 			data.ClockProfileG82751ClockTypeTGm = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-tsc"); value.Exists() {
-		data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-tsc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockProfileG82751ClockTypeTTsc.IsNull() {
+			data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82751ClockTypeTTsc.IsNull() {
 			data.ClockProfileG82751ClockTypeTTsc = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-bc"); value.Exists() {
-		data.ClockProfileG82752ClockTypeTBc = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-bc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockProfileG82752ClockTypeTBc.IsNull() {
+			data.ClockProfileG82752ClockTypeTBc = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82752ClockTypeTBc.IsNull() {
 			data.ClockProfileG82752ClockTypeTBc = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-gm"); value.Exists() {
-		data.ClockProfileG82752ClockTypeTGm = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-gm"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockProfileG82752ClockTypeTGm.IsNull() {
+			data.ClockProfileG82752ClockTypeTGm = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82752ClockTypeTGm.IsNull() {
 			data.ClockProfileG82752ClockTypeTGm = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-tsc"); value.Exists() {
-		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-tsc"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ClockProfileG82752ClockTypeTTsc.IsNull() {
+			data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ClockProfileG82752ClockTypeTTsc.IsNull() {
@@ -1655,6 +1783,10 @@ func (data *PTP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "frequency.priority"); value.Exists() {
 		data.FrequencyPriority = types.Int64Value(value.Int())
 	}
@@ -1663,8 +1795,9 @@ func (data *PTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "ipv6-verify-checksum"); value.Exists() {
 		data.Ipv6VerifyChecksum = types.BoolValue(true)
-	} else {
-		data.Ipv6VerifyChecksum = types.BoolNull()
+	} else if !data.Ipv6VerifyChecksum.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv6VerifyChecksum = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "min-clock-class"); value.Exists() {
 		data.MinClockClass = types.Int64Value(value.Int())
@@ -1691,13 +1824,15 @@ func (data *PTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "uncalibrated-clock-class.unless-from-holdover"); value.Exists() {
 		data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(true)
-	} else {
-		data.UncalibratedClockClassUnlessFromHoldover = types.BoolNull()
+	} else if !data.UncalibratedClockClassUnlessFromHoldover.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "uncalibrated-traceable-override"); value.Exists() {
 		data.UncalibratedTraceableOverride = types.BoolValue(true)
-	} else {
-		data.UncalibratedTraceableOverride = types.BoolNull()
+	} else if !data.UncalibratedTraceableOverride.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UncalibratedTraceableOverride = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "startup-clock-class"); value.Exists() {
 		data.StartupClockClass = types.Int64Value(value.Int())
@@ -1710,18 +1845,21 @@ func (data *PTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "transparent-clock.domain.all"); value.Exists() {
 		data.TransparentClockDomainAll = types.BoolValue(true)
-	} else {
-		data.TransparentClockDomainAll = types.BoolNull()
+	} else if !data.TransparentClockDomainAll.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransparentClockDomainAll = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "physical-layer-frequency"); value.Exists() {
 		data.PhysicalLayerFrequency = types.BoolValue(true)
-	} else {
-		data.PhysicalLayerFrequency = types.BoolNull()
+	} else if !data.PhysicalLayerFrequency.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PhysicalLayerFrequency = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "network-type.high-pdv"); value.Exists() {
 		data.NetworkTypeHighPdv = types.BoolValue(true)
-	} else {
-		data.NetworkTypeHighPdv = types.BoolNull()
+	} else if !data.NetworkTypeHighPdv.IsNull() {
+		// Only set to false if it was previously set in state
+		data.NetworkTypeHighPdv = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "servo-slow-tracking"); value.Exists() {
 		data.ServoSlowTracking = types.Int64Value(value.Int())
@@ -1734,41 +1872,48 @@ func (data *PTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "holdover-spec-traceable-override"); value.Exists() {
 		data.HoldoverSpecTraceableOverride = types.BoolValue(true)
-	} else {
-		data.HoldoverSpecTraceableOverride = types.BoolNull()
+	} else if !data.HoldoverSpecTraceableOverride.IsNull() {
+		// Only set to false if it was previously set in state
+		data.HoldoverSpecTraceableOverride = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "apts"); value.Exists() {
 		data.Apts = types.BoolValue(true)
-	} else {
-		data.Apts = types.BoolNull()
+	} else if !data.Apts.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Apts = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "phase-difference-threshold-breach"); value.Exists() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "detect-ptsf-unusable"); value.Exists() {
 		data.DetectPtsfUnusable = types.BoolValue(true)
-	} else {
-		data.DetectPtsfUnusable = types.BoolNull()
+	} else if !data.DetectPtsfUnusable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DetectPtsfUnusable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "performance-monitoring"); value.Exists() {
 		data.PerformanceMonitoring = types.BoolValue(true)
-	} else {
-		data.PerformanceMonitoring = types.BoolNull()
+	} else if !data.PerformanceMonitoring.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PerformanceMonitoring = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "log.best-primary-clock.changes"); value.Exists() {
 		data.LogBestPrimaryClockChanges = types.BoolValue(true)
-	} else {
-		data.LogBestPrimaryClockChanges = types.BoolNull()
+	} else if !data.LogBestPrimaryClockChanges.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LogBestPrimaryClockChanges = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "log.Cisco-IOS-XR-um-ptp-log-servo-cfg:servo.events"); value.Exists() {
 		data.LogServoEvents = types.BoolValue(true)
-	} else {
-		data.LogServoEvents = types.BoolNull()
+	} else if !data.LogServoEvents.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LogServoEvents = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "virtual-port"); value.Exists() {
 		data.VirtualPort = types.BoolValue(true)
-	} else {
-		data.VirtualPort = types.BoolNull()
+	} else if !data.VirtualPort.IsNull() {
+		// Only set to false if it was previously set in state
+		data.VirtualPort = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "virtual-port.priority1"); value.Exists() {
 		data.VirtualPortPriority1 = types.Int64Value(value.Int())
@@ -1796,8 +1941,9 @@ func (data *PTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "clock.identity.mac-address.router"); value.Exists() {
 		data.ClockIdentityMacAddressRouter = types.BoolValue(true)
-	} else {
-		data.ClockIdentityMacAddressRouter = types.BoolNull()
+	} else if !data.ClockIdentityMacAddressRouter.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockIdentityMacAddressRouter = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.identity.eui-64"); value.Exists() {
 		data.ClockIdentityEui64 = types.StringValue(value.String())
@@ -1816,98 +1962,117 @@ func (data *PTP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "clock.timescale.ptp"); value.Exists() {
 		data.ClockTimescalePtp = types.BoolValue(true)
-	} else {
-		data.ClockTimescalePtp = types.BoolNull()
+	} else if !data.ClockTimescalePtp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimescalePtp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.timescale.arb"); value.Exists() {
 		data.ClockTimescaleArb = types.BoolValue(true)
-	} else {
-		data.ClockTimescaleArb = types.BoolNull()
+	} else if !data.ClockTimescaleArb.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimescaleArb = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.atomic-clock"); value.Exists() {
 		data.ClockTimeSourceAtomicClock = types.BoolValue(true)
-	} else {
-		data.ClockTimeSourceAtomicClock = types.BoolNull()
+	} else if !data.ClockTimeSourceAtomicClock.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimeSourceAtomicClock = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.gps"); value.Exists() {
 		data.ClockTimeSourceGps = types.BoolValue(true)
-	} else {
-		data.ClockTimeSourceGps = types.BoolNull()
+	} else if !data.ClockTimeSourceGps.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimeSourceGps = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.terrestrial-radio"); value.Exists() {
 		data.ClockTimeSourceTerrestrialRadio = types.BoolValue(true)
-	} else {
-		data.ClockTimeSourceTerrestrialRadio = types.BoolNull()
+	} else if !data.ClockTimeSourceTerrestrialRadio.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimeSourceTerrestrialRadio = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.ptp"); value.Exists() {
 		data.ClockTimeSourcePtp = types.BoolValue(true)
-	} else {
-		data.ClockTimeSourcePtp = types.BoolNull()
+	} else if !data.ClockTimeSourcePtp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimeSourcePtp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.ntp"); value.Exists() {
 		data.ClockTimeSourceNtp = types.BoolValue(true)
-	} else {
-		data.ClockTimeSourceNtp = types.BoolNull()
+	} else if !data.ClockTimeSourceNtp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimeSourceNtp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.hand-set"); value.Exists() {
 		data.ClockTimeSourceHandSet = types.BoolValue(true)
-	} else {
-		data.ClockTimeSourceHandSet = types.BoolNull()
+	} else if !data.ClockTimeSourceHandSet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimeSourceHandSet = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.other"); value.Exists() {
 		data.ClockTimeSourceOther = types.BoolValue(true)
-	} else {
-		data.ClockTimeSourceOther = types.BoolNull()
+	} else if !data.ClockTimeSourceOther.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimeSourceOther = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.internal-oscillator"); value.Exists() {
 		data.ClockTimeSourceInternalOscillator = types.BoolValue(true)
-	} else {
-		data.ClockTimeSourceInternalOscillator = types.BoolNull()
+	} else if !data.ClockTimeSourceInternalOscillator.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockTimeSourceInternalOscillator = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8265-1"); value.Exists() {
 		data.ClockProfileG82651 = types.BoolValue(true)
-	} else {
-		data.ClockProfileG82651 = types.BoolNull()
+	} else if !data.ClockProfileG82651.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockProfileG82651 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8265-1.clock-type.primary"); value.Exists() {
 		data.ClockProfileG82651ClockTypeMaster = types.BoolValue(true)
-	} else {
-		data.ClockProfileG82651ClockTypeMaster = types.BoolNull()
+	} else if !data.ClockProfileG82651ClockTypeMaster.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockProfileG82651ClockTypeMaster = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8265-1.clock-type.subordinate"); value.Exists() {
 		data.ClockProfileG82651ClockTypeSlave = types.BoolValue(true)
-	} else {
-		data.ClockProfileG82651ClockTypeSlave = types.BoolNull()
+	} else if !data.ClockProfileG82651ClockTypeSlave.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockProfileG82651ClockTypeSlave = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-1.clock-type.t-bc"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTBc = types.BoolValue(true)
-	} else {
-		data.ClockProfileG82751ClockTypeTBc = types.BoolNull()
+	} else if !data.ClockProfileG82751ClockTypeTBc.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockProfileG82751ClockTypeTBc = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-1.clock-type.t-gm"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTGm = types.BoolValue(true)
-	} else {
-		data.ClockProfileG82751ClockTypeTGm = types.BoolNull()
+	} else if !data.ClockProfileG82751ClockTypeTGm.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockProfileG82751ClockTypeTGm = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-1.clock-type.t-tsc"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(true)
-	} else {
-		data.ClockProfileG82751ClockTypeTTsc = types.BoolNull()
+	} else if !data.ClockProfileG82751ClockTypeTTsc.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-2.clock-type.t-bc"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTBc = types.BoolValue(true)
-	} else {
-		data.ClockProfileG82752ClockTypeTBc = types.BoolNull()
+	} else if !data.ClockProfileG82752ClockTypeTBc.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockProfileG82752ClockTypeTBc = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-2.clock-type.t-gm"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTGm = types.BoolValue(true)
-	} else {
-		data.ClockProfileG82752ClockTypeTGm = types.BoolNull()
+	} else if !data.ClockProfileG82752ClockTypeTGm.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockProfileG82752ClockTypeTGm = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-2.clock-type.t-tsc"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(true)
-	} else {
-		data.ClockProfileG82752ClockTypeTTsc = types.BoolNull()
+	} else if !data.ClockProfileG82752ClockTypeTTsc.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(false)
 	}
 }
 
@@ -1915,9 +2080,14 @@ func (data *PTP) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *PTPData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "frequency.priority"); value.Exists() {
 		data.FrequencyPriority = types.Int64Value(value.Int())
@@ -1928,7 +2098,7 @@ func (data *PTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "ipv6-verify-checksum"); value.Exists() {
 		data.Ipv6VerifyChecksum = types.BoolValue(true)
 	} else {
-		data.Ipv6VerifyChecksum = types.BoolNull()
+		data.Ipv6VerifyChecksum = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "min-clock-class"); value.Exists() {
 		data.MinClockClass = types.Int64Value(value.Int())
@@ -1956,12 +2126,12 @@ func (data *PTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "uncalibrated-clock-class.unless-from-holdover"); value.Exists() {
 		data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(true)
 	} else {
-		data.UncalibratedClockClassUnlessFromHoldover = types.BoolNull()
+		data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "uncalibrated-traceable-override"); value.Exists() {
 		data.UncalibratedTraceableOverride = types.BoolValue(true)
 	} else {
-		data.UncalibratedTraceableOverride = types.BoolNull()
+		data.UncalibratedTraceableOverride = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "startup-clock-class"); value.Exists() {
 		data.StartupClockClass = types.Int64Value(value.Int())
@@ -1975,17 +2145,17 @@ func (data *PTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "transparent-clock.domain.all"); value.Exists() {
 		data.TransparentClockDomainAll = types.BoolValue(true)
 	} else {
-		data.TransparentClockDomainAll = types.BoolNull()
+		data.TransparentClockDomainAll = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "physical-layer-frequency"); value.Exists() {
 		data.PhysicalLayerFrequency = types.BoolValue(true)
 	} else {
-		data.PhysicalLayerFrequency = types.BoolNull()
+		data.PhysicalLayerFrequency = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "network-type.high-pdv"); value.Exists() {
 		data.NetworkTypeHighPdv = types.BoolValue(true)
 	} else {
-		data.NetworkTypeHighPdv = types.BoolNull()
+		data.NetworkTypeHighPdv = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "servo-slow-tracking"); value.Exists() {
 		data.ServoSlowTracking = types.Int64Value(value.Int())
@@ -1999,12 +2169,12 @@ func (data *PTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "holdover-spec-traceable-override"); value.Exists() {
 		data.HoldoverSpecTraceableOverride = types.BoolValue(true)
 	} else {
-		data.HoldoverSpecTraceableOverride = types.BoolNull()
+		data.HoldoverSpecTraceableOverride = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "apts"); value.Exists() {
 		data.Apts = types.BoolValue(true)
 	} else {
-		data.Apts = types.BoolNull()
+		data.Apts = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "phase-difference-threshold-breach"); value.Exists() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Value(value.Int())
@@ -2012,27 +2182,27 @@ func (data *PTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "detect-ptsf-unusable"); value.Exists() {
 		data.DetectPtsfUnusable = types.BoolValue(true)
 	} else {
-		data.DetectPtsfUnusable = types.BoolNull()
+		data.DetectPtsfUnusable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "performance-monitoring"); value.Exists() {
 		data.PerformanceMonitoring = types.BoolValue(true)
 	} else {
-		data.PerformanceMonitoring = types.BoolNull()
+		data.PerformanceMonitoring = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "log.best-primary-clock.changes"); value.Exists() {
 		data.LogBestPrimaryClockChanges = types.BoolValue(true)
 	} else {
-		data.LogBestPrimaryClockChanges = types.BoolNull()
+		data.LogBestPrimaryClockChanges = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "log.Cisco-IOS-XR-um-ptp-log-servo-cfg:servo.events"); value.Exists() {
 		data.LogServoEvents = types.BoolValue(true)
 	} else {
-		data.LogServoEvents = types.BoolNull()
+		data.LogServoEvents = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "virtual-port"); value.Exists() {
 		data.VirtualPort = types.BoolValue(true)
 	} else {
-		data.VirtualPort = types.BoolNull()
+		data.VirtualPort = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "virtual-port.priority1"); value.Exists() {
 		data.VirtualPortPriority1 = types.Int64Value(value.Int())
@@ -2061,7 +2231,7 @@ func (data *PTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "clock.identity.mac-address.router"); value.Exists() {
 		data.ClockIdentityMacAddressRouter = types.BoolValue(true)
 	} else {
-		data.ClockIdentityMacAddressRouter = types.BoolNull()
+		data.ClockIdentityMacAddressRouter = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.identity.eui-64"); value.Exists() {
 		data.ClockIdentityEui64 = types.StringValue(value.String())
@@ -2081,97 +2251,97 @@ func (data *PTPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "clock.timescale.ptp"); value.Exists() {
 		data.ClockTimescalePtp = types.BoolValue(true)
 	} else {
-		data.ClockTimescalePtp = types.BoolNull()
+		data.ClockTimescalePtp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.timescale.arb"); value.Exists() {
 		data.ClockTimescaleArb = types.BoolValue(true)
 	} else {
-		data.ClockTimescaleArb = types.BoolNull()
+		data.ClockTimescaleArb = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.atomic-clock"); value.Exists() {
 		data.ClockTimeSourceAtomicClock = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceAtomicClock = types.BoolNull()
+		data.ClockTimeSourceAtomicClock = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.gps"); value.Exists() {
 		data.ClockTimeSourceGps = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceGps = types.BoolNull()
+		data.ClockTimeSourceGps = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.terrestrial-radio"); value.Exists() {
 		data.ClockTimeSourceTerrestrialRadio = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceTerrestrialRadio = types.BoolNull()
+		data.ClockTimeSourceTerrestrialRadio = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.ptp"); value.Exists() {
 		data.ClockTimeSourcePtp = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourcePtp = types.BoolNull()
+		data.ClockTimeSourcePtp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.ntp"); value.Exists() {
 		data.ClockTimeSourceNtp = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceNtp = types.BoolNull()
+		data.ClockTimeSourceNtp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.hand-set"); value.Exists() {
 		data.ClockTimeSourceHandSet = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceHandSet = types.BoolNull()
+		data.ClockTimeSourceHandSet = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.other"); value.Exists() {
 		data.ClockTimeSourceOther = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceOther = types.BoolNull()
+		data.ClockTimeSourceOther = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.time-source.internal-oscillator"); value.Exists() {
 		data.ClockTimeSourceInternalOscillator = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceInternalOscillator = types.BoolNull()
+		data.ClockTimeSourceInternalOscillator = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8265-1"); value.Exists() {
 		data.ClockProfileG82651 = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82651 = types.BoolNull()
+		data.ClockProfileG82651 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8265-1.clock-type.primary"); value.Exists() {
 		data.ClockProfileG82651ClockTypeMaster = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82651ClockTypeMaster = types.BoolNull()
+		data.ClockProfileG82651ClockTypeMaster = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8265-1.clock-type.subordinate"); value.Exists() {
 		data.ClockProfileG82651ClockTypeSlave = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82651ClockTypeSlave = types.BoolNull()
+		data.ClockProfileG82651ClockTypeSlave = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-1.clock-type.t-bc"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTBc = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82751ClockTypeTBc = types.BoolNull()
+		data.ClockProfileG82751ClockTypeTBc = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-1.clock-type.t-gm"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTGm = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82751ClockTypeTGm = types.BoolNull()
+		data.ClockProfileG82751ClockTypeTGm = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-1.clock-type.t-tsc"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82751ClockTypeTTsc = types.BoolNull()
+		data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-2.clock-type.t-bc"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTBc = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82752ClockTypeTBc = types.BoolNull()
+		data.ClockProfileG82752ClockTypeTBc = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-2.clock-type.t-gm"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTGm = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82752ClockTypeTGm = types.BoolNull()
+		data.ClockProfileG82752ClockTypeTGm = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "clock.profile.g-8275-2.clock-type.t-tsc"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82752ClockTypeTTsc = types.BoolNull()
+		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(false)
 	}
 }
 
@@ -2179,24 +2349,24 @@ func (data *PTPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/frequency/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/frequency/priority"); value.Exists() {
 		data.FrequencyPriority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/time-of-day/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/time-of-day/priority"); value.Exists() {
 		data.TimeOfDayPriority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6-verify-checksum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6-verify-checksum"); value.Exists() {
 		data.Ipv6VerifyChecksum = types.BoolValue(true)
 	} else {
-		data.Ipv6VerifyChecksum = types.BoolNull()
+		data.Ipv6VerifyChecksum = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/min-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/min-clock-class"); value.Exists() {
 		data.MinClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/utc-offset/baseline"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/utc-offset/baseline"); value.Exists() {
 		data.UtcOffsetBaseline = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/utc-offset/offsets/offset"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/utc-offset/offsets/offset"); value.Exists() {
 		data.UtcOffsets = make([]PTPUtcOffsets, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPUtcOffsets{}
@@ -2210,228 +2380,228 @@ func (data *PTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/uncalibrated-clock-class/clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/uncalibrated-clock-class/clock-class"); value.Exists() {
 		data.UncalibratedClockClassClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/uncalibrated-clock-class/unless-from-holdover"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/uncalibrated-clock-class/unless-from-holdover"); value.Exists() {
 		data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(true)
 	} else {
-		data.UncalibratedClockClassUnlessFromHoldover = types.BoolNull()
+		data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/uncalibrated-traceable-override"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/uncalibrated-traceable-override"); value.Exists() {
 		data.UncalibratedTraceableOverride = types.BoolValue(true)
 	} else {
-		data.UncalibratedTraceableOverride = types.BoolNull()
+		data.UncalibratedTraceableOverride = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/startup-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/startup-clock-class"); value.Exists() {
 		data.StartupClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/freerun-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/freerun-clock-class"); value.Exists() {
 		data.FreerunClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/double-failure-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/double-failure-clock-class"); value.Exists() {
 		data.DoubleFailureClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transparent-clock/domain/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transparent-clock/domain/all"); value.Exists() {
 		data.TransparentClockDomainAll = types.BoolValue(true)
 	} else {
-		data.TransparentClockDomainAll = types.BoolNull()
+		data.TransparentClockDomainAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/physical-layer-frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/physical-layer-frequency"); value.Exists() {
 		data.PhysicalLayerFrequency = types.BoolValue(true)
 	} else {
-		data.PhysicalLayerFrequency = types.BoolNull()
+		data.PhysicalLayerFrequency = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/network-type/high-pdv"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/network-type/high-pdv"); value.Exists() {
 		data.NetworkTypeHighPdv = types.BoolValue(true)
 	} else {
-		data.NetworkTypeHighPdv = types.BoolNull()
+		data.NetworkTypeHighPdv = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/servo-slow-tracking"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/servo-slow-tracking"); value.Exists() {
 		data.ServoSlowTracking = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdover-spec-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdover-spec-clock-class"); value.Exists() {
 		data.HoldoverSpecClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdover-spec-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdover-spec-duration"); value.Exists() {
 		data.HoldoverSpecDuration = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdover-spec-traceable-override"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdover-spec-traceable-override"); value.Exists() {
 		data.HoldoverSpecTraceableOverride = types.BoolValue(true)
 	} else {
-		data.HoldoverSpecTraceableOverride = types.BoolNull()
+		data.HoldoverSpecTraceableOverride = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/apts"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/apts"); value.Exists() {
 		data.Apts = types.BoolValue(true)
 	} else {
-		data.Apts = types.BoolNull()
+		data.Apts = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/phase-difference-threshold-breach"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/phase-difference-threshold-breach"); value.Exists() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/detect-ptsf-unusable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/detect-ptsf-unusable"); value.Exists() {
 		data.DetectPtsfUnusable = types.BoolValue(true)
 	} else {
-		data.DetectPtsfUnusable = types.BoolNull()
+		data.DetectPtsfUnusable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/performance-monitoring"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/performance-monitoring"); value.Exists() {
 		data.PerformanceMonitoring = types.BoolValue(true)
 	} else {
-		data.PerformanceMonitoring = types.BoolNull()
+		data.PerformanceMonitoring = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/best-primary-clock/changes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/best-primary-clock/changes"); value.Exists() {
 		data.LogBestPrimaryClockChanges = types.BoolValue(true)
 	} else {
-		data.LogBestPrimaryClockChanges = types.BoolNull()
+		data.LogBestPrimaryClockChanges = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/Cisco-IOS-XR-um-ptp-log-servo-cfg:servo/events"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/Cisco-IOS-XR-um-ptp-log-servo-cfg:servo/events"); value.Exists() {
 		data.LogServoEvents = types.BoolValue(true)
 	} else {
-		data.LogServoEvents = types.BoolNull()
+		data.LogServoEvents = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port"); value.Exists() {
 		data.VirtualPort = types.BoolValue(true)
 	} else {
-		data.VirtualPort = types.BoolNull()
+		data.VirtualPort = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/priority1"); value.Exists() {
 		data.VirtualPortPriority1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/priority2"); value.Exists() {
 		data.VirtualPortPriority2 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/clock-class"); value.Exists() {
 		data.VirtualPortClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/clock-accuracy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/clock-accuracy"); value.Exists() {
 		data.VirtualPortClockAccuracy = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/offset-scaled-log-variance"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/offset-scaled-log-variance"); value.Exists() {
 		data.VirtualPortOffsetScaledLogVariance = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/local-priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/local-priority"); value.Exists() {
 		data.VirtualPortLocalPriority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/gm-threshold-breach"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/gm-threshold-breach"); value.Exists() {
 		data.VirtualPortGmThresholdBreach = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/identity/mac-address/custom"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/identity/mac-address/custom"); value.Exists() {
 		data.ClockIdentityMacAddressCustom = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/identity/mac-address/router"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/identity/mac-address/router"); value.Exists() {
 		data.ClockIdentityMacAddressRouter = types.BoolValue(true)
 	} else {
-		data.ClockIdentityMacAddressRouter = types.BoolNull()
+		data.ClockIdentityMacAddressRouter = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/identity/eui-64"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/identity/eui-64"); value.Exists() {
 		data.ClockIdentityEui64 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/domain"); value.Exists() {
 		data.ClockDomain = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/priority1"); value.Exists() {
 		data.ClockPriority1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/priority2"); value.Exists() {
 		data.ClockPriority2 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/clock-class"); value.Exists() {
 		data.ClockClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/timescale/ptp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/timescale/ptp"); value.Exists() {
 		data.ClockTimescalePtp = types.BoolValue(true)
 	} else {
-		data.ClockTimescalePtp = types.BoolNull()
+		data.ClockTimescalePtp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/timescale/arb"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/timescale/arb"); value.Exists() {
 		data.ClockTimescaleArb = types.BoolValue(true)
 	} else {
-		data.ClockTimescaleArb = types.BoolNull()
+		data.ClockTimescaleArb = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/atomic-clock"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/atomic-clock"); value.Exists() {
 		data.ClockTimeSourceAtomicClock = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceAtomicClock = types.BoolNull()
+		data.ClockTimeSourceAtomicClock = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/gps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/gps"); value.Exists() {
 		data.ClockTimeSourceGps = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceGps = types.BoolNull()
+		data.ClockTimeSourceGps = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/terrestrial-radio"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/terrestrial-radio"); value.Exists() {
 		data.ClockTimeSourceTerrestrialRadio = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceTerrestrialRadio = types.BoolNull()
+		data.ClockTimeSourceTerrestrialRadio = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/ptp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/ptp"); value.Exists() {
 		data.ClockTimeSourcePtp = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourcePtp = types.BoolNull()
+		data.ClockTimeSourcePtp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/ntp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/ntp"); value.Exists() {
 		data.ClockTimeSourceNtp = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceNtp = types.BoolNull()
+		data.ClockTimeSourceNtp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/hand-set"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/hand-set"); value.Exists() {
 		data.ClockTimeSourceHandSet = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceHandSet = types.BoolNull()
+		data.ClockTimeSourceHandSet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/other"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/other"); value.Exists() {
 		data.ClockTimeSourceOther = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceOther = types.BoolNull()
+		data.ClockTimeSourceOther = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/internal-oscillator"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/internal-oscillator"); value.Exists() {
 		data.ClockTimeSourceInternalOscillator = types.BoolValue(true)
 	} else {
-		data.ClockTimeSourceInternalOscillator = types.BoolNull()
+		data.ClockTimeSourceInternalOscillator = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8265-1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8265-1"); value.Exists() {
 		data.ClockProfileG82651 = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82651 = types.BoolNull()
+		data.ClockProfileG82651 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/primary"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/primary"); value.Exists() {
 		data.ClockProfileG82651ClockTypeMaster = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82651ClockTypeMaster = types.BoolNull()
+		data.ClockProfileG82651ClockTypeMaster = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/subordinate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/subordinate"); value.Exists() {
 		data.ClockProfileG82651ClockTypeSlave = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82651ClockTypeSlave = types.BoolNull()
+		data.ClockProfileG82651ClockTypeSlave = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-bc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-bc"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTBc = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82751ClockTypeTBc = types.BoolNull()
+		data.ClockProfileG82751ClockTypeTBc = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-gm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-gm"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTGm = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82751ClockTypeTGm = types.BoolNull()
+		data.ClockProfileG82751ClockTypeTGm = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-tsc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-tsc"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82751ClockTypeTTsc = types.BoolNull()
+		data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-bc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-bc"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTBc = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82752ClockTypeTBc = types.BoolNull()
+		data.ClockProfileG82752ClockTypeTBc = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-gm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-gm"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTGm = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82752ClockTypeTGm = types.BoolNull()
+		data.ClockProfileG82752ClockTypeTGm = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-tsc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-tsc"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(true)
 	} else {
-		data.ClockProfileG82752ClockTypeTTsc = types.BoolNull()
+		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(false)
 	}
 }
 
@@ -2439,24 +2609,24 @@ func (data *PTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/frequency/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/frequency/priority"); value.Exists() {
 		data.FrequencyPriority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/time-of-day/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/time-of-day/priority"); value.Exists() {
 		data.TimeOfDayPriority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6-verify-checksum"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6-verify-checksum"); value.Exists() {
 		data.Ipv6VerifyChecksum = types.BoolValue(true)
 	} else {
 		data.Ipv6VerifyChecksum = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/min-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/min-clock-class"); value.Exists() {
 		data.MinClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/utc-offset/baseline"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/utc-offset/baseline"); value.Exists() {
 		data.UtcOffsetBaseline = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/utc-offset/offsets/offset"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/utc-offset/offsets/offset"); value.Exists() {
 		data.UtcOffsets = make([]PTPUtcOffsets, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PTPUtcOffsets{}
@@ -2470,225 +2640,225 @@ func (data *PTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/uncalibrated-clock-class/clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/uncalibrated-clock-class/clock-class"); value.Exists() {
 		data.UncalibratedClockClassClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/uncalibrated-clock-class/unless-from-holdover"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/uncalibrated-clock-class/unless-from-holdover"); value.Exists() {
 		data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(true)
 	} else {
 		data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/uncalibrated-traceable-override"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/uncalibrated-traceable-override"); value.Exists() {
 		data.UncalibratedTraceableOverride = types.BoolValue(true)
 	} else {
 		data.UncalibratedTraceableOverride = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/startup-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/startup-clock-class"); value.Exists() {
 		data.StartupClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/freerun-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/freerun-clock-class"); value.Exists() {
 		data.FreerunClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/double-failure-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/double-failure-clock-class"); value.Exists() {
 		data.DoubleFailureClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/transparent-clock/domain/all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/transparent-clock/domain/all"); value.Exists() {
 		data.TransparentClockDomainAll = types.BoolValue(true)
 	} else {
 		data.TransparentClockDomainAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/physical-layer-frequency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/physical-layer-frequency"); value.Exists() {
 		data.PhysicalLayerFrequency = types.BoolValue(true)
 	} else {
 		data.PhysicalLayerFrequency = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/network-type/high-pdv"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/network-type/high-pdv"); value.Exists() {
 		data.NetworkTypeHighPdv = types.BoolValue(true)
 	} else {
 		data.NetworkTypeHighPdv = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/servo-slow-tracking"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/servo-slow-tracking"); value.Exists() {
 		data.ServoSlowTracking = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdover-spec-clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdover-spec-clock-class"); value.Exists() {
 		data.HoldoverSpecClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdover-spec-duration"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdover-spec-duration"); value.Exists() {
 		data.HoldoverSpecDuration = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/holdover-spec-traceable-override"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdover-spec-traceable-override"); value.Exists() {
 		data.HoldoverSpecTraceableOverride = types.BoolValue(true)
 	} else {
 		data.HoldoverSpecTraceableOverride = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/apts"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/apts"); value.Exists() {
 		data.Apts = types.BoolValue(true)
 	} else {
 		data.Apts = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/phase-difference-threshold-breach"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/phase-difference-threshold-breach"); value.Exists() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/detect-ptsf-unusable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/detect-ptsf-unusable"); value.Exists() {
 		data.DetectPtsfUnusable = types.BoolValue(true)
 	} else {
 		data.DetectPtsfUnusable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/performance-monitoring"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/performance-monitoring"); value.Exists() {
 		data.PerformanceMonitoring = types.BoolValue(true)
 	} else {
 		data.PerformanceMonitoring = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/best-primary-clock/changes"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/best-primary-clock/changes"); value.Exists() {
 		data.LogBestPrimaryClockChanges = types.BoolValue(true)
 	} else {
 		data.LogBestPrimaryClockChanges = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/log/Cisco-IOS-XR-um-ptp-log-servo-cfg:servo/events"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/Cisco-IOS-XR-um-ptp-log-servo-cfg:servo/events"); value.Exists() {
 		data.LogServoEvents = types.BoolValue(true)
 	} else {
 		data.LogServoEvents = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port"); value.Exists() {
 		data.VirtualPort = types.BoolValue(true)
 	} else {
 		data.VirtualPort = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/priority1"); value.Exists() {
 		data.VirtualPortPriority1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/priority2"); value.Exists() {
 		data.VirtualPortPriority2 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/clock-class"); value.Exists() {
 		data.VirtualPortClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/clock-accuracy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/clock-accuracy"); value.Exists() {
 		data.VirtualPortClockAccuracy = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/offset-scaled-log-variance"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/offset-scaled-log-variance"); value.Exists() {
 		data.VirtualPortOffsetScaledLogVariance = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/local-priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/local-priority"); value.Exists() {
 		data.VirtualPortLocalPriority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/virtual-port/gm-threshold-breach"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual-port/gm-threshold-breach"); value.Exists() {
 		data.VirtualPortGmThresholdBreach = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/identity/mac-address/custom"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/identity/mac-address/custom"); value.Exists() {
 		data.ClockIdentityMacAddressCustom = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/identity/mac-address/router"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/identity/mac-address/router"); value.Exists() {
 		data.ClockIdentityMacAddressRouter = types.BoolValue(true)
 	} else {
 		data.ClockIdentityMacAddressRouter = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/identity/eui-64"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/identity/eui-64"); value.Exists() {
 		data.ClockIdentityEui64 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/domain"); value.Exists() {
 		data.ClockDomain = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/priority1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/priority1"); value.Exists() {
 		data.ClockPriority1 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/priority2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/priority2"); value.Exists() {
 		data.ClockPriority2 = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/clock-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/clock-class"); value.Exists() {
 		data.ClockClockClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/timescale/ptp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/timescale/ptp"); value.Exists() {
 		data.ClockTimescalePtp = types.BoolValue(true)
 	} else {
 		data.ClockTimescalePtp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/timescale/arb"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/timescale/arb"); value.Exists() {
 		data.ClockTimescaleArb = types.BoolValue(true)
 	} else {
 		data.ClockTimescaleArb = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/atomic-clock"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/atomic-clock"); value.Exists() {
 		data.ClockTimeSourceAtomicClock = types.BoolValue(true)
 	} else {
 		data.ClockTimeSourceAtomicClock = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/gps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/gps"); value.Exists() {
 		data.ClockTimeSourceGps = types.BoolValue(true)
 	} else {
 		data.ClockTimeSourceGps = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/terrestrial-radio"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/terrestrial-radio"); value.Exists() {
 		data.ClockTimeSourceTerrestrialRadio = types.BoolValue(true)
 	} else {
 		data.ClockTimeSourceTerrestrialRadio = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/ptp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/ptp"); value.Exists() {
 		data.ClockTimeSourcePtp = types.BoolValue(true)
 	} else {
 		data.ClockTimeSourcePtp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/ntp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/ntp"); value.Exists() {
 		data.ClockTimeSourceNtp = types.BoolValue(true)
 	} else {
 		data.ClockTimeSourceNtp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/hand-set"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/hand-set"); value.Exists() {
 		data.ClockTimeSourceHandSet = types.BoolValue(true)
 	} else {
 		data.ClockTimeSourceHandSet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/other"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/other"); value.Exists() {
 		data.ClockTimeSourceOther = types.BoolValue(true)
 	} else {
 		data.ClockTimeSourceOther = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/time-source/internal-oscillator"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/time-source/internal-oscillator"); value.Exists() {
 		data.ClockTimeSourceInternalOscillator = types.BoolValue(true)
 	} else {
 		data.ClockTimeSourceInternalOscillator = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8265-1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8265-1"); value.Exists() {
 		data.ClockProfileG82651 = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82651 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/primary"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/primary"); value.Exists() {
 		data.ClockProfileG82651ClockTypeMaster = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82651ClockTypeMaster = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/subordinate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8265-1/clock-type/subordinate"); value.Exists() {
 		data.ClockProfileG82651ClockTypeSlave = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82651ClockTypeSlave = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-bc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-bc"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTBc = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82751ClockTypeTBc = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-gm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-gm"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTGm = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82751ClockTypeTGm = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-tsc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-1/clock-type/t-tsc"); value.Exists() {
 		data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-bc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-bc"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTBc = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82752ClockTypeTBc = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-gm"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-gm"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTGm = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82752ClockTypeTGm = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-tsc"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-tsc"); value.Exists() {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(false)
@@ -3289,9 +3459,10 @@ func (data *PTP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/uncalibrated-clock-class", data.getPath()))
 	}
 	for i := range data.UtcOffsets {
-		keyValues := [...]string{data.UtcOffsets[i].Date.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/utc-offset/offsets/offset=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[date=" + data.UtcOffsets[i].Date.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/utc-offset/offsets/offset%v", data.getPath(), keyPath))
 	}
 	if !data.UtcOffsetBaseline.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/utc-offset/baseline", data.getPath()))

@@ -192,28 +192,30 @@ func (data ControllerOptics) toBodyXML(ctx context.Context) string {
 
 func (data *ControllerOptics) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "link-status"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LinkStatus.IsNull() {
 			data.LinkStatus = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LinkStatus.IsNull() {
 			data.LinkStatus = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
-	} else {
+	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-controller-optics-cfg:optics.optics-performance-monitoring"); value.Exists() {
@@ -222,23 +224,24 @@ func (data *ControllerOptics) updateFromBody(ctx context.Context, res []byte) {
 		data.PerformanceMonitoring = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-controller-optics-cfg:optics.transceiver.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TransceiverDisable.IsNull() {
 			data.TransceiverDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TransceiverDisable.IsNull() {
 			data.TransceiverDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() && !data.Speed.IsNull() {
 		data.Speed = types.StringValue(value.String())
-	} else {
+	} else if data.Speed.IsNull() {
 		data.Speed = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-optics-driver-cfg:breakout"); value.Exists() && !data.Breakout.IsNull() {
 		data.Breakout = types.StringValue(value.String())
-	} else {
+	} else if data.Breakout.IsNull() {
 		data.Breakout = types.StringNull()
 	}
 }
@@ -248,61 +251,70 @@ func (data *ControllerOptics) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *ControllerOptics) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/"); value.Exists() {
 		data.Type = types.StringValue(value.String())
 	} else if data.Type.IsNull() {
 		data.Type = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/"); value.Exists() {
 		data.Active = types.StringValue(value.String())
 	} else if data.Active.IsNull() {
 		data.Active = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Shutdown.IsNull() {
+			data.Shutdown = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-status"); value.Exists() {
-		data.LinkStatus = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-status"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LinkStatus.IsNull() {
+			data.LinkStatus = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LinkStatus.IsNull() {
 			data.LinkStatus = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/optics-performance-monitoring"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/optics-performance-monitoring"); value.Exists() {
 		data.PerformanceMonitoring = types.BoolValue(value.Bool())
 	} else if data.PerformanceMonitoring.IsNull() {
 		data.PerformanceMonitoring = types.BoolNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/transceiver/disable"); value.Exists() {
-		data.TransceiverDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/transceiver/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TransceiverDisable.IsNull() {
+			data.TransceiverDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TransceiverDisable.IsNull() {
 			data.TransceiverDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() {
 		data.Speed = types.StringValue(value.String())
 	} else if data.Speed.IsNull() {
 		data.Speed = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-optics-driver-cfg:breakout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-optics-driver-cfg:breakout"); value.Exists() {
 		data.Breakout = types.StringValue(value.String())
 	} else if data.Breakout.IsNull() {
 		data.Breakout = types.StringNull()
@@ -318,28 +330,36 @@ func (data *ControllerOptics) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
-	} else {
-		data.Shutdown = types.BoolNull()
+	} else if !data.Shutdown.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Shutdown = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "link-status"); value.Exists() {
 		data.LinkStatus = types.BoolValue(true)
-	} else {
-		data.LinkStatus = types.BoolNull()
+	} else if !data.LinkStatus.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LinkStatus = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-controller-optics-cfg:optics.optics-performance-monitoring"); value.Exists() {
 		data.PerformanceMonitoring = types.BoolValue(value.Bool())
-	} else {
-		data.PerformanceMonitoring = types.BoolNull()
+	} else if !data.PerformanceMonitoring.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PerformanceMonitoring = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-controller-optics-cfg:optics.transceiver.disable"); value.Exists() {
 		data.TransceiverDisable = types.BoolValue(true)
-	} else {
-		data.TransceiverDisable = types.BoolNull()
+	} else if !data.TransceiverDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransceiverDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() {
 		data.Speed = types.StringValue(value.String())
@@ -354,19 +374,24 @@ func (data *ControllerOptics) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *ControllerOpticsData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
-		data.Shutdown = types.BoolNull()
+		data.Shutdown = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "link-status"); value.Exists() {
 		data.LinkStatus = types.BoolValue(true)
 	} else {
-		data.LinkStatus = types.BoolNull()
+		data.LinkStatus = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -379,7 +404,7 @@ func (data *ControllerOpticsData) fromBody(ctx context.Context, res gjson.Result
 	if value := res.Get(prefix + "Cisco-IOS-XR-controller-optics-cfg:optics.transceiver.disable"); value.Exists() {
 		data.TransceiverDisable = types.BoolValue(true)
 	} else {
-		data.TransceiverDisable = types.BoolNull()
+		data.TransceiverDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() {
 		data.Speed = types.StringValue(value.String())
@@ -394,33 +419,33 @@ func (data *ControllerOpticsData) fromBody(ctx context.Context, res gjson.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *ControllerOptics) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
-		data.Shutdown = types.BoolNull()
+		data.Shutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-status"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-status"); value.Exists() {
 		data.LinkStatus = types.BoolValue(true)
 	} else {
-		data.LinkStatus = types.BoolNull()
+		data.LinkStatus = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/optics-performance-monitoring"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/optics-performance-monitoring"); value.Exists() {
 		data.PerformanceMonitoring = types.BoolValue(value.Bool())
 	} else {
-		data.PerformanceMonitoring = types.BoolNull()
+		data.PerformanceMonitoring = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/transceiver/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/transceiver/disable"); value.Exists() {
 		data.TransceiverDisable = types.BoolValue(true)
 	} else {
-		data.TransceiverDisable = types.BoolNull()
+		data.TransceiverDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() {
 		data.Speed = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-optics-driver-cfg:breakout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-optics-driver-cfg:breakout"); value.Exists() {
 		data.Breakout = types.StringValue(value.String())
 	}
 }
@@ -430,33 +455,33 @@ func (data *ControllerOptics) fromBodyXML(ctx context.Context, res xmldot.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *ControllerOpticsData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		data.Shutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/link-status"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/link-status"); value.Exists() {
 		data.LinkStatus = types.BoolValue(true)
 	} else {
 		data.LinkStatus = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/optics-performance-monitoring"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/optics-performance-monitoring"); value.Exists() {
 		data.PerformanceMonitoring = types.BoolValue(value.Bool())
 	} else {
 		data.PerformanceMonitoring = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/transceiver/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/transceiver/disable"); value.Exists() {
 		data.TransceiverDisable = types.BoolValue(true)
 	} else {
 		data.TransceiverDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() {
 		data.Speed = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-optics-driver-cfg:breakout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-optics-driver-cfg:breakout"); value.Exists() {
 		data.Breakout = types.StringValue(value.String())
 	}
 }

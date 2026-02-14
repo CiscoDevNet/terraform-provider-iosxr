@@ -173,101 +173,108 @@ func (data PerformanceMeasurementInterface) toBody(ctx context.Context) string {
 
 func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "delay-measurement"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DelayMeasurement.IsNull() {
 			data.DelayMeasurement = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DelayMeasurement.IsNull() {
 			data.DelayMeasurement = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.fallback"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DelayMeasurementFallback.IsNull() {
 			data.DelayMeasurementFallback = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DelayMeasurementFallback.IsNull() {
 			data.DelayMeasurementFallback = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.advertise-delay"); value.Exists() && !data.DelayMeasurementAdvertiseDelay.IsNull() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayMeasurementAdvertiseDelay.IsNull() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.delay-profile.name"); value.Exists() && !data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
-	} else {
+	} else if data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.static-delay"); value.Exists() && !data.DelayMeasurementStaticDelay.IsNull() {
 		data.DelayMeasurementStaticDelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayMeasurementStaticDelay.IsNull() {
 		data.DelayMeasurementStaticDelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "next-hop.ipv4"); value.Exists() && !data.NextHopIpv4.IsNull() {
 		data.NextHopIpv4 = types.StringValue(value.String())
-	} else {
+	} else if data.NextHopIpv4.IsNull() {
 		data.NextHopIpv4 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "next-hop.ipv6"); value.Exists() && !data.NextHopIpv6.IsNull() {
 		data.NextHopIpv6 = types.StringValue(value.String())
-	} else {
+	} else if data.NextHopIpv6.IsNull() {
 		data.NextHopIpv6 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "path-tracing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracing.IsNull() {
 			data.PathTracing = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracing.IsNull() {
 			data.PathTracing = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "path-tracing.interface-id"); value.Exists() && !data.PathTracingInterfaceId.IsNull() {
 		data.PathTracingInterfaceId = types.Int64Value(value.Int())
-	} else {
+	} else if data.PathTracingInterfaceId.IsNull() {
 		data.PathTracingInterfaceId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st0"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracingTimestampTemplateSt0.IsNull() {
 			data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracingTimestampTemplateSt0.IsNull() {
 			data.PathTracingTimestampTemplateSt0 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracingTimestampTemplateSt1.IsNull() {
 			data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracingTimestampTemplateSt1.IsNull() {
 			data.PathTracingTimestampTemplateSt1 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracingTimestampTemplateSt2.IsNull() {
 			data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracingTimestampTemplateSt2.IsNull() {
 			data.PathTracingTimestampTemplateSt2 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st3"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracingTimestampTemplateSt3.IsNull() {
 			data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracingTimestampTemplateSt3.IsNull() {
 			data.PathTracingTimestampTemplateSt3 = types.BoolNull()
 		}
@@ -346,91 +353,112 @@ func (data PerformanceMeasurementInterface) toBodyXML(ctx context.Context) strin
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PerformanceMeasurementInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interface-name"); value.Exists() {
 		data.InterfaceName = types.StringValue(value.String())
 	} else if data.InterfaceName.IsNull() {
 		data.InterfaceName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement"); value.Exists() {
-		data.DelayMeasurement = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayMeasurement.IsNull() {
+			data.DelayMeasurement = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DelayMeasurement.IsNull() {
 			data.DelayMeasurement = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/fallback"); value.Exists() {
-		data.DelayMeasurementFallback = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/fallback"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayMeasurementFallback.IsNull() {
+			data.DelayMeasurementFallback = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DelayMeasurementFallback.IsNull() {
 			data.DelayMeasurementFallback = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/advertise-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/advertise-delay"); value.Exists() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
 	} else if data.DelayMeasurementAdvertiseDelay.IsNull() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
 	} else if data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/static-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/static-delay"); value.Exists() {
 		data.DelayMeasurementStaticDelay = types.Int64Value(value.Int())
 	} else if data.DelayMeasurementStaticDelay.IsNull() {
 		data.DelayMeasurementStaticDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv4"); value.Exists() {
 		data.NextHopIpv4 = types.StringValue(value.String())
 	} else if data.NextHopIpv4.IsNull() {
 		data.NextHopIpv4 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv6"); value.Exists() {
 		data.NextHopIpv6 = types.StringValue(value.String())
 	} else if data.NextHopIpv6.IsNull() {
 		data.NextHopIpv6 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing"); value.Exists() {
-		data.PathTracing = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracing.IsNull() {
+			data.PathTracing = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracing.IsNull() {
 			data.PathTracing = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/interface-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/interface-id"); value.Exists() {
 		data.PathTracingInterfaceId = types.Int64Value(value.Int())
 	} else if data.PathTracingInterfaceId.IsNull() {
 		data.PathTracingInterfaceId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st0"); value.Exists() {
-		data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st0"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracingTimestampTemplateSt0.IsNull() {
+			data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracingTimestampTemplateSt0.IsNull() {
 			data.PathTracingTimestampTemplateSt0 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st1"); value.Exists() {
-		data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracingTimestampTemplateSt1.IsNull() {
+			data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracingTimestampTemplateSt1.IsNull() {
 			data.PathTracingTimestampTemplateSt1 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st2"); value.Exists() {
-		data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracingTimestampTemplateSt2.IsNull() {
+			data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracingTimestampTemplateSt2.IsNull() {
 			data.PathTracingTimestampTemplateSt2 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st3"); value.Exists() {
-		data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st3"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracingTimestampTemplateSt3.IsNull() {
+			data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathTracingTimestampTemplateSt3.IsNull() {
@@ -447,15 +475,21 @@ func (data *PerformanceMeasurementInterface) fromBody(ctx context.Context, res g
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "delay-measurement"); value.Exists() {
 		data.DelayMeasurement = types.BoolValue(true)
-	} else {
-		data.DelayMeasurement = types.BoolNull()
+	} else if !data.DelayMeasurement.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DelayMeasurement = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "delay-measurement.fallback"); value.Exists() {
 		data.DelayMeasurementFallback = types.BoolValue(true)
-	} else {
-		data.DelayMeasurementFallback = types.BoolNull()
+	} else if !data.DelayMeasurementFallback.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DelayMeasurementFallback = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "delay-measurement.advertise-delay"); value.Exists() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
@@ -474,31 +508,36 @@ func (data *PerformanceMeasurementInterface) fromBody(ctx context.Context, res g
 	}
 	if value := res.Get(prefix + "path-tracing"); value.Exists() {
 		data.PathTracing = types.BoolValue(true)
-	} else {
-		data.PathTracing = types.BoolNull()
+	} else if !data.PathTracing.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathTracing = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-tracing.interface-id"); value.Exists() {
 		data.PathTracingInterfaceId = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "path-tracing.timestamp.template.st0"); value.Exists() {
 		data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
-	} else {
-		data.PathTracingTimestampTemplateSt0 = types.BoolNull()
+	} else if !data.PathTracingTimestampTemplateSt0.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathTracingTimestampTemplateSt0 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-tracing.timestamp.template.st1"); value.Exists() {
 		data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
-	} else {
-		data.PathTracingTimestampTemplateSt1 = types.BoolNull()
+	} else if !data.PathTracingTimestampTemplateSt1.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathTracingTimestampTemplateSt1 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-tracing.timestamp.template.st2"); value.Exists() {
 		data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
-	} else {
-		data.PathTracingTimestampTemplateSt2 = types.BoolNull()
+	} else if !data.PathTracingTimestampTemplateSt2.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathTracingTimestampTemplateSt2 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-tracing.timestamp.template.st3"); value.Exists() {
 		data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
-	} else {
-		data.PathTracingTimestampTemplateSt3 = types.BoolNull()
+	} else if !data.PathTracingTimestampTemplateSt3.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathTracingTimestampTemplateSt3 = types.BoolValue(false)
 	}
 }
 
@@ -506,19 +545,24 @@ func (data *PerformanceMeasurementInterface) fromBody(ctx context.Context, res g
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *PerformanceMeasurementInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "delay-measurement"); value.Exists() {
 		data.DelayMeasurement = types.BoolValue(true)
 	} else {
-		data.DelayMeasurement = types.BoolNull()
+		data.DelayMeasurement = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "delay-measurement.fallback"); value.Exists() {
 		data.DelayMeasurementFallback = types.BoolValue(true)
 	} else {
-		data.DelayMeasurementFallback = types.BoolNull()
+		data.DelayMeasurementFallback = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "delay-measurement.advertise-delay"); value.Exists() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
@@ -538,7 +582,7 @@ func (data *PerformanceMeasurementInterfaceData) fromBody(ctx context.Context, r
 	if value := res.Get(prefix + "path-tracing"); value.Exists() {
 		data.PathTracing = types.BoolValue(true)
 	} else {
-		data.PathTracing = types.BoolNull()
+		data.PathTracing = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-tracing.interface-id"); value.Exists() {
 		data.PathTracingInterfaceId = types.Int64Value(value.Int())
@@ -546,22 +590,22 @@ func (data *PerformanceMeasurementInterfaceData) fromBody(ctx context.Context, r
 	if value := res.Get(prefix + "path-tracing.timestamp.template.st0"); value.Exists() {
 		data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
 	} else {
-		data.PathTracingTimestampTemplateSt0 = types.BoolNull()
+		data.PathTracingTimestampTemplateSt0 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-tracing.timestamp.template.st1"); value.Exists() {
 		data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
 	} else {
-		data.PathTracingTimestampTemplateSt1 = types.BoolNull()
+		data.PathTracingTimestampTemplateSt1 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-tracing.timestamp.template.st2"); value.Exists() {
 		data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
 	} else {
-		data.PathTracingTimestampTemplateSt2 = types.BoolNull()
+		data.PathTracingTimestampTemplateSt2 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-tracing.timestamp.template.st3"); value.Exists() {
 		data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
 	} else {
-		data.PathTracingTimestampTemplateSt3 = types.BoolNull()
+		data.PathTracingTimestampTemplateSt3 = types.BoolValue(false)
 	}
 }
 
@@ -569,58 +613,58 @@ func (data *PerformanceMeasurementInterfaceData) fromBody(ctx context.Context, r
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PerformanceMeasurementInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement"); value.Exists() {
 		data.DelayMeasurement = types.BoolValue(true)
 	} else {
-		data.DelayMeasurement = types.BoolNull()
+		data.DelayMeasurement = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/fallback"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/fallback"); value.Exists() {
 		data.DelayMeasurementFallback = types.BoolValue(true)
 	} else {
-		data.DelayMeasurementFallback = types.BoolNull()
+		data.DelayMeasurementFallback = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/advertise-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/advertise-delay"); value.Exists() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/static-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/static-delay"); value.Exists() {
 		data.DelayMeasurementStaticDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv4"); value.Exists() {
 		data.NextHopIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv6"); value.Exists() {
 		data.NextHopIpv6 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing"); value.Exists() {
 		data.PathTracing = types.BoolValue(true)
 	} else {
-		data.PathTracing = types.BoolNull()
+		data.PathTracing = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/interface-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/interface-id"); value.Exists() {
 		data.PathTracingInterfaceId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st0"); value.Exists() {
 		data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
 	} else {
-		data.PathTracingTimestampTemplateSt0 = types.BoolNull()
+		data.PathTracingTimestampTemplateSt0 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st1"); value.Exists() {
 		data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
 	} else {
-		data.PathTracingTimestampTemplateSt1 = types.BoolNull()
+		data.PathTracingTimestampTemplateSt1 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st2"); value.Exists() {
 		data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
 	} else {
-		data.PathTracingTimestampTemplateSt2 = types.BoolNull()
+		data.PathTracingTimestampTemplateSt2 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st3"); value.Exists() {
 		data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
 	} else {
-		data.PathTracingTimestampTemplateSt3 = types.BoolNull()
+		data.PathTracingTimestampTemplateSt3 = types.BoolValue(false)
 	}
 }
 
@@ -628,55 +672,55 @@ func (data *PerformanceMeasurementInterface) fromBodyXML(ctx context.Context, re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PerformanceMeasurementInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement"); value.Exists() {
 		data.DelayMeasurement = types.BoolValue(true)
 	} else {
 		data.DelayMeasurement = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/fallback"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/fallback"); value.Exists() {
 		data.DelayMeasurementFallback = types.BoolValue(true)
 	} else {
 		data.DelayMeasurementFallback = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/advertise-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/advertise-delay"); value.Exists() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay-measurement/static-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/static-delay"); value.Exists() {
 		data.DelayMeasurementStaticDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv4"); value.Exists() {
 		data.NextHopIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/next-hop/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv6"); value.Exists() {
 		data.NextHopIpv6 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing"); value.Exists() {
 		data.PathTracing = types.BoolValue(true)
 	} else {
 		data.PathTracing = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/interface-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/interface-id"); value.Exists() {
 		data.PathTracingInterfaceId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st0"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st0"); value.Exists() {
 		data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
 	} else {
 		data.PathTracingTimestampTemplateSt0 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st1"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st1"); value.Exists() {
 		data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
 	} else {
 		data.PathTracingTimestampTemplateSt1 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st2"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st2"); value.Exists() {
 		data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
 	} else {
 		data.PathTracingTimestampTemplateSt2 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-tracing/timestamp/template/st3"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st3"); value.Exists() {
 		data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
 	} else {
 		data.PathTracingTimestampTemplateSt3 = types.BoolValue(false)

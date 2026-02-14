@@ -36,8 +36,6 @@ attributes:
   - yang_name: chassis-id-type/local
     example: true
   - yang_name: subinterfaces/enable
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: subinterfaces-tagged
     tf_name: subinterfaces_tagged
@@ -49,28 +47,16 @@ attributes:
     include_example: true
     example: true
   - yang_name: priorityaddr/enable
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: extended-show-width/enable
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: tlv-select/management-address/disable
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: tlv-select/port-description/disable
     example: true
   - yang_name: tlv-select/system-capabilities/disable
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: tlv-select/system-description/disable
-    type: Bool
-    type_yang_bool: presence
     example: true
   - yang_name: tlv-select/system-name/disable
-    type: Bool
-    type_yang_bool: presence
     example: true

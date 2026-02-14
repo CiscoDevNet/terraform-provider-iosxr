@@ -386,6 +386,15 @@ func (r *MPLSLDPResource) Create(ctx context.Context, req resource.CreateRequest
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			// Ensure connection is closed when function exits (if reuse disabled)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+
 			var ops []gnmi.SetOperation
 
 			// Create object
@@ -399,9 +408,6 @@ func (r *MPLSLDPResource) Create(ctx context.Context, req resource.CreateRequest
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			if !r.data.ReuseConnection {
-				defer device.GnmiClient.Disconnect()
-			}
 			_, err := device.GnmiClient.Set(ctx, ops)
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
@@ -410,10 +416,16 @@ func (r *MPLSLDPResource) Create(ctx context.Context, req resource.CreateRequest
 		} else {
 			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
 			locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
 			if locked {
 				defer device.NetconfOpMutex.Unlock()
 			}
-			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
 			bodyStr := plan.toBodyXML(ctx)
 			tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Initial body length: %d", len(bodyStr)))
@@ -431,7 +443,7 @@ func (r *MPLSLDPResource) Create(ctx context.Context, req resource.CreateRequest
 				tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Final body with deletes: %s", bodyStr))
 			}
 
-			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, device.AutoCommit); err != nil {
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -473,9 +485,13 @@ func (r *MPLSLDPResource) Read(ctx context.Context, req resource.ReadRequest, re
 	if device.Managed {
 		_ = diags // Avoid unused variable error
 		if device.Protocol == "gnmi" {
-			if !r.data.ReuseConnection {
-				defer device.GnmiClient.Disconnect()
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
 			}
+
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{state.Id.ValueString()})
 			if err != nil {
 				if strings.Contains(err.Error(), "Requested element(s) not found") {
@@ -506,10 +522,16 @@ func (r *MPLSLDPResource) Read(ctx context.Context, req resource.ReadRequest, re
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, false)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
 			if locked {
 				defer device.NetconfOpMutex.Unlock()
 			}
-			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
 			filter := helpers.GetSubtreeFilter(state.getXPath())
 			res, err := device.NetconfClient.GetConfig(ctx, "running", filter)
@@ -518,14 +540,20 @@ func (r *MPLSLDPResource) Read(ctx context.Context, req resource.ReadRequest, re
 				return
 			}
 
-			if helpers.IsGetConfigResponseEmpty(&res) && helpers.IsListPath(state.getXPath()) {
-				tflog.Debug(ctx, fmt.Sprintf("%s: Resource does not exist", state.Id.ValueString()))
-				resp.State.RemoveResource(ctx)
-				return
-			}
+			tflog.Debug(ctx, fmt.Sprintf("NETCONF GetConfig response for %s: isEmpty=%v, isListPath=%v",
+				state.getXPath(), helpers.IsGetConfigResponseEmpty(&res), helpers.IsListPath(state.getXPath())))
 
-			// Use updateFromBodyXML to preserve config values for fields not on device
-			state.updateFromBodyXML(ctx, res.Res)
+			if helpers.IsGetConfigResponseEmpty(&res) && helpers.IsListPath(state.getXPath()) {
+				// NETCONF returned empty response for a list resource
+				// This can happen on IOS-XR for certain resources even when they exist
+				// Instead of removing the resource, log a warning and preserve the current state
+				// This matches gNMI behavior where we keep the resource if we can't read it
+				tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response for list path, preserving state as-is", state.Id.ValueString()))
+				// Don't call updateFromBodyXML - keep state unchanged
+			} else {
+				// Use updateFromBodyXML to preserve config values for fields not on device
+				state.updateFromBodyXML(ctx, res.Res)
+			}
 		}
 	}
 
@@ -568,6 +596,15 @@ func (r *MPLSLDPResource) Update(ctx context.Context, req resource.UpdateRequest
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			// Ensure connection is closed when function exits (if reuse disabled)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+
 			var ops []gnmi.SetOperation
 
 			// Update object
@@ -588,9 +625,6 @@ func (r *MPLSLDPResource) Update(ctx context.Context, req resource.UpdateRequest
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			if !r.data.ReuseConnection {
-				defer device.GnmiClient.Disconnect()
-			}
 			_, err := device.GnmiClient.Set(ctx, ops)
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
@@ -599,10 +633,16 @@ func (r *MPLSLDPResource) Update(ctx context.Context, req resource.UpdateRequest
 		} else {
 			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
 			locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
 			if locked {
 				defer device.NetconfOpMutex.Unlock()
 			}
-			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
 			body := plan.toBodyXML(ctx)
 			deleteBody := plan.addDeletedItemsXML(ctx, state, "")
@@ -616,7 +656,7 @@ func (r *MPLSLDPResource) Update(ctx context.Context, req resource.UpdateRequest
 
 			// Combine update and delete operations into a single transaction
 			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit); err != nil {
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -661,12 +701,18 @@ func (r *MPLSLDPResource) Delete(ctx context.Context, req resource.DeleteRequest
 
 		if deleteMode == "all" {
 			if device.Protocol == "gnmi" {
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				// Ensure connection is closed when function exits (if reuse disabled)
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+
 				var ops []gnmi.SetOperation
 				ops = append(ops, gnmi.Delete(state.Id.ValueString()))
 
-				if !r.data.ReuseConnection {
-					defer device.GnmiClient.Disconnect()
-				}
 				_, err := device.GnmiClient.Set(ctx, ops)
 				if err != nil {
 					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
@@ -675,17 +721,23 @@ func (r *MPLSLDPResource) Delete(ctx context.Context, req resource.DeleteRequest
 			} else {
 				// NETCONF - Serialize write operations
 				locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, true)
+				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
 				if locked {
 					defer device.NetconfOpMutex.Unlock()
 				}
-				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+					resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
 
 				body := netconf.Body{}
 				xpath := state.getXPath()
 				// RemoveFromXPathString returns raw XML string for delete operations
 				xmlStr := helpers.RemoveFromXPathString(body, xpath)
 
-				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, device.AutoCommit); err != nil {
+				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, true); err != nil {
 					// Ignore data-missing errors as the resource may already be deleted
 					if !strings.Contains(err.Error(), "data-missing") {
 						resp.Diagnostics.AddError("Client Error", err.Error())
@@ -696,6 +748,15 @@ func (r *MPLSLDPResource) Delete(ctx context.Context, req resource.DeleteRequest
 			}
 		} else {
 			if device.Protocol == "gnmi" {
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection); err != nil {
+					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				// Ensure connection is closed when function exits (if reuse disabled)
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+
 				var ops []gnmi.SetOperation
 				deletePaths := state.getDeletePaths(ctx)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
@@ -705,9 +766,6 @@ func (r *MPLSLDPResource) Delete(ctx context.Context, req resource.DeleteRequest
 				}
 
 				if len(ops) > 0 {
-					if !r.data.ReuseConnection {
-						defer device.GnmiClient.Disconnect()
-					}
 					_, err := device.GnmiClient.Set(ctx, ops)
 					if err != nil {
 						resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
@@ -717,14 +775,20 @@ func (r *MPLSLDPResource) Delete(ctx context.Context, req resource.DeleteRequest
 			} else {
 				// NETCONF - Serialize write operations
 				locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, true)
+				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
 				if locked {
 					defer device.NetconfOpMutex.Unlock()
 				}
-				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection); err != nil {
+					resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
 
 				body := state.addDeletePathsXML(ctx, "")
 
-				if err := helpers.EditConfig(ctx, device.NetconfClient, body, device.AutoCommit); err != nil {
+				if err := helpers.EditConfig(ctx, device.NetconfClient, body, true); err != nil {
 					// Ignore data-missing errors as the attributes may already be deleted
 					if !strings.Contains(err.Error(), "data-missing") {
 						resp.Diagnostics.AddError("Client Error", err.Error())

@@ -321,301 +321,325 @@ func (data L2VPNPWClass) toBody(ctx context.Context) string {
 
 func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "encapsulation.mpls"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMpls.IsNull() {
 			data.EncapsulationMpls = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMpls.IsNull() {
 			data.EncapsulationMpls = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.protocol.ldp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsProtocolLdp.IsNull() {
 			data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsProtocolLdp.IsNull() {
 			data.EncapsulationMplsProtocolLdp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.control-word"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsControlWord.IsNull() {
 			data.EncapsulationMplsControlWord = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsControlWord.IsNull() {
 			data.EncapsulationMplsControlWord = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.ethernet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsTransportModeEthernet.IsNull() {
 			data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsTransportModeEthernet.IsNull() {
 			data.EncapsulationMplsTransportModeEthernet = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.vlan"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsTransportModeVlan.IsNull() {
 			data.EncapsulationMplsTransportModeVlan = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsTransportModeVlan.IsNull() {
 			data.EncapsulationMplsTransportModeVlan = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.passthrough"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() {
 			data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() {
 			data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.vccv.verification-type.none"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsVccvVerificationTypeNone.IsNull() {
 			data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsVccvVerificationTypeNone.IsNull() {
 			data.EncapsulationMplsVccvVerificationTypeNone = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsSequencingTransmit.IsNull() {
 			data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsSequencingTransmit.IsNull() {
 			data.EncapsulationMplsSequencingTransmit = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit.resync"); value.Exists() && !data.EncapsulationMplsSequencingTransmitResync.IsNull() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationMplsSequencingTransmitResync.IsNull() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsSequencingReceive.IsNull() {
 			data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsSequencingReceive.IsNull() {
 			data.EncapsulationMplsSequencingReceive = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive.resync"); value.Exists() && !data.EncapsulationMplsSequencingReceiveResync.IsNull() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationMplsSequencingReceiveResync.IsNull() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsSequencingBoth.IsNull() {
 			data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsSequencingBoth.IsNull() {
 			data.EncapsulationMplsSequencingBoth = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both.resync"); value.Exists() && !data.EncapsulationMplsSequencingBothResync.IsNull() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationMplsSequencingBothResync.IsNull() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-number"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-name"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringValue(value.String())
-	} else {
+	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-ip"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-tp"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.sr-te.policy"); value.Exists() && !data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() {
 		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringValue(value.String())
-	} else {
+	} else if data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() {
 		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.fallback.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() {
 			data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() {
 			data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.switching-tlv.hide"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsSwitchingTlvHide.IsNull() {
 			data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsSwitchingTlvHide.IsNull() {
 			data.EncapsulationMplsSwitchingTlvHide = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.tag-rewrite.ingress.vlan"); value.Exists() && !data.EncapsulationMplsTagRewriteIngressVlan.IsNull() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationMplsTagRewriteIngressVlan.IsNull() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.one-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsRedundancyOneWay.IsNull() {
 			data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsRedundancyOneWay.IsNull() {
 			data.EncapsulationMplsRedundancyOneWay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.initial-delay"); value.Exists() && !data.EncapsulationMplsRedundancyInitialDelay.IsNull() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationMplsRedundancyInitialDelay.IsNull() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.pw-label"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
 			data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
 			data.EncapsulationMplsLoadBalancingPwLabel = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.transmit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.transmit.static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.receive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.receive.static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.both"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.both.static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "encapsulation.mpls.ipv4.source"); value.Exists() && !data.EncapsulationMplsIpv4Source.IsNull() {
 		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
-	} else {
+	} else if data.EncapsulationMplsIpv4Source.IsNull() {
 		data.EncapsulationMplsIpv4Source = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "backup.disable.delay"); value.Exists() && !data.BackupDisableDelay.IsNull() {
 		data.BackupDisableDelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.BackupDisableDelay.IsNull() {
 		data.BackupDisableDelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "backup.disable.never"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BackupDisableNever.IsNull() {
 			data.BackupDisableNever = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BackupDisableNever.IsNull() {
 			data.BackupDisableNever = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "mac-withdraw"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MacWithdraw.IsNull() {
 			data.MacWithdraw = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MacWithdraw.IsNull() {
 			data.MacWithdraw = types.BoolNull()
 		}
@@ -797,257 +821,329 @@ func (data L2VPNPWClass) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *L2VPNPWClass) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pw-class-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pw-class-name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls"); value.Exists() {
-		data.EncapsulationMpls = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMpls.IsNull() {
+			data.EncapsulationMpls = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMpls.IsNull() {
 			data.EncapsulationMpls = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/protocol/ldp"); value.Exists() {
-		data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/protocol/ldp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsProtocolLdp.IsNull() {
+			data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsProtocolLdp.IsNull() {
 			data.EncapsulationMplsProtocolLdp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/control-word"); value.Exists() {
-		data.EncapsulationMplsControlWord = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/control-word"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsControlWord.IsNull() {
+			data.EncapsulationMplsControlWord = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsControlWord.IsNull() {
 			data.EncapsulationMplsControlWord = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/transport-mode/ethernet"); value.Exists() {
-		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/transport-mode/ethernet"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsTransportModeEthernet.IsNull() {
+			data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsTransportModeEthernet.IsNull() {
 			data.EncapsulationMplsTransportModeEthernet = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/transport-mode/vlan"); value.Exists() {
-		data.EncapsulationMplsTransportModeVlan = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/transport-mode/vlan"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsTransportModeVlan.IsNull() {
+			data.EncapsulationMplsTransportModeVlan = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsTransportModeVlan.IsNull() {
 			data.EncapsulationMplsTransportModeVlan = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/transport-mode/passthrough"); value.Exists() {
-		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/transport-mode/passthrough"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() {
+			data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() {
 			data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/vccv/verification-type/none"); value.Exists() {
-		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/vccv/verification-type/none"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsVccvVerificationTypeNone.IsNull() {
+			data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsVccvVerificationTypeNone.IsNull() {
 			data.EncapsulationMplsVccvVerificationTypeNone = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit"); value.Exists() {
-		data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsSequencingTransmit.IsNull() {
+			data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsSequencingTransmit.IsNull() {
 			data.EncapsulationMplsSequencingTransmit = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit/resync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit/resync"); value.Exists() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsSequencingTransmitResync.IsNull() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/receive"); value.Exists() {
-		data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/receive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsSequencingReceive.IsNull() {
+			data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsSequencingReceive.IsNull() {
 			data.EncapsulationMplsSequencingReceive = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/receive/resync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/receive/resync"); value.Exists() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsSequencingReceiveResync.IsNull() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/both"); value.Exists() {
-		data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/both"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsSequencingBoth.IsNull() {
+			data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsSequencingBoth.IsNull() {
 			data.EncapsulationMplsSequencingBoth = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/both/resync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/both/resync"); value.Exists() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsSequencingBothResync.IsNull() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-number"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-name"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringValue(value.String())
 	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-ip"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-tp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-tp"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/sr-te/policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/sr-te/policy"); value.Exists() {
 		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringValue(value.String())
 	} else if data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() {
 		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/fallback/disable"); value.Exists() {
-		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/fallback/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() {
+			data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() {
 			data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/switching-tlv/hide"); value.Exists() {
-		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/switching-tlv/hide"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsSwitchingTlvHide.IsNull() {
+			data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsSwitchingTlvHide.IsNull() {
 			data.EncapsulationMplsSwitchingTlvHide = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/tag-rewrite/ingress/vlan"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/tag-rewrite/ingress/vlan"); value.Exists() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsTagRewriteIngressVlan.IsNull() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/redundancy/one-way"); value.Exists() {
-		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/redundancy/one-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsRedundancyOneWay.IsNull() {
+			data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsRedundancyOneWay.IsNull() {
 			data.EncapsulationMplsRedundancyOneWay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/redundancy/initial-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/redundancy/initial-delay"); value.Exists() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsRedundancyInitialDelay.IsNull() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/pw-label"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/pw-label"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
+			data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
 			data.EncapsulationMplsLoadBalancingPwLabel = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
+			data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit/static"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit/static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
+			data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
+			data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive/static"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive/static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
+			data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
+			data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both/static"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both/static"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
+			data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() {
+			data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7/disable"); value.Exists() {
-		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() {
+			data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/ipv4/source"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/ipv4/source"); value.Exists() {
 		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
 	} else if data.EncapsulationMplsIpv4Source.IsNull() {
 		data.EncapsulationMplsIpv4Source = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/backup/disable/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/backup/disable/delay"); value.Exists() {
 		data.BackupDisableDelay = types.Int64Value(value.Int())
 	} else if data.BackupDisableDelay.IsNull() {
 		data.BackupDisableDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/backup/disable/never"); value.Exists() {
-		data.BackupDisableNever = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/backup/disable/never"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BackupDisableNever.IsNull() {
+			data.BackupDisableNever = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BackupDisableNever.IsNull() {
 			data.BackupDisableNever = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-withdraw"); value.Exists() {
-		data.MacWithdraw = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-withdraw"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MacWithdraw.IsNull() {
+			data.MacWithdraw = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MacWithdraw.IsNull() {
@@ -1064,61 +1160,75 @@ func (data *L2VPNPWClass) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "encapsulation.mpls"); value.Exists() {
 		data.EncapsulationMpls = types.BoolValue(true)
-	} else {
-		data.EncapsulationMpls = types.BoolNull()
+	} else if !data.EncapsulationMpls.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMpls = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.protocol.ldp"); value.Exists() {
 		data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsProtocolLdp = types.BoolNull()
+	} else if !data.EncapsulationMplsProtocolLdp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsProtocolLdp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.control-word"); value.Exists() {
 		data.EncapsulationMplsControlWord = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsControlWord = types.BoolNull()
+	} else if !data.EncapsulationMplsControlWord.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsControlWord = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.transport-mode.ethernet"); value.Exists() {
 		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsTransportModeEthernet = types.BoolNull()
+	} else if !data.EncapsulationMplsTransportModeEthernet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.transport-mode.vlan"); value.Exists() {
 		data.EncapsulationMplsTransportModeVlan = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsTransportModeVlan = types.BoolNull()
+	} else if !data.EncapsulationMplsTransportModeVlan.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsTransportModeVlan = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.transport-mode.passthrough"); value.Exists() {
 		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolNull()
+	} else if !data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.vccv.verification-type.none"); value.Exists() {
 		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolNull()
+	} else if !data.EncapsulationMplsVccvVerificationTypeNone.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.transmit"); value.Exists() {
 		data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsSequencingTransmit = types.BoolNull()
+	} else if !data.EncapsulationMplsSequencingTransmit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsSequencingTransmit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.transmit.resync"); value.Exists() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.receive"); value.Exists() {
 		data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsSequencingReceive = types.BoolNull()
+	} else if !data.EncapsulationMplsSequencingReceive.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsSequencingReceive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.receive.resync"); value.Exists() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.both"); value.Exists() {
 		data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsSequencingBoth = types.BoolNull()
+	} else if !data.EncapsulationMplsSequencingBoth.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsSequencingBoth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.both.resync"); value.Exists() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
@@ -1140,69 +1250,81 @@ func (data *L2VPNPWClass) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.preferred-path.fallback.disable"); value.Exists() {
 		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolNull()
+	} else if !data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.switching-tlv.hide"); value.Exists() {
 		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsSwitchingTlvHide = types.BoolNull()
+	} else if !data.EncapsulationMplsSwitchingTlvHide.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.tag-rewrite.ingress.vlan"); value.Exists() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.redundancy.one-way"); value.Exists() {
 		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsRedundancyOneWay = types.BoolNull()
+	} else if !data.EncapsulationMplsRedundancyOneWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.redundancy.initial-delay"); value.Exists() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.pw-label"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolNull()
+	} else if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.transmit"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolNull()
+	} else if !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.transmit.static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolNull()
+	} else if !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.receive"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolNull()
+	} else if !data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.receive.static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolNull()
+	} else if !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.both"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolNull()
+	} else if !data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.both.static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolNull()
+	} else if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.code.one7"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolNull()
+	} else if !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
-	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolNull()
+	} else if !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.ipv4.source"); value.Exists() {
 		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
@@ -1212,13 +1334,15 @@ func (data *L2VPNPWClass) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "backup.disable.never"); value.Exists() {
 		data.BackupDisableNever = types.BoolValue(true)
-	} else {
-		data.BackupDisableNever = types.BoolNull()
+	} else if !data.BackupDisableNever.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BackupDisableNever = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mac-withdraw"); value.Exists() {
 		data.MacWithdraw = types.BoolValue(true)
-	} else {
-		data.MacWithdraw = types.BoolNull()
+	} else if !data.MacWithdraw.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MacWithdraw = types.BoolValue(false)
 	}
 }
 
@@ -1226,49 +1350,54 @@ func (data *L2VPNPWClass) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *L2VPNPWClassData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "encapsulation.mpls"); value.Exists() {
 		data.EncapsulationMpls = types.BoolValue(true)
 	} else {
-		data.EncapsulationMpls = types.BoolNull()
+		data.EncapsulationMpls = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.protocol.ldp"); value.Exists() {
 		data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsProtocolLdp = types.BoolNull()
+		data.EncapsulationMplsProtocolLdp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.control-word"); value.Exists() {
 		data.EncapsulationMplsControlWord = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsControlWord = types.BoolNull()
+		data.EncapsulationMplsControlWord = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.transport-mode.ethernet"); value.Exists() {
 		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsTransportModeEthernet = types.BoolNull()
+		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.transport-mode.vlan"); value.Exists() {
 		data.EncapsulationMplsTransportModeVlan = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsTransportModeVlan = types.BoolNull()
+		data.EncapsulationMplsTransportModeVlan = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.transport-mode.passthrough"); value.Exists() {
 		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolNull()
+		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.vccv.verification-type.none"); value.Exists() {
 		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolNull()
+		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.transmit"); value.Exists() {
 		data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsSequencingTransmit = types.BoolNull()
+		data.EncapsulationMplsSequencingTransmit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.transmit.resync"); value.Exists() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
@@ -1276,7 +1405,7 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.receive"); value.Exists() {
 		data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsSequencingReceive = types.BoolNull()
+		data.EncapsulationMplsSequencingReceive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.receive.resync"); value.Exists() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
@@ -1284,7 +1413,7 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.both"); value.Exists() {
 		data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsSequencingBoth = types.BoolNull()
+		data.EncapsulationMplsSequencingBoth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.sequencing.both.resync"); value.Exists() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
@@ -1307,12 +1436,12 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "encapsulation.mpls.preferred-path.fallback.disable"); value.Exists() {
 		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolNull()
+		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.switching-tlv.hide"); value.Exists() {
 		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsSwitchingTlvHide = types.BoolNull()
+		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.tag-rewrite.ingress.vlan"); value.Exists() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
@@ -1320,7 +1449,7 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "encapsulation.mpls.redundancy.one-way"); value.Exists() {
 		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsRedundancyOneWay = types.BoolNull()
+		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.redundancy.initial-delay"); value.Exists() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
@@ -1328,47 +1457,47 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.pw-label"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.transmit"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.transmit.static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.receive"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.receive.static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.both"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.both.static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.code.one7"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "encapsulation.mpls.ipv4.source"); value.Exists() {
 		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
@@ -1379,12 +1508,12 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "backup.disable.never"); value.Exists() {
 		data.BackupDisableNever = types.BoolValue(true)
 	} else {
-		data.BackupDisableNever = types.BoolNull()
+		data.BackupDisableNever = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mac-withdraw"); value.Exists() {
 		data.MacWithdraw = types.BoolValue(true)
 	} else {
-		data.MacWithdraw = types.BoolNull()
+		data.MacWithdraw = types.BoolValue(false)
 	}
 }
 
@@ -1392,161 +1521,161 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *L2VPNPWClass) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls"); value.Exists() {
 		data.EncapsulationMpls = types.BoolValue(true)
 	} else {
-		data.EncapsulationMpls = types.BoolNull()
+		data.EncapsulationMpls = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/protocol/ldp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/protocol/ldp"); value.Exists() {
 		data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsProtocolLdp = types.BoolNull()
+		data.EncapsulationMplsProtocolLdp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/control-word"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/control-word"); value.Exists() {
 		data.EncapsulationMplsControlWord = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsControlWord = types.BoolNull()
+		data.EncapsulationMplsControlWord = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/transport-mode/ethernet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/transport-mode/ethernet"); value.Exists() {
 		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsTransportModeEthernet = types.BoolNull()
+		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/transport-mode/vlan"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/transport-mode/vlan"); value.Exists() {
 		data.EncapsulationMplsTransportModeVlan = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsTransportModeVlan = types.BoolNull()
+		data.EncapsulationMplsTransportModeVlan = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/transport-mode/passthrough"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/transport-mode/passthrough"); value.Exists() {
 		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolNull()
+		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/vccv/verification-type/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/vccv/verification-type/none"); value.Exists() {
 		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolNull()
+		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit"); value.Exists() {
 		data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsSequencingTransmit = types.BoolNull()
+		data.EncapsulationMplsSequencingTransmit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit/resync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit/resync"); value.Exists() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/receive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/receive"); value.Exists() {
 		data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsSequencingReceive = types.BoolNull()
+		data.EncapsulationMplsSequencingReceive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/receive/resync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/receive/resync"); value.Exists() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/both"); value.Exists() {
 		data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsSequencingBoth = types.BoolNull()
+		data.EncapsulationMplsSequencingBoth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/both/resync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/both/resync"); value.Exists() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-number"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-name"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-ip"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-tp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-tp"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/sr-te/policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/sr-te/policy"); value.Exists() {
 		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/fallback/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/fallback/disable"); value.Exists() {
 		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolNull()
+		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/switching-tlv/hide"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/switching-tlv/hide"); value.Exists() {
 		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsSwitchingTlvHide = types.BoolNull()
+		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/tag-rewrite/ingress/vlan"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/tag-rewrite/ingress/vlan"); value.Exists() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/redundancy/one-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/redundancy/one-way"); value.Exists() {
 		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsRedundancyOneWay = types.BoolNull()
+		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/redundancy/initial-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/redundancy/initial-delay"); value.Exists() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/pw-label"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/pw-label"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit/static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive/static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both/static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7/disable"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
 	} else {
-		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolNull()
+		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/ipv4/source"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/ipv4/source"); value.Exists() {
 		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/backup/disable/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/backup/disable/delay"); value.Exists() {
 		data.BackupDisableDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/backup/disable/never"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/backup/disable/never"); value.Exists() {
 		data.BackupDisableNever = types.BoolValue(true)
 	} else {
-		data.BackupDisableNever = types.BoolNull()
+		data.BackupDisableNever = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-withdraw"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-withdraw"); value.Exists() {
 		data.MacWithdraw = types.BoolValue(true)
 	} else {
-		data.MacWithdraw = types.BoolNull()
+		data.MacWithdraw = types.BoolValue(false)
 	}
 }
 
@@ -1554,158 +1683,158 @@ func (data *L2VPNPWClass) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *L2VPNPWClassData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls"); value.Exists() {
 		data.EncapsulationMpls = types.BoolValue(true)
 	} else {
 		data.EncapsulationMpls = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/protocol/ldp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/protocol/ldp"); value.Exists() {
 		data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsProtocolLdp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/control-word"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/control-word"); value.Exists() {
 		data.EncapsulationMplsControlWord = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsControlWord = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/transport-mode/ethernet"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/transport-mode/ethernet"); value.Exists() {
 		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/transport-mode/vlan"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/transport-mode/vlan"); value.Exists() {
 		data.EncapsulationMplsTransportModeVlan = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsTransportModeVlan = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/transport-mode/passthrough"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/transport-mode/passthrough"); value.Exists() {
 		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/vccv/verification-type/none"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/vccv/verification-type/none"); value.Exists() {
 		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit"); value.Exists() {
 		data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsSequencingTransmit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit/resync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/transmit/resync"); value.Exists() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/receive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/receive"); value.Exists() {
 		data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsSequencingReceive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/receive/resync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/receive/resync"); value.Exists() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/both"); value.Exists() {
 		data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsSequencingBoth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/sequencing/both/resync"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/sequencing/both/resync"); value.Exists() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-number"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-te/tunnel-name"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-ip"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-tp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/interface/tunnel-tp"); value.Exists() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/sr-te/policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/sr-te/policy"); value.Exists() {
 		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/preferred-path/fallback/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/preferred-path/fallback/disable"); value.Exists() {
 		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/switching-tlv/hide"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/switching-tlv/hide"); value.Exists() {
 		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/tag-rewrite/ingress/vlan"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/tag-rewrite/ingress/vlan"); value.Exists() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/redundancy/one-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/redundancy/one-way"); value.Exists() {
 		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsRedundancyOneWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/redundancy/initial-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/redundancy/initial-delay"); value.Exists() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/pw-label"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/pw-label"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/transmit/static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/receive/static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/both/static"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/load-balancing/flow-label/code/one7/disable"); value.Exists() {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
 	} else {
 		data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/mpls/ipv4/source"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/mpls/ipv4/source"); value.Exists() {
 		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/backup/disable/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/backup/disable/delay"); value.Exists() {
 		data.BackupDisableDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/backup/disable/never"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/backup/disable/never"); value.Exists() {
 		data.BackupDisableNever = types.BoolValue(true)
 	} else {
 		data.BackupDisableNever = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac-withdraw"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac-withdraw"); value.Exists() {
 		data.MacWithdraw = types.BoolValue(true)
 	} else {
 		data.MacWithdraw = types.BoolValue(false)

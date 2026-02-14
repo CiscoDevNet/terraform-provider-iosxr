@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -694,533 +693,564 @@ func (data PerformanceMeasurementDelayProfile) toBody(ctx context.Context) strin
 
 func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "interfaces.default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InterfacesDefault.IsNull() {
 			data.InterfacesDefault = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefault.IsNull() {
 			data.InterfacesDefault = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.probe.computation-interval"); value.Exists() && !data.InterfacesDefaultProbeComputationInterval.IsNull() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultProbeComputationInterval.IsNull() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.probe.tx-interval"); value.Exists() && !data.InterfacesDefaultProbeTxInterval.IsNull() {
 		data.InterfacesDefaultProbeTxInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultProbeTxInterval.IsNull() {
 		data.InterfacesDefaultProbeTxInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.probe.protocol.pm-mpls"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
 			data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
 			data.InterfacesDefaultProbeProtocolPmMpls = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.probe.protocol.twamp-light"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
 			data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
 			data.InterfacesDefaultProbeProtocolTwampLight = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.probe.tos.traffic-class"); value.Exists() && !data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.probe.tos.dscp"); value.Exists() && !data.InterfacesDefaultProbeTosDscp.IsNull() {
 		data.InterfacesDefaultProbeTosDscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultProbeTosDscp.IsNull() {
 		data.InterfacesDefaultProbeTosDscp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.probe.measurement-mode.one-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
 			data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
 			data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.probe.measurement-mode.two-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
 			data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
 			data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.disabled"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
 			data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
 			data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.interval"); value.Exists() && !data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.threshold"); value.Exists() && !data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.minimum-change"); value.Exists() && !data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.logging.delay-exceeded"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
 			data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
 			data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
 			data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
 			data.InterfacesDefaultAdvertisementAccelerated = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated.threshold"); value.Exists() && !data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated.minimum-change"); value.Exists() && !data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.anomaly-loss.upper-bound"); value.Exists() && !data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.advertisement.anomaly-loss.lower-bound"); value.Exists() && !data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
-	} else {
+	} else if data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefault.IsNull() {
 			data.SrPolicyDefault = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefault.IsNull() {
 			data.SrPolicyDefault = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.computation-interval"); value.Exists() && !data.SrPolicyDefaultProbeComputationInterval.IsNull() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeComputationInterval.IsNull() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.tx-interval"); value.Exists() && !data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.static-delay"); value.Exists() && !data.SrPolicyDefaultProbeStaticDelay.IsNull() {
 		data.SrPolicyDefaultProbeStaticDelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeStaticDelay.IsNull() {
 		data.SrPolicyDefaultProbeStaticDelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	} else {
+	} else if data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.range"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.protocol.pm-mpls"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
 			data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
 			data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.protocol.twamp-light"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
 			data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
 			data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.traffic-class"); value.Exists() && !data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.dscp"); value.Exists() && !data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.one-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
 			data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
 			data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.two-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
 			data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
 			data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.loopback"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
 			data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
 			data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.logging.delay-exceeded"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
 			data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
 			data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.average-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.disabled"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
 			data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
 			data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.interval"); value.Exists() && !data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.threshold"); value.Exists() && !data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.minimum-change"); value.Exists() && !data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
 			data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
 			data.SrPolicyDefaultAdvertisementAccelerated = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated.threshold"); value.Exists() && !data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated.minimum-change"); value.Exists() && !data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-check.upper-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-check.lower-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-loss.upper-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-loss.lower-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefault.IsNull() {
 			data.EndpointDefault = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefault.IsNull() {
 			data.EndpointDefault = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.tx-interval"); value.Exists() && !data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.computation-interval"); value.Exists() && !data.EndpointDefaultProbeComputationInterval.IsNull() {
 		data.EndpointDefaultProbeComputationInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeComputationInterval.IsNull() {
 		data.EndpointDefaultProbeComputationInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
 			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
 			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() && !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
-	} else {
+	} else if data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.from"); value.Exists() && !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.to"); value.Exists() && !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.increment"); value.Exists() && !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	} else {
+	} else if data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.range"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.one-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
 			data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
 			data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.two-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
 			data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
 			data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.loopback"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
 			data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
 			data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.tos.dscp"); value.Exists() && !data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.logging.delay-exceeded"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
 			data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
 			data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.average-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
 			data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
 			data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
 			data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
 			data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
 			data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
 			data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.disabled"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
 			data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
 			data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.interval"); value.Exists() && !data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.threshold"); value.Exists() && !data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.minimum-change"); value.Exists() && !data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultAdvertisementAccelerated.IsNull() {
 			data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementAccelerated.IsNull() {
 			data.EndpointDefaultAdvertisementAccelerated = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated.threshold"); value.Exists() && !data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated.minimum-change"); value.Exists() && !data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-check.upper-bound"); value.Exists() && !data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-check.lower-bound"); value.Exists() && !data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-loss.upper-bound"); value.Exists() && !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Null()
 	}
 	for i := range data.Profiles {
@@ -1277,21 +1307,15 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 			data.Profiles[i].ProbeSweepDestinationRange = types.Int64Null()
 		}
 		if value := r.Get("probe.flow-label.explicits"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() && !data.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(false)
-			} else if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
 				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
 				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.flow-label.explicits.explicit"); value.Exists() && !data.Profiles[i].ProbeFlowLabelExplicitList.IsNull() {
@@ -1315,39 +1339,27 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 			data.Profiles[i].ProbeFlowLabelIncrement = types.Int64Null()
 		}
 		if value := r.Get("probe.protocol.pm-mpls"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() && !data.Profiles[i].ProbeProtocolPmMpls.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].ProbeProtocolPmMpls = types.BoolValue(false)
-			} else if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() {
 				data.Profiles[i].ProbeProtocolPmMpls = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ProbeProtocolPmMpls.IsNull() {
 				data.Profiles[i].ProbeProtocolPmMpls = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].ProbeProtocolPmMpls = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.protocol.twamp-light"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() && !data.Profiles[i].ProbeProtocolTwampLight.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].ProbeProtocolTwampLight = types.BoolValue(false)
-			} else if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() {
 				data.Profiles[i].ProbeProtocolTwampLight = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ProbeProtocolTwampLight.IsNull() {
 				data.Profiles[i].ProbeProtocolTwampLight = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].ProbeProtocolTwampLight = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.tos.traffic-class"); value.Exists() && !data.Profiles[i].ProbeTosTrafficClass.IsNull() {
@@ -1361,147 +1373,99 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 			data.Profiles[i].ProbeTosDscp = types.Int64Null()
 		}
 		if value := r.Get("probe.measurement-mode.one-way"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeOneWay.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolValue(false)
-			} else if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.measurement-mode.two-way"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeTwoWay.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolValue(false)
-			} else if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("probe.measurement-mode.loopback"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() && !data.Profiles[i].ProbeMeasurementModeLoopback.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolValue(false)
-			} else if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() {
 				data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.logging.delay-exceeded"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() && !data.Profiles[i].AdvertiseLoggingDelayExceeded.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolValue(false)
-			} else if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() {
 				data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() {
 				data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.threshold-check.average-delay"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
-			} else if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.threshold-check.minimum-delay"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
-			} else if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.threshold-check.maximum-delay"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
-			} else if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() {
 				data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.periodic.disabled"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() && !data.Profiles[i].AdvertisePeriodicDisabled.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].AdvertisePeriodicDisabled = types.BoolValue(false)
-			} else if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() {
 				data.Profiles[i].AdvertisePeriodicDisabled = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].AdvertisePeriodicDisabled.IsNull() {
 				data.Profiles[i].AdvertisePeriodicDisabled = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].AdvertisePeriodicDisabled = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.periodic.interval"); value.Exists() && !data.Profiles[i].AdvertisePeriodicInterval.IsNull() {
@@ -1520,21 +1484,15 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 			data.Profiles[i].AdvertisePeriodicMinimumChange = types.Int64Null()
 		}
 		if value := r.Get("advertisement.accelerated"); value.Exists() {
-			// For presence-based booleans: if state has explicit false, preserve it
-			// Otherwise set to true since element exists on device
-			if !data.Profiles[i].AdvertiseAccelerated.IsNull() && !data.Profiles[i].AdvertiseAccelerated.ValueBool() {
-				// Keep false value from state even though element exists on device
-				data.Profiles[i].AdvertiseAccelerated = types.BoolValue(false)
-			} else if !data.Profiles[i].AdvertiseAccelerated.IsNull() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseAccelerated.IsNull() {
 				data.Profiles[i].AdvertiseAccelerated = types.BoolValue(true)
 			}
 		} else {
-			// Element doesn't exist on device
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].AdvertiseAccelerated.IsNull() {
 				data.Profiles[i].AdvertiseAccelerated = types.BoolNull()
-			} else {
-				// Preserve false value from state when element doesn't exist
-				data.Profiles[i].AdvertiseAccelerated = types.BoolValue(false)
 			}
 		}
 		if value := r.Get("advertisement.accelerated.threshold"); value.Exists() && !data.Profiles[i].AdvertiseAcceleratedThreshold.IsNull() {
@@ -1867,138 +1825,135 @@ func (data PerformanceMeasurementDelayProfile) toBodyXML(ctx context.Context) st
 		body = helpers.SetFromXPath(body, data.getXPath()+"/endpoint/default/advertisement/anomaly-loss/upper-bound", strconv.FormatInt(data.EndpointDefaultAdvertisementAnomalyLossUpperBound.ValueInt64(), 10))
 	}
 	if len(data.Profiles) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Profiles {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/names/name[profile-name='" + item.ProfileName.ValueString() + "']"
 			if !item.ProfileName.IsNull() && !item.ProfileName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "profile-name", item.ProfileName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/profile-name", item.ProfileName.ValueString())
 			}
 			if !item.ProbeComputationInterval.IsNull() && !item.ProbeComputationInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/computation-interval", strconv.FormatInt(item.ProbeComputationInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/computation-interval", strconv.FormatInt(item.ProbeComputationInterval.ValueInt64(), 10))
 			}
 			if !item.ProbeTxInterval.IsNull() && !item.ProbeTxInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/tx-interval", strconv.FormatInt(item.ProbeTxInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/tx-interval", strconv.FormatInt(item.ProbeTxInterval.ValueInt64(), 10))
 			}
 			if !item.ProbeStaticDelay.IsNull() && !item.ProbeStaticDelay.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/static-delay", strconv.FormatInt(item.ProbeStaticDelay.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/static-delay", strconv.FormatInt(item.ProbeStaticDelay.ValueInt64(), 10))
 			}
 			if !item.ProbeSweepDestinationIpv4.IsNull() && !item.ProbeSweepDestinationIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/sweep/destination/ipv4", item.ProbeSweepDestinationIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/probe/sweep/destination/ipv4", item.ProbeSweepDestinationIpv4.ValueString())
 			}
 			if !item.ProbeSweepDestinationRange.IsNull() && !item.ProbeSweepDestinationRange.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/sweep/destination/range", strconv.FormatInt(item.ProbeSweepDestinationRange.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/sweep/destination/range", strconv.FormatInt(item.ProbeSweepDestinationRange.ValueInt64(), 10))
 			}
 			if !item.ProbeFlowLabelExplicit.IsNull() && !item.ProbeFlowLabelExplicit.IsUnknown() {
 				if item.ProbeFlowLabelExplicit.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "probe/flow-label/explicits", "")
+					body = helpers.SetFromXPath(body, basePath+"/probe/flow-label/explicits", "")
 				}
 			}
 			if !item.ProbeFlowLabelExplicitList.IsNull() && !item.ProbeFlowLabelExplicitList.IsUnknown() {
 				var values []int
 				item.ProbeFlowLabelExplicitList.ElementsAs(ctx, &values, false)
 				for _, v := range values {
-					cBody = helpers.AppendFromXPath(cBody, "probe/flow-label/explicits/explicit", v)
+					body = helpers.AppendFromXPath(body, basePath+"/probe/flow-label/explicits/explicit", v)
 				}
 			}
 			if !item.ProbeFlowLabelFrom.IsNull() && !item.ProbeFlowLabelFrom.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/flow-label/from", strconv.FormatInt(item.ProbeFlowLabelFrom.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/flow-label/from", strconv.FormatInt(item.ProbeFlowLabelFrom.ValueInt64(), 10))
 			}
 			if !item.ProbeFlowLabelTo.IsNull() && !item.ProbeFlowLabelTo.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/flow-label/to", strconv.FormatInt(item.ProbeFlowLabelTo.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/flow-label/to", strconv.FormatInt(item.ProbeFlowLabelTo.ValueInt64(), 10))
 			}
 			if !item.ProbeFlowLabelIncrement.IsNull() && !item.ProbeFlowLabelIncrement.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/flow-label/increment", strconv.FormatInt(item.ProbeFlowLabelIncrement.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/flow-label/increment", strconv.FormatInt(item.ProbeFlowLabelIncrement.ValueInt64(), 10))
 			}
 			if !item.ProbeProtocolPmMpls.IsNull() && !item.ProbeProtocolPmMpls.IsUnknown() {
 				if item.ProbeProtocolPmMpls.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "probe/protocol/pm-mpls", "")
+					body = helpers.SetFromXPath(body, basePath+"/probe/protocol/pm-mpls", "")
 				}
 			}
 			if !item.ProbeProtocolTwampLight.IsNull() && !item.ProbeProtocolTwampLight.IsUnknown() {
 				if item.ProbeProtocolTwampLight.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "probe/protocol/twamp-light", "")
+					body = helpers.SetFromXPath(body, basePath+"/probe/protocol/twamp-light", "")
 				}
 			}
 			if !item.ProbeTosTrafficClass.IsNull() && !item.ProbeTosTrafficClass.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/tos/traffic-class", strconv.FormatInt(item.ProbeTosTrafficClass.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/tos/traffic-class", strconv.FormatInt(item.ProbeTosTrafficClass.ValueInt64(), 10))
 			}
 			if !item.ProbeTosDscp.IsNull() && !item.ProbeTosDscp.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/tos/dscp", strconv.FormatInt(item.ProbeTosDscp.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/tos/dscp", strconv.FormatInt(item.ProbeTosDscp.ValueInt64(), 10))
 			}
 			if !item.ProbeMeasurementModeOneWay.IsNull() && !item.ProbeMeasurementModeOneWay.IsUnknown() {
 				if item.ProbeMeasurementModeOneWay.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "probe/measurement-mode/one-way", "")
+					body = helpers.SetFromXPath(body, basePath+"/probe/measurement-mode/one-way", "")
 				}
 			}
 			if !item.ProbeMeasurementModeTwoWay.IsNull() && !item.ProbeMeasurementModeTwoWay.IsUnknown() {
 				if item.ProbeMeasurementModeTwoWay.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "probe/measurement-mode/two-way", "")
+					body = helpers.SetFromXPath(body, basePath+"/probe/measurement-mode/two-way", "")
 				}
 			}
 			if !item.ProbeMeasurementModeLoopback.IsNull() && !item.ProbeMeasurementModeLoopback.IsUnknown() {
 				if item.ProbeMeasurementModeLoopback.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "probe/measurement-mode/loopback", "")
+					body = helpers.SetFromXPath(body, basePath+"/probe/measurement-mode/loopback", "")
 				}
 			}
 			if !item.AdvertiseLoggingDelayExceeded.IsNull() && !item.AdvertiseLoggingDelayExceeded.IsUnknown() {
 				if item.AdvertiseLoggingDelayExceeded.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "advertisement/logging/delay-exceeded", "")
+					body = helpers.SetFromXPath(body, basePath+"/advertisement/logging/delay-exceeded", "")
 				}
 			}
 			if !item.AdvertiseThresholdCheckAverageDelay.IsNull() && !item.AdvertiseThresholdCheckAverageDelay.IsUnknown() {
 				if item.AdvertiseThresholdCheckAverageDelay.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "advertisement/threshold-check/average-delay", "")
+					body = helpers.SetFromXPath(body, basePath+"/advertisement/threshold-check/average-delay", "")
 				}
 			}
 			if !item.AdvertiseThresholdCheckMinimumDelay.IsNull() && !item.AdvertiseThresholdCheckMinimumDelay.IsUnknown() {
 				if item.AdvertiseThresholdCheckMinimumDelay.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "advertisement/threshold-check/minimum-delay", "")
+					body = helpers.SetFromXPath(body, basePath+"/advertisement/threshold-check/minimum-delay", "")
 				}
 			}
 			if !item.AdvertiseThresholdCheckMaximumDelay.IsNull() && !item.AdvertiseThresholdCheckMaximumDelay.IsUnknown() {
 				if item.AdvertiseThresholdCheckMaximumDelay.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "advertisement/threshold-check/maximum-delay", "")
+					body = helpers.SetFromXPath(body, basePath+"/advertisement/threshold-check/maximum-delay", "")
 				}
 			}
 			if !item.AdvertisePeriodicDisabled.IsNull() && !item.AdvertisePeriodicDisabled.IsUnknown() {
 				if item.AdvertisePeriodicDisabled.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "advertisement/periodic/disabled", "")
+					body = helpers.SetFromXPath(body, basePath+"/advertisement/periodic/disabled", "")
 				}
 			}
 			if !item.AdvertisePeriodicInterval.IsNull() && !item.AdvertisePeriodicInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement/periodic/interval", strconv.FormatInt(item.AdvertisePeriodicInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement/periodic/interval", strconv.FormatInt(item.AdvertisePeriodicInterval.ValueInt64(), 10))
 			}
 			if !item.AdvertisePeriodicThreshold.IsNull() && !item.AdvertisePeriodicThreshold.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement/periodic/threshold", strconv.FormatInt(item.AdvertisePeriodicThreshold.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement/periodic/threshold", strconv.FormatInt(item.AdvertisePeriodicThreshold.ValueInt64(), 10))
 			}
 			if !item.AdvertisePeriodicMinimumChange.IsNull() && !item.AdvertisePeriodicMinimumChange.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement/periodic/minimum-change", strconv.FormatInt(item.AdvertisePeriodicMinimumChange.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement/periodic/minimum-change", strconv.FormatInt(item.AdvertisePeriodicMinimumChange.ValueInt64(), 10))
 			}
 			if !item.AdvertiseAccelerated.IsNull() && !item.AdvertiseAccelerated.IsUnknown() {
 				if item.AdvertiseAccelerated.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "advertisement/accelerated", "")
+					body = helpers.SetFromXPath(body, basePath+"/advertisement/accelerated", "")
 				}
 			}
 			if !item.AdvertiseAcceleratedThreshold.IsNull() && !item.AdvertiseAcceleratedThreshold.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement/accelerated/threshold", strconv.FormatInt(item.AdvertiseAcceleratedThreshold.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement/accelerated/threshold", strconv.FormatInt(item.AdvertiseAcceleratedThreshold.ValueInt64(), 10))
 			}
 			if !item.AdvertiseAcceleratedMinimumChange.IsNull() && !item.AdvertiseAcceleratedMinimumChange.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement/accelerated/minimum-change", strconv.FormatInt(item.AdvertiseAcceleratedMinimumChange.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement/accelerated/minimum-change", strconv.FormatInt(item.AdvertiseAcceleratedMinimumChange.ValueInt64(), 10))
 			}
 			if !item.AdvertiseAnomalyCheckUpperBound.IsNull() && !item.AdvertiseAnomalyCheckUpperBound.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement/anomaly-check/upper-bound", strconv.FormatInt(item.AdvertiseAnomalyCheckUpperBound.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement/anomaly-check/upper-bound", strconv.FormatInt(item.AdvertiseAnomalyCheckUpperBound.ValueInt64(), 10))
 			}
 			if !item.AdvertiseAnomalyCheckLowerBound.IsNull() && !item.AdvertiseAnomalyCheckLowerBound.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement/anomaly-check/lower-bound", strconv.FormatInt(item.AdvertiseAnomalyCheckLowerBound.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement/anomaly-check/lower-bound", strconv.FormatInt(item.AdvertiseAnomalyCheckLowerBound.ValueInt64(), 10))
 			}
 			if !item.AdvertiseAnomalyLossUpperBound.IsNull() && !item.AdvertiseAnomalyLossUpperBound.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement/anomaly-loss/upper-bound", strconv.FormatInt(item.AdvertiseAnomalyLossUpperBound.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement/anomaly-loss/upper-bound", strconv.FormatInt(item.AdvertiseAnomalyLossUpperBound.ValueInt64(), 10))
 			}
 			if !item.AdvertiseAnomalyLossLowerBound.IsNull() && !item.AdvertiseAnomalyLossLowerBound.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement/anomaly-loss/lower-bound", strconv.FormatInt(item.AdvertiseAnomalyLossLowerBound.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement/anomaly-loss/lower-bound", strconv.FormatInt(item.AdvertiseAnomalyLossLowerBound.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"names/name", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -2012,470 +1967,563 @@ func (data PerformanceMeasurementDelayProfile) toBodyXML(ctx context.Context) st
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default"); value.Exists() {
-		data.InterfacesDefault = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesDefault.IsNull() {
+			data.InterfacesDefault = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefault.IsNull() {
 			data.InterfacesDefault = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/computation-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/computation-interval"); value.Exists() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultProbeComputationInterval.IsNull() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/tx-interval"); value.Exists() {
 		data.InterfacesDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultProbeTxInterval.IsNull() {
 		data.InterfacesDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/protocol/pm-mpls"); value.Exists() {
-		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/protocol/pm-mpls"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
+			data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
 			data.InterfacesDefaultProbeProtocolPmMpls = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/protocol/twamp-light"); value.Exists() {
-		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/protocol/twamp-light"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
+			data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
 			data.InterfacesDefaultProbeProtocolTwampLight = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/tos/traffic-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/tos/traffic-class"); value.Exists() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/tos/dscp"); value.Exists() {
 		data.InterfacesDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultProbeTosDscp.IsNull() {
 		data.InterfacesDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/measurement-mode/one-way"); value.Exists() {
-		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/measurement-mode/one-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
+			data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
 			data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/measurement-mode/two-way"); value.Exists() {
-		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/measurement-mode/two-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
+			data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
 			data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/disabled"); value.Exists() {
-		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/disabled"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
+			data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
 			data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/interval"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/threshold"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/minimum-change"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/logging/delay-exceeded"); value.Exists() {
-		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/logging/delay-exceeded"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+			data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
 			data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/accelerated"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/accelerated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
+			data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
 			data.InterfacesDefaultAdvertisementAccelerated = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/accelerated/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/accelerated/threshold"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/accelerated/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/accelerated/minimum-change"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default"); value.Exists() {
-		data.SrPolicyDefault = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefault.IsNull() {
+			data.SrPolicyDefault = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefault.IsNull() {
 			data.SrPolicyDefault = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/computation-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/computation-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeComputationInterval.IsNull() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/static-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/static-delay"); value.Exists() {
 		data.SrPolicyDefaultProbeStaticDelay = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeStaticDelay.IsNull() {
 		data.SrPolicyDefaultProbeStaticDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	} else if data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/protocol/pm-mpls"); value.Exists() {
-		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/protocol/pm-mpls"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
+			data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
 			data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/protocol/twamp-light"); value.Exists() {
-		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/protocol/twamp-light"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
+			data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
 			data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tos/traffic-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tos/traffic-class"); value.Exists() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/one-way"); value.Exists() {
-		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/one-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
+			data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
 			data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/two-way"); value.Exists() {
-		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/two-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
+			data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
 			data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/loopback"); value.Exists() {
-		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/loopback"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
+			data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
 			data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/logging/delay-exceeded"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/logging/delay-exceeded"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+			data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
 			data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/average-delay"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/average-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+			data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+			data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+			data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/disabled"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/disabled"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
+			data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
 			data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/interval"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/threshold"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/minimum-change"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/accelerated"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/accelerated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
+			data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
 			data.SrPolicyDefaultAdvertisementAccelerated = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/threshold"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/minimum-change"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default"); value.Exists() {
-		data.EndpointDefault = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefault.IsNull() {
+			data.EndpointDefault = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefault.IsNull() {
 			data.EndpointDefault = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/computation-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/computation-interval"); value.Exists() {
 		data.EndpointDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeComputationInterval.IsNull() {
 		data.EndpointDefaultProbeComputationInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
 			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	} else if data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/measurement-mode/one-way"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/one-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
+			data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
 			data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/measurement-mode/two-way"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/two-way"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
+			data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
 			data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/measurement-mode/loopback"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/loopback"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
+			data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
 			data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/logging/delay-exceeded"); value.Exists() {
-		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/logging/delay-exceeded"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+			data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
 			data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/average-delay"); value.Exists() {
-		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/average-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+			data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
 			data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
-		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+			data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
 			data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
-		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+			data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
 			data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/disabled"); value.Exists() {
-		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/disabled"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
+			data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
 			data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/interval"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/threshold"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/minimum-change"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/accelerated"); value.Exists() {
-		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/accelerated"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultAdvertisementAccelerated.IsNull() {
+			data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultAdvertisementAccelerated.IsNull() {
 			data.EndpointDefaultAdvertisementAccelerated = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/accelerated/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/accelerated/threshold"); value.Exists() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/accelerated/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/accelerated/minimum-change"); value.Exists() {
 		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
 		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
 		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
 		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Null()
@@ -2485,7 +2533,7 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/names/name").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/names/name").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2534,7 +2582,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			data.Profiles[i].ProbeSweepDestinationRange = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "probe/flow-label/explicits"); value.Exists() {
-			data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
+				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2561,7 +2612,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			data.Profiles[i].ProbeFlowLabelIncrement = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "probe/protocol/pm-mpls"); value.Exists() {
-			data.Profiles[i].ProbeProtocolPmMpls = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() {
+				data.Profiles[i].ProbeProtocolPmMpls = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2570,7 +2624,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			}
 		}
 		if value := helpers.GetFromXPath(r, "probe/protocol/twamp-light"); value.Exists() {
-			data.Profiles[i].ProbeProtocolTwampLight = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() {
+				data.Profiles[i].ProbeProtocolTwampLight = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2589,7 +2646,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			data.Profiles[i].ProbeTosDscp = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "probe/measurement-mode/one-way"); value.Exists() {
-			data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() {
+				data.Profiles[i].ProbeMeasurementModeOneWay = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2598,7 +2658,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			}
 		}
 		if value := helpers.GetFromXPath(r, "probe/measurement-mode/two-way"); value.Exists() {
-			data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() {
+				data.Profiles[i].ProbeMeasurementModeTwoWay = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2607,7 +2670,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			}
 		}
 		if value := helpers.GetFromXPath(r, "probe/measurement-mode/loopback"); value.Exists() {
-			data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() {
+				data.Profiles[i].ProbeMeasurementModeLoopback = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2616,7 +2682,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			}
 		}
 		if value := helpers.GetFromXPath(r, "advertisement/logging/delay-exceeded"); value.Exists() {
-			data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() {
+				data.Profiles[i].AdvertiseLoggingDelayExceeded = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2625,7 +2694,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			}
 		}
 		if value := helpers.GetFromXPath(r, "advertisement/threshold-check/average-delay"); value.Exists() {
-			data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() {
+				data.Profiles[i].AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2634,7 +2706,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			}
 		}
 		if value := helpers.GetFromXPath(r, "advertisement/threshold-check/minimum-delay"); value.Exists() {
-			data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() {
+				data.Profiles[i].AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2643,7 +2718,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			}
 		}
 		if value := helpers.GetFromXPath(r, "advertisement/threshold-check/maximum-delay"); value.Exists() {
-			data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() {
+				data.Profiles[i].AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2652,7 +2730,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			}
 		}
 		if value := helpers.GetFromXPath(r, "advertisement/periodic/disabled"); value.Exists() {
-			data.Profiles[i].AdvertisePeriodicDisabled = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() {
+				data.Profiles[i].AdvertisePeriodicDisabled = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2676,7 +2757,10 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			data.Profiles[i].AdvertisePeriodicMinimumChange = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "advertisement/accelerated"); value.Exists() {
-			data.Profiles[i].AdvertiseAccelerated = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AdvertiseAccelerated.IsNull() {
+				data.Profiles[i].AdvertiseAccelerated = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2725,10 +2809,15 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "interfaces.default"); value.Exists() {
 		data.InterfacesDefault = types.BoolValue(true)
-	} else {
-		data.InterfacesDefault = types.BoolNull()
+	} else if !data.InterfacesDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.computation-interval"); value.Exists() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
@@ -2738,13 +2827,15 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.protocol.pm-mpls"); value.Exists() {
 		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolNull()
+	} else if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.protocol.twamp-light"); value.Exists() {
 		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolNull()
+	} else if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.tos.traffic-class"); value.Exists() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
@@ -2754,18 +2845,21 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.measurement-mode.one-way"); value.Exists() {
 		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolNull()
+	} else if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.measurement-mode.two-way"); value.Exists() {
 		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolNull()
+	} else if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.disabled"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolNull()
+	} else if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.interval"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
@@ -2778,13 +2872,15 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "interfaces.default.advertisement.logging.delay-exceeded"); value.Exists() {
 		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
+	} else if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultAdvertisementAccelerated = types.BoolNull()
+	} else if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated.threshold"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
@@ -2800,8 +2896,9 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "sr-policy.default"); value.Exists() {
 		data.SrPolicyDefault = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefault = types.BoolNull()
+	} else if !data.SrPolicyDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.computation-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
@@ -2820,13 +2917,15 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.protocol.pm-mpls"); value.Exists() {
 		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolNull()
+	} else if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.protocol.twamp-light"); value.Exists() {
 		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolNull()
+	} else if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.tos.traffic-class"); value.Exists() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
@@ -2836,43 +2935,51 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.one-way"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolNull()
+	} else if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.two-way"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolNull()
+	} else if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.loopback"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolNull()
+	} else if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.logging.delay-exceeded"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
+	} else if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.average-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
+	} else if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
+	} else if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
+	} else if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.disabled"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolNull()
+	} else if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.interval"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
@@ -2885,8 +2992,9 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolNull()
+	} else if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated.threshold"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
@@ -2908,8 +3016,9 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "endpoint.default"); value.Exists() {
 		data.EndpointDefault = types.BoolValue(true)
-	} else {
-		data.EndpointDefault = types.BoolNull()
+	} else if !data.EndpointDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.tx-interval"); value.Exists() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
@@ -2919,8 +3028,9 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
+	} else if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
@@ -2944,46 +3054,54 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.one-way"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolNull()
+	} else if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.two-way"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolNull()
+	} else if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.loopback"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolNull()
+	} else if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.tos.dscp"); value.Exists() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.logging.delay-exceeded"); value.Exists() {
 		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
+	} else if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.average-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
+	} else if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
+	} else if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
+	} else if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.disabled"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolNull()
+	} else if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.interval"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
@@ -2996,8 +3114,9 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated"); value.Exists() {
 		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementAccelerated = types.BoolNull()
+	} else if !data.EndpointDefaultAdvertisementAccelerated.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated.threshold"); value.Exists() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
@@ -3038,8 +3157,9 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			}
 			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
-			} else {
-				item.ProbeFlowLabelExplicit = types.BoolNull()
+			} else if !item.ProbeFlowLabelExplicit.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
@@ -3057,13 +3177,15 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			}
 			if cValue := v.Get("probe.protocol.pm-mpls"); cValue.Exists() {
 				item.ProbeProtocolPmMpls = types.BoolValue(true)
-			} else {
-				item.ProbeProtocolPmMpls = types.BoolNull()
+			} else if !item.ProbeProtocolPmMpls.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeProtocolPmMpls = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.protocol.twamp-light"); cValue.Exists() {
 				item.ProbeProtocolTwampLight = types.BoolValue(true)
-			} else {
-				item.ProbeProtocolTwampLight = types.BoolNull()
+			} else if !item.ProbeProtocolTwampLight.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeProtocolTwampLight = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.tos.traffic-class"); cValue.Exists() {
 				item.ProbeTosTrafficClass = types.Int64Value(cValue.Int())
@@ -3073,43 +3195,51 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			}
 			if cValue := v.Get("probe.measurement-mode.one-way"); cValue.Exists() {
 				item.ProbeMeasurementModeOneWay = types.BoolValue(true)
-			} else {
-				item.ProbeMeasurementModeOneWay = types.BoolNull()
+			} else if !item.ProbeMeasurementModeOneWay.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeMeasurementModeOneWay = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.measurement-mode.two-way"); cValue.Exists() {
 				item.ProbeMeasurementModeTwoWay = types.BoolValue(true)
-			} else {
-				item.ProbeMeasurementModeTwoWay = types.BoolNull()
+			} else if !item.ProbeMeasurementModeTwoWay.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeMeasurementModeTwoWay = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.measurement-mode.loopback"); cValue.Exists() {
 				item.ProbeMeasurementModeLoopback = types.BoolValue(true)
-			} else {
-				item.ProbeMeasurementModeLoopback = types.BoolNull()
+			} else if !item.ProbeMeasurementModeLoopback.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeMeasurementModeLoopback = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.logging.delay-exceeded"); cValue.Exists() {
 				item.AdvertiseLoggingDelayExceeded = types.BoolValue(true)
-			} else {
-				item.AdvertiseLoggingDelayExceeded = types.BoolNull()
+			} else if !item.AdvertiseLoggingDelayExceeded.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseLoggingDelayExceeded = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.threshold-check.average-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
-			} else {
-				item.AdvertiseThresholdCheckAverageDelay = types.BoolNull()
+			} else if !item.AdvertiseThresholdCheckAverageDelay.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.threshold-check.minimum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
-			} else {
-				item.AdvertiseThresholdCheckMinimumDelay = types.BoolNull()
+			} else if !item.AdvertiseThresholdCheckMinimumDelay.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.threshold-check.maximum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
-			} else {
-				item.AdvertiseThresholdCheckMaximumDelay = types.BoolNull()
+			} else if !item.AdvertiseThresholdCheckMaximumDelay.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.periodic.disabled"); cValue.Exists() {
 				item.AdvertisePeriodicDisabled = types.BoolValue(true)
-			} else {
-				item.AdvertisePeriodicDisabled = types.BoolNull()
+			} else if !item.AdvertisePeriodicDisabled.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertisePeriodicDisabled = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.periodic.interval"); cValue.Exists() {
 				item.AdvertisePeriodicInterval = types.Int64Value(cValue.Int())
@@ -3122,8 +3252,9 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			}
 			if cValue := v.Get("advertisement.accelerated"); cValue.Exists() {
 				item.AdvertiseAccelerated = types.BoolValue(true)
-			} else {
-				item.AdvertiseAccelerated = types.BoolNull()
+			} else if !item.AdvertiseAccelerated.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseAccelerated = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.accelerated.threshold"); cValue.Exists() {
 				item.AdvertiseAcceleratedThreshold = types.Int64Value(cValue.Int())
@@ -3153,14 +3284,19 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "interfaces.default"); value.Exists() {
 		data.InterfacesDefault = types.BoolValue(true)
 	} else {
-		data.InterfacesDefault = types.BoolNull()
+		data.InterfacesDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.computation-interval"); value.Exists() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
@@ -3171,12 +3307,12 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "interfaces.default.probe.protocol.pm-mpls"); value.Exists() {
 		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolNull()
+		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.protocol.twamp-light"); value.Exists() {
 		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolNull()
+		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.tos.traffic-class"); value.Exists() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
@@ -3187,17 +3323,17 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "interfaces.default.probe.measurement-mode.one-way"); value.Exists() {
 		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolNull()
+		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.probe.measurement-mode.two-way"); value.Exists() {
 		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolNull()
+		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.disabled"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolNull()
+		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.interval"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
@@ -3211,12 +3347,12 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "interfaces.default.advertisement.logging.delay-exceeded"); value.Exists() {
 		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
+		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultAdvertisementAccelerated = types.BoolNull()
+		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated.threshold"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
@@ -3233,7 +3369,7 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "sr-policy.default"); value.Exists() {
 		data.SrPolicyDefault = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefault = types.BoolNull()
+		data.SrPolicyDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.computation-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
@@ -3253,12 +3389,12 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "sr-policy.default.probe.protocol.pm-mpls"); value.Exists() {
 		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolNull()
+		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.protocol.twamp-light"); value.Exists() {
 		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolNull()
+		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.tos.traffic-class"); value.Exists() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
@@ -3269,42 +3405,42 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.one-way"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolNull()
+		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.two-way"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolNull()
+		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.loopback"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolNull()
+		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.logging.delay-exceeded"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.average-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.disabled"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.interval"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
@@ -3318,7 +3454,7 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated.threshold"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
@@ -3341,7 +3477,7 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "endpoint.default"); value.Exists() {
 		data.EndpointDefault = types.BoolValue(true)
 	} else {
-		data.EndpointDefault = types.BoolNull()
+		data.EndpointDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.tx-interval"); value.Exists() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
@@ -3352,7 +3488,7 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
@@ -3377,17 +3513,17 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.one-way"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolNull()
+		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.two-way"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolNull()
+		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.loopback"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolNull()
+		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.tos.dscp"); value.Exists() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
@@ -3395,27 +3531,27 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "endpoint.default.advertisement.logging.delay-exceeded"); value.Exists() {
 		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
+		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.average-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
+		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
+		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
+		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.disabled"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolNull()
+		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.interval"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
@@ -3429,7 +3565,7 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated"); value.Exists() {
 		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementAccelerated = types.BoolNull()
+		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated.threshold"); value.Exists() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
@@ -3471,7 +3607,7 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
 			} else {
-				item.ProbeFlowLabelExplicit = types.BoolNull()
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
@@ -3490,12 +3626,12 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 			if cValue := v.Get("probe.protocol.pm-mpls"); cValue.Exists() {
 				item.ProbeProtocolPmMpls = types.BoolValue(true)
 			} else {
-				item.ProbeProtocolPmMpls = types.BoolNull()
+				item.ProbeProtocolPmMpls = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.protocol.twamp-light"); cValue.Exists() {
 				item.ProbeProtocolTwampLight = types.BoolValue(true)
 			} else {
-				item.ProbeProtocolTwampLight = types.BoolNull()
+				item.ProbeProtocolTwampLight = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.tos.traffic-class"); cValue.Exists() {
 				item.ProbeTosTrafficClass = types.Int64Value(cValue.Int())
@@ -3506,42 +3642,42 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 			if cValue := v.Get("probe.measurement-mode.one-way"); cValue.Exists() {
 				item.ProbeMeasurementModeOneWay = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeOneWay = types.BoolNull()
+				item.ProbeMeasurementModeOneWay = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.measurement-mode.two-way"); cValue.Exists() {
 				item.ProbeMeasurementModeTwoWay = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeTwoWay = types.BoolNull()
+				item.ProbeMeasurementModeTwoWay = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.measurement-mode.loopback"); cValue.Exists() {
 				item.ProbeMeasurementModeLoopback = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeLoopback = types.BoolNull()
+				item.ProbeMeasurementModeLoopback = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.logging.delay-exceeded"); cValue.Exists() {
 				item.AdvertiseLoggingDelayExceeded = types.BoolValue(true)
 			} else {
-				item.AdvertiseLoggingDelayExceeded = types.BoolNull()
+				item.AdvertiseLoggingDelayExceeded = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.threshold-check.average-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckAverageDelay = types.BoolNull()
+				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.threshold-check.minimum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckMinimumDelay = types.BoolNull()
+				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.threshold-check.maximum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckMaximumDelay = types.BoolNull()
+				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.periodic.disabled"); cValue.Exists() {
 				item.AdvertisePeriodicDisabled = types.BoolValue(true)
 			} else {
-				item.AdvertisePeriodicDisabled = types.BoolNull()
+				item.AdvertisePeriodicDisabled = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.periodic.interval"); cValue.Exists() {
 				item.AdvertisePeriodicInterval = types.Int64Value(cValue.Int())
@@ -3555,7 +3691,7 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 			if cValue := v.Get("advertisement.accelerated"); cValue.Exists() {
 				item.AdvertiseAccelerated = types.BoolValue(true)
 			} else {
-				item.AdvertiseAccelerated = types.BoolNull()
+				item.AdvertiseAccelerated = types.BoolValue(false)
 			}
 			if cValue := v.Get("advertisement.accelerated.threshold"); cValue.Exists() {
 				item.AdvertiseAcceleratedThreshold = types.Int64Value(cValue.Int())
@@ -3585,296 +3721,296 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default"); value.Exists() {
 		data.InterfacesDefault = types.BoolValue(true)
 	} else {
-		data.InterfacesDefault = types.BoolNull()
+		data.InterfacesDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/computation-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/computation-interval"); value.Exists() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/tx-interval"); value.Exists() {
 		data.InterfacesDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/protocol/pm-mpls"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/protocol/pm-mpls"); value.Exists() {
 		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolNull()
+		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/protocol/twamp-light"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/protocol/twamp-light"); value.Exists() {
 		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolNull()
+		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/tos/traffic-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/tos/traffic-class"); value.Exists() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/tos/dscp"); value.Exists() {
 		data.InterfacesDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/measurement-mode/one-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/measurement-mode/one-way"); value.Exists() {
 		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolNull()
+		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/measurement-mode/two-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/measurement-mode/two-way"); value.Exists() {
 		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolNull()
+		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/disabled"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/disabled"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolNull()
+		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/interval"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/threshold"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/minimum-change"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/logging/delay-exceeded"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/logging/delay-exceeded"); value.Exists() {
 		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
+		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/accelerated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/accelerated"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
 	} else {
-		data.InterfacesDefaultAdvertisementAccelerated = types.BoolNull()
+		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/accelerated/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/accelerated/threshold"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/accelerated/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/accelerated/minimum-change"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default"); value.Exists() {
 		data.SrPolicyDefault = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefault = types.BoolNull()
+		data.SrPolicyDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/computation-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/computation-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/static-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/static-delay"); value.Exists() {
 		data.SrPolicyDefaultProbeStaticDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/protocol/pm-mpls"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/protocol/pm-mpls"); value.Exists() {
 		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolNull()
+		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/protocol/twamp-light"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/protocol/twamp-light"); value.Exists() {
 		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolNull()
+		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tos/traffic-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tos/traffic-class"); value.Exists() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/one-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/one-way"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolNull()
+		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/two-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/two-way"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolNull()
+		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/loopback"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/loopback"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolNull()
+		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/logging/delay-exceeded"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/logging/delay-exceeded"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/average-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/average-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/disabled"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/disabled"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/interval"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/threshold"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/minimum-change"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/accelerated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/accelerated"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolNull()
+		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/threshold"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/minimum-change"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default"); value.Exists() {
 		data.EndpointDefault = types.BoolValue(true)
 	} else {
-		data.EndpointDefault = types.BoolNull()
+		data.EndpointDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/computation-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/computation-interval"); value.Exists() {
 		data.EndpointDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/measurement-mode/one-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/one-way"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolNull()
+		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/measurement-mode/two-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/two-way"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolNull()
+		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/measurement-mode/loopback"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/loopback"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolNull()
+		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/logging/delay-exceeded"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/logging/delay-exceeded"); value.Exists() {
 		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
+		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/average-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/average-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
+		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
+		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
+		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/disabled"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/disabled"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolNull()
+		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/interval"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/threshold"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/minimum-change"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/accelerated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/accelerated"); value.Exists() {
 		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultAdvertisementAccelerated = types.BoolNull()
+		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/accelerated/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/accelerated/threshold"); value.Exists() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/accelerated/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/accelerated/minimum-change"); value.Exists() {
 		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
 		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
 		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
 		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/names/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/names/name"); value.Exists() {
 		data.Profiles = make([]PerformanceMeasurementDelayProfileProfiles, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PerformanceMeasurementDelayProfileProfiles{}
@@ -3899,7 +4035,7 @@ func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context,
 			if cValue := helpers.GetFromXPath(v, "probe/flow-label/explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
 			} else {
-				item.ProbeFlowLabelExplicit = types.BoolNull()
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "probe/flow-label/explicits/explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64ListXML(cValue.Array())
@@ -3918,12 +4054,12 @@ func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context,
 			if cValue := helpers.GetFromXPath(v, "probe/protocol/pm-mpls"); cValue.Exists() {
 				item.ProbeProtocolPmMpls = types.BoolValue(true)
 			} else {
-				item.ProbeProtocolPmMpls = types.BoolNull()
+				item.ProbeProtocolPmMpls = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "probe/protocol/twamp-light"); cValue.Exists() {
 				item.ProbeProtocolTwampLight = types.BoolValue(true)
 			} else {
-				item.ProbeProtocolTwampLight = types.BoolNull()
+				item.ProbeProtocolTwampLight = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "probe/tos/traffic-class"); cValue.Exists() {
 				item.ProbeTosTrafficClass = types.Int64Value(cValue.Int())
@@ -3934,42 +4070,42 @@ func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context,
 			if cValue := helpers.GetFromXPath(v, "probe/measurement-mode/one-way"); cValue.Exists() {
 				item.ProbeMeasurementModeOneWay = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeOneWay = types.BoolNull()
+				item.ProbeMeasurementModeOneWay = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "probe/measurement-mode/two-way"); cValue.Exists() {
 				item.ProbeMeasurementModeTwoWay = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeTwoWay = types.BoolNull()
+				item.ProbeMeasurementModeTwoWay = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "probe/measurement-mode/loopback"); cValue.Exists() {
 				item.ProbeMeasurementModeLoopback = types.BoolValue(true)
 			} else {
-				item.ProbeMeasurementModeLoopback = types.BoolNull()
+				item.ProbeMeasurementModeLoopback = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "advertisement/logging/delay-exceeded"); cValue.Exists() {
 				item.AdvertiseLoggingDelayExceeded = types.BoolValue(true)
 			} else {
-				item.AdvertiseLoggingDelayExceeded = types.BoolNull()
+				item.AdvertiseLoggingDelayExceeded = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "advertisement/threshold-check/average-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckAverageDelay = types.BoolNull()
+				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "advertisement/threshold-check/minimum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckMinimumDelay = types.BoolNull()
+				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "advertisement/threshold-check/maximum-delay"); cValue.Exists() {
 				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
 			} else {
-				item.AdvertiseThresholdCheckMaximumDelay = types.BoolNull()
+				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "advertisement/periodic/disabled"); cValue.Exists() {
 				item.AdvertisePeriodicDisabled = types.BoolValue(true)
 			} else {
-				item.AdvertisePeriodicDisabled = types.BoolNull()
+				item.AdvertisePeriodicDisabled = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "advertisement/periodic/interval"); cValue.Exists() {
 				item.AdvertisePeriodicInterval = types.Int64Value(cValue.Int())
@@ -3983,7 +4119,7 @@ func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context,
 			if cValue := helpers.GetFromXPath(v, "advertisement/accelerated"); cValue.Exists() {
 				item.AdvertiseAccelerated = types.BoolValue(true)
 			} else {
-				item.AdvertiseAccelerated = types.BoolNull()
+				item.AdvertiseAccelerated = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "advertisement/accelerated/threshold"); cValue.Exists() {
 				item.AdvertiseAcceleratedThreshold = types.Int64Value(cValue.Int())
@@ -4013,296 +4149,296 @@ func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context,
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PerformanceMeasurementDelayProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default"); value.Exists() {
 		data.InterfacesDefault = types.BoolValue(true)
 	} else {
 		data.InterfacesDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/computation-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/computation-interval"); value.Exists() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/tx-interval"); value.Exists() {
 		data.InterfacesDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/protocol/pm-mpls"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/protocol/pm-mpls"); value.Exists() {
 		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
 	} else {
 		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/protocol/twamp-light"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/protocol/twamp-light"); value.Exists() {
 		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
 	} else {
 		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/tos/traffic-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/tos/traffic-class"); value.Exists() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/tos/dscp"); value.Exists() {
 		data.InterfacesDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/measurement-mode/one-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/measurement-mode/one-way"); value.Exists() {
 		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 	} else {
 		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/probe/measurement-mode/two-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/measurement-mode/two-way"); value.Exists() {
 		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 	} else {
 		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/disabled"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/disabled"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 	} else {
 		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/interval"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/threshold"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/periodic/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/periodic/minimum-change"); value.Exists() {
 		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/logging/delay-exceeded"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/logging/delay-exceeded"); value.Exists() {
 		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 	} else {
 		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/accelerated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/accelerated"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
 	} else {
 		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/accelerated/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/accelerated/threshold"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/accelerated/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/accelerated/minimum-change"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
 		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default"); value.Exists() {
 		data.SrPolicyDefault = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/computation-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/computation-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/static-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/static-delay"); value.Exists() {
 		data.SrPolicyDefaultProbeStaticDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/protocol/pm-mpls"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/protocol/pm-mpls"); value.Exists() {
 		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/protocol/twamp-light"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/protocol/twamp-light"); value.Exists() {
 		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tos/traffic-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tos/traffic-class"); value.Exists() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/one-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/one-way"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/two-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/two-way"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/loopback"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/measurement-mode/loopback"); value.Exists() {
 		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/logging/delay-exceeded"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/logging/delay-exceeded"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/average-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/average-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/disabled"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/disabled"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/interval"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/threshold"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/periodic/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/periodic/minimum-change"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/accelerated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/accelerated"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/threshold"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/accelerated/minimum-change"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/advertisement/anomaly-loss/lower-bound"); value.Exists() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default"); value.Exists() {
 		data.EndpointDefault = types.BoolValue(true)
 	} else {
 		data.EndpointDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/computation-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/computation-interval"); value.Exists() {
 		data.EndpointDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/measurement-mode/one-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/one-way"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/measurement-mode/two-way"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/two-way"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/measurement-mode/loopback"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/loopback"); value.Exists() {
 		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/logging/delay-exceeded"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/logging/delay-exceeded"); value.Exists() {
 		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/average-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/average-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/minimum-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/threshold-check/maximum-delay"); value.Exists() {
 		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/disabled"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/disabled"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/interval"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/threshold"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/periodic/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/periodic/minimum-change"); value.Exists() {
 		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/accelerated"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/accelerated"); value.Exists() {
 		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/accelerated/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/accelerated/threshold"); value.Exists() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/accelerated/minimum-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/accelerated/minimum-change"); value.Exists() {
 		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/upper-bound"); value.Exists() {
 		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/anomaly-check/lower-bound"); value.Exists() {
 		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/advertisement/anomaly-loss/upper-bound"); value.Exists() {
 		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/names/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/names/name"); value.Exists() {
 		data.Profiles = make([]PerformanceMeasurementDelayProfileProfiles, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PerformanceMeasurementDelayProfileProfiles{}
@@ -5088,9 +5224,10 @@ func (data *PerformanceMeasurementDelayProfile) getEmptyLeafsDelete(ctx context.
 func (data *PerformanceMeasurementDelayProfile) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Profiles {
-		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/names/name=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[profile-name=" + data.Profiles[i].ProfileName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/names/name%v", data.getPath(), keyPath))
 	}
 	if !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/anomaly-loss/upper-bound", data.getPath()))

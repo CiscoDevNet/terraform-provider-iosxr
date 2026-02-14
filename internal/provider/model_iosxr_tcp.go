@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -165,7 +164,6 @@ func (data TCP) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "ao.keychains.keychain"+"."+strconv.Itoa(index)+"."+"keychain-name", item.KeychainName.ValueString())
 			}
 			if len(item.Keys) > 0 {
-				body, _ = sjson.Set(body, "ao.keychains.keychain"+"."+strconv.Itoa(index)+"."+"keys.key", []interface{}{})
 				for cindex, citem := range item.Keys {
 					if !citem.KeyName.IsNull() && !citem.KeyName.IsUnknown() {
 						body, _ = sjson.Set(body, "ao.keychains.keychain"+"."+strconv.Itoa(index)+"."+"keys.key"+"."+strconv.Itoa(cindex)+"."+"key-name", citem.KeyName.ValueString())
@@ -190,80 +188,84 @@ func (data TCP) toBody(ctx context.Context) string {
 func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "window-size"); value.Exists() && !data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "synwait-time"); value.Exists() && !data.SynwaitTime.IsNull() {
 		data.SynwaitTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.SynwaitTime.IsNull() {
 		data.SynwaitTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "path-mtu-discovery"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathMtuDiscovery.IsNull() {
 			data.PathMtuDiscovery = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathMtuDiscovery.IsNull() {
 			data.PathMtuDiscovery = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "path-mtu-discovery.age-timer"); value.Exists() && !data.PathMtuDiscoveryAgeTimer.IsNull() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
-	} else {
+	} else if data.PathMtuDiscoveryAgeTimer.IsNull() {
 		data.PathMtuDiscoveryAgeTimer = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "receive-queue"); value.Exists() && !data.ReceiveQueue.IsNull() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
-	} else {
+	} else if data.ReceiveQueue.IsNull() {
 		data.ReceiveQueue = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timestamp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Timestamp.IsNull() {
 			data.Timestamp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Timestamp.IsNull() {
 			data.Timestamp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "throttle"); value.Exists() && !data.Throttle.IsNull() {
 		data.Throttle = types.Int64Value(value.Int())
-	} else {
+	} else if data.Throttle.IsNull() {
 		data.Throttle = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "high-water-mark-throttling"); value.Exists() && !data.ThrottleHighWaterMark.IsNull() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThrottleHighWaterMark.IsNull() {
 		data.ThrottleHighWaterMark = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "selective-ack"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SelectiveAck.IsNull() {
 			data.SelectiveAck = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SelectiveAck.IsNull() {
 			data.SelectiveAck = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "mss"); value.Exists() && !data.Mss.IsNull() {
 		data.Mss = types.Int64Value(value.Int())
-	} else {
+	} else if data.Mss.IsNull() {
 		data.Mss = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "accept-rate"); value.Exists() && !data.AcceptRate.IsNull() {
 		data.AcceptRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.AcceptRate.IsNull() {
 		data.AcceptRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ao"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ao.IsNull() {
 			data.Ao = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ao.IsNull() {
 			data.Ao = types.BoolNull()
 		}
@@ -296,39 +298,44 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.AoKeychains[i].KeychainName = types.StringNull()
 		}
-		// Rebuild nested list from device response
-		if value := r.Get("keys.key"); value.Exists() {
-			// Store existing state items for matching
-			existingItems := data.AoKeychains[i].Keys
-			data.AoKeychains[i].Keys = make([]TCPAoKeychainsKeys, 0)
-			value.ForEach(func(_, cr gjson.Result) bool {
-				citem := TCPAoKeychainsKeys{}
-				if cValue := cr.Get("key-name"); cValue.Exists() {
-					citem.KeyName = types.StringValue(cValue.String())
-				}
-				if cValue := cr.Get("send-id"); cValue.Exists() {
-					citem.SendId = types.Int64Value(cValue.Int())
-				}
-				if cValue := cr.Get("receive-id"); cValue.Exists() {
-					citem.ReceiveId = types.Int64Value(cValue.Int())
-				}
+		for ci := range data.AoKeychains[i].Keys {
+			keys := [...]string{"key-name"}
+			keyValues := [...]string{data.AoKeychains[i].Keys[ci].KeyName.ValueString()}
 
-				// Match with existing state item by key fields
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.KeyName.ValueString() != citem.KeyName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Preserve false values for presence-based booleans
+			var cr gjson.Result
+			r.Get("keys.key").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.AoKeychains[i].Keys = append(data.AoKeychains[i].Keys, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("key-name"); value.Exists() && !data.AoKeychains[i].Keys[ci].KeyName.IsNull() {
+				data.AoKeychains[i].Keys[ci].KeyName = types.StringValue(value.String())
+			} else {
+				data.AoKeychains[i].Keys[ci].KeyName = types.StringNull()
+			}
+			if value := cr.Get("send-id"); value.Exists() && !data.AoKeychains[i].Keys[ci].SendId.IsNull() {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Value(value.Int())
+			} else {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Null()
+			}
+			if value := cr.Get("receive-id"); value.Exists() && !data.AoKeychains[i].Keys[ci].ReceiveId.IsNull() {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Value(value.Int())
+			} else {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Null()
+			}
 		}
 	}
 }
@@ -383,29 +390,25 @@ func (data TCP) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.AoKeychains) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AoKeychains {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/ao/keychains/keychain[keychain-name='" + item.KeychainName.ValueString() + "']"
 			if !item.KeychainName.IsNull() && !item.KeychainName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "keychain-name", item.KeychainName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/keychain-name", item.KeychainName.ValueString())
 			}
 			if len(item.Keys) > 0 {
 				for _, citem := range item.Keys {
-					ccBody := netconf.Body{}
+					cbasePath := basePath + "/keys/key[key-name='" + citem.KeyName.ValueString() + "']"
 					if !citem.KeyName.IsNull() && !citem.KeyName.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "key-name", citem.KeyName.ValueString())
+						body = helpers.SetFromXPath(body, cbasePath+"/key-name", citem.KeyName.ValueString())
 					}
 					if !citem.SendId.IsNull() && !citem.SendId.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "send-id", strconv.FormatInt(citem.SendId.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/send-id", strconv.FormatInt(citem.SendId.ValueInt64(), 10))
 					}
 					if !citem.ReceiveId.IsNull() && !citem.ReceiveId.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "receive-id", strconv.FormatInt(citem.ReceiveId.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/receive-id", strconv.FormatInt(citem.ReceiveId.ValueInt64(), 10))
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "keys/key", ccBody.Res())
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"ao/keychains/keychain", cBody.Res())
 		}
 	}
 	bodyString, err := body.String()
@@ -419,72 +422,84 @@ func (data TCP) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	} else if data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/synwait-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	} else if data.SynwaitTime.IsNull() {
 		data.SynwaitTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
-		data.PathMtuDiscovery = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathMtuDiscovery.IsNull() {
+			data.PathMtuDiscovery = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathMtuDiscovery.IsNull() {
 			data.PathMtuDiscovery = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	} else if data.PathMtuDiscoveryAgeTimer.IsNull() {
 		data.PathMtuDiscoveryAgeTimer = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/receive-queue"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	} else if data.ReceiveQueue.IsNull() {
 		data.ReceiveQueue = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timestamp"); value.Exists() {
-		data.Timestamp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timestamp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Timestamp.IsNull() {
+			data.Timestamp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Timestamp.IsNull() {
 			data.Timestamp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	} else if data.Throttle.IsNull() {
 		data.Throttle = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	} else if data.ThrottleHighWaterMark.IsNull() {
 		data.ThrottleHighWaterMark = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/selective-ack"); value.Exists() {
-		data.SelectiveAck = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/selective-ack"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SelectiveAck.IsNull() {
+			data.SelectiveAck = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SelectiveAck.IsNull() {
 			data.SelectiveAck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mss"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	} else if data.Mss.IsNull() {
 		data.Mss = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	} else if data.AcceptRate.IsNull() {
 		data.AcceptRate = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao"); value.Exists() {
-		data.Ao = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ao.IsNull() {
+			data.Ao = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ao.IsNull() {
@@ -496,7 +511,7 @@ func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/keychains/keychain").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao/keychains/keychain").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -519,42 +534,45 @@ func (data *TCP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.AoKeychains[i].KeychainName.IsNull() {
 			data.AoKeychains[i].KeychainName = types.StringNull()
 		}
-		// Rebuild nested list from device XML response
-		if value := helpers.GetFromXPath(r, "keys/key"); value.Exists() {
-			// Match existing state items with device response by key fields
-			existingItems := data.AoKeychains[i].Keys
-			data.AoKeychains[i].Keys = make([]TCPAoKeychainsKeys, 0)
+		for ci := range data.AoKeychains[i].Keys {
+			keys := [...]string{"key-name"}
+			keyValues := [...]string{data.AoKeychains[i].Keys[ci].KeyName.ValueString()}
 
-			value.ForEach(func(_ int, cr xmldot.Result) bool {
-				citem := TCPAoKeychainsKeys{}
-
-				// First, populate all fields from device
-				if cValue := helpers.GetFromXPath(cr, "key-name"); cValue.Exists() {
-					citem.KeyName = types.StringValue(cValue.String())
-				}
-				if cValue := helpers.GetFromXPath(cr, "send-id"); cValue.Exists() {
-					citem.SendId = types.Int64Value(cValue.Int())
-				}
-				if cValue := helpers.GetFromXPath(cr, "receive-id"); cValue.Exists() {
-					citem.ReceiveId = types.Int64Value(cValue.Int())
-				}
-
-				// Try to find matching item in existing state to preserve field states
-				for _, existingItem := range existingItems {
-					match := true
-					if existingItem.KeyName.ValueString() != citem.KeyName.ValueString() {
-						match = false
-					}
-
-					if match {
-						// Found matching item - preserve state for fields not in device response
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "keys/key").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
 						break
 					}
-				}
-
-				data.AoKeychains[i].Keys = append(data.AoKeychains[i].Keys, citem)
-				return true
-			})
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "key-name"); value.Exists() {
+				data.AoKeychains[i].Keys[ci].KeyName = types.StringValue(value.String())
+			} else {
+				// If not found in device response, keep the current value (don't set to null)
+				// This handles cases where the item exists but is being read back
+			}
+			if value := helpers.GetFromXPath(cr, "send-id"); value.Exists() {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Value(value.Int())
+			} else if data.AoKeychains[i].Keys[ci].SendId.IsNull() {
+				data.AoKeychains[i].Keys[ci].SendId = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "receive-id"); value.Exists() {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Value(value.Int())
+			} else if data.AoKeychains[i].Keys[ci].ReceiveId.IsNull() {
+				data.AoKeychains[i].Keys[ci].ReceiveId = types.Int64Null()
+			}
 		}
 	}
 }
@@ -567,6 +585,10 @@ func (data *TCP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
@@ -575,8 +597,9 @@ func (data *TCP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
-	} else {
-		data.PathMtuDiscovery = types.BoolNull()
+	} else if !data.PathMtuDiscovery.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathMtuDiscovery = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-mtu-discovery.age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
@@ -586,8 +609,9 @@ func (data *TCP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
-	} else {
-		data.Timestamp = types.BoolNull()
+	} else if !data.Timestamp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Timestamp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
@@ -597,8 +621,9 @@ func (data *TCP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
-	} else {
-		data.SelectiveAck = types.BoolNull()
+	} else if !data.SelectiveAck.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SelectiveAck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
@@ -608,8 +633,9 @@ func (data *TCP) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
-	} else {
-		data.Ao = types.BoolNull()
+	} else if !data.Ao.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ao = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ao.keychains.keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
@@ -645,9 +671,14 @@ func (data *TCP) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *TCPData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
@@ -658,7 +689,7 @@ func (data *TCPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
 	} else {
-		data.PathMtuDiscovery = types.BoolNull()
+		data.PathMtuDiscovery = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-mtu-discovery.age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
@@ -669,7 +700,7 @@ func (data *TCPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
 	} else {
-		data.Timestamp = types.BoolNull()
+		data.Timestamp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
@@ -680,7 +711,7 @@ func (data *TCPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
 	} else {
-		data.SelectiveAck = types.BoolNull()
+		data.SelectiveAck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
@@ -691,7 +722,7 @@ func (data *TCPData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
 	} else {
-		data.Ao = types.BoolNull()
+		data.Ao = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ao.keychains.keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
@@ -727,51 +758,51 @@ func (data *TCPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TCP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/synwait-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
 	} else {
-		data.PathMtuDiscovery = types.BoolNull()
+		data.PathMtuDiscovery = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/receive-queue"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timestamp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
 	} else {
-		data.Timestamp = types.BoolNull()
+		data.Timestamp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/selective-ack"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
 	} else {
-		data.SelectiveAck = types.BoolNull()
+		data.SelectiveAck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mss"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
 	} else {
-		data.Ao = types.BoolNull()
+		data.Ao = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/keychains/keychain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao/keychains/keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TCPAoKeychains{}
@@ -805,51 +836,51 @@ func (data *TCP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TCPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/window-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/window-size"); value.Exists() {
 		data.WindowSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/synwait-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/synwait-time"); value.Exists() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery"); value.Exists() {
 		data.PathMtuDiscovery = types.BoolValue(true)
 	} else {
 		data.PathMtuDiscovery = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu-discovery/age-timer"); value.Exists() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/receive-queue"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/receive-queue"); value.Exists() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timestamp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timestamp"); value.Exists() {
 		data.Timestamp = types.BoolValue(true)
 	} else {
 		data.Timestamp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/throttle"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle"); value.Exists() {
 		data.Throttle = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/high-water-mark-throttling"); value.Exists() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/selective-ack"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/selective-ack"); value.Exists() {
 		data.SelectiveAck = types.BoolValue(true)
 	} else {
 		data.SelectiveAck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mss"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mss"); value.Exists() {
 		data.Mss = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-rate"); value.Exists() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao"); value.Exists() {
 		data.Ao = types.BoolValue(true)
 	} else {
 		data.Ao = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ao/keychains/keychain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ao/keychains/keychain"); value.Exists() {
 		data.AoKeychains = make([]TCPAoKeychains, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TCPAoKeychains{}
@@ -1043,9 +1074,10 @@ func (data *TCP) getEmptyLeafsDelete(ctx context.Context, state *TCP) []string {
 func (data *TCP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.AoKeychains {
-		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/keychains/keychain=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[keychain-name=" + data.AoKeychains[i].KeychainName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/keychains/keychain%v", data.getPath(), keyPath))
 	}
 	if !data.Ao.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao", data.getPath()))

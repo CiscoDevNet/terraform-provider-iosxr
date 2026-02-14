@@ -116,7 +116,7 @@ func (data EtagSet) toBodyXML(ctx context.Context) string {
 func (data *EtagSet) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "etag-set-as-text"); value.Exists() && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
-	} else {
+	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
 }
@@ -126,12 +126,12 @@ func (data *EtagSet) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *EtagSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/set-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/set-name"); value.Exists() {
 		data.SetName = types.StringValue(value.String())
 	} else if data.SetName.IsNull() {
 		data.SetName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etag-set-as-text"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
@@ -147,6 +147,10 @@ func (data *EtagSet) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
@@ -157,9 +161,14 @@ func (data *EtagSet) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *EtagSetData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
@@ -171,7 +180,7 @@ func (data *EtagSetData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *EtagSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etag-set-as-text"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -181,7 +190,7 @@ func (data *EtagSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *EtagSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/etag-set-as-text"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/etag-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }

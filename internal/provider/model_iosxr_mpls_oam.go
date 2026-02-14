@@ -152,91 +152,99 @@ func (data MPLSOAM) toBody(ctx context.Context) string {
 
 func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "oam"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Oam.IsNull() {
 			data.Oam = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Oam.IsNull() {
 			data.Oam = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "oam.echo.disable-vendor-extension"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoDisableVendorExtension.IsNull() {
 			data.OamEchoDisableVendorExtension = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoDisableVendorExtension.IsNull() {
 			data.OamEchoDisableVendorExtension = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
 			data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
 			data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "oam.echo.revision.one"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoRevisionOne.IsNull() {
 			data.OamEchoRevisionOne = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoRevisionOne.IsNull() {
 			data.OamEchoRevisionOne = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "oam.echo.revision.two"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoRevisionTwo.IsNull() {
 			data.OamEchoRevisionTwo = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoRevisionTwo.IsNull() {
 			data.OamEchoRevisionTwo = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "oam.echo.revision.three"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoRevisionThree.IsNull() {
 			data.OamEchoRevisionThree = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoRevisionThree.IsNull() {
 			data.OamEchoRevisionThree = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "oam.echo.revision.four"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoRevisionFour.IsNull() {
 			data.OamEchoRevisionFour = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoRevisionFour.IsNull() {
 			data.OamEchoRevisionFour = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "oam.dpm.pps"); value.Exists() && !data.OamDpmPps.IsNull() {
 		data.OamDpmPps = types.Int64Value(value.Int())
-	} else {
+	} else if data.OamDpmPps.IsNull() {
 		data.OamDpmPps = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "oam.dpm.interval"); value.Exists() && !data.OamDpmInterval.IsNull() {
 		data.OamDpmInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.OamDpmInterval.IsNull() {
 		data.OamDpmInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "oam.dpm.downstream-ecmp-faults"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.OamDpmDownstreamEcmpFaults.IsNull() {
 			data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.OamDpmDownstreamEcmpFaults.IsNull() {
 			data.OamDpmDownstreamEcmpFaults = types.BoolNull()
 		}
@@ -305,74 +313,98 @@ func (data MPLSOAM) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MPLSOAM) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam"); value.Exists() {
-		data.Oam = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Oam.IsNull() {
+			data.Oam = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Oam.IsNull() {
 			data.Oam = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/disable-vendor-extension"); value.Exists() {
-		data.OamEchoDisableVendorExtension = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/disable-vendor-extension"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamEchoDisableVendorExtension.IsNull() {
+			data.OamEchoDisableVendorExtension = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoDisableVendorExtension.IsNull() {
 			data.OamEchoDisableVendorExtension = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp"); value.Exists() {
-		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+			data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
 			data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/one"); value.Exists() {
-		data.OamEchoRevisionOne = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/one"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamEchoRevisionOne.IsNull() {
+			data.OamEchoRevisionOne = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoRevisionOne.IsNull() {
 			data.OamEchoRevisionOne = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/two"); value.Exists() {
-		data.OamEchoRevisionTwo = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/two"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamEchoRevisionTwo.IsNull() {
+			data.OamEchoRevisionTwo = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoRevisionTwo.IsNull() {
 			data.OamEchoRevisionTwo = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/three"); value.Exists() {
-		data.OamEchoRevisionThree = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/three"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamEchoRevisionThree.IsNull() {
+			data.OamEchoRevisionThree = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoRevisionThree.IsNull() {
 			data.OamEchoRevisionThree = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/four"); value.Exists() {
-		data.OamEchoRevisionFour = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/four"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamEchoRevisionFour.IsNull() {
+			data.OamEchoRevisionFour = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.OamEchoRevisionFour.IsNull() {
 			data.OamEchoRevisionFour = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/dpm/pps"); value.Exists() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	} else if data.OamDpmPps.IsNull() {
 		data.OamDpmPps = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/dpm/interval"); value.Exists() {
 		data.OamDpmInterval = types.Int64Value(value.Int())
 	} else if data.OamDpmInterval.IsNull() {
 		data.OamDpmInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/downstream-ecmp-faults"); value.Exists() {
-		data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/dpm/downstream-ecmp-faults"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.OamDpmDownstreamEcmpFaults.IsNull() {
+			data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.OamDpmDownstreamEcmpFaults.IsNull() {
@@ -389,40 +421,51 @@ func (data *MPLSOAM) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "oam"); value.Exists() {
 		data.Oam = types.BoolValue(true)
-	} else {
-		data.Oam = types.BoolNull()
+	} else if !data.Oam.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Oam = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.disable-vendor-extension"); value.Exists() {
 		data.OamEchoDisableVendorExtension = types.BoolValue(true)
-	} else {
-		data.OamEchoDisableVendorExtension = types.BoolNull()
+	} else if !data.OamEchoDisableVendorExtension.IsNull() {
+		// Only set to false if it was previously set in state
+		data.OamEchoDisableVendorExtension = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
-	} else {
-		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolNull()
+	} else if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.revision.one"); value.Exists() {
 		data.OamEchoRevisionOne = types.BoolValue(true)
-	} else {
-		data.OamEchoRevisionOne = types.BoolNull()
+	} else if !data.OamEchoRevisionOne.IsNull() {
+		// Only set to false if it was previously set in state
+		data.OamEchoRevisionOne = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.revision.two"); value.Exists() {
 		data.OamEchoRevisionTwo = types.BoolValue(true)
-	} else {
-		data.OamEchoRevisionTwo = types.BoolNull()
+	} else if !data.OamEchoRevisionTwo.IsNull() {
+		// Only set to false if it was previously set in state
+		data.OamEchoRevisionTwo = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.revision.three"); value.Exists() {
 		data.OamEchoRevisionThree = types.BoolValue(true)
-	} else {
-		data.OamEchoRevisionThree = types.BoolNull()
+	} else if !data.OamEchoRevisionThree.IsNull() {
+		// Only set to false if it was previously set in state
+		data.OamEchoRevisionThree = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.revision.four"); value.Exists() {
 		data.OamEchoRevisionFour = types.BoolValue(true)
-	} else {
-		data.OamEchoRevisionFour = types.BoolNull()
+	} else if !data.OamEchoRevisionFour.IsNull() {
+		// Only set to false if it was previously set in state
+		data.OamEchoRevisionFour = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.dpm.pps"); value.Exists() {
 		data.OamDpmPps = types.Int64Value(value.Int())
@@ -432,8 +475,9 @@ func (data *MPLSOAM) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "oam.dpm.downstream-ecmp-faults"); value.Exists() {
 		data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
-	} else {
-		data.OamDpmDownstreamEcmpFaults = types.BoolNull()
+	} else if !data.OamDpmDownstreamEcmpFaults.IsNull() {
+		// Only set to false if it was previously set in state
+		data.OamDpmDownstreamEcmpFaults = types.BoolValue(false)
 	}
 }
 
@@ -441,44 +485,49 @@ func (data *MPLSOAM) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *MPLSOAMData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "oam"); value.Exists() {
 		data.Oam = types.BoolValue(true)
 	} else {
-		data.Oam = types.BoolNull()
+		data.Oam = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.disable-vendor-extension"); value.Exists() {
 		data.OamEchoDisableVendorExtension = types.BoolValue(true)
 	} else {
-		data.OamEchoDisableVendorExtension = types.BoolNull()
+		data.OamEchoDisableVendorExtension = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
 	} else {
-		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolNull()
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.revision.one"); value.Exists() {
 		data.OamEchoRevisionOne = types.BoolValue(true)
 	} else {
-		data.OamEchoRevisionOne = types.BoolNull()
+		data.OamEchoRevisionOne = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.revision.two"); value.Exists() {
 		data.OamEchoRevisionTwo = types.BoolValue(true)
 	} else {
-		data.OamEchoRevisionTwo = types.BoolNull()
+		data.OamEchoRevisionTwo = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.revision.three"); value.Exists() {
 		data.OamEchoRevisionThree = types.BoolValue(true)
 	} else {
-		data.OamEchoRevisionThree = types.BoolNull()
+		data.OamEchoRevisionThree = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.echo.revision.four"); value.Exists() {
 		data.OamEchoRevisionFour = types.BoolValue(true)
 	} else {
-		data.OamEchoRevisionFour = types.BoolNull()
+		data.OamEchoRevisionFour = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "oam.dpm.pps"); value.Exists() {
 		data.OamDpmPps = types.Int64Value(value.Int())
@@ -489,7 +538,7 @@ func (data *MPLSOAMData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "oam.dpm.downstream-ecmp-faults"); value.Exists() {
 		data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
 	} else {
-		data.OamDpmDownstreamEcmpFaults = types.BoolNull()
+		data.OamDpmDownstreamEcmpFaults = types.BoolValue(false)
 	}
 }
 
@@ -497,51 +546,51 @@ func (data *MPLSOAMData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MPLSOAM) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam"); value.Exists() {
 		data.Oam = types.BoolValue(true)
 	} else {
-		data.Oam = types.BoolNull()
+		data.Oam = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/disable-vendor-extension"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/disable-vendor-extension"); value.Exists() {
 		data.OamEchoDisableVendorExtension = types.BoolValue(true)
 	} else {
-		data.OamEchoDisableVendorExtension = types.BoolNull()
+		data.OamEchoDisableVendorExtension = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp"); value.Exists() {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
 	} else {
-		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolNull()
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/one"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/one"); value.Exists() {
 		data.OamEchoRevisionOne = types.BoolValue(true)
 	} else {
-		data.OamEchoRevisionOne = types.BoolNull()
+		data.OamEchoRevisionOne = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/two"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/two"); value.Exists() {
 		data.OamEchoRevisionTwo = types.BoolValue(true)
 	} else {
-		data.OamEchoRevisionTwo = types.BoolNull()
+		data.OamEchoRevisionTwo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/three"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/three"); value.Exists() {
 		data.OamEchoRevisionThree = types.BoolValue(true)
 	} else {
-		data.OamEchoRevisionThree = types.BoolNull()
+		data.OamEchoRevisionThree = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/four"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/four"); value.Exists() {
 		data.OamEchoRevisionFour = types.BoolValue(true)
 	} else {
-		data.OamEchoRevisionFour = types.BoolNull()
+		data.OamEchoRevisionFour = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/dpm/pps"); value.Exists() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/dpm/interval"); value.Exists() {
 		data.OamDpmInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/downstream-ecmp-faults"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/dpm/downstream-ecmp-faults"); value.Exists() {
 		data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
 	} else {
-		data.OamDpmDownstreamEcmpFaults = types.BoolNull()
+		data.OamDpmDownstreamEcmpFaults = types.BoolValue(false)
 	}
 }
 
@@ -549,48 +598,48 @@ func (data *MPLSOAM) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MPLSOAMData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam"); value.Exists() {
 		data.Oam = types.BoolValue(true)
 	} else {
 		data.Oam = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/disable-vendor-extension"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/disable-vendor-extension"); value.Exists() {
 		data.OamEchoDisableVendorExtension = types.BoolValue(true)
 	} else {
 		data.OamEchoDisableVendorExtension = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/reply-mode/control-channel/allow-reverse-lsp"); value.Exists() {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
 	} else {
 		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/one"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/one"); value.Exists() {
 		data.OamEchoRevisionOne = types.BoolValue(true)
 	} else {
 		data.OamEchoRevisionOne = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/two"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/two"); value.Exists() {
 		data.OamEchoRevisionTwo = types.BoolValue(true)
 	} else {
 		data.OamEchoRevisionTwo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/three"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/three"); value.Exists() {
 		data.OamEchoRevisionThree = types.BoolValue(true)
 	} else {
 		data.OamEchoRevisionThree = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/echo/revision/four"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/echo/revision/four"); value.Exists() {
 		data.OamEchoRevisionFour = types.BoolValue(true)
 	} else {
 		data.OamEchoRevisionFour = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/pps"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/dpm/pps"); value.Exists() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/dpm/interval"); value.Exists() {
 		data.OamDpmInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/oam/dpm/downstream-ecmp-faults"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oam/dpm/downstream-ecmp-faults"); value.Exists() {
 		data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
 	} else {
 		data.OamDpmDownstreamEcmpFaults = types.BoolValue(false)

@@ -139,9 +139,17 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_system", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.address", "11.11.11.11"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.traps_unencrypted_strings.0.udp_port", "1100"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.traps_unencrypted_strings.0.version_v3_security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.traps_unencrypted_strings.0.version_v2c", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.traps_encrypted_default.0.udp_port", "1100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.traps_encrypted_default.0.version_v2c", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.traps_encrypted_aes.0.udp_port", "1100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.traps_encrypted_aes.0.version_v2c", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.informs_unencrypted_strings.0.udp_port", "1100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.informs_unencrypted_strings.0.version_v3_security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.informs_encrypted_default.0.udp_port", "1100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.informs_encrypted_default.0.version_v2c", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.informs_encrypted_aes.0.udp_port", "1100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "hosts.0.informs_encrypted_aes.0.version_v2c", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "views.0.view_name", "VIEW1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "views.0.mib_view_families.0.name", "1.3.6.1.2.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "views.0.mib_view_families.0.included", "true"))
@@ -375,12 +383,32 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config += `		traps_unencrypted_strings = [{` + "\n"
 	config += `			community_string = "COMMUNITY1"` + "\n"
 	config += `			udp_port = 1100` + "\n"
-	config += `			version_v3_security_level = "auth"` + "\n"
+	config += `			version_v2c = true` + "\n"
+	config += `		}]` + "\n"
+	config += `		traps_encrypted_default = [{` + "\n"
+	config += `			community_string = "15021E0E082328"` + "\n"
+	config += `			udp_port = 1100` + "\n"
+	config += `			version_v2c = true` + "\n"
+	config += `		}]` + "\n"
+	config += `		traps_encrypted_aes = [{` + "\n"
+	config += `			community_string = "06253E2C5A471E1C5E"` + "\n"
+	config += `			udp_port = 1100` + "\n"
+	config += `			version_v2c = true` + "\n"
 	config += `		}]` + "\n"
 	config += `		informs_unencrypted_strings = [{` + "\n"
 	config += `			community_string = "COMMUNITY2"` + "\n"
 	config += `			udp_port = 1100` + "\n"
 	config += `			version_v3_security_level = "auth"` + "\n"
+	config += `		}]` + "\n"
+	config += `		informs_encrypted_default = [{` + "\n"
+	config += `			community_string = "15021E0E082328"` + "\n"
+	config += `			udp_port = 1100` + "\n"
+	config += `			version_v2c = true` + "\n"
+	config += `		}]` + "\n"
+	config += `		informs_encrypted_aes = [{` + "\n"
+	config += `			community_string = "06253E2C5A471E1C5E"` + "\n"
+	config += `			udp_port = 1100` + "\n"
+	config += `			version_v2c = true` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	views = [{` + "\n"

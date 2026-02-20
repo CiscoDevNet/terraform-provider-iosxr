@@ -7,6 +7,15 @@ description: |-
 
 # Changelog
 
+## Unreleased
+
+- BREAKING CHANGE: Refactor `iosxr_snmp_server_vrf_host` into `iosxr_snmp_server_vrf` resource and data source
+- Add `traps_encrypted_default`, `traps_encrypted_aes` lists to `iosxr_snmp_server_vrf` resource and data source
+- Add `informs_encrypted_default`, `informs_encrypted_aes` lists to `iosxr_snmp_server_vrf` resource and data source
+- Add `traps_encrypted_default`, `traps_encrypted_aes` lists to `iosxr_snmp_server` resource and data source
+- Add `informs_encrypted_default`, `informs_encrypted_aes` lists to `iosxr_snmp_server` resource and data source
+- Fix: Make `version_v3_security_level` attribute optional in `iosxr_snmp_server`, `iosxr_snmp_server_vrf` resource and data source
+
 ## 0.7.0
 
 - BREAKING CHANGE: Rename `purge_transmit_strict_strict_value` to `purge_transmit_strict_value` in `iosxr_router_isis` resource and data source

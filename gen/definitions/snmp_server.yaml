@@ -404,9 +404,47 @@ attributes:
             example: 1100
           - yang_name: version/v2c
             example: true
-            exclude_test: true
           - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
             example: auth
+            exclude_test: true
+      - yang_name: traps/encrypted/encryption-defaults/encryption-default
+        tf_name: traps_encrypted_default
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: 15021E0E082328
+          - yang_name: udp-port
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+            exclude_test: true
+      - yang_name: traps/encrypted/encryption-aeses/encryption-aes
+        tf_name: traps_encrypted_aes
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: 06253E2C5A471E1C5E
+          - yang_name: udp-port
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+            exclude_test: true
       - yang_name: informs/unencrypted/unencrypted-string
         tf_name: informs_unencrypted_strings
         type: List
@@ -422,7 +460,45 @@ attributes:
             example: true
             exclude_test: true
           - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
             example: auth
+      - yang_name: informs/encrypted/encryption-defaults/encryption-default
+        tf_name: informs_encrypted_default
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: 15021E0E082328
+          - yang_name: udp-port
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+            exclude_test: true
+      - yang_name: informs/encrypted/encryption-aeses/encryption-aes
+        tf_name: informs_encrypted_aes
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: 06253E2C5A471E1C5E
+          - yang_name: udp-port
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+            exclude_test: true
   - yang_name: views/view
     tf_name: views
     type: List

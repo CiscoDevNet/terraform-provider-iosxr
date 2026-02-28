@@ -534,6 +534,56 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 								},
 							},
 						},
+						"traps_encrypted_default": schema.ListNestedAttribute{
+							MarkdownDescription: "Specifies an ENCRYPTED community string in default method",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: "Specifies an ENCRYPTED community string in default method",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: "udp port to which notifications should be sent",
+										Computed:            true,
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: "Use 2c for SNMPv2c",
+										Computed:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: "Security level",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"traps_encrypted_aes": schema.ListNestedAttribute{
+							MarkdownDescription: "Specifies an ENCRYPTED community string in aes-128 method",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: "Specifies an ENCRYPTED community string in aes-128 method",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: "udp port to which notifications should be sent",
+										Computed:            true,
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: "Use 2c for SNMPv2c",
+										Computed:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: "Security level",
+										Computed:            true,
+									},
+								},
+							},
+						},
 						"informs_unencrypted_strings": schema.ListNestedAttribute{
 							MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
 							Computed:            true,
@@ -541,6 +591,56 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 								Attributes: map[string]schema.Attribute{
 									"community_string": schema.StringAttribute{
 										MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: "udp port to which notifications should be sent",
+										Computed:            true,
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: "Use 2c for SNMPv2c",
+										Computed:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: "Security level",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"informs_encrypted_default": schema.ListNestedAttribute{
+							MarkdownDescription: "Specifies an ENCRYPTED community string in default method",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: "Specifies an ENCRYPTED community string in default method",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: "udp port to which notifications should be sent",
+										Computed:            true,
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: "Use 2c for SNMPv2c",
+										Computed:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: "Security level",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"informs_encrypted_aes": schema.ListNestedAttribute{
+							MarkdownDescription: "Specifies an ENCRYPTED community string in aes-128 method",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: "Specifies an ENCRYPTED community string in aes-128 method",
 										Computed:            true,
 										Sensitive:           true,
 									},

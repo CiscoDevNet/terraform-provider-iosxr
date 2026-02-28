@@ -184,6 +184,7 @@ func TestAccDataSourceIosxrRouterISISAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "prefix_unreachable_adv_lifetime", "120"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "prefix_unreachable_adv_metric", "4261412865"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "prefix_unreachable_rx_process_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "apply_weight_ecmp_only_bandwidth", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -458,6 +459,7 @@ func testAccDataSourceIosxrRouterISISAddressFamilyConfig() string {
 	config += `	prefix_unreachable_adv_lifetime = 120` + "\n"
 	config += `	prefix_unreachable_adv_metric = 4261412865` + "\n"
 	config += `	prefix_unreachable_rx_process_enable = true` + "\n"
+	config += `	apply_weight_ecmp_only_bandwidth = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 

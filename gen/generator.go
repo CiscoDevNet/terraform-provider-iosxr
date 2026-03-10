@@ -353,12 +353,6 @@ func ToDotPath(path string) string {
 	return path
 }
 
-// ToGnmiPath converts a path to GNMI format
-// For iosxr (which uses NETCONF/gNMI), we just return the path as-is
-func ToGnmiPath(path string) string {
-	return path
-}
-
 func ReverseAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
 	reversed := make([]YamlConfigAttribute, len(attributes))
 	for i, v := range attributes {
@@ -523,7 +517,6 @@ var functions = template.FuncMap{
 	"getLastPathElement":          GetLastPathElement,
 	"reverseAttributes":           ReverseAttributes,
 	"toDotPath":                   ToDotPath,
-	"toGnmiPath":                  ToGnmiPath,
 	"hasPrefix":                   strings.HasPrefix,
 	"hasXmlNamespaceSiblings":     HasXmlNamespaceSiblings,
 	"isXmlNamespaceSibling":       IsXmlNamespaceSibling,

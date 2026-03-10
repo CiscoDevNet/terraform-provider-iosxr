@@ -284,6 +284,17 @@ func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	return attributes
 }
 
+// Templating helper function to get ID attributes from a list
+func GetIdAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
+	idAttrs := []YamlConfigAttribute{}
+	for _, attr := range attributes {
+		if attr.Id {
+			idAttrs = append(idAttrs, attr)
+		}
+	}
+	return idAttrs
+}
+
 // Templating helper function to get xpath if available
 func GetXPath(yangPath, xPath string) string {
 	if xPath != "" {
@@ -325,10 +336,20 @@ func GetLastPathElement(path string) string {
 func ToDotPath(path string) string {
 	// Remove leading slash
 	path = strings.TrimPrefix(path, "/")
-	// Replace double slashes with single dot
+
+	// Split by /, escape dots in each segment (which are part of YANG element names),
+	// then join with . (path separator)
+	parts := strings.Split(path, "/")
+	for i, part := range parts {
+		// Escape dots in element names for sjson/gjson
+		// In Go string literals, \\\\ becomes \\ in the string, which sjson interprets as \
+		parts[i] = strings.ReplaceAll(part, ".", "\\\\.")
+	}
+	path = strings.Join(parts, ".")
+
+	// Replace double slashes with single dot (if any remain)
 	path = strings.ReplaceAll(path, "//", ".")
-	// Replace single slashes with dots
-	path = strings.ReplaceAll(path, "/", ".")
+
 	return path
 }
 
@@ -372,23 +393,142 @@ func RemoveLastPathElement(p string) string {
 	return path.Dir(p)
 }
 
+// topElementName returns the first path element name stripped of any namespace
+// prefix. e.g. "Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"
+// → "suppress", and "suppress/duplicates" → "suppress".
+func topElementName(yangName string) string {
+	first := yangName
+	if idx := strings.Index(yangName, "/"); idx != -1 {
+		first = yangName[:idx]
+	}
+	if idx := strings.Index(first, ":"); idx != -1 {
+		return first[idx+1:]
+	}
+	return first
+}
+
+// hasNamespacePrefix checks if a yang path contains any namespace prefix (e.g. "prefix:")
+func hasNamespacePrefix(yangName string) bool {
+	return strings.Contains(yangName, ":")
+}
+
+// IsXmlNamespaceSibling reports whether attr must be emitted as a separate
+// XML sibling body to prevent xmldot from merging same-named elements that
+// belong to different YANG namespaces.
+//
+// An attribute needs sibling treatment when:
+//  1. Its yang_name carries an explicit namespace prefix anywhere in the path
+//     (e.g. "traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/all"), AND
+//  2. At least one other attribute in the same sibling list shares the same root element.
+//
+// The explicit yaml flag xml_namespace_sibling:true is still honoured for
+// backward compatibility, but is no longer required.
+func IsXmlNamespaceSibling(attr YamlConfigAttribute, allAttrs []YamlConfigAttribute) bool {
+	// Auto-detect: must have a namespace prefix anywhere in the path.
+	if !hasNamespacePrefix(attr.YangName) {
+		return false
+	}
+	myTop := topElementName(attr.YangName)
+	// Check whether any other attribute in the list shares the same root element.
+	for _, other := range allAttrs {
+		if other.YangName == attr.YangName {
+			continue
+		}
+		if topElementName(other.YangName) == myTop {
+			return true
+		}
+	}
+	return false
+}
+
+// HasXmlNamespaceSiblings returns true when any attribute in the list needs
+// separate XML sibling treatment (either via explicit flag or auto-detection).
+func HasXmlNamespaceSiblings(attributes []YamlConfigAttribute) bool {
+	for _, a := range attributes {
+		if IsXmlNamespaceSibling(a, attributes) {
+			return true
+		}
+	}
+	return false
+}
+
+// SiblingGroup holds a set of attributes that share the same top-level XML
+// namespace element (e.g. all "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/…"
+// attributes belong to the same group).  They must be emitted into a single
+// nsBody so they produce one merged XML element rather than duplicate siblings.
+type SiblingGroup struct {
+	// Key is "<namespace-prefix>:<top-element-name>", e.g.
+	// "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"
+	Key        string
+	Attributes []YamlConfigAttribute
+}
+
+// GroupXmlSiblings returns the xml-namespace-sibling attributes from allAttrs
+// collected into groups that share the same top-level element.  The order of
+// groups follows the first occurrence of each key in allAttrs.
+func GroupXmlSiblings(allAttrs []YamlConfigAttribute) []SiblingGroup {
+	seen := map[string]int{} // key -> index in groups
+	var groups []SiblingGroup
+	for _, a := range allAttrs {
+		if !IsXmlNamespaceSibling(a, allAttrs) {
+			continue
+		}
+		// Build the group key: "<ns-prefix>:<top-element>"
+		prefix := XmlNamespacePrefixFromXPath(a.YangName)
+		top := topElementName(a.YangName)
+		key := prefix + ":" + top
+		if prefix == "" {
+			key = top
+		}
+		if idx, ok := seen[key]; ok {
+			groups[idx].Attributes = append(groups[idx].Attributes, a)
+		} else {
+			seen[key] = len(groups)
+			groups = append(groups, SiblingGroup{Key: key, Attributes: []YamlConfigAttribute{a}})
+		}
+	}
+	return groups
+}
+
+// XmlNamespacePrefixFromXPath extracts the YANG module prefix from the first
+// segment of an XPath that carries one, e.g.
+//
+//	"Cisco-IOS-XR-um-logging-cfg:suppress/duplicates" -> "Cisco-IOS-XR-um-logging-cfg"
+//	"suppress/duplicates"                              -> ""
+func XmlNamespacePrefixFromXPath(xp string) string {
+	first := xp
+	if idx := strings.Index(xp, "/"); idx != -1 {
+		first = xp[:idx]
+	}
+	if idx := strings.Index(first, ":"); idx != -1 {
+		return first[:idx]
+	}
+	return ""
+}
+
 // Map of templating functions
 var functions = template.FuncMap{
-	"toGoName":              ToGoName,
-	"camelCase":             CamelCase,
-	"snakeCase":             SnakeCase,
-	"hasId":                 HasId,
-	"hasReference":          HasReference,
-	"importParts":           ImportParts,
-	"importAttributes":      ImportAttributes,
-	"add":                   Add,
-	"sprintf":               fmt.Sprintf,
-	"removeLastPathElement": RemoveLastPathElement,
-	"getDeletePath":         GetDeletePath,
-	"getLastPathElement":    GetLastPathElement,
-	"reverseAttributes":     ReverseAttributes,
-	"toDotPath":             ToDotPath,
-	"toGnmiPath":            ToGnmiPath,
+	"toGoName":                    ToGoName,
+	"camelCase":                   CamelCase,
+	"snakeCase":                   SnakeCase,
+	"hasId":                       HasId,
+	"hasReference":                HasReference,
+	"importParts":                 ImportParts,
+	"importAttributes":            ImportAttributes,
+	"getIdAttributes":             GetIdAttributes,
+	"add":                         Add,
+	"sprintf":                     fmt.Sprintf,
+	"removeLastPathElement":       RemoveLastPathElement,
+	"getDeletePath":               GetDeletePath,
+	"getLastPathElement":          GetLastPathElement,
+	"reverseAttributes":           ReverseAttributes,
+	"toDotPath":                   ToDotPath,
+	"toGnmiPath":                  ToGnmiPath,
+	"hasPrefix":                   strings.HasPrefix,
+	"hasXmlNamespaceSiblings":     HasXmlNamespaceSiblings,
+	"isXmlNamespaceSibling":       IsXmlNamespaceSibling,
+	"xmlNamespacePrefixFromXPath": XmlNamespacePrefixFromXPath,
+	"groupXmlSiblings":            GroupXmlSiblings,
 }
 
 func resolvePath(e *yang.Entry, path string) *yang.Entry {
@@ -571,6 +711,37 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 	addKeys(e, config)
 
 	for ia := range config.Attributes {
+		// Default XPath from YangName if not explicitly set (do this first for all attributes)
+		if config.Attributes[ia].XPath == "" {
+			config.Attributes[ia].XPath = config.Attributes[ia].YangName
+		}
+
+		// For Lists with NoAugmentConfig, still process child attributes to set their XPath
+		if config.Attributes[ia].Type == "List" && config.Attributes[ia].NoAugmentConfig {
+			for iaa := range config.Attributes[ia].Attributes {
+				// Default XPath from YangName if not explicitly set
+				if config.Attributes[ia].Attributes[iaa].XPath == "" {
+					config.Attributes[ia].Attributes[iaa].XPath = config.Attributes[ia].Attributes[iaa].YangName
+				}
+				// If parent list has no_augment_config and child is an id attribute, inherit the flag
+				if config.Attributes[ia].Attributes[iaa].Id && !config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
+					config.Attributes[ia].Attributes[iaa].NoAugmentConfig = true
+				}
+				// For nested lists, also set XPath for their children
+				if config.Attributes[ia].Attributes[iaa].Type == "List" && config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
+					for iaaa := range config.Attributes[ia].Attributes[iaa].Attributes {
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath == "" {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName
+						}
+						// If parent list has no_augment_config and child is an id attribute, inherit the flag
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig = true
+						}
+					}
+				}
+			}
+		}
+
 		if config.Attributes[ia].Id || config.Attributes[ia].Reference || config.Attributes[ia].NoAugmentConfig {
 			continue
 		}
@@ -578,6 +749,10 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 		if config.Attributes[ia].Type == "List" {
 			el := resolvePath(e, config.Attributes[ia].YangName)
 			for iaa := range config.Attributes[ia].Attributes {
+				// Default XPath from YangName if not explicitly set (do this first for all attributes)
+				if config.Attributes[ia].Attributes[iaa].XPath == "" {
+					config.Attributes[ia].Attributes[iaa].XPath = config.Attributes[ia].Attributes[iaa].YangName
+				}
 				if config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
 					continue
 				}
@@ -585,17 +760,52 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 				if config.Attributes[ia].Attributes[iaa].Type == "List" {
 					ell := resolvePath(el, config.Attributes[ia].Attributes[iaa].YangName)
 					for iaaa := range config.Attributes[ia].Attributes[iaa].Attributes {
-						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
-							continue
+						// Default XPath from YangName if not explicitly set (do this first for all attributes)
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath == "" {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName
 						}
-						parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
-						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" {
+						// If parent list has no_augment_config and child is an id attribute, inherit the flag
+						if config.Attributes[ia].Attributes[iaa].NoAugmentConfig && config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig = true
+						}
+						// Only skip parseAttribute if no_augment_config, but still process children
+						if !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
+						}
+						// Process children if this is a List (check Type from YAML, or if children exist)
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" || config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "Set" || len(config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes) > 0 {
 							elll := resolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName)
 							for iaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes {
-								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
-									continue
+								// Default XPath from YangName if not explicitly set (do this first for all attributes)
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].XPath == "" {
+									config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].YangName
 								}
-								parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
+								// If parent list has no_augment_config and child is an id attribute, inherit the flag
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig && config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig = true
+								}
+								// Only skip parseAttribute if no_augment_config, but still process children
+								if !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
+								}
+								// Process level 5 children if this is a List
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Type == "List" || config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Type == "Set" || len(config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes) > 0 {
+									ellll := resolvePath(elll, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].YangName)
+									for iaaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes {
+										// Default XPath from YangName if not explicitly set
+										if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].XPath == "" {
+											config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].YangName
+										}
+										// If parent list has no_augment_config and child is an id attribute, inherit the flag
+										if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig && config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].NoAugmentConfig {
+											config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].NoAugmentConfig = true
+										}
+										if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].NoAugmentConfig {
+											continue
+										}
+										parseAttribute(ellll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa])
+									}
+								}
 							}
 						}
 					}
@@ -646,12 +856,19 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 
 	// skip first line with 'build-ignore' directive for go files
 	scanner := bufio.NewScanner(file)
+	// Increase buffer to 1MB to handle long lines in large templates/generated files.
+	// The default 64KB limit silently truncates the scan, producing a misleading
+	// "unexpected EOF" parse error at whatever template line was last read.
+	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
 	if strings.HasSuffix(templatePath, ".go") {
 		scanner.Scan()
 	}
 	var temp string
 	for scanner.Scan() {
 		temp = temp + scanner.Text() + "\n"
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatalf("Error reading template %s: %v", templatePath, err)
 	}
 
 	template, err := template.New(path.Base(templatePath)).Funcs(functions).Parse(temp)
@@ -671,6 +888,7 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 		os.MkdirAll(filepath.Dir(outputFile), 0755)
 	} else if strings.HasSuffix(templatePath, ".go") {
 		existingScanner := bufio.NewScanner(existingFile)
+		existingScanner.Buffer(make([]byte, 1024*1024), 1024*1024)
 		var newContent string
 		currentSectionName := ""
 		processedSections := make(map[string]bool)
@@ -692,22 +910,6 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 					currentSectionName = ""
 					newSection := getTemplateSection(string(output.Bytes()), matches[1])
 					newContent += newSection
-				}
-			}
-		}
-
-		// Append any new sections from template that weren't in the existing file
-		templateContent := string(output.Bytes())
-		templateScanner := bufio.NewScanner(strings.NewReader(templateContent))
-		for templateScanner.Scan() {
-			line := templateScanner.Text()
-			matches := beginRegex.FindStringSubmatch(line)
-			if len(matches) > 1 && matches[1] != "" {
-				sectionName := matches[1]
-				if !processedSections[sectionName] {
-					newSection := getTemplateSection(templateContent, sectionName)
-					newContent += newSection
-					processedSections[sectionName] = true
 				}
 			}
 		}
@@ -763,6 +965,15 @@ func main() {
 		if resourceName != "" && configs[i].Name != resourceName {
 			continue
 		}
+
+		// Set default descriptions if not provided
+		if configs[i].DsDescription == "" {
+			configs[i].DsDescription = fmt.Sprintf("This data source can read the %s configuration.", configs[i].Name)
+		}
+		if configs[i].ResDescription == "" {
+			configs[i].ResDescription = fmt.Sprintf("This resource can manage the %s configuration.", configs[i].Name)
+		}
+
 		// Augment config by yang models
 		if !configs[i].NoAugmentConfig {
 			augmentConfig(&configs[i], modelPaths)

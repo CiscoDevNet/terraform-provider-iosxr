@@ -308,11 +308,13 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].DestinationInterface = types.StringNull()
 		}
 		if value := r.Get("destination.pseudowire"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].DestinationPseudowire.IsNull() {
 				data.MonitorSessions[i].DestinationPseudowire = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].DestinationPseudowire.IsNull() {
 				data.MonitorSessions[i].DestinationPseudowire = types.BoolNull()
 			}
@@ -323,21 +325,25 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].DestinationFileSize = types.Int64Null()
 		}
 		if value := r.Get("destination.file.buffer-type.linear"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() {
 				data.MonitorSessions[i].DestinationFileBufferTypeLinear = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() {
 				data.MonitorSessions[i].DestinationFileBufferTypeLinear = types.BoolNull()
 			}
 		}
 		if value := r.Get("destination.file.format.pcapng"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() {
 				data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() {
 				data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolNull()
 			}
@@ -348,51 +354,61 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].DestinationFileFilter = types.StringNull()
 		}
 		if value := r.Get("destination.file.always-on"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() {
 				data.MonitorSessions[i].DestinationFileAlwaysOn = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() {
 				data.MonitorSessions[i].DestinationFileAlwaysOn = types.BoolNull()
 			}
 		}
 		if value := r.Get("drops.packet-processing"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].DropsPacketProcessing.IsNull() {
 				data.MonitorSessions[i].DropsPacketProcessing = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].DropsPacketProcessing.IsNull() {
 				data.MonitorSessions[i].DropsPacketProcessing = types.BoolNull()
 			}
 		}
 		if value := r.Get("drops.traffic-management"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].DropsTrafficManagement.IsNull() {
 				data.MonitorSessions[i].DropsTrafficManagement = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].DropsTrafficManagement.IsNull() {
 				data.MonitorSessions[i].DropsTrafficManagement = types.BoolNull()
 			}
 		}
 		if value := r.Get("drops.rx"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].DropsRx.IsNull() {
 				data.MonitorSessions[i].DropsRx = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].DropsRx.IsNull() {
 				data.MonitorSessions[i].DropsRx = types.BoolNull()
 			}
 		}
 		if value := r.Get("drops.tx"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].DropsTx.IsNull() {
 				data.MonitorSessions[i].DropsTx = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].DropsTx.IsNull() {
 				data.MonitorSessions[i].DropsTx = types.BoolNull()
 			}
@@ -408,11 +424,13 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].RxInterface = types.StringNull()
 		}
 		if value := r.Get("rx.pseudowire"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].RxPseudowire.IsNull() {
 				data.MonitorSessions[i].RxPseudowire = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].RxPseudowire.IsNull() {
 				data.MonitorSessions[i].RxPseudowire = types.BoolNull()
 			}
@@ -423,11 +441,13 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].TxInterface = types.StringNull()
 		}
 		if value := r.Get("tx.pseudowire"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].TxPseudowire.IsNull() {
 				data.MonitorSessions[i].TxPseudowire = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].TxPseudowire.IsNull() {
 				data.MonitorSessions[i].TxPseudowire = types.BoolNull()
 			}
@@ -458,21 +478,25 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].MirrorInterval = types.StringNull()
 		}
 		if value := r.Get("protocol-capture.rx"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].ProtocolCaptureRx.IsNull() {
 				data.MonitorSessions[i].ProtocolCaptureRx = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].ProtocolCaptureRx.IsNull() {
 				data.MonitorSessions[i].ProtocolCaptureRx = types.BoolNull()
 			}
 		}
 		if value := r.Get("protocol-capture.tx"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.MonitorSessions[i].ProtocolCaptureTx.IsNull() {
 				data.MonitorSessions[i].ProtocolCaptureTx = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.MonitorSessions[i].ProtocolCaptureTx.IsNull() {
 				data.MonitorSessions[i].ProtocolCaptureTx = types.BoolNull()
 			}
@@ -495,50 +519,54 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.Int64Value(value.Int())
-	} else {
+	} else if data.RouterId.IsNull() {
 		data.RouterId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "default-capture-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DefaultCaptureDisable.IsNull() {
 			data.DefaultCaptureDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DefaultCaptureDisable.IsNull() {
 			data.DefaultCaptureDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "local-capture-capacity"); value.Exists() && !data.LocalCaptureCapacitySize.IsNull() {
 		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
-	} else {
+	} else if data.LocalCaptureCapacitySize.IsNull() {
 		data.LocalCaptureCapacitySize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "kb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LocalCaptureUnitKb.IsNull() {
 			data.LocalCaptureUnitKb = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LocalCaptureUnitKb.IsNull() {
 			data.LocalCaptureUnitKb = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "mb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LocalCaptureUnitMb.IsNull() {
 			data.LocalCaptureUnitMb = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LocalCaptureUnitMb.IsNull() {
 			data.LocalCaptureUnitMb = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "gb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LocalCaptureUnitGb.IsNull() {
 			data.LocalCaptureUnitGb = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LocalCaptureUnitGb.IsNull() {
 			data.LocalCaptureUnitGb = types.BoolNull()
 		}
@@ -551,119 +579,116 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 func (data MonitorSession) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if len(data.MonitorSessions) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MonitorSessions {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/monitor-session"
 			if !item.SessionName.IsNull() && !item.SessionName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "session-name", item.SessionName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/session-name", item.SessionName.ValueString())
 			}
 			if !item.TrafficType.IsNull() && !item.TrafficType.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "traffic-type", item.TrafficType.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/traffic-type", item.TrafficType.ValueString())
 			}
 			if !item.DestinationInterface.IsNull() && !item.DestinationInterface.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "destination/interface", item.DestinationInterface.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/destination/interface", item.DestinationInterface.ValueString())
 			}
 			if !item.DestinationPseudowire.IsNull() && !item.DestinationPseudowire.IsUnknown() {
 				if item.DestinationPseudowire.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/pseudowire", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/pseudowire", "")
 				}
 			}
 			if !item.DestinationFileSize.IsNull() && !item.DestinationFileSize.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "destination/file/size", strconv.FormatInt(item.DestinationFileSize.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/destination/file/size", strconv.FormatInt(item.DestinationFileSize.ValueInt64(), 10))
 			}
 			if !item.DestinationFileBufferTypeLinear.IsNull() && !item.DestinationFileBufferTypeLinear.IsUnknown() {
 				if item.DestinationFileBufferTypeLinear.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/file/buffer-type/linear", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/file/buffer-type/linear", "")
 				}
 			}
 			if !item.DestinationFileFormatPcapng.IsNull() && !item.DestinationFileFormatPcapng.IsUnknown() {
 				if item.DestinationFileFormatPcapng.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/file/format/pcapng", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/file/format/pcapng", "")
 				}
 			}
 			if !item.DestinationFileFilter.IsNull() && !item.DestinationFileFilter.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "destination/file/filter", item.DestinationFileFilter.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/destination/file/filter", item.DestinationFileFilter.ValueString())
 			}
 			if !item.DestinationFileAlwaysOn.IsNull() && !item.DestinationFileAlwaysOn.IsUnknown() {
 				if item.DestinationFileAlwaysOn.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/file/always-on", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/file/always-on", "")
 				}
 			}
 			if !item.DropsPacketProcessing.IsNull() && !item.DropsPacketProcessing.IsUnknown() {
 				if item.DropsPacketProcessing.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "drops/packet-processing", "")
+					body = helpers.SetFromXPath(body, basePath+"/drops/packet-processing", "")
 				}
 			}
 			if !item.DropsTrafficManagement.IsNull() && !item.DropsTrafficManagement.IsUnknown() {
 				if item.DropsTrafficManagement.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "drops/traffic-management", "")
+					body = helpers.SetFromXPath(body, basePath+"/drops/traffic-management", "")
 				}
 			}
 			if !item.DropsRx.IsNull() && !item.DropsRx.IsUnknown() {
 				if item.DropsRx.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "drops/rx", "")
+					body = helpers.SetFromXPath(body, basePath+"/drops/rx", "")
 				}
 			}
 			if !item.DropsTx.IsNull() && !item.DropsTx.IsUnknown() {
 				if item.DropsTx.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "drops/tx", "")
+					body = helpers.SetFromXPath(body, basePath+"/drops/tx", "")
 				}
 			}
 			if !item.DropsFilter.IsNull() && !item.DropsFilter.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "drops/filter", item.DropsFilter.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/drops/filter", item.DropsFilter.ValueString())
 			}
 			if !item.RxInterface.IsNull() && !item.RxInterface.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "rx/interface", item.RxInterface.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/rx/interface", item.RxInterface.ValueString())
 			}
 			if !item.RxPseudowire.IsNull() && !item.RxPseudowire.IsUnknown() {
 				if item.RxPseudowire.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "rx/pseudowire", "")
+					body = helpers.SetFromXPath(body, basePath+"/rx/pseudowire", "")
 				}
 			}
 			if !item.TxInterface.IsNull() && !item.TxInterface.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "tx/interface", item.TxInterface.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/tx/interface", item.TxInterface.ValueString())
 			}
 			if !item.TxPseudowire.IsNull() && !item.TxPseudowire.IsUnknown() {
 				if item.TxPseudowire.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "tx/pseudowire", "")
+					body = helpers.SetFromXPath(body, basePath+"/tx/pseudowire", "")
 				}
 			}
 			if !item.InjectInterface.IsNull() && !item.InjectInterface.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "inject-interface", item.InjectInterface.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/inject-interface", item.InjectInterface.ValueString())
 			}
 			if !item.DiscardClass.IsNull() && !item.DiscardClass.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "discard-class", strconv.FormatInt(item.DiscardClass.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/discard-class", strconv.FormatInt(item.DiscardClass.ValueInt64(), 10))
 			}
 			if !item.TrafficClass.IsNull() && !item.TrafficClass.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "traffic-class", strconv.FormatInt(item.TrafficClass.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/traffic-class", strconv.FormatInt(item.TrafficClass.ValueInt64(), 10))
 			}
 			if !item.MirrorFirst.IsNull() && !item.MirrorFirst.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "mirror/first", strconv.FormatInt(item.MirrorFirst.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/mirror/first", strconv.FormatInt(item.MirrorFirst.ValueInt64(), 10))
 			}
 			if !item.MirrorInterval.IsNull() && !item.MirrorInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "mirror/interval", item.MirrorInterval.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/mirror/interval", item.MirrorInterval.ValueString())
 			}
 			if !item.ProtocolCaptureRx.IsNull() && !item.ProtocolCaptureRx.IsUnknown() {
 				if item.ProtocolCaptureRx.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "protocol-capture/rx", "")
+					body = helpers.SetFromXPath(body, basePath+"/protocol-capture/rx", "")
 				}
 			}
 			if !item.ProtocolCaptureTx.IsNull() && !item.ProtocolCaptureTx.IsUnknown() {
 				if item.ProtocolCaptureTx.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "protocol-capture/tx", "")
+					body = helpers.SetFromXPath(body, basePath+"/protocol-capture/tx", "")
 				}
 			}
 			if !item.ProtocolCaptureFilter.IsNull() && !item.ProtocolCaptureFilter.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "protocol-capture/filter", item.ProtocolCaptureFilter.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/protocol-capture/filter", item.ProtocolCaptureFilter.ValueString())
 			}
 			if !item.RateLimitRx.IsNull() && !item.RateLimitRx.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "rate-limit/rx", strconv.FormatInt(item.RateLimitRx.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/rate-limit/rx", strconv.FormatInt(item.RateLimitRx.ValueInt64(), 10))
 			}
 			if !item.RateLimitTx.IsNull() && !item.RateLimitTx.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "rate-limit/tx", strconv.FormatInt(item.RateLimitTx.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/rate-limit/tx", strconv.FormatInt(item.RateLimitTx.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"monitor-session", cBody.Res())
 		}
 	}
 	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
@@ -692,10 +717,14 @@ func (data MonitorSession) toBodyXML(ctx context.Context) string {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/gb", "")
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -708,7 +737,7 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-session").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-session").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -726,23 +755,26 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "session-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "session-name"); value.Exists() && !data.MonitorSessions[i].SessionName.IsNull() {
 			data.MonitorSessions[i].SessionName = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].SessionName.IsNull() {
 			data.MonitorSessions[i].SessionName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "traffic-type"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "traffic-type"); value.Exists() && !data.MonitorSessions[i].TrafficType.IsNull() {
 			data.MonitorSessions[i].TrafficType = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].TrafficType.IsNull() {
 			data.MonitorSessions[i].TrafficType = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "destination/interface"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "destination/interface"); value.Exists() && !data.MonitorSessions[i].DestinationInterface.IsNull() {
 			data.MonitorSessions[i].DestinationInterface = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].DestinationInterface.IsNull() {
 			data.MonitorSessions[i].DestinationInterface = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "destination/pseudowire"); value.Exists() {
-			data.MonitorSessions[i].DestinationPseudowire = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DestinationPseudowire.IsNull() {
+				data.MonitorSessions[i].DestinationPseudowire = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -750,13 +782,16 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 				data.MonitorSessions[i].DestinationPseudowire = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "destination/file/size"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "destination/file/size"); value.Exists() && !data.MonitorSessions[i].DestinationFileSize.IsNull() {
 			data.MonitorSessions[i].DestinationFileSize = types.Int64Value(value.Int())
 		} else if data.MonitorSessions[i].DestinationFileSize.IsNull() {
 			data.MonitorSessions[i].DestinationFileSize = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "destination/file/buffer-type/linear"); value.Exists() {
-			data.MonitorSessions[i].DestinationFileBufferTypeLinear = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() {
+				data.MonitorSessions[i].DestinationFileBufferTypeLinear = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -765,7 +800,10 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "destination/file/format/pcapng"); value.Exists() {
-			data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() {
+				data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -773,13 +811,16 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 				data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "destination/file/filter"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "destination/file/filter"); value.Exists() && !data.MonitorSessions[i].DestinationFileFilter.IsNull() {
 			data.MonitorSessions[i].DestinationFileFilter = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].DestinationFileFilter.IsNull() {
 			data.MonitorSessions[i].DestinationFileFilter = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "destination/file/always-on"); value.Exists() {
-			data.MonitorSessions[i].DestinationFileAlwaysOn = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() {
+				data.MonitorSessions[i].DestinationFileAlwaysOn = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -788,7 +829,10 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "drops/packet-processing"); value.Exists() {
-			data.MonitorSessions[i].DropsPacketProcessing = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsPacketProcessing.IsNull() {
+				data.MonitorSessions[i].DropsPacketProcessing = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -797,7 +841,10 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "drops/traffic-management"); value.Exists() {
-			data.MonitorSessions[i].DropsTrafficManagement = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsTrafficManagement.IsNull() {
+				data.MonitorSessions[i].DropsTrafficManagement = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -806,7 +853,10 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "drops/rx"); value.Exists() {
-			data.MonitorSessions[i].DropsRx = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsRx.IsNull() {
+				data.MonitorSessions[i].DropsRx = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -815,7 +865,10 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "drops/tx"); value.Exists() {
-			data.MonitorSessions[i].DropsTx = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsTx.IsNull() {
+				data.MonitorSessions[i].DropsTx = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -823,18 +876,21 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 				data.MonitorSessions[i].DropsTx = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "drops/filter"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "drops/filter"); value.Exists() && !data.MonitorSessions[i].DropsFilter.IsNull() {
 			data.MonitorSessions[i].DropsFilter = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].DropsFilter.IsNull() {
 			data.MonitorSessions[i].DropsFilter = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "rx/interface"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "rx/interface"); value.Exists() && !data.MonitorSessions[i].RxInterface.IsNull() {
 			data.MonitorSessions[i].RxInterface = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].RxInterface.IsNull() {
 			data.MonitorSessions[i].RxInterface = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "rx/pseudowire"); value.Exists() {
-			data.MonitorSessions[i].RxPseudowire = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].RxPseudowire.IsNull() {
+				data.MonitorSessions[i].RxPseudowire = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -842,13 +898,16 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 				data.MonitorSessions[i].RxPseudowire = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "tx/interface"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "tx/interface"); value.Exists() && !data.MonitorSessions[i].TxInterface.IsNull() {
 			data.MonitorSessions[i].TxInterface = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].TxInterface.IsNull() {
 			data.MonitorSessions[i].TxInterface = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "tx/pseudowire"); value.Exists() {
-			data.MonitorSessions[i].TxPseudowire = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].TxPseudowire.IsNull() {
+				data.MonitorSessions[i].TxPseudowire = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -856,33 +915,36 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 				data.MonitorSessions[i].TxPseudowire = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "inject-interface"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "inject-interface"); value.Exists() && !data.MonitorSessions[i].InjectInterface.IsNull() {
 			data.MonitorSessions[i].InjectInterface = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].InjectInterface.IsNull() {
 			data.MonitorSessions[i].InjectInterface = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "discard-class"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "discard-class"); value.Exists() && !data.MonitorSessions[i].DiscardClass.IsNull() {
 			data.MonitorSessions[i].DiscardClass = types.Int64Value(value.Int())
 		} else if data.MonitorSessions[i].DiscardClass.IsNull() {
 			data.MonitorSessions[i].DiscardClass = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "traffic-class"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "traffic-class"); value.Exists() && !data.MonitorSessions[i].TrafficClass.IsNull() {
 			data.MonitorSessions[i].TrafficClass = types.Int64Value(value.Int())
 		} else if data.MonitorSessions[i].TrafficClass.IsNull() {
 			data.MonitorSessions[i].TrafficClass = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "mirror/first"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "mirror/first"); value.Exists() && !data.MonitorSessions[i].MirrorFirst.IsNull() {
 			data.MonitorSessions[i].MirrorFirst = types.Int64Value(value.Int())
 		} else if data.MonitorSessions[i].MirrorFirst.IsNull() {
 			data.MonitorSessions[i].MirrorFirst = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "mirror/interval"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "mirror/interval"); value.Exists() && !data.MonitorSessions[i].MirrorInterval.IsNull() {
 			data.MonitorSessions[i].MirrorInterval = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].MirrorInterval.IsNull() {
 			data.MonitorSessions[i].MirrorInterval = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "protocol-capture/rx"); value.Exists() {
-			data.MonitorSessions[i].ProtocolCaptureRx = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].ProtocolCaptureRx.IsNull() {
+				data.MonitorSessions[i].ProtocolCaptureRx = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -891,7 +953,10 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			}
 		}
 		if value := helpers.GetFromXPath(r, "protocol-capture/tx"); value.Exists() {
-			data.MonitorSessions[i].ProtocolCaptureTx = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].ProtocolCaptureTx.IsNull() {
+				data.MonitorSessions[i].ProtocolCaptureTx = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -899,58 +964,70 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 				data.MonitorSessions[i].ProtocolCaptureTx = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "protocol-capture/filter"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "protocol-capture/filter"); value.Exists() && !data.MonitorSessions[i].ProtocolCaptureFilter.IsNull() {
 			data.MonitorSessions[i].ProtocolCaptureFilter = types.StringValue(value.String())
 		} else if data.MonitorSessions[i].ProtocolCaptureFilter.IsNull() {
 			data.MonitorSessions[i].ProtocolCaptureFilter = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "rate-limit/rx"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "rate-limit/rx"); value.Exists() && !data.MonitorSessions[i].RateLimitRx.IsNull() {
 			data.MonitorSessions[i].RateLimitRx = types.Int64Value(value.Int())
 		} else if data.MonitorSessions[i].RateLimitRx.IsNull() {
 			data.MonitorSessions[i].RateLimitRx = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "rate-limit/tx"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "rate-limit/tx"); value.Exists() && !data.MonitorSessions[i].RateLimitTx.IsNull() {
 			data.MonitorSessions[i].RateLimitTx = types.Int64Value(value.Int())
 		} else if data.MonitorSessions[i].RateLimitTx.IsNull() {
 			data.MonitorSessions[i].RateLimitTx = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.Int64Value(value.Int())
 	} else if data.RouterId.IsNull() {
 		data.RouterId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-capture-disable"); value.Exists() {
-		data.DefaultCaptureDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default-capture-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DefaultCaptureDisable.IsNull() {
+			data.DefaultCaptureDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DefaultCaptureDisable.IsNull() {
 			data.DefaultCaptureDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-capture-capacity"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/local-capture-capacity"); value.Exists() && !data.LocalCaptureCapacitySize.IsNull() {
 		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
 	} else if data.LocalCaptureCapacitySize.IsNull() {
 		data.LocalCaptureCapacitySize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/kb"); value.Exists() {
-		data.LocalCaptureUnitKb = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/kb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LocalCaptureUnitKb.IsNull() {
+			data.LocalCaptureUnitKb = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LocalCaptureUnitKb.IsNull() {
 			data.LocalCaptureUnitKb = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mb"); value.Exists() {
-		data.LocalCaptureUnitMb = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LocalCaptureUnitMb.IsNull() {
+			data.LocalCaptureUnitMb = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LocalCaptureUnitMb.IsNull() {
 			data.LocalCaptureUnitMb = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/gb"); value.Exists() {
-		data.LocalCaptureUnitGb = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gb"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LocalCaptureUnitGb.IsNull() {
+			data.LocalCaptureUnitGb = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LocalCaptureUnitGb.IsNull() {
@@ -967,6 +1044,10 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "monitor-session"); value.Exists() {
 		data.MonitorSessions = make([]MonitorSessionMonitorSessions, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -982,49 +1063,57 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("destination.pseudowire"); cValue.Exists() {
 				item.DestinationPseudowire = types.BoolValue(true)
-			} else {
-				item.DestinationPseudowire = types.BoolNull()
+			} else if !item.DestinationPseudowire.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationPseudowire = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.file.size"); cValue.Exists() {
 				item.DestinationFileSize = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("destination.file.buffer-type.linear"); cValue.Exists() {
 				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
-			} else {
-				item.DestinationFileBufferTypeLinear = types.BoolNull()
+			} else if !item.DestinationFileBufferTypeLinear.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationFileBufferTypeLinear = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.file.format.pcapng"); cValue.Exists() {
 				item.DestinationFileFormatPcapng = types.BoolValue(true)
-			} else {
-				item.DestinationFileFormatPcapng = types.BoolNull()
+			} else if !item.DestinationFileFormatPcapng.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationFileFormatPcapng = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.file.filter"); cValue.Exists() {
 				item.DestinationFileFilter = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("destination.file.always-on"); cValue.Exists() {
 				item.DestinationFileAlwaysOn = types.BoolValue(true)
-			} else {
-				item.DestinationFileAlwaysOn = types.BoolNull()
+			} else if !item.DestinationFileAlwaysOn.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationFileAlwaysOn = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.packet-processing"); cValue.Exists() {
 				item.DropsPacketProcessing = types.BoolValue(true)
-			} else {
-				item.DropsPacketProcessing = types.BoolNull()
+			} else if !item.DropsPacketProcessing.IsNull() {
+				// Only set to false if it was previously set
+				item.DropsPacketProcessing = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.traffic-management"); cValue.Exists() {
 				item.DropsTrafficManagement = types.BoolValue(true)
-			} else {
-				item.DropsTrafficManagement = types.BoolNull()
+			} else if !item.DropsTrafficManagement.IsNull() {
+				// Only set to false if it was previously set
+				item.DropsTrafficManagement = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.rx"); cValue.Exists() {
 				item.DropsRx = types.BoolValue(true)
-			} else {
-				item.DropsRx = types.BoolNull()
+			} else if !item.DropsRx.IsNull() {
+				// Only set to false if it was previously set
+				item.DropsRx = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.tx"); cValue.Exists() {
 				item.DropsTx = types.BoolValue(true)
-			} else {
-				item.DropsTx = types.BoolNull()
+			} else if !item.DropsTx.IsNull() {
+				// Only set to false if it was previously set
+				item.DropsTx = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.filter"); cValue.Exists() {
 				item.DropsFilter = types.StringValue(cValue.String())
@@ -1034,16 +1123,18 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("rx.pseudowire"); cValue.Exists() {
 				item.RxPseudowire = types.BoolValue(true)
-			} else {
-				item.RxPseudowire = types.BoolNull()
+			} else if !item.RxPseudowire.IsNull() {
+				// Only set to false if it was previously set
+				item.RxPseudowire = types.BoolValue(false)
 			}
 			if cValue := v.Get("tx.interface"); cValue.Exists() {
 				item.TxInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("tx.pseudowire"); cValue.Exists() {
 				item.TxPseudowire = types.BoolValue(true)
-			} else {
-				item.TxPseudowire = types.BoolNull()
+			} else if !item.TxPseudowire.IsNull() {
+				// Only set to false if it was previously set
+				item.TxPseudowire = types.BoolValue(false)
 			}
 			if cValue := v.Get("inject-interface"); cValue.Exists() {
 				item.InjectInterface = types.StringValue(cValue.String())
@@ -1062,13 +1153,15 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("protocol-capture.rx"); cValue.Exists() {
 				item.ProtocolCaptureRx = types.BoolValue(true)
-			} else {
-				item.ProtocolCaptureRx = types.BoolNull()
+			} else if !item.ProtocolCaptureRx.IsNull() {
+				// Only set to false if it was previously set
+				item.ProtocolCaptureRx = types.BoolValue(false)
 			}
 			if cValue := v.Get("protocol-capture.tx"); cValue.Exists() {
 				item.ProtocolCaptureTx = types.BoolValue(true)
-			} else {
-				item.ProtocolCaptureTx = types.BoolNull()
+			} else if !item.ProtocolCaptureTx.IsNull() {
+				// Only set to false if it was previously set
+				item.ProtocolCaptureTx = types.BoolValue(false)
 			}
 			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() {
 				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
@@ -1088,26 +1181,30 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "default-capture-disable"); value.Exists() {
 		data.DefaultCaptureDisable = types.BoolValue(true)
-	} else {
-		data.DefaultCaptureDisable = types.BoolNull()
+	} else if !data.DefaultCaptureDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DefaultCaptureDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "local-capture-capacity"); value.Exists() {
 		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "kb"); value.Exists() {
 		data.LocalCaptureUnitKb = types.BoolValue(true)
-	} else {
-		data.LocalCaptureUnitKb = types.BoolNull()
+	} else if !data.LocalCaptureUnitKb.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LocalCaptureUnitKb = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mb"); value.Exists() {
 		data.LocalCaptureUnitMb = types.BoolValue(true)
-	} else {
-		data.LocalCaptureUnitMb = types.BoolNull()
+	} else if !data.LocalCaptureUnitMb.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LocalCaptureUnitMb = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "gb"); value.Exists() {
 		data.LocalCaptureUnitGb = types.BoolValue(true)
-	} else {
-		data.LocalCaptureUnitGb = types.BoolNull()
+	} else if !data.LocalCaptureUnitGb.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LocalCaptureUnitGb = types.BoolValue(false)
 	}
 }
 
@@ -1115,9 +1212,14 @@ func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "monitor-session"); value.Exists() {
 		data.MonitorSessions = make([]MonitorSessionMonitorSessions, 0)
@@ -1135,7 +1237,7 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("destination.pseudowire"); cValue.Exists() {
 				item.DestinationPseudowire = types.BoolValue(true)
 			} else {
-				item.DestinationPseudowire = types.BoolNull()
+				item.DestinationPseudowire = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.file.size"); cValue.Exists() {
 				item.DestinationFileSize = types.Int64Value(cValue.Int())
@@ -1143,12 +1245,12 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("destination.file.buffer-type.linear"); cValue.Exists() {
 				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
 			} else {
-				item.DestinationFileBufferTypeLinear = types.BoolNull()
+				item.DestinationFileBufferTypeLinear = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.file.format.pcapng"); cValue.Exists() {
 				item.DestinationFileFormatPcapng = types.BoolValue(true)
 			} else {
-				item.DestinationFileFormatPcapng = types.BoolNull()
+				item.DestinationFileFormatPcapng = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.file.filter"); cValue.Exists() {
 				item.DestinationFileFilter = types.StringValue(cValue.String())
@@ -1156,27 +1258,27 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("destination.file.always-on"); cValue.Exists() {
 				item.DestinationFileAlwaysOn = types.BoolValue(true)
 			} else {
-				item.DestinationFileAlwaysOn = types.BoolNull()
+				item.DestinationFileAlwaysOn = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.packet-processing"); cValue.Exists() {
 				item.DropsPacketProcessing = types.BoolValue(true)
 			} else {
-				item.DropsPacketProcessing = types.BoolNull()
+				item.DropsPacketProcessing = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.traffic-management"); cValue.Exists() {
 				item.DropsTrafficManagement = types.BoolValue(true)
 			} else {
-				item.DropsTrafficManagement = types.BoolNull()
+				item.DropsTrafficManagement = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.rx"); cValue.Exists() {
 				item.DropsRx = types.BoolValue(true)
 			} else {
-				item.DropsRx = types.BoolNull()
+				item.DropsRx = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.tx"); cValue.Exists() {
 				item.DropsTx = types.BoolValue(true)
 			} else {
-				item.DropsTx = types.BoolNull()
+				item.DropsTx = types.BoolValue(false)
 			}
 			if cValue := v.Get("drops.filter"); cValue.Exists() {
 				item.DropsFilter = types.StringValue(cValue.String())
@@ -1187,7 +1289,7 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("rx.pseudowire"); cValue.Exists() {
 				item.RxPseudowire = types.BoolValue(true)
 			} else {
-				item.RxPseudowire = types.BoolNull()
+				item.RxPseudowire = types.BoolValue(false)
 			}
 			if cValue := v.Get("tx.interface"); cValue.Exists() {
 				item.TxInterface = types.StringValue(cValue.String())
@@ -1195,7 +1297,7 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("tx.pseudowire"); cValue.Exists() {
 				item.TxPseudowire = types.BoolValue(true)
 			} else {
-				item.TxPseudowire = types.BoolNull()
+				item.TxPseudowire = types.BoolValue(false)
 			}
 			if cValue := v.Get("inject-interface"); cValue.Exists() {
 				item.InjectInterface = types.StringValue(cValue.String())
@@ -1215,12 +1317,12 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("protocol-capture.rx"); cValue.Exists() {
 				item.ProtocolCaptureRx = types.BoolValue(true)
 			} else {
-				item.ProtocolCaptureRx = types.BoolNull()
+				item.ProtocolCaptureRx = types.BoolValue(false)
 			}
 			if cValue := v.Get("protocol-capture.tx"); cValue.Exists() {
 				item.ProtocolCaptureTx = types.BoolValue(true)
 			} else {
-				item.ProtocolCaptureTx = types.BoolNull()
+				item.ProtocolCaptureTx = types.BoolValue(false)
 			}
 			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() {
 				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
@@ -1241,7 +1343,7 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) 
 	if value := res.Get(prefix + "default-capture-disable"); value.Exists() {
 		data.DefaultCaptureDisable = types.BoolValue(true)
 	} else {
-		data.DefaultCaptureDisable = types.BoolNull()
+		data.DefaultCaptureDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "local-capture-capacity"); value.Exists() {
 		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
@@ -1249,17 +1351,17 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) 
 	if value := res.Get(prefix + "kb"); value.Exists() {
 		data.LocalCaptureUnitKb = types.BoolValue(true)
 	} else {
-		data.LocalCaptureUnitKb = types.BoolNull()
+		data.LocalCaptureUnitKb = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mb"); value.Exists() {
 		data.LocalCaptureUnitMb = types.BoolValue(true)
 	} else {
-		data.LocalCaptureUnitMb = types.BoolNull()
+		data.LocalCaptureUnitMb = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "gb"); value.Exists() {
 		data.LocalCaptureUnitGb = types.BoolValue(true)
 	} else {
-		data.LocalCaptureUnitGb = types.BoolNull()
+		data.LocalCaptureUnitGb = types.BoolValue(false)
 	}
 }
 
@@ -1267,155 +1369,7 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MonitorSession) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-session"); value.Exists() {
-		data.MonitorSessions = make([]MonitorSessionMonitorSessions, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := MonitorSessionMonitorSessions{}
-			if cValue := helpers.GetFromXPath(v, "session-name"); cValue.Exists() {
-				item.SessionName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "traffic-type"); cValue.Exists() {
-				item.TrafficType = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "destination/interface"); cValue.Exists() {
-				item.DestinationInterface = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "destination/pseudowire"); cValue.Exists() {
-				item.DestinationPseudowire = types.BoolValue(true)
-			} else {
-				item.DestinationPseudowire = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "destination/file/size"); cValue.Exists() {
-				item.DestinationFileSize = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "destination/file/buffer-type/linear"); cValue.Exists() {
-				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
-			} else {
-				item.DestinationFileBufferTypeLinear = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "destination/file/format/pcapng"); cValue.Exists() {
-				item.DestinationFileFormatPcapng = types.BoolValue(true)
-			} else {
-				item.DestinationFileFormatPcapng = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "destination/file/filter"); cValue.Exists() {
-				item.DestinationFileFilter = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "destination/file/always-on"); cValue.Exists() {
-				item.DestinationFileAlwaysOn = types.BoolValue(true)
-			} else {
-				item.DestinationFileAlwaysOn = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "drops/packet-processing"); cValue.Exists() {
-				item.DropsPacketProcessing = types.BoolValue(true)
-			} else {
-				item.DropsPacketProcessing = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "drops/traffic-management"); cValue.Exists() {
-				item.DropsTrafficManagement = types.BoolValue(true)
-			} else {
-				item.DropsTrafficManagement = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "drops/rx"); cValue.Exists() {
-				item.DropsRx = types.BoolValue(true)
-			} else {
-				item.DropsRx = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "drops/tx"); cValue.Exists() {
-				item.DropsTx = types.BoolValue(true)
-			} else {
-				item.DropsTx = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "drops/filter"); cValue.Exists() {
-				item.DropsFilter = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "rx/interface"); cValue.Exists() {
-				item.RxInterface = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "rx/pseudowire"); cValue.Exists() {
-				item.RxPseudowire = types.BoolValue(true)
-			} else {
-				item.RxPseudowire = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "tx/interface"); cValue.Exists() {
-				item.TxInterface = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "tx/pseudowire"); cValue.Exists() {
-				item.TxPseudowire = types.BoolValue(true)
-			} else {
-				item.TxPseudowire = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "inject-interface"); cValue.Exists() {
-				item.InjectInterface = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "discard-class"); cValue.Exists() {
-				item.DiscardClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "traffic-class"); cValue.Exists() {
-				item.TrafficClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "mirror/first"); cValue.Exists() {
-				item.MirrorFirst = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "mirror/interval"); cValue.Exists() {
-				item.MirrorInterval = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "protocol-capture/rx"); cValue.Exists() {
-				item.ProtocolCaptureRx = types.BoolValue(true)
-			} else {
-				item.ProtocolCaptureRx = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "protocol-capture/tx"); cValue.Exists() {
-				item.ProtocolCaptureTx = types.BoolValue(true)
-			} else {
-				item.ProtocolCaptureTx = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "protocol-capture/filter"); cValue.Exists() {
-				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "rate-limit/rx"); cValue.Exists() {
-				item.RateLimitRx = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "rate-limit/tx"); cValue.Exists() {
-				item.RateLimitTx = types.Int64Value(cValue.Int())
-			}
-			data.MonitorSessions = append(data.MonitorSessions, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
-		data.RouterId = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-capture-disable"); value.Exists() {
-		data.DefaultCaptureDisable = types.BoolValue(true)
-	} else {
-		data.DefaultCaptureDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-capture-capacity"); value.Exists() {
-		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/kb"); value.Exists() {
-		data.LocalCaptureUnitKb = types.BoolValue(true)
-	} else {
-		data.LocalCaptureUnitKb = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mb"); value.Exists() {
-		data.LocalCaptureUnitMb = types.BoolValue(true)
-	} else {
-		data.LocalCaptureUnitMb = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/gb"); value.Exists() {
-		data.LocalCaptureUnitGb = types.BoolValue(true)
-	} else {
-		data.LocalCaptureUnitGb = types.BoolNull()
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *MonitorSessionData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/monitor-session"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-session"); value.Exists() {
 		data.MonitorSessions = make([]MonitorSessionMonitorSessions, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := MonitorSessionMonitorSessions{}
@@ -1531,28 +1485,176 @@ func (data *MonitorSessionData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id"); value.Exists() {
 		data.RouterId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-capture-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default-capture-disable"); value.Exists() {
 		data.DefaultCaptureDisable = types.BoolValue(true)
 	} else {
 		data.DefaultCaptureDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/local-capture-capacity"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/local-capture-capacity"); value.Exists() {
 		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/kb"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/kb"); value.Exists() {
 		data.LocalCaptureUnitKb = types.BoolValue(true)
 	} else {
 		data.LocalCaptureUnitKb = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mb"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mb"); value.Exists() {
 		data.LocalCaptureUnitMb = types.BoolValue(true)
 	} else {
 		data.LocalCaptureUnitMb = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/gb"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gb"); value.Exists() {
+		data.LocalCaptureUnitGb = types.BoolValue(true)
+	} else {
+		data.LocalCaptureUnitGb = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *MonitorSessionData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-session"); value.Exists() {
+		data.MonitorSessions = make([]MonitorSessionMonitorSessions, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := MonitorSessionMonitorSessions{}
+			if cValue := helpers.GetFromXPath(v, "session-name"); cValue.Exists() {
+				item.SessionName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "traffic-type"); cValue.Exists() {
+				item.TrafficType = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/interface"); cValue.Exists() {
+				item.DestinationInterface = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/pseudowire"); cValue.Exists() {
+				item.DestinationPseudowire = types.BoolValue(true)
+			} else {
+				item.DestinationPseudowire = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/file/size"); cValue.Exists() {
+				item.DestinationFileSize = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/file/buffer-type/linear"); cValue.Exists() {
+				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
+			} else {
+				item.DestinationFileBufferTypeLinear = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/file/format/pcapng"); cValue.Exists() {
+				item.DestinationFileFormatPcapng = types.BoolValue(true)
+			} else {
+				item.DestinationFileFormatPcapng = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/file/filter"); cValue.Exists() {
+				item.DestinationFileFilter = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/file/always-on"); cValue.Exists() {
+				item.DestinationFileAlwaysOn = types.BoolValue(true)
+			} else {
+				item.DestinationFileAlwaysOn = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/packet-processing"); cValue.Exists() {
+				item.DropsPacketProcessing = types.BoolValue(true)
+			} else {
+				item.DropsPacketProcessing = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/traffic-management"); cValue.Exists() {
+				item.DropsTrafficManagement = types.BoolValue(true)
+			} else {
+				item.DropsTrafficManagement = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/rx"); cValue.Exists() {
+				item.DropsRx = types.BoolValue(true)
+			} else {
+				item.DropsRx = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/tx"); cValue.Exists() {
+				item.DropsTx = types.BoolValue(true)
+			} else {
+				item.DropsTx = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/filter"); cValue.Exists() {
+				item.DropsFilter = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/interface"); cValue.Exists() {
+				item.RxInterface = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/pseudowire"); cValue.Exists() {
+				item.RxPseudowire = types.BoolValue(true)
+			} else {
+				item.RxPseudowire = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/interface"); cValue.Exists() {
+				item.TxInterface = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/pseudowire"); cValue.Exists() {
+				item.TxPseudowire = types.BoolValue(true)
+			} else {
+				item.TxPseudowire = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "inject-interface"); cValue.Exists() {
+				item.InjectInterface = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "discard-class"); cValue.Exists() {
+				item.DiscardClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "traffic-class"); cValue.Exists() {
+				item.TrafficClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "mirror/first"); cValue.Exists() {
+				item.MirrorFirst = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "mirror/interval"); cValue.Exists() {
+				item.MirrorInterval = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol-capture/rx"); cValue.Exists() {
+				item.ProtocolCaptureRx = types.BoolValue(true)
+			} else {
+				item.ProtocolCaptureRx = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol-capture/tx"); cValue.Exists() {
+				item.ProtocolCaptureTx = types.BoolValue(true)
+			} else {
+				item.ProtocolCaptureTx = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "protocol-capture/filter"); cValue.Exists() {
+				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "rate-limit/rx"); cValue.Exists() {
+				item.RateLimitRx = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "rate-limit/tx"); cValue.Exists() {
+				item.RateLimitTx = types.Int64Value(cValue.Int())
+			}
+			data.MonitorSessions = append(data.MonitorSessions, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id"); value.Exists() {
+		data.RouterId = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default-capture-disable"); value.Exists() {
+		data.DefaultCaptureDisable = types.BoolValue(true)
+	} else {
+		data.DefaultCaptureDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/local-capture-capacity"); value.Exists() {
+		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/kb"); value.Exists() {
+		data.LocalCaptureUnitKb = types.BoolValue(true)
+	} else {
+		data.LocalCaptureUnitKb = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mb"); value.Exists() {
+		data.LocalCaptureUnitMb = types.BoolValue(true)
+	} else {
+		data.LocalCaptureUnitMb = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gb"); value.Exists() {
 		data.LocalCaptureUnitGb = types.BoolValue(true)
 	} else {
 		data.LocalCaptureUnitGb = types.BoolValue(false)
@@ -1844,9 +1946,10 @@ func (data *MonitorSession) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
 	}
 	for i := range data.MonitorSessions {
-		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor-session=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[session-name=" + data.MonitorSessions[i].SessionName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor-session%v", data.getPath(), keyPath))
 	}
 
 	return deletePaths
@@ -1856,52 +1959,101 @@ func (data *MonitorSession) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *MonitorSession) addDeletedItemsXML(ctx context.Context, state MonitorSession, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LocalCaptureUnitGb.IsNull() && state.LocalCaptureUnitGb.ValueBool() && data.LocalCaptureUnitGb.IsNull() {
 		deletePath := state.getXPath() + "/gb"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LocalCaptureUnitMb.IsNull() && state.LocalCaptureUnitMb.ValueBool() && data.LocalCaptureUnitMb.IsNull() {
 		deletePath := state.getXPath() + "/mb"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LocalCaptureUnitKb.IsNull() && state.LocalCaptureUnitKb.ValueBool() && data.LocalCaptureUnitKb.IsNull() {
 		deletePath := state.getXPath() + "/kb"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LocalCaptureCapacitySize.IsNull() && data.LocalCaptureCapacitySize.IsNull() {
 		deletePath := state.getXPath() + "/local-capture-capacity"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DefaultCaptureDisable.IsNull() && state.DefaultCaptureDisable.ValueBool() && data.DefaultCaptureDisable.IsNull() {
 		deletePath := state.getXPath() + "/default-capture-disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
 		deletePath := state.getXPath() + "/router-id"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1929,108 +2081,107 @@ func (data *MonitorSession) addDeletedItemsXML(ctx context.Context, state Monito
 			}
 			if found {
 				if !state.MonitorSessions[i].RateLimitTx.IsNull() && data.MonitorSessions[j].RateLimitTx.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rate-limit/tx", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rate-limit/tx", predicates))
 				}
 				if !state.MonitorSessions[i].RateLimitRx.IsNull() && data.MonitorSessions[j].RateLimitRx.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rate-limit/rx", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rate-limit/rx", predicates))
 				}
 				if !state.MonitorSessions[i].ProtocolCaptureFilter.IsNull() && data.MonitorSessions[j].ProtocolCaptureFilter.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/protocol-capture/filter", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/protocol-capture/filter", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].ProtocolCaptureTx.IsNull() && state.MonitorSessions[i].ProtocolCaptureTx.ValueBool() && data.MonitorSessions[j].ProtocolCaptureTx.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/protocol-capture/tx", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/protocol-capture/tx", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].ProtocolCaptureRx.IsNull() && state.MonitorSessions[i].ProtocolCaptureRx.ValueBool() && data.MonitorSessions[j].ProtocolCaptureRx.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/protocol-capture/rx", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/protocol-capture/rx", predicates))
 				}
 				if !state.MonitorSessions[i].MirrorInterval.IsNull() && data.MonitorSessions[j].MirrorInterval.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/mirror/interval", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/mirror/interval", predicates))
 				}
 				if !state.MonitorSessions[i].MirrorFirst.IsNull() && data.MonitorSessions[j].MirrorFirst.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/mirror/first", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/mirror/first", predicates))
 				}
 				if !state.MonitorSessions[i].TrafficClass.IsNull() && data.MonitorSessions[j].TrafficClass.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/traffic-class", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/traffic-class", predicates))
 				}
 				if !state.MonitorSessions[i].DiscardClass.IsNull() && data.MonitorSessions[j].DiscardClass.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/discard-class", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/discard-class", predicates))
 				}
 				if !state.MonitorSessions[i].InjectInterface.IsNull() && data.MonitorSessions[j].InjectInterface.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/inject-interface", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/inject-interface", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].TxPseudowire.IsNull() && state.MonitorSessions[i].TxPseudowire.ValueBool() && data.MonitorSessions[j].TxPseudowire.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/pseudowire", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/pseudowire", predicates))
 				}
 				if !state.MonitorSessions[i].TxInterface.IsNull() && data.MonitorSessions[j].TxInterface.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/interface", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/interface", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].RxPseudowire.IsNull() && state.MonitorSessions[i].RxPseudowire.ValueBool() && data.MonitorSessions[j].RxPseudowire.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/pseudowire", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/pseudowire", predicates))
 				}
 				if !state.MonitorSessions[i].RxInterface.IsNull() && data.MonitorSessions[j].RxInterface.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/interface", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/interface", predicates))
 				}
 				if !state.MonitorSessions[i].DropsFilter.IsNull() && data.MonitorSessions[j].DropsFilter.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/filter", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/filter", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].DropsTx.IsNull() && state.MonitorSessions[i].DropsTx.ValueBool() && data.MonitorSessions[j].DropsTx.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/tx", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/tx", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].DropsRx.IsNull() && state.MonitorSessions[i].DropsRx.ValueBool() && data.MonitorSessions[j].DropsRx.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/rx", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/rx", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].DropsTrafficManagement.IsNull() && state.MonitorSessions[i].DropsTrafficManagement.ValueBool() && data.MonitorSessions[j].DropsTrafficManagement.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/traffic-management", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/traffic-management", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].DropsPacketProcessing.IsNull() && state.MonitorSessions[i].DropsPacketProcessing.ValueBool() && data.MonitorSessions[j].DropsPacketProcessing.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/packet-processing", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/packet-processing", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() && state.MonitorSessions[i].DestinationFileAlwaysOn.ValueBool() && data.MonitorSessions[j].DestinationFileAlwaysOn.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/always-on", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/always-on", predicates))
 				}
 				if !state.MonitorSessions[i].DestinationFileFilter.IsNull() && data.MonitorSessions[j].DestinationFileFilter.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/filter", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/filter", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() && state.MonitorSessions[i].DestinationFileFormatPcapng.ValueBool() && data.MonitorSessions[j].DestinationFileFormatPcapng.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/format/pcapng", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/format/pcapng", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() && state.MonitorSessions[i].DestinationFileBufferTypeLinear.ValueBool() && data.MonitorSessions[j].DestinationFileBufferTypeLinear.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/buffer-type/linear", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/buffer-type/linear", predicates))
 				}
 				if !state.MonitorSessions[i].DestinationFileSize.IsNull() && data.MonitorSessions[j].DestinationFileSize.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/size", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/file/size", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.MonitorSessions[i].DestinationPseudowire.IsNull() && state.MonitorSessions[i].DestinationPseudowire.ValueBool() && data.MonitorSessions[j].DestinationPseudowire.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/pseudowire", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/pseudowire", predicates))
 				}
 				if !state.MonitorSessions[i].DestinationInterface.IsNull() && data.MonitorSessions[j].DestinationInterface.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination", predicates))
 				}
 				if !state.MonitorSessions[i].TrafficType.IsNull() && data.MonitorSessions[j].TrafficType.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v/traffic-type", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/traffic-type", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/monitor-session%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v", predicates))
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -2068,7 +2219,6 @@ func (data *MonitorSession) addDeletePathsXML(ctx context.Context, body string) 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/monitor-session%v", predicates))
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

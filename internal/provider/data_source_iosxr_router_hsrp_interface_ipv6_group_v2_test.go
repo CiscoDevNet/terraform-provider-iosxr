@@ -63,7 +63,7 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]"
 	attributes = {
 		"interface-name" = "GigabitEthernet0/0/0/2"
@@ -102,7 +102,7 @@ func testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config() string {
 	config += `	name = "gp2"` + "\n"
 	config += `	bfd_fast_detect_peer_ipv6 = "fe80::240:d0ff:fe48:4672"` + "\n"
 	config += `	bfd_fast_detect_peer_interface = "GigabitEthernet0/0/0/3"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

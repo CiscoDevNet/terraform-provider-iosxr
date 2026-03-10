@@ -325,9 +325,6 @@ func (data EVPNVNI) toBody(ctx context.Context) string {
 
 func (data EVPNVNI) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
-	if !data.VniId.IsNull() && !data.VniId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/vni-id", strconv.FormatInt(data.VniId.ValueInt64(), 10))
-	}
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
 	}
@@ -350,129 +347,102 @@ func (data EVPNVNI) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/ipv4-address-assigned-number", strconv.FormatInt(data.BgpRdIpv4AddressIndex.ValueInt64(), 10))
 	}
 	if len(data.BgpRouteTargetTwoByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetTwoByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/two-byte-as-rts/two-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetFourByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetFourByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/four-byte-as-rts/four-byte-as-rt"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/four-byte-as-rts/four-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetIpv4AddressFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetIpv4AddressFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/ipv4-address-rts/ipv4-address-rt"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetImportTwoByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetImportTwoByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/import/two-byte-as-rts/two-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetImportFourByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetImportFourByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/import/four-byte-as-rts/four-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetImportIpv4AddressFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetImportIpv4AddressFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/import/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetExportTwoByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetExportTwoByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/two-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/two-byte-as-rts/two-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetExportFourByteAsFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetExportFourByteAsFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"
 			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/four-byte-as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/four-byte-as-rts/four-byte-as-rt", cBody.Res())
 		}
 	}
 	if len(data.BgpRouteTargetExportIpv4AddressFormat) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BgpRouteTargetExportIpv4AddressFormat {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ipv4-address", item.Ipv4Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"bgp/route-target/export/ipv4-address-rts/ipv4-address-rt", cBody.Res())
 		}
 	}
 	if !data.PreferredNexthopLowestIp.IsNull() && !data.PreferredNexthopLowestIp.IsUnknown() {
@@ -505,10 +475,14 @@ func (data EVPNVNI) toBodyXML(ctx context.Context) string {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/re-origination-disable", "")
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -519,37 +493,37 @@ func (data EVPNVNI) toBodyXML(ctx context.Context) string {
 func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
-	} else {
+	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() && !data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-number"); value.Exists() && !data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address"); value.Exists() && !data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
-	} else {
+	} else if data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Null()
 	}
 	for i := range data.BgpRouteTargetTwoByteAsFormat {
@@ -859,61 +833,67 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	if value := gjson.GetBytes(res, "preferred-nexthop.lowest-ip"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PreferredNexthopLowestIp.IsNull() {
 			data.PreferredNexthopLowestIp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopLowestIp.IsNull() {
 			data.PreferredNexthopLowestIp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "preferred-nexthop.highest-ip"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PreferredNexthopHighestIp.IsNull() {
 			data.PreferredNexthopHighestIp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopHighestIp.IsNull() {
 			data.PreferredNexthopHighestIp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "preferred-nexthop.modulo"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PreferredNexthopModulo.IsNull() {
 			data.PreferredNexthopModulo = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopModulo.IsNull() {
 			data.PreferredNexthopModulo = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "advertise-mac"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseMac.IsNull() {
 			data.AdvertiseMac = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AdvertiseMac.IsNull() {
 			data.AdvertiseMac = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "unknown-unicast-suppression"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.UnknownUnicastSuppression.IsNull() {
 			data.UnknownUnicastSuppression = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.UnknownUnicastSuppression.IsNull() {
 			data.UnknownUnicastSuppression = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "re-origination-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ReOriginationDisable.IsNull() {
 			data.ReOriginationDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ReOriginationDisable.IsNull() {
 			data.ReOriginationDisable = types.BoolNull()
 		}
@@ -925,42 +905,37 @@ func (data *EVPNVNI) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vni-id"); value.Exists() {
-		data.VniId = types.Int64Value(value.Int())
-	} else if data.VniId.IsNull() {
-		data.VniId = types.Int64Null()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() && !data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else if data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() && !data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() && !data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	} else if data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() && !data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() && !data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	} else if data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() && !data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Null()
@@ -970,7 +945,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -988,12 +963,12 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "two-byte-as-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "two-byte-as-number"); value.Exists() && !data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() && !data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber = types.Int64Null()
@@ -1004,7 +979,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1022,12 +997,12 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "four-byte-as-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "four-byte-as-number"); value.Exists() && !data.BgpRouteTargetFourByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetFourByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() && !data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber = types.Int64Null()
@@ -1038,7 +1013,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1056,12 +1031,12 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() && !data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.IsNull() {
 			data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address = types.StringValue(value.String())
 		} else if data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.IsNull() {
 			data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() && !data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
@@ -1072,7 +1047,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1090,12 +1065,12 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "two-byte-as-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "two-byte-as-number"); value.Exists() && !data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() && !data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber = types.Int64Null()
@@ -1106,7 +1081,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1124,12 +1099,12 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "four-byte-as-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "four-byte-as-number"); value.Exists() && !data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() && !data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber = types.Int64Null()
@@ -1140,7 +1115,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1158,12 +1133,12 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() && !data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.IsNull() {
 			data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address = types.StringValue(value.String())
 		} else if data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.IsNull() {
 			data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() && !data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
@@ -1174,7 +1149,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1192,12 +1167,12 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "two-byte-as-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "two-byte-as-number"); value.Exists() && !data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() && !data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber = types.Int64Null()
@@ -1208,7 +1183,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1226,12 +1201,12 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "four-byte-as-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "four-byte-as-number"); value.Exists() && !data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.IsNull() {
 			data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() && !data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber = types.Int64Null()
@@ -1242,7 +1217,7 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1260,59 +1235,77 @@ func (data *EVPNVNI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "ipv4-address"); value.Exists() && !data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.IsNull() {
 			data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address = types.StringValue(value.String())
 		} else if data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.IsNull() {
 			data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "assigned-number"); value.Exists() && !data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Value(value.Int())
 		} else if data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.IsNull() {
 			data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
-		data.PreferredNexthopLowestIp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PreferredNexthopLowestIp.IsNull() {
+			data.PreferredNexthopLowestIp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopLowestIp.IsNull() {
 			data.PreferredNexthopLowestIp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
-		data.PreferredNexthopHighestIp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PreferredNexthopHighestIp.IsNull() {
+			data.PreferredNexthopHighestIp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopHighestIp.IsNull() {
 			data.PreferredNexthopHighestIp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
-		data.PreferredNexthopModulo = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PreferredNexthopModulo.IsNull() {
+			data.PreferredNexthopModulo = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PreferredNexthopModulo.IsNull() {
 			data.PreferredNexthopModulo = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
-		data.AdvertiseMac = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise-mac"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AdvertiseMac.IsNull() {
+			data.AdvertiseMac = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AdvertiseMac.IsNull() {
 			data.AdvertiseMac = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
-		data.UnknownUnicastSuppression = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UnknownUnicastSuppression.IsNull() {
+			data.UnknownUnicastSuppression = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.UnknownUnicastSuppression.IsNull() {
 			data.UnknownUnicastSuppression = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
-		data.ReOriginationDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ReOriginationDisable.IsNull() {
+			data.ReOriginationDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ReOriginationDisable.IsNull() {
@@ -1330,6 +1323,10 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -1479,33 +1476,39 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "preferred-nexthop.lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
-	} else {
-		data.PreferredNexthopLowestIp = types.BoolNull()
+	} else if !data.PreferredNexthopLowestIp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preferred-nexthop.highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
-	} else {
-		data.PreferredNexthopHighestIp = types.BoolNull()
+	} else if !data.PreferredNexthopHighestIp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preferred-nexthop.modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
-	} else {
-		data.PreferredNexthopModulo = types.BoolNull()
+	} else if !data.PreferredNexthopModulo.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
-	} else {
-		data.AdvertiseMac = types.BoolNull()
+	} else if !data.AdvertiseMac.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AdvertiseMac = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
-	} else {
-		data.UnknownUnicastSuppression = types.BoolNull()
+	} else if !data.UnknownUnicastSuppression.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
-	} else {
-		data.ReOriginationDisable = types.BoolNull()
+	} else if !data.ReOriginationDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ReOriginationDisable = types.BoolValue(false)
 	}
 }
 
@@ -1514,9 +1517,14 @@ func (data *EVPNVNI) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -1668,32 +1676,32 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "preferred-nexthop.lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopLowestIp = types.BoolNull()
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preferred-nexthop.highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopHighestIp = types.BoolNull()
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preferred-nexthop.modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopModulo = types.BoolNull()
+		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
-		data.AdvertiseMac = types.BoolNull()
+		data.AdvertiseMac = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
-		data.UnknownUnicastSuppression = types.BoolNull()
+		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
-		data.ReOriginationDisable = types.BoolNull()
+		data.ReOriginationDisable = types.BoolValue(false)
 	}
 }
 
@@ -1702,28 +1710,28 @@ func (data *EVPNVNIData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetTwoByteAsFormat{}
@@ -1737,7 +1745,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetFourByteAsFormat = make([]EVPNVNIBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetFourByteAsFormat{}
@@ -1751,7 +1759,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetIpv4AddressFormat{}
@@ -1765,7 +1773,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportTwoByteAsFormat{}
@@ -1779,7 +1787,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportFourByteAsFormat{}
@@ -1793,7 +1801,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportIpv4AddressFormat{}
@@ -1807,7 +1815,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportTwoByteAsFormat{}
@@ -1821,7 +1829,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportFourByteAsFormat{}
@@ -1835,7 +1843,7 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportIpv4AddressFormat{}
@@ -1849,35 +1857,35 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopLowestIp = types.BoolNull()
+		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopHighestIp = types.BoolNull()
+		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
-		data.PreferredNexthopModulo = types.BoolNull()
+		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
-		data.AdvertiseMac = types.BoolNull()
+		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
-		data.UnknownUnicastSuppression = types.BoolNull()
+		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
-		data.ReOriginationDisable = types.BoolNull()
+		data.ReOriginationDisable = types.BoolValue(false)
 	}
 }
 
@@ -1886,28 +1894,28 @@ func (data *EVPNVNI) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/two-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-number"); value.Exists() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/four-byte-as-assigned-number"); value.Exists() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address"); value.Exists() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/rd/ipv4-address-assigned-number"); value.Exists() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetTwoByteAsFormat{}
@@ -1921,7 +1929,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetFourByteAsFormat = make([]EVPNVNIBgpRouteTargetFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetFourByteAsFormat{}
@@ -1935,7 +1943,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetIpv4AddressFormat{}
@@ -1949,7 +1957,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetImportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportTwoByteAsFormat{}
@@ -1963,7 +1971,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetImportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetImportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportFourByteAsFormat{}
@@ -1977,7 +1985,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetImportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetImportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetImportIpv4AddressFormat{}
@@ -1991,7 +1999,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportTwoByteAsFormat = make([]EVPNVNIBgpRouteTargetExportTwoByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportTwoByteAsFormat{}
@@ -2005,7 +2013,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt"); value.Exists() {
 		data.BgpRouteTargetExportFourByteAsFormat = make([]EVPNVNIBgpRouteTargetExportFourByteAsFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportFourByteAsFormat{}
@@ -2019,7 +2027,7 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt"); value.Exists() {
 		data.BgpRouteTargetExportIpv4AddressFormat = make([]EVPNVNIBgpRouteTargetExportIpv4AddressFormat, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := EVPNVNIBgpRouteTargetExportIpv4AddressFormat{}
@@ -2033,32 +2041,32 @@ func (data *EVPNVNIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/lowest-ip"); value.Exists() {
 		data.PreferredNexthopLowestIp = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopLowestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/highest-ip"); value.Exists() {
 		data.PreferredNexthopHighestIp = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopHighestIp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preferred-nexthop/modulo"); value.Exists() {
 		data.PreferredNexthopModulo = types.BoolValue(true)
 	} else {
 		data.PreferredNexthopModulo = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/advertise-mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise-mac"); value.Exists() {
 		data.AdvertiseMac = types.BoolValue(true)
 	} else {
 		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unknown-unicast-suppression"); value.Exists() {
 		data.UnknownUnicastSuppression = types.BoolValue(true)
 	} else {
 		data.UnknownUnicastSuppression = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/re-origination-disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/re-origination-disable"); value.Exists() {
 		data.ReOriginationDisable = types.BoolValue(true)
 	} else {
 		data.ReOriginationDisable = types.BoolValue(false)
@@ -2579,49 +2587,67 @@ func (data *EVPNVNI) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/preferred-nexthop/lowest-ip", data.getPath()))
 	}
 	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
-		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ipv4-address=" + data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString() + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetExportFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[four-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[two-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
-		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ipv4-address=" + data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString() + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetImportFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[four-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[two-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetIpv4AddressFormat {
-		keyValues := [...]string{data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/ipv4-address-rts/ipv4-address-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[ipv4-address=" + data.BgpRouteTargetIpv4AddressFormat[i].Ipv4Address.ValueString() + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetFourByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/four-byte-as-rts/four-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[four-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	for i := range data.BgpRouteTargetTwoByteAsFormat {
-		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[two-byte-as-number=" + strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10) + "]"
+		keyPath += "[assigned-number=" + strconv.FormatInt(data.BgpRouteTargetTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyPath))
 	}
 	if !data.BgpRdIpv4AddressIndex.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/ipv4-address-assigned-number", data.getPath()))
@@ -2653,54 +2679,103 @@ func (data *EVPNVNI) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ReOriginationDisable.IsNull() && state.ReOriginationDisable.ValueBool() && data.ReOriginationDisable.IsNull() {
 		deletePath := state.getXPath() + "/re-origination-disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.UnknownUnicastSuppression.IsNull() && state.UnknownUnicastSuppression.ValueBool() && data.UnknownUnicastSuppression.IsNull() {
 		deletePath := state.getXPath() + "/unknown-unicast-suppression"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() && data.AdvertiseMac.IsNull() {
 		deletePath := state.getXPath() + "/advertise-mac"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PreferredNexthopModulo.IsNull() && state.PreferredNexthopModulo.ValueBool() && data.PreferredNexthopModulo.IsNull() {
 		deletePath := state.getXPath() + "/preferred-nexthop/modulo"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PreferredNexthopHighestIp.IsNull() && state.PreferredNexthopHighestIp.ValueBool() && data.PreferredNexthopHighestIp.IsNull() {
 		deletePath := state.getXPath() + "/preferred-nexthop/highest-ip"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PreferredNexthopLowestIp.IsNull() && state.PreferredNexthopLowestIp.ValueBool() && data.PreferredNexthopLowestIp.IsNull() {
 		deletePath := state.getXPath() + "/preferred-nexthop/lowest-ip"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -2737,7 +2812,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", predicates))
 		}
 	}
 	for i := range state.BgpRouteTargetExportFourByteAsFormat {
@@ -2773,7 +2848,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", predicates))
 		}
 	}
 	for i := range state.BgpRouteTargetExportTwoByteAsFormat {
@@ -2809,7 +2884,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", predicates))
 		}
 	}
 	for i := range state.BgpRouteTargetImportIpv4AddressFormat {
@@ -2845,7 +2920,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", predicates))
 		}
 	}
 	for i := range state.BgpRouteTargetImportFourByteAsFormat {
@@ -2881,7 +2956,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", predicates))
 		}
 	}
 	for i := range state.BgpRouteTargetImportTwoByteAsFormat {
@@ -2917,7 +2992,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", predicates))
 		}
 	}
 	for i := range state.BgpRouteTargetIpv4AddressFormat {
@@ -2953,7 +3028,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bgp/route-target/ipv4-address-rts/ipv4-address-rt%v", predicates))
 		}
 	}
 	for i := range state.BgpRouteTargetFourByteAsFormat {
@@ -2989,7 +3064,7 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bgp/route-target/four-byte-as-rts/four-byte-as-rt%v", predicates))
 		}
 	}
 	for i := range state.BgpRouteTargetTwoByteAsFormat {
@@ -3025,61 +3100,116 @@ func (data *EVPNVNI) addDeletedItemsXML(ctx context.Context, state EVPNVNI, body
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", predicates))
 		}
 	}
 	if !state.BgpRdIpv4AddressIndex.IsNull() && data.BgpRdIpv4AddressIndex.IsNull() {
 		deletePath := state.getXPath() + "/bgp/rd/ipv4-address-assigned-number"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdIpv4Address.IsNull() && data.BgpRdIpv4Address.IsNull() {
 		deletePath := state.getXPath() + "/bgp/rd/ipv4-address"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdFourByteAsIndex.IsNull() && data.BgpRdFourByteAsIndex.IsNull() {
 		deletePath := state.getXPath() + "/bgp/rd/four-byte-as-assigned-number"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdFourByteAsNumber.IsNull() && data.BgpRdFourByteAsNumber.IsNull() {
 		deletePath := state.getXPath() + "/bgp/rd/four-byte-as-number"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdTwoByteAsIndex.IsNull() && data.BgpRdTwoByteAsIndex.IsNull() {
 		deletePath := state.getXPath() + "/bgp/rd/two-byte-as-assigned-number"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpRdTwoByteAsNumber.IsNull() && data.BgpRdTwoByteAsNumber.IsNull() {
 		deletePath := state.getXPath() + "/bgp/rd/two-byte-as-number"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletePath := state.getXPath() + "/description"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -3219,7 +3349,6 @@ func (data *EVPNVNI) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/description")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

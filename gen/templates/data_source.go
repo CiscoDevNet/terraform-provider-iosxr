@@ -209,10 +209,19 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-			if !d.data.ReuseConnection {
-				defer device.GnmiClient.Disconnect()
-			}
-			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
+				// Ensure connection is healthy (reconnect if stale)
+				locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+				if locked {
+					defer device.GetOpMutex().Unlock()
+				}
+				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+				getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return
@@ -234,14 +243,20 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 			config.fromBody(ctx, gjson.ParseBytes(respBody))
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
-			locked := helpers.AcquireNetconfLock(&device.NetconfOpMutex, device.ReuseConnection, false)
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)
 			if locked {
-				defer device.NetconfOpMutex.Unlock()
+				defer device.GetOpMutex().Unlock()
 			}
 			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
 
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
 			filter := helpers.GetSubtreeFilter(config.getXPath())
-			res, err := device.NetconfClient.GetConfig(ctx, "running", filter)
+			res, err := helpers.GetConfigWithTimeout(ctx, device.NetconfClient, "running", filter)
 			if err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object (%s), got error: %s", config.getPath(), err))
 				return
@@ -251,6 +266,7 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 		}
 	}
 
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

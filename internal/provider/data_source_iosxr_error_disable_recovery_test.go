@@ -28,9 +28,6 @@ import (
 
 // End of section. //template:end imports
 
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-
-// End of section. //template:end testPrerequisites
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrErrorDisableRecovery(t *testing.T) {
@@ -68,6 +65,11 @@ func TestAccDataSourceIosxrErrorDisableRecovery(t *testing.T) {
 }
 
 // End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrErrorDisableRecoveryConfig() string {

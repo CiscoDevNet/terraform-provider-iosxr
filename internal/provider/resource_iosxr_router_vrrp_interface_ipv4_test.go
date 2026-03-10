@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -77,6 +77,41 @@ func TestAccIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterVRRPInterfaceIPv4ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceName := primary.Attributes["interface_name"]
+		VrrpId := primary.Attributes["vrrp_id"]
+		Version := primary.Attributes["version"]
+
+		return fmt.Sprintf("%s,%s,%s", InterfaceName, VrrpId, Version), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
+	attributes = {
+	}
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+	depends_on = [iosxr_yang.PreReq0, ]
+}
+
+`
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrRouterVRRPInterfaceIPv4Config_minimum() string {
@@ -84,7 +119,7 @@ func testAccIosxrRouterVRRPInterfaceIPv4Config_minimum() string {
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	vrrp_id = 123` + "\n"
 	config += `	version = 2` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -120,42 +155,9 @@ func testAccIosxrRouterVRRPInterfaceIPv4Config_all() string {
 	config += `		priority_decrement = 22` + "\n"
 	config += `		}]` + "\n"
 	config += `	bfd_fast_detect_peer_ipv4 = "33.33.33.3"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrRouterVRRPInterfaceIPv4ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		InterfaceName := primary.Attributes["interface_name"]
-		VrrpId := primary.Attributes["vrrp_id"]
-		Version := primary.Attributes["version"]
-
-		return fmt.Sprintf("%s,%s,%s", InterfaceName, VrrpId, Version), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
-	attributes = {
-	}
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
-	attributes = {
-		"interface-name" = "GigabitEthernet0/0/0/1"
-	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
-}
-
-`
-
-// End of section. //template:end testPrerequisites

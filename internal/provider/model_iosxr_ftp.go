@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -124,37 +123,38 @@ func (data FTP) toBody(ctx context.Context) string {
 func (data FTP) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if len(data.ClientVrfs) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.ClientVrfs {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/client/vrfs/vrf"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "vrf-name", item.VrfName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
 			if !item.Passive.IsNull() && !item.Passive.IsUnknown() {
 				if item.Passive.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "passive", "")
+					body = helpers.SetFromXPath(body, basePath+"/passive", "")
 				}
 			}
 			if !item.SourceInterface.IsNull() && !item.SourceInterface.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "source-interface", item.SourceInterface.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/source-interface", item.SourceInterface.ValueString())
 			}
 			if !item.AnonymousPassword.IsNull() && !item.AnonymousPassword.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "anonymous-password", item.AnonymousPassword.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/anonymous-password", item.AnonymousPassword.ValueString())
 			}
 			if !item.Username.IsNull() && !item.Username.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "username", item.Username.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/username", item.Username.ValueString())
 			}
 			if !item.Password.IsNull() && !item.Password.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "password/encrypted", item.Password.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/password/encrypted", item.Password.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"client/vrfs/vrf", cBody.Res())
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -192,11 +192,13 @@ func (data *FTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClientVrfs[i].VrfName = types.StringNull()
 		}
 		if value := r.Get("passive"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.ClientVrfs[i].Passive.IsNull() {
 				data.ClientVrfs[i].Passive = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.ClientVrfs[i].Passive.IsNull() {
 				data.ClientVrfs[i].Passive = types.BoolNull()
 			}
@@ -234,7 +236,7 @@ func (data *FTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/client/vrfs/vrf").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/vrfs/vrf").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -252,13 +254,16 @@ func (data *FTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() && !data.ClientVrfs[i].VrfName.IsNull() {
 			data.ClientVrfs[i].VrfName = types.StringValue(value.String())
 		} else if data.ClientVrfs[i].VrfName.IsNull() {
 			data.ClientVrfs[i].VrfName = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "passive"); value.Exists() {
-			data.ClientVrfs[i].Passive = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.ClientVrfs[i].Passive.IsNull() {
+				data.ClientVrfs[i].Passive = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -266,22 +271,22 @@ func (data *FTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.ClientVrfs[i].Passive = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "source-interface"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "source-interface"); value.Exists() && !data.ClientVrfs[i].SourceInterface.IsNull() {
 			data.ClientVrfs[i].SourceInterface = types.StringValue(value.String())
 		} else if data.ClientVrfs[i].SourceInterface.IsNull() {
 			data.ClientVrfs[i].SourceInterface = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "anonymous-password"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "anonymous-password"); value.Exists() && !data.ClientVrfs[i].AnonymousPassword.IsNull() {
 			data.ClientVrfs[i].AnonymousPassword = types.StringValue(value.String())
 		} else if data.ClientVrfs[i].AnonymousPassword.IsNull() {
 			data.ClientVrfs[i].AnonymousPassword = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "username"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "username"); value.Exists() && !data.ClientVrfs[i].Username.IsNull() {
 			data.ClientVrfs[i].Username = types.StringValue(value.String())
 		} else if data.ClientVrfs[i].Username.IsNull() {
 			data.ClientVrfs[i].Username = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "password/encrypted"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "password/encrypted"); value.Exists() && !data.ClientVrfs[i].Password.IsNull() {
 			data.ClientVrfs[i].Password = types.StringValue(value.String())
 		} else if data.ClientVrfs[i].Password.IsNull() {
 			data.ClientVrfs[i].Password = types.StringNull()
@@ -298,6 +303,10 @@ func (data *FTP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "client.vrfs.vrf"); value.Exists() {
 		data.ClientVrfs = make([]FTPClientVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -307,8 +316,9 @@ func (data *FTP) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("passive"); cValue.Exists() {
 				item.Passive = types.BoolValue(true)
-			} else {
-				item.Passive = types.BoolNull()
+			} else if !item.Passive.IsNull() {
+				// Only set to false if it was previously set
+				item.Passive = types.BoolValue(false)
 			}
 			if cValue := v.Get("source-interface"); cValue.Exists() {
 				item.SourceInterface = types.StringValue(cValue.String())
@@ -333,9 +343,14 @@ func (data *FTP) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *FTPData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "client.vrfs.vrf"); value.Exists() {
 		data.ClientVrfs = make([]FTPClientVrfs, 0)
@@ -347,7 +362,7 @@ func (data *FTPData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("passive"); cValue.Exists() {
 				item.Passive = types.BoolValue(true)
 			} else {
-				item.Passive = types.BoolNull()
+				item.Passive = types.BoolValue(false)
 			}
 			if cValue := v.Get("source-interface"); cValue.Exists() {
 				item.SourceInterface = types.StringValue(cValue.String())
@@ -372,7 +387,7 @@ func (data *FTPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *FTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
 		data.ClientVrfs = make([]FTPClientVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := FTPClientVrfs{}
@@ -382,7 +397,7 @@ func (data *FTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "passive"); cValue.Exists() {
 				item.Passive = types.BoolValue(true)
 			} else {
-				item.Passive = types.BoolNull()
+				item.Passive = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "source-interface"); cValue.Exists() {
 				item.SourceInterface = types.StringValue(cValue.String())
@@ -407,7 +422,7 @@ func (data *FTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *FTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
 		data.ClientVrfs = make([]FTPClientVrfs, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := FTPClientVrfs{}
@@ -522,9 +537,10 @@ func (data *FTP) getEmptyLeafsDelete(ctx context.Context, state *FTP) []string {
 func (data *FTP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.ClientVrfs {
-		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/client/vrfs/vrf=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[vrf-name=" + data.ClientVrfs[i].VrfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/client/vrfs/vrf%v", data.getPath(), keyPath))
 	}
 
 	return deletePaths
@@ -535,7 +551,8 @@ func (data *FTP) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *FTP) addDeletedItemsXML(ctx context.Context, state FTP, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.ClientVrfs {
@@ -562,31 +579,30 @@ func (data *FTP) addDeletedItemsXML(ctx context.Context, state FTP, body string)
 			}
 			if found {
 				if !state.ClientVrfs[i].Password.IsNull() && data.ClientVrfs[j].Password.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/password/encrypted", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/password/encrypted", predicates))
 				}
 				if !state.ClientVrfs[i].Username.IsNull() && data.ClientVrfs[j].Username.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/username", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/username", predicates))
 				}
 				if !state.ClientVrfs[i].AnonymousPassword.IsNull() && data.ClientVrfs[j].AnonymousPassword.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/anonymous-password", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/anonymous-password", predicates))
 				}
 				if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/source-interface", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/source-interface", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.ClientVrfs[i].Passive.IsNull() && state.ClientVrfs[i].Passive.ValueBool() && data.ClientVrfs[j].Passive.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/passive", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/passive", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v", predicates))
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -607,7 +623,6 @@ func (data *FTP) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/client/vrfs/vrf%v", predicates))
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

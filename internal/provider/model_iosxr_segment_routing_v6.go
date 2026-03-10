@@ -204,26 +204,28 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 
 func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Enable.IsNull() {
 			data.Enable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Enable.IsNull() {
 			data.Enable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sid-holdtime"); value.Exists() && !data.SidHoldtime.IsNull() {
 		data.SidHoldtime = types.Int64Value(value.Int())
-	} else {
+	} else if data.SidHoldtime.IsNull() {
 		data.SidHoldtime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "logging.locator-status"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingLocatorStatus.IsNull() {
 			data.LoggingLocatorStatus = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingLocatorStatus.IsNull() {
 			data.LoggingLocatorStatus = types.BoolNull()
 		}
@@ -257,11 +259,13 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			data.Formats[i].Name = types.StringNull()
 		}
 		if value := r.Get("format-enable"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Formats[i].FormatEnable.IsNull() {
 				data.Formats[i].FormatEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Formats[i].FormatEnable.IsNull() {
 				data.Formats[i].FormatEnable = types.BoolNull()
 			}
@@ -306,11 +310,13 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			},
 		)
 		if value := r.Get("locator-enable"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Locators[i].LocatorEnable.IsNull() {
 				data.Locators[i].LocatorEnable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Locators[i].LocatorEnable.IsNull() {
 				data.Locators[i].LocatorEnable = types.BoolNull()
 			}
@@ -336,11 +342,13 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			data.Locators[i].PrefixLength = types.Int64Null()
 		}
 		if value := r.Get("anycast"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Locators[i].Anycast.IsNull() {
 				data.Locators[i].Anycast = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Locators[i].Anycast.IsNull() {
 				data.Locators[i].Anycast = types.BoolNull()
 			}
@@ -353,27 +361,27 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "encapsulation.traffic-class.option"); value.Exists() && !data.EncapsulationTrafficClassOption.IsNull() {
 		data.EncapsulationTrafficClassOption = types.StringValue(value.String())
-	} else {
+	} else if data.EncapsulationTrafficClassOption.IsNull() {
 		data.EncapsulationTrafficClassOption = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.traffic-class.value"); value.Exists() && !data.EncapsulationTrafficClassValue.IsNull() {
 		data.EncapsulationTrafficClassValue = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationTrafficClassValue.IsNull() {
 		data.EncapsulationTrafficClassValue = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.hop-limit.option"); value.Exists() && !data.EncapsulationHopLimitOption.IsNull() {
 		data.EncapsulationHopLimitOption = types.StringValue(value.String())
-	} else {
+	} else if data.EncapsulationHopLimitOption.IsNull() {
 		data.EncapsulationHopLimitOption = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.hop-limit.value"); value.Exists() && !data.EncapsulationHopLimitValue.IsNull() {
 		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
-	} else {
+	} else if data.EncapsulationHopLimitValue.IsNull() {
 		data.EncapsulationHopLimitValue = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() && !data.EncapsulationSourceAddress.IsNull() {
 		data.EncapsulationSourceAddress = types.StringValue(value.String())
-	} else {
+	} else if data.EncapsulationSourceAddress.IsNull() {
 		data.EncapsulationSourceAddress = types.StringNull()
 	}
 }
@@ -397,61 +405,55 @@ func (data SegmentRoutingV6) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.Formats) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Formats {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/formats/formats/format"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "name", item.Name.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/name", item.Name.ValueString())
 			}
 			if !item.FormatEnable.IsNull() && !item.FormatEnable.IsUnknown() {
 				if item.FormatEnable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "format-enable", "")
+					body = helpers.SetFromXPath(body, basePath+"/format-enable", "")
 				}
 			}
 			if !item.UsidLocalIdBlockRangesLibStart.IsNull() && !item.UsidLocalIdBlockRangesLibStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "usid/local-id-block-ranges/lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesLibStart.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/usid/local-id-block-ranges/lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesLibStart.ValueInt64(), 10))
 			}
 			if !item.UsidLocalIdBlockRangesExplictLibStart.IsNull() && !item.UsidLocalIdBlockRangesExplictLibStart.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "usid/local-id-block-ranges/explict-lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesExplictLibStart.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/usid/local-id-block-ranges/explict-lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesExplictLibStart.ValueInt64(), 10))
 			}
 			if !item.UsidWideLocalIdBlockExplicitRange.IsNull() && !item.UsidWideLocalIdBlockExplicitRange.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "usid/wide-local-id-block-explicit-range", strconv.FormatInt(item.UsidWideLocalIdBlockExplicitRange.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/usid/wide-local-id-block-explicit-range", strconv.FormatInt(item.UsidWideLocalIdBlockExplicitRange.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"formats/formats/format", cBody.Res())
 		}
 	}
 	if len(data.Locators) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Locators {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/locators/locators/locator"
 			if !item.LocatorEnable.IsNull() && !item.LocatorEnable.IsUnknown() {
 				if item.LocatorEnable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "locator-enable", "")
+					body = helpers.SetFromXPath(body, basePath+"/locator-enable", "")
 				}
 			}
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "name", item.Name.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/name", item.Name.ValueString())
 			}
 			if !item.MicroSegmentBehavior.IsNull() && !item.MicroSegmentBehavior.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "micro-segment/behavior", item.MicroSegmentBehavior.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/micro-segment/behavior", item.MicroSegmentBehavior.ValueString())
 			}
 			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "prefix/prefix", item.Prefix.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/prefix/prefix", item.Prefix.ValueString())
 			}
 			if !item.PrefixLength.IsNull() && !item.PrefixLength.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "prefix/prefix-length", strconv.FormatInt(item.PrefixLength.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/prefix/prefix-length", strconv.FormatInt(item.PrefixLength.ValueInt64(), 10))
 			}
 			if !item.Anycast.IsNull() && !item.Anycast.IsUnknown() {
 				if item.Anycast.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "anycast", "")
+					body = helpers.SetFromXPath(body, basePath+"/anycast", "")
 				}
 			}
 			if !item.Algorithm.IsNull() && !item.Algorithm.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "algorithm", strconv.FormatInt(item.Algorithm.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/algorithm", strconv.FormatInt(item.Algorithm.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"locators/locators/locator", cBody.Res())
 		}
 	}
 	if !data.EncapsulationTrafficClassOption.IsNull() && !data.EncapsulationTrafficClassOption.IsUnknown() {
@@ -469,10 +471,14 @@ func (data SegmentRoutingV6) toBodyXML(ctx context.Context) string {
 	if !data.EncapsulationSourceAddress.IsNull() && !data.EncapsulationSourceAddress.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/encapsulation/source-address", data.EncapsulationSourceAddress.ValueString())
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -480,21 +486,27 @@ func (data SegmentRoutingV6) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *SegmentRoutingV6) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
-		data.Enable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Enable.IsNull() {
+			data.Enable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Enable.IsNull() {
 			data.Enable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sid-holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sid-holdtime"); value.Exists() && !data.SidHoldtime.IsNull() {
 		data.SidHoldtime = types.Int64Value(value.Int())
 	} else if data.SidHoldtime.IsNull() {
 		data.SidHoldtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/locator-status"); value.Exists() {
-		data.LoggingLocatorStatus = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/locator-status"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingLocatorStatus.IsNull() {
+			data.LoggingLocatorStatus = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingLocatorStatus.IsNull() {
@@ -506,7 +518,7 @@ func (data *SegmentRoutingV6) updateFromBodyXML(ctx context.Context, res xmldot.
 		keyValues := [...]string{data.Formats[i].Name.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/formats/formats/format").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/formats/formats/format").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -524,13 +536,16 @@ func (data *SegmentRoutingV6) updateFromBodyXML(ctx context.Context, res xmldot.
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "name"); value.Exists() && !data.Formats[i].Name.IsNull() {
 			data.Formats[i].Name = types.StringValue(value.String())
 		} else if data.Formats[i].Name.IsNull() {
 			data.Formats[i].Name = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "format-enable"); value.Exists() {
-			data.Formats[i].FormatEnable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Formats[i].FormatEnable.IsNull() {
+				data.Formats[i].FormatEnable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -538,17 +553,17 @@ func (data *SegmentRoutingV6) updateFromBodyXML(ctx context.Context, res xmldot.
 				data.Formats[i].FormatEnable = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "usid/local-id-block-ranges/lib-start"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "usid/local-id-block-ranges/lib-start"); value.Exists() && !data.Formats[i].UsidLocalIdBlockRangesLibStart.IsNull() {
 			data.Formats[i].UsidLocalIdBlockRangesLibStart = types.Int64Value(value.Int())
 		} else if data.Formats[i].UsidLocalIdBlockRangesLibStart.IsNull() {
 			data.Formats[i].UsidLocalIdBlockRangesLibStart = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "usid/local-id-block-ranges/explict-lib-start"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "usid/local-id-block-ranges/explict-lib-start"); value.Exists() && !data.Formats[i].UsidLocalIdBlockRangesExplictLibStart.IsNull() {
 			data.Formats[i].UsidLocalIdBlockRangesExplictLibStart = types.Int64Value(value.Int())
 		} else if data.Formats[i].UsidLocalIdBlockRangesExplictLibStart.IsNull() {
 			data.Formats[i].UsidLocalIdBlockRangesExplictLibStart = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "usid/wide-local-id-block-explicit-range"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "usid/wide-local-id-block-explicit-range"); value.Exists() && !data.Formats[i].UsidWideLocalIdBlockExplicitRange.IsNull() {
 			data.Formats[i].UsidWideLocalIdBlockExplicitRange = types.Int64Value(value.Int())
 		} else if data.Formats[i].UsidWideLocalIdBlockExplicitRange.IsNull() {
 			data.Formats[i].UsidWideLocalIdBlockExplicitRange = types.Int64Null()
@@ -559,7 +574,7 @@ func (data *SegmentRoutingV6) updateFromBodyXML(ctx context.Context, res xmldot.
 		keyValues := [...]string{data.Locators[i].Name.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/locators/locators/locator").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locators/locators/locator").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -578,7 +593,10 @@ func (data *SegmentRoutingV6) updateFromBodyXML(ctx context.Context, res xmldot.
 			},
 		)
 		if value := helpers.GetFromXPath(r, "locator-enable"); value.Exists() {
-			data.Locators[i].LocatorEnable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Locators[i].LocatorEnable.IsNull() {
+				data.Locators[i].LocatorEnable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -586,28 +604,31 @@ func (data *SegmentRoutingV6) updateFromBodyXML(ctx context.Context, res xmldot.
 				data.Locators[i].LocatorEnable = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "name"); value.Exists() && !data.Locators[i].Name.IsNull() {
 			data.Locators[i].Name = types.StringValue(value.String())
 		} else if data.Locators[i].Name.IsNull() {
 			data.Locators[i].Name = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "micro-segment/behavior"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "micro-segment/behavior"); value.Exists() && !data.Locators[i].MicroSegmentBehavior.IsNull() {
 			data.Locators[i].MicroSegmentBehavior = types.StringValue(value.String())
 		} else if data.Locators[i].MicroSegmentBehavior.IsNull() {
 			data.Locators[i].MicroSegmentBehavior = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "prefix/prefix"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "prefix/prefix"); value.Exists() && !data.Locators[i].Prefix.IsNull() {
 			data.Locators[i].Prefix = types.StringValue(value.String())
 		} else if data.Locators[i].Prefix.IsNull() {
 			data.Locators[i].Prefix = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "prefix/prefix-length"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "prefix/prefix-length"); value.Exists() && !data.Locators[i].PrefixLength.IsNull() {
 			data.Locators[i].PrefixLength = types.Int64Value(value.Int())
 		} else if data.Locators[i].PrefixLength.IsNull() {
 			data.Locators[i].PrefixLength = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "anycast"); value.Exists() {
-			data.Locators[i].Anycast = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Locators[i].Anycast.IsNull() {
+				data.Locators[i].Anycast = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -615,33 +636,33 @@ func (data *SegmentRoutingV6) updateFromBodyXML(ctx context.Context, res xmldot.
 				data.Locators[i].Anycast = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "algorithm"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "algorithm"); value.Exists() && !data.Locators[i].Algorithm.IsNull() {
 			data.Locators[i].Algorithm = types.Int64Value(value.Int())
 		} else if data.Locators[i].Algorithm.IsNull() {
 			data.Locators[i].Algorithm = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/traffic-class/option"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/traffic-class/option"); value.Exists() && !data.EncapsulationTrafficClassOption.IsNull() {
 		data.EncapsulationTrafficClassOption = types.StringValue(value.String())
 	} else if data.EncapsulationTrafficClassOption.IsNull() {
 		data.EncapsulationTrafficClassOption = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/traffic-class/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/traffic-class/value"); value.Exists() && !data.EncapsulationTrafficClassValue.IsNull() {
 		data.EncapsulationTrafficClassValue = types.Int64Value(value.Int())
 	} else if data.EncapsulationTrafficClassValue.IsNull() {
 		data.EncapsulationTrafficClassValue = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/hop-limit/option"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/hop-limit/option"); value.Exists() && !data.EncapsulationHopLimitOption.IsNull() {
 		data.EncapsulationHopLimitOption = types.StringValue(value.String())
 	} else if data.EncapsulationHopLimitOption.IsNull() {
 		data.EncapsulationHopLimitOption = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/hop-limit/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/hop-limit/value"); value.Exists() && !data.EncapsulationHopLimitValue.IsNull() {
 		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
 	} else if data.EncapsulationHopLimitValue.IsNull() {
 		data.EncapsulationHopLimitValue = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/source-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address"); value.Exists() && !data.EncapsulationSourceAddress.IsNull() {
 		data.EncapsulationSourceAddress = types.StringValue(value.String())
 	} else if data.EncapsulationSourceAddress.IsNull() {
 		data.EncapsulationSourceAddress = types.StringNull()
@@ -656,18 +677,24 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
-	} else {
-		data.Enable = types.BoolNull()
+	} else if !data.Enable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Enable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sid-holdtime"); value.Exists() {
 		data.SidHoldtime = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "logging.locator-status"); value.Exists() {
 		data.LoggingLocatorStatus = types.BoolValue(true)
-	} else {
-		data.LoggingLocatorStatus = types.BoolNull()
+	} else if !data.LoggingLocatorStatus.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingLocatorStatus = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "formats.formats.format"); value.Exists() {
 		data.Formats = make([]SegmentRoutingV6Formats, 0)
@@ -678,8 +705,9 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("format-enable"); cValue.Exists() {
 				item.FormatEnable = types.BoolValue(true)
-			} else {
-				item.FormatEnable = types.BoolNull()
+			} else if !item.FormatEnable.IsNull() {
+				// Only set to false if it was previously set
+				item.FormatEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("usid.local-id-block-ranges.lib-start"); cValue.Exists() {
 				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
@@ -700,8 +728,9 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 			item := SegmentRoutingV6Locators{}
 			if cValue := v.Get("locator-enable"); cValue.Exists() {
 				item.LocatorEnable = types.BoolValue(true)
-			} else {
-				item.LocatorEnable = types.BoolNull()
+			} else if !item.LocatorEnable.IsNull() {
+				// Only set to false if it was previously set
+				item.LocatorEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("name"); cValue.Exists() {
 				item.Name = types.StringValue(cValue.String())
@@ -717,8 +746,9 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("anycast"); cValue.Exists() {
 				item.Anycast = types.BoolValue(true)
-			} else {
-				item.Anycast = types.BoolNull()
+			} else if !item.Anycast.IsNull() {
+				// Only set to false if it was previously set
+				item.Anycast = types.BoolValue(false)
 			}
 			if cValue := v.Get("algorithm"); cValue.Exists() {
 				item.Algorithm = types.Int64Value(cValue.Int())
@@ -748,14 +778,19 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
-		data.Enable = types.BoolNull()
+		data.Enable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sid-holdtime"); value.Exists() {
 		data.SidHoldtime = types.Int64Value(value.Int())
@@ -763,7 +798,7 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res gjson.Result
 	if value := res.Get(prefix + "logging.locator-status"); value.Exists() {
 		data.LoggingLocatorStatus = types.BoolValue(true)
 	} else {
-		data.LoggingLocatorStatus = types.BoolNull()
+		data.LoggingLocatorStatus = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "formats.formats.format"); value.Exists() {
 		data.Formats = make([]SegmentRoutingV6Formats, 0)
@@ -775,7 +810,7 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res gjson.Result
 			if cValue := v.Get("format-enable"); cValue.Exists() {
 				item.FormatEnable = types.BoolValue(true)
 			} else {
-				item.FormatEnable = types.BoolNull()
+				item.FormatEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("usid.local-id-block-ranges.lib-start"); cValue.Exists() {
 				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
@@ -797,7 +832,7 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res gjson.Result
 			if cValue := v.Get("locator-enable"); cValue.Exists() {
 				item.LocatorEnable = types.BoolValue(true)
 			} else {
-				item.LocatorEnable = types.BoolNull()
+				item.LocatorEnable = types.BoolValue(false)
 			}
 			if cValue := v.Get("name"); cValue.Exists() {
 				item.Name = types.StringValue(cValue.String())
@@ -814,7 +849,7 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res gjson.Result
 			if cValue := v.Get("anycast"); cValue.Exists() {
 				item.Anycast = types.BoolValue(true)
 			} else {
-				item.Anycast = types.BoolNull()
+				item.Anycast = types.BoolValue(false)
 			}
 			if cValue := v.Get("algorithm"); cValue.Exists() {
 				item.Algorithm = types.Int64Value(cValue.Int())
@@ -844,112 +879,20 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res gjson.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *SegmentRoutingV6) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
-		data.Enable = types.BoolValue(true)
-	} else {
-		data.Enable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sid-holdtime"); value.Exists() {
-		data.SidHoldtime = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/locator-status"); value.Exists() {
-		data.LoggingLocatorStatus = types.BoolValue(true)
-	} else {
-		data.LoggingLocatorStatus = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/formats/formats/format"); value.Exists() {
-		data.Formats = make([]SegmentRoutingV6Formats, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := SegmentRoutingV6Formats{}
-			if cValue := helpers.GetFromXPath(v, "name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "format-enable"); cValue.Exists() {
-				item.FormatEnable = types.BoolValue(true)
-			} else {
-				item.FormatEnable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "usid/local-id-block-ranges/lib-start"); cValue.Exists() {
-				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "usid/local-id-block-ranges/explict-lib-start"); cValue.Exists() {
-				item.UsidLocalIdBlockRangesExplictLibStart = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "usid/wide-local-id-block-explicit-range"); cValue.Exists() {
-				item.UsidWideLocalIdBlockExplicitRange = types.Int64Value(cValue.Int())
-			}
-			data.Formats = append(data.Formats, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/locators/locators/locator"); value.Exists() {
-		data.Locators = make([]SegmentRoutingV6Locators, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := SegmentRoutingV6Locators{}
-			if cValue := helpers.GetFromXPath(v, "locator-enable"); cValue.Exists() {
-				item.LocatorEnable = types.BoolValue(true)
-			} else {
-				item.LocatorEnable = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "micro-segment/behavior"); cValue.Exists() {
-				item.MicroSegmentBehavior = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "prefix/prefix"); cValue.Exists() {
-				item.Prefix = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "prefix/prefix-length"); cValue.Exists() {
-				item.PrefixLength = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "anycast"); cValue.Exists() {
-				item.Anycast = types.BoolValue(true)
-			} else {
-				item.Anycast = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "algorithm"); cValue.Exists() {
-				item.Algorithm = types.Int64Value(cValue.Int())
-			}
-			data.Locators = append(data.Locators, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/traffic-class/option"); value.Exists() {
-		data.EncapsulationTrafficClassOption = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/traffic-class/value"); value.Exists() {
-		data.EncapsulationTrafficClassValue = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/hop-limit/option"); value.Exists() {
-		data.EncapsulationHopLimitOption = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/hop-limit/value"); value.Exists() {
-		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/source-address"); value.Exists() {
-		data.EncapsulationSourceAddress = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *SegmentRoutingV6Data) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
 		data.Enable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sid-holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sid-holdtime"); value.Exists() {
 		data.SidHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/locator-status"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/locator-status"); value.Exists() {
 		data.LoggingLocatorStatus = types.BoolValue(true)
 	} else {
 		data.LoggingLocatorStatus = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/formats/formats/format"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/formats/formats/format"); value.Exists() {
 		data.Formats = make([]SegmentRoutingV6Formats, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingV6Formats{}
@@ -974,7 +917,7 @@ func (data *SegmentRoutingV6Data) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/locators/locators/locator"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locators/locators/locator"); value.Exists() {
 		data.Locators = make([]SegmentRoutingV6Locators, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingV6Locators{}
@@ -1007,19 +950,111 @@ func (data *SegmentRoutingV6Data) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/traffic-class/option"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/traffic-class/option"); value.Exists() {
 		data.EncapsulationTrafficClassOption = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/traffic-class/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/traffic-class/value"); value.Exists() {
 		data.EncapsulationTrafficClassValue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/hop-limit/option"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/hop-limit/option"); value.Exists() {
 		data.EncapsulationHopLimitOption = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/hop-limit/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/hop-limit/value"); value.Exists() {
 		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/encapsulation/source-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address"); value.Exists() {
+		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *SegmentRoutingV6Data) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sid-holdtime"); value.Exists() {
+		data.SidHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/locator-status"); value.Exists() {
+		data.LoggingLocatorStatus = types.BoolValue(true)
+	} else {
+		data.LoggingLocatorStatus = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/formats/formats/format"); value.Exists() {
+		data.Formats = make([]SegmentRoutingV6Formats, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SegmentRoutingV6Formats{}
+			if cValue := helpers.GetFromXPath(v, "name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "format-enable"); cValue.Exists() {
+				item.FormatEnable = types.BoolValue(true)
+			} else {
+				item.FormatEnable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "usid/local-id-block-ranges/lib-start"); cValue.Exists() {
+				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "usid/local-id-block-ranges/explict-lib-start"); cValue.Exists() {
+				item.UsidLocalIdBlockRangesExplictLibStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "usid/wide-local-id-block-explicit-range"); cValue.Exists() {
+				item.UsidWideLocalIdBlockExplicitRange = types.Int64Value(cValue.Int())
+			}
+			data.Formats = append(data.Formats, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locators/locators/locator"); value.Exists() {
+		data.Locators = make([]SegmentRoutingV6Locators, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SegmentRoutingV6Locators{}
+			if cValue := helpers.GetFromXPath(v, "locator-enable"); cValue.Exists() {
+				item.LocatorEnable = types.BoolValue(true)
+			} else {
+				item.LocatorEnable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "micro-segment/behavior"); cValue.Exists() {
+				item.MicroSegmentBehavior = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "prefix/prefix"); cValue.Exists() {
+				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "prefix/prefix-length"); cValue.Exists() {
+				item.PrefixLength = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "anycast"); cValue.Exists() {
+				item.Anycast = types.BoolValue(true)
+			} else {
+				item.Anycast = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "algorithm"); cValue.Exists() {
+				item.Algorithm = types.Int64Value(cValue.Int())
+			}
+			data.Locators = append(data.Locators, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/traffic-class/option"); value.Exists() {
+		data.EncapsulationTrafficClassOption = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/traffic-class/value"); value.Exists() {
+		data.EncapsulationTrafficClassValue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/hop-limit/option"); value.Exists() {
+		data.EncapsulationHopLimitOption = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/hop-limit/value"); value.Exists() {
+		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address"); value.Exists() {
 		data.EncapsulationSourceAddress = types.StringValue(value.String())
 	}
 }
@@ -1224,14 +1259,16 @@ func (data *SegmentRoutingV6) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/traffic-class/option", data.getPath()))
 	}
 	for i := range data.Locators {
-		keyValues := [...]string{data.Locators[i].Name.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/locators/locators/locator=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[name=" + data.Locators[i].Name.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/locators/locators/locator%v", data.getPath(), keyPath))
 	}
 	for i := range data.Formats {
-		keyValues := [...]string{data.Formats[i].Name.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/formats/formats/format=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[name=" + data.Formats[i].Name.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/formats/formats/format%v", data.getPath(), keyPath))
 	}
 	if !data.LoggingLocatorStatus.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/locator-status", data.getPath()))
@@ -1250,41 +1287,82 @@ func (data *SegmentRoutingV6) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *SegmentRoutingV6) addDeletedItemsXML(ctx context.Context, state SegmentRoutingV6, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.EncapsulationSourceAddress.IsNull() && data.EncapsulationSourceAddress.IsNull() {
 		deletePath := state.getXPath() + "/encapsulation/source-address"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EncapsulationHopLimitValue.IsNull() && data.EncapsulationHopLimitValue.IsNull() {
 		deletePath := state.getXPath() + "/encapsulation/hop-limit/value"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EncapsulationHopLimitOption.IsNull() && data.EncapsulationHopLimitOption.IsNull() {
 		deletePath := state.getXPath() + "/encapsulation/hop-limit/option"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EncapsulationTrafficClassValue.IsNull() && data.EncapsulationTrafficClassValue.IsNull() {
 		deletePath := state.getXPath() + "/encapsulation/traffic-class/value"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EncapsulationTrafficClassOption.IsNull() && data.EncapsulationTrafficClassOption.IsNull() {
 		deletePath := state.getXPath() + "/encapsulation/traffic-class/option"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1312,30 +1390,30 @@ func (data *SegmentRoutingV6) addDeletedItemsXML(ctx context.Context, state Segm
 			}
 			if found {
 				if !state.Locators[i].Algorithm.IsNull() && data.Locators[j].Algorithm.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/algorithm", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/algorithm", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Locators[i].Anycast.IsNull() && state.Locators[i].Anycast.ValueBool() && data.Locators[j].Anycast.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/anycast", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/anycast", predicates))
 				}
 				if !state.Locators[i].PrefixLength.IsNull() && data.Locators[j].PrefixLength.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/prefix/prefix-length", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/prefix/prefix-length", predicates))
 				}
 				if !state.Locators[i].Prefix.IsNull() && data.Locators[j].Prefix.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/prefix/prefix", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/prefix/prefix", predicates))
 				}
 				if !state.Locators[i].MicroSegmentBehavior.IsNull() && data.Locators[j].MicroSegmentBehavior.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/micro-segment/behavior", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/micro-segment/behavior", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Locators[i].LocatorEnable.IsNull() && state.Locators[i].LocatorEnable.ValueBool() && data.Locators[j].LocatorEnable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/locator-enable", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v/locator-enable", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/locators/locators/locator%v", predicates))
 		}
 	}
 	for i := range state.Formats {
@@ -1362,51 +1440,74 @@ func (data *SegmentRoutingV6) addDeletedItemsXML(ctx context.Context, state Segm
 			}
 			if found {
 				if !state.Formats[i].UsidWideLocalIdBlockExplicitRange.IsNull() && data.Formats[j].UsidWideLocalIdBlockExplicitRange.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v/usid/wide-local-id-block-explicit-range", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v/usid/wide-local-id-block-explicit-range", predicates))
 				}
 				if !state.Formats[i].UsidLocalIdBlockRangesExplictLibStart.IsNull() && data.Formats[j].UsidLocalIdBlockRangesExplictLibStart.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v/usid/local-id-block-ranges/explict-lib-start", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v/usid/local-id-block-ranges/explict-lib-start", predicates))
 				}
 				if !state.Formats[i].UsidLocalIdBlockRangesLibStart.IsNull() && data.Formats[j].UsidLocalIdBlockRangesLibStart.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v/usid/local-id-block-ranges/lib-start", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v/usid/local-id-block-ranges/lib-start", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Formats[i].FormatEnable.IsNull() && state.Formats[i].FormatEnable.ValueBool() && data.Formats[j].FormatEnable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v/format-enable", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v/format-enable", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/formats/formats/format%v", predicates))
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingLocatorStatus.IsNull() && state.LoggingLocatorStatus.ValueBool() && data.LoggingLocatorStatus.IsNull() {
 		deletePath := state.getXPath() + "/logging/locator-status"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SidHoldtime.IsNull() && data.SidHoldtime.IsNull() {
 		deletePath := state.getXPath() + "/sid-holdtime"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Enable.IsNull() && state.Enable.ValueBool() && data.Enable.IsNull() {
 		deletePath := state.getXPath() + "/enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -1460,7 +1561,6 @@ func (data *SegmentRoutingV6) addDeletePathsXML(ctx context.Context, body string
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/enable")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

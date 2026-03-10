@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -195,10 +196,14 @@ func (data IPv6) toBodyXML(ctx context.Context) string {
 	if !data.PathMtuTimeout.IsNull() && !data.PathMtuTimeout.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/path-mtu/timeout", strconv.FormatInt(data.PathMtuTimeout.ValueInt64(), 10))
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -209,82 +214,87 @@ func (data IPv6) toBodyXML(ctx context.Context) string {
 func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hop-limit"); value.Exists() && !data.HopLimit.IsNull() {
 		data.HopLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.HopLimit.IsNull() {
 		data.HopLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "icmp.error-interval.interval-time"); value.Exists() && !data.IcmpErrorInterval.IsNull() {
 		data.IcmpErrorInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.IcmpErrorInterval.IsNull() {
 		data.IcmpErrorInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "icmp.error-interval.bucket-size"); value.Exists() && !data.IcmpErrorIntervalBucketSize.IsNull() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.IcmpErrorIntervalBucketSize.IsNull() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "source-route"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SourceRoute.IsNull() {
 			data.SourceRoute = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SourceRoute.IsNull() {
 			data.SourceRoute = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "assembler.timeout"); value.Exists() && !data.AssemblerTimeout.IsNull() {
 		data.AssemblerTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.AssemblerTimeout.IsNull() {
 		data.AssemblerTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "assembler.max-packets"); value.Exists() && !data.AssemblerMaxPackets.IsNull() {
 		data.AssemblerMaxPackets = types.Int64Value(value.Int())
-	} else {
+	} else if data.AssemblerMaxPackets.IsNull() {
 		data.AssemblerMaxPackets = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "assembler.reassembler-drop.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AssemblerReassemblerDropEnable.IsNull() {
 			data.AssemblerReassemblerDropEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AssemblerReassemblerDropEnable.IsNull() {
 			data.AssemblerReassemblerDropEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "assembler.frag-hdr-incomplete.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AssemblerFragHdrIncompleteEnable.IsNull() {
 			data.AssemblerFragHdrIncompleteEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AssemblerFragHdrIncompleteEnable.IsNull() {
 			data.AssemblerFragHdrIncompleteEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "assembler.overlap-frag-drop.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AssemblerOverlapFragDropEnable.IsNull() {
 			data.AssemblerOverlapFragDropEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AssemblerOverlapFragDropEnable.IsNull() {
 			data.AssemblerOverlapFragDropEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "path-mtu.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathMtuEnable.IsNull() {
 			data.PathMtuEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathMtuEnable.IsNull() {
 			data.PathMtuEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "path-mtu.timeout"); value.Exists() && !data.PathMtuTimeout.IsNull() {
 		data.PathMtuTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.PathMtuTimeout.IsNull() {
 		data.PathMtuTimeout = types.Int64Null()
 	}
 }
@@ -294,72 +304,87 @@ func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *IPv6) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hop-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hop-limit"); value.Exists() && !data.HopLimit.IsNull() {
 		data.HopLimit = types.Int64Value(value.Int())
 	} else if data.HopLimit.IsNull() {
 		data.HopLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp/error-interval/interval-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/icmp/error-interval/interval-time"); value.Exists() && !data.IcmpErrorInterval.IsNull() {
 		data.IcmpErrorInterval = types.Int64Value(value.Int())
 	} else if data.IcmpErrorInterval.IsNull() {
 		data.IcmpErrorInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp/error-interval/bucket-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/icmp/error-interval/bucket-size"); value.Exists() && !data.IcmpErrorIntervalBucketSize.IsNull() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Value(value.Int())
 	} else if data.IcmpErrorIntervalBucketSize.IsNull() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-route"); value.Exists() {
-		data.SourceRoute = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-route"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SourceRoute.IsNull() {
+			data.SourceRoute = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SourceRoute.IsNull() {
 			data.SourceRoute = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/timeout"); value.Exists() && !data.AssemblerTimeout.IsNull() {
 		data.AssemblerTimeout = types.Int64Value(value.Int())
 	} else if data.AssemblerTimeout.IsNull() {
 		data.AssemblerTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/max-packets"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/max-packets"); value.Exists() && !data.AssemblerMaxPackets.IsNull() {
 		data.AssemblerMaxPackets = types.Int64Value(value.Int())
 	} else if data.AssemblerMaxPackets.IsNull() {
 		data.AssemblerMaxPackets = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/reassembler-drop/enable"); value.Exists() {
-		data.AssemblerReassemblerDropEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/reassembler-drop/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AssemblerReassemblerDropEnable.IsNull() {
+			data.AssemblerReassemblerDropEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AssemblerReassemblerDropEnable.IsNull() {
 			data.AssemblerReassemblerDropEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/frag-hdr-incomplete/enable"); value.Exists() {
-		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/frag-hdr-incomplete/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AssemblerFragHdrIncompleteEnable.IsNull() {
+			data.AssemblerFragHdrIncompleteEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AssemblerFragHdrIncompleteEnable.IsNull() {
 			data.AssemblerFragHdrIncompleteEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/overlap-frag-drop/enable"); value.Exists() {
-		data.AssemblerOverlapFragDropEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/overlap-frag-drop/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AssemblerOverlapFragDropEnable.IsNull() {
+			data.AssemblerOverlapFragDropEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AssemblerOverlapFragDropEnable.IsNull() {
 			data.AssemblerOverlapFragDropEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu/enable"); value.Exists() {
-		data.PathMtuEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathMtuEnable.IsNull() {
+			data.PathMtuEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathMtuEnable.IsNull() {
 			data.PathMtuEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu/timeout"); value.Exists() && !data.PathMtuTimeout.IsNull() {
 		data.PathMtuTimeout = types.Int64Value(value.Int())
 	} else if data.PathMtuTimeout.IsNull() {
 		data.PathMtuTimeout = types.Int64Null()
@@ -374,6 +399,10 @@ func (data *IPv6) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "hop-limit"); value.Exists() {
 		data.HopLimit = types.Int64Value(value.Int())
 	}
@@ -385,8 +414,9 @@ func (data *IPv6) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "source-route"); value.Exists() {
 		data.SourceRoute = types.BoolValue(true)
-	} else {
-		data.SourceRoute = types.BoolNull()
+	} else if !data.SourceRoute.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SourceRoute = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "assembler.timeout"); value.Exists() {
 		data.AssemblerTimeout = types.Int64Value(value.Int())
@@ -396,23 +426,27 @@ func (data *IPv6) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "assembler.reassembler-drop.enable"); value.Exists() {
 		data.AssemblerReassemblerDropEnable = types.BoolValue(true)
-	} else {
-		data.AssemblerReassemblerDropEnable = types.BoolNull()
+	} else if !data.AssemblerReassemblerDropEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AssemblerReassemblerDropEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "assembler.frag-hdr-incomplete.enable"); value.Exists() {
 		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(true)
-	} else {
-		data.AssemblerFragHdrIncompleteEnable = types.BoolNull()
+	} else if !data.AssemblerFragHdrIncompleteEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "assembler.overlap-frag-drop.enable"); value.Exists() {
 		data.AssemblerOverlapFragDropEnable = types.BoolValue(true)
-	} else {
-		data.AssemblerOverlapFragDropEnable = types.BoolNull()
+	} else if !data.AssemblerOverlapFragDropEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AssemblerOverlapFragDropEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-mtu.enable"); value.Exists() {
 		data.PathMtuEnable = types.BoolValue(true)
-	} else {
-		data.PathMtuEnable = types.BoolNull()
+	} else if !data.PathMtuEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathMtuEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-mtu.timeout"); value.Exists() {
 		data.PathMtuTimeout = types.Int64Value(value.Int())
@@ -423,9 +457,14 @@ func (data *IPv6) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *IPv6Data) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "hop-limit"); value.Exists() {
 		data.HopLimit = types.Int64Value(value.Int())
@@ -439,7 +478,7 @@ func (data *IPv6Data) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "source-route"); value.Exists() {
 		data.SourceRoute = types.BoolValue(true)
 	} else {
-		data.SourceRoute = types.BoolNull()
+		data.SourceRoute = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "assembler.timeout"); value.Exists() {
 		data.AssemblerTimeout = types.Int64Value(value.Int())
@@ -450,22 +489,22 @@ func (data *IPv6Data) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "assembler.reassembler-drop.enable"); value.Exists() {
 		data.AssemblerReassemblerDropEnable = types.BoolValue(true)
 	} else {
-		data.AssemblerReassemblerDropEnable = types.BoolNull()
+		data.AssemblerReassemblerDropEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "assembler.frag-hdr-incomplete.enable"); value.Exists() {
 		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(true)
 	} else {
-		data.AssemblerFragHdrIncompleteEnable = types.BoolNull()
+		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "assembler.overlap-frag-drop.enable"); value.Exists() {
 		data.AssemblerOverlapFragDropEnable = types.BoolValue(true)
 	} else {
-		data.AssemblerOverlapFragDropEnable = types.BoolNull()
+		data.AssemblerOverlapFragDropEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-mtu.enable"); value.Exists() {
 		data.PathMtuEnable = types.BoolValue(true)
 	} else {
-		data.PathMtuEnable = types.BoolNull()
+		data.PathMtuEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "path-mtu.timeout"); value.Exists() {
 		data.PathMtuTimeout = types.Int64Value(value.Int())
@@ -476,47 +515,47 @@ func (data *IPv6Data) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPv6) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hop-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hop-limit"); value.Exists() {
 		data.HopLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp/error-interval/interval-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/icmp/error-interval/interval-time"); value.Exists() {
 		data.IcmpErrorInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp/error-interval/bucket-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/icmp/error-interval/bucket-size"); value.Exists() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-route"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-route"); value.Exists() {
 		data.SourceRoute = types.BoolValue(true)
 	} else {
-		data.SourceRoute = types.BoolNull()
+		data.SourceRoute = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/timeout"); value.Exists() {
 		data.AssemblerTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/max-packets"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/max-packets"); value.Exists() {
 		data.AssemblerMaxPackets = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/reassembler-drop/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/reassembler-drop/enable"); value.Exists() {
 		data.AssemblerReassemblerDropEnable = types.BoolValue(true)
 	} else {
-		data.AssemblerReassemblerDropEnable = types.BoolNull()
+		data.AssemblerReassemblerDropEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/frag-hdr-incomplete/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/frag-hdr-incomplete/enable"); value.Exists() {
 		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(true)
 	} else {
-		data.AssemblerFragHdrIncompleteEnable = types.BoolNull()
+		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/overlap-frag-drop/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/overlap-frag-drop/enable"); value.Exists() {
 		data.AssemblerOverlapFragDropEnable = types.BoolValue(true)
 	} else {
-		data.AssemblerOverlapFragDropEnable = types.BoolNull()
+		data.AssemblerOverlapFragDropEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu/enable"); value.Exists() {
 		data.PathMtuEnable = types.BoolValue(true)
 	} else {
-		data.PathMtuEnable = types.BoolNull()
+		data.PathMtuEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu/timeout"); value.Exists() {
 		data.PathMtuTimeout = types.Int64Value(value.Int())
 	}
 }
@@ -525,47 +564,47 @@ func (data *IPv6) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *IPv6Data) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/hop-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hop-limit"); value.Exists() {
 		data.HopLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp/error-interval/interval-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/icmp/error-interval/interval-time"); value.Exists() {
 		data.IcmpErrorInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/icmp/error-interval/bucket-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/icmp/error-interval/bucket-size"); value.Exists() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-route"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-route"); value.Exists() {
 		data.SourceRoute = types.BoolValue(true)
 	} else {
 		data.SourceRoute = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/timeout"); value.Exists() {
 		data.AssemblerTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/max-packets"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/max-packets"); value.Exists() {
 		data.AssemblerMaxPackets = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/reassembler-drop/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/reassembler-drop/enable"); value.Exists() {
 		data.AssemblerReassemblerDropEnable = types.BoolValue(true)
 	} else {
 		data.AssemblerReassemblerDropEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/frag-hdr-incomplete/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/frag-hdr-incomplete/enable"); value.Exists() {
 		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(true)
 	} else {
 		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/assembler/overlap-frag-drop/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/assembler/overlap-frag-drop/enable"); value.Exists() {
 		data.AssemblerOverlapFragDropEnable = types.BoolValue(true)
 	} else {
 		data.AssemblerOverlapFragDropEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu/enable"); value.Exists() {
 		data.PathMtuEnable = types.BoolValue(true)
 	} else {
 		data.PathMtuEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/path-mtu/timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-mtu/timeout"); value.Exists() {
 		data.PathMtuTimeout = types.Int64Value(value.Int())
 	}
 }
@@ -695,67 +734,132 @@ func (data *IPv6) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *IPv6) addDeletedItemsXML(ctx context.Context, state IPv6, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.PathMtuTimeout.IsNull() && data.PathMtuTimeout.IsNull() {
 		deletePath := state.getXPath() + "/path-mtu/timeout"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PathMtuEnable.IsNull() && state.PathMtuEnable.ValueBool() && data.PathMtuEnable.IsNull() {
 		deletePath := state.getXPath() + "/path-mtu/enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AssemblerOverlapFragDropEnable.IsNull() && state.AssemblerOverlapFragDropEnable.ValueBool() && data.AssemblerOverlapFragDropEnable.IsNull() {
 		deletePath := state.getXPath() + "/assembler/overlap-frag-drop/enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AssemblerFragHdrIncompleteEnable.IsNull() && state.AssemblerFragHdrIncompleteEnable.ValueBool() && data.AssemblerFragHdrIncompleteEnable.IsNull() {
 		deletePath := state.getXPath() + "/assembler/frag-hdr-incomplete/enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AssemblerReassemblerDropEnable.IsNull() && state.AssemblerReassemblerDropEnable.ValueBool() && data.AssemblerReassemblerDropEnable.IsNull() {
 		deletePath := state.getXPath() + "/assembler/reassembler-drop/enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AssemblerMaxPackets.IsNull() && data.AssemblerMaxPackets.IsNull() {
 		deletePath := state.getXPath() + "/assembler/max-packets"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AssemblerTimeout.IsNull() && data.AssemblerTimeout.IsNull() {
 		deletePath := state.getXPath() + "/assembler/timeout"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SourceRoute.IsNull() && state.SourceRoute.ValueBool() && data.SourceRoute.IsNull() {
 		deletePath := state.getXPath() + "/source-route"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -777,7 +881,7 @@ func (data *IPv6) addDeletedItemsXML(ctx context.Context, state IPv6, body strin
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -799,20 +903,27 @@ func (data *IPv6) addDeletedItemsXML(ctx context.Context, state IPv6, body strin
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.HopLimit.IsNull() && data.HopLimit.IsNull() {
 		deletePath := state.getXPath() + "/hop-limit"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -855,7 +966,6 @@ func (data *IPv6) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hop-limit")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

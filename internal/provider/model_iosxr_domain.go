@@ -190,17 +190,14 @@ func (data Domain) toBody(ctx context.Context) string {
 func (data Domain) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if len(data.Domains) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Domains {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/list/domain"
 			if !item.DomainName.IsNull() && !item.DomainName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "domain-name", item.DomainName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/domain-name", item.DomainName.ValueString())
 			}
 			if !item.Order.IsNull() && !item.Order.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "order", strconv.FormatInt(item.Order.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/order", strconv.FormatInt(item.Order.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"list/domain", cBody.Res())
 		}
 	}
 	if !data.LookupDisable.IsNull() && !data.LookupDisable.IsUnknown() {
@@ -215,53 +212,44 @@ func (data Domain) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/name", data.Name.ValueString())
 	}
 	if len(data.Ipv4Hosts) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Ipv4Hosts {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/ipv4/hosts/host"
 			if !item.HostName.IsNull() && !item.HostName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "host-name", item.HostName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/host-name", item.HostName.ValueString())
 			}
 			if !item.IpAddress.IsNull() && !item.IpAddress.IsUnknown() {
 				var values []string
 				item.IpAddress.ElementsAs(ctx, &values, false)
 				for _, v := range values {
-					cBody = helpers.AppendFromXPath(cBody, "ip-address", v)
+					body = helpers.AppendFromXPath(body, basePath+"/ip-address", v)
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"ipv4/hosts/host", cBody.Res())
 		}
 	}
 	if len(data.NameServers) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.NameServers {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/name-servers/name-server"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.Order.IsNull() && !item.Order.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "order", strconv.FormatInt(item.Order.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/order", strconv.FormatInt(item.Order.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"name-servers/name-server", cBody.Res())
 		}
 	}
 	if len(data.Ipv6Hosts) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Ipv6Hosts {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/ipv6/host/host"
 			if !item.HostName.IsNull() && !item.HostName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "host-name", item.HostName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/host-name", item.HostName.ValueString())
 			}
 			if !item.Ipv6Address.IsNull() && !item.Ipv6Address.IsUnknown() {
 				var values []string
 				item.Ipv6Address.ElementsAs(ctx, &values, false)
 				for _, v := range values {
-					cBody = helpers.AppendFromXPath(cBody, "ipv6-address", v)
+					body = helpers.AppendFromXPath(body, basePath+"/ipv6-address", v)
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"ipv6/host/host", cBody.Res())
 		}
 	}
 	if !data.Multicast.IsNull() && !data.Multicast.IsUnknown() {
@@ -272,10 +260,14 @@ func (data Domain) toBodyXML(ctx context.Context) string {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/default-flows/disable", "")
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -319,23 +311,24 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	if value := gjson.GetBytes(res, "lookup.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LookupDisable.IsNull() {
 			data.LookupDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LookupDisable.IsNull() {
 			data.LookupDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "lookup.source-interface"); value.Exists() && !data.LookupSourceInterface.IsNull() {
 		data.LookupSourceInterface = types.StringValue(value.String())
-	} else {
+	} else if data.LookupSourceInterface.IsNull() {
 		data.LookupSourceInterface = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "name"); value.Exists() && !data.Name.IsNull() {
 		data.Name = types.StringValue(value.String())
-	} else {
+	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
 	for i := range data.Ipv4Hosts {
@@ -442,15 +435,16 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "multicast"); value.Exists() && !data.Multicast.IsNull() {
 		data.Multicast = types.StringValue(value.String())
-	} else {
+	} else if data.Multicast.IsNull() {
 		data.Multicast = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "default-flows.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DefaultFlowsDisable.IsNull() {
 			data.DefaultFlowsDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DefaultFlowsDisable.IsNull() {
 			data.DefaultFlowsDisable = types.BoolNull()
 		}
@@ -467,7 +461,7 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/list/domain").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/list/domain").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -485,31 +479,34 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "domain-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "domain-name"); value.Exists() && !data.Domains[i].DomainName.IsNull() {
 			data.Domains[i].DomainName = types.StringValue(value.String())
 		} else if data.Domains[i].DomainName.IsNull() {
 			data.Domains[i].DomainName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "order"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "order"); value.Exists() && !data.Domains[i].Order.IsNull() {
 			data.Domains[i].Order = types.Int64Value(value.Int())
 		} else if data.Domains[i].Order.IsNull() {
 			data.Domains[i].Order = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/disable"); value.Exists() {
-		data.LookupDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/lookup/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LookupDisable.IsNull() {
+			data.LookupDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LookupDisable.IsNull() {
 			data.LookupDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/lookup/source-interface"); value.Exists() && !data.LookupSourceInterface.IsNull() {
 		data.LookupSourceInterface = types.StringValue(value.String())
 	} else if data.LookupSourceInterface.IsNull() {
 		data.LookupSourceInterface = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() && !data.Name.IsNull() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
@@ -519,7 +516,7 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/hosts/host").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/hosts/host").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -537,13 +534,15 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "host-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "host-name"); value.Exists() && !data.Ipv4Hosts[i].HostName.IsNull() {
 			data.Ipv4Hosts[i].HostName = types.StringValue(value.String())
 		} else if data.Ipv4Hosts[i].HostName.IsNull() {
 			data.Ipv4Hosts[i].HostName = types.StringNull()
 		}
-		if childElements := helpers.GetAllChildElements(r, "ip-address"); len(childElements) > 0 {
+		if childElements := helpers.GetAllChildElements(r, "ip-address"); len(childElements) > 0 && !data.Ipv4Hosts[i].IpAddress.IsNull() {
 			data.Ipv4Hosts[i].IpAddress = helpers.GetStringListXML(childElements)
+		} else if data.Ipv4Hosts[i].IpAddress.IsNull() {
+			data.Ipv4Hosts[i].IpAddress = types.ListNull(types.StringType)
 		}
 	}
 	for i := range data.NameServers {
@@ -551,7 +550,7 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/name-servers/name-server").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name-servers/name-server").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -569,12 +568,12 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.NameServers[i].Address.IsNull() {
 			data.NameServers[i].Address = types.StringValue(value.String())
 		} else if data.NameServers[i].Address.IsNull() {
 			data.NameServers[i].Address = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "order"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "order"); value.Exists() && !data.NameServers[i].Order.IsNull() {
 			data.NameServers[i].Order = types.Int64Value(value.Int())
 		} else if data.NameServers[i].Order.IsNull() {
 			data.NameServers[i].Order = types.Int64Null()
@@ -585,7 +584,7 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/host/host").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/host/host").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -603,22 +602,27 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "host-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "host-name"); value.Exists() && !data.Ipv6Hosts[i].HostName.IsNull() {
 			data.Ipv6Hosts[i].HostName = types.StringValue(value.String())
 		} else if data.Ipv6Hosts[i].HostName.IsNull() {
 			data.Ipv6Hosts[i].HostName = types.StringNull()
 		}
-		if childElements := helpers.GetAllChildElements(r, "ipv6-address"); len(childElements) > 0 {
+		if childElements := helpers.GetAllChildElements(r, "ipv6-address"); len(childElements) > 0 && !data.Ipv6Hosts[i].Ipv6Address.IsNull() {
 			data.Ipv6Hosts[i].Ipv6Address = helpers.GetStringListXML(childElements)
+		} else if data.Ipv6Hosts[i].Ipv6Address.IsNull() {
+			data.Ipv6Hosts[i].Ipv6Address = types.ListNull(types.StringType)
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast"); value.Exists() && !data.Multicast.IsNull() {
 		data.Multicast = types.StringValue(value.String())
 	} else if data.Multicast.IsNull() {
 		data.Multicast = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-flows/disable"); value.Exists() {
-		data.DefaultFlowsDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default-flows/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DefaultFlowsDisable.IsNull() {
+			data.DefaultFlowsDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DefaultFlowsDisable.IsNull() {
@@ -636,6 +640,10 @@ func (data *Domain) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "list.domain"); value.Exists() {
 		data.Domains = make([]DomainDomains, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -652,8 +660,9 @@ func (data *Domain) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "lookup.disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
-	} else {
-		data.LookupDisable = types.BoolNull()
+	} else if !data.LookupDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LookupDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "lookup.source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
@@ -712,8 +721,9 @@ func (data *Domain) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "default-flows.disable"); value.Exists() {
 		data.DefaultFlowsDisable = types.BoolValue(true)
-	} else {
-		data.DefaultFlowsDisable = types.BoolNull()
+	} else if !data.DefaultFlowsDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DefaultFlowsDisable = types.BoolValue(false)
 	}
 }
 
@@ -722,9 +732,14 @@ func (data *Domain) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *DomainData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "list.domain"); value.Exists() {
 		data.Domains = make([]DomainDomains, 0)
@@ -743,7 +758,7 @@ func (data *DomainData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "lookup.disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
 	} else {
-		data.LookupDisable = types.BoolNull()
+		data.LookupDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "lookup.source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
@@ -803,7 +818,7 @@ func (data *DomainData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "default-flows.disable"); value.Exists() {
 		data.DefaultFlowsDisable = types.BoolValue(true)
 	} else {
-		data.DefaultFlowsDisable = types.BoolNull()
+		data.DefaultFlowsDisable = types.BoolValue(false)
 	}
 }
 
@@ -812,7 +827,7 @@ func (data *DomainData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Domain) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/list/domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/list/domain"); value.Exists() {
 		data.Domains = make([]DomainDomains, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := DomainDomains{}
@@ -826,18 +841,18 @@ func (data *Domain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/lookup/disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
 	} else {
-		data.LookupDisable = types.BoolNull()
+		data.LookupDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/lookup/source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/hosts/host"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/hosts/host"); value.Exists() {
 		data.Ipv4Hosts = make([]DomainIpv4Hosts, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := DomainIpv4Hosts{}
@@ -853,7 +868,7 @@ func (data *Domain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name-servers/name-server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name-servers/name-server"); value.Exists() {
 		data.NameServers = make([]DomainNameServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := DomainNameServers{}
@@ -867,7 +882,7 @@ func (data *Domain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/host/host"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/host/host"); value.Exists() {
 		data.Ipv6Hosts = make([]DomainIpv6Hosts, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := DomainIpv6Hosts{}
@@ -883,13 +898,13 @@ func (data *Domain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast"); value.Exists() {
 		data.Multicast = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-flows/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default-flows/disable"); value.Exists() {
 		data.DefaultFlowsDisable = types.BoolValue(true)
 	} else {
-		data.DefaultFlowsDisable = types.BoolNull()
+		data.DefaultFlowsDisable = types.BoolValue(false)
 	}
 }
 
@@ -898,7 +913,7 @@ func (data *Domain) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *DomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/list/domain"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/list/domain"); value.Exists() {
 		data.Domains = make([]DomainDomains, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := DomainDomains{}
@@ -912,18 +927,18 @@ func (data *DomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/lookup/disable"); value.Exists() {
 		data.LookupDisable = types.BoolValue(true)
 	} else {
 		data.LookupDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/lookup/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/lookup/source-interface"); value.Exists() {
 		data.LookupSourceInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/hosts/host"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/hosts/host"); value.Exists() {
 		data.Ipv4Hosts = make([]DomainIpv4Hosts, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := DomainIpv4Hosts{}
@@ -939,7 +954,7 @@ func (data *DomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name-servers/name-server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name-servers/name-server"); value.Exists() {
 		data.NameServers = make([]DomainNameServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := DomainNameServers{}
@@ -953,7 +968,7 @@ func (data *DomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/host/host"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/host/host"); value.Exists() {
 		data.Ipv6Hosts = make([]DomainIpv6Hosts, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := DomainIpv6Hosts{}
@@ -969,10 +984,10 @@ func (data *DomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/multicast"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multicast"); value.Exists() {
 		data.Multicast = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default-flows/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default-flows/disable"); value.Exists() {
 		data.DefaultFlowsDisable = types.BoolValue(true)
 	} else {
 		data.DefaultFlowsDisable = types.BoolValue(false)
@@ -1207,19 +1222,23 @@ func (data *Domain) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast", data.getPath()))
 	}
 	for i := range data.Ipv6Hosts {
-		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/host/host=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[host-name=" + data.Ipv6Hosts[i].HostName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/host/host%v", data.getPath(), keyPath))
 	}
 	for i := range data.NameServers {
-		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/name-servers/name-server=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.NameServers[i].Address.ValueString() + "]"
+		keyPath += "[order=" + strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/name-servers/name-server%v", data.getPath(), keyPath))
 	}
 	for i := range data.Ipv4Hosts {
-		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/hosts/host=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[host-name=" + data.Ipv4Hosts[i].HostName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/hosts/host%v", data.getPath(), keyPath))
 	}
 	if !data.Name.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
@@ -1231,9 +1250,11 @@ func (data *Domain) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/lookup/disable", data.getPath()))
 	}
 	for i := range data.Domains {
-		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/list/domain=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[domain-name=" + data.Domains[i].DomainName.ValueString() + "]"
+		keyPath += "[order=" + strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/list/domain%v", data.getPath(), keyPath))
 	}
 
 	return deletePaths
@@ -1244,21 +1265,38 @@ func (data *Domain) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *Domain) addDeletedItemsXML(ctx context.Context, state Domain, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DefaultFlowsDisable.IsNull() && state.DefaultFlowsDisable.ValueBool() && data.DefaultFlowsDisable.IsNull() {
 		deletePath := state.getXPath() + "/default-flows/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Multicast.IsNull() && data.Multicast.IsNull() {
 		deletePath := state.getXPath() + "/multicast"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1290,7 +1328,7 @@ func (data *Domain) addDeletedItemsXML(ctx context.Context, state Domain, body s
 						var values []string
 						state.Ipv6Hosts[i].Ipv6Address.ElementsAs(ctx, &values, false)
 						for _, v := range values {
-							deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ipv6/host/host%v/ipv6-address[.=%v]", predicates, v))
+							b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv6/host/host%v/ipv6-address[.=%v]", predicates, v))
 						}
 					} else {
 						var dataValues, stateValues []string
@@ -1305,7 +1343,7 @@ func (data *Domain) addDeletedItemsXML(ctx context.Context, state Domain, body s
 								}
 							}
 							if !found {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ipv6/host/host%v/ipv6-address[.=%v]", predicates, v))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv6/host/host%v/ipv6-address[.=%v]", predicates, v))
 							}
 						}
 					}
@@ -1314,7 +1352,7 @@ func (data *Domain) addDeletedItemsXML(ctx context.Context, state Domain, body s
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ipv6/host/host%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv6/host/host%v", predicates))
 		}
 	}
 	for i := range state.NameServers {
@@ -1350,7 +1388,7 @@ func (data *Domain) addDeletedItemsXML(ctx context.Context, state Domain, body s
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/name-servers/name-server%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/name-servers/name-server%v", predicates))
 		}
 	}
 	for i := range state.Ipv4Hosts {
@@ -1381,7 +1419,7 @@ func (data *Domain) addDeletedItemsXML(ctx context.Context, state Domain, body s
 						var values []string
 						state.Ipv4Hosts[i].IpAddress.ElementsAs(ctx, &values, false)
 						for _, v := range values {
-							deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ipv4/hosts/host%v/ip-address[.=%v]", predicates, v))
+							b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv4/hosts/host%v/ip-address[.=%v]", predicates, v))
 						}
 					} else {
 						var dataValues, stateValues []string
@@ -1396,7 +1434,7 @@ func (data *Domain) addDeletedItemsXML(ctx context.Context, state Domain, body s
 								}
 							}
 							if !found {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ipv4/hosts/host%v/ip-address[.=%v]", predicates, v))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv4/hosts/host%v/ip-address[.=%v]", predicates, v))
 							}
 						}
 					}
@@ -1405,28 +1443,52 @@ func (data *Domain) addDeletedItemsXML(ctx context.Context, state Domain, body s
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ipv4/hosts/host%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv4/hosts/host%v", predicates))
 		}
 	}
 	if !state.Name.IsNull() && data.Name.IsNull() {
 		deletePath := state.getXPath() + "/name"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LookupSourceInterface.IsNull() && data.LookupSourceInterface.IsNull() {
 		deletePath := state.getXPath() + "/lookup/source-interface"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LookupDisable.IsNull() && state.LookupDisable.ValueBool() && data.LookupDisable.IsNull() {
 		deletePath := state.getXPath() + "/lookup/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1463,12 +1525,11 @@ func (data *Domain) addDeletedItemsXML(ctx context.Context, state Domain, body s
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/list/domain%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/list/domain%v", predicates))
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -1534,7 +1595,6 @@ func (data *Domain) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/list/domain%v", predicates))
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

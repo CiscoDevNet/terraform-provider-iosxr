@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -62,31 +62,6 @@ func TestAccIosxrRoutePolicy(t *testing.T) {
 
 // End of section. //template:end testAcc
 
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-
-func testAccIosxrRoutePolicyConfig_minimum() string {
-	config := `resource "iosxr_route_policy" "test" {` + "\n"
-	config += `	route_policy_name = "ROUTE_POLICY_1"` + "\n"
-	config += `	rpl = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-	return config
-}
-
-// End of section. //template:end testAccConfigMinimal
-
-// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-
-func testAccIosxrRoutePolicyConfig_all() string {
-	config := `resource "iosxr_route_policy" "test" {` + "\n"
-	config += `	route_policy_name = "ROUTE_POLICY_1"` + "\n"
-	config += `	rpl = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
-	config += `}` + "\n"
-	return config
-}
-
-// End of section. //template:end testAccConfigAll
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 
 func iosxrRoutePolicyImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
@@ -99,9 +74,10 @@ func iosxrRoutePolicyImportStateIdFunc(resourceName string) resource.ImportState
 }
 
 // End of section. //template:end importStateIdFunc
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRoutePolicyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]"
 	attributes = {
 		"set-name" = "PREFIX_SET_1"
@@ -112,3 +88,29 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 // End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
+func testAccIosxrRoutePolicyConfig_minimum() string {
+	config := `resource "iosxr_route_policy" "test" {` + "\n"
+	config += `	route_policy_name = "ROUTE_POLICY_1"` + "\n"
+	config += `	rpl = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
+}
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
+
+func testAccIosxrRoutePolicyConfig_all() string {
+	config := `resource "iosxr_route_policy" "test" {` + "\n"
+	config += `	route_policy_name = "ROUTE_POLICY_1"` + "\n"
+	config += `	rpl = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
+}
+
+// End of section. //template:end testAccConfigAll

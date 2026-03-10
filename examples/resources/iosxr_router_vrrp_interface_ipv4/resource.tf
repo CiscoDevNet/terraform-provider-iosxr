@@ -1,31 +1,31 @@
 resource "iosxr_router_vrrp_interface_ipv4" "example" {
-  interface_name      = "GigabitEthernet0/0/0/1"
-  vrrp_id             = 123
-  version             = 2
-  address             = "1.1.1.1"
-  priority            = 250
-  name                = "TEST"
+  interface_name = "GigabitEthernet0/0/0/1"
+  vrrp_id = 123
+  version = 2
+  address = "1.1.1.1"
+  priority = 250
+  name = "TEST"
   text_authentication = "password"
-  unicast_peer        = "1.1.1.2"
+  unicast_peer = "1.1.1.2"
   secondary_addresses = [
     {
       address = "2.2.2.2"
     }
   ]
   timer_advertisement_seconds = 123
-  timer_force                 = false
-  preempt_disable             = false
-  preempt_delay               = 255
-  accept_mode_disable         = false
+  timer_force = false
+  preempt_disable = false
+  preempt_delay = 255
+  accept_mode_disable = false
   track_interfaces = [
     {
-      interface_name     = "GigabitEthernet0/0/0/4"
+      interface_name = "GigabitEthernet0/0/0/4"
       priority_decrement = 12
     }
   ]
   track_objects = [
     {
-      object_name        = "OBJECT"
+      object_name = "OBJECT"
       priority_decrement = 22
     }
   ]

@@ -446,57 +446,57 @@ func (data InterfaceTunnelTE) toBody(ctx context.Context) string {
 	}
 	if !data.LoggingEventsLspState.IsNull() && !data.LoggingEventsLspState.IsUnknown() {
 		if data.LoggingEventsLspState.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.state", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsLspReoptimize.IsNull() && !data.LoggingEventsLspReoptimize.IsUnknown() {
 		if data.LoggingEventsLspReoptimize.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reoptimize", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsLspReoptimizeAttempts.IsNull() && !data.LoggingEventsLspReoptimizeAttempts.IsUnknown() {
 		if data.LoggingEventsLspReoptimizeAttempts.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reoptimize-attempts", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsLspBwChange.IsNull() && !data.LoggingEventsLspBwChange.IsUnknown() {
 		if data.LoggingEventsLspBwChange.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.bw-change", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsLspReroute.IsNull() && !data.LoggingEventsLspReroute.IsUnknown() {
 		if data.LoggingEventsLspReroute.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reroute", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsLspRecordRoute.IsNull() && !data.LoggingEventsLspRecordRoute.IsUnknown() {
 		if data.LoggingEventsLspRecordRoute.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.record-route", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsLspSwitchover.IsNull() && !data.LoggingEventsLspSwitchover.IsUnknown() {
 		if data.LoggingEventsLspSwitchover.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.switchover", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsLspInsufficientBw.IsNull() && !data.LoggingEventsLspInsufficientBw.IsUnknown() {
 		if data.LoggingEventsLspInsufficientBw.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.insufficient-bandwidth", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsPcalcFailure.IsNull() && !data.LoggingEventsPcalcFailure.IsUnknown() {
 		if data.LoggingEventsPcalcFailure.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.pcalc-failure", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsBfdStatus.IsNull() && !data.LoggingEventsBfdStatus.IsUnknown() {
 		if data.LoggingEventsBfdStatus.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.bfd-status", map[string]string{})
 		}
 	}
 	if !data.LoggingEventsAll.IsNull() && !data.LoggingEventsAll.IsUnknown() {
 		if data.LoggingEventsAll.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.all", map[string]string{})
 		}
 	}
 	if !data.SignalledName.IsNull() && !data.SignalledName.IsUnknown() {
@@ -519,7 +519,7 @@ func (data InterfaceTunnelTE) toBody(ctx context.Context) string {
 	if !data.PolicyClasses.IsNull() && !data.PolicyClasses.IsUnknown() {
 		var values []string
 		data.PolicyClasses.ElementsAs(ctx, &values, false)
-		body, _ = sjson.Set(body, "", values)
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:policy-class.tunnel-policy-class-values.tunnel-policy-class-value", values)
 	}
 	if !data.AutoBwLimitMin.IsNull() && !data.AutoBwLimitMin.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.bw-limit.min", strconv.FormatInt(data.AutoBwLimitMin.ValueInt64(), 10))
@@ -649,43 +649,43 @@ func (data InterfaceTunnelTE) toBody(ctx context.Context) string {
 	}
 	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.IsUnknown() {
 		if data.BfdFastDetect.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.fast-detect", map[string]string{})
 		}
 	}
 	if !data.BfdSbfd.IsNull() && !data.BfdSbfd.IsUnknown() {
 		if data.BfdSbfd.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.fast-detect.sbfd", map[string]string{})
 		}
 	}
 	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
-		body, _ = sjson.Set(body, "", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
 	}
 	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
-		body, _ = sjson.Set(body, "", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
 	}
 	if !data.BfdBringupTimeout.IsNull() && !data.BfdBringupTimeout.IsUnknown() {
-		body, _ = sjson.Set(body, "", strconv.FormatInt(data.BfdBringupTimeout.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.bringup-timeout", strconv.FormatInt(data.BfdBringupTimeout.ValueInt64(), 10))
 	}
 	if !data.BfdLspPingInterval.IsNull() && !data.BfdLspPingInterval.IsUnknown() {
-		body, _ = sjson.Set(body, "", strconv.FormatInt(data.BfdLspPingInterval.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.lsp-ping.interval", strconv.FormatInt(data.BfdLspPingInterval.ValueInt64(), 10))
 	}
 	if !data.BfdLspPingDisable.IsNull() && !data.BfdLspPingDisable.IsUnknown() {
 		if data.BfdLspPingDisable.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.lsp-ping.disable", map[string]string{})
 		}
 	}
 	if !data.BfdDampeningInitialWait.IsNull() && !data.BfdDampeningInitialWait.IsUnknown() {
-		body, _ = sjson.Set(body, "", strconv.FormatInt(data.BfdDampeningInitialWait.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.initial-wait", strconv.FormatInt(data.BfdDampeningInitialWait.ValueInt64(), 10))
 	}
 	if !data.BfdDampeningMaximumWait.IsNull() && !data.BfdDampeningMaximumWait.IsUnknown() {
-		body, _ = sjson.Set(body, "", strconv.FormatInt(data.BfdDampeningMaximumWait.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.maximum-wait", strconv.FormatInt(data.BfdDampeningMaximumWait.ValueInt64(), 10))
 	}
 	if !data.BfdDampeningSecondaryWait.IsNull() && !data.BfdDampeningSecondaryWait.IsUnknown() {
-		body, _ = sjson.Set(body, "", strconv.FormatInt(data.BfdDampeningSecondaryWait.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.secondary-wait", strconv.FormatInt(data.BfdDampeningSecondaryWait.ValueInt64(), 10))
 	}
 	if !data.BfdEncapGal.IsNull() && !data.BfdEncapGal.IsUnknown() {
 		if data.BfdEncapGal.ValueBool() {
-			body, _ = sjson.Set(body, "", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.encap-mode.gal", map[string]string{})
 		}
 	}
 	if !data.Destination.IsNull() && !data.Destination.IsUnknown() {
@@ -766,151 +766,160 @@ func (data InterfaceTunnelTE) toBody(ctx context.Context) string {
 
 func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "logging.events.link-status"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsLinkStatus.IsNull() {
 			data.LoggingEventsLinkStatus = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLinkStatus.IsNull() {
 			data.LoggingEventsLinkStatus = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "bandwidth"); value.Exists() && !data.Bandwidth.IsNull() {
 		data.Bandwidth = types.Int64Value(value.Int())
-	} else {
+	} else if data.Bandwidth.IsNull() {
 		data.Bandwidth = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
-	} else {
+	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-statistics-cfg:load-interval"); value.Exists() && !data.LoadInterval.IsNull() {
 		data.LoadInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoadInterval.IsNull() {
 		data.LoadInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address"); value.Exists() && !data.Ipv4Address.IsNull() {
 		data.Ipv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv4Address.IsNull() {
 		data.Ipv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask"); value.Exists() && !data.Ipv4Netmask.IsNull() {
 		data.Ipv4Netmask = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv4Netmask.IsNull() {
 		data.Ipv4Netmask = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() && !data.Ipv4Unnumbered.IsNull() {
 		data.Ipv4Unnumbered = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv4Unnumbered.IsNull() {
 		data.Ipv4Unnumbered = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4ForwardingEnable.IsNull() {
 			data.Ipv4ForwardingEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4ForwardingEnable.IsNull() {
 			data.Ipv4ForwardingEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4TtlPropagateDisable.IsNull() {
 			data.Ipv4TtlPropagateDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4TtlPropagateDisable.IsNull() {
 			data.Ipv4TtlPropagateDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6Enable.IsNull() {
 			data.Ipv6Enable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6Enable.IsNull() {
 			data.Ipv6Enable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6TtlPropagateDisable.IsNull() {
 			data.Ipv6TtlPropagateDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6TtlPropagateDisable.IsNull() {
 			data.Ipv6TtlPropagateDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-mpls-cfg:mpls.mtu"); value.Exists() && !data.MplsMtu.IsNull() {
 		data.MplsMtu = types.Int64Value(value.Int())
-	} else {
+	} else if data.MplsMtu.IsNull() {
 		data.MplsMtu = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:affinity.affinity-attribute-value"); value.Exists() && !data.AffinityValue.IsNull() {
 		data.AffinityValue = types.StringValue(value.String())
-	} else {
+	} else if data.AffinityValue.IsNull() {
 		data.AffinityValue = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:affinity.mask"); value.Exists() && !data.AffinityMask.IsNull() {
 		data.AffinityMask = types.StringValue(value.String())
-	} else {
+	} else if data.AffinityMask.IsNull() {
 		data.AffinityMask = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutorouteAnnounce.IsNull() {
 			data.AutorouteAnnounce = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutorouteAnnounce.IsNull() {
 			data.AutorouteAnnounce = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.metric.absolute"); value.Exists() && !data.AutorouteAnnounceMetricAbsolute.IsNull() {
 		data.AutorouteAnnounceMetricAbsolute = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutorouteAnnounceMetricAbsolute.IsNull() {
 		data.AutorouteAnnounceMetricAbsolute = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.metric.relative"); value.Exists() && !data.AutorouteAnnounceMetricRelative.IsNull() {
 		data.AutorouteAnnounceMetricRelative = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutorouteAnnounceMetricRelative.IsNull() {
 		data.AutorouteAnnounceMetricRelative = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.metric.constant-metric"); value.Exists() && !data.AutorouteAnnounceMetric.IsNull() {
 		data.AutorouteAnnounceMetric = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutorouteAnnounceMetric.IsNull() {
 		data.AutorouteAnnounceMetric = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.include-ipv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutorouteAnnounceIncludeIpv6.IsNull() {
 			data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutorouteAnnounceIncludeIpv6.IsNull() {
 			data.AutorouteAnnounceIncludeIpv6 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.exclude-traffic.segment-routing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() {
 			data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() {
 			data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolNull()
 		}
@@ -946,227 +955,245 @@ func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:backup-bw.pool-type"); value.Exists() && !data.BackupBwPoolType.IsNull() {
 		data.BackupBwPoolType = types.StringValue(value.String())
-	} else {
+	} else if data.BackupBwPoolType.IsNull() {
 		data.BackupBwPoolType = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:backup-bw.class-type"); value.Exists() && !data.BackupBwClassType.IsNull() {
 		data.BackupBwClassType = types.StringValue(value.String())
-	} else {
+	} else if data.BackupBwClassType.IsNull() {
 		data.BackupBwClassType = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:backup-bw.bandwidth"); value.Exists() && !data.BackupBwValue.IsNull() {
 		data.BackupBwValue = types.Int64Value(value.Int())
-	} else {
+	} else if data.BackupBwValue.IsNull() {
 		data.BackupBwValue = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:backup-bw.unlimited"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BackupBwUnlimited.IsNull() {
 			data.BackupBwUnlimited = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BackupBwUnlimited.IsNull() {
 			data.BackupBwUnlimited = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth.bandwidth"); value.Exists() && !data.SignalledBandwidth.IsNull() {
 		data.SignalledBandwidth = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignalledBandwidth.IsNull() {
 		data.SignalledBandwidth = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth.class-type"); value.Exists() && !data.SignalledBandwidthClassType.IsNull() {
 		data.SignalledBandwidthClassType = types.Int64Value(value.Int())
-	} else {
+	} else if data.SignalledBandwidthClassType.IsNull() {
 		data.SignalledBandwidthClassType = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth.sub-pool"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SignalledBandwidthSubPool.IsNull() {
 			data.SignalledBandwidthSubPool = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SignalledBandwidthSubPool.IsNull() {
 			data.SignalledBandwidthSubPool = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.FastReroute.IsNull() {
 			data.FastReroute = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroute.IsNull() {
 			data.FastReroute = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute.protect.node"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.FastRerouteProtectNode.IsNull() {
 			data.FastRerouteProtectNode = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.FastRerouteProtectNode.IsNull() {
 			data.FastRerouteProtectNode = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute.protect.bandwidth"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.FastRerouteProtectBandwidth.IsNull() {
 			data.FastRerouteProtectBandwidth = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.FastRerouteProtectBandwidth.IsNull() {
 			data.FastRerouteProtectBandwidth = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:forward-class"); value.Exists() && !data.ForwardClass.IsNull() {
 		data.ForwardClass = types.Int64Value(value.Int())
-	} else {
+	} else if data.ForwardClass.IsNull() {
 		data.ForwardClass = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ForwardingAdjacency.IsNull() {
 			data.ForwardingAdjacency = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ForwardingAdjacency.IsNull() {
 			data.ForwardingAdjacency = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency.holdtime"); value.Exists() && !data.ForwardingAdjacencyHoldtime.IsNull() {
 		data.ForwardingAdjacencyHoldtime = types.Int64Value(value.Int())
-	} else {
+	} else if data.ForwardingAdjacencyHoldtime.IsNull() {
 		data.ForwardingAdjacencyHoldtime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency.include-ipv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ForwardingAdjacencyIncludeIpv6.IsNull() {
 			data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ForwardingAdjacencyIncludeIpv6.IsNull() {
 			data.ForwardingAdjacencyIncludeIpv6 = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:load-share"); value.Exists() && !data.LoadShare.IsNull() {
 		data.LoadShare = types.Int64Value(value.Int())
-	} else {
+	} else if data.LoadShare.IsNull() {
 		data.LoadShare = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.state"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsLspState.IsNull() {
 			data.LoggingEventsLspState = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspState.IsNull() {
 			data.LoggingEventsLspState = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reoptimize"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsLspReoptimize.IsNull() {
 			data.LoggingEventsLspReoptimize = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspReoptimize.IsNull() {
 			data.LoggingEventsLspReoptimize = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reoptimize-attempts"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsLspReoptimizeAttempts.IsNull() {
 			data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspReoptimizeAttempts.IsNull() {
 			data.LoggingEventsLspReoptimizeAttempts = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.bw-change"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsLspBwChange.IsNull() {
 			data.LoggingEventsLspBwChange = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspBwChange.IsNull() {
 			data.LoggingEventsLspBwChange = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reroute"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsLspReroute.IsNull() {
 			data.LoggingEventsLspReroute = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspReroute.IsNull() {
 			data.LoggingEventsLspReroute = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.record-route"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsLspRecordRoute.IsNull() {
 			data.LoggingEventsLspRecordRoute = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspRecordRoute.IsNull() {
 			data.LoggingEventsLspRecordRoute = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.switchover"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsLspSwitchover.IsNull() {
 			data.LoggingEventsLspSwitchover = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspSwitchover.IsNull() {
 			data.LoggingEventsLspSwitchover = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.insufficient-bandwidth"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsLspInsufficientBw.IsNull() {
 			data.LoggingEventsLspInsufficientBw = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspInsufficientBw.IsNull() {
 			data.LoggingEventsLspInsufficientBw = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.pcalc-failure"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsPcalcFailure.IsNull() {
 			data.LoggingEventsPcalcFailure = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsPcalcFailure.IsNull() {
 			data.LoggingEventsPcalcFailure = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.bfd-status"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsBfdStatus.IsNull() {
 			data.LoggingEventsBfdStatus = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsBfdStatus.IsNull() {
 			data.LoggingEventsBfdStatus = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingEventsAll.IsNull() {
 			data.LoggingEventsAll = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsAll.IsNull() {
 			data.LoggingEventsAll = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"); value.Exists() && !data.SignalledName.IsNull() {
 		data.SignalledName = types.StringValue(value.String())
-	} else {
+	} else if data.SignalledName.IsNull() {
 		data.SignalledName = types.StringNull()
 	}
 	for i := range data.PathOptions {
@@ -1198,11 +1225,13 @@ func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PathOptions[i].Preference = types.Int64Null()
 		}
 		if value := r.Get("dynamic"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.PathOptions[i].Dynamic.IsNull() {
 				data.PathOptions[i].Dynamic = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PathOptions[i].Dynamic.IsNull() {
 				data.PathOptions[i].Dynamic = types.BoolNull()
 			}
@@ -1218,11 +1247,13 @@ func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PathOptions[i].ExplicitPathName = types.StringNull()
 		}
 		if value := r.Get("explicit.verbatim"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.PathOptions[i].ExplicitPathVerbatim.IsNull() {
 				data.PathOptions[i].ExplicitPathVerbatim = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PathOptions[i].ExplicitPathVerbatim.IsNull() {
 				data.PathOptions[i].ExplicitPathVerbatim = types.BoolNull()
 			}
@@ -1268,21 +1299,25 @@ func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PathOptions[i].ProtectedByIndexSecondary = types.Int64Null()
 		}
 		if value := r.Get("lockdown"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.PathOptions[i].Lockdown.IsNull() {
 				data.PathOptions[i].Lockdown = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PathOptions[i].Lockdown.IsNull() {
 				data.PathOptions[i].Lockdown = types.BoolNull()
 			}
 		}
 		if value := r.Get("lockdown.sticky"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.PathOptions[i].LockdownSticky.IsNull() {
 				data.PathOptions[i].LockdownSticky = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.PathOptions[i].LockdownSticky.IsNull() {
 				data.PathOptions[i].LockdownSticky = types.BoolNull()
 			}
@@ -1290,347 +1325,367 @@ func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:priority.setup-priority"); value.Exists() && !data.PrioritySetup.IsNull() {
 		data.PrioritySetup = types.Int64Value(value.Int())
-	} else {
+	} else if data.PrioritySetup.IsNull() {
 		data.PrioritySetup = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:priority.hold-priority"); value.Exists() && !data.PriorityHold.IsNull() {
 		data.PriorityHold = types.Int64Value(value.Int())
-	} else {
+	} else if data.PriorityHold.IsNull() {
 		data.PriorityHold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:record-route"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.RecordRoute.IsNull() {
 			data.RecordRoute = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.RecordRoute.IsNull() {
 			data.RecordRoute = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:binding-sid.mpls.label"); value.Exists() && !data.BindingSidMplsLabel.IsNull() {
 		data.BindingSidMplsLabel = types.Int64Value(value.Int())
-	} else {
+	} else if data.BindingSidMplsLabel.IsNull() {
 		data.BindingSidMplsLabel = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.PolicyClasses.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:policy-class.tunnel-policy-class-values.tunnel-policy-class-value"); value.Exists() && !data.PolicyClasses.IsNull() {
 		data.PolicyClasses = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.PolicyClasses.IsNull() {
 		data.PolicyClasses = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.bw-limit.min"); value.Exists() && !data.AutoBwLimitMin.IsNull() {
 		data.AutoBwLimitMin = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwLimitMin.IsNull() {
 		data.AutoBwLimitMin = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.bw-limit.max"); value.Exists() && !data.AutoBwLimitMax.IsNull() {
 		data.AutoBwLimitMax = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwLimitMax.IsNull() {
 		data.AutoBwLimitMax = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.collect-bw-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AutoBwCollectOnly.IsNull() {
 			data.AutoBwCollectOnly = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AutoBwCollectOnly.IsNull() {
 			data.AutoBwCollectOnly = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.adjustment-threshold.threshold"); value.Exists() && !data.AutoBwAdjustmentThresholdPercent.IsNull() {
 		data.AutoBwAdjustmentThresholdPercent = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwAdjustmentThresholdPercent.IsNull() {
 		data.AutoBwAdjustmentThresholdPercent = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.adjustment-threshold.min"); value.Exists() && !data.AutoBwAdjustmentThresholdMin.IsNull() {
 		data.AutoBwAdjustmentThresholdMin = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwAdjustmentThresholdMin.IsNull() {
 		data.AutoBwAdjustmentThresholdMin = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.overflow.threshold"); value.Exists() && !data.AutoBwOverflowThreshold.IsNull() {
 		data.AutoBwOverflowThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwOverflowThreshold.IsNull() {
 		data.AutoBwOverflowThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.overflow.min"); value.Exists() && !data.AutoBwOverflowMin.IsNull() {
 		data.AutoBwOverflowMin = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwOverflowMin.IsNull() {
 		data.AutoBwOverflowMin = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.overflow.limit"); value.Exists() && !data.AutoBwOverflowLimit.IsNull() {
 		data.AutoBwOverflowLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwOverflowLimit.IsNull() {
 		data.AutoBwOverflowLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.underflow.threshold"); value.Exists() && !data.AutoBwUnderflowThreshold.IsNull() {
 		data.AutoBwUnderflowThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwUnderflowThreshold.IsNull() {
 		data.AutoBwUnderflowThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.underflow.min"); value.Exists() && !data.AutoBwUnderflowMin.IsNull() {
 		data.AutoBwUnderflowMin = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwUnderflowMin.IsNull() {
 		data.AutoBwUnderflowMin = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.underflow.limit"); value.Exists() && !data.AutoBwUnderflowLimit.IsNull() {
 		data.AutoBwUnderflowLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwUnderflowLimit.IsNull() {
 		data.AutoBwUnderflowLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.resignal.last-bandwidth.time-out"); value.Exists() && !data.AutoBwResignalLastBandwidthTimeout.IsNull() {
 		data.AutoBwResignalLastBandwidthTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.AutoBwResignalLastBandwidthTimeout.IsNull() {
 		data.AutoBwResignalLastBandwidthTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-protection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathProtection.IsNull() {
 			data.PathProtection = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathProtection.IsNull() {
 			data.PathProtection = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-protection.srlg-diverse"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathProtectionSrlgDiverse.IsNull() {
 			data.PathProtectionSrlgDiverse = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathProtectionSrlgDiverse.IsNull() {
 			data.PathProtectionSrlgDiverse = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-protection.protection-mode.non-revertive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathProtectionNonRevertive.IsNull() {
 			data.PathProtectionNonRevertive = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathProtectionNonRevertive.IsNull() {
 			data.PathProtectionNonRevertive = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SoftPreemption.IsNull() {
 			data.SoftPreemption = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SoftPreemption.IsNull() {
 			data.SoftPreemption = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.metric.igp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathSelectionMetricIgp.IsNull() {
 			data.PathSelectionMetricIgp = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionMetricIgp.IsNull() {
 			data.PathSelectionMetricIgp = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.metric.te"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathSelectionMetricTe.IsNull() {
 			data.PathSelectionMetricTe = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionMetricTe.IsNull() {
 			data.PathSelectionMetricTe = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.metric.delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathSelectionMetricDelay.IsNull() {
 			data.PathSelectionMetricDelay = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionMetricDelay.IsNull() {
 			data.PathSelectionMetricDelay = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.tiebreaker.min-fill"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathSelectionTiebreakerMinFill.IsNull() {
 			data.PathSelectionTiebreakerMinFill = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionTiebreakerMinFill.IsNull() {
 			data.PathSelectionTiebreakerMinFill = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.tiebreaker.max-fill"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathSelectionTiebreakerMaxFill.IsNull() {
 			data.PathSelectionTiebreakerMaxFill = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionTiebreakerMaxFill.IsNull() {
 			data.PathSelectionTiebreakerMaxFill = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.tiebreaker.random"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PathSelectionTiebreakerRandom.IsNull() {
 			data.PathSelectionTiebreakerRandom = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionTiebreakerRandom.IsNull() {
 			data.PathSelectionTiebreakerRandom = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.hop-limit"); value.Exists() && !data.PathSelectionHopLimit.IsNull() {
 		data.PathSelectionHopLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.PathSelectionHopLimit.IsNull() {
 		data.PathSelectionHopLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.cost-limit"); value.Exists() && !data.PathSelectionCostLimit.IsNull() {
 		data.PathSelectionCostLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.PathSelectionCostLimit.IsNull() {
 		data.PathSelectionCostLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.delay-limit"); value.Exists() && !data.PathSelectionDelayLimit.IsNull() {
 		data.PathSelectionDelayLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.PathSelectionDelayLimit.IsNull() {
 		data.PathSelectionDelayLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.id.association-id"); value.Exists() && !data.BidirectionalAssociationId.IsNull() {
 		data.BidirectionalAssociationId = types.Int64Value(value.Int())
-	} else {
+	} else if data.BidirectionalAssociationId.IsNull() {
 		data.BidirectionalAssociationId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.id.source-address"); value.Exists() && !data.BidirectionalAssociationSourceAddress.IsNull() {
 		data.BidirectionalAssociationSourceAddress = types.StringValue(value.String())
-	} else {
+	} else if data.BidirectionalAssociationSourceAddress.IsNull() {
 		data.BidirectionalAssociationSourceAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.id.global-id"); value.Exists() && !data.BidirectionalAssociationGlobalId.IsNull() {
 		data.BidirectionalAssociationGlobalId = types.Int64Value(value.Int())
-	} else {
+	} else if data.BidirectionalAssociationGlobalId.IsNull() {
 		data.BidirectionalAssociationGlobalId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BidirectionalAssociationCorouted.IsNull() {
 			data.BidirectionalAssociationCorouted = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BidirectionalAssociationCorouted.IsNull() {
 			data.BidirectionalAssociationCorouted = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed.fault-oam"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BidirectionalAssociationCoRoutedFaultOam.IsNull() {
 			data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BidirectionalAssociationCoRoutedFaultOam.IsNull() {
 			data.BidirectionalAssociationCoRoutedFaultOam = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed.wrap-protection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BidirectionalAssociationCoRoutedWrapProtection.IsNull() {
 			data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BidirectionalAssociationCoRoutedWrapProtection.IsNull() {
 			data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed.signaling.protection-object.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() {
 			data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() {
 			data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.fast-detect"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BfdFastDetect.IsNull() {
 			data.BfdFastDetect = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BfdFastDetect.IsNull() {
 			data.BfdFastDetect = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.fast-detect.sbfd"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BfdSbfd.IsNull() {
 			data.BfdSbfd = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BfdSbfd.IsNull() {
 			data.BfdSbfd = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.BfdMinimumInterval.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.BfdMultiplier.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.BfdBringupTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.bringup-timeout"); value.Exists() && !data.BfdBringupTimeout.IsNull() {
 		data.BfdBringupTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdBringupTimeout.IsNull() {
 		data.BfdBringupTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.BfdLspPingInterval.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.lsp-ping.interval"); value.Exists() && !data.BfdLspPingInterval.IsNull() {
 		data.BfdLspPingInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdLspPingInterval.IsNull() {
 		data.BfdLspPingInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.lsp-ping.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BfdLspPingDisable.IsNull() {
 			data.BfdLspPingDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BfdLspPingDisable.IsNull() {
 			data.BfdLspPingDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.BfdDampeningInitialWait.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.initial-wait"); value.Exists() && !data.BfdDampeningInitialWait.IsNull() {
 		data.BfdDampeningInitialWait = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdDampeningInitialWait.IsNull() {
 		data.BfdDampeningInitialWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.BfdDampeningMaximumWait.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.maximum-wait"); value.Exists() && !data.BfdDampeningMaximumWait.IsNull() {
 		data.BfdDampeningMaximumWait = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdDampeningMaximumWait.IsNull() {
 		data.BfdDampeningMaximumWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.BfdDampeningSecondaryWait.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.secondary-wait"); value.Exists() && !data.BfdDampeningSecondaryWait.IsNull() {
 		data.BfdDampeningSecondaryWait = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdDampeningSecondaryWait.IsNull() {
 		data.BfdDampeningSecondaryWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, ""); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:bfd.encap-mode.gal"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BfdEncapGal.IsNull() {
 			data.BfdEncapGal = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BfdEncapGal.IsNull() {
 			data.BfdEncapGal = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:destination"); value.Exists() && !data.Destination.IsNull() {
 		data.Destination = types.StringValue(value.String())
-	} else {
+	} else if data.Destination.IsNull() {
 		data.Destination = types.StringNull()
 	}
 }
@@ -1640,9 +1695,6 @@ func (data *InterfaceTunnelTE) updateFromBody(ctx context.Context, res []byte) {
 
 func (data InterfaceTunnelTE) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
-	if !data.Name.IsNull() && !data.Name.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", data.Name.ValueString())
-	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.IsUnknown() {
 		if data.Shutdown.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/shutdown", "")
@@ -1662,262 +1714,75 @@ func (data InterfaceTunnelTE) toBodyXML(ctx context.Context) string {
 	if !data.LoadInterval.IsNull() && !data.LoadInterval.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-statistics-cfg:load-interval", strconv.FormatInt(data.LoadInterval.ValueInt64(), 10))
 	}
-	if !data.Ipv4Address.IsNull() && !data.Ipv4Address.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address", data.Ipv4Address.ValueString())
-	}
-	if !data.Ipv4Netmask.IsNull() && !data.Ipv4Netmask.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask", data.Ipv4Netmask.ValueString())
-	}
-	if !data.Ipv4Unnumbered.IsNull() && !data.Ipv4Unnumbered.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", data.Ipv4Unnumbered.ValueString())
-	}
-	if !data.Ipv4ForwardingEnable.IsNull() && !data.Ipv4ForwardingEnable.IsUnknown() {
-		if data.Ipv4ForwardingEnable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", "")
-		}
-	}
-	if !data.Ipv4TtlPropagateDisable.IsNull() && !data.Ipv4TtlPropagateDisable.IsUnknown() {
-		if data.Ipv4TtlPropagateDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable", "")
-		}
-	}
-	if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.IsUnknown() {
-		if data.Ipv6Enable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", "")
-		}
-	}
-	if !data.Ipv6TtlPropagateDisable.IsNull() && !data.Ipv6TtlPropagateDisable.IsUnknown() {
-		if data.Ipv6TtlPropagateDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable", "")
-		}
-	}
 	if !data.MplsMtu.IsNull() && !data.MplsMtu.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu", strconv.FormatInt(data.MplsMtu.ValueInt64(), 10))
-	}
-	if !data.AffinityValue.IsNull() && !data.AffinityValue.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value", data.AffinityValue.ValueString())
-	}
-	if !data.AffinityMask.IsNull() && !data.AffinityMask.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask", data.AffinityMask.ValueString())
-	}
-	if !data.AutorouteAnnounce.IsNull() && !data.AutorouteAnnounce.IsUnknown() {
-		if data.AutorouteAnnounce.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce", "")
-		}
-	}
-	if !data.AutorouteAnnounceMetricAbsolute.IsNull() && !data.AutorouteAnnounceMetricAbsolute.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/absolute", strconv.FormatInt(data.AutorouteAnnounceMetricAbsolute.ValueInt64(), 10))
-	}
-	if !data.AutorouteAnnounceMetricRelative.IsNull() && !data.AutorouteAnnounceMetricRelative.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/relative", strconv.FormatInt(data.AutorouteAnnounceMetricRelative.ValueInt64(), 10))
-	}
-	if !data.AutorouteAnnounceMetric.IsNull() && !data.AutorouteAnnounceMetric.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/constant-metric", strconv.FormatInt(data.AutorouteAnnounceMetric.ValueInt64(), 10))
-	}
-	if !data.AutorouteAnnounceIncludeIpv6.IsNull() && !data.AutorouteAnnounceIncludeIpv6.IsUnknown() {
-		if data.AutorouteAnnounceIncludeIpv6.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6", "")
-		}
-	}
-	if !data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() && !data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsUnknown() {
-		if data.AutorouteAnnounceExcludeTrafficSegmentRouting.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing", "")
-		}
-	}
-	if len(data.AutorouteDestinations) > 0 {
-		// Build all list items and append them using AppendFromXPath
-		for _, item := range data.AutorouteDestinations {
-			cBody := netconf.Body{}
-			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
-			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination", cBody.Res())
-		}
-	}
-	if !data.BackupBwPoolType.IsNull() && !data.BackupBwPoolType.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/pool-type", data.BackupBwPoolType.ValueString())
-	}
-	if !data.BackupBwClassType.IsNull() && !data.BackupBwClassType.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/class-type", data.BackupBwClassType.ValueString())
-	}
-	if !data.BackupBwValue.IsNull() && !data.BackupBwValue.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/bandwidth", strconv.FormatInt(data.BackupBwValue.ValueInt64(), 10))
-	}
-	if !data.BackupBwUnlimited.IsNull() && !data.BackupBwUnlimited.IsUnknown() {
-		if data.BackupBwUnlimited.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/unlimited", "")
-		}
-	}
-	if !data.SignalledBandwidth.IsNull() && !data.SignalledBandwidth.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/bandwidth", strconv.FormatInt(data.SignalledBandwidth.ValueInt64(), 10))
-	}
-	if !data.SignalledBandwidthClassType.IsNull() && !data.SignalledBandwidthClassType.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type", strconv.FormatInt(data.SignalledBandwidthClassType.ValueInt64(), 10))
-	}
-	if !data.SignalledBandwidthSubPool.IsNull() && !data.SignalledBandwidthSubPool.IsUnknown() {
-		if data.SignalledBandwidthSubPool.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool", "")
-		}
-	}
-	if !data.FastReroute.IsNull() && !data.FastReroute.IsUnknown() {
-		if data.FastReroute.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute", "")
-		}
-	}
-	if !data.FastRerouteProtectNode.IsNull() && !data.FastRerouteProtectNode.IsUnknown() {
-		if data.FastRerouteProtectNode.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node", "")
-		}
-	}
-	if !data.FastRerouteProtectBandwidth.IsNull() && !data.FastRerouteProtectBandwidth.IsUnknown() {
-		if data.FastRerouteProtectBandwidth.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth", "")
-		}
 	}
 	if !data.ForwardClass.IsNull() && !data.ForwardClass.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forward-class", strconv.FormatInt(data.ForwardClass.ValueInt64(), 10))
 	}
-	if !data.ForwardingAdjacency.IsNull() && !data.ForwardingAdjacency.IsUnknown() {
-		if data.ForwardingAdjacency.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency", "")
-		}
-	}
-	if !data.ForwardingAdjacencyHoldtime.IsNull() && !data.ForwardingAdjacencyHoldtime.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime", strconv.FormatInt(data.ForwardingAdjacencyHoldtime.ValueInt64(), 10))
-	}
-	if !data.ForwardingAdjacencyIncludeIpv6.IsNull() && !data.ForwardingAdjacencyIncludeIpv6.IsUnknown() {
-		if data.ForwardingAdjacencyIncludeIpv6.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6", "")
-		}
-	}
 	if !data.LoadShare.IsNull() && !data.LoadShare.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:load-share", strconv.FormatInt(data.LoadShare.ValueInt64(), 10))
-	}
-	if !data.LoggingEventsLspState.IsNull() && !data.LoggingEventsLspState.IsUnknown() {
-		if data.LoggingEventsLspState.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsLspReoptimize.IsNull() && !data.LoggingEventsLspReoptimize.IsUnknown() {
-		if data.LoggingEventsLspReoptimize.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsLspReoptimizeAttempts.IsNull() && !data.LoggingEventsLspReoptimizeAttempts.IsUnknown() {
-		if data.LoggingEventsLspReoptimizeAttempts.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsLspBwChange.IsNull() && !data.LoggingEventsLspBwChange.IsUnknown() {
-		if data.LoggingEventsLspBwChange.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsLspReroute.IsNull() && !data.LoggingEventsLspReroute.IsUnknown() {
-		if data.LoggingEventsLspReroute.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsLspRecordRoute.IsNull() && !data.LoggingEventsLspRecordRoute.IsUnknown() {
-		if data.LoggingEventsLspRecordRoute.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsLspSwitchover.IsNull() && !data.LoggingEventsLspSwitchover.IsUnknown() {
-		if data.LoggingEventsLspSwitchover.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsLspInsufficientBw.IsNull() && !data.LoggingEventsLspInsufficientBw.IsUnknown() {
-		if data.LoggingEventsLspInsufficientBw.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsPcalcFailure.IsNull() && !data.LoggingEventsPcalcFailure.IsUnknown() {
-		if data.LoggingEventsPcalcFailure.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsBfdStatus.IsNull() && !data.LoggingEventsBfdStatus.IsUnknown() {
-		if data.LoggingEventsBfdStatus.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.LoggingEventsAll.IsNull() && !data.LoggingEventsAll.IsUnknown() {
-		if data.LoggingEventsAll.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
 	}
 	if !data.SignalledName.IsNull() && !data.SignalledName.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name", data.SignalledName.ValueString())
 	}
 	if len(data.PathOptions) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.PathOptions {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option"
 			if !item.Preference.IsNull() && !item.Preference.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "preference", strconv.FormatInt(item.Preference.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/preference", strconv.FormatInt(item.Preference.ValueInt64(), 10))
 			}
 			if !item.Dynamic.IsNull() && !item.Dynamic.IsUnknown() {
 				if item.Dynamic.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "dynamic", "")
+					body = helpers.SetFromXPath(body, basePath+"/dynamic", "")
 				}
 			}
 			if !item.ExplicitPathId.IsNull() && !item.ExplicitPathId.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "explicit/identifier", strconv.FormatInt(item.ExplicitPathId.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/explicit/identifier", strconv.FormatInt(item.ExplicitPathId.ValueInt64(), 10))
 			}
 			if !item.ExplicitPathName.IsNull() && !item.ExplicitPathName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "explicit/name", item.ExplicitPathName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/explicit/name", item.ExplicitPathName.ValueString())
 			}
 			if !item.ExplicitPathVerbatim.IsNull() && !item.ExplicitPathVerbatim.IsUnknown() {
 				if item.ExplicitPathVerbatim.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "explicit/verbatim", "")
+					body = helpers.SetFromXPath(body, basePath+"/explicit/verbatim", "")
 				}
 			}
 			if !item.OspfInstance.IsNull() && !item.OspfInstance.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ospf/instance-name", item.OspfInstance.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ospf/instance-name", item.OspfInstance.ValueString())
 			}
 			if !item.OspfAreaId.IsNull() && !item.OspfAreaId.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ospf/area/decimal", strconv.FormatInt(item.OspfAreaId.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/ospf/area/decimal", strconv.FormatInt(item.OspfAreaId.ValueInt64(), 10))
 			}
 			if !item.OspfAreaIpFormat.IsNull() && !item.OspfAreaIpFormat.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "ospf/area/ip-address", item.OspfAreaIpFormat.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/ospf/area/ip-address", item.OspfAreaIpFormat.ValueString())
 			}
 			if !item.IsisInstance.IsNull() && !item.IsisInstance.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "isis/instance-name", item.IsisInstance.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/isis/instance-name", item.IsisInstance.ValueString())
 			}
 			if !item.IsisLevel.IsNull() && !item.IsisLevel.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "isis/level", strconv.FormatInt(item.IsisLevel.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/isis/level", strconv.FormatInt(item.IsisLevel.ValueInt64(), 10))
 			}
 			if !item.AttributeSet.IsNull() && !item.AttributeSet.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "attribute-set/attribute-set-name", item.AttributeSet.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/attribute-set/attribute-set-name", item.AttributeSet.ValueString())
 			}
 			if !item.ProtectedByIndex.IsNull() && !item.ProtectedByIndex.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "protected-by/index", strconv.FormatInt(item.ProtectedByIndex.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/protected-by/index", strconv.FormatInt(item.ProtectedByIndex.ValueInt64(), 10))
 			}
 			if !item.ProtectedByIndexSecondary.IsNull() && !item.ProtectedByIndexSecondary.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "protected-by/index-secondary", strconv.FormatInt(item.ProtectedByIndexSecondary.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/protected-by/index-secondary", strconv.FormatInt(item.ProtectedByIndexSecondary.ValueInt64(), 10))
 			}
 			if !item.Lockdown.IsNull() && !item.Lockdown.IsUnknown() {
 				if item.Lockdown.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "lockdown", "")
+					body = helpers.SetFromXPath(body, basePath+"/lockdown", "")
 				}
 			}
 			if !item.LockdownSticky.IsNull() && !item.LockdownSticky.IsUnknown() {
 				if item.LockdownSticky.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "lockdown/sticky", "")
+					body = helpers.SetFromXPath(body, basePath+"/lockdown/sticky", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option", cBody.Res())
 		}
-	}
-	if !data.PrioritySetup.IsNull() && !data.PrioritySetup.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/setup-priority", strconv.FormatInt(data.PrioritySetup.ValueInt64(), 10))
-	}
-	if !data.PriorityHold.IsNull() && !data.PriorityHold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/hold-priority", strconv.FormatInt(data.PriorityHold.ValueInt64(), 10))
 	}
 	if !data.RecordRoute.IsNull() && !data.RecordRoute.IsUnknown() {
 		if data.RecordRoute.ValueBool() {
@@ -1931,60 +1796,7 @@ func (data InterfaceTunnelTE) toBodyXML(ctx context.Context) string {
 		var values []string
 		data.PolicyClasses.ElementsAs(ctx, &values, false)
 		for _, v := range values {
-			body = helpers.AppendFromXPath(body, data.getXPath()+"/", v)
-		}
-	}
-	if !data.AutoBwLimitMin.IsNull() && !data.AutoBwLimitMin.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/min", strconv.FormatInt(data.AutoBwLimitMin.ValueInt64(), 10))
-	}
-	if !data.AutoBwLimitMax.IsNull() && !data.AutoBwLimitMax.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/max", strconv.FormatInt(data.AutoBwLimitMax.ValueInt64(), 10))
-	}
-	if !data.AutoBwCollectOnly.IsNull() && !data.AutoBwCollectOnly.IsUnknown() {
-		if data.AutoBwCollectOnly.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only", "")
-		}
-	}
-	if !data.AutoBwAdjustmentThresholdPercent.IsNull() && !data.AutoBwAdjustmentThresholdPercent.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/threshold", strconv.FormatInt(data.AutoBwAdjustmentThresholdPercent.ValueInt64(), 10))
-	}
-	if !data.AutoBwAdjustmentThresholdMin.IsNull() && !data.AutoBwAdjustmentThresholdMin.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/min", strconv.FormatInt(data.AutoBwAdjustmentThresholdMin.ValueInt64(), 10))
-	}
-	if !data.AutoBwOverflowThreshold.IsNull() && !data.AutoBwOverflowThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/threshold", strconv.FormatInt(data.AutoBwOverflowThreshold.ValueInt64(), 10))
-	}
-	if !data.AutoBwOverflowMin.IsNull() && !data.AutoBwOverflowMin.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/min", strconv.FormatInt(data.AutoBwOverflowMin.ValueInt64(), 10))
-	}
-	if !data.AutoBwOverflowLimit.IsNull() && !data.AutoBwOverflowLimit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/limit", strconv.FormatInt(data.AutoBwOverflowLimit.ValueInt64(), 10))
-	}
-	if !data.AutoBwUnderflowThreshold.IsNull() && !data.AutoBwUnderflowThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/threshold", strconv.FormatInt(data.AutoBwUnderflowThreshold.ValueInt64(), 10))
-	}
-	if !data.AutoBwUnderflowMin.IsNull() && !data.AutoBwUnderflowMin.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/min", strconv.FormatInt(data.AutoBwUnderflowMin.ValueInt64(), 10))
-	}
-	if !data.AutoBwUnderflowLimit.IsNull() && !data.AutoBwUnderflowLimit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/limit", strconv.FormatInt(data.AutoBwUnderflowLimit.ValueInt64(), 10))
-	}
-	if !data.AutoBwResignalLastBandwidthTimeout.IsNull() && !data.AutoBwResignalLastBandwidthTimeout.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out", strconv.FormatInt(data.AutoBwResignalLastBandwidthTimeout.ValueInt64(), 10))
-	}
-	if !data.PathProtection.IsNull() && !data.PathProtection.IsUnknown() {
-		if data.PathProtection.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection", "")
-		}
-	}
-	if !data.PathProtectionSrlgDiverse.IsNull() && !data.PathProtectionSrlgDiverse.IsUnknown() {
-		if data.PathProtectionSrlgDiverse.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse", "")
-		}
-	}
-	if !data.PathProtectionNonRevertive.IsNull() && !data.PathProtectionNonRevertive.IsUnknown() {
-		if data.PathProtectionNonRevertive.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive", "")
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value", v)
 		}
 	}
 	if !data.SoftPreemption.IsNull() && !data.SoftPreemption.IsUnknown() {
@@ -1992,122 +1804,589 @@ func (data InterfaceTunnelTE) toBodyXML(ctx context.Context) string {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption", "")
 		}
 	}
-	if !data.PathSelectionMetricIgp.IsNull() && !data.PathSelectionMetricIgp.IsUnknown() {
-		if data.PathSelectionMetricIgp.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/igp", "")
-		}
-	}
-	if !data.PathSelectionMetricTe.IsNull() && !data.PathSelectionMetricTe.IsUnknown() {
-		if data.PathSelectionMetricTe.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/te", "")
-		}
-	}
-	if !data.PathSelectionMetricDelay.IsNull() && !data.PathSelectionMetricDelay.IsUnknown() {
-		if data.PathSelectionMetricDelay.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/delay", "")
-		}
-	}
-	if !data.PathSelectionTiebreakerMinFill.IsNull() && !data.PathSelectionTiebreakerMinFill.IsUnknown() {
-		if data.PathSelectionTiebreakerMinFill.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/min-fill", "")
-		}
-	}
-	if !data.PathSelectionTiebreakerMaxFill.IsNull() && !data.PathSelectionTiebreakerMaxFill.IsUnknown() {
-		if data.PathSelectionTiebreakerMaxFill.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/max-fill", "")
-		}
-	}
-	if !data.PathSelectionTiebreakerRandom.IsNull() && !data.PathSelectionTiebreakerRandom.IsUnknown() {
-		if data.PathSelectionTiebreakerRandom.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/random", "")
-		}
-	}
-	if !data.PathSelectionHopLimit.IsNull() && !data.PathSelectionHopLimit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit", strconv.FormatInt(data.PathSelectionHopLimit.ValueInt64(), 10))
-	}
-	if !data.PathSelectionCostLimit.IsNull() && !data.PathSelectionCostLimit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit", strconv.FormatInt(data.PathSelectionCostLimit.ValueInt64(), 10))
-	}
-	if !data.PathSelectionDelayLimit.IsNull() && !data.PathSelectionDelayLimit.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit", strconv.FormatInt(data.PathSelectionDelayLimit.ValueInt64(), 10))
-	}
-	if !data.BidirectionalAssociationId.IsNull() && !data.BidirectionalAssociationId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/association-id", strconv.FormatInt(data.BidirectionalAssociationId.ValueInt64(), 10))
-	}
-	if !data.BidirectionalAssociationSourceAddress.IsNull() && !data.BidirectionalAssociationSourceAddress.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/source-address", data.BidirectionalAssociationSourceAddress.ValueString())
-	}
-	if !data.BidirectionalAssociationGlobalId.IsNull() && !data.BidirectionalAssociationGlobalId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/global-id", strconv.FormatInt(data.BidirectionalAssociationGlobalId.ValueInt64(), 10))
-	}
-	if !data.BidirectionalAssociationCorouted.IsNull() && !data.BidirectionalAssociationCorouted.IsUnknown() {
-		if data.BidirectionalAssociationCorouted.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed", "")
-		}
-	}
-	if !data.BidirectionalAssociationCoRoutedFaultOam.IsNull() && !data.BidirectionalAssociationCoRoutedFaultOam.IsUnknown() {
-		if data.BidirectionalAssociationCoRoutedFaultOam.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam", "")
-		}
-	}
-	if !data.BidirectionalAssociationCoRoutedWrapProtection.IsNull() && !data.BidirectionalAssociationCoRoutedWrapProtection.IsUnknown() {
-		if data.BidirectionalAssociationCoRoutedWrapProtection.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection", "")
-		}
-	}
-	if !data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() && !data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsUnknown() {
-		if data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable", "")
-		}
-	}
-	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.IsUnknown() {
-		if data.BfdFastDetect.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.BfdSbfd.IsNull() && !data.BfdSbfd.IsUnknown() {
-		if data.BfdSbfd.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
-	}
-	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
-	}
-	if !data.BfdBringupTimeout.IsNull() && !data.BfdBringupTimeout.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", strconv.FormatInt(data.BfdBringupTimeout.ValueInt64(), 10))
-	}
-	if !data.BfdLspPingInterval.IsNull() && !data.BfdLspPingInterval.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", strconv.FormatInt(data.BfdLspPingInterval.ValueInt64(), 10))
-	}
-	if !data.BfdLspPingDisable.IsNull() && !data.BfdLspPingDisable.IsUnknown() {
-		if data.BfdLspPingDisable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
-	if !data.BfdDampeningInitialWait.IsNull() && !data.BfdDampeningInitialWait.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", strconv.FormatInt(data.BfdDampeningInitialWait.ValueInt64(), 10))
-	}
-	if !data.BfdDampeningMaximumWait.IsNull() && !data.BfdDampeningMaximumWait.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", strconv.FormatInt(data.BfdDampeningMaximumWait.ValueInt64(), 10))
-	}
-	if !data.BfdDampeningSecondaryWait.IsNull() && !data.BfdDampeningSecondaryWait.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", strconv.FormatInt(data.BfdDampeningSecondaryWait.ValueInt64(), 10))
-	}
-	if !data.BfdEncapGal.IsNull() && !data.BfdEncapGal.IsUnknown() {
-		if data.BfdEncapGal.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/", "")
-		}
-	}
 	if !data.Destination.IsNull() && !data.Destination.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:destination", data.Destination.ValueString())
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	// xml_namespace_sibling attributes share an element name with a sibling element but belong
+	// to a different YANG namespace.  xmldot merges same-named elements in a single body, so
+	// attributes sharing the same top-level element are grouped into one netconf.Body and
+	// injected as a single raw XML sibling into the final root element produced above.
+	{
+		nsBody := netconf.Body{}
+		if !data.Ipv4Address.IsNull() && !data.Ipv4Address.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address", data.Ipv4Address.ValueString())
+		}
+		if !data.Ipv4Netmask.IsNull() && !data.Ipv4Netmask.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask", data.Ipv4Netmask.ValueString())
+		}
+		if !data.Ipv4Unnumbered.IsNull() && !data.Ipv4Unnumbered.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", data.Ipv4Unnumbered.ValueString())
+		}
+		if !data.Ipv4ForwardingEnable.IsNull() && !data.Ipv4ForwardingEnable.IsUnknown() {
+			if data.Ipv4ForwardingEnable.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable", "")
+			}
+		}
+		if !data.Ipv4TtlPropagateDisable.IsNull() && !data.Ipv4TtlPropagateDisable.IsUnknown() {
+			if data.Ipv4TtlPropagateDisable.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.IsUnknown() {
+			if data.Ipv6Enable.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", "")
+			}
+		}
+		if !data.Ipv6TtlPropagateDisable.IsNull() && !data.Ipv6TtlPropagateDisable.IsUnknown() {
+			if data.Ipv6TtlPropagateDisable.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.AffinityValue.IsNull() && !data.AffinityValue.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value", data.AffinityValue.ValueString())
+		}
+		if !data.AffinityMask.IsNull() && !data.AffinityMask.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask", data.AffinityMask.ValueString())
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.AutorouteAnnounce.IsNull() && !data.AutorouteAnnounce.IsUnknown() {
+			if data.AutorouteAnnounce.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce", "")
+			}
+		}
+		if !data.AutorouteAnnounceMetricAbsolute.IsNull() && !data.AutorouteAnnounceMetricAbsolute.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/absolute", strconv.FormatInt(data.AutorouteAnnounceMetricAbsolute.ValueInt64(), 10))
+		}
+		if !data.AutorouteAnnounceMetricRelative.IsNull() && !data.AutorouteAnnounceMetricRelative.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/relative", strconv.FormatInt(data.AutorouteAnnounceMetricRelative.ValueInt64(), 10))
+		}
+		if !data.AutorouteAnnounceMetric.IsNull() && !data.AutorouteAnnounceMetric.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/constant-metric", strconv.FormatInt(data.AutorouteAnnounceMetric.ValueInt64(), 10))
+		}
+		if !data.AutorouteAnnounceIncludeIpv6.IsNull() && !data.AutorouteAnnounceIncludeIpv6.IsUnknown() {
+			if data.AutorouteAnnounceIncludeIpv6.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6", "")
+			}
+		}
+		if !data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() && !data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsUnknown() {
+			if data.AutorouteAnnounceExcludeTrafficSegmentRouting.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing", "")
+			}
+		}
+		if len(data.AutorouteDestinations) > 0 {
+			for _, item := range data.AutorouteDestinations {
+				basePath := data.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination"
+				if !item.Address.IsNull() && !item.Address.IsUnknown() {
+					nsBody = helpers.SetFromXPath(nsBody, basePath+"/address", item.Address.ValueString())
+				}
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.BackupBwPoolType.IsNull() && !data.BackupBwPoolType.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/pool-type", data.BackupBwPoolType.ValueString())
+		}
+		if !data.BackupBwClassType.IsNull() && !data.BackupBwClassType.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/class-type", data.BackupBwClassType.ValueString())
+		}
+		if !data.BackupBwValue.IsNull() && !data.BackupBwValue.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/bandwidth", strconv.FormatInt(data.BackupBwValue.ValueInt64(), 10))
+		}
+		if !data.BackupBwUnlimited.IsNull() && !data.BackupBwUnlimited.IsUnknown() {
+			if data.BackupBwUnlimited.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/unlimited", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.SignalledBandwidth.IsNull() && !data.SignalledBandwidth.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/bandwidth", strconv.FormatInt(data.SignalledBandwidth.ValueInt64(), 10))
+		}
+		if !data.SignalledBandwidthClassType.IsNull() && !data.SignalledBandwidthClassType.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type", strconv.FormatInt(data.SignalledBandwidthClassType.ValueInt64(), 10))
+		}
+		if !data.SignalledBandwidthSubPool.IsNull() && !data.SignalledBandwidthSubPool.IsUnknown() {
+			if data.SignalledBandwidthSubPool.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.FastReroute.IsNull() && !data.FastReroute.IsUnknown() {
+			if data.FastReroute.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute", "")
+			}
+		}
+		if !data.FastRerouteProtectNode.IsNull() && !data.FastRerouteProtectNode.IsUnknown() {
+			if data.FastRerouteProtectNode.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node", "")
+			}
+		}
+		if !data.FastRerouteProtectBandwidth.IsNull() && !data.FastRerouteProtectBandwidth.IsUnknown() {
+			if data.FastRerouteProtectBandwidth.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.ForwardingAdjacency.IsNull() && !data.ForwardingAdjacency.IsUnknown() {
+			if data.ForwardingAdjacency.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency", "")
+			}
+		}
+		if !data.ForwardingAdjacencyHoldtime.IsNull() && !data.ForwardingAdjacencyHoldtime.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime", strconv.FormatInt(data.ForwardingAdjacencyHoldtime.ValueInt64(), 10))
+		}
+		if !data.ForwardingAdjacencyIncludeIpv6.IsNull() && !data.ForwardingAdjacencyIncludeIpv6.IsUnknown() {
+			if data.ForwardingAdjacencyIncludeIpv6.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.LoggingEventsLspState.IsNull() && !data.LoggingEventsLspState.IsUnknown() {
+			if data.LoggingEventsLspState.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/state", "")
+			}
+		}
+		if !data.LoggingEventsLspReoptimize.IsNull() && !data.LoggingEventsLspReoptimize.IsUnknown() {
+			if data.LoggingEventsLspReoptimize.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize", "")
+			}
+		}
+		if !data.LoggingEventsLspReoptimizeAttempts.IsNull() && !data.LoggingEventsLspReoptimizeAttempts.IsUnknown() {
+			if data.LoggingEventsLspReoptimizeAttempts.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize-attempts", "")
+			}
+		}
+		if !data.LoggingEventsLspBwChange.IsNull() && !data.LoggingEventsLspBwChange.IsUnknown() {
+			if data.LoggingEventsLspBwChange.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/bw-change", "")
+			}
+		}
+		if !data.LoggingEventsLspReroute.IsNull() && !data.LoggingEventsLspReroute.IsUnknown() {
+			if data.LoggingEventsLspReroute.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reroute", "")
+			}
+		}
+		if !data.LoggingEventsLspRecordRoute.IsNull() && !data.LoggingEventsLspRecordRoute.IsUnknown() {
+			if data.LoggingEventsLspRecordRoute.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/record-route", "")
+			}
+		}
+		if !data.LoggingEventsLspSwitchover.IsNull() && !data.LoggingEventsLspSwitchover.IsUnknown() {
+			if data.LoggingEventsLspSwitchover.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/switchover", "")
+			}
+		}
+		if !data.LoggingEventsLspInsufficientBw.IsNull() && !data.LoggingEventsLspInsufficientBw.IsUnknown() {
+			if data.LoggingEventsLspInsufficientBw.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/insufficient-bandwidth", "")
+			}
+		}
+		if !data.LoggingEventsPcalcFailure.IsNull() && !data.LoggingEventsPcalcFailure.IsUnknown() {
+			if data.LoggingEventsPcalcFailure.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/pcalc-failure", "")
+			}
+		}
+		if !data.LoggingEventsBfdStatus.IsNull() && !data.LoggingEventsBfdStatus.IsUnknown() {
+			if data.LoggingEventsBfdStatus.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/bfd-status", "")
+			}
+		}
+		if !data.LoggingEventsAll.IsNull() && !data.LoggingEventsAll.IsUnknown() {
+			if data.LoggingEventsAll.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/all", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.PrioritySetup.IsNull() && !data.PrioritySetup.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/setup-priority", strconv.FormatInt(data.PrioritySetup.ValueInt64(), 10))
+		}
+		if !data.PriorityHold.IsNull() && !data.PriorityHold.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/hold-priority", strconv.FormatInt(data.PriorityHold.ValueInt64(), 10))
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.AutoBwLimitMin.IsNull() && !data.AutoBwLimitMin.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/min", strconv.FormatInt(data.AutoBwLimitMin.ValueInt64(), 10))
+		}
+		if !data.AutoBwLimitMax.IsNull() && !data.AutoBwLimitMax.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/max", strconv.FormatInt(data.AutoBwLimitMax.ValueInt64(), 10))
+		}
+		if !data.AutoBwCollectOnly.IsNull() && !data.AutoBwCollectOnly.IsUnknown() {
+			if data.AutoBwCollectOnly.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only", "")
+			}
+		}
+		if !data.AutoBwAdjustmentThresholdPercent.IsNull() && !data.AutoBwAdjustmentThresholdPercent.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/threshold", strconv.FormatInt(data.AutoBwAdjustmentThresholdPercent.ValueInt64(), 10))
+		}
+		if !data.AutoBwAdjustmentThresholdMin.IsNull() && !data.AutoBwAdjustmentThresholdMin.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/min", strconv.FormatInt(data.AutoBwAdjustmentThresholdMin.ValueInt64(), 10))
+		}
+		if !data.AutoBwOverflowThreshold.IsNull() && !data.AutoBwOverflowThreshold.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/threshold", strconv.FormatInt(data.AutoBwOverflowThreshold.ValueInt64(), 10))
+		}
+		if !data.AutoBwOverflowMin.IsNull() && !data.AutoBwOverflowMin.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/min", strconv.FormatInt(data.AutoBwOverflowMin.ValueInt64(), 10))
+		}
+		if !data.AutoBwOverflowLimit.IsNull() && !data.AutoBwOverflowLimit.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/limit", strconv.FormatInt(data.AutoBwOverflowLimit.ValueInt64(), 10))
+		}
+		if !data.AutoBwUnderflowThreshold.IsNull() && !data.AutoBwUnderflowThreshold.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/threshold", strconv.FormatInt(data.AutoBwUnderflowThreshold.ValueInt64(), 10))
+		}
+		if !data.AutoBwUnderflowMin.IsNull() && !data.AutoBwUnderflowMin.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/min", strconv.FormatInt(data.AutoBwUnderflowMin.ValueInt64(), 10))
+		}
+		if !data.AutoBwUnderflowLimit.IsNull() && !data.AutoBwUnderflowLimit.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/limit", strconv.FormatInt(data.AutoBwUnderflowLimit.ValueInt64(), 10))
+		}
+		if !data.AutoBwResignalLastBandwidthTimeout.IsNull() && !data.AutoBwResignalLastBandwidthTimeout.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out", strconv.FormatInt(data.AutoBwResignalLastBandwidthTimeout.ValueInt64(), 10))
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.PathProtection.IsNull() && !data.PathProtection.IsUnknown() {
+			if data.PathProtection.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection", "")
+			}
+		}
+		if !data.PathProtectionSrlgDiverse.IsNull() && !data.PathProtectionSrlgDiverse.IsUnknown() {
+			if data.PathProtectionSrlgDiverse.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse", "")
+			}
+		}
+		if !data.PathProtectionNonRevertive.IsNull() && !data.PathProtectionNonRevertive.IsUnknown() {
+			if data.PathProtectionNonRevertive.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.PathSelectionMetricIgp.IsNull() && !data.PathSelectionMetricIgp.IsUnknown() {
+			if data.PathSelectionMetricIgp.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/igp", "")
+			}
+		}
+		if !data.PathSelectionMetricTe.IsNull() && !data.PathSelectionMetricTe.IsUnknown() {
+			if data.PathSelectionMetricTe.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/te", "")
+			}
+		}
+		if !data.PathSelectionMetricDelay.IsNull() && !data.PathSelectionMetricDelay.IsUnknown() {
+			if data.PathSelectionMetricDelay.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/delay", "")
+			}
+		}
+		if !data.PathSelectionTiebreakerMinFill.IsNull() && !data.PathSelectionTiebreakerMinFill.IsUnknown() {
+			if data.PathSelectionTiebreakerMinFill.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/min-fill", "")
+			}
+		}
+		if !data.PathSelectionTiebreakerMaxFill.IsNull() && !data.PathSelectionTiebreakerMaxFill.IsUnknown() {
+			if data.PathSelectionTiebreakerMaxFill.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/max-fill", "")
+			}
+		}
+		if !data.PathSelectionTiebreakerRandom.IsNull() && !data.PathSelectionTiebreakerRandom.IsUnknown() {
+			if data.PathSelectionTiebreakerRandom.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/random", "")
+			}
+		}
+		if !data.PathSelectionHopLimit.IsNull() && !data.PathSelectionHopLimit.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit", strconv.FormatInt(data.PathSelectionHopLimit.ValueInt64(), 10))
+		}
+		if !data.PathSelectionCostLimit.IsNull() && !data.PathSelectionCostLimit.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit", strconv.FormatInt(data.PathSelectionCostLimit.ValueInt64(), 10))
+		}
+		if !data.PathSelectionDelayLimit.IsNull() && !data.PathSelectionDelayLimit.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit", strconv.FormatInt(data.PathSelectionDelayLimit.ValueInt64(), 10))
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.BidirectionalAssociationId.IsNull() && !data.BidirectionalAssociationId.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/association-id", strconv.FormatInt(data.BidirectionalAssociationId.ValueInt64(), 10))
+		}
+		if !data.BidirectionalAssociationSourceAddress.IsNull() && !data.BidirectionalAssociationSourceAddress.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/source-address", data.BidirectionalAssociationSourceAddress.ValueString())
+		}
+		if !data.BidirectionalAssociationGlobalId.IsNull() && !data.BidirectionalAssociationGlobalId.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/global-id", strconv.FormatInt(data.BidirectionalAssociationGlobalId.ValueInt64(), 10))
+		}
+		if !data.BidirectionalAssociationCorouted.IsNull() && !data.BidirectionalAssociationCorouted.IsUnknown() {
+			if data.BidirectionalAssociationCorouted.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed", "")
+			}
+		}
+		if !data.BidirectionalAssociationCoRoutedFaultOam.IsNull() && !data.BidirectionalAssociationCoRoutedFaultOam.IsUnknown() {
+			if data.BidirectionalAssociationCoRoutedFaultOam.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam", "")
+			}
+		}
+		if !data.BidirectionalAssociationCoRoutedWrapProtection.IsNull() && !data.BidirectionalAssociationCoRoutedWrapProtection.IsUnknown() {
+			if data.BidirectionalAssociationCoRoutedWrapProtection.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection", "")
+			}
+		}
+		if !data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() && !data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsUnknown() {
+			if data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.IsUnknown() {
+			if data.BfdFastDetect.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect", "")
+			}
+		}
+		if !data.BfdSbfd.IsNull() && !data.BfdSbfd.IsUnknown() {
+			if data.BfdSbfd.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect/sbfd", "")
+			}
+		}
+		if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+		}
+		if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
+		}
+		if !data.BfdBringupTimeout.IsNull() && !data.BfdBringupTimeout.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/bringup-timeout", strconv.FormatInt(data.BfdBringupTimeout.ValueInt64(), 10))
+		}
+		if !data.BfdLspPingInterval.IsNull() && !data.BfdLspPingInterval.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/interval", strconv.FormatInt(data.BfdLspPingInterval.ValueInt64(), 10))
+		}
+		if !data.BfdLspPingDisable.IsNull() && !data.BfdLspPingDisable.IsUnknown() {
+			if data.BfdLspPingDisable.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/disable", "")
+			}
+		}
+		if !data.BfdDampeningInitialWait.IsNull() && !data.BfdDampeningInitialWait.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/initial-wait", strconv.FormatInt(data.BfdDampeningInitialWait.ValueInt64(), 10))
+		}
+		if !data.BfdDampeningMaximumWait.IsNull() && !data.BfdDampeningMaximumWait.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/maximum-wait", strconv.FormatInt(data.BfdDampeningMaximumWait.ValueInt64(), 10))
+		}
+		if !data.BfdDampeningSecondaryWait.IsNull() && !data.BfdDampeningSecondaryWait.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/secondary-wait", strconv.FormatInt(data.BfdDampeningSecondaryWait.ValueInt64(), 10))
+		}
+		if !data.BfdEncapGal.IsNull() && !data.BfdEncapGal.IsUnknown() {
+			if data.BfdEncapGal.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/encap-mode/gal", "")
+			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -2115,137 +2394,159 @@ func (data InterfaceTunnelTE) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *InterfaceTunnelTE) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.Name = types.StringValue(value.String())
-	} else if data.Name.IsNull() {
-		data.Name = types.StringNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Shutdown.IsNull() {
+			data.Shutdown = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/link-status"); value.Exists() {
-		data.LoggingEventsLinkStatus = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/events/link-status"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsLinkStatus.IsNull() {
+			data.LoggingEventsLinkStatus = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLinkStatus.IsNull() {
 			data.LoggingEventsLinkStatus = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth"); value.Exists() && !data.Bandwidth.IsNull() {
 		data.Bandwidth = types.Int64Value(value.Int())
 	} else if data.Bandwidth.IsNull() {
 		data.Bandwidth = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-statistics-cfg:load-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-statistics-cfg:load-interval"); value.Exists() && !data.LoadInterval.IsNull() {
 		data.LoadInterval = types.Int64Value(value.Int())
 	} else if data.LoadInterval.IsNull() {
 		data.LoadInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address"); value.Exists() && !data.Ipv4Address.IsNull() {
 		data.Ipv4Address = types.StringValue(value.String())
 	} else if data.Ipv4Address.IsNull() {
 		data.Ipv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask"); value.Exists() && !data.Ipv4Netmask.IsNull() {
 		data.Ipv4Netmask = types.StringValue(value.String())
 	} else if data.Ipv4Netmask.IsNull() {
 		data.Ipv4Netmask = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered"); value.Exists() && !data.Ipv4Unnumbered.IsNull() {
 		data.Ipv4Unnumbered = types.StringValue(value.String())
 	} else if data.Ipv4Unnumbered.IsNull() {
 		data.Ipv4Unnumbered = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
-		data.Ipv4ForwardingEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4ForwardingEnable.IsNull() {
+			data.Ipv4ForwardingEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4ForwardingEnable.IsNull() {
 			data.Ipv4ForwardingEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable"); value.Exists() {
-		data.Ipv4TtlPropagateDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4TtlPropagateDisable.IsNull() {
+			data.Ipv4TtlPropagateDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv4TtlPropagateDisable.IsNull() {
 			data.Ipv4TtlPropagateDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
-		data.Ipv6Enable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6Enable.IsNull() {
+			data.Ipv6Enable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6Enable.IsNull() {
 			data.Ipv6Enable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable"); value.Exists() {
-		data.Ipv6TtlPropagateDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6TtlPropagateDisable.IsNull() {
+			data.Ipv6TtlPropagateDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.Ipv6TtlPropagateDisable.IsNull() {
 			data.Ipv6TtlPropagateDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu"); value.Exists() && !data.MplsMtu.IsNull() {
 		data.MplsMtu = types.Int64Value(value.Int())
 	} else if data.MplsMtu.IsNull() {
 		data.MplsMtu = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value"); value.Exists() && !data.AffinityValue.IsNull() {
 		data.AffinityValue = types.StringValue(value.String())
 	} else if data.AffinityValue.IsNull() {
 		data.AffinityValue = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask"); value.Exists() && !data.AffinityMask.IsNull() {
 		data.AffinityMask = types.StringValue(value.String())
 	} else if data.AffinityMask.IsNull() {
 		data.AffinityMask = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce"); value.Exists() {
-		data.AutorouteAnnounce = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutorouteAnnounce.IsNull() {
+			data.AutorouteAnnounce = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutorouteAnnounce.IsNull() {
 			data.AutorouteAnnounce = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/absolute"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/absolute"); value.Exists() && !data.AutorouteAnnounceMetricAbsolute.IsNull() {
 		data.AutorouteAnnounceMetricAbsolute = types.Int64Value(value.Int())
 	} else if data.AutorouteAnnounceMetricAbsolute.IsNull() {
 		data.AutorouteAnnounceMetricAbsolute = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/relative"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/relative"); value.Exists() && !data.AutorouteAnnounceMetricRelative.IsNull() {
 		data.AutorouteAnnounceMetricRelative = types.Int64Value(value.Int())
 	} else if data.AutorouteAnnounceMetricRelative.IsNull() {
 		data.AutorouteAnnounceMetricRelative = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/constant-metric"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/constant-metric"); value.Exists() && !data.AutorouteAnnounceMetric.IsNull() {
 		data.AutorouteAnnounceMetric = types.Int64Value(value.Int())
 	} else if data.AutorouteAnnounceMetric.IsNull() {
 		data.AutorouteAnnounceMetric = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6"); value.Exists() {
-		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutorouteAnnounceIncludeIpv6.IsNull() {
+			data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutorouteAnnounceIncludeIpv6.IsNull() {
 			data.AutorouteAnnounceIncludeIpv6 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing"); value.Exists() {
-		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() {
+			data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() {
@@ -2257,7 +2558,7 @@ func (data *InterfaceTunnelTE) updateFromBodyXML(ctx context.Context, res xmldot
 		keyValues := [...]string{data.AutorouteDestinations[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2275,197 +2576,251 @@ func (data *InterfaceTunnelTE) updateFromBodyXML(ctx context.Context, res xmldot
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.AutorouteDestinations[i].Address.IsNull() {
 			data.AutorouteDestinations[i].Address = types.StringValue(value.String())
 		} else if data.AutorouteDestinations[i].Address.IsNull() {
 			data.AutorouteDestinations[i].Address = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/pool-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/pool-type"); value.Exists() && !data.BackupBwPoolType.IsNull() {
 		data.BackupBwPoolType = types.StringValue(value.String())
 	} else if data.BackupBwPoolType.IsNull() {
 		data.BackupBwPoolType = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/class-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/class-type"); value.Exists() && !data.BackupBwClassType.IsNull() {
 		data.BackupBwClassType = types.StringValue(value.String())
 	} else if data.BackupBwClassType.IsNull() {
 		data.BackupBwClassType = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/bandwidth"); value.Exists() && !data.BackupBwValue.IsNull() {
 		data.BackupBwValue = types.Int64Value(value.Int())
 	} else if data.BackupBwValue.IsNull() {
 		data.BackupBwValue = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/unlimited"); value.Exists() {
-		data.BackupBwUnlimited = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/unlimited"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BackupBwUnlimited.IsNull() {
+			data.BackupBwUnlimited = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BackupBwUnlimited.IsNull() {
 			data.BackupBwUnlimited = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/bandwidth"); value.Exists() && !data.SignalledBandwidth.IsNull() {
 		data.SignalledBandwidth = types.Int64Value(value.Int())
 	} else if data.SignalledBandwidth.IsNull() {
 		data.SignalledBandwidth = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type"); value.Exists() && !data.SignalledBandwidthClassType.IsNull() {
 		data.SignalledBandwidthClassType = types.Int64Value(value.Int())
 	} else if data.SignalledBandwidthClassType.IsNull() {
 		data.SignalledBandwidthClassType = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool"); value.Exists() {
-		data.SignalledBandwidthSubPool = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SignalledBandwidthSubPool.IsNull() {
+			data.SignalledBandwidthSubPool = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SignalledBandwidthSubPool.IsNull() {
 			data.SignalledBandwidthSubPool = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"); value.Exists() {
-		data.FastReroute = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FastReroute.IsNull() {
+			data.FastReroute = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.FastReroute.IsNull() {
 			data.FastReroute = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node"); value.Exists() {
-		data.FastRerouteProtectNode = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FastRerouteProtectNode.IsNull() {
+			data.FastRerouteProtectNode = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.FastRerouteProtectNode.IsNull() {
 			data.FastRerouteProtectNode = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth"); value.Exists() {
-		data.FastRerouteProtectBandwidth = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FastRerouteProtectBandwidth.IsNull() {
+			data.FastRerouteProtectBandwidth = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.FastRerouteProtectBandwidth.IsNull() {
 			data.FastRerouteProtectBandwidth = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forward-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forward-class"); value.Exists() && !data.ForwardClass.IsNull() {
 		data.ForwardClass = types.Int64Value(value.Int())
 	} else if data.ForwardClass.IsNull() {
 		data.ForwardClass = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"); value.Exists() {
-		data.ForwardingAdjacency = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ForwardingAdjacency.IsNull() {
+			data.ForwardingAdjacency = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ForwardingAdjacency.IsNull() {
 			data.ForwardingAdjacency = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime"); value.Exists() && !data.ForwardingAdjacencyHoldtime.IsNull() {
 		data.ForwardingAdjacencyHoldtime = types.Int64Value(value.Int())
 	} else if data.ForwardingAdjacencyHoldtime.IsNull() {
 		data.ForwardingAdjacencyHoldtime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6"); value.Exists() {
-		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ForwardingAdjacencyIncludeIpv6.IsNull() {
+			data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ForwardingAdjacencyIncludeIpv6.IsNull() {
 			data.ForwardingAdjacencyIncludeIpv6 = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:load-share"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:load-share"); value.Exists() && !data.LoadShare.IsNull() {
 		data.LoadShare = types.Int64Value(value.Int())
 	} else if data.LoadShare.IsNull() {
 		data.LoadShare = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspState = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/state"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsLspState.IsNull() {
+			data.LoggingEventsLspState = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspState.IsNull() {
 			data.LoggingEventsLspState = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspReoptimize = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsLspReoptimize.IsNull() {
+			data.LoggingEventsLspReoptimize = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspReoptimize.IsNull() {
 			data.LoggingEventsLspReoptimize = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize-attempts"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsLspReoptimizeAttempts.IsNull() {
+			data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspReoptimizeAttempts.IsNull() {
 			data.LoggingEventsLspReoptimizeAttempts = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspBwChange = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/bw-change"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsLspBwChange.IsNull() {
+			data.LoggingEventsLspBwChange = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspBwChange.IsNull() {
 			data.LoggingEventsLspBwChange = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspReroute = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reroute"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsLspReroute.IsNull() {
+			data.LoggingEventsLspReroute = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspReroute.IsNull() {
 			data.LoggingEventsLspReroute = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspRecordRoute = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/record-route"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsLspRecordRoute.IsNull() {
+			data.LoggingEventsLspRecordRoute = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspRecordRoute.IsNull() {
 			data.LoggingEventsLspRecordRoute = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspSwitchover = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/switchover"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsLspSwitchover.IsNull() {
+			data.LoggingEventsLspSwitchover = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspSwitchover.IsNull() {
 			data.LoggingEventsLspSwitchover = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspInsufficientBw = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/insufficient-bandwidth"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsLspInsufficientBw.IsNull() {
+			data.LoggingEventsLspInsufficientBw = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsLspInsufficientBw.IsNull() {
 			data.LoggingEventsLspInsufficientBw = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsPcalcFailure = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/pcalc-failure"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsPcalcFailure.IsNull() {
+			data.LoggingEventsPcalcFailure = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsPcalcFailure.IsNull() {
 			data.LoggingEventsPcalcFailure = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsBfdStatus = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/bfd-status"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsBfdStatus.IsNull() {
+			data.LoggingEventsBfdStatus = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsBfdStatus.IsNull() {
 			data.LoggingEventsBfdStatus = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsAll = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LoggingEventsAll.IsNull() {
+			data.LoggingEventsAll = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.LoggingEventsAll.IsNull() {
 			data.LoggingEventsAll = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"); value.Exists() && !data.SignalledName.IsNull() {
 		data.SignalledName = types.StringValue(value.String())
 	} else if data.SignalledName.IsNull() {
 		data.SignalledName = types.StringNull()
@@ -2475,7 +2830,7 @@ func (data *InterfaceTunnelTE) updateFromBodyXML(ctx context.Context, res xmldot
 		keyValues := [...]string{strconv.FormatInt(data.PathOptions[i].Preference.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2493,13 +2848,16 @@ func (data *InterfaceTunnelTE) updateFromBodyXML(ctx context.Context, res xmldot
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "preference"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "preference"); value.Exists() && !data.PathOptions[i].Preference.IsNull() {
 			data.PathOptions[i].Preference = types.Int64Value(value.Int())
 		} else if data.PathOptions[i].Preference.IsNull() {
 			data.PathOptions[i].Preference = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "dynamic"); value.Exists() {
-			data.PathOptions[i].Dynamic = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PathOptions[i].Dynamic.IsNull() {
+				data.PathOptions[i].Dynamic = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2507,18 +2865,21 @@ func (data *InterfaceTunnelTE) updateFromBodyXML(ctx context.Context, res xmldot
 				data.PathOptions[i].Dynamic = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "explicit/identifier"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "explicit/identifier"); value.Exists() && !data.PathOptions[i].ExplicitPathId.IsNull() {
 			data.PathOptions[i].ExplicitPathId = types.Int64Value(value.Int())
 		} else if data.PathOptions[i].ExplicitPathId.IsNull() {
 			data.PathOptions[i].ExplicitPathId = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "explicit/name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "explicit/name"); value.Exists() && !data.PathOptions[i].ExplicitPathName.IsNull() {
 			data.PathOptions[i].ExplicitPathName = types.StringValue(value.String())
 		} else if data.PathOptions[i].ExplicitPathName.IsNull() {
 			data.PathOptions[i].ExplicitPathName = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "explicit/verbatim"); value.Exists() {
-			data.PathOptions[i].ExplicitPathVerbatim = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PathOptions[i].ExplicitPathVerbatim.IsNull() {
+				data.PathOptions[i].ExplicitPathVerbatim = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2526,48 +2887,51 @@ func (data *InterfaceTunnelTE) updateFromBodyXML(ctx context.Context, res xmldot
 				data.PathOptions[i].ExplicitPathVerbatim = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "ospf/instance-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "ospf/instance-name"); value.Exists() && !data.PathOptions[i].OspfInstance.IsNull() {
 			data.PathOptions[i].OspfInstance = types.StringValue(value.String())
 		} else if data.PathOptions[i].OspfInstance.IsNull() {
 			data.PathOptions[i].OspfInstance = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "ospf/area/decimal"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "ospf/area/decimal"); value.Exists() && !data.PathOptions[i].OspfAreaId.IsNull() {
 			data.PathOptions[i].OspfAreaId = types.Int64Value(value.Int())
 		} else if data.PathOptions[i].OspfAreaId.IsNull() {
 			data.PathOptions[i].OspfAreaId = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "ospf/area/ip-address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "ospf/area/ip-address"); value.Exists() && !data.PathOptions[i].OspfAreaIpFormat.IsNull() {
 			data.PathOptions[i].OspfAreaIpFormat = types.StringValue(value.String())
 		} else if data.PathOptions[i].OspfAreaIpFormat.IsNull() {
 			data.PathOptions[i].OspfAreaIpFormat = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "isis/instance-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "isis/instance-name"); value.Exists() && !data.PathOptions[i].IsisInstance.IsNull() {
 			data.PathOptions[i].IsisInstance = types.StringValue(value.String())
 		} else if data.PathOptions[i].IsisInstance.IsNull() {
 			data.PathOptions[i].IsisInstance = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "isis/level"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "isis/level"); value.Exists() && !data.PathOptions[i].IsisLevel.IsNull() {
 			data.PathOptions[i].IsisLevel = types.Int64Value(value.Int())
 		} else if data.PathOptions[i].IsisLevel.IsNull() {
 			data.PathOptions[i].IsisLevel = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "attribute-set/attribute-set-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "attribute-set/attribute-set-name"); value.Exists() && !data.PathOptions[i].AttributeSet.IsNull() {
 			data.PathOptions[i].AttributeSet = types.StringValue(value.String())
 		} else if data.PathOptions[i].AttributeSet.IsNull() {
 			data.PathOptions[i].AttributeSet = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "protected-by/index"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "protected-by/index"); value.Exists() && !data.PathOptions[i].ProtectedByIndex.IsNull() {
 			data.PathOptions[i].ProtectedByIndex = types.Int64Value(value.Int())
 		} else if data.PathOptions[i].ProtectedByIndex.IsNull() {
 			data.PathOptions[i].ProtectedByIndex = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "protected-by/index-secondary"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "protected-by/index-secondary"); value.Exists() && !data.PathOptions[i].ProtectedByIndexSecondary.IsNull() {
 			data.PathOptions[i].ProtectedByIndexSecondary = types.Int64Value(value.Int())
 		} else if data.PathOptions[i].ProtectedByIndexSecondary.IsNull() {
 			data.PathOptions[i].ProtectedByIndexSecondary = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "lockdown"); value.Exists() {
-			data.PathOptions[i].Lockdown = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PathOptions[i].Lockdown.IsNull() {
+				data.PathOptions[i].Lockdown = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2576,7 +2940,10 @@ func (data *InterfaceTunnelTE) updateFromBodyXML(ctx context.Context, res xmldot
 			}
 		}
 		if value := helpers.GetFromXPath(r, "lockdown/sticky"); value.Exists() {
-			data.PathOptions[i].LockdownSticky = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.PathOptions[i].LockdownSticky.IsNull() {
+				data.PathOptions[i].LockdownSticky = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -2585,307 +2952,367 @@ func (data *InterfaceTunnelTE) updateFromBodyXML(ctx context.Context, res xmldot
 			}
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/setup-priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/setup-priority"); value.Exists() && !data.PrioritySetup.IsNull() {
 		data.PrioritySetup = types.Int64Value(value.Int())
 	} else if data.PrioritySetup.IsNull() {
 		data.PrioritySetup = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/hold-priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/hold-priority"); value.Exists() && !data.PriorityHold.IsNull() {
 		data.PriorityHold = types.Int64Value(value.Int())
 	} else if data.PriorityHold.IsNull() {
 		data.PriorityHold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:record-route"); value.Exists() {
-		data.RecordRoute = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:record-route"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.RecordRoute.IsNull() {
+			data.RecordRoute = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.RecordRoute.IsNull() {
 			data.RecordRoute = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:binding-sid/mpls/label"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:binding-sid/mpls/label"); value.Exists() && !data.BindingSidMplsLabel.IsNull() {
 		data.BindingSidMplsLabel = types.Int64Value(value.Int())
 	} else if data.BindingSidMplsLabel.IsNull() {
 		data.BindingSidMplsLabel = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value"); value.Exists() && !data.PolicyClasses.IsNull() {
 		data.PolicyClasses = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.PolicyClasses.IsNull() {
 		data.PolicyClasses = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/min"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/min"); value.Exists() && !data.AutoBwLimitMin.IsNull() {
 		data.AutoBwLimitMin = types.Int64Value(value.Int())
 	} else if data.AutoBwLimitMin.IsNull() {
 		data.AutoBwLimitMin = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/max"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/max"); value.Exists() && !data.AutoBwLimitMax.IsNull() {
 		data.AutoBwLimitMax = types.Int64Value(value.Int())
 	} else if data.AutoBwLimitMax.IsNull() {
 		data.AutoBwLimitMax = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only"); value.Exists() {
-		data.AutoBwCollectOnly = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AutoBwCollectOnly.IsNull() {
+			data.AutoBwCollectOnly = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AutoBwCollectOnly.IsNull() {
 			data.AutoBwCollectOnly = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/threshold"); value.Exists() && !data.AutoBwAdjustmentThresholdPercent.IsNull() {
 		data.AutoBwAdjustmentThresholdPercent = types.Int64Value(value.Int())
 	} else if data.AutoBwAdjustmentThresholdPercent.IsNull() {
 		data.AutoBwAdjustmentThresholdPercent = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/min"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/min"); value.Exists() && !data.AutoBwAdjustmentThresholdMin.IsNull() {
 		data.AutoBwAdjustmentThresholdMin = types.Int64Value(value.Int())
 	} else if data.AutoBwAdjustmentThresholdMin.IsNull() {
 		data.AutoBwAdjustmentThresholdMin = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/threshold"); value.Exists() && !data.AutoBwOverflowThreshold.IsNull() {
 		data.AutoBwOverflowThreshold = types.Int64Value(value.Int())
 	} else if data.AutoBwOverflowThreshold.IsNull() {
 		data.AutoBwOverflowThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/min"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/min"); value.Exists() && !data.AutoBwOverflowMin.IsNull() {
 		data.AutoBwOverflowMin = types.Int64Value(value.Int())
 	} else if data.AutoBwOverflowMin.IsNull() {
 		data.AutoBwOverflowMin = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/limit"); value.Exists() && !data.AutoBwOverflowLimit.IsNull() {
 		data.AutoBwOverflowLimit = types.Int64Value(value.Int())
 	} else if data.AutoBwOverflowLimit.IsNull() {
 		data.AutoBwOverflowLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/threshold"); value.Exists() && !data.AutoBwUnderflowThreshold.IsNull() {
 		data.AutoBwUnderflowThreshold = types.Int64Value(value.Int())
 	} else if data.AutoBwUnderflowThreshold.IsNull() {
 		data.AutoBwUnderflowThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/min"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/min"); value.Exists() && !data.AutoBwUnderflowMin.IsNull() {
 		data.AutoBwUnderflowMin = types.Int64Value(value.Int())
 	} else if data.AutoBwUnderflowMin.IsNull() {
 		data.AutoBwUnderflowMin = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/limit"); value.Exists() && !data.AutoBwUnderflowLimit.IsNull() {
 		data.AutoBwUnderflowLimit = types.Int64Value(value.Int())
 	} else if data.AutoBwUnderflowLimit.IsNull() {
 		data.AutoBwUnderflowLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out"); value.Exists() && !data.AutoBwResignalLastBandwidthTimeout.IsNull() {
 		data.AutoBwResignalLastBandwidthTimeout = types.Int64Value(value.Int())
 	} else if data.AutoBwResignalLastBandwidthTimeout.IsNull() {
 		data.AutoBwResignalLastBandwidthTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection"); value.Exists() {
-		data.PathProtection = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathProtection.IsNull() {
+			data.PathProtection = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathProtection.IsNull() {
 			data.PathProtection = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse"); value.Exists() {
-		data.PathProtectionSrlgDiverse = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathProtectionSrlgDiverse.IsNull() {
+			data.PathProtectionSrlgDiverse = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathProtectionSrlgDiverse.IsNull() {
 			data.PathProtectionSrlgDiverse = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive"); value.Exists() {
-		data.PathProtectionNonRevertive = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathProtectionNonRevertive.IsNull() {
+			data.PathProtectionNonRevertive = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathProtectionNonRevertive.IsNull() {
 			data.PathProtectionNonRevertive = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"); value.Exists() {
-		data.SoftPreemption = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SoftPreemption.IsNull() {
+			data.SoftPreemption = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SoftPreemption.IsNull() {
 			data.SoftPreemption = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/igp"); value.Exists() {
-		data.PathSelectionMetricIgp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/igp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathSelectionMetricIgp.IsNull() {
+			data.PathSelectionMetricIgp = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionMetricIgp.IsNull() {
 			data.PathSelectionMetricIgp = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/te"); value.Exists() {
-		data.PathSelectionMetricTe = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/te"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathSelectionMetricTe.IsNull() {
+			data.PathSelectionMetricTe = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionMetricTe.IsNull() {
 			data.PathSelectionMetricTe = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/delay"); value.Exists() {
-		data.PathSelectionMetricDelay = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/delay"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathSelectionMetricDelay.IsNull() {
+			data.PathSelectionMetricDelay = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionMetricDelay.IsNull() {
 			data.PathSelectionMetricDelay = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/min-fill"); value.Exists() {
-		data.PathSelectionTiebreakerMinFill = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/min-fill"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathSelectionTiebreakerMinFill.IsNull() {
+			data.PathSelectionTiebreakerMinFill = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionTiebreakerMinFill.IsNull() {
 			data.PathSelectionTiebreakerMinFill = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/max-fill"); value.Exists() {
-		data.PathSelectionTiebreakerMaxFill = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/max-fill"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathSelectionTiebreakerMaxFill.IsNull() {
+			data.PathSelectionTiebreakerMaxFill = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionTiebreakerMaxFill.IsNull() {
 			data.PathSelectionTiebreakerMaxFill = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/random"); value.Exists() {
-		data.PathSelectionTiebreakerRandom = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/random"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathSelectionTiebreakerRandom.IsNull() {
+			data.PathSelectionTiebreakerRandom = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PathSelectionTiebreakerRandom.IsNull() {
 			data.PathSelectionTiebreakerRandom = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit"); value.Exists() && !data.PathSelectionHopLimit.IsNull() {
 		data.PathSelectionHopLimit = types.Int64Value(value.Int())
 	} else if data.PathSelectionHopLimit.IsNull() {
 		data.PathSelectionHopLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit"); value.Exists() && !data.PathSelectionCostLimit.IsNull() {
 		data.PathSelectionCostLimit = types.Int64Value(value.Int())
 	} else if data.PathSelectionCostLimit.IsNull() {
 		data.PathSelectionCostLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit"); value.Exists() && !data.PathSelectionDelayLimit.IsNull() {
 		data.PathSelectionDelayLimit = types.Int64Value(value.Int())
 	} else if data.PathSelectionDelayLimit.IsNull() {
 		data.PathSelectionDelayLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/association-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/association-id"); value.Exists() && !data.BidirectionalAssociationId.IsNull() {
 		data.BidirectionalAssociationId = types.Int64Value(value.Int())
 	} else if data.BidirectionalAssociationId.IsNull() {
 		data.BidirectionalAssociationId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/source-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/source-address"); value.Exists() && !data.BidirectionalAssociationSourceAddress.IsNull() {
 		data.BidirectionalAssociationSourceAddress = types.StringValue(value.String())
 	} else if data.BidirectionalAssociationSourceAddress.IsNull() {
 		data.BidirectionalAssociationSourceAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/global-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/global-id"); value.Exists() && !data.BidirectionalAssociationGlobalId.IsNull() {
 		data.BidirectionalAssociationGlobalId = types.Int64Value(value.Int())
 	} else if data.BidirectionalAssociationGlobalId.IsNull() {
 		data.BidirectionalAssociationGlobalId = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed"); value.Exists() {
-		data.BidirectionalAssociationCorouted = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BidirectionalAssociationCorouted.IsNull() {
+			data.BidirectionalAssociationCorouted = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BidirectionalAssociationCorouted.IsNull() {
 			data.BidirectionalAssociationCorouted = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam"); value.Exists() {
-		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BidirectionalAssociationCoRoutedFaultOam.IsNull() {
+			data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BidirectionalAssociationCoRoutedFaultOam.IsNull() {
 			data.BidirectionalAssociationCoRoutedFaultOam = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection"); value.Exists() {
-		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BidirectionalAssociationCoRoutedWrapProtection.IsNull() {
+			data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BidirectionalAssociationCoRoutedWrapProtection.IsNull() {
 			data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable"); value.Exists() {
-		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() {
+			data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() {
 			data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdFastDetect = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BfdFastDetect.IsNull() {
+			data.BfdFastDetect = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BfdFastDetect.IsNull() {
 			data.BfdFastDetect = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdSbfd = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect/sbfd"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BfdSbfd.IsNull() {
+			data.BfdSbfd = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BfdSbfd.IsNull() {
 			data.BfdSbfd = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/bringup-timeout"); value.Exists() && !data.BfdBringupTimeout.IsNull() {
 		data.BfdBringupTimeout = types.Int64Value(value.Int())
 	} else if data.BfdBringupTimeout.IsNull() {
 		data.BfdBringupTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/interval"); value.Exists() && !data.BfdLspPingInterval.IsNull() {
 		data.BfdLspPingInterval = types.Int64Value(value.Int())
 	} else if data.BfdLspPingInterval.IsNull() {
 		data.BfdLspPingInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdLspPingDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BfdLspPingDisable.IsNull() {
+			data.BfdLspPingDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BfdLspPingDisable.IsNull() {
 			data.BfdLspPingDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/initial-wait"); value.Exists() && !data.BfdDampeningInitialWait.IsNull() {
 		data.BfdDampeningInitialWait = types.Int64Value(value.Int())
 	} else if data.BfdDampeningInitialWait.IsNull() {
 		data.BfdDampeningInitialWait = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/maximum-wait"); value.Exists() && !data.BfdDampeningMaximumWait.IsNull() {
 		data.BfdDampeningMaximumWait = types.Int64Value(value.Int())
 	} else if data.BfdDampeningMaximumWait.IsNull() {
 		data.BfdDampeningMaximumWait = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/secondary-wait"); value.Exists() && !data.BfdDampeningSecondaryWait.IsNull() {
 		data.BfdDampeningSecondaryWait = types.Int64Value(value.Int())
 	} else if data.BfdDampeningSecondaryWait.IsNull() {
 		data.BfdDampeningSecondaryWait = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdEncapGal = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/encap-mode/gal"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BfdEncapGal.IsNull() {
+			data.BfdEncapGal = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BfdEncapGal.IsNull() {
 			data.BfdEncapGal = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:destination"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:destination"); value.Exists() && !data.Destination.IsNull() {
 		data.Destination = types.StringValue(value.String())
 	} else if data.Destination.IsNull() {
 		data.Destination = types.StringNull()
@@ -2900,15 +3327,21 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
-	} else {
-		data.Shutdown = types.BoolNull()
+	} else if !data.Shutdown.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Shutdown = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "logging.events.link-status"); value.Exists() {
 		data.LoggingEventsLinkStatus = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLinkStatus = types.BoolNull()
+	} else if !data.LoggingEventsLinkStatus.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsLinkStatus = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "bandwidth"); value.Exists() {
 		data.Bandwidth = types.Int64Value(value.Int())
@@ -2930,23 +3363,27 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
 		data.Ipv4ForwardingEnable = types.BoolValue(true)
-	} else {
-		data.Ipv4ForwardingEnable = types.BoolNull()
+	} else if !data.Ipv4ForwardingEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4ForwardingEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate.disable"); value.Exists() {
 		data.Ipv4TtlPropagateDisable = types.BoolValue(true)
-	} else {
-		data.Ipv4TtlPropagateDisable = types.BoolNull()
+	} else if !data.Ipv4TtlPropagateDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4TtlPropagateDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
 		data.Ipv6Enable = types.BoolValue(true)
-	} else {
-		data.Ipv6Enable = types.BoolNull()
+	} else if !data.Ipv6Enable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv6Enable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate.disable"); value.Exists() {
 		data.Ipv6TtlPropagateDisable = types.BoolValue(true)
-	} else {
-		data.Ipv6TtlPropagateDisable = types.BoolNull()
+	} else if !data.Ipv6TtlPropagateDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv6TtlPropagateDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-mpls-cfg:mpls.mtu"); value.Exists() {
 		data.MplsMtu = types.Int64Value(value.Int())
@@ -2959,8 +3396,9 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce"); value.Exists() {
 		data.AutorouteAnnounce = types.BoolValue(true)
-	} else {
-		data.AutorouteAnnounce = types.BoolNull()
+	} else if !data.AutorouteAnnounce.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutorouteAnnounce = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.metric.absolute"); value.Exists() {
 		data.AutorouteAnnounceMetricAbsolute = types.Int64Value(value.Int())
@@ -2973,13 +3411,15 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.include-ipv6"); value.Exists() {
 		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(true)
-	} else {
-		data.AutorouteAnnounceIncludeIpv6 = types.BoolNull()
+	} else if !data.AutorouteAnnounceIncludeIpv6.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.exclude-traffic.segment-routing"); value.Exists() {
 		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(true)
-	} else {
-		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolNull()
+	} else if !data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.destinations.destination"); value.Exists() {
 		data.AutorouteDestinations = make([]InterfaceTunnelTEAutorouteDestinations, 0)
@@ -3003,8 +3443,9 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:backup-bw.unlimited"); value.Exists() {
 		data.BackupBwUnlimited = types.BoolValue(true)
-	} else {
-		data.BackupBwUnlimited = types.BoolNull()
+	} else if !data.BackupBwUnlimited.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BackupBwUnlimited = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth.bandwidth"); value.Exists() {
 		data.SignalledBandwidth = types.Int64Value(value.Int())
@@ -3014,97 +3455,114 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth.sub-pool"); value.Exists() {
 		data.SignalledBandwidthSubPool = types.BoolValue(true)
-	} else {
-		data.SignalledBandwidthSubPool = types.BoolNull()
+	} else if !data.SignalledBandwidthSubPool.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignalledBandwidthSubPool = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"); value.Exists() {
 		data.FastReroute = types.BoolValue(true)
-	} else {
-		data.FastReroute = types.BoolNull()
+	} else if !data.FastReroute.IsNull() {
+		// Only set to false if it was previously set in state
+		data.FastReroute = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute.protect.node"); value.Exists() {
 		data.FastRerouteProtectNode = types.BoolValue(true)
-	} else {
-		data.FastRerouteProtectNode = types.BoolNull()
+	} else if !data.FastRerouteProtectNode.IsNull() {
+		// Only set to false if it was previously set in state
+		data.FastRerouteProtectNode = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute.protect.bandwidth"); value.Exists() {
 		data.FastRerouteProtectBandwidth = types.BoolValue(true)
-	} else {
-		data.FastRerouteProtectBandwidth = types.BoolNull()
+	} else if !data.FastRerouteProtectBandwidth.IsNull() {
+		// Only set to false if it was previously set in state
+		data.FastRerouteProtectBandwidth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:forward-class"); value.Exists() {
 		data.ForwardClass = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"); value.Exists() {
 		data.ForwardingAdjacency = types.BoolValue(true)
-	} else {
-		data.ForwardingAdjacency = types.BoolNull()
+	} else if !data.ForwardingAdjacency.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ForwardingAdjacency = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency.holdtime"); value.Exists() {
 		data.ForwardingAdjacencyHoldtime = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency.include-ipv6"); value.Exists() {
 		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(true)
-	} else {
-		data.ForwardingAdjacencyIncludeIpv6 = types.BoolNull()
+	} else if !data.ForwardingAdjacencyIncludeIpv6.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:load-share"); value.Exists() {
 		data.LoadShare = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.state"); value.Exists() {
 		data.LoggingEventsLspState = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspState = types.BoolNull()
+	} else if !data.LoggingEventsLspState.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsLspState = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reoptimize"); value.Exists() {
 		data.LoggingEventsLspReoptimize = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspReoptimize = types.BoolNull()
+	} else if !data.LoggingEventsLspReoptimize.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsLspReoptimize = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reoptimize-attempts"); value.Exists() {
 		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspReoptimizeAttempts = types.BoolNull()
+	} else if !data.LoggingEventsLspReoptimizeAttempts.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.bw-change"); value.Exists() {
 		data.LoggingEventsLspBwChange = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspBwChange = types.BoolNull()
+	} else if !data.LoggingEventsLspBwChange.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsLspBwChange = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reroute"); value.Exists() {
 		data.LoggingEventsLspReroute = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspReroute = types.BoolNull()
+	} else if !data.LoggingEventsLspReroute.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsLspReroute = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.record-route"); value.Exists() {
 		data.LoggingEventsLspRecordRoute = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspRecordRoute = types.BoolNull()
+	} else if !data.LoggingEventsLspRecordRoute.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsLspRecordRoute = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.switchover"); value.Exists() {
 		data.LoggingEventsLspSwitchover = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspSwitchover = types.BoolNull()
+	} else if !data.LoggingEventsLspSwitchover.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsLspSwitchover = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.insufficient-bandwidth"); value.Exists() {
 		data.LoggingEventsLspInsufficientBw = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspInsufficientBw = types.BoolNull()
+	} else if !data.LoggingEventsLspInsufficientBw.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsLspInsufficientBw = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.pcalc-failure"); value.Exists() {
 		data.LoggingEventsPcalcFailure = types.BoolValue(true)
-	} else {
-		data.LoggingEventsPcalcFailure = types.BoolNull()
+	} else if !data.LoggingEventsPcalcFailure.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsPcalcFailure = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.bfd-status"); value.Exists() {
 		data.LoggingEventsBfdStatus = types.BoolValue(true)
-	} else {
-		data.LoggingEventsBfdStatus = types.BoolNull()
+	} else if !data.LoggingEventsBfdStatus.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsBfdStatus = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.all"); value.Exists() {
 		data.LoggingEventsAll = types.BoolValue(true)
-	} else {
-		data.LoggingEventsAll = types.BoolNull()
+	} else if !data.LoggingEventsAll.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsAll = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"); value.Exists() {
 		data.SignalledName = types.StringValue(value.String())
@@ -3118,8 +3576,9 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("dynamic"); cValue.Exists() {
 				item.Dynamic = types.BoolValue(true)
-			} else {
-				item.Dynamic = types.BoolNull()
+			} else if !item.Dynamic.IsNull() {
+				// Only set to false if it was previously set
+				item.Dynamic = types.BoolValue(false)
 			}
 			if cValue := v.Get("explicit.identifier"); cValue.Exists() {
 				item.ExplicitPathId = types.Int64Value(cValue.Int())
@@ -3129,8 +3588,9 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("explicit.verbatim"); cValue.Exists() {
 				item.ExplicitPathVerbatim = types.BoolValue(true)
-			} else {
-				item.ExplicitPathVerbatim = types.BoolNull()
+			} else if !item.ExplicitPathVerbatim.IsNull() {
+				// Only set to false if it was previously set
+				item.ExplicitPathVerbatim = types.BoolValue(false)
 			}
 			if cValue := v.Get("ospf.instance-name"); cValue.Exists() {
 				item.OspfInstance = types.StringValue(cValue.String())
@@ -3158,13 +3618,15 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("lockdown"); cValue.Exists() {
 				item.Lockdown = types.BoolValue(true)
-			} else {
-				item.Lockdown = types.BoolNull()
+			} else if !item.Lockdown.IsNull() {
+				// Only set to false if it was previously set
+				item.Lockdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("lockdown.sticky"); cValue.Exists() {
 				item.LockdownSticky = types.BoolValue(true)
-			} else {
-				item.LockdownSticky = types.BoolNull()
+			} else if !item.LockdownSticky.IsNull() {
+				// Only set to false if it was previously set
+				item.LockdownSticky = types.BoolValue(false)
 			}
 			data.PathOptions = append(data.PathOptions, item)
 			return true
@@ -3178,13 +3640,14 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:record-route"); value.Exists() {
 		data.RecordRoute = types.BoolValue(true)
-	} else {
-		data.RecordRoute = types.BoolNull()
+	} else if !data.RecordRoute.IsNull() {
+		// Only set to false if it was previously set in state
+		data.RecordRoute = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:binding-sid.mpls.label"); value.Exists() {
 		data.BindingSidMplsLabel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:policy-class.tunnel-policy-class-values.tunnel-policy-class-value"); value.Exists() {
 		data.PolicyClasses = helpers.GetStringList(value.Array())
 	} else {
 		data.PolicyClasses = types.ListNull(types.StringType)
@@ -3197,8 +3660,9 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.collect-bw-only"); value.Exists() {
 		data.AutoBwCollectOnly = types.BoolValue(true)
-	} else {
-		data.AutoBwCollectOnly = types.BoolNull()
+	} else if !data.AutoBwCollectOnly.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutoBwCollectOnly = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.adjustment-threshold.threshold"); value.Exists() {
 		data.AutoBwAdjustmentThresholdPercent = types.Int64Value(value.Int())
@@ -3229,53 +3693,63 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-protection"); value.Exists() {
 		data.PathProtection = types.BoolValue(true)
-	} else {
-		data.PathProtection = types.BoolNull()
+	} else if !data.PathProtection.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathProtection = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-protection.srlg-diverse"); value.Exists() {
 		data.PathProtectionSrlgDiverse = types.BoolValue(true)
-	} else {
-		data.PathProtectionSrlgDiverse = types.BoolNull()
+	} else if !data.PathProtectionSrlgDiverse.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathProtectionSrlgDiverse = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-protection.protection-mode.non-revertive"); value.Exists() {
 		data.PathProtectionNonRevertive = types.BoolValue(true)
-	} else {
-		data.PathProtectionNonRevertive = types.BoolNull()
+	} else if !data.PathProtectionNonRevertive.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathProtectionNonRevertive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"); value.Exists() {
 		data.SoftPreemption = types.BoolValue(true)
-	} else {
-		data.SoftPreemption = types.BoolNull()
+	} else if !data.SoftPreemption.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SoftPreemption = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.metric.igp"); value.Exists() {
 		data.PathSelectionMetricIgp = types.BoolValue(true)
-	} else {
-		data.PathSelectionMetricIgp = types.BoolNull()
+	} else if !data.PathSelectionMetricIgp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathSelectionMetricIgp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.metric.te"); value.Exists() {
 		data.PathSelectionMetricTe = types.BoolValue(true)
-	} else {
-		data.PathSelectionMetricTe = types.BoolNull()
+	} else if !data.PathSelectionMetricTe.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathSelectionMetricTe = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.metric.delay"); value.Exists() {
 		data.PathSelectionMetricDelay = types.BoolValue(true)
-	} else {
-		data.PathSelectionMetricDelay = types.BoolNull()
+	} else if !data.PathSelectionMetricDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathSelectionMetricDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.tiebreaker.min-fill"); value.Exists() {
 		data.PathSelectionTiebreakerMinFill = types.BoolValue(true)
-	} else {
-		data.PathSelectionTiebreakerMinFill = types.BoolNull()
+	} else if !data.PathSelectionTiebreakerMinFill.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathSelectionTiebreakerMinFill = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.tiebreaker.max-fill"); value.Exists() {
 		data.PathSelectionTiebreakerMaxFill = types.BoolValue(true)
-	} else {
-		data.PathSelectionTiebreakerMaxFill = types.BoolNull()
+	} else if !data.PathSelectionTiebreakerMaxFill.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathSelectionTiebreakerMaxFill = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.tiebreaker.random"); value.Exists() {
 		data.PathSelectionTiebreakerRandom = types.BoolValue(true)
-	} else {
-		data.PathSelectionTiebreakerRandom = types.BoolNull()
+	} else if !data.PathSelectionTiebreakerRandom.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PathSelectionTiebreakerRandom = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.hop-limit"); value.Exists() {
 		data.PathSelectionHopLimit = types.Int64Value(value.Int())
@@ -3297,64 +3771,72 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed"); value.Exists() {
 		data.BidirectionalAssociationCorouted = types.BoolValue(true)
-	} else {
-		data.BidirectionalAssociationCorouted = types.BoolNull()
+	} else if !data.BidirectionalAssociationCorouted.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BidirectionalAssociationCorouted = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed.fault-oam"); value.Exists() {
 		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(true)
-	} else {
-		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolNull()
+	} else if !data.BidirectionalAssociationCoRoutedFaultOam.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed.wrap-protection"); value.Exists() {
 		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(true)
-	} else {
-		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolNull()
+	} else if !data.BidirectionalAssociationCoRoutedWrapProtection.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed.signaling.protection-object.disable"); value.Exists() {
 		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(true)
-	} else {
-		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolNull()
+	} else if !data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
-	} else {
-		data.BfdFastDetect = types.BoolNull()
+	} else if !data.BfdFastDetect.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BfdFastDetect = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.fast-detect.sbfd"); value.Exists() {
 		data.BfdSbfd = types.BoolValue(true)
-	} else {
-		data.BfdSbfd = types.BoolNull()
+	} else if !data.BfdSbfd.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BfdSbfd = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.bringup-timeout"); value.Exists() {
 		data.BfdBringupTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.lsp-ping.interval"); value.Exists() {
 		data.BfdLspPingInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.lsp-ping.disable"); value.Exists() {
 		data.BfdLspPingDisable = types.BoolValue(true)
-	} else {
-		data.BfdLspPingDisable = types.BoolNull()
+	} else if !data.BfdLspPingDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BfdLspPingDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.initial-wait"); value.Exists() {
 		data.BfdDampeningInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.maximum-wait"); value.Exists() {
 		data.BfdDampeningMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.secondary-wait"); value.Exists() {
 		data.BfdDampeningSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.encap-mode.gal"); value.Exists() {
 		data.BfdEncapGal = types.BoolValue(true)
-	} else {
-		data.BfdEncapGal = types.BoolNull()
+	} else if !data.BfdEncapGal.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BfdEncapGal = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:destination"); value.Exists() {
 		data.Destination = types.StringValue(value.String())
@@ -3365,19 +3847,24 @@ func (data *InterfaceTunnelTE) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
-		data.Shutdown = types.BoolNull()
+		data.Shutdown = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "logging.events.link-status"); value.Exists() {
 		data.LoggingEventsLinkStatus = types.BoolValue(true)
 	} else {
-		data.LoggingEventsLinkStatus = types.BoolNull()
+		data.LoggingEventsLinkStatus = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "bandwidth"); value.Exists() {
 		data.Bandwidth = types.Int64Value(value.Int())
@@ -3400,22 +3887,22 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
 		data.Ipv4ForwardingEnable = types.BoolValue(true)
 	} else {
-		data.Ipv4ForwardingEnable = types.BoolNull()
+		data.Ipv4ForwardingEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate.disable"); value.Exists() {
 		data.Ipv4TtlPropagateDisable = types.BoolValue(true)
 	} else {
-		data.Ipv4TtlPropagateDisable = types.BoolNull()
+		data.Ipv4TtlPropagateDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
 		data.Ipv6Enable = types.BoolValue(true)
 	} else {
-		data.Ipv6Enable = types.BoolNull()
+		data.Ipv6Enable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate.disable"); value.Exists() {
 		data.Ipv6TtlPropagateDisable = types.BoolValue(true)
 	} else {
-		data.Ipv6TtlPropagateDisable = types.BoolNull()
+		data.Ipv6TtlPropagateDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-if-mpls-cfg:mpls.mtu"); value.Exists() {
 		data.MplsMtu = types.Int64Value(value.Int())
@@ -3429,7 +3916,7 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce"); value.Exists() {
 		data.AutorouteAnnounce = types.BoolValue(true)
 	} else {
-		data.AutorouteAnnounce = types.BoolNull()
+		data.AutorouteAnnounce = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.metric.absolute"); value.Exists() {
 		data.AutorouteAnnounceMetricAbsolute = types.Int64Value(value.Int())
@@ -3443,12 +3930,12 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.include-ipv6"); value.Exists() {
 		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(true)
 	} else {
-		data.AutorouteAnnounceIncludeIpv6 = types.BoolNull()
+		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.announce.exclude-traffic.segment-routing"); value.Exists() {
 		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(true)
 	} else {
-		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolNull()
+		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:autoroute.destinations.destination"); value.Exists() {
 		data.AutorouteDestinations = make([]InterfaceTunnelTEAutorouteDestinations, 0)
@@ -3473,7 +3960,7 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:backup-bw.unlimited"); value.Exists() {
 		data.BackupBwUnlimited = types.BoolValue(true)
 	} else {
-		data.BackupBwUnlimited = types.BoolNull()
+		data.BackupBwUnlimited = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth.bandwidth"); value.Exists() {
 		data.SignalledBandwidth = types.Int64Value(value.Int())
@@ -3484,22 +3971,22 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth.sub-pool"); value.Exists() {
 		data.SignalledBandwidthSubPool = types.BoolValue(true)
 	} else {
-		data.SignalledBandwidthSubPool = types.BoolNull()
+		data.SignalledBandwidthSubPool = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"); value.Exists() {
 		data.FastReroute = types.BoolValue(true)
 	} else {
-		data.FastReroute = types.BoolNull()
+		data.FastReroute = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute.protect.node"); value.Exists() {
 		data.FastRerouteProtectNode = types.BoolValue(true)
 	} else {
-		data.FastRerouteProtectNode = types.BoolNull()
+		data.FastRerouteProtectNode = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute.protect.bandwidth"); value.Exists() {
 		data.FastRerouteProtectBandwidth = types.BoolValue(true)
 	} else {
-		data.FastRerouteProtectBandwidth = types.BoolNull()
+		data.FastRerouteProtectBandwidth = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:forward-class"); value.Exists() {
 		data.ForwardClass = types.Int64Value(value.Int())
@@ -3507,7 +3994,7 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"); value.Exists() {
 		data.ForwardingAdjacency = types.BoolValue(true)
 	} else {
-		data.ForwardingAdjacency = types.BoolNull()
+		data.ForwardingAdjacency = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency.holdtime"); value.Exists() {
 		data.ForwardingAdjacencyHoldtime = types.Int64Value(value.Int())
@@ -3515,65 +4002,65 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency.include-ipv6"); value.Exists() {
 		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(true)
 	} else {
-		data.ForwardingAdjacencyIncludeIpv6 = types.BoolNull()
+		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:load-share"); value.Exists() {
 		data.LoadShare = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.state"); value.Exists() {
 		data.LoggingEventsLspState = types.BoolValue(true)
 	} else {
-		data.LoggingEventsLspState = types.BoolNull()
+		data.LoggingEventsLspState = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reoptimize"); value.Exists() {
 		data.LoggingEventsLspReoptimize = types.BoolValue(true)
 	} else {
-		data.LoggingEventsLspReoptimize = types.BoolNull()
+		data.LoggingEventsLspReoptimize = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reoptimize-attempts"); value.Exists() {
 		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(true)
 	} else {
-		data.LoggingEventsLspReoptimizeAttempts = types.BoolNull()
+		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.bw-change"); value.Exists() {
 		data.LoggingEventsLspBwChange = types.BoolValue(true)
 	} else {
-		data.LoggingEventsLspBwChange = types.BoolNull()
+		data.LoggingEventsLspBwChange = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.reroute"); value.Exists() {
 		data.LoggingEventsLspReroute = types.BoolValue(true)
 	} else {
-		data.LoggingEventsLspReroute = types.BoolNull()
+		data.LoggingEventsLspReroute = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.record-route"); value.Exists() {
 		data.LoggingEventsLspRecordRoute = types.BoolValue(true)
 	} else {
-		data.LoggingEventsLspRecordRoute = types.BoolNull()
+		data.LoggingEventsLspRecordRoute = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.switchover"); value.Exists() {
 		data.LoggingEventsLspSwitchover = types.BoolValue(true)
 	} else {
-		data.LoggingEventsLspSwitchover = types.BoolNull()
+		data.LoggingEventsLspSwitchover = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.lsp-status.insufficient-bandwidth"); value.Exists() {
 		data.LoggingEventsLspInsufficientBw = types.BoolValue(true)
 	} else {
-		data.LoggingEventsLspInsufficientBw = types.BoolNull()
+		data.LoggingEventsLspInsufficientBw = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.pcalc-failure"); value.Exists() {
 		data.LoggingEventsPcalcFailure = types.BoolValue(true)
 	} else {
-		data.LoggingEventsPcalcFailure = types.BoolNull()
+		data.LoggingEventsPcalcFailure = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.bfd-status"); value.Exists() {
 		data.LoggingEventsBfdStatus = types.BoolValue(true)
 	} else {
-		data.LoggingEventsBfdStatus = types.BoolNull()
+		data.LoggingEventsBfdStatus = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:logging.events.all"); value.Exists() {
 		data.LoggingEventsAll = types.BoolValue(true)
 	} else {
-		data.LoggingEventsAll = types.BoolNull()
+		data.LoggingEventsAll = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"); value.Exists() {
 		data.SignalledName = types.StringValue(value.String())
@@ -3588,7 +4075,7 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 			if cValue := v.Get("dynamic"); cValue.Exists() {
 				item.Dynamic = types.BoolValue(true)
 			} else {
-				item.Dynamic = types.BoolNull()
+				item.Dynamic = types.BoolValue(false)
 			}
 			if cValue := v.Get("explicit.identifier"); cValue.Exists() {
 				item.ExplicitPathId = types.Int64Value(cValue.Int())
@@ -3599,7 +4086,7 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 			if cValue := v.Get("explicit.verbatim"); cValue.Exists() {
 				item.ExplicitPathVerbatim = types.BoolValue(true)
 			} else {
-				item.ExplicitPathVerbatim = types.BoolNull()
+				item.ExplicitPathVerbatim = types.BoolValue(false)
 			}
 			if cValue := v.Get("ospf.instance-name"); cValue.Exists() {
 				item.OspfInstance = types.StringValue(cValue.String())
@@ -3628,12 +4115,12 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 			if cValue := v.Get("lockdown"); cValue.Exists() {
 				item.Lockdown = types.BoolValue(true)
 			} else {
-				item.Lockdown = types.BoolNull()
+				item.Lockdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("lockdown.sticky"); cValue.Exists() {
 				item.LockdownSticky = types.BoolValue(true)
 			} else {
-				item.LockdownSticky = types.BoolNull()
+				item.LockdownSticky = types.BoolValue(false)
 			}
 			data.PathOptions = append(data.PathOptions, item)
 			return true
@@ -3648,12 +4135,12 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:record-route"); value.Exists() {
 		data.RecordRoute = types.BoolValue(true)
 	} else {
-		data.RecordRoute = types.BoolNull()
+		data.RecordRoute = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:binding-sid.mpls.label"); value.Exists() {
 		data.BindingSidMplsLabel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:policy-class.tunnel-policy-class-values.tunnel-policy-class-value"); value.Exists() {
 		data.PolicyClasses = helpers.GetStringList(value.Array())
 	} else {
 		data.PolicyClasses = types.ListNull(types.StringType)
@@ -3667,7 +4154,7 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.collect-bw-only"); value.Exists() {
 		data.AutoBwCollectOnly = types.BoolValue(true)
 	} else {
-		data.AutoBwCollectOnly = types.BoolNull()
+		data.AutoBwCollectOnly = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:auto-bw.adjustment-threshold.threshold"); value.Exists() {
 		data.AutoBwAdjustmentThresholdPercent = types.Int64Value(value.Int())
@@ -3699,52 +4186,52 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-protection"); value.Exists() {
 		data.PathProtection = types.BoolValue(true)
 	} else {
-		data.PathProtection = types.BoolNull()
+		data.PathProtection = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-protection.srlg-diverse"); value.Exists() {
 		data.PathProtectionSrlgDiverse = types.BoolValue(true)
 	} else {
-		data.PathProtectionSrlgDiverse = types.BoolNull()
+		data.PathProtectionSrlgDiverse = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-protection.protection-mode.non-revertive"); value.Exists() {
 		data.PathProtectionNonRevertive = types.BoolValue(true)
 	} else {
-		data.PathProtectionNonRevertive = types.BoolNull()
+		data.PathProtectionNonRevertive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"); value.Exists() {
 		data.SoftPreemption = types.BoolValue(true)
 	} else {
-		data.SoftPreemption = types.BoolNull()
+		data.SoftPreemption = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.metric.igp"); value.Exists() {
 		data.PathSelectionMetricIgp = types.BoolValue(true)
 	} else {
-		data.PathSelectionMetricIgp = types.BoolNull()
+		data.PathSelectionMetricIgp = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.metric.te"); value.Exists() {
 		data.PathSelectionMetricTe = types.BoolValue(true)
 	} else {
-		data.PathSelectionMetricTe = types.BoolNull()
+		data.PathSelectionMetricTe = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.metric.delay"); value.Exists() {
 		data.PathSelectionMetricDelay = types.BoolValue(true)
 	} else {
-		data.PathSelectionMetricDelay = types.BoolNull()
+		data.PathSelectionMetricDelay = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.tiebreaker.min-fill"); value.Exists() {
 		data.PathSelectionTiebreakerMinFill = types.BoolValue(true)
 	} else {
-		data.PathSelectionTiebreakerMinFill = types.BoolNull()
+		data.PathSelectionTiebreakerMinFill = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.tiebreaker.max-fill"); value.Exists() {
 		data.PathSelectionTiebreakerMaxFill = types.BoolValue(true)
 	} else {
-		data.PathSelectionTiebreakerMaxFill = types.BoolNull()
+		data.PathSelectionTiebreakerMaxFill = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.tiebreaker.random"); value.Exists() {
 		data.PathSelectionTiebreakerRandom = types.BoolValue(true)
 	} else {
-		data.PathSelectionTiebreakerRandom = types.BoolNull()
+		data.PathSelectionTiebreakerRandom = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:path-selection.hop-limit"); value.Exists() {
 		data.PathSelectionHopLimit = types.Int64Value(value.Int())
@@ -3767,63 +4254,63 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed"); value.Exists() {
 		data.BidirectionalAssociationCorouted = types.BoolValue(true)
 	} else {
-		data.BidirectionalAssociationCorouted = types.BoolNull()
+		data.BidirectionalAssociationCorouted = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed.fault-oam"); value.Exists() {
 		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(true)
 	} else {
-		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolNull()
+		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed.wrap-protection"); value.Exists() {
 		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(true)
 	} else {
-		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolNull()
+		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bidirectional.association.type.co-routed.signaling.protection-object.disable"); value.Exists() {
 		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(true)
 	} else {
-		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolNull()
+		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
 	} else {
-		data.BfdFastDetect = types.BoolNull()
+		data.BfdFastDetect = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.fast-detect.sbfd"); value.Exists() {
 		data.BfdSbfd = types.BoolValue(true)
 	} else {
-		data.BfdSbfd = types.BoolNull()
+		data.BfdSbfd = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.bringup-timeout"); value.Exists() {
 		data.BfdBringupTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.lsp-ping.interval"); value.Exists() {
 		data.BfdLspPingInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.lsp-ping.disable"); value.Exists() {
 		data.BfdLspPingDisable = types.BoolValue(true)
 	} else {
-		data.BfdLspPingDisable = types.BoolNull()
+		data.BfdLspPingDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.initial-wait"); value.Exists() {
 		data.BfdDampeningInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.maximum-wait"); value.Exists() {
 		data.BfdDampeningMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.dampening.secondary-wait"); value.Exists() {
 		data.BfdDampeningSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:bfd.encap-mode.gal"); value.Exists() {
 		data.BfdEncapGal = types.BoolValue(true)
 	} else {
-		data.BfdEncapGal = types.BoolNull()
+		data.BfdEncapGal = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:destination"); value.Exists() {
 		data.Destination = types.StringValue(value.String())
@@ -3834,553 +4321,88 @@ func (data *InterfaceTunnelTEData) fromBody(ctx context.Context, res gjson.Resul
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *InterfaceTunnelTE) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
-	} else {
-		data.Shutdown = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/link-status"); value.Exists() {
-		data.LoggingEventsLinkStatus = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLinkStatus = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth"); value.Exists() {
-		data.Bandwidth = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
-		data.Description = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-statistics-cfg:load-interval"); value.Exists() {
-		data.LoadInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address"); value.Exists() {
-		data.Ipv4Address = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask"); value.Exists() {
-		data.Ipv4Netmask = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered"); value.Exists() {
-		data.Ipv4Unnumbered = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
-		data.Ipv4ForwardingEnable = types.BoolValue(true)
-	} else {
-		data.Ipv4ForwardingEnable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable"); value.Exists() {
-		data.Ipv4TtlPropagateDisable = types.BoolValue(true)
-	} else {
-		data.Ipv4TtlPropagateDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
-		data.Ipv6Enable = types.BoolValue(true)
-	} else {
-		data.Ipv6Enable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable"); value.Exists() {
-		data.Ipv6TtlPropagateDisable = types.BoolValue(true)
-	} else {
-		data.Ipv6TtlPropagateDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu"); value.Exists() {
-		data.MplsMtu = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value"); value.Exists() {
-		data.AffinityValue = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask"); value.Exists() {
-		data.AffinityMask = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce"); value.Exists() {
-		data.AutorouteAnnounce = types.BoolValue(true)
-	} else {
-		data.AutorouteAnnounce = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/absolute"); value.Exists() {
-		data.AutorouteAnnounceMetricAbsolute = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/relative"); value.Exists() {
-		data.AutorouteAnnounceMetricRelative = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/constant-metric"); value.Exists() {
-		data.AutorouteAnnounceMetric = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6"); value.Exists() {
-		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(true)
-	} else {
-		data.AutorouteAnnounceIncludeIpv6 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing"); value.Exists() {
-		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(true)
-	} else {
-		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination"); value.Exists() {
-		data.AutorouteDestinations = make([]InterfaceTunnelTEAutorouteDestinations, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := InterfaceTunnelTEAutorouteDestinations{}
-			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			data.AutorouteDestinations = append(data.AutorouteDestinations, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/pool-type"); value.Exists() {
-		data.BackupBwPoolType = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/class-type"); value.Exists() {
-		data.BackupBwClassType = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/bandwidth"); value.Exists() {
-		data.BackupBwValue = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/unlimited"); value.Exists() {
-		data.BackupBwUnlimited = types.BoolValue(true)
-	} else {
-		data.BackupBwUnlimited = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/bandwidth"); value.Exists() {
-		data.SignalledBandwidth = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type"); value.Exists() {
-		data.SignalledBandwidthClassType = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool"); value.Exists() {
-		data.SignalledBandwidthSubPool = types.BoolValue(true)
-	} else {
-		data.SignalledBandwidthSubPool = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"); value.Exists() {
-		data.FastReroute = types.BoolValue(true)
-	} else {
-		data.FastReroute = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node"); value.Exists() {
-		data.FastRerouteProtectNode = types.BoolValue(true)
-	} else {
-		data.FastRerouteProtectNode = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth"); value.Exists() {
-		data.FastRerouteProtectBandwidth = types.BoolValue(true)
-	} else {
-		data.FastRerouteProtectBandwidth = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forward-class"); value.Exists() {
-		data.ForwardClass = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"); value.Exists() {
-		data.ForwardingAdjacency = types.BoolValue(true)
-	} else {
-		data.ForwardingAdjacency = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime"); value.Exists() {
-		data.ForwardingAdjacencyHoldtime = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6"); value.Exists() {
-		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(true)
-	} else {
-		data.ForwardingAdjacencyIncludeIpv6 = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:load-share"); value.Exists() {
-		data.LoadShare = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspState = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspState = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspReoptimize = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspReoptimize = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspReoptimizeAttempts = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspBwChange = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspBwChange = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspReroute = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspReroute = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspRecordRoute = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspRecordRoute = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspSwitchover = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspSwitchover = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsLspInsufficientBw = types.BoolValue(true)
-	} else {
-		data.LoggingEventsLspInsufficientBw = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsPcalcFailure = types.BoolValue(true)
-	} else {
-		data.LoggingEventsPcalcFailure = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsBfdStatus = types.BoolValue(true)
-	} else {
-		data.LoggingEventsBfdStatus = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.LoggingEventsAll = types.BoolValue(true)
-	} else {
-		data.LoggingEventsAll = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"); value.Exists() {
-		data.SignalledName = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option"); value.Exists() {
-		data.PathOptions = make([]InterfaceTunnelTEPathOptions, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := InterfaceTunnelTEPathOptions{}
-			if cValue := helpers.GetFromXPath(v, "preference"); cValue.Exists() {
-				item.Preference = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "dynamic"); cValue.Exists() {
-				item.Dynamic = types.BoolValue(true)
-			} else {
-				item.Dynamic = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "explicit/identifier"); cValue.Exists() {
-				item.ExplicitPathId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "explicit/name"); cValue.Exists() {
-				item.ExplicitPathName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "explicit/verbatim"); cValue.Exists() {
-				item.ExplicitPathVerbatim = types.BoolValue(true)
-			} else {
-				item.ExplicitPathVerbatim = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "ospf/instance-name"); cValue.Exists() {
-				item.OspfInstance = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "ospf/area/decimal"); cValue.Exists() {
-				item.OspfAreaId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "ospf/area/ip-address"); cValue.Exists() {
-				item.OspfAreaIpFormat = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "isis/instance-name"); cValue.Exists() {
-				item.IsisInstance = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "isis/level"); cValue.Exists() {
-				item.IsisLevel = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "attribute-set/attribute-set-name"); cValue.Exists() {
-				item.AttributeSet = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "protected-by/index"); cValue.Exists() {
-				item.ProtectedByIndex = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "protected-by/index-secondary"); cValue.Exists() {
-				item.ProtectedByIndexSecondary = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "lockdown"); cValue.Exists() {
-				item.Lockdown = types.BoolValue(true)
-			} else {
-				item.Lockdown = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "lockdown/sticky"); cValue.Exists() {
-				item.LockdownSticky = types.BoolValue(true)
-			} else {
-				item.LockdownSticky = types.BoolNull()
-			}
-			data.PathOptions = append(data.PathOptions, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/setup-priority"); value.Exists() {
-		data.PrioritySetup = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/hold-priority"); value.Exists() {
-		data.PriorityHold = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:record-route"); value.Exists() {
-		data.RecordRoute = types.BoolValue(true)
-	} else {
-		data.RecordRoute = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:binding-sid/mpls/label"); value.Exists() {
-		data.BindingSidMplsLabel = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.PolicyClasses = helpers.GetStringListXML(value.Array())
-	} else {
-		data.PolicyClasses = types.ListNull(types.StringType)
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/min"); value.Exists() {
-		data.AutoBwLimitMin = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/max"); value.Exists() {
-		data.AutoBwLimitMax = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only"); value.Exists() {
-		data.AutoBwCollectOnly = types.BoolValue(true)
-	} else {
-		data.AutoBwCollectOnly = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/threshold"); value.Exists() {
-		data.AutoBwAdjustmentThresholdPercent = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/min"); value.Exists() {
-		data.AutoBwAdjustmentThresholdMin = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/threshold"); value.Exists() {
-		data.AutoBwOverflowThreshold = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/min"); value.Exists() {
-		data.AutoBwOverflowMin = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/limit"); value.Exists() {
-		data.AutoBwOverflowLimit = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/threshold"); value.Exists() {
-		data.AutoBwUnderflowThreshold = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/min"); value.Exists() {
-		data.AutoBwUnderflowMin = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/limit"); value.Exists() {
-		data.AutoBwUnderflowLimit = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out"); value.Exists() {
-		data.AutoBwResignalLastBandwidthTimeout = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection"); value.Exists() {
-		data.PathProtection = types.BoolValue(true)
-	} else {
-		data.PathProtection = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse"); value.Exists() {
-		data.PathProtectionSrlgDiverse = types.BoolValue(true)
-	} else {
-		data.PathProtectionSrlgDiverse = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive"); value.Exists() {
-		data.PathProtectionNonRevertive = types.BoolValue(true)
-	} else {
-		data.PathProtectionNonRevertive = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"); value.Exists() {
-		data.SoftPreemption = types.BoolValue(true)
-	} else {
-		data.SoftPreemption = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/igp"); value.Exists() {
-		data.PathSelectionMetricIgp = types.BoolValue(true)
-	} else {
-		data.PathSelectionMetricIgp = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/te"); value.Exists() {
-		data.PathSelectionMetricTe = types.BoolValue(true)
-	} else {
-		data.PathSelectionMetricTe = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/delay"); value.Exists() {
-		data.PathSelectionMetricDelay = types.BoolValue(true)
-	} else {
-		data.PathSelectionMetricDelay = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/min-fill"); value.Exists() {
-		data.PathSelectionTiebreakerMinFill = types.BoolValue(true)
-	} else {
-		data.PathSelectionTiebreakerMinFill = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/max-fill"); value.Exists() {
-		data.PathSelectionTiebreakerMaxFill = types.BoolValue(true)
-	} else {
-		data.PathSelectionTiebreakerMaxFill = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/random"); value.Exists() {
-		data.PathSelectionTiebreakerRandom = types.BoolValue(true)
-	} else {
-		data.PathSelectionTiebreakerRandom = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit"); value.Exists() {
-		data.PathSelectionHopLimit = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit"); value.Exists() {
-		data.PathSelectionCostLimit = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit"); value.Exists() {
-		data.PathSelectionDelayLimit = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/association-id"); value.Exists() {
-		data.BidirectionalAssociationId = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/source-address"); value.Exists() {
-		data.BidirectionalAssociationSourceAddress = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/global-id"); value.Exists() {
-		data.BidirectionalAssociationGlobalId = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed"); value.Exists() {
-		data.BidirectionalAssociationCorouted = types.BoolValue(true)
-	} else {
-		data.BidirectionalAssociationCorouted = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam"); value.Exists() {
-		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(true)
-	} else {
-		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection"); value.Exists() {
-		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(true)
-	} else {
-		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable"); value.Exists() {
-		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(true)
-	} else {
-		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdFastDetect = types.BoolValue(true)
-	} else {
-		data.BfdFastDetect = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdSbfd = types.BoolValue(true)
-	} else {
-		data.BfdSbfd = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdMinimumInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdMultiplier = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdBringupTimeout = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdLspPingInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdLspPingDisable = types.BoolValue(true)
-	} else {
-		data.BfdLspPingDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdDampeningInitialWait = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdDampeningMaximumWait = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdDampeningSecondaryWait = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
-		data.BfdEncapGal = types.BoolValue(true)
-	} else {
-		data.BfdEncapGal = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:destination"); value.Exists() {
-		data.Destination = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *InterfaceTunnelTEData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/shutdown"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
 		data.Shutdown = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/logging/events/link-status"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/events/link-status"); value.Exists() {
 		data.LoggingEventsLinkStatus = types.BoolValue(true)
 	} else {
 		data.LoggingEventsLinkStatus = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth"); value.Exists() {
 		data.Bandwidth = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-statistics-cfg:load-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-statistics-cfg:load-interval"); value.Exists() {
 		data.LoadInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address"); value.Exists() {
 		data.Ipv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask"); value.Exists() {
 		data.Ipv4Netmask = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered"); value.Exists() {
 		data.Ipv4Unnumbered = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
 		data.Ipv4ForwardingEnable = types.BoolValue(true)
 	} else {
 		data.Ipv4ForwardingEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable"); value.Exists() {
 		data.Ipv4TtlPropagateDisable = types.BoolValue(true)
 	} else {
 		data.Ipv4TtlPropagateDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
 		data.Ipv6Enable = types.BoolValue(true)
 	} else {
 		data.Ipv6Enable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable"); value.Exists() {
 		data.Ipv6TtlPropagateDisable = types.BoolValue(true)
 	} else {
 		data.Ipv6TtlPropagateDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu"); value.Exists() {
 		data.MplsMtu = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value"); value.Exists() {
 		data.AffinityValue = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask"); value.Exists() {
 		data.AffinityMask = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce"); value.Exists() {
 		data.AutorouteAnnounce = types.BoolValue(true)
 	} else {
 		data.AutorouteAnnounce = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/absolute"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/absolute"); value.Exists() {
 		data.AutorouteAnnounceMetricAbsolute = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/relative"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/relative"); value.Exists() {
 		data.AutorouteAnnounceMetricRelative = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/constant-metric"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/constant-metric"); value.Exists() {
 		data.AutorouteAnnounceMetric = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6"); value.Exists() {
 		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(true)
 	} else {
 		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing"); value.Exists() {
 		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(true)
 	} else {
 		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination"); value.Exists() {
 		data.AutorouteDestinations = make([]InterfaceTunnelTEAutorouteDestinations, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceTunnelTEAutorouteDestinations{}
@@ -4391,124 +4413,124 @@ func (data *InterfaceTunnelTEData) fromBodyXML(ctx context.Context, res xmldot.R
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/pool-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/pool-type"); value.Exists() {
 		data.BackupBwPoolType = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/class-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/class-type"); value.Exists() {
 		data.BackupBwClassType = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/bandwidth"); value.Exists() {
 		data.BackupBwValue = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/unlimited"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/unlimited"); value.Exists() {
 		data.BackupBwUnlimited = types.BoolValue(true)
 	} else {
 		data.BackupBwUnlimited = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/bandwidth"); value.Exists() {
 		data.SignalledBandwidth = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type"); value.Exists() {
 		data.SignalledBandwidthClassType = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool"); value.Exists() {
 		data.SignalledBandwidthSubPool = types.BoolValue(true)
 	} else {
 		data.SignalledBandwidthSubPool = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"); value.Exists() {
 		data.FastReroute = types.BoolValue(true)
 	} else {
 		data.FastReroute = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node"); value.Exists() {
 		data.FastRerouteProtectNode = types.BoolValue(true)
 	} else {
 		data.FastRerouteProtectNode = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth"); value.Exists() {
 		data.FastRerouteProtectBandwidth = types.BoolValue(true)
 	} else {
 		data.FastRerouteProtectBandwidth = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forward-class"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forward-class"); value.Exists() {
 		data.ForwardClass = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"); value.Exists() {
 		data.ForwardingAdjacency = types.BoolValue(true)
 	} else {
 		data.ForwardingAdjacency = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime"); value.Exists() {
 		data.ForwardingAdjacencyHoldtime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6"); value.Exists() {
 		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(true)
 	} else {
 		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:load-share"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:load-share"); value.Exists() {
 		data.LoadShare = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/state"); value.Exists() {
 		data.LoggingEventsLspState = types.BoolValue(true)
 	} else {
 		data.LoggingEventsLspState = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize"); value.Exists() {
 		data.LoggingEventsLspReoptimize = types.BoolValue(true)
 	} else {
 		data.LoggingEventsLspReoptimize = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize-attempts"); value.Exists() {
 		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(true)
 	} else {
 		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/bw-change"); value.Exists() {
 		data.LoggingEventsLspBwChange = types.BoolValue(true)
 	} else {
 		data.LoggingEventsLspBwChange = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reroute"); value.Exists() {
 		data.LoggingEventsLspReroute = types.BoolValue(true)
 	} else {
 		data.LoggingEventsLspReroute = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/record-route"); value.Exists() {
 		data.LoggingEventsLspRecordRoute = types.BoolValue(true)
 	} else {
 		data.LoggingEventsLspRecordRoute = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/switchover"); value.Exists() {
 		data.LoggingEventsLspSwitchover = types.BoolValue(true)
 	} else {
 		data.LoggingEventsLspSwitchover = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/insufficient-bandwidth"); value.Exists() {
 		data.LoggingEventsLspInsufficientBw = types.BoolValue(true)
 	} else {
 		data.LoggingEventsLspInsufficientBw = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/pcalc-failure"); value.Exists() {
 		data.LoggingEventsPcalcFailure = types.BoolValue(true)
 	} else {
 		data.LoggingEventsPcalcFailure = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/bfd-status"); value.Exists() {
 		data.LoggingEventsBfdStatus = types.BoolValue(true)
 	} else {
 		data.LoggingEventsBfdStatus = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/all"); value.Exists() {
 		data.LoggingEventsAll = types.BoolValue(true)
 	} else {
 		data.LoggingEventsAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"); value.Exists() {
 		data.SignalledName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option"); value.Exists() {
 		data.PathOptions = make([]InterfaceTunnelTEPathOptions, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := InterfaceTunnelTEPathOptions{}
@@ -4569,193 +4591,658 @@ func (data *InterfaceTunnelTEData) fromBodyXML(ctx context.Context, res xmldot.R
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/setup-priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/setup-priority"); value.Exists() {
 		data.PrioritySetup = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/hold-priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/hold-priority"); value.Exists() {
 		data.PriorityHold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:record-route"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:record-route"); value.Exists() {
 		data.RecordRoute = types.BoolValue(true)
 	} else {
 		data.RecordRoute = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:binding-sid/mpls/label"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:binding-sid/mpls/label"); value.Exists() {
 		data.BindingSidMplsLabel = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value"); value.Exists() {
 		data.PolicyClasses = helpers.GetStringListXML(value.Array())
 	} else {
 		data.PolicyClasses = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/min"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/min"); value.Exists() {
 		data.AutoBwLimitMin = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/max"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/max"); value.Exists() {
 		data.AutoBwLimitMax = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only"); value.Exists() {
 		data.AutoBwCollectOnly = types.BoolValue(true)
 	} else {
 		data.AutoBwCollectOnly = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/threshold"); value.Exists() {
 		data.AutoBwAdjustmentThresholdPercent = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/min"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/min"); value.Exists() {
 		data.AutoBwAdjustmentThresholdMin = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/threshold"); value.Exists() {
 		data.AutoBwOverflowThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/min"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/min"); value.Exists() {
 		data.AutoBwOverflowMin = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/limit"); value.Exists() {
 		data.AutoBwOverflowLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/threshold"); value.Exists() {
 		data.AutoBwUnderflowThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/min"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/min"); value.Exists() {
 		data.AutoBwUnderflowMin = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/limit"); value.Exists() {
 		data.AutoBwUnderflowLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out"); value.Exists() {
 		data.AutoBwResignalLastBandwidthTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection"); value.Exists() {
 		data.PathProtection = types.BoolValue(true)
 	} else {
 		data.PathProtection = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse"); value.Exists() {
 		data.PathProtectionSrlgDiverse = types.BoolValue(true)
 	} else {
 		data.PathProtectionSrlgDiverse = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive"); value.Exists() {
 		data.PathProtectionNonRevertive = types.BoolValue(true)
 	} else {
 		data.PathProtectionNonRevertive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"); value.Exists() {
 		data.SoftPreemption = types.BoolValue(true)
 	} else {
 		data.SoftPreemption = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/igp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/igp"); value.Exists() {
 		data.PathSelectionMetricIgp = types.BoolValue(true)
 	} else {
 		data.PathSelectionMetricIgp = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/te"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/te"); value.Exists() {
 		data.PathSelectionMetricTe = types.BoolValue(true)
 	} else {
 		data.PathSelectionMetricTe = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/delay"); value.Exists() {
 		data.PathSelectionMetricDelay = types.BoolValue(true)
 	} else {
 		data.PathSelectionMetricDelay = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/min-fill"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/min-fill"); value.Exists() {
 		data.PathSelectionTiebreakerMinFill = types.BoolValue(true)
 	} else {
 		data.PathSelectionTiebreakerMinFill = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/max-fill"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/max-fill"); value.Exists() {
 		data.PathSelectionTiebreakerMaxFill = types.BoolValue(true)
 	} else {
 		data.PathSelectionTiebreakerMaxFill = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/random"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/random"); value.Exists() {
 		data.PathSelectionTiebreakerRandom = types.BoolValue(true)
 	} else {
 		data.PathSelectionTiebreakerRandom = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit"); value.Exists() {
 		data.PathSelectionHopLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit"); value.Exists() {
 		data.PathSelectionCostLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit"); value.Exists() {
 		data.PathSelectionDelayLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/association-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/association-id"); value.Exists() {
 		data.BidirectionalAssociationId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/source-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/source-address"); value.Exists() {
 		data.BidirectionalAssociationSourceAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/global-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/global-id"); value.Exists() {
 		data.BidirectionalAssociationGlobalId = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed"); value.Exists() {
 		data.BidirectionalAssociationCorouted = types.BoolValue(true)
 	} else {
 		data.BidirectionalAssociationCorouted = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam"); value.Exists() {
 		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(true)
 	} else {
 		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection"); value.Exists() {
 		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(true)
 	} else {
 		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable"); value.Exists() {
 		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(true)
 	} else {
 		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
 	} else {
 		data.BfdFastDetect = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect/sbfd"); value.Exists() {
 		data.BfdSbfd = types.BoolValue(true)
 	} else {
 		data.BfdSbfd = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/bringup-timeout"); value.Exists() {
 		data.BfdBringupTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/interval"); value.Exists() {
 		data.BfdLspPingInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/disable"); value.Exists() {
 		data.BfdLspPingDisable = types.BoolValue(true)
 	} else {
 		data.BfdLspPingDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/initial-wait"); value.Exists() {
 		data.BfdDampeningInitialWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/maximum-wait"); value.Exists() {
 		data.BfdDampeningMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/secondary-wait"); value.Exists() {
 		data.BfdDampeningSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/encap-mode/gal"); value.Exists() {
 		data.BfdEncapGal = types.BoolValue(true)
 	} else {
 		data.BfdEncapGal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:destination"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:destination"); value.Exists() {
+		data.Destination = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *InterfaceTunnelTEData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
+	} else {
+		data.Shutdown = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/events/link-status"); value.Exists() {
+		data.LoggingEventsLinkStatus = types.BoolValue(true)
+	} else {
+		data.LoggingEventsLinkStatus = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth"); value.Exists() {
+		data.Bandwidth = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-statistics-cfg:load-interval"); value.Exists() {
+		data.LoadInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address"); value.Exists() {
+		data.Ipv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask"); value.Exists() {
+		data.Ipv4Netmask = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered"); value.Exists() {
+		data.Ipv4Unnumbered = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"); value.Exists() {
+		data.Ipv4ForwardingEnable = types.BoolValue(true)
+	} else {
+		data.Ipv4ForwardingEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable"); value.Exists() {
+		data.Ipv4TtlPropagateDisable = types.BoolValue(true)
+	} else {
+		data.Ipv4TtlPropagateDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
+		data.Ipv6Enable = types.BoolValue(true)
+	} else {
+		data.Ipv6Enable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable"); value.Exists() {
+		data.Ipv6TtlPropagateDisable = types.BoolValue(true)
+	} else {
+		data.Ipv6TtlPropagateDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu"); value.Exists() {
+		data.MplsMtu = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value"); value.Exists() {
+		data.AffinityValue = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask"); value.Exists() {
+		data.AffinityMask = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce"); value.Exists() {
+		data.AutorouteAnnounce = types.BoolValue(true)
+	} else {
+		data.AutorouteAnnounce = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/absolute"); value.Exists() {
+		data.AutorouteAnnounceMetricAbsolute = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/relative"); value.Exists() {
+		data.AutorouteAnnounceMetricRelative = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/metric/constant-metric"); value.Exists() {
+		data.AutorouteAnnounceMetric = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6"); value.Exists() {
+		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(true)
+	} else {
+		data.AutorouteAnnounceIncludeIpv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing"); value.Exists() {
+		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(true)
+	} else {
+		data.AutorouteAnnounceExcludeTrafficSegmentRouting = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination"); value.Exists() {
+		data.AutorouteDestinations = make([]InterfaceTunnelTEAutorouteDestinations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := InterfaceTunnelTEAutorouteDestinations{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.AutorouteDestinations = append(data.AutorouteDestinations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/pool-type"); value.Exists() {
+		data.BackupBwPoolType = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/class-type"); value.Exists() {
+		data.BackupBwClassType = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/bandwidth"); value.Exists() {
+		data.BackupBwValue = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw/unlimited"); value.Exists() {
+		data.BackupBwUnlimited = types.BoolValue(true)
+	} else {
+		data.BackupBwUnlimited = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/bandwidth"); value.Exists() {
+		data.SignalledBandwidth = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type"); value.Exists() {
+		data.SignalledBandwidthClassType = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool"); value.Exists() {
+		data.SignalledBandwidthSubPool = types.BoolValue(true)
+	} else {
+		data.SignalledBandwidthSubPool = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"); value.Exists() {
+		data.FastReroute = types.BoolValue(true)
+	} else {
+		data.FastReroute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node"); value.Exists() {
+		data.FastRerouteProtectNode = types.BoolValue(true)
+	} else {
+		data.FastRerouteProtectNode = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth"); value.Exists() {
+		data.FastRerouteProtectBandwidth = types.BoolValue(true)
+	} else {
+		data.FastRerouteProtectBandwidth = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forward-class"); value.Exists() {
+		data.ForwardClass = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"); value.Exists() {
+		data.ForwardingAdjacency = types.BoolValue(true)
+	} else {
+		data.ForwardingAdjacency = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime"); value.Exists() {
+		data.ForwardingAdjacencyHoldtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6"); value.Exists() {
+		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(true)
+	} else {
+		data.ForwardingAdjacencyIncludeIpv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:load-share"); value.Exists() {
+		data.LoadShare = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/state"); value.Exists() {
+		data.LoggingEventsLspState = types.BoolValue(true)
+	} else {
+		data.LoggingEventsLspState = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize"); value.Exists() {
+		data.LoggingEventsLspReoptimize = types.BoolValue(true)
+	} else {
+		data.LoggingEventsLspReoptimize = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize-attempts"); value.Exists() {
+		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(true)
+	} else {
+		data.LoggingEventsLspReoptimizeAttempts = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/bw-change"); value.Exists() {
+		data.LoggingEventsLspBwChange = types.BoolValue(true)
+	} else {
+		data.LoggingEventsLspBwChange = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reroute"); value.Exists() {
+		data.LoggingEventsLspReroute = types.BoolValue(true)
+	} else {
+		data.LoggingEventsLspReroute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/record-route"); value.Exists() {
+		data.LoggingEventsLspRecordRoute = types.BoolValue(true)
+	} else {
+		data.LoggingEventsLspRecordRoute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/switchover"); value.Exists() {
+		data.LoggingEventsLspSwitchover = types.BoolValue(true)
+	} else {
+		data.LoggingEventsLspSwitchover = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/insufficient-bandwidth"); value.Exists() {
+		data.LoggingEventsLspInsufficientBw = types.BoolValue(true)
+	} else {
+		data.LoggingEventsLspInsufficientBw = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/pcalc-failure"); value.Exists() {
+		data.LoggingEventsPcalcFailure = types.BoolValue(true)
+	} else {
+		data.LoggingEventsPcalcFailure = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/bfd-status"); value.Exists() {
+		data.LoggingEventsBfdStatus = types.BoolValue(true)
+	} else {
+		data.LoggingEventsBfdStatus = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/all"); value.Exists() {
+		data.LoggingEventsAll = types.BoolValue(true)
+	} else {
+		data.LoggingEventsAll = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"); value.Exists() {
+		data.SignalledName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option"); value.Exists() {
+		data.PathOptions = make([]InterfaceTunnelTEPathOptions, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := InterfaceTunnelTEPathOptions{}
+			if cValue := helpers.GetFromXPath(v, "preference"); cValue.Exists() {
+				item.Preference = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "dynamic"); cValue.Exists() {
+				item.Dynamic = types.BoolValue(true)
+			} else {
+				item.Dynamic = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "explicit/identifier"); cValue.Exists() {
+				item.ExplicitPathId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "explicit/name"); cValue.Exists() {
+				item.ExplicitPathName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "explicit/verbatim"); cValue.Exists() {
+				item.ExplicitPathVerbatim = types.BoolValue(true)
+			} else {
+				item.ExplicitPathVerbatim = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ospf/instance-name"); cValue.Exists() {
+				item.OspfInstance = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ospf/area/decimal"); cValue.Exists() {
+				item.OspfAreaId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "ospf/area/ip-address"); cValue.Exists() {
+				item.OspfAreaIpFormat = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "isis/instance-name"); cValue.Exists() {
+				item.IsisInstance = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "isis/level"); cValue.Exists() {
+				item.IsisLevel = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "attribute-set/attribute-set-name"); cValue.Exists() {
+				item.AttributeSet = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "protected-by/index"); cValue.Exists() {
+				item.ProtectedByIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "protected-by/index-secondary"); cValue.Exists() {
+				item.ProtectedByIndexSecondary = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "lockdown"); cValue.Exists() {
+				item.Lockdown = types.BoolValue(true)
+			} else {
+				item.Lockdown = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "lockdown/sticky"); cValue.Exists() {
+				item.LockdownSticky = types.BoolValue(true)
+			} else {
+				item.LockdownSticky = types.BoolValue(false)
+			}
+			data.PathOptions = append(data.PathOptions, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/setup-priority"); value.Exists() {
+		data.PrioritySetup = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:priority/hold-priority"); value.Exists() {
+		data.PriorityHold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:record-route"); value.Exists() {
+		data.RecordRoute = types.BoolValue(true)
+	} else {
+		data.RecordRoute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:binding-sid/mpls/label"); value.Exists() {
+		data.BindingSidMplsLabel = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value"); value.Exists() {
+		data.PolicyClasses = helpers.GetStringListXML(value.Array())
+	} else {
+		data.PolicyClasses = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/min"); value.Exists() {
+		data.AutoBwLimitMin = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit/max"); value.Exists() {
+		data.AutoBwLimitMax = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only"); value.Exists() {
+		data.AutoBwCollectOnly = types.BoolValue(true)
+	} else {
+		data.AutoBwCollectOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/threshold"); value.Exists() {
+		data.AutoBwAdjustmentThresholdPercent = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/adjustment-threshold/min"); value.Exists() {
+		data.AutoBwAdjustmentThresholdMin = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/threshold"); value.Exists() {
+		data.AutoBwOverflowThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/min"); value.Exists() {
+		data.AutoBwOverflowMin = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/overflow/limit"); value.Exists() {
+		data.AutoBwOverflowLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/threshold"); value.Exists() {
+		data.AutoBwUnderflowThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/min"); value.Exists() {
+		data.AutoBwUnderflowMin = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/underflow/limit"); value.Exists() {
+		data.AutoBwUnderflowLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out"); value.Exists() {
+		data.AutoBwResignalLastBandwidthTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection"); value.Exists() {
+		data.PathProtection = types.BoolValue(true)
+	} else {
+		data.PathProtection = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse"); value.Exists() {
+		data.PathProtectionSrlgDiverse = types.BoolValue(true)
+	} else {
+		data.PathProtectionSrlgDiverse = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive"); value.Exists() {
+		data.PathProtectionNonRevertive = types.BoolValue(true)
+	} else {
+		data.PathProtectionNonRevertive = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"); value.Exists() {
+		data.SoftPreemption = types.BoolValue(true)
+	} else {
+		data.SoftPreemption = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/igp"); value.Exists() {
+		data.PathSelectionMetricIgp = types.BoolValue(true)
+	} else {
+		data.PathSelectionMetricIgp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/te"); value.Exists() {
+		data.PathSelectionMetricTe = types.BoolValue(true)
+	} else {
+		data.PathSelectionMetricTe = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/metric/delay"); value.Exists() {
+		data.PathSelectionMetricDelay = types.BoolValue(true)
+	} else {
+		data.PathSelectionMetricDelay = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/min-fill"); value.Exists() {
+		data.PathSelectionTiebreakerMinFill = types.BoolValue(true)
+	} else {
+		data.PathSelectionTiebreakerMinFill = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/max-fill"); value.Exists() {
+		data.PathSelectionTiebreakerMaxFill = types.BoolValue(true)
+	} else {
+		data.PathSelectionTiebreakerMaxFill = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/tiebreaker/random"); value.Exists() {
+		data.PathSelectionTiebreakerRandom = types.BoolValue(true)
+	} else {
+		data.PathSelectionTiebreakerRandom = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit"); value.Exists() {
+		data.PathSelectionHopLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit"); value.Exists() {
+		data.PathSelectionCostLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit"); value.Exists() {
+		data.PathSelectionDelayLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/association-id"); value.Exists() {
+		data.BidirectionalAssociationId = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/source-address"); value.Exists() {
+		data.BidirectionalAssociationSourceAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/id/global-id"); value.Exists() {
+		data.BidirectionalAssociationGlobalId = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed"); value.Exists() {
+		data.BidirectionalAssociationCorouted = types.BoolValue(true)
+	} else {
+		data.BidirectionalAssociationCorouted = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam"); value.Exists() {
+		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(true)
+	} else {
+		data.BidirectionalAssociationCoRoutedFaultOam = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection"); value.Exists() {
+		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(true)
+	} else {
+		data.BidirectionalAssociationCoRoutedWrapProtection = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable"); value.Exists() {
+		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(true)
+	} else {
+		data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	} else {
+		data.BfdFastDetect = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect/sbfd"); value.Exists() {
+		data.BfdSbfd = types.BoolValue(true)
+	} else {
+		data.BfdSbfd = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/bringup-timeout"); value.Exists() {
+		data.BfdBringupTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/interval"); value.Exists() {
+		data.BfdLspPingInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/disable"); value.Exists() {
+		data.BfdLspPingDisable = types.BoolValue(true)
+	} else {
+		data.BfdLspPingDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/initial-wait"); value.Exists() {
+		data.BfdDampeningInitialWait = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/maximum-wait"); value.Exists() {
+		data.BfdDampeningMaximumWait = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/secondary-wait"); value.Exists() {
+		data.BfdDampeningSecondaryWait = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bfd/encap-mode/gal"); value.Exists() {
+		data.BfdEncapGal = types.BoolValue(true)
+	} else {
+		data.BfdEncapGal = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:destination"); value.Exists() {
 		data.Destination = types.StringValue(value.String())
 	}
 }
@@ -4769,37 +5256,37 @@ func (data *InterfaceTunnelTE) getDeletedItems(ctx context.Context, state Interf
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:destination", state.getPath()))
 	}
 	if !state.BfdEncapGal.IsNull() && data.BfdEncapGal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/encap-mode/gal", state.getPath()))
 	}
 	if !state.BfdDampeningSecondaryWait.IsNull() && data.BfdDampeningSecondaryWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/secondary-wait", state.getPath()))
 	}
 	if !state.BfdDampeningMaximumWait.IsNull() && data.BfdDampeningMaximumWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/maximum-wait", state.getPath()))
 	}
 	if !state.BfdDampeningInitialWait.IsNull() && data.BfdDampeningInitialWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/initial-wait", state.getPath()))
 	}
 	if !state.BfdLspPingDisable.IsNull() && data.BfdLspPingDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/disable", state.getPath()))
 	}
 	if !state.BfdLspPingInterval.IsNull() && data.BfdLspPingInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/interval", state.getPath()))
 	}
 	if !state.BfdBringupTimeout.IsNull() && data.BfdBringupTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/bringup-timeout", state.getPath()))
 	}
 	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/multiplier", state.getPath()))
 	}
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/minimum-interval", state.getPath()))
 	}
 	if !state.BfdSbfd.IsNull() && data.BfdSbfd.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect/sbfd", state.getPath()))
 	}
 	if !state.BfdFastDetect.IsNull() && data.BfdFastDetect.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/.", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd", state.getPath()))
 	}
 	if !state.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() && data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable", state.getPath()))
@@ -4898,7 +5385,7 @@ func (data *InterfaceTunnelTE) getDeletedItems(ctx context.Context, state Interf
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit", state.getPath()))
 	}
 	if !state.PolicyClasses.IsNull() && data.PolicyClasses.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value", state.getPath()))
 	}
 	if !state.BindingSidMplsLabel.IsNull() && data.BindingSidMplsLabel.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:binding-sid/mpls", state.getPath()))
@@ -4988,37 +5475,37 @@ func (data *InterfaceTunnelTE) getDeletedItems(ctx context.Context, state Interf
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name", state.getPath()))
 	}
 	if !state.LoggingEventsAll.IsNull() && data.LoggingEventsAll.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/all", state.getPath()))
 	}
 	if !state.LoggingEventsBfdStatus.IsNull() && data.LoggingEventsBfdStatus.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/bfd-status", state.getPath()))
 	}
 	if !state.LoggingEventsPcalcFailure.IsNull() && data.LoggingEventsPcalcFailure.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/pcalc-failure", state.getPath()))
 	}
 	if !state.LoggingEventsLspInsufficientBw.IsNull() && data.LoggingEventsLspInsufficientBw.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/insufficient-bandwidth", state.getPath()))
 	}
 	if !state.LoggingEventsLspSwitchover.IsNull() && data.LoggingEventsLspSwitchover.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/switchover", state.getPath()))
 	}
 	if !state.LoggingEventsLspRecordRoute.IsNull() && data.LoggingEventsLspRecordRoute.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/record-route", state.getPath()))
 	}
 	if !state.LoggingEventsLspReroute.IsNull() && data.LoggingEventsLspReroute.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reroute", state.getPath()))
 	}
 	if !state.LoggingEventsLspBwChange.IsNull() && data.LoggingEventsLspBwChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/bw-change", state.getPath()))
 	}
 	if !state.LoggingEventsLspReoptimizeAttempts.IsNull() && data.LoggingEventsLspReoptimizeAttempts.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize-attempts", state.getPath()))
 	}
 	if !state.LoggingEventsLspReoptimize.IsNull() && data.LoggingEventsLspReoptimize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize", state.getPath()))
 	}
 	if !state.LoggingEventsLspState.IsNull() && data.LoggingEventsLspState.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/state", state.getPath()))
 	}
 	if !state.LoadShare.IsNull() && data.LoadShare.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:load-share", state.getPath()))
@@ -5169,25 +5656,25 @@ func (data *InterfaceTunnelTE) getEmptyLeafsDelete(ctx context.Context, state *I
 	// Only delete if state has true and plan has false
 	if !data.BfdEncapGal.IsNull() && !data.BfdEncapGal.ValueBool() {
 		if state != nil && !state.BfdEncapGal.IsNull() && state.BfdEncapGal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/encap-mode/gal", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.BfdLspPingDisable.IsNull() && !data.BfdLspPingDisable.ValueBool() {
 		if state != nil && !state.BfdLspPingDisable.IsNull() && state.BfdLspPingDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/disable", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.BfdSbfd.IsNull() && !data.BfdSbfd.ValueBool() {
 		if state != nil && !state.BfdSbfd.IsNull() && state.BfdSbfd.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect/sbfd", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.ValueBool() {
 		if state != nil && !state.BfdFastDetect.IsNull() && state.BfdFastDetect.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/.", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -5325,67 +5812,67 @@ func (data *InterfaceTunnelTE) getEmptyLeafsDelete(ctx context.Context, state *I
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsAll.IsNull() && !data.LoggingEventsAll.ValueBool() {
 		if state != nil && !state.LoggingEventsAll.IsNull() && state.LoggingEventsAll.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/all", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsBfdStatus.IsNull() && !data.LoggingEventsBfdStatus.ValueBool() {
 		if state != nil && !state.LoggingEventsBfdStatus.IsNull() && state.LoggingEventsBfdStatus.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/bfd-status", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsPcalcFailure.IsNull() && !data.LoggingEventsPcalcFailure.ValueBool() {
 		if state != nil && !state.LoggingEventsPcalcFailure.IsNull() && state.LoggingEventsPcalcFailure.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/pcalc-failure", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsLspInsufficientBw.IsNull() && !data.LoggingEventsLspInsufficientBw.ValueBool() {
 		if state != nil && !state.LoggingEventsLspInsufficientBw.IsNull() && state.LoggingEventsLspInsufficientBw.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/insufficient-bandwidth", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsLspSwitchover.IsNull() && !data.LoggingEventsLspSwitchover.ValueBool() {
 		if state != nil && !state.LoggingEventsLspSwitchover.IsNull() && state.LoggingEventsLspSwitchover.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/switchover", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsLspRecordRoute.IsNull() && !data.LoggingEventsLspRecordRoute.ValueBool() {
 		if state != nil && !state.LoggingEventsLspRecordRoute.IsNull() && state.LoggingEventsLspRecordRoute.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/record-route", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsLspReroute.IsNull() && !data.LoggingEventsLspReroute.ValueBool() {
 		if state != nil && !state.LoggingEventsLspReroute.IsNull() && state.LoggingEventsLspReroute.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reroute", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsLspBwChange.IsNull() && !data.LoggingEventsLspBwChange.ValueBool() {
 		if state != nil && !state.LoggingEventsLspBwChange.IsNull() && state.LoggingEventsLspBwChange.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/bw-change", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsLspReoptimizeAttempts.IsNull() && !data.LoggingEventsLspReoptimizeAttempts.ValueBool() {
 		if state != nil && !state.LoggingEventsLspReoptimizeAttempts.IsNull() && state.LoggingEventsLspReoptimizeAttempts.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize-attempts", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsLspReoptimize.IsNull() && !data.LoggingEventsLspReoptimize.ValueBool() {
 		if state != nil && !state.LoggingEventsLspReoptimize.IsNull() && state.LoggingEventsLspReoptimize.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
 	if !data.LoggingEventsLspState.IsNull() && !data.LoggingEventsLspState.ValueBool() {
 		if state != nil && !state.LoggingEventsLspState.IsNull() && state.LoggingEventsLspState.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/", data.getXPath()))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/state", data.getXPath()))
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -5504,37 +5991,37 @@ func (data *InterfaceTunnelTE) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:destination", data.getPath()))
 	}
 	if !data.BfdEncapGal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/encap-mode/gal", data.getPath()))
 	}
 	if !data.BfdDampeningSecondaryWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/secondary-wait", data.getPath()))
 	}
 	if !data.BfdDampeningMaximumWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/maximum-wait", data.getPath()))
 	}
 	if !data.BfdDampeningInitialWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/dampening/initial-wait", data.getPath()))
 	}
 	if !data.BfdLspPingDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/disable", data.getPath()))
 	}
 	if !data.BfdLspPingInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/lsp-ping/interval", data.getPath()))
 	}
 	if !data.BfdBringupTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/bringup-timeout", data.getPath()))
 	}
 	if !data.BfdMultiplier.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/multiplier", data.getPath()))
 	}
 	if !data.BfdMinimumInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/minimum-interval", data.getPath()))
 	}
 	if !data.BfdSbfd.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd/fast-detect/sbfd", data.getPath()))
 	}
 	if !data.BfdFastDetect.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/.", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bfd", data.getPath()))
 	}
 	if !data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable", data.getPath()))
@@ -5633,7 +6120,7 @@ func (data *InterfaceTunnelTE) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/bw-limit", data.getPath()))
 	}
 	if !data.PolicyClasses.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value", data.getPath()))
 	}
 	if !data.BindingSidMplsLabel.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:binding-sid/mpls", data.getPath()))
@@ -5648,45 +6135,46 @@ func (data *InterfaceTunnelTE) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:priority", data.getPath()))
 	}
 	for i := range data.PathOptions {
-		keyValues := [...]string{strconv.FormatInt(data.PathOptions[i].Preference.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[preference=" + strconv.FormatInt(data.PathOptions[i].Preference.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v", data.getPath(), keyPath))
 	}
 	if !data.SignalledName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name", data.getPath()))
 	}
 	if !data.LoggingEventsAll.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/all", data.getPath()))
 	}
 	if !data.LoggingEventsBfdStatus.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/bfd-status", data.getPath()))
 	}
 	if !data.LoggingEventsPcalcFailure.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/pcalc-failure", data.getPath()))
 	}
 	if !data.LoggingEventsLspInsufficientBw.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/insufficient-bandwidth", data.getPath()))
 	}
 	if !data.LoggingEventsLspSwitchover.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/switchover", data.getPath()))
 	}
 	if !data.LoggingEventsLspRecordRoute.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/record-route", data.getPath()))
 	}
 	if !data.LoggingEventsLspReroute.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reroute", data.getPath()))
 	}
 	if !data.LoggingEventsLspBwChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/bw-change", data.getPath()))
 	}
 	if !data.LoggingEventsLspReoptimizeAttempts.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize-attempts", data.getPath()))
 	}
 	if !data.LoggingEventsLspReoptimize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/reoptimize", data.getPath()))
 	}
 	if !data.LoggingEventsLspState.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:logging/events/lsp-status/state", data.getPath()))
 	}
 	if !data.LoadShare.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:load-share", data.getPath()))
@@ -5734,9 +6222,10 @@ func (data *InterfaceTunnelTE) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:backup-bw", data.getPath()))
 	}
 	for i := range data.AutorouteDestinations {
-		keyValues := [...]string{data.AutorouteDestinations[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.AutorouteDestinations[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination%v", data.getPath(), keyPath))
 	}
 	if !data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing", data.getPath()))
@@ -5809,138 +6298,277 @@ func (data *InterfaceTunnelTE) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state InterfaceTunnelTE, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.Destination.IsNull() && data.Destination.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:destination"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BfdEncapGal.IsNull() && state.BfdEncapGal.ValueBool() && data.BfdEncapGal.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.BfdEncapGal.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdDampeningSecondaryWait.IsNull() && data.BfdDampeningSecondaryWait.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatInt(state.BfdDampeningSecondaryWait.ValueInt64(), 10)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdDampeningMaximumWait.IsNull() && data.BfdDampeningMaximumWait.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatInt(state.BfdDampeningMaximumWait.ValueInt64(), 10)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdDampeningInitialWait.IsNull() && data.BfdDampeningInitialWait.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatInt(state.BfdDampeningInitialWait.ValueInt64(), 10)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BfdLspPingDisable.IsNull() && state.BfdLspPingDisable.ValueBool() && data.BfdLspPingDisable.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.BfdLspPingDisable.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdLspPingInterval.IsNull() && data.BfdLspPingInterval.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatInt(state.BfdLspPingInterval.ValueInt64(), 10)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdBringupTimeout.IsNull() && data.BfdBringupTimeout.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatInt(state.BfdBringupTimeout.ValueInt64(), 10)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatInt(state.BfdMultiplier.ValueInt64(), 10)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatInt(state.BfdMinimumInterval.ValueInt64(), 10)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BfdSbfd.IsNull() && state.BfdSbfd.ValueBool() && data.BfdSbfd.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.BfdSbfd.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BfdFastDetect.IsNull() && state.BfdFastDetect.ValueBool() && data.BfdFastDetect.IsNull() {
-		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/."
-		predicates := make(map[string]string)
-		predicates[""] = fmt.Sprintf("%v", state.BfdFastDetect.ValueBool())
-		// Sort keys to ensure consistent ordering
-		keys := make([]string, 0, len(predicates))
-		for k := range predicates {
-			keys = append(keys, k)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.BfdFastDetect.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
 		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
-		}
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() && state.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.ValueBool() && data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BidirectionalAssociationCoRoutedWrapProtection.IsNull() && state.BidirectionalAssociationCoRoutedWrapProtection.ValueBool() && data.BidirectionalAssociationCoRoutedWrapProtection.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/wrap-protection"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BidirectionalAssociationCoRoutedFaultOam.IsNull() && state.BidirectionalAssociationCoRoutedFaultOam.ValueBool() && data.BidirectionalAssociationCoRoutedFaultOam.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/fault-oam"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BidirectionalAssociationCorouted.IsNull() && state.BidirectionalAssociationCorouted.ValueBool() && data.BidirectionalAssociationCorouted.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -5965,7 +6593,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -5990,7 +6618,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6015,28 +6643,52 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PathSelectionDelayLimit.IsNull() && data.PathSelectionDelayLimit.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/delay-limit"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PathSelectionCostLimit.IsNull() && data.PathSelectionCostLimit.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/cost-limit"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PathSelectionHopLimit.IsNull() && data.PathSelectionHopLimit.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:path-selection/hop-limit"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6062,7 +6714,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6088,7 +6740,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6114,7 +6766,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6140,7 +6792,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6166,7 +6818,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6192,46 +6844,86 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SoftPreemption.IsNull() && state.SoftPreemption.ValueBool() && data.SoftPreemption.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:soft-preemption"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PathProtectionNonRevertive.IsNull() && state.PathProtectionNonRevertive.ValueBool() && data.PathProtectionNonRevertive.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/protection-mode/non-revertive"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PathProtectionSrlgDiverse.IsNull() && state.PathProtectionSrlgDiverse.ValueBool() && data.PathProtectionSrlgDiverse.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:path-protection/srlg-diverse"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PathProtection.IsNull() && state.PathProtection.ValueBool() && data.PathProtection.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:path-protection"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AutoBwResignalLastBandwidthTimeout.IsNull() && data.AutoBwResignalLastBandwidthTimeout.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/resignal/last-bandwidth/time-out"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6256,7 +6948,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6281,7 +6973,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6306,7 +6998,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6331,7 +7023,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6356,7 +7048,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6381,7 +7073,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6403,7 +7095,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6425,15 +7117,23 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AutoBwCollectOnly.IsNull() && state.AutoBwCollectOnly.ValueBool() && data.AutoBwCollectOnly.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:auto-bw/collect-bw-only"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6455,7 +7155,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6477,7 +7177,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6486,7 +7186,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			var values []string
 			state.PolicyClasses.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -6501,7 +7201,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value[.=%v]", v))
 				}
 			}
 		}
@@ -6521,15 +7221,23 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.RecordRoute.IsNull() && state.RecordRoute.ValueBool() && data.RecordRoute.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:record-route"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6551,7 +7259,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6573,7 +7281,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6602,225 +7310,423 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PathOptions[i].LockdownSticky.IsNull() && state.PathOptions[i].LockdownSticky.ValueBool() && data.PathOptions[j].LockdownSticky.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/lockdown/sticky", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/lockdown/sticky", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PathOptions[i].Lockdown.IsNull() && state.PathOptions[i].Lockdown.ValueBool() && data.PathOptions[j].Lockdown.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/lockdown", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/lockdown", predicates))
 				}
 				if !state.PathOptions[i].ProtectedByIndexSecondary.IsNull() && data.PathOptions[j].ProtectedByIndexSecondary.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/protected-by/index-secondary", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/protected-by/index-secondary", predicates))
 				}
 				if !state.PathOptions[i].ProtectedByIndex.IsNull() && data.PathOptions[j].ProtectedByIndex.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/protected-by", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/protected-by", predicates))
 				}
 				if !state.PathOptions[i].AttributeSet.IsNull() && data.PathOptions[j].AttributeSet.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/attribute-set/attribute-set-name", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/attribute-set/attribute-set-name", predicates))
 				}
 				if !state.PathOptions[i].IsisLevel.IsNull() && data.PathOptions[j].IsisLevel.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/isis/level", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/isis/level", predicates))
 				}
 				if !state.PathOptions[i].IsisInstance.IsNull() && data.PathOptions[j].IsisInstance.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/isis", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/isis", predicates))
 				}
 				if !state.PathOptions[i].OspfAreaIpFormat.IsNull() && data.PathOptions[j].OspfAreaIpFormat.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/ospf/area/ip-address", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/ospf/area/ip-address", predicates))
 				}
 				if !state.PathOptions[i].OspfAreaId.IsNull() && data.PathOptions[j].OspfAreaId.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/ospf/area/decimal", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/ospf/area/decimal", predicates))
 				}
 				if !state.PathOptions[i].OspfInstance.IsNull() && data.PathOptions[j].OspfInstance.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/ospf", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/ospf", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PathOptions[i].ExplicitPathVerbatim.IsNull() && state.PathOptions[i].ExplicitPathVerbatim.ValueBool() && data.PathOptions[j].ExplicitPathVerbatim.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/explicit/verbatim", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/explicit/verbatim", predicates))
 				}
 				if !state.PathOptions[i].ExplicitPathName.IsNull() && data.PathOptions[j].ExplicitPathName.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/explicit", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/explicit", predicates))
 				}
 				if !state.PathOptions[i].ExplicitPathId.IsNull() && data.PathOptions[j].ExplicitPathId.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/explicit", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/explicit", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PathOptions[i].Dynamic.IsNull() && state.PathOptions[i].Dynamic.ValueBool() && data.PathOptions[j].Dynamic.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/dynamic", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v/dynamic", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:path-options/path-option%v", predicates))
 		}
 	}
 	if !state.SignalledName.IsNull() && data.SignalledName.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsAll.IsNull() && state.LoggingEventsAll.ValueBool() && data.LoggingEventsAll.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsAll.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsBfdStatus.IsNull() && state.LoggingEventsBfdStatus.ValueBool() && data.LoggingEventsBfdStatus.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsBfdStatus.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsPcalcFailure.IsNull() && state.LoggingEventsPcalcFailure.ValueBool() && data.LoggingEventsPcalcFailure.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsPcalcFailure.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsLspInsufficientBw.IsNull() && state.LoggingEventsLspInsufficientBw.ValueBool() && data.LoggingEventsLspInsufficientBw.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsLspInsufficientBw.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsLspSwitchover.IsNull() && state.LoggingEventsLspSwitchover.ValueBool() && data.LoggingEventsLspSwitchover.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsLspSwitchover.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsLspRecordRoute.IsNull() && state.LoggingEventsLspRecordRoute.ValueBool() && data.LoggingEventsLspRecordRoute.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsLspRecordRoute.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsLspReroute.IsNull() && state.LoggingEventsLspReroute.ValueBool() && data.LoggingEventsLspReroute.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsLspReroute.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsLspBwChange.IsNull() && state.LoggingEventsLspBwChange.ValueBool() && data.LoggingEventsLspBwChange.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsLspBwChange.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsLspReoptimizeAttempts.IsNull() && state.LoggingEventsLspReoptimizeAttempts.ValueBool() && data.LoggingEventsLspReoptimizeAttempts.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsLspReoptimizeAttempts.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsLspReoptimize.IsNull() && state.LoggingEventsLspReoptimize.ValueBool() && data.LoggingEventsLspReoptimize.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsLspReoptimize.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsLspState.IsNull() && state.LoggingEventsLspState.ValueBool() && data.LoggingEventsLspState.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.LoggingEventsLspState.ValueBool())
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LoadShare.IsNull() && data.LoadShare.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:load-share"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ForwardingAdjacencyIncludeIpv6.IsNull() && state.ForwardingAdjacencyIncludeIpv6.ValueBool() && data.ForwardingAdjacencyIncludeIpv6.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/include-ipv6"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ForwardingAdjacencyHoldtime.IsNull() && data.ForwardingAdjacencyHoldtime.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency/holdtime"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ForwardingAdjacency.IsNull() && state.ForwardingAdjacency.ValueBool() && data.ForwardingAdjacency.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:forwarding-adjacency"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ForwardClass.IsNull() && data.ForwardClass.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:forward-class"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FastRerouteProtectBandwidth.IsNull() && state.FastRerouteProtectBandwidth.ValueBool() && data.FastRerouteProtectBandwidth.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/bandwidth"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FastRerouteProtectNode.IsNull() && state.FastRerouteProtectNode.ValueBool() && data.FastRerouteProtectNode.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/protect/node"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FastReroute.IsNull() && state.FastReroute.ValueBool() && data.FastReroute.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SignalledBandwidthSubPool.IsNull() && state.SignalledBandwidthSubPool.ValueBool() && data.SignalledBandwidthSubPool.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/sub-pool"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SignalledBandwidthClassType.IsNull() && data.SignalledBandwidthClassType.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:signalled-bandwidth/class-type"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6839,7 +7745,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6868,7 +7774,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6896,7 +7802,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6924,7 +7830,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6952,7 +7858,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -6983,22 +7889,38 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/destinations/destination%v", predicates))
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() && state.AutorouteAnnounceExcludeTrafficSegmentRouting.ValueBool() && data.AutorouteAnnounceExcludeTrafficSegmentRouting.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/exclude-traffic/segment-routing"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AutorouteAnnounceIncludeIpv6.IsNull() && state.AutorouteAnnounceIncludeIpv6.ValueBool() && data.AutorouteAnnounceIncludeIpv6.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce/include-ipv6"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -7023,7 +7945,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -7048,7 +7970,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -7073,75 +7995,147 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AutorouteAnnounce.IsNull() && state.AutorouteAnnounce.ValueBool() && data.AutorouteAnnounce.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:autoroute/announce"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AffinityMask.IsNull() && data.AffinityMask.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:affinity/mask"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AffinityValue.IsNull() && data.AffinityValue.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-mpls-te-cfg:affinity/affinity-attribute-value"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MplsMtu.IsNull() && data.MplsMtu.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Ipv6TtlPropagateDisable.IsNull() && state.Ipv6TtlPropagateDisable.ValueBool() && data.Ipv6TtlPropagateDisable.IsNull() {
 		deletePath := state.getXPath() + "/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Ipv6Enable.IsNull() && state.Ipv6Enable.ValueBool() && data.Ipv6Enable.IsNull() {
 		deletePath := state.getXPath() + "/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Ipv4TtlPropagateDisable.IsNull() && state.Ipv4TtlPropagateDisable.ValueBool() && data.Ipv4TtlPropagateDisable.IsNull() {
 		deletePath := state.getXPath() + "/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Ipv4ForwardingEnable.IsNull() && state.Ipv4ForwardingEnable.ValueBool() && data.Ipv4ForwardingEnable.IsNull() {
 		deletePath := state.getXPath() + "/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Ipv4Unnumbered.IsNull() && data.Ipv4Unnumbered.IsNull() {
 		deletePath := state.getXPath() + "/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -7163,7 +8157,7 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -7185,50 +8179,89 @@ func (data *InterfaceTunnelTE) addDeletedItemsXML(ctx context.Context, state Int
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LoadInterval.IsNull() && data.LoadInterval.IsNull() {
 		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-statistics-cfg:load-interval"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletePath := state.getXPath() + "/description"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Bandwidth.IsNull() && data.Bandwidth.IsNull() {
 		deletePath := state.getXPath() + "/bandwidth"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.LoggingEventsLinkStatus.IsNull() && state.LoggingEventsLinkStatus.ValueBool() && data.LoggingEventsLinkStatus.IsNull() {
 		deletePath := state.getXPath() + "/logging/events/link-status"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Shutdown.IsNull() && state.Shutdown.ValueBool() && data.Shutdown.IsNull() {
 		deletePath := state.getXPath() + "/shutdown"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -7241,37 +8274,70 @@ func (data *InterfaceTunnelTE) addDeletePathsXML(ctx context.Context, body strin
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:destination")
 	}
 	if !data.BfdEncapGal.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdDampeningSecondaryWait.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdDampeningMaximumWait.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdDampeningInitialWait.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdLspPingDisable.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdLspPingInterval.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdBringupTimeout.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdMultiplier.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdMinimumInterval.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdSbfd.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BfdFastDetect.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/.")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.BidirectionalAssociationCoRoutedSignalingProtectionObjectDisable.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:bidirectional/association/type/co-routed/signaling/protection-object/disable")
@@ -7373,7 +8439,7 @@ func (data *InterfaceTunnelTE) addDeletePathsXML(ctx context.Context, body strin
 		var values []string
 		data.PolicyClasses.ElementsAs(ctx, &values, false)
 		for _, v := range values {
-			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/[.=%v]", v))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:policy-class/tunnel-policy-class-values/tunnel-policy-class-value[.=%v]", v))
 		}
 	}
 	if !data.BindingSidMplsLabel.IsNull() {
@@ -7402,37 +8468,70 @@ func (data *InterfaceTunnelTE) addDeletePathsXML(ctx context.Context, body strin
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:signalled-name")
 	}
 	if !data.LoggingEventsAll.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsBfdStatus.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsPcalcFailure.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsLspInsufficientBw.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsLspSwitchover.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsLspRecordRoute.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsLspReroute.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsLspBwChange.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsLspReoptimizeAttempts.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsLspReoptimize.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoggingEventsLspState.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 	if !data.LoadShare.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-mpls-te-cfg:load-share")
@@ -7553,7 +8652,6 @@ func (data *InterfaceTunnelTE) addDeletePathsXML(ctx context.Context, body strin
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/shutdown")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

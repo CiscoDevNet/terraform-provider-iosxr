@@ -36,6 +36,20 @@ func Contains(s []string, str string) bool {
 	return false
 }
 
+// GetValueSlice converts a slice of gjson.Result to a slice of Terraform attr.Value.
+func GetValueSlice(result []gjson.Result) []attr.Value {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.StringValue(result[r].String())
+	}
+	return v
+}
+
+// IsListPath checks if an XPath represents a list item (ends with a predicate).
+func IsListPath(xPath string) bool {
+	return strings.HasSuffix(strings.TrimSpace(xPath), "]")
+}
+
 func GetStringList(result []gjson.Result) types.List {
 	v := make([]attr.Value, len(result))
 	for r := range result {

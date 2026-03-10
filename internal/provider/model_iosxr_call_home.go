@@ -309,7 +309,6 @@ func (data CallHome) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.DestinationAddresses) > 0 {
-				body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"destination.addresses.address", []interface{}{})
 				for cindex, citem := range item.DestinationAddresses {
 					if !citem.AddressType.IsNull() && !citem.AddressType.IsUnknown() {
 						body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"destination.addresses.address"+"."+strconv.Itoa(cindex)+"."+"address-type", citem.AddressType.ValueString())
@@ -336,17 +335,14 @@ func (data CallHome) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.MailServers) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MailServers {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/mail-servers/mail-server"
 			if !item.MailServerName.IsNull() && !item.MailServerName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "mail-server-name", item.MailServerName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/mail-server-name", item.MailServerName.ValueString())
 			}
 			if !item.Priority.IsNull() && !item.Priority.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/priority", strconv.FormatInt(item.Priority.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"mail-servers/mail-server", cBody.Res())
 		}
 	}
 	if !data.SenderFrom.IsNull() && !data.SenderFrom.IsUnknown() {
@@ -422,90 +418,95 @@ func (data CallHome) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/aaa-authorization/username", data.AaaAuthorizationUsername.ValueString())
 	}
 	if len(data.Profiles) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Profiles {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/profiles/profile"
 			if !item.ProfileName.IsNull() && !item.ProfileName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "profile-name", item.ProfileName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/profile-name", item.ProfileName.ValueString())
 			}
 			if !item.Active.IsNull() && !item.Active.IsUnknown() {
 				if item.Active.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "active", "")
+					body = helpers.SetFromXPath(body, basePath+"/active", "")
 				}
 			}
 			if len(item.DestinationAddresses) > 0 {
 				for _, citem := range item.DestinationAddresses {
-					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
-					cBody = helpers.SetRawFromXPath(cBody, "destination/addresses/address", ccBody.Res())
+					cbasePath := basePath + "/destination/addresses/address[address-type='" + citem.AddressType.ValueString() + "' and destination-address='" + citem.DestinationAddress.ValueString() + "']"
+					if !citem.AddressType.IsNull() && !citem.AddressType.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address-type", citem.AddressType.ValueString())
+					}
+					if !citem.DestinationAddress.IsNull() && !citem.DestinationAddress.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/destination-address", citem.DestinationAddress.ValueString())
+					}
 				}
 			}
 			if !item.DestinationMessageSizeLimit.IsNull() && !item.DestinationMessageSizeLimit.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "destination/message-size-limit", strconv.FormatInt(item.DestinationMessageSizeLimit.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/destination/message-size-limit", strconv.FormatInt(item.DestinationMessageSizeLimit.ValueInt64(), 10))
 			}
 			if !item.DestinationMsgFormatShort.IsNull() && !item.DestinationMsgFormatShort.IsUnknown() {
 				if item.DestinationMsgFormatShort.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/preferred-msg-format/short-text", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/preferred-msg-format/short-text", "")
 				}
 			}
 			if !item.DestinationMsgFormatLong.IsNull() && !item.DestinationMsgFormatLong.IsUnknown() {
 				if item.DestinationMsgFormatLong.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/preferred-msg-format/long-text", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/preferred-msg-format/long-text", "")
 				}
 			}
 			if !item.DestinationTransportMethodEmail.IsNull() && !item.DestinationTransportMethodEmail.IsUnknown() {
 				if item.DestinationTransportMethodEmail.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/transport-method/email", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/transport-method/email", "")
 				}
 			}
 			if !item.DestinationTransportMethodEmailDisable.IsNull() && !item.DestinationTransportMethodEmailDisable.IsUnknown() {
 				if item.DestinationTransportMethodEmailDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/transport-method/email/disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/transport-method/email/disable", "")
 				}
 			}
 			if !item.DestinationTransportMethodHttp.IsNull() && !item.DestinationTransportMethodHttp.IsUnknown() {
 				if item.DestinationTransportMethodHttp.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/transport-method/http", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/transport-method/http", "")
 				}
 			}
 			if !item.DestinationTransportMethodHttpDisable.IsNull() && !item.DestinationTransportMethodHttpDisable.IsUnknown() {
 				if item.DestinationTransportMethodHttpDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "destination/transport-method/http/disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/destination/transport-method/http/disable", "")
 				}
 			}
 			if !item.ReportingSmartCallHomeData.IsNull() && !item.ReportingSmartCallHomeData.IsUnknown() {
 				if item.ReportingSmartCallHomeData.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "reporting/smart-call-home-data", "")
+					body = helpers.SetFromXPath(body, basePath+"/reporting/smart-call-home-data", "")
 				}
 			}
 			if !item.ReportingSmartCallHomeDataDisable.IsNull() && !item.ReportingSmartCallHomeDataDisable.IsUnknown() {
 				if item.ReportingSmartCallHomeDataDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "reporting/smart-call-home-data/disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/reporting/smart-call-home-data/disable", "")
 				}
 			}
 			if !item.ReportingSmartLicensingData.IsNull() && !item.ReportingSmartLicensingData.IsUnknown() {
 				if item.ReportingSmartLicensingData.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "reporting/smart-licensing-data", "")
+					body = helpers.SetFromXPath(body, basePath+"/reporting/smart-licensing-data", "")
 				}
 			}
 			if !item.ReportingSmartLicensingDataDisable.IsNull() && !item.ReportingSmartLicensingDataDisable.IsUnknown() {
 				if item.ReportingSmartLicensingDataDisable.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "reporting/smart-licensing-data/disable", "")
+					body = helpers.SetFromXPath(body, basePath+"/reporting/smart-licensing-data/disable", "")
 				}
 			}
 			if !item.AnonymousReportingOnly.IsNull() && !item.AnonymousReportingOnly.IsUnknown() {
 				if item.AnonymousReportingOnly.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "anonymous-reporting-only", "")
+					body = helpers.SetFromXPath(body, basePath+"/anonymous-reporting-only", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"profiles/profile", cBody.Res())
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -515,11 +516,12 @@ func (data CallHome) toBodyXML(ctx context.Context) string {
 
 func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "service.active"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ServiceActive.IsNull() {
 			data.ServiceActive = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ServiceActive.IsNull() {
 			data.ServiceActive = types.BoolNull()
 		}
@@ -560,132 +562,138 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "sender.from"); value.Exists() && !data.SenderFrom.IsNull() {
 		data.SenderFrom = types.StringValue(value.String())
-	} else {
+	} else if data.SenderFrom.IsNull() {
 		data.SenderFrom = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "sender.reply-to"); value.Exists() && !data.SenderReplyTo.IsNull() {
 		data.SenderReplyTo = types.StringValue(value.String())
-	} else {
+	} else if data.SenderReplyTo.IsNull() {
 		data.SenderReplyTo = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "contact-email-addr"); value.Exists() && !data.ContactEmail.IsNull() {
 		data.ContactEmail = types.StringValue(value.String())
-	} else {
+	} else if data.ContactEmail.IsNull() {
 		data.ContactEmail = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "contact.smart-licensing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ContactSmartLicensing.IsNull() {
 			data.ContactSmartLicensing = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ContactSmartLicensing.IsNull() {
 			data.ContactSmartLicensing = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "phone-number"); value.Exists() && !data.PhoneNumber.IsNull() {
 		data.PhoneNumber = types.StringValue(value.String())
-	} else {
+	} else if data.PhoneNumber.IsNull() {
 		data.PhoneNumber = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "street-address"); value.Exists() && !data.StreetAddress.IsNull() {
 		data.StreetAddress = types.StringValue(value.String())
-	} else {
+	} else if data.StreetAddress.IsNull() {
 		data.StreetAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "customer-id"); value.Exists() && !data.CustomerId.IsNull() {
 		data.CustomerId = types.StringValue(value.String())
-	} else {
+	} else if data.CustomerId.IsNull() {
 		data.CustomerId = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "contract-id"); value.Exists() && !data.ContractId.IsNull() {
 		data.ContractId = types.StringValue(value.String())
-	} else {
+	} else if data.ContractId.IsNull() {
 		data.ContractId = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "site-id"); value.Exists() && !data.SiteId.IsNull() {
 		data.SiteId = types.StringValue(value.String())
-	} else {
+	} else if data.SiteId.IsNull() {
 		data.SiteId = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "rate-limit"); value.Exists() && !data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Value(value.Int())
-	} else {
+	} else if data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "data-privacy.hostname"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DataPrivacyHostname.IsNull() {
 			data.DataPrivacyHostname = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DataPrivacyHostname.IsNull() {
 			data.DataPrivacyHostname = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "data-privacy.level.normal"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DataPrivacyLevelNormal.IsNull() {
 			data.DataPrivacyLevelNormal = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DataPrivacyLevelNormal.IsNull() {
 			data.DataPrivacyLevelNormal = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "data-privacy.level.high"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DataPrivacyLevelHigh.IsNull() {
 			data.DataPrivacyLevelHigh = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DataPrivacyLevelHigh.IsNull() {
 			data.DataPrivacyLevelHigh = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "http-proxy.server-name"); value.Exists() && !data.HttpProxyName.IsNull() {
 		data.HttpProxyName = types.StringValue(value.String())
-	} else {
+	} else if data.HttpProxyName.IsNull() {
 		data.HttpProxyName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "http-proxy.port"); value.Exists() && !data.HttpProxyPort.IsNull() {
 		data.HttpProxyPort = types.Int64Value(value.Int())
-	} else {
+	} else if data.HttpProxyPort.IsNull() {
 		data.HttpProxyPort = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
-	} else {
+	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "syslog-throttling"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SyslogThrottling.IsNull() {
 			data.SyslogThrottling = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SyslogThrottling.IsNull() {
 			data.SyslogThrottling = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "vrf"); value.Exists() && !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(value.String())
-	} else {
+	} else if data.Vrf.IsNull() {
 		data.Vrf = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "aaa-authorization.active"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AaaAuthorization.IsNull() {
 			data.AaaAuthorization = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AaaAuthorization.IsNull() {
 			data.AaaAuthorization = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "aaa-authorization.username"); value.Exists() && !data.AaaAuthorizationUsername.IsNull() {
 		data.AaaAuthorizationUsername = types.StringValue(value.String())
-	} else {
+	} else if data.AaaAuthorizationUsername.IsNull() {
 		data.AaaAuthorizationUsername = types.StringNull()
 	}
 	for i := range data.Profiles {
@@ -717,11 +725,13 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.Profiles[i].ProfileName = types.StringNull()
 		}
 		if value := r.Get("active"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].Active.IsNull() {
 				data.Profiles[i].Active = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].Active.IsNull() {
 				data.Profiles[i].Active = types.BoolNull()
 			}
@@ -766,111 +776,133 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.Profiles[i].DestinationMessageSizeLimit = types.Int64Null()
 		}
 		if value := r.Get("destination.preferred-msg-format.short-text"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].DestinationMsgFormatShort.IsNull() {
 				data.Profiles[i].DestinationMsgFormatShort = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].DestinationMsgFormatShort.IsNull() {
 				data.Profiles[i].DestinationMsgFormatShort = types.BoolNull()
 			}
 		}
 		if value := r.Get("destination.preferred-msg-format.long-text"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].DestinationMsgFormatLong.IsNull() {
 				data.Profiles[i].DestinationMsgFormatLong = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].DestinationMsgFormatLong.IsNull() {
 				data.Profiles[i].DestinationMsgFormatLong = types.BoolNull()
 			}
 		}
 		if value := r.Get("destination.transport-method.email"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].DestinationTransportMethodEmail.IsNull() {
 				data.Profiles[i].DestinationTransportMethodEmail = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].DestinationTransportMethodEmail.IsNull() {
 				data.Profiles[i].DestinationTransportMethodEmail = types.BoolNull()
 			}
 		}
 		if value := r.Get("destination.transport-method.email.disable"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() {
 				data.Profiles[i].DestinationTransportMethodEmailDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() {
 				data.Profiles[i].DestinationTransportMethodEmailDisable = types.BoolNull()
 			}
 		}
 		if value := r.Get("destination.transport-method.http"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].DestinationTransportMethodHttp.IsNull() {
 				data.Profiles[i].DestinationTransportMethodHttp = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].DestinationTransportMethodHttp.IsNull() {
 				data.Profiles[i].DestinationTransportMethodHttp = types.BoolNull()
 			}
 		}
 		if value := r.Get("destination.transport-method.http.disable"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() {
 				data.Profiles[i].DestinationTransportMethodHttpDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() {
 				data.Profiles[i].DestinationTransportMethodHttpDisable = types.BoolNull()
 			}
 		}
 		if value := r.Get("reporting.smart-call-home-data"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].ReportingSmartCallHomeData.IsNull() {
 				data.Profiles[i].ReportingSmartCallHomeData = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ReportingSmartCallHomeData.IsNull() {
 				data.Profiles[i].ReportingSmartCallHomeData = types.BoolNull()
 			}
 		}
 		if value := r.Get("reporting.smart-call-home-data.disable"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() {
 				data.Profiles[i].ReportingSmartCallHomeDataDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() {
 				data.Profiles[i].ReportingSmartCallHomeDataDisable = types.BoolNull()
 			}
 		}
 		if value := r.Get("reporting.smart-licensing-data"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].ReportingSmartLicensingData.IsNull() {
 				data.Profiles[i].ReportingSmartLicensingData = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ReportingSmartLicensingData.IsNull() {
 				data.Profiles[i].ReportingSmartLicensingData = types.BoolNull()
 			}
 		}
 		if value := r.Get("reporting.smart-licensing-data.disable"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() {
 				data.Profiles[i].ReportingSmartLicensingDataDisable = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() {
 				data.Profiles[i].ReportingSmartLicensingDataDisable = types.BoolNull()
 			}
 		}
 		if value := r.Get("anonymous-reporting-only"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].AnonymousReportingOnly.IsNull() {
 				data.Profiles[i].AnonymousReportingOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].AnonymousReportingOnly.IsNull() {
 				data.Profiles[i].AnonymousReportingOnly = types.BoolNull()
 			}
@@ -883,8 +915,11 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/service/active"); value.Exists() {
-		data.ServiceActive = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/service/active"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServiceActive.IsNull() {
+			data.ServiceActive = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ServiceActive.IsNull() {
@@ -896,7 +931,7 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 		keyValues := [...]string{data.MailServers[i].MailServerName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/mail-servers/mail-server").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mail-servers/mail-server").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -914,131 +949,149 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "mail-server-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "mail-server-name"); value.Exists() && !data.MailServers[i].MailServerName.IsNull() {
 			data.MailServers[i].MailServerName = types.StringValue(value.String())
 		} else if data.MailServers[i].MailServerName.IsNull() {
 			data.MailServers[i].MailServerName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "priority"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "priority"); value.Exists() && !data.MailServers[i].Priority.IsNull() {
 			data.MailServers[i].Priority = types.Int64Value(value.Int())
 		} else if data.MailServers[i].Priority.IsNull() {
 			data.MailServers[i].Priority = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sender/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sender/from"); value.Exists() && !data.SenderFrom.IsNull() {
 		data.SenderFrom = types.StringValue(value.String())
 	} else if data.SenderFrom.IsNull() {
 		data.SenderFrom = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sender/reply-to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sender/reply-to"); value.Exists() && !data.SenderReplyTo.IsNull() {
 		data.SenderReplyTo = types.StringValue(value.String())
 	} else if data.SenderReplyTo.IsNull() {
 		data.SenderReplyTo = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/contact-email-addr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contact-email-addr"); value.Exists() && !data.ContactEmail.IsNull() {
 		data.ContactEmail = types.StringValue(value.String())
 	} else if data.ContactEmail.IsNull() {
 		data.ContactEmail = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/contact/smart-licensing"); value.Exists() {
-		data.ContactSmartLicensing = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contact/smart-licensing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ContactSmartLicensing.IsNull() {
+			data.ContactSmartLicensing = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ContactSmartLicensing.IsNull() {
 			data.ContactSmartLicensing = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/phone-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/phone-number"); value.Exists() && !data.PhoneNumber.IsNull() {
 		data.PhoneNumber = types.StringValue(value.String())
 	} else if data.PhoneNumber.IsNull() {
 		data.PhoneNumber = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/street-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/street-address"); value.Exists() && !data.StreetAddress.IsNull() {
 		data.StreetAddress = types.StringValue(value.String())
 	} else if data.StreetAddress.IsNull() {
 		data.StreetAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/customer-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/customer-id"); value.Exists() && !data.CustomerId.IsNull() {
 		data.CustomerId = types.StringValue(value.String())
 	} else if data.CustomerId.IsNull() {
 		data.CustomerId = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/contract-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contract-id"); value.Exists() && !data.ContractId.IsNull() {
 		data.ContractId = types.StringValue(value.String())
 	} else if data.ContractId.IsNull() {
 		data.ContractId = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/site-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/site-id"); value.Exists() && !data.SiteId.IsNull() {
 		data.SiteId = types.StringValue(value.String())
 	} else if data.SiteId.IsNull() {
 		data.SiteId = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rate-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rate-limit"); value.Exists() && !data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Value(value.Int())
 	} else if data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/data-privacy/hostname"); value.Exists() {
-		data.DataPrivacyHostname = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/data-privacy/hostname"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DataPrivacyHostname.IsNull() {
+			data.DataPrivacyHostname = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DataPrivacyHostname.IsNull() {
 			data.DataPrivacyHostname = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/data-privacy/level/normal"); value.Exists() {
-		data.DataPrivacyLevelNormal = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/data-privacy/level/normal"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DataPrivacyLevelNormal.IsNull() {
+			data.DataPrivacyLevelNormal = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DataPrivacyLevelNormal.IsNull() {
 			data.DataPrivacyLevelNormal = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/data-privacy/level/high"); value.Exists() {
-		data.DataPrivacyLevelHigh = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/data-privacy/level/high"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DataPrivacyLevelHigh.IsNull() {
+			data.DataPrivacyLevelHigh = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DataPrivacyLevelHigh.IsNull() {
 			data.DataPrivacyLevelHigh = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/http-proxy/server-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/http-proxy/server-name"); value.Exists() && !data.HttpProxyName.IsNull() {
 		data.HttpProxyName = types.StringValue(value.String())
 	} else if data.HttpProxyName.IsNull() {
 		data.HttpProxyName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/http-proxy/port"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/http-proxy/port"); value.Exists() && !data.HttpProxyPort.IsNull() {
 		data.HttpProxyPort = types.Int64Value(value.Int())
 	} else if data.HttpProxyPort.IsNull() {
 		data.HttpProxyPort = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
 	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/syslog-throttling"); value.Exists() {
-		data.SyslogThrottling = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/syslog-throttling"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SyslogThrottling.IsNull() {
+			data.SyslogThrottling = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SyslogThrottling.IsNull() {
 			data.SyslogThrottling = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrf"); value.Exists() && !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(value.String())
 	} else if data.Vrf.IsNull() {
 		data.Vrf = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/aaa-authorization/active"); value.Exists() {
-		data.AaaAuthorization = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa-authorization/active"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AaaAuthorization.IsNull() {
+			data.AaaAuthorization = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AaaAuthorization.IsNull() {
 			data.AaaAuthorization = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/aaa-authorization/username"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa-authorization/username"); value.Exists() && !data.AaaAuthorizationUsername.IsNull() {
 		data.AaaAuthorizationUsername = types.StringValue(value.String())
 	} else if data.AaaAuthorizationUsername.IsNull() {
 		data.AaaAuthorizationUsername = types.StringNull()
@@ -1048,7 +1101,7 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/profiles/profile").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1066,13 +1119,16 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "profile-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "profile-name"); value.Exists() && !data.Profiles[i].ProfileName.IsNull() {
 			data.Profiles[i].ProfileName = types.StringValue(value.String())
 		} else if data.Profiles[i].ProfileName.IsNull() {
 			data.Profiles[i].ProfileName = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "active"); value.Exists() {
-			data.Profiles[i].Active = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].Active.IsNull() {
+				data.Profiles[i].Active = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1103,24 +1159,27 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 					return true
 				},
 			)
-			if value := helpers.GetFromXPath(cr, "address-type"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "address-type"); value.Exists() && !data.Profiles[i].DestinationAddresses[ci].AddressType.IsNull() {
 				data.Profiles[i].DestinationAddresses[ci].AddressType = types.StringValue(value.String())
-			} else {
+			} else if data.Profiles[i].DestinationAddresses[ci].AddressType.IsNull() {
 				data.Profiles[i].DestinationAddresses[ci].AddressType = types.StringNull()
 			}
-			if value := helpers.GetFromXPath(cr, "destination-address"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "destination-address"); value.Exists() && !data.Profiles[i].DestinationAddresses[ci].DestinationAddress.IsNull() {
 				data.Profiles[i].DestinationAddresses[ci].DestinationAddress = types.StringValue(value.String())
-			} else {
+			} else if data.Profiles[i].DestinationAddresses[ci].DestinationAddress.IsNull() {
 				data.Profiles[i].DestinationAddresses[ci].DestinationAddress = types.StringNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "destination/message-size-limit"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "destination/message-size-limit"); value.Exists() && !data.Profiles[i].DestinationMessageSizeLimit.IsNull() {
 			data.Profiles[i].DestinationMessageSizeLimit = types.Int64Value(value.Int())
 		} else if data.Profiles[i].DestinationMessageSizeLimit.IsNull() {
 			data.Profiles[i].DestinationMessageSizeLimit = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "destination/preferred-msg-format/short-text"); value.Exists() {
-			data.Profiles[i].DestinationMsgFormatShort = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].DestinationMsgFormatShort.IsNull() {
+				data.Profiles[i].DestinationMsgFormatShort = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1129,7 +1188,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "destination/preferred-msg-format/long-text"); value.Exists() {
-			data.Profiles[i].DestinationMsgFormatLong = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].DestinationMsgFormatLong.IsNull() {
+				data.Profiles[i].DestinationMsgFormatLong = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1138,7 +1200,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "destination/transport-method/email"); value.Exists() {
-			data.Profiles[i].DestinationTransportMethodEmail = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].DestinationTransportMethodEmail.IsNull() {
+				data.Profiles[i].DestinationTransportMethodEmail = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1147,7 +1212,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "destination/transport-method/email/disable"); value.Exists() {
-			data.Profiles[i].DestinationTransportMethodEmailDisable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() {
+				data.Profiles[i].DestinationTransportMethodEmailDisable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1156,7 +1224,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "destination/transport-method/http"); value.Exists() {
-			data.Profiles[i].DestinationTransportMethodHttp = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].DestinationTransportMethodHttp.IsNull() {
+				data.Profiles[i].DestinationTransportMethodHttp = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1165,7 +1236,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "destination/transport-method/http/disable"); value.Exists() {
-			data.Profiles[i].DestinationTransportMethodHttpDisable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() {
+				data.Profiles[i].DestinationTransportMethodHttpDisable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1174,7 +1248,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "reporting/smart-call-home-data"); value.Exists() {
-			data.Profiles[i].ReportingSmartCallHomeData = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ReportingSmartCallHomeData.IsNull() {
+				data.Profiles[i].ReportingSmartCallHomeData = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1183,7 +1260,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "reporting/smart-call-home-data/disable"); value.Exists() {
-			data.Profiles[i].ReportingSmartCallHomeDataDisable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() {
+				data.Profiles[i].ReportingSmartCallHomeDataDisable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1192,7 +1272,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "reporting/smart-licensing-data"); value.Exists() {
-			data.Profiles[i].ReportingSmartLicensingData = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ReportingSmartLicensingData.IsNull() {
+				data.Profiles[i].ReportingSmartLicensingData = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1201,7 +1284,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "reporting/smart-licensing-data/disable"); value.Exists() {
-			data.Profiles[i].ReportingSmartLicensingDataDisable = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() {
+				data.Profiles[i].ReportingSmartLicensingDataDisable = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1210,7 +1296,10 @@ func (data *CallHome) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 		}
 		if value := helpers.GetFromXPath(r, "anonymous-reporting-only"); value.Exists() {
-			data.Profiles[i].AnonymousReportingOnly = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].AnonymousReportingOnly.IsNull() {
+				data.Profiles[i].AnonymousReportingOnly = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1230,10 +1319,15 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "service.active"); value.Exists() {
 		data.ServiceActive = types.BoolValue(true)
-	} else {
-		data.ServiceActive = types.BoolNull()
+	} else if !data.ServiceActive.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ServiceActive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mail-servers.mail-server"); value.Exists() {
 		data.MailServers = make([]CallHomeMailServers, 0)
@@ -1260,8 +1354,9 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "contact.smart-licensing"); value.Exists() {
 		data.ContactSmartLicensing = types.BoolValue(true)
-	} else {
-		data.ContactSmartLicensing = types.BoolNull()
+	} else if !data.ContactSmartLicensing.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ContactSmartLicensing = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "phone-number"); value.Exists() {
 		data.PhoneNumber = types.StringValue(value.String())
@@ -1283,18 +1378,21 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "data-privacy.hostname"); value.Exists() {
 		data.DataPrivacyHostname = types.BoolValue(true)
-	} else {
-		data.DataPrivacyHostname = types.BoolNull()
+	} else if !data.DataPrivacyHostname.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DataPrivacyHostname = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "data-privacy.level.normal"); value.Exists() {
 		data.DataPrivacyLevelNormal = types.BoolValue(true)
-	} else {
-		data.DataPrivacyLevelNormal = types.BoolNull()
+	} else if !data.DataPrivacyLevelNormal.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DataPrivacyLevelNormal = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "data-privacy.level.high"); value.Exists() {
 		data.DataPrivacyLevelHigh = types.BoolValue(true)
-	} else {
-		data.DataPrivacyLevelHigh = types.BoolNull()
+	} else if !data.DataPrivacyLevelHigh.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DataPrivacyLevelHigh = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "http-proxy.server-name"); value.Exists() {
 		data.HttpProxyName = types.StringValue(value.String())
@@ -1307,16 +1405,18 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "syslog-throttling"); value.Exists() {
 		data.SyslogThrottling = types.BoolValue(true)
-	} else {
-		data.SyslogThrottling = types.BoolNull()
+	} else if !data.SyslogThrottling.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SyslogThrottling = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "vrf"); value.Exists() {
 		data.Vrf = types.StringValue(value.String())
 	}
 	if value := res.Get(prefix + "aaa-authorization.active"); value.Exists() {
 		data.AaaAuthorization = types.BoolValue(true)
-	} else {
-		data.AaaAuthorization = types.BoolNull()
+	} else if !data.AaaAuthorization.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AaaAuthorization = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "aaa-authorization.username"); value.Exists() {
 		data.AaaAuthorizationUsername = types.StringValue(value.String())
@@ -1330,8 +1430,9 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("active"); cValue.Exists() {
 				item.Active = types.BoolValue(true)
-			} else {
-				item.Active = types.BoolNull()
+			} else if !item.Active.IsNull() {
+				// Only set to false if it was previously set
+				item.Active = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.addresses.address"); cValue.Exists() {
 				item.DestinationAddresses = make([]CallHomeProfilesDestinationAddresses, 0)
@@ -1352,58 +1453,69 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("destination.preferred-msg-format.short-text"); cValue.Exists() {
 				item.DestinationMsgFormatShort = types.BoolValue(true)
-			} else {
-				item.DestinationMsgFormatShort = types.BoolNull()
+			} else if !item.DestinationMsgFormatShort.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationMsgFormatShort = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.preferred-msg-format.long-text"); cValue.Exists() {
 				item.DestinationMsgFormatLong = types.BoolValue(true)
-			} else {
-				item.DestinationMsgFormatLong = types.BoolNull()
+			} else if !item.DestinationMsgFormatLong.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationMsgFormatLong = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.email"); cValue.Exists() {
 				item.DestinationTransportMethodEmail = types.BoolValue(true)
-			} else {
-				item.DestinationTransportMethodEmail = types.BoolNull()
+			} else if !item.DestinationTransportMethodEmail.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationTransportMethodEmail = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.email.disable"); cValue.Exists() {
 				item.DestinationTransportMethodEmailDisable = types.BoolValue(true)
-			} else {
-				item.DestinationTransportMethodEmailDisable = types.BoolNull()
+			} else if !item.DestinationTransportMethodEmailDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationTransportMethodEmailDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.http"); cValue.Exists() {
 				item.DestinationTransportMethodHttp = types.BoolValue(true)
-			} else {
-				item.DestinationTransportMethodHttp = types.BoolNull()
+			} else if !item.DestinationTransportMethodHttp.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationTransportMethodHttp = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.http.disable"); cValue.Exists() {
 				item.DestinationTransportMethodHttpDisable = types.BoolValue(true)
-			} else {
-				item.DestinationTransportMethodHttpDisable = types.BoolNull()
+			} else if !item.DestinationTransportMethodHttpDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationTransportMethodHttpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-call-home-data"); cValue.Exists() {
 				item.ReportingSmartCallHomeData = types.BoolValue(true)
-			} else {
-				item.ReportingSmartCallHomeData = types.BoolNull()
+			} else if !item.ReportingSmartCallHomeData.IsNull() {
+				// Only set to false if it was previously set
+				item.ReportingSmartCallHomeData = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-call-home-data.disable"); cValue.Exists() {
 				item.ReportingSmartCallHomeDataDisable = types.BoolValue(true)
-			} else {
-				item.ReportingSmartCallHomeDataDisable = types.BoolNull()
+			} else if !item.ReportingSmartCallHomeDataDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.ReportingSmartCallHomeDataDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-licensing-data"); cValue.Exists() {
 				item.ReportingSmartLicensingData = types.BoolValue(true)
-			} else {
-				item.ReportingSmartLicensingData = types.BoolNull()
+			} else if !item.ReportingSmartLicensingData.IsNull() {
+				// Only set to false if it was previously set
+				item.ReportingSmartLicensingData = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-licensing-data.disable"); cValue.Exists() {
 				item.ReportingSmartLicensingDataDisable = types.BoolValue(true)
-			} else {
-				item.ReportingSmartLicensingDataDisable = types.BoolNull()
+			} else if !item.ReportingSmartLicensingDataDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.ReportingSmartLicensingDataDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("anonymous-reporting-only"); cValue.Exists() {
 				item.AnonymousReportingOnly = types.BoolValue(true)
-			} else {
-				item.AnonymousReportingOnly = types.BoolNull()
+			} else if !item.AnonymousReportingOnly.IsNull() {
+				// Only set to false if it was previously set
+				item.AnonymousReportingOnly = types.BoolValue(false)
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true
@@ -1416,14 +1528,19 @@ func (data *CallHome) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *CallHomeData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "service.active"); value.Exists() {
 		data.ServiceActive = types.BoolValue(true)
 	} else {
-		data.ServiceActive = types.BoolNull()
+		data.ServiceActive = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "mail-servers.mail-server"); value.Exists() {
 		data.MailServers = make([]CallHomeMailServers, 0)
@@ -1451,7 +1568,7 @@ func (data *CallHomeData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "contact.smart-licensing"); value.Exists() {
 		data.ContactSmartLicensing = types.BoolValue(true)
 	} else {
-		data.ContactSmartLicensing = types.BoolNull()
+		data.ContactSmartLicensing = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "phone-number"); value.Exists() {
 		data.PhoneNumber = types.StringValue(value.String())
@@ -1474,17 +1591,17 @@ func (data *CallHomeData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "data-privacy.hostname"); value.Exists() {
 		data.DataPrivacyHostname = types.BoolValue(true)
 	} else {
-		data.DataPrivacyHostname = types.BoolNull()
+		data.DataPrivacyHostname = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "data-privacy.level.normal"); value.Exists() {
 		data.DataPrivacyLevelNormal = types.BoolValue(true)
 	} else {
-		data.DataPrivacyLevelNormal = types.BoolNull()
+		data.DataPrivacyLevelNormal = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "data-privacy.level.high"); value.Exists() {
 		data.DataPrivacyLevelHigh = types.BoolValue(true)
 	} else {
-		data.DataPrivacyLevelHigh = types.BoolNull()
+		data.DataPrivacyLevelHigh = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "http-proxy.server-name"); value.Exists() {
 		data.HttpProxyName = types.StringValue(value.String())
@@ -1498,7 +1615,7 @@ func (data *CallHomeData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "syslog-throttling"); value.Exists() {
 		data.SyslogThrottling = types.BoolValue(true)
 	} else {
-		data.SyslogThrottling = types.BoolNull()
+		data.SyslogThrottling = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "vrf"); value.Exists() {
 		data.Vrf = types.StringValue(value.String())
@@ -1506,7 +1623,7 @@ func (data *CallHomeData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "aaa-authorization.active"); value.Exists() {
 		data.AaaAuthorization = types.BoolValue(true)
 	} else {
-		data.AaaAuthorization = types.BoolNull()
+		data.AaaAuthorization = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "aaa-authorization.username"); value.Exists() {
 		data.AaaAuthorizationUsername = types.StringValue(value.String())
@@ -1521,7 +1638,7 @@ func (data *CallHomeData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("active"); cValue.Exists() {
 				item.Active = types.BoolValue(true)
 			} else {
-				item.Active = types.BoolNull()
+				item.Active = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.addresses.address"); cValue.Exists() {
 				item.DestinationAddresses = make([]CallHomeProfilesDestinationAddresses, 0)
@@ -1543,57 +1660,57 @@ func (data *CallHomeData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("destination.preferred-msg-format.short-text"); cValue.Exists() {
 				item.DestinationMsgFormatShort = types.BoolValue(true)
 			} else {
-				item.DestinationMsgFormatShort = types.BoolNull()
+				item.DestinationMsgFormatShort = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.preferred-msg-format.long-text"); cValue.Exists() {
 				item.DestinationMsgFormatLong = types.BoolValue(true)
 			} else {
-				item.DestinationMsgFormatLong = types.BoolNull()
+				item.DestinationMsgFormatLong = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.email"); cValue.Exists() {
 				item.DestinationTransportMethodEmail = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodEmail = types.BoolNull()
+				item.DestinationTransportMethodEmail = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.email.disable"); cValue.Exists() {
 				item.DestinationTransportMethodEmailDisable = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodEmailDisable = types.BoolNull()
+				item.DestinationTransportMethodEmailDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.http"); cValue.Exists() {
 				item.DestinationTransportMethodHttp = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodHttp = types.BoolNull()
+				item.DestinationTransportMethodHttp = types.BoolValue(false)
 			}
 			if cValue := v.Get("destination.transport-method.http.disable"); cValue.Exists() {
 				item.DestinationTransportMethodHttpDisable = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodHttpDisable = types.BoolNull()
+				item.DestinationTransportMethodHttpDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-call-home-data"); cValue.Exists() {
 				item.ReportingSmartCallHomeData = types.BoolValue(true)
 			} else {
-				item.ReportingSmartCallHomeData = types.BoolNull()
+				item.ReportingSmartCallHomeData = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-call-home-data.disable"); cValue.Exists() {
 				item.ReportingSmartCallHomeDataDisable = types.BoolValue(true)
 			} else {
-				item.ReportingSmartCallHomeDataDisable = types.BoolNull()
+				item.ReportingSmartCallHomeDataDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-licensing-data"); cValue.Exists() {
 				item.ReportingSmartLicensingData = types.BoolValue(true)
 			} else {
-				item.ReportingSmartLicensingData = types.BoolNull()
+				item.ReportingSmartLicensingData = types.BoolValue(false)
 			}
 			if cValue := v.Get("reporting.smart-licensing-data.disable"); cValue.Exists() {
 				item.ReportingSmartLicensingDataDisable = types.BoolValue(true)
 			} else {
-				item.ReportingSmartLicensingDataDisable = types.BoolNull()
+				item.ReportingSmartLicensingDataDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("anonymous-reporting-only"); cValue.Exists() {
 				item.AnonymousReportingOnly = types.BoolValue(true)
 			} else {
-				item.AnonymousReportingOnly = types.BoolNull()
+				item.AnonymousReportingOnly = types.BoolValue(false)
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true
@@ -1606,12 +1723,12 @@ func (data *CallHomeData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *CallHome) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/service/active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/service/active"); value.Exists() {
 		data.ServiceActive = types.BoolValue(true)
 	} else {
-		data.ServiceActive = types.BoolNull()
+		data.ServiceActive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mail-servers/mail-server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mail-servers/mail-server"); value.Exists() {
 		data.MailServers = make([]CallHomeMailServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CallHomeMailServers{}
@@ -1625,79 +1742,79 @@ func (data *CallHome) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sender/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sender/from"); value.Exists() {
 		data.SenderFrom = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sender/reply-to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sender/reply-to"); value.Exists() {
 		data.SenderReplyTo = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/contact-email-addr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contact-email-addr"); value.Exists() {
 		data.ContactEmail = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/contact/smart-licensing"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contact/smart-licensing"); value.Exists() {
 		data.ContactSmartLicensing = types.BoolValue(true)
 	} else {
-		data.ContactSmartLicensing = types.BoolNull()
+		data.ContactSmartLicensing = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/phone-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/phone-number"); value.Exists() {
 		data.PhoneNumber = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/street-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/street-address"); value.Exists() {
 		data.StreetAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/customer-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/customer-id"); value.Exists() {
 		data.CustomerId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/contract-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contract-id"); value.Exists() {
 		data.ContractId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/site-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/site-id"); value.Exists() {
 		data.SiteId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rate-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rate-limit"); value.Exists() {
 		data.RateLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/data-privacy/hostname"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/data-privacy/hostname"); value.Exists() {
 		data.DataPrivacyHostname = types.BoolValue(true)
 	} else {
-		data.DataPrivacyHostname = types.BoolNull()
+		data.DataPrivacyHostname = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/data-privacy/level/normal"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/data-privacy/level/normal"); value.Exists() {
 		data.DataPrivacyLevelNormal = types.BoolValue(true)
 	} else {
-		data.DataPrivacyLevelNormal = types.BoolNull()
+		data.DataPrivacyLevelNormal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/data-privacy/level/high"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/data-privacy/level/high"); value.Exists() {
 		data.DataPrivacyLevelHigh = types.BoolValue(true)
 	} else {
-		data.DataPrivacyLevelHigh = types.BoolNull()
+		data.DataPrivacyLevelHigh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/http-proxy/server-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/http-proxy/server-name"); value.Exists() {
 		data.HttpProxyName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/http-proxy/port"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/http-proxy/port"); value.Exists() {
 		data.HttpProxyPort = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/syslog-throttling"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/syslog-throttling"); value.Exists() {
 		data.SyslogThrottling = types.BoolValue(true)
 	} else {
-		data.SyslogThrottling = types.BoolNull()
+		data.SyslogThrottling = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrf"); value.Exists() {
 		data.Vrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/aaa-authorization/active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa-authorization/active"); value.Exists() {
 		data.AaaAuthorization = types.BoolValue(true)
 	} else {
-		data.AaaAuthorization = types.BoolNull()
+		data.AaaAuthorization = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/aaa-authorization/username"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa-authorization/username"); value.Exists() {
 		data.AaaAuthorizationUsername = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/profiles/profile"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
 		data.Profiles = make([]CallHomeProfiles, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CallHomeProfiles{}
@@ -1707,7 +1824,7 @@ func (data *CallHome) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "active"); cValue.Exists() {
 				item.Active = types.BoolValue(true)
 			} else {
-				item.Active = types.BoolNull()
+				item.Active = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "destination/addresses/address"); cValue.Exists() {
 				item.DestinationAddresses = make([]CallHomeProfilesDestinationAddresses, 0)
@@ -1729,57 +1846,57 @@ func (data *CallHome) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "destination/preferred-msg-format/short-text"); cValue.Exists() {
 				item.DestinationMsgFormatShort = types.BoolValue(true)
 			} else {
-				item.DestinationMsgFormatShort = types.BoolNull()
+				item.DestinationMsgFormatShort = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "destination/preferred-msg-format/long-text"); cValue.Exists() {
 				item.DestinationMsgFormatLong = types.BoolValue(true)
 			} else {
-				item.DestinationMsgFormatLong = types.BoolNull()
+				item.DestinationMsgFormatLong = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "destination/transport-method/email"); cValue.Exists() {
 				item.DestinationTransportMethodEmail = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodEmail = types.BoolNull()
+				item.DestinationTransportMethodEmail = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "destination/transport-method/email/disable"); cValue.Exists() {
 				item.DestinationTransportMethodEmailDisable = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodEmailDisable = types.BoolNull()
+				item.DestinationTransportMethodEmailDisable = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "destination/transport-method/http"); cValue.Exists() {
 				item.DestinationTransportMethodHttp = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodHttp = types.BoolNull()
+				item.DestinationTransportMethodHttp = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "destination/transport-method/http/disable"); cValue.Exists() {
 				item.DestinationTransportMethodHttpDisable = types.BoolValue(true)
 			} else {
-				item.DestinationTransportMethodHttpDisable = types.BoolNull()
+				item.DestinationTransportMethodHttpDisable = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "reporting/smart-call-home-data"); cValue.Exists() {
 				item.ReportingSmartCallHomeData = types.BoolValue(true)
 			} else {
-				item.ReportingSmartCallHomeData = types.BoolNull()
+				item.ReportingSmartCallHomeData = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "reporting/smart-call-home-data/disable"); cValue.Exists() {
 				item.ReportingSmartCallHomeDataDisable = types.BoolValue(true)
 			} else {
-				item.ReportingSmartCallHomeDataDisable = types.BoolNull()
+				item.ReportingSmartCallHomeDataDisable = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "reporting/smart-licensing-data"); cValue.Exists() {
 				item.ReportingSmartLicensingData = types.BoolValue(true)
 			} else {
-				item.ReportingSmartLicensingData = types.BoolNull()
+				item.ReportingSmartLicensingData = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "reporting/smart-licensing-data/disable"); cValue.Exists() {
 				item.ReportingSmartLicensingDataDisable = types.BoolValue(true)
 			} else {
-				item.ReportingSmartLicensingDataDisable = types.BoolNull()
+				item.ReportingSmartLicensingDataDisable = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "anonymous-reporting-only"); cValue.Exists() {
 				item.AnonymousReportingOnly = types.BoolValue(true)
 			} else {
-				item.AnonymousReportingOnly = types.BoolNull()
+				item.AnonymousReportingOnly = types.BoolValue(false)
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true
@@ -1792,12 +1909,12 @@ func (data *CallHome) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *CallHomeData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/service/active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/service/active"); value.Exists() {
 		data.ServiceActive = types.BoolValue(true)
 	} else {
 		data.ServiceActive = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mail-servers/mail-server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mail-servers/mail-server"); value.Exists() {
 		data.MailServers = make([]CallHomeMailServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CallHomeMailServers{}
@@ -1811,79 +1928,79 @@ func (data *CallHomeData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sender/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sender/from"); value.Exists() {
 		data.SenderFrom = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sender/reply-to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sender/reply-to"); value.Exists() {
 		data.SenderReplyTo = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/contact-email-addr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contact-email-addr"); value.Exists() {
 		data.ContactEmail = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/contact/smart-licensing"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contact/smart-licensing"); value.Exists() {
 		data.ContactSmartLicensing = types.BoolValue(true)
 	} else {
 		data.ContactSmartLicensing = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/phone-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/phone-number"); value.Exists() {
 		data.PhoneNumber = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/street-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/street-address"); value.Exists() {
 		data.StreetAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/customer-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/customer-id"); value.Exists() {
 		data.CustomerId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/contract-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contract-id"); value.Exists() {
 		data.ContractId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/site-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/site-id"); value.Exists() {
 		data.SiteId = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/rate-limit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rate-limit"); value.Exists() {
 		data.RateLimit = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/data-privacy/hostname"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/data-privacy/hostname"); value.Exists() {
 		data.DataPrivacyHostname = types.BoolValue(true)
 	} else {
 		data.DataPrivacyHostname = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/data-privacy/level/normal"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/data-privacy/level/normal"); value.Exists() {
 		data.DataPrivacyLevelNormal = types.BoolValue(true)
 	} else {
 		data.DataPrivacyLevelNormal = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/data-privacy/level/high"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/data-privacy/level/high"); value.Exists() {
 		data.DataPrivacyLevelHigh = types.BoolValue(true)
 	} else {
 		data.DataPrivacyLevelHigh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/http-proxy/server-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/http-proxy/server-name"); value.Exists() {
 		data.HttpProxyName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/http-proxy/port"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/http-proxy/port"); value.Exists() {
 		data.HttpProxyPort = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/syslog-throttling"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/syslog-throttling"); value.Exists() {
 		data.SyslogThrottling = types.BoolValue(true)
 	} else {
 		data.SyslogThrottling = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrf"); value.Exists() {
 		data.Vrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/aaa-authorization/active"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa-authorization/active"); value.Exists() {
 		data.AaaAuthorization = types.BoolValue(true)
 	} else {
 		data.AaaAuthorization = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/aaa-authorization/username"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa-authorization/username"); value.Exists() {
 		data.AaaAuthorizationUsername = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/profiles/profile"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
 		data.Profiles = make([]CallHomeProfiles, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := CallHomeProfiles{}
@@ -2349,9 +2466,10 @@ func (data *CallHome) getEmptyLeafsDelete(ctx context.Context, state *CallHome) 
 func (data *CallHome) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Profiles {
-		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profiles/profile=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[profile-name=" + data.Profiles[i].ProfileName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/profiles/profile%v", data.getPath(), keyPath))
 	}
 	if !data.AaaAuthorizationUsername.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/aaa-authorization/username", data.getPath()))
@@ -2414,9 +2532,10 @@ func (data *CallHome) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/sender/from", data.getPath()))
 	}
 	for i := range data.MailServers {
-		keyValues := [...]string{data.MailServers[i].MailServerName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mail-servers/mail-server=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[mail-server-name=" + data.MailServers[i].MailServerName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mail-servers/mail-server%v", data.getPath(), keyPath))
 	}
 	if !data.ServiceActive.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/service/active", data.getPath()))
@@ -2430,7 +2549,8 @@ func (data *CallHome) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *CallHome) addDeletedItemsXML(ctx context.Context, state CallHome, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Profiles {
@@ -2458,50 +2578,50 @@ func (data *CallHome) addDeletedItemsXML(ctx context.Context, state CallHome, bo
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].AnonymousReportingOnly.IsNull() && state.Profiles[i].AnonymousReportingOnly.ValueBool() && data.Profiles[j].AnonymousReportingOnly.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/anonymous-reporting-only", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/anonymous-reporting-only", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() && state.Profiles[i].ReportingSmartLicensingDataDisable.ValueBool() && data.Profiles[j].ReportingSmartLicensingDataDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/reporting/smart-licensing-data/disable", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/reporting/smart-licensing-data/disable", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].ReportingSmartLicensingData.IsNull() && state.Profiles[i].ReportingSmartLicensingData.ValueBool() && data.Profiles[j].ReportingSmartLicensingData.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/reporting/smart-licensing-data", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/reporting/smart-licensing-data", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() && state.Profiles[i].ReportingSmartCallHomeDataDisable.ValueBool() && data.Profiles[j].ReportingSmartCallHomeDataDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/reporting/smart-call-home-data/disable", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/reporting/smart-call-home-data/disable", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].ReportingSmartCallHomeData.IsNull() && state.Profiles[i].ReportingSmartCallHomeData.ValueBool() && data.Profiles[j].ReportingSmartCallHomeData.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/reporting/smart-call-home-data", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/reporting/smart-call-home-data", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() && state.Profiles[i].DestinationTransportMethodHttpDisable.ValueBool() && data.Profiles[j].DestinationTransportMethodHttpDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/transport-method/http/disable", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/transport-method/http/disable", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].DestinationTransportMethodHttp.IsNull() && state.Profiles[i].DestinationTransportMethodHttp.ValueBool() && data.Profiles[j].DestinationTransportMethodHttp.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/transport-method/http", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/transport-method/http", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() && state.Profiles[i].DestinationTransportMethodEmailDisable.ValueBool() && data.Profiles[j].DestinationTransportMethodEmailDisable.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/transport-method/email/disable", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/transport-method/email/disable", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].DestinationTransportMethodEmail.IsNull() && state.Profiles[i].DestinationTransportMethodEmail.ValueBool() && data.Profiles[j].DestinationTransportMethodEmail.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/transport-method/email", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/transport-method/email", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].DestinationMsgFormatLong.IsNull() && state.Profiles[i].DestinationMsgFormatLong.ValueBool() && data.Profiles[j].DestinationMsgFormatLong.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/preferred-msg-format/long-text", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/preferred-msg-format/long-text", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].DestinationMsgFormatShort.IsNull() && state.Profiles[i].DestinationMsgFormatShort.ValueBool() && data.Profiles[j].DestinationMsgFormatShort.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/preferred-msg-format/short-text", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/preferred-msg-format/short-text", predicates))
 				}
 				if !state.Profiles[i].DestinationMessageSizeLimit.IsNull() && data.Profiles[j].DestinationMessageSizeLimit.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/message-size-limit", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/message-size-limit", predicates))
 				}
 				for ci := range state.Profiles[i].DestinationAddresses {
 					cstateKeys := [...]string{"address-type", "destination-address"}
@@ -2536,61 +2656,109 @@ func (data *CallHome) addDeletedItemsXML(ctx context.Context, state CallHome, bo
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/addresses/address%v", predicates, cpredicates))
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/destination/addresses/address%v", predicates, cpredicates))
 					}
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].Active.IsNull() && state.Profiles[i].Active.ValueBool() && data.Profiles[j].Active.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/active", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/active", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/profiles/profile%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v", predicates))
 		}
 	}
 	if !state.AaaAuthorizationUsername.IsNull() && data.AaaAuthorizationUsername.IsNull() {
 		deletePath := state.getXPath() + "/aaa-authorization/username"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AaaAuthorization.IsNull() && state.AaaAuthorization.ValueBool() && data.AaaAuthorization.IsNull() {
 		deletePath := state.getXPath() + "/aaa-authorization/active"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Vrf.IsNull() && data.Vrf.IsNull() {
 		deletePath := state.getXPath() + "/vrf"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SyslogThrottling.IsNull() && state.SyslogThrottling.ValueBool() && data.SyslogThrottling.IsNull() {
 		deletePath := state.getXPath() + "/syslog-throttling"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
 		deletePath := state.getXPath() + "/source-interface"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.HttpProxyPort.IsNull() && data.HttpProxyPort.IsNull() {
 		deletePath := state.getXPath() + "/http-proxy/port"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -2609,102 +2777,206 @@ func (data *CallHome) addDeletedItemsXML(ctx context.Context, state CallHome, bo
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DataPrivacyLevelHigh.IsNull() && state.DataPrivacyLevelHigh.ValueBool() && data.DataPrivacyLevelHigh.IsNull() {
 		deletePath := state.getXPath() + "/data-privacy/level/high"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DataPrivacyLevelNormal.IsNull() && state.DataPrivacyLevelNormal.ValueBool() && data.DataPrivacyLevelNormal.IsNull() {
 		deletePath := state.getXPath() + "/data-privacy/level/normal"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DataPrivacyHostname.IsNull() && state.DataPrivacyHostname.ValueBool() && data.DataPrivacyHostname.IsNull() {
 		deletePath := state.getXPath() + "/data-privacy/hostname"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RateLimit.IsNull() && data.RateLimit.IsNull() {
 		deletePath := state.getXPath() + "/rate-limit"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SiteId.IsNull() && data.SiteId.IsNull() {
 		deletePath := state.getXPath() + "/site-id"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ContractId.IsNull() && data.ContractId.IsNull() {
 		deletePath := state.getXPath() + "/contract-id"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.CustomerId.IsNull() && data.CustomerId.IsNull() {
 		deletePath := state.getXPath() + "/customer-id"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.StreetAddress.IsNull() && data.StreetAddress.IsNull() {
 		deletePath := state.getXPath() + "/street-address"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PhoneNumber.IsNull() && data.PhoneNumber.IsNull() {
 		deletePath := state.getXPath() + "/phone-number"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ContactSmartLicensing.IsNull() && state.ContactSmartLicensing.ValueBool() && data.ContactSmartLicensing.IsNull() {
 		deletePath := state.getXPath() + "/contact/smart-licensing"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ContactEmail.IsNull() && data.ContactEmail.IsNull() {
 		deletePath := state.getXPath() + "/contact-email-addr"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SenderReplyTo.IsNull() && data.SenderReplyTo.IsNull() {
 		deletePath := state.getXPath() + "/sender/reply-to"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SenderFrom.IsNull() && data.SenderFrom.IsNull() {
 		deletePath := state.getXPath() + "/sender/from"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -2732,26 +3004,33 @@ func (data *CallHome) addDeletedItemsXML(ctx context.Context, state CallHome, bo
 			}
 			if found {
 				if !state.MailServers[i].Priority.IsNull() && data.MailServers[j].Priority.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/mail-servers/mail-server%v/priority", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/mail-servers/mail-server%v/priority", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/mail-servers/mail-server%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/mail-servers/mail-server%v", predicates))
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ServiceActive.IsNull() && state.ServiceActive.ValueBool() && data.ServiceActive.IsNull() {
 		deletePath := state.getXPath() + "/service/active"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -2845,7 +3124,6 @@ func (data *CallHome) addDeletePathsXML(ctx context.Context, body string) string
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/service/active")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

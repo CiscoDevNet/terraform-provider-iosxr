@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -115,11 +115,34 @@ func TestAccIosxrEVPN(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrEVPNPrerequisitesConfig = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrEVPNConfig_minimum() string {
 	config := `resource "iosxr_evpn" "test" {` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -195,30 +218,9 @@ func testAccIosxrEVPNConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	virtual_access_evi_ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.03"` + "\n"
 	config += `	virtual_access_evi_ethernet_segment_bgp_rt = "01:01:01:01:01:03"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-
-		return fmt.Sprintf(""), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrEVPNPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
-	attributes = {
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites

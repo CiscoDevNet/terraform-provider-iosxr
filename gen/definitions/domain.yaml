@@ -28,7 +28,6 @@ attributes:
         id: true
         example: HOST_NAME_IPV4
       - yang_name: ip-address
-        type: StringList
         example: 10.0.0.10
   - yang_name: name-servers/name-server
     tf_name: name_servers
@@ -48,7 +47,6 @@ attributes:
         id: true
         example: HOST_NAME_IPV6
       - yang_name: ipv6-address
-        type: StringList
         example: 10::10
   - yang_name: multicast
     example: multicast.cisco.com

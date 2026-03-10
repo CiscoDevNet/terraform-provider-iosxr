@@ -242,75 +242,79 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 	}
 	if value := gjson.GetBytes(res, "address.linklocal.linklocal-address"); value.Exists() && !data.AddressLinklocal.IsNull() {
 		data.AddressLinklocal = types.StringValue(value.String())
-	} else {
+	} else if data.AddressLinklocal.IsNull() {
 		data.AddressLinklocal = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "address.linklocal.autoconfig"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AddressLinklocalAutoconfig.IsNull() {
 			data.AddressLinklocalAutoconfig = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AddressLinklocalAutoconfig.IsNull() {
 			data.AddressLinklocalAutoconfig = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
-	} else {
+	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "name"); value.Exists() && !data.Name.IsNull() {
 		data.Name = types.StringValue(value.String())
-	} else {
+	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "unicast-peer"); value.Exists() && !data.UnicastPeer.IsNull() {
 		data.UnicastPeer = types.StringValue(value.String())
-	} else {
+	} else if data.UnicastPeer.IsNull() {
 		data.UnicastPeer = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "timer.advertisement-time-in-seconds"); value.Exists() && !data.TimerAdvertisementSeconds.IsNull() {
 		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
-	} else {
+	} else if data.TimerAdvertisementSeconds.IsNull() {
 		data.TimerAdvertisementSeconds = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timer.advertisement-time-in-milliseconds"); value.Exists() && !data.TimerAdvertisementMilliseconds.IsNull() {
 		data.TimerAdvertisementMilliseconds = types.Int64Value(value.Int())
-	} else {
+	} else if data.TimerAdvertisementMilliseconds.IsNull() {
 		data.TimerAdvertisementMilliseconds = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timer.force"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.TimerForce.IsNull() {
 			data.TimerForce = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.TimerForce.IsNull() {
 			data.TimerForce = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "preempt.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.PreemptDisable.IsNull() {
 			data.PreemptDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.PreemptDisable.IsNull() {
 			data.PreemptDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "preempt.delay"); value.Exists() && !data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "accept-mode.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AcceptModeDisable.IsNull() {
 			data.AcceptModeDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AcceptModeDisable.IsNull() {
 			data.AcceptModeDisable = types.BoolNull()
 		}
@@ -385,7 +389,7 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.ipv6"); value.Exists() && !data.BfdFastDetectPeerIpv6.IsNull() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
-	} else {
+	} else if data.BfdFastDetectPeerIpv6.IsNull() {
 		data.BfdFastDetectPeerIpv6 = types.StringNull()
 	}
 }
@@ -395,18 +399,12 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 
 func (data RouterVRRPInterfaceIPv6) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
-	if !data.VrrpId.IsNull() && !data.VrrpId.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/vrrp-id", strconv.FormatInt(data.VrrpId.ValueInt64(), 10))
-	}
 	if len(data.GlobalAddresses) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.GlobalAddresses {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/address/global/global-address"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"address/global/global-address", cBody.Res())
 		}
 	}
 	if !data.AddressLinklocal.IsNull() && !data.AddressLinklocal.IsUnknown() {
@@ -451,40 +449,38 @@ func (data RouterVRRPInterfaceIPv6) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.TrackInterfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.TrackInterfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/track/interfaces/interface"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.PriorityDecrement.IsNull() && !item.PriorityDecrement.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "priority-decrement", strconv.FormatInt(item.PriorityDecrement.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/priority-decrement", strconv.FormatInt(item.PriorityDecrement.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"track/interfaces/interface", cBody.Res())
 		}
 	}
 	if len(data.TrackObjects) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.TrackObjects {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/track/objects/object"
 			if !item.ObjectName.IsNull() && !item.ObjectName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "object-name", item.ObjectName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/object-name", item.ObjectName.ValueString())
 			}
 			if !item.PriorityDecrement.IsNull() && !item.PriorityDecrement.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "priority-decrement", strconv.FormatInt(item.PriorityDecrement.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/priority-decrement", strconv.FormatInt(item.PriorityDecrement.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"track/objects/object", cBody.Res())
 		}
 	}
 	if !data.BfdFastDetectPeerIpv6.IsNull() && !data.BfdFastDetectPeerIpv6.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/bfd/fast-detect/peer/ipv6", data.BfdFastDetectPeerIpv6.ValueString())
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -492,17 +488,12 @@ func (data RouterVRRPInterfaceIPv6) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterVRRPInterfaceIPv6) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrrp-id"); value.Exists() {
-		data.VrrpId = types.Int64Value(value.Int())
-	} else if data.VrrpId.IsNull() {
-		data.VrrpId = types.Int64Null()
-	}
 	for i := range data.GlobalAddresses {
 		keys := [...]string{"address"}
 		keyValues := [...]string{data.GlobalAddresses[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/global/global-address").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/global/global-address").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -520,73 +511,85 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBodyXML(ctx context.Context, res 
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.GlobalAddresses[i].Address.IsNull() {
 			data.GlobalAddresses[i].Address = types.StringValue(value.String())
 		} else if data.GlobalAddresses[i].Address.IsNull() {
 			data.GlobalAddresses[i].Address = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/linklocal/linklocal-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/linklocal/linklocal-address"); value.Exists() && !data.AddressLinklocal.IsNull() {
 		data.AddressLinklocal = types.StringValue(value.String())
 	} else if data.AddressLinklocal.IsNull() {
 		data.AddressLinklocal = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/linklocal/autoconfig"); value.Exists() {
-		data.AddressLinklocalAutoconfig = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/linklocal/autoconfig"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AddressLinklocalAutoconfig.IsNull() {
+			data.AddressLinklocalAutoconfig = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AddressLinklocalAutoconfig.IsNull() {
 			data.AddressLinklocalAutoconfig = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
 	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() && !data.Name.IsNull() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unicast-peer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unicast-peer"); value.Exists() && !data.UnicastPeer.IsNull() {
 		data.UnicastPeer = types.StringValue(value.String())
 	} else if data.UnicastPeer.IsNull() {
 		data.UnicastPeer = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer/advertisement-time-in-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer/advertisement-time-in-seconds"); value.Exists() && !data.TimerAdvertisementSeconds.IsNull() {
 		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
 	} else if data.TimerAdvertisementSeconds.IsNull() {
 		data.TimerAdvertisementSeconds = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer/advertisement-time-in-milliseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer/advertisement-time-in-milliseconds"); value.Exists() && !data.TimerAdvertisementMilliseconds.IsNull() {
 		data.TimerAdvertisementMilliseconds = types.Int64Value(value.Int())
 	} else if data.TimerAdvertisementMilliseconds.IsNull() {
 		data.TimerAdvertisementMilliseconds = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer/force"); value.Exists() {
-		data.TimerForce = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer/force"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TimerForce.IsNull() {
+			data.TimerForce = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.TimerForce.IsNull() {
 			data.TimerForce = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preempt/disable"); value.Exists() {
-		data.PreemptDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preempt/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PreemptDisable.IsNull() {
+			data.PreemptDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.PreemptDisable.IsNull() {
 			data.PreemptDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preempt/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preempt/delay"); value.Exists() && !data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	} else if data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-mode/disable"); value.Exists() {
-		data.AcceptModeDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-mode/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AcceptModeDisable.IsNull() {
+			data.AcceptModeDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AcceptModeDisable.IsNull() {
@@ -598,7 +601,7 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBodyXML(ctx context.Context, res 
 		keyValues := [...]string{data.TrackInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/track/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -616,12 +619,12 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBodyXML(ctx context.Context, res 
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.TrackInterfaces[i].InterfaceName.IsNull() {
 			data.TrackInterfaces[i].InterfaceName = types.StringValue(value.String())
 		} else if data.TrackInterfaces[i].InterfaceName.IsNull() {
 			data.TrackInterfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "priority-decrement"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "priority-decrement"); value.Exists() && !data.TrackInterfaces[i].PriorityDecrement.IsNull() {
 			data.TrackInterfaces[i].PriorityDecrement = types.Int64Value(value.Int())
 		} else if data.TrackInterfaces[i].PriorityDecrement.IsNull() {
 			data.TrackInterfaces[i].PriorityDecrement = types.Int64Null()
@@ -632,7 +635,7 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBodyXML(ctx context.Context, res 
 		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/track/objects/object").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track/objects/object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -650,18 +653,18 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBodyXML(ctx context.Context, res 
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() && !data.TrackObjects[i].ObjectName.IsNull() {
 			data.TrackObjects[i].ObjectName = types.StringValue(value.String())
 		} else if data.TrackObjects[i].ObjectName.IsNull() {
 			data.TrackObjects[i].ObjectName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "priority-decrement"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "priority-decrement"); value.Exists() && !data.TrackObjects[i].PriorityDecrement.IsNull() {
 			data.TrackObjects[i].PriorityDecrement = types.Int64Value(value.Int())
 		} else if data.TrackObjects[i].PriorityDecrement.IsNull() {
 			data.TrackObjects[i].PriorityDecrement = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/peer/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/fast-detect/peer/ipv6"); value.Exists() && !data.BfdFastDetectPeerIpv6.IsNull() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
 	} else if data.BfdFastDetectPeerIpv6.IsNull() {
 		data.BfdFastDetectPeerIpv6 = types.StringNull()
@@ -675,6 +678,10 @@ func (data *RouterVRRPInterfaceIPv6) fromBody(ctx context.Context, res gjson.Res
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "address.global.global-address"); value.Exists() {
 		data.GlobalAddresses = make([]RouterVRRPInterfaceIPv6GlobalAddresses, 0)
@@ -692,8 +699,9 @@ func (data *RouterVRRPInterfaceIPv6) fromBody(ctx context.Context, res gjson.Res
 	}
 	if value := res.Get(prefix + "address.linklocal.autoconfig"); value.Exists() {
 		data.AddressLinklocalAutoconfig = types.BoolValue(true)
-	} else {
-		data.AddressLinklocalAutoconfig = types.BoolNull()
+	} else if !data.AddressLinklocalAutoconfig.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AddressLinklocalAutoconfig = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
@@ -712,21 +720,24 @@ func (data *RouterVRRPInterfaceIPv6) fromBody(ctx context.Context, res gjson.Res
 	}
 	if value := res.Get(prefix + "timer.force"); value.Exists() {
 		data.TimerForce = types.BoolValue(true)
-	} else {
-		data.TimerForce = types.BoolNull()
+	} else if !data.TimerForce.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TimerForce = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preempt.disable"); value.Exists() {
 		data.PreemptDisable = types.BoolValue(true)
-	} else {
-		data.PreemptDisable = types.BoolNull()
+	} else if !data.PreemptDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PreemptDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preempt.delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "accept-mode.disable"); value.Exists() {
 		data.AcceptModeDisable = types.BoolValue(true)
-	} else {
-		data.AcceptModeDisable = types.BoolNull()
+	} else if !data.AcceptModeDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AcceptModeDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "track.interfaces.interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterVRRPInterfaceIPv6TrackInterfaces, 0)
@@ -765,9 +776,14 @@ func (data *RouterVRRPInterfaceIPv6) fromBody(ctx context.Context, res gjson.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterVRRPInterfaceIPv6Data) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "address.global.global-address"); value.Exists() {
 		data.GlobalAddresses = make([]RouterVRRPInterfaceIPv6GlobalAddresses, 0)
@@ -786,7 +802,7 @@ func (data *RouterVRRPInterfaceIPv6Data) fromBody(ctx context.Context, res gjson
 	if value := res.Get(prefix + "address.linklocal.autoconfig"); value.Exists() {
 		data.AddressLinklocalAutoconfig = types.BoolValue(true)
 	} else {
-		data.AddressLinklocalAutoconfig = types.BoolNull()
+		data.AddressLinklocalAutoconfig = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
@@ -806,12 +822,12 @@ func (data *RouterVRRPInterfaceIPv6Data) fromBody(ctx context.Context, res gjson
 	if value := res.Get(prefix + "timer.force"); value.Exists() {
 		data.TimerForce = types.BoolValue(true)
 	} else {
-		data.TimerForce = types.BoolNull()
+		data.TimerForce = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preempt.disable"); value.Exists() {
 		data.PreemptDisable = types.BoolValue(true)
 	} else {
-		data.PreemptDisable = types.BoolNull()
+		data.PreemptDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "preempt.delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
@@ -819,7 +835,7 @@ func (data *RouterVRRPInterfaceIPv6Data) fromBody(ctx context.Context, res gjson
 	if value := res.Get(prefix + "accept-mode.disable"); value.Exists() {
 		data.AcceptModeDisable = types.BoolValue(true)
 	} else {
-		data.AcceptModeDisable = types.BoolNull()
+		data.AcceptModeDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "track.interfaces.interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterVRRPInterfaceIPv6TrackInterfaces, 0)
@@ -858,7 +874,7 @@ func (data *RouterVRRPInterfaceIPv6Data) fromBody(ctx context.Context, res gjson
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterVRRPInterfaceIPv6) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/global/global-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/global/global-address"); value.Exists() {
 		data.GlobalAddresses = make([]RouterVRRPInterfaceIPv6GlobalAddresses, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterVRRPInterfaceIPv6GlobalAddresses{}
@@ -869,48 +885,48 @@ func (data *RouterVRRPInterfaceIPv6) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/linklocal/linklocal-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/linklocal/linklocal-address"); value.Exists() {
 		data.AddressLinklocal = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/linklocal/autoconfig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/linklocal/autoconfig"); value.Exists() {
 		data.AddressLinklocalAutoconfig = types.BoolValue(true)
 	} else {
-		data.AddressLinklocalAutoconfig = types.BoolNull()
+		data.AddressLinklocalAutoconfig = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unicast-peer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unicast-peer"); value.Exists() {
 		data.UnicastPeer = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer/advertisement-time-in-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer/advertisement-time-in-seconds"); value.Exists() {
 		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer/advertisement-time-in-milliseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer/advertisement-time-in-milliseconds"); value.Exists() {
 		data.TimerAdvertisementMilliseconds = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer/force"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer/force"); value.Exists() {
 		data.TimerForce = types.BoolValue(true)
 	} else {
-		data.TimerForce = types.BoolNull()
+		data.TimerForce = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preempt/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preempt/disable"); value.Exists() {
 		data.PreemptDisable = types.BoolValue(true)
 	} else {
-		data.PreemptDisable = types.BoolNull()
+		data.PreemptDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preempt/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preempt/delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-mode/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-mode/disable"); value.Exists() {
 		data.AcceptModeDisable = types.BoolValue(true)
 	} else {
-		data.AcceptModeDisable = types.BoolNull()
+		data.AcceptModeDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track/interfaces/interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterVRRPInterfaceIPv6TrackInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterVRRPInterfaceIPv6TrackInterfaces{}
@@ -924,7 +940,7 @@ func (data *RouterVRRPInterfaceIPv6) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track/objects/object"); value.Exists() {
 		data.TrackObjects = make([]RouterVRRPInterfaceIPv6TrackObjects, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterVRRPInterfaceIPv6TrackObjects{}
@@ -938,7 +954,7 @@ func (data *RouterVRRPInterfaceIPv6) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/peer/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/fast-detect/peer/ipv6"); value.Exists() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
 	}
 }
@@ -947,7 +963,7 @@ func (data *RouterVRRPInterfaceIPv6) fromBodyXML(ctx context.Context, res xmldot
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterVRRPInterfaceIPv6Data) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/global/global-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/global/global-address"); value.Exists() {
 		data.GlobalAddresses = make([]RouterVRRPInterfaceIPv6GlobalAddresses, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterVRRPInterfaceIPv6GlobalAddresses{}
@@ -958,48 +974,48 @@ func (data *RouterVRRPInterfaceIPv6Data) fromBodyXML(ctx context.Context, res xm
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/linklocal/linklocal-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/linklocal/linklocal-address"); value.Exists() {
 		data.AddressLinklocal = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/address/linklocal/autoconfig"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/address/linklocal/autoconfig"); value.Exists() {
 		data.AddressLinklocalAutoconfig = types.BoolValue(true)
 	} else {
 		data.AddressLinklocalAutoconfig = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/unicast-peer"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unicast-peer"); value.Exists() {
 		data.UnicastPeer = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer/advertisement-time-in-seconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer/advertisement-time-in-seconds"); value.Exists() {
 		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer/advertisement-time-in-milliseconds"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer/advertisement-time-in-milliseconds"); value.Exists() {
 		data.TimerAdvertisementMilliseconds = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/timer/force"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer/force"); value.Exists() {
 		data.TimerForce = types.BoolValue(true)
 	} else {
 		data.TimerForce = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preempt/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preempt/disable"); value.Exists() {
 		data.PreemptDisable = types.BoolValue(true)
 	} else {
 		data.PreemptDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/preempt/delay"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/preempt/delay"); value.Exists() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/accept-mode/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/accept-mode/disable"); value.Exists() {
 		data.AcceptModeDisable = types.BoolValue(true)
 	} else {
 		data.AcceptModeDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track/interfaces/interface"); value.Exists() {
 		data.TrackInterfaces = make([]RouterVRRPInterfaceIPv6TrackInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterVRRPInterfaceIPv6TrackInterfaces{}
@@ -1013,7 +1029,7 @@ func (data *RouterVRRPInterfaceIPv6Data) fromBodyXML(ctx context.Context, res xm
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/track/objects/object"); value.Exists() {
 		data.TrackObjects = make([]RouterVRRPInterfaceIPv6TrackObjects, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterVRRPInterfaceIPv6TrackObjects{}
@@ -1027,7 +1043,7 @@ func (data *RouterVRRPInterfaceIPv6Data) fromBodyXML(ctx context.Context, res xm
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/bfd/fast-detect/peer/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bfd/fast-detect/peer/ipv6"); value.Exists() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
 	}
 }
@@ -1237,14 +1253,16 @@ func (data *RouterVRRPInterfaceIPv6) getDeletePaths(ctx context.Context) []strin
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv6", data.getPath()))
 	}
 	for i := range data.TrackObjects {
-		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/objects/object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[object-name=" + data.TrackObjects[i].ObjectName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/objects/object%v", data.getPath(), keyPath))
 	}
 	for i := range data.TrackInterfaces {
-		keyValues := [...]string{data.TrackInterfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.TrackInterfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	if !data.AcceptModeDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/accept-mode/disable", data.getPath()))
@@ -1280,9 +1298,10 @@ func (data *RouterVRRPInterfaceIPv6) getDeletePaths(ctx context.Context) []strin
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/linklocal/linklocal-address", data.getPath()))
 	}
 	for i := range data.GlobalAddresses {
-		keyValues := [...]string{data.GlobalAddresses[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/global/global-address=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.GlobalAddresses[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/global/global-address%v", data.getPath(), keyPath))
 	}
 
 	return deletePaths
@@ -1292,13 +1311,22 @@ func (data *RouterVRRPInterfaceIPv6) getDeletePaths(ctx context.Context) []strin
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RouterVRRPInterfaceIPv6) addDeletedItemsXML(ctx context.Context, state RouterVRRPInterfaceIPv6, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.BfdFastDetectPeerIpv6.IsNull() && data.BfdFastDetectPeerIpv6.IsNull() {
 		deletePath := state.getXPath() + "/bfd/fast-detect/peer/ipv6"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1326,13 +1354,13 @@ func (data *RouterVRRPInterfaceIPv6) addDeletedItemsXML(ctx context.Context, sta
 			}
 			if found {
 				if !state.TrackObjects[i].PriorityDecrement.IsNull() && data.TrackObjects[j].PriorityDecrement.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track/objects/object%v/priority-decrement", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/track/objects/object%v/priority-decrement", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track/objects/object%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/track/objects/object%v", predicates))
 		}
 	}
 	for i := range state.TrackInterfaces {
@@ -1359,93 +1387,181 @@ func (data *RouterVRRPInterfaceIPv6) addDeletedItemsXML(ctx context.Context, sta
 			}
 			if found {
 				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track/interfaces/interface%v/priority-decrement", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/track/interfaces/interface%v/priority-decrement", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/track/interfaces/interface%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/track/interfaces/interface%v", predicates))
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AcceptModeDisable.IsNull() && state.AcceptModeDisable.ValueBool() && data.AcceptModeDisable.IsNull() {
 		deletePath := state.getXPath() + "/accept-mode/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.PreemptDelay.IsNull() && data.PreemptDelay.IsNull() {
 		deletePath := state.getXPath() + "/preempt/delay"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PreemptDisable.IsNull() && state.PreemptDisable.ValueBool() && data.PreemptDisable.IsNull() {
 		deletePath := state.getXPath() + "/preempt/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TimerForce.IsNull() && state.TimerForce.ValueBool() && data.TimerForce.IsNull() {
 		deletePath := state.getXPath() + "/timer/force"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.TimerAdvertisementMilliseconds.IsNull() && data.TimerAdvertisementMilliseconds.IsNull() {
 		deletePath := state.getXPath() + "/timer/advertisement-time-in-milliseconds"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.TimerAdvertisementSeconds.IsNull() && data.TimerAdvertisementSeconds.IsNull() {
 		deletePath := state.getXPath() + "/timer/advertisement-time-in-seconds"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.UnicastPeer.IsNull() && data.UnicastPeer.IsNull() {
 		deletePath := state.getXPath() + "/unicast-peer"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Name.IsNull() && data.Name.IsNull() {
 		deletePath := state.getXPath() + "/name"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Priority.IsNull() && data.Priority.IsNull() {
 		deletePath := state.getXPath() + "/priority"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AddressLinklocalAutoconfig.IsNull() && state.AddressLinklocalAutoconfig.ValueBool() && data.AddressLinklocalAutoconfig.IsNull() {
 		deletePath := state.getXPath() + "/address/linklocal/autoconfig"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AddressLinklocal.IsNull() && data.AddressLinklocal.IsNull() {
 		deletePath := state.getXPath() + "/address/linklocal/linklocal-address"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1476,12 +1592,11 @@ func (data *RouterVRRPInterfaceIPv6) addDeletedItemsXML(ctx context.Context, sta
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/address/global/global-address%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/address/global/global-address%v", predicates))
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -1557,7 +1672,6 @@ func (data *RouterVRRPInterfaceIPv6) addDeletePathsXML(ctx context.Context, body
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/address/global/global-address%v", predicates))
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

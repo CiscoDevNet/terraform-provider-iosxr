@@ -221,7 +221,6 @@ func (data RouterIGMPInterface) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.GroupMasks) > 0 {
-				body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-inc-mask.inc-mask", []interface{}{})
 				for cindex, citem := range item.GroupMasks {
 					if !citem.GroupIncMask.IsNull() && !citem.GroupIncMask.IsUnknown() {
 						body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-inc-mask.inc-mask"+"."+strconv.Itoa(cindex)+"."+"group-mask-address", citem.GroupIncMask.ValueString())
@@ -237,7 +236,6 @@ func (data RouterIGMPInterface) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SourceAddresses) > 0 {
-				body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-source-address.source-address", []interface{}{})
 				for cindex, citem := range item.SourceAddresses {
 					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
 						body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-source-address.source-address"+"."+strconv.Itoa(cindex)+"."+"source-address", citem.SourceIp.ValueString())
@@ -250,7 +248,6 @@ func (data RouterIGMPInterface) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.GroupMasksSourceAddresses) > 0 {
-				body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-inc-mask-source-address.inc-mask", []interface{}{})
 				for cindex, citem := range item.GroupMasksSourceAddresses {
 					if !citem.GroupIncMask.IsNull() && !citem.GroupIncMask.IsUnknown() {
 						body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-inc-mask-source-address.inc-mask"+"."+strconv.Itoa(cindex)+"."+"group-mask-address", citem.GroupIncMask.ValueString())
@@ -282,7 +279,6 @@ func (data RouterIGMPInterface) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SourceAddresses) > 0 {
-				body, _ = sjson.Set(body, "join-groups.join-group"+"."+strconv.Itoa(index)+"."+"source-addresses", []interface{}{})
 				for cindex, citem := range item.SourceAddresses {
 					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
 						body, _ = sjson.Set(body, "join-groups.join-group"+"."+strconv.Itoa(index)+"."+"source-addresses"+"."+strconv.Itoa(cindex)+"."+"source-address", citem.SourceIp.ValueString())
@@ -311,97 +307,102 @@ func (data RouterIGMPInterface) toBody(ctx context.Context) string {
 func (data *RouterIGMPInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "version"); value.Exists() && !data.Version.IsNull() {
 		data.Version = types.Int64Value(value.Int())
-	} else {
+	} else if data.Version.IsNull() {
 		data.Version = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "router.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.RouterEnable.IsNull() {
 			data.RouterEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.RouterEnable.IsNull() {
 			data.RouterEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "router.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.RouterDisable.IsNull() {
 			data.RouterDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.RouterDisable.IsNull() {
 			data.RouterDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "dvmrp-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.DvmrpEnable.IsNull() {
 			data.DvmrpEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.DvmrpEnable.IsNull() {
 			data.DvmrpEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "explicit-tracking.enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ExplicitTrackingEnable.IsNull() {
 			data.ExplicitTrackingEnable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ExplicitTrackingEnable.IsNull() {
 			data.ExplicitTrackingEnable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "explicit-tracking.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ExplicitTrackingDisable.IsNull() {
 			data.ExplicitTrackingDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ExplicitTrackingDisable.IsNull() {
 			data.ExplicitTrackingDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "explicit-tracking.access-list"); value.Exists() && !data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
-	} else {
+	} else if data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "access-group"); value.Exists() && !data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "maximum.groups-per-interface.maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
-	} else {
+	} else if data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "maximum.groups-per-interface.threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "maximum.groups-per-interface.access-list"); value.Exists() && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
-	} else {
+	} else if data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringNull()
 	}
 	for i := range data.StaticGroups {
@@ -433,21 +434,25 @@ func (data *RouterIGMPInterface) updateFromBody(ctx context.Context, res []byte)
 			data.StaticGroups[i].GroupAddress = types.StringNull()
 		}
 		if value := r.Get("group-address-only"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.StaticGroups[i].GroupAddressOnly.IsNull() {
 				data.StaticGroups[i].GroupAddressOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.StaticGroups[i].GroupAddressOnly.IsNull() {
 				data.StaticGroups[i].GroupAddressOnly = types.BoolNull()
 			}
 		}
 		if value := r.Get("group-address-only.suppress-reports"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.StaticGroups[i].SuppressReports.IsNull() {
 				data.StaticGroups[i].SuppressReports = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.StaticGroups[i].SuppressReports.IsNull() {
 				data.StaticGroups[i].SuppressReports = types.BoolNull()
 			}
@@ -480,9 +485,9 @@ func (data *RouterIGMPInterface) updateFromBody(ctx context.Context, res []byte)
 			} else {
 				data.StaticGroups[i].GroupMasks[ci].GroupIncMask = types.StringNull()
 			}
-			if value := cr.Get("group-address-count"); value.Exists() {
+			if value := cr.Get("group-address-count"); value.Exists() && !data.StaticGroups[i].GroupMasks[ci].GroupCount.IsNull() {
 				data.StaticGroups[i].GroupMasks[ci].GroupCount = types.Int64Value(value.Int())
-			} else if data.StaticGroups[i].GroupMasks[ci].GroupCount.IsNull() {
+			} else {
 				data.StaticGroups[i].GroupMasks[ci].GroupCount = types.Int64Null()
 			}
 			if value := cr.Get("suppress-reports"); value.Exists() {
@@ -568,9 +573,9 @@ func (data *RouterIGMPInterface) updateFromBody(ctx context.Context, res []byte)
 			} else {
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp = types.StringNull()
 			}
-			if value := cr.Get("group-address-count"); value.Exists() {
+			if value := cr.Get("group-address-count"); value.Exists() && !data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount.IsNull() {
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount = types.Int64Value(value.Int())
-			} else if data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount.IsNull() {
+			} else {
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount = types.Int64Null()
 			}
 			if value := cr.Get("suppress-reports"); value.Exists() {
@@ -614,11 +619,13 @@ func (data *RouterIGMPInterface) updateFromBody(ctx context.Context, res []byte)
 			data.JoinGroups[i].GroupAddress = types.StringNull()
 		}
 		if value := r.Get("group-address-only"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.JoinGroups[i].GroupAddressOnly.IsNull() {
 				data.JoinGroups[i].GroupAddressOnly = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.JoinGroups[i].GroupAddressOnly.IsNull() {
 				data.JoinGroups[i].GroupAddressOnly = types.BoolNull()
 			}
@@ -680,9 +687,6 @@ func (data *RouterIGMPInterface) updateFromBody(ctx context.Context, res []byte)
 
 func (data RouterIGMPInterface) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
-	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/interface-name", data.InterfaceName.ValueString())
-	}
 	if !data.Version.IsNull() && !data.Version.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/version", strconv.FormatInt(data.Version.ValueInt64(), 10))
 	}
@@ -736,105 +740,110 @@ func (data RouterIGMPInterface) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/maximum/groups-per-interface/access-list", data.MaximumGroupsPerInterfaceAcl.ValueString())
 	}
 	if len(data.StaticGroups) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.StaticGroups {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/static-groups/group-address"
 			if !item.GroupAddress.IsNull() && !item.GroupAddress.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "group-address", item.GroupAddress.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/group-address", item.GroupAddress.ValueString())
 			}
 			if !item.GroupAddressOnly.IsNull() && !item.GroupAddressOnly.IsUnknown() {
 				if item.GroupAddressOnly.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "group-address-only", "")
+					body = helpers.SetFromXPath(body, basePath+"/group-address-only", "")
 				}
 			}
 			if !item.SuppressReports.IsNull() && !item.SuppressReports.IsUnknown() {
 				if item.SuppressReports.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "group-address-only/suppress-reports", "")
+					body = helpers.SetFromXPath(body, basePath+"/group-address-only/suppress-reports", "")
 				}
 			}
 			if len(item.GroupMasks) > 0 {
 				for _, citem := range item.GroupMasks {
-					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					cbasePath := basePath + "/group-address-inc-mask/inc-mask[group-mask-address='" + citem.GroupIncMask.ValueString() + "']"
+					if !citem.GroupIncMask.IsNull() && !citem.GroupIncMask.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/group-mask-address", citem.GroupIncMask.ValueString())
+					}
 					if !citem.GroupCount.IsNull() && !citem.GroupCount.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "group-address-count", strconv.FormatInt(citem.GroupCount.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/group-address-count", strconv.FormatInt(citem.GroupCount.ValueInt64(), 10))
 					}
 					if !citem.SuppressReports.IsNull() && !citem.SuppressReports.IsUnknown() {
 						if citem.SuppressReports.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "suppress-reports", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/suppress-reports", "")
 						}
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "group-address-inc-mask/inc-mask", ccBody.Res())
 				}
 			}
 			if len(item.SourceAddresses) > 0 {
 				for _, citem := range item.SourceAddresses {
-					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					cbasePath := basePath + "/group-address-source-address/source-address[source-address='" + citem.SourceIp.ValueString() + "']"
+					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/source-address", citem.SourceIp.ValueString())
+					}
 					if !citem.SuppressReports.IsNull() && !citem.SuppressReports.IsUnknown() {
 						if citem.SuppressReports.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "suppress-reports", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/suppress-reports", "")
 						}
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "group-address-source-address/source-address", ccBody.Res())
 				}
 			}
 			if len(item.GroupMasksSourceAddresses) > 0 {
 				for _, citem := range item.GroupMasksSourceAddresses {
-					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					cbasePath := basePath + "/group-address-inc-mask-source-address/inc-mask[group-mask-address='" + citem.GroupIncMask.ValueString() + "' and source-address='" + citem.SourceIp.ValueString() + "']"
+					if !citem.GroupIncMask.IsNull() && !citem.GroupIncMask.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/group-mask-address", citem.GroupIncMask.ValueString())
+					}
+					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/source-address", citem.SourceIp.ValueString())
+					}
 					if !citem.GroupCount.IsNull() && !citem.GroupCount.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "group-address-count", strconv.FormatInt(citem.GroupCount.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/group-address-count", strconv.FormatInt(citem.GroupCount.ValueInt64(), 10))
 					}
 					if !citem.SuppressReports.IsNull() && !citem.SuppressReports.IsUnknown() {
 						if citem.SuppressReports.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "suppress-reports", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/suppress-reports", "")
 						}
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "group-address-inc-mask-source-address/inc-mask", ccBody.Res())
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"static-groups/group-address", cBody.Res())
 		}
 	}
 	if len(data.JoinGroups) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.JoinGroups {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/join-groups/join-group"
 			if !item.GroupAddress.IsNull() && !item.GroupAddress.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "group-address", item.GroupAddress.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/group-address", item.GroupAddress.ValueString())
 			}
 			if !item.GroupAddressOnly.IsNull() && !item.GroupAddressOnly.IsUnknown() {
 				if item.GroupAddressOnly.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "group-address-only", "")
+					body = helpers.SetFromXPath(body, basePath+"/group-address-only", "")
 				}
 			}
 			if len(item.SourceAddresses) > 0 {
 				for _, citem := range item.SourceAddresses {
-					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					cbasePath := basePath + "/source-addresses[source-address='" + citem.SourceIp.ValueString() + "']"
+					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/source-address", citem.SourceIp.ValueString())
+					}
 					if !citem.Include.IsNull() && !citem.Include.IsUnknown() {
 						if citem.Include.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "include", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/include", "")
 						}
 					}
 					if !citem.Exclude.IsNull() && !citem.Exclude.IsUnknown() {
 						if citem.Exclude.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "exclude", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/exclude", "")
 						}
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "source-addresses", ccBody.Res())
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"join-groups/join-group", cBody.Res())
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -842,92 +851,102 @@ func (data RouterIGMPInterface) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interface-name"); value.Exists() {
-		data.InterfaceName = types.StringValue(value.String())
-	} else if data.InterfaceName.IsNull() {
-		data.InterfaceName = types.StringNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version"); value.Exists() && !data.Version.IsNull() {
 		data.Version = types.Int64Value(value.Int())
 	} else if data.Version.IsNull() {
 		data.Version = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router/enable"); value.Exists() {
-		data.RouterEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.RouterEnable.IsNull() {
+			data.RouterEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.RouterEnable.IsNull() {
 			data.RouterEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router/disable"); value.Exists() {
-		data.RouterDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.RouterDisable.IsNull() {
+			data.RouterDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.RouterDisable.IsNull() {
 			data.RouterDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dvmrp-enable"); value.Exists() {
-		data.DvmrpEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dvmrp-enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DvmrpEnable.IsNull() {
+			data.DvmrpEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.DvmrpEnable.IsNull() {
 			data.DvmrpEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Value(value.Int())
 	} else if data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Value(value.Int())
 	} else if data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-max-response-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
 	} else if data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/enable"); value.Exists() {
-		data.ExplicitTrackingEnable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ExplicitTrackingEnable.IsNull() {
+			data.ExplicitTrackingEnable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ExplicitTrackingEnable.IsNull() {
 			data.ExplicitTrackingEnable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
-		data.ExplicitTrackingDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ExplicitTrackingDisable.IsNull() {
+			data.ExplicitTrackingDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ExplicitTrackingDisable.IsNull() {
 			data.ExplicitTrackingDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() && !data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
 	} else if data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group"); value.Exists() && !data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringValue(value.String())
 	} else if data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
 	} else if data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringNull()
@@ -937,7 +956,7 @@ func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmld
 		keyValues := [...]string{data.StaticGroups[i].GroupAddress.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/static-groups/group-address").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/static-groups/group-address").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -955,13 +974,16 @@ func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmld
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "group-address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "group-address"); value.Exists() && !data.StaticGroups[i].GroupAddress.IsNull() {
 			data.StaticGroups[i].GroupAddress = types.StringValue(value.String())
 		} else if data.StaticGroups[i].GroupAddress.IsNull() {
 			data.StaticGroups[i].GroupAddress = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "group-address-only"); value.Exists() {
-			data.StaticGroups[i].GroupAddressOnly = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.StaticGroups[i].GroupAddressOnly.IsNull() {
+				data.StaticGroups[i].GroupAddressOnly = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -970,7 +992,10 @@ func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmld
 			}
 		}
 		if value := helpers.GetFromXPath(r, "group-address-only/suppress-reports"); value.Exists() {
-			data.StaticGroups[i].SuppressReports = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.StaticGroups[i].SuppressReports.IsNull() {
+				data.StaticGroups[i].SuppressReports = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1001,14 +1026,14 @@ func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmld
 					return true
 				},
 			)
-			if value := helpers.GetFromXPath(cr, "group-mask-address"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "group-mask-address"); value.Exists() && !data.StaticGroups[i].GroupMasks[ci].GroupIncMask.IsNull() {
 				data.StaticGroups[i].GroupMasks[ci].GroupIncMask = types.StringValue(value.String())
-			} else {
+			} else if data.StaticGroups[i].GroupMasks[ci].GroupIncMask.IsNull() {
 				data.StaticGroups[i].GroupMasks[ci].GroupIncMask = types.StringNull()
 			}
-			if value := helpers.GetFromXPath(cr, "group-address-count"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "group-address-count"); value.Exists() && !data.StaticGroups[i].GroupMasks[ci].GroupCount.IsNull() {
 				data.StaticGroups[i].GroupMasks[ci].GroupCount = types.Int64Value(value.Int())
-			} else {
+			} else if data.StaticGroups[i].GroupMasks[ci].GroupCount.IsNull() {
 				data.StaticGroups[i].GroupMasks[ci].GroupCount = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "suppress-reports"); value.Exists() {
@@ -1045,9 +1070,9 @@ func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmld
 					return true
 				},
 			)
-			if value := helpers.GetFromXPath(cr, "source-address"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "source-address"); value.Exists() && !data.StaticGroups[i].SourceAddresses[ci].SourceIp.IsNull() {
 				data.StaticGroups[i].SourceAddresses[ci].SourceIp = types.StringValue(value.String())
-			} else {
+			} else if data.StaticGroups[i].SourceAddresses[ci].SourceIp.IsNull() {
 				data.StaticGroups[i].SourceAddresses[ci].SourceIp = types.StringNull()
 			}
 			if value := helpers.GetFromXPath(cr, "suppress-reports"); value.Exists() {
@@ -1084,19 +1109,19 @@ func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmld
 					return true
 				},
 			)
-			if value := helpers.GetFromXPath(cr, "group-mask-address"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "group-mask-address"); value.Exists() && !data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask.IsNull() {
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask = types.StringValue(value.String())
-			} else {
+			} else if data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask.IsNull() {
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupIncMask = types.StringNull()
 			}
-			if value := helpers.GetFromXPath(cr, "source-address"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "source-address"); value.Exists() && !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp.IsNull() {
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp = types.StringValue(value.String())
-			} else {
+			} else if data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp.IsNull() {
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].SourceIp = types.StringNull()
 			}
-			if value := helpers.GetFromXPath(cr, "group-address-count"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "group-address-count"); value.Exists() && !data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount.IsNull() {
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount = types.Int64Value(value.Int())
-			} else {
+			} else if data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount.IsNull() {
 				data.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "suppress-reports"); value.Exists() {
@@ -1116,7 +1141,7 @@ func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmld
 		keyValues := [...]string{data.JoinGroups[i].GroupAddress.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/join-groups/join-group").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/join-groups/join-group").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1134,13 +1159,16 @@ func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmld
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "group-address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "group-address"); value.Exists() && !data.JoinGroups[i].GroupAddress.IsNull() {
 			data.JoinGroups[i].GroupAddress = types.StringValue(value.String())
 		} else if data.JoinGroups[i].GroupAddress.IsNull() {
 			data.JoinGroups[i].GroupAddress = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "group-address-only"); value.Exists() {
-			data.JoinGroups[i].GroupAddressOnly = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.JoinGroups[i].GroupAddressOnly.IsNull() {
+				data.JoinGroups[i].GroupAddressOnly = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1171,9 +1199,9 @@ func (data *RouterIGMPInterface) updateFromBodyXML(ctx context.Context, res xmld
 					return true
 				},
 			)
-			if value := helpers.GetFromXPath(cr, "source-address"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "source-address"); value.Exists() && !data.JoinGroups[i].SourceAddresses[ci].SourceIp.IsNull() {
 				data.JoinGroups[i].SourceAddresses[ci].SourceIp = types.StringValue(value.String())
-			} else {
+			} else if data.JoinGroups[i].SourceAddresses[ci].SourceIp.IsNull() {
 				data.JoinGroups[i].SourceAddresses[ci].SourceIp = types.StringNull()
 			}
 			if value := helpers.GetFromXPath(cr, "include"); value.Exists() {
@@ -1208,23 +1236,30 @@ func (data *RouterIGMPInterface) fromBody(ctx context.Context, res gjson.Result)
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "version"); value.Exists() {
 		data.Version = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "router.enable"); value.Exists() {
 		data.RouterEnable = types.BoolValue(true)
-	} else {
-		data.RouterEnable = types.BoolNull()
+	} else if !data.RouterEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.RouterEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "router.disable"); value.Exists() {
 		data.RouterDisable = types.BoolValue(true)
-	} else {
-		data.RouterDisable = types.BoolNull()
+	} else if !data.RouterDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.RouterDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "dvmrp-enable"); value.Exists() {
 		data.DvmrpEnable = types.BoolValue(true)
-	} else {
-		data.DvmrpEnable = types.BoolNull()
+	} else if !data.DvmrpEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DvmrpEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "query-interval"); value.Exists() {
 		data.QueryInterval = types.Int64Value(value.Int())
@@ -1237,13 +1272,15 @@ func (data *RouterIGMPInterface) fromBody(ctx context.Context, res gjson.Result)
 	}
 	if value := res.Get(prefix + "explicit-tracking.enable"); value.Exists() {
 		data.ExplicitTrackingEnable = types.BoolValue(true)
-	} else {
-		data.ExplicitTrackingEnable = types.BoolNull()
+	} else if !data.ExplicitTrackingEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ExplicitTrackingEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "explicit-tracking.disable"); value.Exists() {
 		data.ExplicitTrackingDisable = types.BoolValue(true)
-	} else {
-		data.ExplicitTrackingDisable = types.BoolNull()
+	} else if !data.ExplicitTrackingDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ExplicitTrackingDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "explicit-tracking.access-list"); value.Exists() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
@@ -1269,13 +1306,15 @@ func (data *RouterIGMPInterface) fromBody(ctx context.Context, res gjson.Result)
 			}
 			if cValue := v.Get("group-address-only"); cValue.Exists() {
 				item.GroupAddressOnly = types.BoolValue(true)
-			} else {
-				item.GroupAddressOnly = types.BoolNull()
+			} else if !item.GroupAddressOnly.IsNull() {
+				// Only set to false if it was previously set
+				item.GroupAddressOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("group-address-only.suppress-reports"); cValue.Exists() {
 				item.SuppressReports = types.BoolValue(true)
-			} else {
-				item.SuppressReports = types.BoolNull()
+			} else if !item.SuppressReports.IsNull() {
+				// Only set to false if it was previously set
+				item.SuppressReports = types.BoolValue(false)
 			}
 			if cValue := v.Get("group-address-inc-mask.inc-mask"); cValue.Exists() {
 				item.GroupMasks = make([]RouterIGMPInterfaceStaticGroupsGroupMasks, 0)
@@ -1289,8 +1328,9 @@ func (data *RouterIGMPInterface) fromBody(ctx context.Context, res gjson.Result)
 					}
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
-					} else {
-						cItem.SuppressReports = types.BoolNull()
+					} else if !cItem.SuppressReports.IsNull() {
+						// Only set to false if it was previously set
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.GroupMasks = append(item.GroupMasks, cItem)
 					return true
@@ -1305,8 +1345,9 @@ func (data *RouterIGMPInterface) fromBody(ctx context.Context, res gjson.Result)
 					}
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
-					} else {
-						cItem.SuppressReports = types.BoolNull()
+					} else if !cItem.SuppressReports.IsNull() {
+						// Only set to false if it was previously set
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
@@ -1327,8 +1368,9 @@ func (data *RouterIGMPInterface) fromBody(ctx context.Context, res gjson.Result)
 					}
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
-					} else {
-						cItem.SuppressReports = types.BoolNull()
+					} else if !cItem.SuppressReports.IsNull() {
+						// Only set to false if it was previously set
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.GroupMasksSourceAddresses = append(item.GroupMasksSourceAddresses, cItem)
 					return true
@@ -1347,8 +1389,9 @@ func (data *RouterIGMPInterface) fromBody(ctx context.Context, res gjson.Result)
 			}
 			if cValue := v.Get("group-address-only"); cValue.Exists() {
 				item.GroupAddressOnly = types.BoolValue(true)
-			} else {
-				item.GroupAddressOnly = types.BoolNull()
+			} else if !item.GroupAddressOnly.IsNull() {
+				// Only set to false if it was previously set
+				item.GroupAddressOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("source-addresses"); cValue.Exists() {
 				item.SourceAddresses = make([]RouterIGMPInterfaceJoinGroupsSourceAddresses, 0)
@@ -1359,13 +1402,15 @@ func (data *RouterIGMPInterface) fromBody(ctx context.Context, res gjson.Result)
 					}
 					if ccValue := cv.Get("include"); ccValue.Exists() {
 						cItem.Include = types.BoolValue(true)
-					} else {
-						cItem.Include = types.BoolNull()
+					} else if !cItem.Include.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Include = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("exclude"); ccValue.Exists() {
 						cItem.Exclude = types.BoolValue(true)
-					} else {
-						cItem.Exclude = types.BoolNull()
+					} else if !cItem.Exclude.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Exclude = types.BoolValue(false)
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
@@ -1381,9 +1426,14 @@ func (data *RouterIGMPInterface) fromBody(ctx context.Context, res gjson.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "version"); value.Exists() {
 		data.Version = types.Int64Value(value.Int())
@@ -1391,17 +1441,17 @@ func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 	if value := res.Get(prefix + "router.enable"); value.Exists() {
 		data.RouterEnable = types.BoolValue(true)
 	} else {
-		data.RouterEnable = types.BoolNull()
+		data.RouterEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "router.disable"); value.Exists() {
 		data.RouterDisable = types.BoolValue(true)
 	} else {
-		data.RouterDisable = types.BoolNull()
+		data.RouterDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "dvmrp-enable"); value.Exists() {
 		data.DvmrpEnable = types.BoolValue(true)
 	} else {
-		data.DvmrpEnable = types.BoolNull()
+		data.DvmrpEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "query-interval"); value.Exists() {
 		data.QueryInterval = types.Int64Value(value.Int())
@@ -1415,12 +1465,12 @@ func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 	if value := res.Get(prefix + "explicit-tracking.enable"); value.Exists() {
 		data.ExplicitTrackingEnable = types.BoolValue(true)
 	} else {
-		data.ExplicitTrackingEnable = types.BoolNull()
+		data.ExplicitTrackingEnable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "explicit-tracking.disable"); value.Exists() {
 		data.ExplicitTrackingDisable = types.BoolValue(true)
 	} else {
-		data.ExplicitTrackingDisable = types.BoolNull()
+		data.ExplicitTrackingDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "explicit-tracking.access-list"); value.Exists() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
@@ -1447,12 +1497,12 @@ func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("group-address-only"); cValue.Exists() {
 				item.GroupAddressOnly = types.BoolValue(true)
 			} else {
-				item.GroupAddressOnly = types.BoolNull()
+				item.GroupAddressOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("group-address-only.suppress-reports"); cValue.Exists() {
 				item.SuppressReports = types.BoolValue(true)
 			} else {
-				item.SuppressReports = types.BoolNull()
+				item.SuppressReports = types.BoolValue(false)
 			}
 			if cValue := v.Get("group-address-inc-mask.inc-mask"); cValue.Exists() {
 				item.GroupMasks = make([]RouterIGMPInterfaceStaticGroupsGroupMasks, 0)
@@ -1467,7 +1517,7 @@ func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
-						cItem.SuppressReports = types.BoolNull()
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.GroupMasks = append(item.GroupMasks, cItem)
 					return true
@@ -1483,7 +1533,7 @@ func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
-						cItem.SuppressReports = types.BoolNull()
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
@@ -1505,7 +1555,7 @@ func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 					if ccValue := cv.Get("suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
-						cItem.SuppressReports = types.BoolNull()
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.GroupMasksSourceAddresses = append(item.GroupMasksSourceAddresses, cItem)
 					return true
@@ -1525,7 +1575,7 @@ func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("group-address-only"); cValue.Exists() {
 				item.GroupAddressOnly = types.BoolValue(true)
 			} else {
-				item.GroupAddressOnly = types.BoolNull()
+				item.GroupAddressOnly = types.BoolValue(false)
 			}
 			if cValue := v.Get("source-addresses"); cValue.Exists() {
 				item.SourceAddresses = make([]RouterIGMPInterfaceJoinGroupsSourceAddresses, 0)
@@ -1537,12 +1587,12 @@ func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 					if ccValue := cv.Get("include"); ccValue.Exists() {
 						cItem.Include = types.BoolValue(true)
 					} else {
-						cItem.Include = types.BoolNull()
+						cItem.Include = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("exclude"); ccValue.Exists() {
 						cItem.Exclude = types.BoolValue(true)
 					} else {
-						cItem.Exclude = types.BoolNull()
+						cItem.Exclude = types.BoolValue(false)
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
@@ -1558,232 +1608,59 @@ func (data *RouterIGMPInterfaceData) fromBody(ctx context.Context, res gjson.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterIGMPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version"); value.Exists() {
 		data.Version = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router/enable"); value.Exists() {
-		data.RouterEnable = types.BoolValue(true)
-	} else {
-		data.RouterEnable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router/disable"); value.Exists() {
-		data.RouterDisable = types.BoolValue(true)
-	} else {
-		data.RouterDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dvmrp-enable"); value.Exists() {
-		data.DvmrpEnable = types.BoolValue(true)
-	} else {
-		data.DvmrpEnable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-interval"); value.Exists() {
-		data.QueryInterval = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-timeout"); value.Exists() {
-		data.QueryTimeout = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-max-response-time"); value.Exists() {
-		data.QueryMaxResponseTime = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/enable"); value.Exists() {
-		data.ExplicitTrackingEnable = types.BoolValue(true)
-	} else {
-		data.ExplicitTrackingEnable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
-		data.ExplicitTrackingDisable = types.BoolValue(true)
-	} else {
-		data.ExplicitTrackingDisable = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
-		data.ExplicitTrackingAcl = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group"); value.Exists() {
-		data.AccessGroup = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
-		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
-		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
-		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/static-groups/group-address"); value.Exists() {
-		data.StaticGroups = make([]RouterIGMPInterfaceStaticGroups, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterIGMPInterfaceStaticGroups{}
-			if cValue := helpers.GetFromXPath(v, "group-address"); cValue.Exists() {
-				item.GroupAddress = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "group-address-only"); cValue.Exists() {
-				item.GroupAddressOnly = types.BoolValue(true)
-			} else {
-				item.GroupAddressOnly = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "group-address-only/suppress-reports"); cValue.Exists() {
-				item.SuppressReports = types.BoolValue(true)
-			} else {
-				item.SuppressReports = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "group-address-inc-mask/inc-mask"); cValue.Exists() {
-				item.GroupMasks = make([]RouterIGMPInterfaceStaticGroupsGroupMasks, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := RouterIGMPInterfaceStaticGroupsGroupMasks{}
-					if ccValue := helpers.GetFromXPath(cv, "group-mask-address"); ccValue.Exists() {
-						cItem.GroupIncMask = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "group-address-count"); ccValue.Exists() {
-						cItem.GroupCount = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
-						cItem.SuppressReports = types.BoolValue(true)
-					} else {
-						cItem.SuppressReports = types.BoolNull()
-					}
-					item.GroupMasks = append(item.GroupMasks, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "group-address-source-address/source-address"); cValue.Exists() {
-				item.SourceAddresses = make([]RouterIGMPInterfaceStaticGroupsSourceAddresses, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := RouterIGMPInterfaceStaticGroupsSourceAddresses{}
-					if ccValue := helpers.GetFromXPath(cv, "source-address"); ccValue.Exists() {
-						cItem.SourceIp = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
-						cItem.SuppressReports = types.BoolValue(true)
-					} else {
-						cItem.SuppressReports = types.BoolNull()
-					}
-					item.SourceAddresses = append(item.SourceAddresses, cItem)
-					return true
-				})
-			}
-			if cValue := helpers.GetFromXPath(v, "group-address-inc-mask-source-address/inc-mask"); cValue.Exists() {
-				item.GroupMasksSourceAddresses = make([]RouterIGMPInterfaceStaticGroupsGroupMasksSourceAddresses, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := RouterIGMPInterfaceStaticGroupsGroupMasksSourceAddresses{}
-					if ccValue := helpers.GetFromXPath(cv, "group-mask-address"); ccValue.Exists() {
-						cItem.GroupIncMask = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "source-address"); ccValue.Exists() {
-						cItem.SourceIp = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "group-address-count"); ccValue.Exists() {
-						cItem.GroupCount = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
-						cItem.SuppressReports = types.BoolValue(true)
-					} else {
-						cItem.SuppressReports = types.BoolNull()
-					}
-					item.GroupMasksSourceAddresses = append(item.GroupMasksSourceAddresses, cItem)
-					return true
-				})
-			}
-			data.StaticGroups = append(data.StaticGroups, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/join-groups/join-group"); value.Exists() {
-		data.JoinGroups = make([]RouterIGMPInterfaceJoinGroups, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := RouterIGMPInterfaceJoinGroups{}
-			if cValue := helpers.GetFromXPath(v, "group-address"); cValue.Exists() {
-				item.GroupAddress = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "group-address-only"); cValue.Exists() {
-				item.GroupAddressOnly = types.BoolValue(true)
-			} else {
-				item.GroupAddressOnly = types.BoolNull()
-			}
-			if cValue := helpers.GetFromXPath(v, "source-addresses"); cValue.Exists() {
-				item.SourceAddresses = make([]RouterIGMPInterfaceJoinGroupsSourceAddresses, 0)
-				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
-					cItem := RouterIGMPInterfaceJoinGroupsSourceAddresses{}
-					if ccValue := helpers.GetFromXPath(cv, "source-address"); ccValue.Exists() {
-						cItem.SourceIp = types.StringValue(ccValue.String())
-					}
-					if ccValue := helpers.GetFromXPath(cv, "include"); ccValue.Exists() {
-						cItem.Include = types.BoolValue(true)
-					} else {
-						cItem.Include = types.BoolNull()
-					}
-					if ccValue := helpers.GetFromXPath(cv, "exclude"); ccValue.Exists() {
-						cItem.Exclude = types.BoolValue(true)
-					} else {
-						cItem.Exclude = types.BoolNull()
-					}
-					item.SourceAddresses = append(item.SourceAddresses, cItem)
-					return true
-				})
-			}
-			data.JoinGroups = append(data.JoinGroups, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *RouterIGMPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version"); value.Exists() {
-		data.Version = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router/enable"); value.Exists() {
 		data.RouterEnable = types.BoolValue(true)
 	} else {
 		data.RouterEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/router/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router/disable"); value.Exists() {
 		data.RouterDisable = types.BoolValue(true)
 	} else {
 		data.RouterDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/dvmrp-enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dvmrp-enable"); value.Exists() {
 		data.DvmrpEnable = types.BoolValue(true)
 	} else {
 		data.DvmrpEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-interval"); value.Exists() {
 		data.QueryInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-timeout"); value.Exists() {
 		data.QueryTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-max-response-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-max-response-time"); value.Exists() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/enable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/enable"); value.Exists() {
 		data.ExplicitTrackingEnable = types.BoolValue(true)
 	} else {
 		data.ExplicitTrackingEnable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
 		data.ExplicitTrackingDisable = types.BoolValue(true)
 	} else {
 		data.ExplicitTrackingDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group"); value.Exists() {
 		data.AccessGroup = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/static-groups/group-address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/static-groups/group-address"); value.Exists() {
 		data.StaticGroups = make([]RouterIGMPInterfaceStaticGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterIGMPInterfaceStaticGroups{}
@@ -1813,6 +1690,7 @@ func (data *RouterIGMPInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.GroupMasks = append(item.GroupMasks, cItem)
 					return true
@@ -1828,6 +1706,7 @@ func (data *RouterIGMPInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
@@ -1849,6 +1728,7 @@ func (data *RouterIGMPInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
 						cItem.SuppressReports = types.BoolValue(true)
 					} else {
+						cItem.SuppressReports = types.BoolValue(false)
 					}
 					item.GroupMasksSourceAddresses = append(item.GroupMasksSourceAddresses, cItem)
 					return true
@@ -1858,7 +1738,7 @@ func (data *RouterIGMPInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/join-groups/join-group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/join-groups/join-group"); value.Exists() {
 		data.JoinGroups = make([]RouterIGMPInterfaceJoinGroups, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterIGMPInterfaceJoinGroups{}
@@ -1880,10 +1760,185 @@ func (data *RouterIGMPInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 					if ccValue := helpers.GetFromXPath(cv, "include"); ccValue.Exists() {
 						cItem.Include = types.BoolValue(true)
 					} else {
+						cItem.Include = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "exclude"); ccValue.Exists() {
 						cItem.Exclude = types.BoolValue(true)
 					} else {
+						cItem.Exclude = types.BoolValue(false)
+					}
+					item.SourceAddresses = append(item.SourceAddresses, cItem)
+					return true
+				})
+			}
+			data.JoinGroups = append(data.JoinGroups, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RouterIGMPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version"); value.Exists() {
+		data.Version = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router/enable"); value.Exists() {
+		data.RouterEnable = types.BoolValue(true)
+	} else {
+		data.RouterEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router/disable"); value.Exists() {
+		data.RouterDisable = types.BoolValue(true)
+	} else {
+		data.RouterDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dvmrp-enable"); value.Exists() {
+		data.DvmrpEnable = types.BoolValue(true)
+	} else {
+		data.DvmrpEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-interval"); value.Exists() {
+		data.QueryInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-timeout"); value.Exists() {
+		data.QueryTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-max-response-time"); value.Exists() {
+		data.QueryMaxResponseTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/enable"); value.Exists() {
+		data.ExplicitTrackingEnable = types.BoolValue(true)
+	} else {
+		data.ExplicitTrackingEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
+		data.ExplicitTrackingDisable = types.BoolValue(true)
+	} else {
+		data.ExplicitTrackingDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
+		data.ExplicitTrackingAcl = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group"); value.Exists() {
+		data.AccessGroup = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
+		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
+		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
+		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/static-groups/group-address"); value.Exists() {
+		data.StaticGroups = make([]RouterIGMPInterfaceStaticGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterIGMPInterfaceStaticGroups{}
+			if cValue := helpers.GetFromXPath(v, "group-address"); cValue.Exists() {
+				item.GroupAddress = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "group-address-only"); cValue.Exists() {
+				item.GroupAddressOnly = types.BoolValue(true)
+			} else {
+				item.GroupAddressOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "group-address-only/suppress-reports"); cValue.Exists() {
+				item.SuppressReports = types.BoolValue(true)
+			} else {
+				item.SuppressReports = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "group-address-inc-mask/inc-mask"); cValue.Exists() {
+				item.GroupMasks = make([]RouterIGMPInterfaceStaticGroupsGroupMasks, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RouterIGMPInterfaceStaticGroupsGroupMasks{}
+					if ccValue := helpers.GetFromXPath(cv, "group-mask-address"); ccValue.Exists() {
+						cItem.GroupIncMask = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "group-address-count"); ccValue.Exists() {
+						cItem.GroupCount = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
+						cItem.SuppressReports = types.BoolValue(true)
+					} else {
+						cItem.SuppressReports = types.BoolValue(false)
+					}
+					item.GroupMasks = append(item.GroupMasks, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "group-address-source-address/source-address"); cValue.Exists() {
+				item.SourceAddresses = make([]RouterIGMPInterfaceStaticGroupsSourceAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RouterIGMPInterfaceStaticGroupsSourceAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "source-address"); ccValue.Exists() {
+						cItem.SourceIp = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
+						cItem.SuppressReports = types.BoolValue(true)
+					} else {
+						cItem.SuppressReports = types.BoolValue(false)
+					}
+					item.SourceAddresses = append(item.SourceAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "group-address-inc-mask-source-address/inc-mask"); cValue.Exists() {
+				item.GroupMasksSourceAddresses = make([]RouterIGMPInterfaceStaticGroupsGroupMasksSourceAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RouterIGMPInterfaceStaticGroupsGroupMasksSourceAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "group-mask-address"); ccValue.Exists() {
+						cItem.GroupIncMask = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source-address"); ccValue.Exists() {
+						cItem.SourceIp = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "group-address-count"); ccValue.Exists() {
+						cItem.GroupCount = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "suppress-reports"); ccValue.Exists() {
+						cItem.SuppressReports = types.BoolValue(true)
+					} else {
+						cItem.SuppressReports = types.BoolValue(false)
+					}
+					item.GroupMasksSourceAddresses = append(item.GroupMasksSourceAddresses, cItem)
+					return true
+				})
+			}
+			data.StaticGroups = append(data.StaticGroups, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/join-groups/join-group"); value.Exists() {
+		data.JoinGroups = make([]RouterIGMPInterfaceJoinGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterIGMPInterfaceJoinGroups{}
+			if cValue := helpers.GetFromXPath(v, "group-address"); cValue.Exists() {
+				item.GroupAddress = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "group-address-only"); cValue.Exists() {
+				item.GroupAddressOnly = types.BoolValue(true)
+			} else {
+				item.GroupAddressOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "source-addresses"); cValue.Exists() {
+				item.SourceAddresses = make([]RouterIGMPInterfaceJoinGroupsSourceAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RouterIGMPInterfaceJoinGroupsSourceAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "source-address"); ccValue.Exists() {
+						cItem.SourceIp = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "include"); ccValue.Exists() {
+						cItem.Include = types.BoolValue(true)
+					} else {
+						cItem.Include = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "exclude"); ccValue.Exists() {
+						cItem.Exclude = types.BoolValue(true)
+					} else {
+						cItem.Exclude = types.BoolValue(false)
 					}
 					item.SourceAddresses = append(item.SourceAddresses, cItem)
 					return true
@@ -2309,14 +2364,16 @@ func (data *RouterIGMPInterface) getEmptyLeafsDelete(ctx context.Context, state 
 func (data *RouterIGMPInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.JoinGroups {
-		keyValues := [...]string{data.JoinGroups[i].GroupAddress.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/join-groups/join-group=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[group-address=" + data.JoinGroups[i].GroupAddress.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/join-groups/join-group%v", data.getPath(), keyPath))
 	}
 	for i := range data.StaticGroups {
-		keyValues := [...]string{data.StaticGroups[i].GroupAddress.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/static-groups/group-address=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[group-address=" + data.StaticGroups[i].GroupAddress.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/static-groups/group-address%v", data.getPath(), keyPath))
 	}
 	if !data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum/groups-per-interface", data.getPath()))
@@ -2368,7 +2425,8 @@ func (data *RouterIGMPInterface) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RouterIGMPInterface) addDeletedItemsXML(ctx context.Context, state RouterIGMPInterface, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.JoinGroups {
@@ -2419,28 +2477,28 @@ func (data *RouterIGMPInterface) addDeletedItemsXML(ctx context.Context, state R
 						if found {
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() && state.JoinGroups[i].SourceAddresses[ci].Exclude.ValueBool() && data.JoinGroups[j].SourceAddresses[cj].Exclude.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v/source-addresses%v/exclude", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v/source-addresses%v/exclude", predicates, cpredicates))
 							}
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.JoinGroups[i].SourceAddresses[ci].Include.IsNull() && state.JoinGroups[i].SourceAddresses[ci].Include.ValueBool() && data.JoinGroups[j].SourceAddresses[cj].Include.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v/source-addresses%v/include", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v/source-addresses%v/include", predicates, cpredicates))
 							}
 							break
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v/source-addresses%v", predicates, cpredicates))
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v/source-addresses%v", predicates, cpredicates))
 					}
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.JoinGroups[i].GroupAddressOnly.IsNull() && state.JoinGroups[i].GroupAddressOnly.ValueBool() && data.JoinGroups[j].GroupAddressOnly.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v/group-address-only", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v/group-address-only", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/join-groups/join-group%v", predicates))
 		}
 	}
 	for i := range state.StaticGroups {
@@ -2497,16 +2555,16 @@ func (data *RouterIGMPInterface) addDeletedItemsXML(ctx context.Context, state R
 						if found {
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() && state.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.ValueBool() && data.StaticGroups[j].GroupMasksSourceAddresses[cj].SuppressReports.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask-source-address/inc-mask%v/suppress-reports", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask-source-address/inc-mask%v/suppress-reports", predicates, cpredicates))
 							}
 							if !state.StaticGroups[i].GroupMasksSourceAddresses[ci].GroupCount.IsNull() && data.StaticGroups[j].GroupMasksSourceAddresses[cj].GroupCount.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask-source-address/inc-mask%v/group-address-count", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask-source-address/inc-mask%v/group-address-count", predicates, cpredicates))
 							}
 							break
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask-source-address/inc-mask%v", predicates, cpredicates))
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask-source-address/inc-mask%v", predicates, cpredicates))
 					}
 				}
 				for ci := range state.StaticGroups[i].SourceAddresses {
@@ -2534,13 +2592,13 @@ func (data *RouterIGMPInterface) addDeletedItemsXML(ctx context.Context, state R
 						if found {
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() && state.StaticGroups[i].SourceAddresses[ci].SuppressReports.ValueBool() && data.StaticGroups[j].SourceAddresses[cj].SuppressReports.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-source-address/source-address%v/suppress-reports", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-source-address/source-address%v/suppress-reports", predicates, cpredicates))
 							}
 							break
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-source-address/source-address%v", predicates, cpredicates))
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-source-address/source-address%v", predicates, cpredicates))
 					}
 				}
 				for ci := range state.StaticGroups[i].GroupMasks {
@@ -2568,31 +2626,31 @@ func (data *RouterIGMPInterface) addDeletedItemsXML(ctx context.Context, state R
 						if found {
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() && state.StaticGroups[i].GroupMasks[ci].SuppressReports.ValueBool() && data.StaticGroups[j].GroupMasks[cj].SuppressReports.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask/inc-mask%v/suppress-reports", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask/inc-mask%v/suppress-reports", predicates, cpredicates))
 							}
 							if !state.StaticGroups[i].GroupMasks[ci].GroupCount.IsNull() && data.StaticGroups[j].GroupMasks[cj].GroupCount.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask/inc-mask%v/group-address-count", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask/inc-mask%v/group-address-count", predicates, cpredicates))
 							}
 							break
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask/inc-mask%v", predicates, cpredicates))
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-inc-mask/inc-mask%v", predicates, cpredicates))
 					}
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.StaticGroups[i].SuppressReports.IsNull() && state.StaticGroups[i].SuppressReports.ValueBool() && data.StaticGroups[j].SuppressReports.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-only/suppress-reports", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-only/suppress-reports", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.StaticGroups[i].GroupAddressOnly.IsNull() && state.StaticGroups[i].GroupAddressOnly.ValueBool() && data.StaticGroups[j].GroupAddressOnly.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-only", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v/group-address-only", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/static-groups/group-address%v", predicates))
 		}
 	}
 	if !state.MaximumGroupsPerInterfaceAcl.IsNull() && data.MaximumGroupsPerInterfaceAcl.IsNull() {
@@ -2616,7 +2674,7 @@ func (data *RouterIGMPInterface) addDeletedItemsXML(ctx context.Context, state R
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -2641,7 +2699,7 @@ func (data *RouterIGMPInterface) addDeletedItemsXML(ctx context.Context, state R
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -2666,95 +2724,182 @@ func (data *RouterIGMPInterface) addDeletedItemsXML(ctx context.Context, state R
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.AccessGroup.IsNull() && data.AccessGroup.IsNull() {
 		deletePath := state.getXPath() + "/access-group"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ExplicitTrackingAcl.IsNull() && data.ExplicitTrackingAcl.IsNull() {
 		deletePath := state.getXPath() + "/explicit-tracking/access-list"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ExplicitTrackingDisable.IsNull() && state.ExplicitTrackingDisable.ValueBool() && data.ExplicitTrackingDisable.IsNull() {
 		deletePath := state.getXPath() + "/explicit-tracking/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ExplicitTrackingEnable.IsNull() && state.ExplicitTrackingEnable.ValueBool() && data.ExplicitTrackingEnable.IsNull() {
 		deletePath := state.getXPath() + "/explicit-tracking/enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.QueryMaxResponseTime.IsNull() && data.QueryMaxResponseTime.IsNull() {
 		deletePath := state.getXPath() + "/query-max-response-time"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.QueryTimeout.IsNull() && data.QueryTimeout.IsNull() {
 		deletePath := state.getXPath() + "/query-timeout"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.QueryInterval.IsNull() && data.QueryInterval.IsNull() {
 		deletePath := state.getXPath() + "/query-interval"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DvmrpEnable.IsNull() && state.DvmrpEnable.ValueBool() && data.DvmrpEnable.IsNull() {
 		deletePath := state.getXPath() + "/dvmrp-enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.RouterDisable.IsNull() && state.RouterDisable.ValueBool() && data.RouterDisable.IsNull() {
 		deletePath := state.getXPath() + "/router/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.RouterEnable.IsNull() && state.RouterEnable.ValueBool() && data.RouterEnable.IsNull() {
 		deletePath := state.getXPath() + "/router/enable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Version.IsNull() && data.Version.IsNull() {
 		deletePath := state.getXPath() + "/version"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -2826,7 +2971,6 @@ func (data *RouterIGMPInterface) addDeletePathsXML(ctx context.Context, body str
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/version")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

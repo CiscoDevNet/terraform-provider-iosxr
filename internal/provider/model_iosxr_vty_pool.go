@@ -26,7 +26,6 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -145,32 +144,32 @@ func (data VTYPool) toBody(ctx context.Context) string {
 func (data *VTYPool) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default.first-vty-number"); value.Exists() && !data.DefaultFirstVty.IsNull() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
-	} else {
+	} else if data.DefaultFirstVty.IsNull() {
 		data.DefaultFirstVty = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "default.last-vty-number"); value.Exists() && !data.DefaultLastVty.IsNull() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
-	} else {
+	} else if data.DefaultLastVty.IsNull() {
 		data.DefaultLastVty = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "default.line-template"); value.Exists() && !data.DefaultLineTemplate.IsNull() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
-	} else {
+	} else if data.DefaultLineTemplate.IsNull() {
 		data.DefaultLineTemplate = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "eem.first-vty-number"); value.Exists() && !data.EemFirstVty.IsNull() {
 		data.EemFirstVty = types.Int64Value(value.Int())
-	} else {
+	} else if data.EemFirstVty.IsNull() {
 		data.EemFirstVty = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "eem.last-vty-number"); value.Exists() && !data.EemLastVty.IsNull() {
 		data.EemLastVty = types.Int64Value(value.Int())
-	} else {
+	} else if data.EemLastVty.IsNull() {
 		data.EemLastVty = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "eem.line-template"); value.Exists() && !data.EemLineTemplate.IsNull() {
 		data.EemLineTemplate = types.StringValue(value.String())
-	} else {
+	} else if data.EemLineTemplate.IsNull() {
 		data.EemLineTemplate = types.StringNull()
 	}
 	for i := range data.Pools {
@@ -243,29 +242,30 @@ func (data VTYPool) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/eem/line-template", data.EemLineTemplate.ValueString())
 	}
 	if len(data.Pools) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Pools {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/pools/pool"
 			if !item.PoolName.IsNull() && !item.PoolName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "pool-name", item.PoolName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/pool-name", item.PoolName.ValueString())
 			}
 			if !item.FirstVty.IsNull() && !item.FirstVty.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "first-vty-number", item.FirstVty.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/first-vty-number", item.FirstVty.ValueString())
 			}
 			if !item.LastVty.IsNull() && !item.LastVty.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "last-vty-number", item.LastVty.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/last-vty-number", item.LastVty.ValueString())
 			}
 			if !item.LineTemplate.IsNull() && !item.LineTemplate.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "line-template", item.LineTemplate.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/line-template", item.LineTemplate.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"pools/pool", cBody.Res())
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -273,32 +273,32 @@ func (data VTYPool) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *VTYPool) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default/first-vty-number"); value.Exists() && !data.DefaultFirstVty.IsNull() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	} else if data.DefaultFirstVty.IsNull() {
 		data.DefaultFirstVty = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default/last-vty-number"); value.Exists() && !data.DefaultLastVty.IsNull() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	} else if data.DefaultLastVty.IsNull() {
 		data.DefaultLastVty = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default/line-template"); value.Exists() && !data.DefaultLineTemplate.IsNull() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	} else if data.DefaultLineTemplate.IsNull() {
 		data.DefaultLineTemplate = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/eem/first-vty-number"); value.Exists() && !data.EemFirstVty.IsNull() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	} else if data.EemFirstVty.IsNull() {
 		data.EemFirstVty = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/eem/last-vty-number"); value.Exists() && !data.EemLastVty.IsNull() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	} else if data.EemLastVty.IsNull() {
 		data.EemLastVty = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/eem/line-template"); value.Exists() && !data.EemLineTemplate.IsNull() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	} else if data.EemLineTemplate.IsNull() {
 		data.EemLineTemplate = types.StringNull()
@@ -308,7 +308,7 @@ func (data *VTYPool) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/pools/pool").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pools/pool").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -326,22 +326,22 @@ func (data *VTYPool) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "pool-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "pool-name"); value.Exists() && !data.Pools[i].PoolName.IsNull() {
 			data.Pools[i].PoolName = types.StringValue(value.String())
 		} else if data.Pools[i].PoolName.IsNull() {
 			data.Pools[i].PoolName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "first-vty-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "first-vty-number"); value.Exists() && !data.Pools[i].FirstVty.IsNull() {
 			data.Pools[i].FirstVty = types.StringValue(value.String())
 		} else if data.Pools[i].FirstVty.IsNull() {
 			data.Pools[i].FirstVty = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "last-vty-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "last-vty-number"); value.Exists() && !data.Pools[i].LastVty.IsNull() {
 			data.Pools[i].LastVty = types.StringValue(value.String())
 		} else if data.Pools[i].LastVty.IsNull() {
 			data.Pools[i].LastVty = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "line-template"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "line-template"); value.Exists() && !data.Pools[i].LineTemplate.IsNull() {
 			data.Pools[i].LineTemplate = types.StringValue(value.String())
 		} else if data.Pools[i].LineTemplate.IsNull() {
 			data.Pools[i].LineTemplate = types.StringNull()
@@ -356,6 +356,10 @@ func (data *VTYPool) fromBody(ctx context.Context, res gjson.Result) {
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "default.first-vty-number"); value.Exists() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
@@ -401,9 +405,14 @@ func (data *VTYPool) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *VTYPoolData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "default.first-vty-number"); value.Exists() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
@@ -449,25 +458,25 @@ func (data *VTYPoolData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *VTYPool) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default/first-vty-number"); value.Exists() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default/last-vty-number"); value.Exists() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default/line-template"); value.Exists() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/eem/first-vty-number"); value.Exists() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/eem/last-vty-number"); value.Exists() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/eem/line-template"); value.Exists() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pools/pool"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pools/pool"); value.Exists() {
 		data.Pools = make([]VTYPoolPools, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := VTYPoolPools{}
@@ -493,25 +502,25 @@ func (data *VTYPool) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *VTYPoolData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default/first-vty-number"); value.Exists() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default/last-vty-number"); value.Exists() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/default/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default/line-template"); value.Exists() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/first-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/eem/first-vty-number"); value.Exists() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/last-vty-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/eem/last-vty-number"); value.Exists() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/eem/line-template"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/eem/line-template"); value.Exists() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/pools/pool"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pools/pool"); value.Exists() {
 		data.Pools = make([]VTYPoolPools, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := VTYPoolPools{}
@@ -620,9 +629,10 @@ func (data *VTYPool) getEmptyLeafsDelete(ctx context.Context, state *VTYPool) []
 func (data *VTYPool) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Pools {
-		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pools/pool=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[pool-name=" + data.Pools[i].PoolName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/pools/pool%v", data.getPath(), keyPath))
 	}
 	if !data.EemLineTemplate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/eem", data.getPath()))
@@ -650,7 +660,8 @@ func (data *VTYPool) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Pools {
@@ -677,19 +688,19 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 			}
 			if found {
 				if !state.Pools[i].LineTemplate.IsNull() && data.Pools[j].LineTemplate.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v/line-template", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pools/pool%v/line-template", predicates))
 				}
 				if !state.Pools[i].LastVty.IsNull() && data.Pools[j].LastVty.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v/last-vty-number", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pools/pool%v/last-vty-number", predicates))
 				}
 				if !state.Pools[i].FirstVty.IsNull() && data.Pools[j].FirstVty.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v/first-vty-number", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pools/pool%v/first-vty-number", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/pools/pool%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pools/pool%v", predicates))
 		}
 	}
 	if !state.EemLineTemplate.IsNull() && data.EemLineTemplate.IsNull() {
@@ -713,7 +724,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -738,7 +749,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -763,7 +774,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -788,7 +799,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -813,7 +824,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -838,13 +849,12 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -882,7 +892,6 @@ func (data *VTYPool) addDeletePathsXML(ctx context.Context, body string) string 
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

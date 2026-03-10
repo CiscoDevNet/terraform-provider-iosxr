@@ -203,20 +203,17 @@ func (data BMPServer) toBody(ctx context.Context) string {
 func (data BMPServer) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if len(data.AllRouteMonitorings) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.AllRouteMonitorings {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/all/route-monitorings/route-monitoring"
 			if !item.RouteMon.IsNull() && !item.RouteMon.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "route-mon", item.RouteMon.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/route-mon", item.RouteMon.ValueString())
 			}
 			if !item.AdvertisementInterval.IsNull() && !item.AdvertisementInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "advertisement-interval", strconv.FormatInt(item.AdvertisementInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/advertisement-interval", strconv.FormatInt(item.AdvertisementInterval.ValueInt64(), 10))
 			}
 			if !item.ScanTime.IsNull() && !item.ScanTime.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "scan-time", strconv.FormatInt(item.ScanTime.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/scan-time", strconv.FormatInt(item.ScanTime.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"all/route-monitorings/route-monitoring", cBody.Res())
 		}
 	}
 	if !data.AllRouteMirroringInboundPrePolicy.IsNull() && !data.AllRouteMirroringInboundPrePolicy.IsUnknown() {
@@ -228,72 +225,73 @@ func (data BMPServer) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/all/max-buffer-size", strconv.FormatInt(data.AllMaxBufferSize.ValueInt64(), 10))
 	}
 	if len(data.Servers) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Servers {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/server"
 			if !item.Number.IsNull() && !item.Number.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "server-number", strconv.FormatInt(item.Number.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/server-number", strconv.FormatInt(item.Number.ValueInt64(), 10))
 			}
 			if !item.Shutdown.IsNull() && !item.Shutdown.IsUnknown() {
 				if item.Shutdown.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "shutdown", "")
+					body = helpers.SetFromXPath(body, basePath+"/shutdown", "")
 				}
 			}
 			if !item.Host.IsNull() && !item.Host.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "host/host-name", item.Host.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/host/host-name", item.Host.ValueString())
 			}
 			if !item.Port.IsNull() && !item.Port.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "host/port", strconv.FormatInt(item.Port.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/host/port", strconv.FormatInt(item.Port.ValueInt64(), 10))
 			}
 			if !item.InitialDelay.IsNull() && !item.InitialDelay.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "initial-delay", strconv.FormatInt(item.InitialDelay.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/initial-delay", strconv.FormatInt(item.InitialDelay.ValueInt64(), 10))
 			}
 			if !item.FlappingDelay.IsNull() && !item.FlappingDelay.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "flapping-delay", strconv.FormatInt(item.FlappingDelay.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/flapping-delay", strconv.FormatInt(item.FlappingDelay.ValueInt64(), 10))
 			}
 			if !item.InitialRefreshDelay.IsNull() && !item.InitialRefreshDelay.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "initial-refresh/delay", strconv.FormatInt(item.InitialRefreshDelay.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/initial-refresh/delay", strconv.FormatInt(item.InitialRefreshDelay.ValueInt64(), 10))
 			}
 			if !item.InitialRefreshSpread.IsNull() && !item.InitialRefreshSpread.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "initial-refresh/spread", strconv.FormatInt(item.InitialRefreshSpread.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/initial-refresh/spread", strconv.FormatInt(item.InitialRefreshSpread.ValueInt64(), 10))
 			}
 			if !item.InitialRefreshSkip.IsNull() && !item.InitialRefreshSkip.IsUnknown() {
 				if item.InitialRefreshSkip.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "initial-refresh/skip", "")
+					body = helpers.SetFromXPath(body, basePath+"/initial-refresh/skip", "")
 				}
 			}
 			if !item.StatsReportingPeriod.IsNull() && !item.StatsReportingPeriod.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "stats-reporting-period", strconv.FormatInt(item.StatsReportingPeriod.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/stats-reporting-period", strconv.FormatInt(item.StatsReportingPeriod.ValueInt64(), 10))
 			}
 			if !item.Description.IsNull() && !item.Description.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "description", item.Description.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/description", item.Description.ValueString())
 			}
 			if !item.DscpValue.IsNull() && !item.DscpValue.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "dscp/dscp-value", item.DscpValue.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/dscp/dscp-value", item.DscpValue.ValueString())
 			}
 			if !item.PrecedenceValue.IsNull() && !item.PrecedenceValue.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "precedence/precedence-value", item.PrecedenceValue.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/precedence/precedence-value", item.PrecedenceValue.ValueString())
 			}
 			if !item.UpdateSource.IsNull() && !item.UpdateSource.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "update-source", item.UpdateSource.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/update-source", item.UpdateSource.ValueString())
 			}
 			if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "vrf", item.Vrf.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/vrf", item.Vrf.ValueString())
 			}
 			if !item.TcpMss.IsNull() && !item.TcpMss.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "tcp/mss", strconv.FormatInt(item.TcpMss.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/tcp/mss", strconv.FormatInt(item.TcpMss.ValueInt64(), 10))
 			}
 			if !item.TcpKeepAlive.IsNull() && !item.TcpKeepAlive.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "tcp/keep-alive", strconv.FormatInt(item.TcpKeepAlive.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/tcp/keep-alive", strconv.FormatInt(item.TcpKeepAlive.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"server", cBody.Res())
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -342,18 +340,19 @@ func (data *BMPServer) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	if value := gjson.GetBytes(res, "all.route-mirroring.inbound.pre-policy"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.AllRouteMirroringInboundPrePolicy.IsNull() {
 			data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.AllRouteMirroringInboundPrePolicy.IsNull() {
 			data.AllRouteMirroringInboundPrePolicy = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "all.max-buffer-size"); value.Exists() && !data.AllMaxBufferSize.IsNull() {
 		data.AllMaxBufferSize = types.Int64Value(value.Int())
-	} else {
+	} else if data.AllMaxBufferSize.IsNull() {
 		data.AllMaxBufferSize = types.Int64Null()
 	}
 	for i := range data.Servers {
@@ -385,11 +384,13 @@ func (data *BMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Servers[i].Number = types.Int64Null()
 		}
 		if value := r.Get("shutdown"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Servers[i].Shutdown.IsNull() {
 				data.Servers[i].Shutdown = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Servers[i].Shutdown.IsNull() {
 				data.Servers[i].Shutdown = types.BoolNull()
 			}
@@ -425,11 +426,13 @@ func (data *BMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Servers[i].InitialRefreshSpread = types.Int64Null()
 		}
 		if value := r.Get("initial-refresh.skip"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Servers[i].InitialRefreshSkip.IsNull() {
 				data.Servers[i].InitialRefreshSkip = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Servers[i].InitialRefreshSkip.IsNull() {
 				data.Servers[i].InitialRefreshSkip = types.BoolNull()
 			}
@@ -487,7 +490,7 @@ func (data *BMPServer) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		keyValues := [...]string{data.AllRouteMonitorings[i].RouteMon.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/all/route-monitorings/route-monitoring").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/all/route-monitorings/route-monitoring").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -505,31 +508,34 @@ func (data *BMPServer) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "route-mon"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "route-mon"); value.Exists() && !data.AllRouteMonitorings[i].RouteMon.IsNull() {
 			data.AllRouteMonitorings[i].RouteMon = types.StringValue(value.String())
 		} else if data.AllRouteMonitorings[i].RouteMon.IsNull() {
 			data.AllRouteMonitorings[i].RouteMon = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "advertisement-interval"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "advertisement-interval"); value.Exists() && !data.AllRouteMonitorings[i].AdvertisementInterval.IsNull() {
 			data.AllRouteMonitorings[i].AdvertisementInterval = types.Int64Value(value.Int())
 		} else if data.AllRouteMonitorings[i].AdvertisementInterval.IsNull() {
 			data.AllRouteMonitorings[i].AdvertisementInterval = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "scan-time"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "scan-time"); value.Exists() && !data.AllRouteMonitorings[i].ScanTime.IsNull() {
 			data.AllRouteMonitorings[i].ScanTime = types.Int64Value(value.Int())
 		} else if data.AllRouteMonitorings[i].ScanTime.IsNull() {
 			data.AllRouteMonitorings[i].ScanTime = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/all/route-mirroring/inbound/pre-policy"); value.Exists() {
-		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/all/route-mirroring/inbound/pre-policy"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AllRouteMirroringInboundPrePolicy.IsNull() {
+			data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.AllRouteMirroringInboundPrePolicy.IsNull() {
 			data.AllRouteMirroringInboundPrePolicy = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/all/max-buffer-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/all/max-buffer-size"); value.Exists() && !data.AllMaxBufferSize.IsNull() {
 		data.AllMaxBufferSize = types.Int64Value(value.Int())
 	} else if data.AllMaxBufferSize.IsNull() {
 		data.AllMaxBufferSize = types.Int64Null()
@@ -539,7 +545,7 @@ func (data *BMPServer) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		keyValues := [...]string{strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/server").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -557,13 +563,16 @@ func (data *BMPServer) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "server-number"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "server-number"); value.Exists() && !data.Servers[i].Number.IsNull() {
 			data.Servers[i].Number = types.Int64Value(value.Int())
 		} else if data.Servers[i].Number.IsNull() {
 			data.Servers[i].Number = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "shutdown"); value.Exists() {
-			data.Servers[i].Shutdown = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Servers[i].Shutdown.IsNull() {
+				data.Servers[i].Shutdown = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -571,38 +580,41 @@ func (data *BMPServer) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 				data.Servers[i].Shutdown = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "host/host-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "host/host-name"); value.Exists() && !data.Servers[i].Host.IsNull() {
 			data.Servers[i].Host = types.StringValue(value.String())
 		} else if data.Servers[i].Host.IsNull() {
 			data.Servers[i].Host = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "host/port"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "host/port"); value.Exists() && !data.Servers[i].Port.IsNull() {
 			data.Servers[i].Port = types.Int64Value(value.Int())
 		} else if data.Servers[i].Port.IsNull() {
 			data.Servers[i].Port = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "initial-delay"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "initial-delay"); value.Exists() && !data.Servers[i].InitialDelay.IsNull() {
 			data.Servers[i].InitialDelay = types.Int64Value(value.Int())
 		} else if data.Servers[i].InitialDelay.IsNull() {
 			data.Servers[i].InitialDelay = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "flapping-delay"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "flapping-delay"); value.Exists() && !data.Servers[i].FlappingDelay.IsNull() {
 			data.Servers[i].FlappingDelay = types.Int64Value(value.Int())
 		} else if data.Servers[i].FlappingDelay.IsNull() {
 			data.Servers[i].FlappingDelay = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "initial-refresh/delay"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "initial-refresh/delay"); value.Exists() && !data.Servers[i].InitialRefreshDelay.IsNull() {
 			data.Servers[i].InitialRefreshDelay = types.Int64Value(value.Int())
 		} else if data.Servers[i].InitialRefreshDelay.IsNull() {
 			data.Servers[i].InitialRefreshDelay = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "initial-refresh/spread"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "initial-refresh/spread"); value.Exists() && !data.Servers[i].InitialRefreshSpread.IsNull() {
 			data.Servers[i].InitialRefreshSpread = types.Int64Value(value.Int())
 		} else if data.Servers[i].InitialRefreshSpread.IsNull() {
 			data.Servers[i].InitialRefreshSpread = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "initial-refresh/skip"); value.Exists() {
-			data.Servers[i].InitialRefreshSkip = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Servers[i].InitialRefreshSkip.IsNull() {
+				data.Servers[i].InitialRefreshSkip = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -610,42 +622,42 @@ func (data *BMPServer) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 				data.Servers[i].InitialRefreshSkip = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "stats-reporting-period"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "stats-reporting-period"); value.Exists() && !data.Servers[i].StatsReportingPeriod.IsNull() {
 			data.Servers[i].StatsReportingPeriod = types.Int64Value(value.Int())
 		} else if data.Servers[i].StatsReportingPeriod.IsNull() {
 			data.Servers[i].StatsReportingPeriod = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "description"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "description"); value.Exists() && !data.Servers[i].Description.IsNull() {
 			data.Servers[i].Description = types.StringValue(value.String())
 		} else if data.Servers[i].Description.IsNull() {
 			data.Servers[i].Description = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "dscp/dscp-value"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "dscp/dscp-value"); value.Exists() && !data.Servers[i].DscpValue.IsNull() {
 			data.Servers[i].DscpValue = types.StringValue(value.String())
 		} else if data.Servers[i].DscpValue.IsNull() {
 			data.Servers[i].DscpValue = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "precedence/precedence-value"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "precedence/precedence-value"); value.Exists() && !data.Servers[i].PrecedenceValue.IsNull() {
 			data.Servers[i].PrecedenceValue = types.StringValue(value.String())
 		} else if data.Servers[i].PrecedenceValue.IsNull() {
 			data.Servers[i].PrecedenceValue = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "update-source"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "update-source"); value.Exists() && !data.Servers[i].UpdateSource.IsNull() {
 			data.Servers[i].UpdateSource = types.StringValue(value.String())
 		} else if data.Servers[i].UpdateSource.IsNull() {
 			data.Servers[i].UpdateSource = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "vrf"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "vrf"); value.Exists() && !data.Servers[i].Vrf.IsNull() {
 			data.Servers[i].Vrf = types.StringValue(value.String())
 		} else if data.Servers[i].Vrf.IsNull() {
 			data.Servers[i].Vrf = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "tcp/mss"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "tcp/mss"); value.Exists() && !data.Servers[i].TcpMss.IsNull() {
 			data.Servers[i].TcpMss = types.Int64Value(value.Int())
 		} else if data.Servers[i].TcpMss.IsNull() {
 			data.Servers[i].TcpMss = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "tcp/keep-alive"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "tcp/keep-alive"); value.Exists() && !data.Servers[i].TcpKeepAlive.IsNull() {
 			data.Servers[i].TcpKeepAlive = types.Int64Value(value.Int())
 		} else if data.Servers[i].TcpKeepAlive.IsNull() {
 			data.Servers[i].TcpKeepAlive = types.Int64Null()
@@ -661,6 +673,10 @@ func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "all.route-monitorings.route-monitoring"); value.Exists() {
 		data.AllRouteMonitorings = make([]BMPServerAllRouteMonitorings, 0)
@@ -681,8 +697,9 @@ func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "all.route-mirroring.inbound.pre-policy"); value.Exists() {
 		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
-	} else {
-		data.AllRouteMirroringInboundPrePolicy = types.BoolNull()
+	} else if !data.AllRouteMirroringInboundPrePolicy.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "all.max-buffer-size"); value.Exists() {
 		data.AllMaxBufferSize = types.Int64Value(value.Int())
@@ -696,8 +713,9 @@ func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
-			} else {
-				item.Shutdown = types.BoolNull()
+			} else if !item.Shutdown.IsNull() {
+				// Only set to false if it was previously set
+				item.Shutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("host.host-name"); cValue.Exists() {
 				item.Host = types.StringValue(cValue.String())
@@ -719,8 +737,9 @@ func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("initial-refresh.skip"); cValue.Exists() {
 				item.InitialRefreshSkip = types.BoolValue(true)
-			} else {
-				item.InitialRefreshSkip = types.BoolNull()
+			} else if !item.InitialRefreshSkip.IsNull() {
+				// Only set to false if it was previously set
+				item.InitialRefreshSkip = types.BoolValue(false)
 			}
 			if cValue := v.Get("stats-reporting-period"); cValue.Exists() {
 				item.StatsReportingPeriod = types.Int64Value(cValue.Int())
@@ -757,9 +776,14 @@ func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *BMPServerData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "all.route-monitorings.route-monitoring"); value.Exists() {
 		data.AllRouteMonitorings = make([]BMPServerAllRouteMonitorings, 0)
@@ -781,7 +805,7 @@ func (data *BMPServerData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "all.route-mirroring.inbound.pre-policy"); value.Exists() {
 		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
 	} else {
-		data.AllRouteMirroringInboundPrePolicy = types.BoolNull()
+		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "all.max-buffer-size"); value.Exists() {
 		data.AllMaxBufferSize = types.Int64Value(value.Int())
@@ -796,7 +820,7 @@ func (data *BMPServerData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolNull()
+				item.Shutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("host.host-name"); cValue.Exists() {
 				item.Host = types.StringValue(cValue.String())
@@ -819,7 +843,7 @@ func (data *BMPServerData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("initial-refresh.skip"); cValue.Exists() {
 				item.InitialRefreshSkip = types.BoolValue(true)
 			} else {
-				item.InitialRefreshSkip = types.BoolNull()
+				item.InitialRefreshSkip = types.BoolValue(false)
 			}
 			if cValue := v.Get("stats-reporting-period"); cValue.Exists() {
 				item.StatsReportingPeriod = types.Int64Value(cValue.Int())
@@ -856,7 +880,7 @@ func (data *BMPServerData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *BMPServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/all/route-monitorings/route-monitoring"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/all/route-monitorings/route-monitoring"); value.Exists() {
 		data.AllRouteMonitorings = make([]BMPServerAllRouteMonitorings, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := BMPServerAllRouteMonitorings{}
@@ -873,15 +897,15 @@ func (data *BMPServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/all/route-mirroring/inbound/pre-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/all/route-mirroring/inbound/pre-policy"); value.Exists() {
 		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
 	} else {
-		data.AllRouteMirroringInboundPrePolicy = types.BoolNull()
+		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/all/max-buffer-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/all/max-buffer-size"); value.Exists() {
 		data.AllMaxBufferSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server"); value.Exists() {
 		data.Servers = make([]BMPServerServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := BMPServerServers{}
@@ -891,7 +915,7 @@ func (data *BMPServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
 			} else {
-				item.Shutdown = types.BoolNull()
+				item.Shutdown = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "host/host-name"); cValue.Exists() {
 				item.Host = types.StringValue(cValue.String())
@@ -914,7 +938,7 @@ func (data *BMPServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "initial-refresh/skip"); cValue.Exists() {
 				item.InitialRefreshSkip = types.BoolValue(true)
 			} else {
-				item.InitialRefreshSkip = types.BoolNull()
+				item.InitialRefreshSkip = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "stats-reporting-period"); cValue.Exists() {
 				item.StatsReportingPeriod = types.Int64Value(cValue.Int())
@@ -951,7 +975,7 @@ func (data *BMPServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *BMPServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/all/route-monitorings/route-monitoring"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/all/route-monitorings/route-monitoring"); value.Exists() {
 		data.AllRouteMonitorings = make([]BMPServerAllRouteMonitorings, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := BMPServerAllRouteMonitorings{}
@@ -968,15 +992,15 @@ func (data *BMPServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/all/route-mirroring/inbound/pre-policy"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/all/route-mirroring/inbound/pre-policy"); value.Exists() {
 		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
 	} else {
 		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/all/max-buffer-size"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/all/max-buffer-size"); value.Exists() {
 		data.AllMaxBufferSize = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/server"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server"); value.Exists() {
 		data.Servers = make([]BMPServerServers, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := BMPServerServers{}
@@ -1222,9 +1246,10 @@ func (data *BMPServer) getEmptyLeafsDelete(ctx context.Context, state *BMPServer
 func (data *BMPServer) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Servers {
-		keyValues := [...]string{strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[server-number=" + strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server%v", data.getPath(), keyPath))
 	}
 	if !data.AllMaxBufferSize.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/all/max-buffer-size", data.getPath()))
@@ -1233,9 +1258,10 @@ func (data *BMPServer) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/all/route-mirroring/inbound/pre-policy", data.getPath()))
 	}
 	for i := range data.AllRouteMonitorings {
-		keyValues := [...]string{data.AllRouteMonitorings[i].RouteMon.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/all/route-monitorings/route-monitoring=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[route-mon=" + data.AllRouteMonitorings[i].RouteMon.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/all/route-monitorings/route-monitoring%v", data.getPath(), keyPath))
 	}
 
 	return deletePaths
@@ -1246,7 +1272,8 @@ func (data *BMPServer) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *BMPServer) addDeletedItemsXML(ctx context.Context, state BMPServer, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Servers {
@@ -1273,74 +1300,90 @@ func (data *BMPServer) addDeletedItemsXML(ctx context.Context, state BMPServer, 
 			}
 			if found {
 				if !state.Servers[i].TcpKeepAlive.IsNull() && data.Servers[j].TcpKeepAlive.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/tcp/keep-alive", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/tcp/keep-alive", predicates))
 				}
 				if !state.Servers[i].TcpMss.IsNull() && data.Servers[j].TcpMss.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/tcp/mss", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/tcp/mss", predicates))
 				}
 				if !state.Servers[i].Vrf.IsNull() && data.Servers[j].Vrf.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/vrf", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/vrf", predicates))
 				}
 				if !state.Servers[i].UpdateSource.IsNull() && data.Servers[j].UpdateSource.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/update-source", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/update-source", predicates))
 				}
 				if !state.Servers[i].PrecedenceValue.IsNull() && data.Servers[j].PrecedenceValue.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/precedence", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/precedence", predicates))
 				}
 				if !state.Servers[i].DscpValue.IsNull() && data.Servers[j].DscpValue.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/dscp", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/dscp", predicates))
 				}
 				if !state.Servers[i].Description.IsNull() && data.Servers[j].Description.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/description", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/description", predicates))
 				}
 				if !state.Servers[i].StatsReportingPeriod.IsNull() && data.Servers[j].StatsReportingPeriod.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/stats-reporting-period", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/stats-reporting-period", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Servers[i].InitialRefreshSkip.IsNull() && state.Servers[i].InitialRefreshSkip.ValueBool() && data.Servers[j].InitialRefreshSkip.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/initial-refresh", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/initial-refresh", predicates))
 				}
 				if !state.Servers[i].InitialRefreshSpread.IsNull() && data.Servers[j].InitialRefreshSpread.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/initial-refresh", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/initial-refresh", predicates))
 				}
 				if !state.Servers[i].InitialRefreshDelay.IsNull() && data.Servers[j].InitialRefreshDelay.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/initial-refresh", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/initial-refresh", predicates))
 				}
 				if !state.Servers[i].FlappingDelay.IsNull() && data.Servers[j].FlappingDelay.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/flapping-delay", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/flapping-delay", predicates))
 				}
 				if !state.Servers[i].InitialDelay.IsNull() && data.Servers[j].InitialDelay.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/initial-delay", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/initial-delay", predicates))
 				}
 				if !state.Servers[i].Port.IsNull() && data.Servers[j].Port.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/host/port", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/host/port", predicates))
 				}
 				if !state.Servers[i].Host.IsNull() && data.Servers[j].Host.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/host/host-name", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/host/host-name", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Servers[i].Shutdown.IsNull() && state.Servers[i].Shutdown.ValueBool() && data.Servers[j].Shutdown.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v/shutdown", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v/shutdown", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/server%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/server%v", predicates))
 		}
 	}
 	if !state.AllMaxBufferSize.IsNull() && data.AllMaxBufferSize.IsNull() {
 		deletePath := state.getXPath() + "/all/max-buffer-size"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AllRouteMirroringInboundPrePolicy.IsNull() && state.AllRouteMirroringInboundPrePolicy.ValueBool() && data.AllRouteMirroringInboundPrePolicy.IsNull() {
 		deletePath := state.getXPath() + "/all/route-mirroring/inbound/pre-policy"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1368,21 +1411,20 @@ func (data *BMPServer) addDeletedItemsXML(ctx context.Context, state BMPServer, 
 			}
 			if found {
 				if !state.AllRouteMonitorings[i].ScanTime.IsNull() && data.AllRouteMonitorings[j].ScanTime.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/all/route-monitorings/route-monitoring%v/scan-time", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/all/route-monitorings/route-monitoring%v/scan-time", predicates))
 				}
 				if !state.AllRouteMonitorings[i].AdvertisementInterval.IsNull() && data.AllRouteMonitorings[j].AdvertisementInterval.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/all/route-monitorings/route-monitoring%v/advertisement-interval", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/all/route-monitorings/route-monitoring%v/advertisement-interval", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/all/route-monitorings/route-monitoring%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/all/route-monitorings/route-monitoring%v", predicates))
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -1419,7 +1461,6 @@ func (data *BMPServer) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/all/route-monitorings/route-monitoring%v", predicates))
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

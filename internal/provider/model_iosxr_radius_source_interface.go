@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -97,7 +98,7 @@ func (data RadiusSourceInterface) toBody(ctx context.Context) string {
 func (data *RadiusSourceInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
-	} else {
+	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
 	}
 }
@@ -107,16 +108,17 @@ func (data *RadiusSourceInterface) updateFromBody(ctx context.Context, res []byt
 
 func (data RadiusSourceInterface) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
-	if !data.Vrf.IsNull() && !data.Vrf.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/vrf-name", data.Vrf.ValueString())
-	}
 	if !data.SourceInterface.IsNull() && !data.SourceInterface.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/source-interface", data.SourceInterface.ValueString())
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -124,12 +126,7 @@ func (data RadiusSourceInterface) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RadiusSourceInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/vrf-name"); value.Exists() {
-		data.Vrf = types.StringValue(value.String())
-	} else if data.Vrf.IsNull() {
-		data.Vrf = types.StringNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
 	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
@@ -144,6 +141,10 @@ func (data *RadiusSourceInterface) fromBody(ctx context.Context, res gjson.Resul
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
@@ -153,9 +154,14 @@ func (data *RadiusSourceInterface) fromBody(ctx context.Context, res gjson.Resul
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RadiusSourceInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
@@ -166,7 +172,7 @@ func (data *RadiusSourceInterfaceData) fromBody(ctx context.Context, res gjson.R
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RadiusSourceInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
 }
@@ -175,7 +181,7 @@ func (data *RadiusSourceInterface) fromBodyXML(ctx context.Context, res xmldot.R
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RadiusSourceInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/source-interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/source-interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
 }
@@ -215,19 +221,27 @@ func (data *RadiusSourceInterface) getDeletePaths(ctx context.Context) []string 
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RadiusSourceInterface) addDeletedItemsXML(ctx context.Context, state RadiusSourceInterface, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
 		deletePath := state.getXPath() + "/source-interface"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -240,7 +254,6 @@ func (data *RadiusSourceInterface) addDeletePathsXML(ctx context.Context, body s
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/source-interface")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

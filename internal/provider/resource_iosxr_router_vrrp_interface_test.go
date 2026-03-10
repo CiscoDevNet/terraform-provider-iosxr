@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -71,7 +71,7 @@ func TestAccIosxrRouterVRRPInterface(t *testing.T) {
 func testAccIosxrRouterVRRPInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_vrrp_interface" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -88,7 +88,7 @@ func testAccIosxrRouterVRRPInterfaceConfig_all() string {
 	config += `	delay_reload = 4321` + "\n"
 	config += `	bfd_minimum_interval = 255` + "\n"
 	config += `	bfd_multiplier = 33` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -108,7 +108,7 @@ func iosxrRouterVRRPInterfaceImportStateIdFunc(resourceName string) resource.Imp
 // End of section. //template:end importStateIdFunc
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterVRRPInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
 	attributes = {
 	}

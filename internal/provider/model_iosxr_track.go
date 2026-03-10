@@ -454,47 +454,47 @@ func (data Track) toBody(ctx context.Context) string {
 func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "delay.up"); value.Exists() && !data.DelayUp.IsNull() {
 		data.DelayUp = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayUp.IsNull() {
 		data.DelayUp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay.down"); value.Exists() && !data.DelayDown.IsNull() {
 		data.DelayDown = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayDown.IsNull() {
 		data.DelayDown = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "type.route.reachability.route.ipv4.address"); value.Exists() && !data.RouteIpv4Address.IsNull() {
 		data.RouteIpv4Address = types.StringValue(value.String())
-	} else {
+	} else if data.RouteIpv4Address.IsNull() {
 		data.RouteIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.route.reachability.route.ipv4.mask"); value.Exists() && !data.RouteIpv4Mask.IsNull() {
 		data.RouteIpv4Mask = types.StringValue(value.String())
-	} else {
+	} else if data.RouteIpv4Mask.IsNull() {
 		data.RouteIpv4Mask = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.route.reachability.route.address-prefix"); value.Exists() && !data.RouteAddressPrefix.IsNull() {
 		data.RouteAddressPrefix = types.StringValue(value.String())
-	} else {
+	} else if data.RouteAddressPrefix.IsNull() {
 		data.RouteAddressPrefix = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.route.reachability.route.address-prefix-length"); value.Exists() && !data.RouteAddressPrefixLength.IsNull() {
 		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
-	} else {
+	} else if data.RouteAddressPrefixLength.IsNull() {
 		data.RouteAddressPrefixLength = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "type.route.reachability.vrf"); value.Exists() && !data.RouteVrf.IsNull() {
 		data.RouteVrf = types.StringValue(value.String())
-	} else {
+	} else if data.RouteVrf.IsNull() {
 		data.RouteVrf = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.line-protocol.state.interface"); value.Exists() && !data.LineProtocolState.IsNull() {
 		data.LineProtocolState = types.StringValue(value.String())
-	} else {
+	} else if data.LineProtocolState.IsNull() {
 		data.LineProtocolState = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.rtr"); value.Exists() && !data.Rtr.IsNull() {
 		data.Rtr = types.Int64Value(value.Int())
-	} else {
+	} else if data.Rtr.IsNull() {
 		data.Rtr = types.Int64Null()
 	}
 	for i := range data.BooleanAndList {
@@ -526,11 +526,13 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 			data.BooleanAndList[i].ObjectName = types.StringNull()
 		}
 		if value := r.Get("not"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.BooleanAndList[i].Not.IsNull() {
 				data.BooleanAndList[i].Not = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.BooleanAndList[i].Not.IsNull() {
 				data.BooleanAndList[i].Not = types.BoolNull()
 			}
@@ -565,11 +567,13 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 			data.BooleanOrList[i].ObjectName = types.StringNull()
 		}
 		if value := r.Get("not"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.BooleanOrList[i].Not.IsNull() {
 				data.BooleanOrList[i].Not = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.BooleanOrList[i].Not.IsNull() {
 				data.BooleanOrList[i].Not = types.BoolNull()
 			}
@@ -611,12 +615,12 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "type.list.threshold.percentage.threshold.percentage.up"); value.Exists() && !data.ThresholdPercentageUp.IsNull() {
 		data.ThresholdPercentageUp = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThresholdPercentageUp.IsNull() {
 		data.ThresholdPercentageUp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "type.list.threshold.percentage.threshold.percentage.down"); value.Exists() && !data.ThresholdPercentageDown.IsNull() {
 		data.ThresholdPercentageDown = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThresholdPercentageDown.IsNull() {
 		data.ThresholdPercentageDown = types.Int64Null()
 	}
 	for i := range data.ThresholdWeight {
@@ -655,22 +659,22 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "type.list.threshold.weight.threshold.weight.up"); value.Exists() && !data.ThresholdWeightUp.IsNull() {
 		data.ThresholdWeightUp = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThresholdWeightUp.IsNull() {
 		data.ThresholdWeightUp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "type.list.threshold.weight.threshold.weight.down"); value.Exists() && !data.ThresholdWeightDown.IsNull() {
 		data.ThresholdWeightDown = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThresholdWeightDown.IsNull() {
 		data.ThresholdWeightDown = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "type.list.line-protocol.state.threshold.weight.threshold.weight.up"); value.Exists() && !data.LineProtocolWeightUp.IsNull() {
 		data.LineProtocolWeightUp = types.Int64Value(value.Int())
-	} else {
+	} else if data.LineProtocolWeightUp.IsNull() {
 		data.LineProtocolWeightUp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "type.list.line-protocol.state.threshold.weight.threshold.weight.down"); value.Exists() && !data.LineProtocolWeightDown.IsNull() {
 		data.LineProtocolWeightDown = types.Int64Value(value.Int())
-	} else {
+	} else if data.LineProtocolWeightDown.IsNull() {
 		data.LineProtocolWeightDown = types.Int64Null()
 	}
 	for i := range data.LineProtocolWeight {
@@ -709,12 +713,12 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "type.list.line-protocol.state.threshold.percentage.threshold.percentage.up"); value.Exists() && !data.LineProtocolPercentageUp.IsNull() {
 		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
-	} else {
+	} else if data.LineProtocolPercentageUp.IsNull() {
 		data.LineProtocolPercentageUp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "type.list.line-protocol.state.threshold.percentage.threshold.percentage.down"); value.Exists() && !data.LineProtocolPercentageDown.IsNull() {
 		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
-	} else {
+	} else if data.LineProtocolPercentageDown.IsNull() {
 		data.LineProtocolPercentageDown = types.Int64Null()
 	}
 	for i := range data.LineProtocolPercentage {
@@ -806,125 +810,131 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "type.bfdrtr.rate"); value.Exists() && !data.BfdRate.IsNull() {
 		data.BfdRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdRate.IsNull() {
 		data.BfdRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "type.bfdrtr.debounce"); value.Exists() && !data.BfdDebounce.IsNull() {
 		data.BfdDebounce = types.Int64Value(value.Int())
-	} else {
+	} else if data.BfdDebounce.IsNull() {
 		data.BfdDebounce = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "type.bfdrtr.interface"); value.Exists() && !data.BfdInterface.IsNull() {
 		data.BfdInterface = types.StringValue(value.String())
-	} else {
+	} else if data.BfdInterface.IsNull() {
 		data.BfdInterface = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bfdrtr.destaddress"); value.Exists() && !data.BfdDestinationAddress.IsNull() {
 		data.BfdDestinationAddress = types.StringValue(value.String())
-	} else {
+	} else if data.BfdDestinationAddress.IsNull() {
 		data.BfdDestinationAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.neighbor"); value.Exists() && !data.BgpNeighborIpv4UnicastAddress.IsNull() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
-	} else {
+	} else if data.BgpNeighborIpv4UnicastAddress.IsNull() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.vrf"); value.Exists() && !data.BgpNeighborIpv4UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
-	} else {
+	} else if data.BgpNeighborIpv4UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.disable.fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.neighbor"); value.Exists() && !data.BgpNeighborIpv4LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
-	} else {
+	} else if data.BgpNeighborIpv4LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.vrf"); value.Exists() && !data.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
-	} else {
+	} else if data.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.disable.fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.neighbor"); value.Exists() && !data.BgpNeighborIpv6UnicastAddress.IsNull() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
-	} else {
+	} else if data.BgpNeighborIpv6UnicastAddress.IsNull() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.vrf"); value.Exists() && !data.BgpNeighborIpv6UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
-	} else {
+	} else if data.BgpNeighborIpv6UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.disable.fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.neighbor"); value.Exists() && !data.BgpNeighborIpv6LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
-	} else {
+	} else if data.BgpNeighborIpv6LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.disable.fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.neighbor"); value.Exists() && !data.BgpNeighborVpnv4UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
-	} else {
+	} else if data.BgpNeighborVpnv4UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.disable.fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.neighbor"); value.Exists() && !data.BgpNeighborVpnv6UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
-	} else {
+	} else if data.BgpNeighborVpnv6UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.disable.fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolNull()
 		}
@@ -958,11 +968,13 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 			data.TrackDownErrorDisableInterfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("auto-recover"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() {
 				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() {
 				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolNull()
 			}
@@ -997,11 +1009,13 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 			data.TrackUpErrorDisableInterfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("auto-recover"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() {
 				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() {
 				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolNull()
 			}
@@ -1014,9 +1028,6 @@ func (data *Track) updateFromBody(ctx context.Context, res []byte) {
 
 func (data Track) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
-	if !data.TrackName.IsNull() && !data.TrackName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/track-name", data.TrackName.ValueString())
-	}
 	if !data.DelayUp.IsNull() && !data.DelayUp.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/delay/up", strconv.FormatInt(data.DelayUp.ValueInt64(), 10))
 	}
@@ -1045,49 +1056,40 @@ func (data Track) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/type/rtr", strconv.FormatInt(data.Rtr.ValueInt64(), 10))
 	}
 	if len(data.BooleanAndList) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BooleanAndList {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/type/list/boolean/and/objects/object"
 			if !item.ObjectName.IsNull() && !item.ObjectName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "object-name", item.ObjectName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/object-name", item.ObjectName.ValueString())
 			}
 			if !item.Not.IsNull() && !item.Not.IsUnknown() {
 				if item.Not.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "not", "")
+					body = helpers.SetFromXPath(body, basePath+"/not", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"type/list/boolean/and/objects/object", cBody.Res())
 		}
 	}
 	if len(data.BooleanOrList) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.BooleanOrList {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/type/list/boolean/or/objects/object"
 			if !item.ObjectName.IsNull() && !item.ObjectName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "object-name", item.ObjectName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/object-name", item.ObjectName.ValueString())
 			}
 			if !item.Not.IsNull() && !item.Not.IsUnknown() {
 				if item.Not.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "not", "")
+					body = helpers.SetFromXPath(body, basePath+"/not", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"type/list/boolean/or/objects/object", cBody.Res())
 		}
 	}
 	if len(data.ThresholdPercentage) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.ThresholdPercentage {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/type/list/threshold/percentage/objects/object"
 			if !item.ObjectName.IsNull() && !item.ObjectName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "object-name", item.ObjectName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/object-name", item.ObjectName.ValueString())
 			}
 			if !item.Weight.IsNull() && !item.Weight.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "weight", strconv.FormatInt(item.Weight.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/weight", strconv.FormatInt(item.Weight.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"type/list/threshold/percentage/objects/object", cBody.Res())
 		}
 	}
 	if !data.ThresholdPercentageUp.IsNull() && !data.ThresholdPercentageUp.IsUnknown() {
@@ -1097,17 +1099,14 @@ func (data Track) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down", strconv.FormatInt(data.ThresholdPercentageDown.ValueInt64(), 10))
 	}
 	if len(data.ThresholdWeight) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.ThresholdWeight {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/type/list/threshold/weight/objects/object"
 			if !item.ObjectName.IsNull() && !item.ObjectName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "object-name", item.ObjectName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/object-name", item.ObjectName.ValueString())
 			}
 			if !item.Weight.IsNull() && !item.Weight.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "weight", strconv.FormatInt(item.Weight.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/weight", strconv.FormatInt(item.Weight.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"type/list/threshold/weight/objects/object", cBody.Res())
 		}
 	}
 	if !data.ThresholdWeightUp.IsNull() && !data.ThresholdWeightUp.IsUnknown() {
@@ -1123,17 +1122,14 @@ func (data Track) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down", strconv.FormatInt(data.LineProtocolWeightDown.ValueInt64(), 10))
 	}
 	if len(data.LineProtocolWeight) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.LineProtocolWeight {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/type/list/line-protocol/state/threshold/weight/interfaces/interface"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.Weight.IsNull() && !item.Weight.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "weight", strconv.FormatInt(item.Weight.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/weight", strconv.FormatInt(item.Weight.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"type/list/line-protocol/state/threshold/weight/interfaces/interface", cBody.Res())
 		}
 	}
 	if !data.LineProtocolPercentageUp.IsNull() && !data.LineProtocolPercentageUp.IsUnknown() {
@@ -1143,36 +1139,27 @@ func (data Track) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down", strconv.FormatInt(data.LineProtocolPercentageDown.ValueInt64(), 10))
 	}
 	if len(data.LineProtocolPercentage) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.LineProtocolPercentage {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/type/list/line-protocol/state/threshold/percentage/interfaces/interface"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"type/list/line-protocol/state/threshold/percentage/interfaces/interface", cBody.Res())
 		}
 	}
 	if len(data.LineProtocolBooleanAnd) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.LineProtocolBooleanAnd {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/type/list/line-protocol/state/boolean/and/interfaces/interface"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"type/list/line-protocol/state/boolean/and/interfaces/interface", cBody.Res())
 		}
 	}
 	if len(data.LineProtocolBooleanOr) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.LineProtocolBooleanOr {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/type/list/line-protocol/state/boolean/or/interfaces/interface"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"type/list/line-protocol/state/boolean/or/interfaces/interface", cBody.Res())
 		}
 	}
 	if !data.BfdRate.IsNull() && !data.BfdRate.IsUnknown() {
@@ -1245,41 +1232,39 @@ func (data Track) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.TrackDownErrorDisableInterfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.TrackDownErrorDisableInterfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/action/track-down/error-disable/interfaces/interface"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.AutoRecover.IsNull() && !item.AutoRecover.IsUnknown() {
 				if item.AutoRecover.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "auto-recover", "")
+					body = helpers.SetFromXPath(body, basePath+"/auto-recover", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"action/track-down/error-disable/interfaces/interface", cBody.Res())
 		}
 	}
 	if len(data.TrackUpErrorDisableInterfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.TrackUpErrorDisableInterfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/action/track-up/error-disable/interfaces/interface"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.AutoRecover.IsNull() && !item.AutoRecover.IsUnknown() {
 				if item.AutoRecover.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "auto-recover", "")
+					body = helpers.SetFromXPath(body, basePath+"/auto-recover", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"action/track-up/error-disable/interfaces/interface", cBody.Res())
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -1287,52 +1272,47 @@ func (data Track) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/track-name"); value.Exists() {
-		data.TrackName = types.StringValue(value.String())
-	} else if data.TrackName.IsNull() {
-		data.TrackName = types.StringNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/up"); value.Exists() && !data.DelayUp.IsNull() {
 		data.DelayUp = types.Int64Value(value.Int())
 	} else if data.DelayUp.IsNull() {
 		data.DelayUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/down"); value.Exists() && !data.DelayDown.IsNull() {
 		data.DelayDown = types.Int64Value(value.Int())
 	} else if data.DelayDown.IsNull() {
 		data.DelayDown = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/ipv4/address"); value.Exists() && !data.RouteIpv4Address.IsNull() {
 		data.RouteIpv4Address = types.StringValue(value.String())
 	} else if data.RouteIpv4Address.IsNull() {
 		data.RouteIpv4Address = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/mask"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/ipv4/mask"); value.Exists() && !data.RouteIpv4Mask.IsNull() {
 		data.RouteIpv4Mask = types.StringValue(value.String())
 	} else if data.RouteIpv4Mask.IsNull() {
 		data.RouteIpv4Mask = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/address-prefix"); value.Exists() && !data.RouteAddressPrefix.IsNull() {
 		data.RouteAddressPrefix = types.StringValue(value.String())
 	} else if data.RouteAddressPrefix.IsNull() {
 		data.RouteAddressPrefix = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/address-prefix-length"); value.Exists() && !data.RouteAddressPrefixLength.IsNull() {
 		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
 	} else if data.RouteAddressPrefixLength.IsNull() {
 		data.RouteAddressPrefixLength = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/vrf"); value.Exists() && !data.RouteVrf.IsNull() {
 		data.RouteVrf = types.StringValue(value.String())
 	} else if data.RouteVrf.IsNull() {
 		data.RouteVrf = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/line-protocol/state/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/line-protocol/state/interface"); value.Exists() && !data.LineProtocolState.IsNull() {
 		data.LineProtocolState = types.StringValue(value.String())
 	} else if data.LineProtocolState.IsNull() {
 		data.LineProtocolState = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/rtr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/rtr"); value.Exists() && !data.Rtr.IsNull() {
 		data.Rtr = types.Int64Value(value.Int())
 	} else if data.Rtr.IsNull() {
 		data.Rtr = types.Int64Null()
@@ -1342,7 +1322,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.BooleanAndList[i].ObjectName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/and/objects/object").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/boolean/and/objects/object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1360,13 +1340,16 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() && !data.BooleanAndList[i].ObjectName.IsNull() {
 			data.BooleanAndList[i].ObjectName = types.StringValue(value.String())
 		} else if data.BooleanAndList[i].ObjectName.IsNull() {
 			data.BooleanAndList[i].ObjectName = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "not"); value.Exists() {
-			data.BooleanAndList[i].Not = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.BooleanAndList[i].Not.IsNull() {
+				data.BooleanAndList[i].Not = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1380,7 +1363,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.BooleanOrList[i].ObjectName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/or/objects/object").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/boolean/or/objects/object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1398,13 +1381,16 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() && !data.BooleanOrList[i].ObjectName.IsNull() {
 			data.BooleanOrList[i].ObjectName = types.StringValue(value.String())
 		} else if data.BooleanOrList[i].ObjectName.IsNull() {
 			data.BooleanOrList[i].ObjectName = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "not"); value.Exists() {
-			data.BooleanOrList[i].Not = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.BooleanOrList[i].Not.IsNull() {
+				data.BooleanOrList[i].Not = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1418,7 +1404,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.ThresholdPercentage[i].ObjectName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/objects/object").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/percentage/objects/object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1436,23 +1422,23 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() && !data.ThresholdPercentage[i].ObjectName.IsNull() {
 			data.ThresholdPercentage[i].ObjectName = types.StringValue(value.String())
 		} else if data.ThresholdPercentage[i].ObjectName.IsNull() {
 			data.ThresholdPercentage[i].ObjectName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "weight"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "weight"); value.Exists() && !data.ThresholdPercentage[i].Weight.IsNull() {
 			data.ThresholdPercentage[i].Weight = types.Int64Value(value.Int())
 		} else if data.ThresholdPercentage[i].Weight.IsNull() {
 			data.ThresholdPercentage[i].Weight = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() && !data.ThresholdPercentageUp.IsNull() {
 		data.ThresholdPercentageUp = types.Int64Value(value.Int())
 	} else if data.ThresholdPercentageUp.IsNull() {
 		data.ThresholdPercentageUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() && !data.ThresholdPercentageDown.IsNull() {
 		data.ThresholdPercentageDown = types.Int64Value(value.Int())
 	} else if data.ThresholdPercentageDown.IsNull() {
 		data.ThresholdPercentageDown = types.Int64Null()
@@ -1462,7 +1448,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.ThresholdWeight[i].ObjectName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/objects/object").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/weight/objects/object").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1480,33 +1466,33 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "object-name"); value.Exists() && !data.ThresholdWeight[i].ObjectName.IsNull() {
 			data.ThresholdWeight[i].ObjectName = types.StringValue(value.String())
 		} else if data.ThresholdWeight[i].ObjectName.IsNull() {
 			data.ThresholdWeight[i].ObjectName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "weight"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "weight"); value.Exists() && !data.ThresholdWeight[i].Weight.IsNull() {
 			data.ThresholdWeight[i].Weight = types.Int64Value(value.Int())
 		} else if data.ThresholdWeight[i].Weight.IsNull() {
 			data.ThresholdWeight[i].Weight = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/up"); value.Exists() && !data.ThresholdWeightUp.IsNull() {
 		data.ThresholdWeightUp = types.Int64Value(value.Int())
 	} else if data.ThresholdWeightUp.IsNull() {
 		data.ThresholdWeightUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/down"); value.Exists() && !data.ThresholdWeightDown.IsNull() {
 		data.ThresholdWeightDown = types.Int64Value(value.Int())
 	} else if data.ThresholdWeightDown.IsNull() {
 		data.ThresholdWeightDown = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() && !data.LineProtocolWeightUp.IsNull() {
 		data.LineProtocolWeightUp = types.Int64Value(value.Int())
 	} else if data.LineProtocolWeightUp.IsNull() {
 		data.LineProtocolWeightUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() && !data.LineProtocolWeightDown.IsNull() {
 		data.LineProtocolWeightDown = types.Int64Value(value.Int())
 	} else if data.LineProtocolWeightDown.IsNull() {
 		data.LineProtocolWeightDown = types.Int64Null()
@@ -1516,7 +1502,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.LineProtocolWeight[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1534,23 +1520,23 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.LineProtocolWeight[i].InterfaceName.IsNull() {
 			data.LineProtocolWeight[i].InterfaceName = types.StringValue(value.String())
 		} else if data.LineProtocolWeight[i].InterfaceName.IsNull() {
 			data.LineProtocolWeight[i].InterfaceName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "weight"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "weight"); value.Exists() && !data.LineProtocolWeight[i].Weight.IsNull() {
 			data.LineProtocolWeight[i].Weight = types.Int64Value(value.Int())
 		} else if data.LineProtocolWeight[i].Weight.IsNull() {
 			data.LineProtocolWeight[i].Weight = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() && !data.LineProtocolPercentageUp.IsNull() {
 		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
 	} else if data.LineProtocolPercentageUp.IsNull() {
 		data.LineProtocolPercentageUp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() && !data.LineProtocolPercentageDown.IsNull() {
 		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
 	} else if data.LineProtocolPercentageDown.IsNull() {
 		data.LineProtocolPercentageDown = types.Int64Null()
@@ -1560,7 +1546,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.LineProtocolPercentage[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1578,7 +1564,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.LineProtocolPercentage[i].InterfaceName.IsNull() {
 			data.LineProtocolPercentage[i].InterfaceName = types.StringValue(value.String())
 		} else if data.LineProtocolPercentage[i].InterfaceName.IsNull() {
 			data.LineProtocolPercentage[i].InterfaceName = types.StringNull()
@@ -1589,7 +1575,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.LineProtocolBooleanAnd[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1607,7 +1593,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.LineProtocolBooleanAnd[i].InterfaceName.IsNull() {
 			data.LineProtocolBooleanAnd[i].InterfaceName = types.StringValue(value.String())
 		} else if data.LineProtocolBooleanAnd[i].InterfaceName.IsNull() {
 			data.LineProtocolBooleanAnd[i].InterfaceName = types.StringNull()
@@ -1618,7 +1604,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.LineProtocolBooleanOr[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1636,119 +1622,137 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.LineProtocolBooleanOr[i].InterfaceName.IsNull() {
 			data.LineProtocolBooleanOr[i].InterfaceName = types.StringValue(value.String())
 		} else if data.LineProtocolBooleanOr[i].InterfaceName.IsNull() {
 			data.LineProtocolBooleanOr[i].InterfaceName = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/rate"); value.Exists() && !data.BfdRate.IsNull() {
 		data.BfdRate = types.Int64Value(value.Int())
 	} else if data.BfdRate.IsNull() {
 		data.BfdRate = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/debounce"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/debounce"); value.Exists() && !data.BfdDebounce.IsNull() {
 		data.BfdDebounce = types.Int64Value(value.Int())
 	} else if data.BfdDebounce.IsNull() {
 		data.BfdDebounce = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/interface"); value.Exists() && !data.BfdInterface.IsNull() {
 		data.BfdInterface = types.StringValue(value.String())
 	} else if data.BfdInterface.IsNull() {
 		data.BfdInterface = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/destaddress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/destaddress"); value.Exists() && !data.BfdDestinationAddress.IsNull() {
 		data.BfdDestinationAddress = types.StringValue(value.String())
 	} else if data.BfdDestinationAddress.IsNull() {
 		data.BfdDestinationAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() && !data.BgpNeighborIpv4UnicastAddress.IsNull() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv4UnicastAddress.IsNull() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() && !data.BgpNeighborIpv4UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv4UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
+			data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() && !data.BgpNeighborIpv4LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv4LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() && !data.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
+			data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() && !data.BgpNeighborIpv6UnicastAddress.IsNull() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv6UnicastAddress.IsNull() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() && !data.BgpNeighborIpv6UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv6UnicastVrfName.IsNull() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
+			data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() && !data.BgpNeighborIpv6LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborIpv6LabeledUnicastAddress.IsNull() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
+			data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() && !data.BgpNeighborVpnv4UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborVpnv4UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
+			data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
 			data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() && !data.BgpNeighborVpnv6UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
 	} else if data.BgpNeighborVpnv6UnicastAddress.IsNull() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
+			data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
@@ -1760,7 +1764,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-down/error-disable/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/action/track-down/error-disable/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1778,13 +1782,16 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.TrackDownErrorDisableInterfaces[i].InterfaceName.IsNull() {
 			data.TrackDownErrorDisableInterfaces[i].InterfaceName = types.StringValue(value.String())
 		} else if data.TrackDownErrorDisableInterfaces[i].InterfaceName.IsNull() {
 			data.TrackDownErrorDisableInterfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "auto-recover"); value.Exists() {
-			data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() {
+				data.TrackDownErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1798,7 +1805,7 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		keyValues := [...]string{data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-up/error-disable/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/action/track-up/error-disable/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1816,13 +1823,16 @@ func (data *Track) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.TrackUpErrorDisableInterfaces[i].InterfaceName.IsNull() {
 			data.TrackUpErrorDisableInterfaces[i].InterfaceName = types.StringValue(value.String())
 		} else if data.TrackUpErrorDisableInterfaces[i].InterfaceName.IsNull() {
 			data.TrackUpErrorDisableInterfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "auto-recover"); value.Exists() {
-			data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() {
+				data.TrackUpErrorDisableInterfaces[i].AutoRecover = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -1841,6 +1851,10 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "delay.up"); value.Exists() {
 		data.DelayUp = types.Int64Value(value.Int())
 	}
@@ -1877,8 +1891,9 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
-			} else {
-				item.Not = types.BoolNull()
+			} else if !item.Not.IsNull() {
+				// Only set to false if it was previously set
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanAndList = append(data.BooleanAndList, item)
 			return true
@@ -1893,8 +1908,9 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
-			} else {
-				item.Not = types.BoolNull()
+			} else if !item.Not.IsNull() {
+				// Only set to false if it was previously set
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanOrList = append(data.BooleanOrList, item)
 			return true
@@ -2019,8 +2035,9 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
+	} else if !data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
@@ -2030,8 +2047,9 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
+	} else if !data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
@@ -2041,32 +2059,36 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
+	} else if !data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
+	} else if !data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
+	} else if !data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolNull()
+	} else if !data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
+		// Only set to false if it was previously set in state
+		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "action.track-down.error-disable.interfaces.interface"); value.Exists() {
 		data.TrackDownErrorDisableInterfaces = make([]TrackTrackDownErrorDisableInterfaces, 0)
@@ -2077,8 +2099,9 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
-			} else {
-				item.AutoRecover = types.BoolNull()
+			} else if !item.AutoRecover.IsNull() {
+				// Only set to false if it was previously set
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackDownErrorDisableInterfaces = append(data.TrackDownErrorDisableInterfaces, item)
 			return true
@@ -2093,8 +2116,9 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
-			} else {
-				item.AutoRecover = types.BoolNull()
+			} else if !item.AutoRecover.IsNull() {
+				// Only set to false if it was previously set
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackUpErrorDisableInterfaces = append(data.TrackUpErrorDisableInterfaces, item)
 			return true
@@ -2106,9 +2130,14 @@ func (data *Track) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "delay.up"); value.Exists() {
 		data.DelayUp = types.Int64Value(value.Int())
@@ -2147,7 +2176,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolNull()
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanAndList = append(data.BooleanAndList, item)
 			return true
@@ -2163,7 +2192,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("not"); cValue.Exists() {
 				item.Not = types.BoolValue(true)
 			} else {
-				item.Not = types.BoolNull()
+				item.Not = types.BoolValue(false)
 			}
 			data.BooleanOrList = append(data.BooleanOrList, item)
 			return true
@@ -2289,7 +2318,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
@@ -2300,7 +2329,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv4.labeled-unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
@@ -2311,7 +2340,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.neighbor"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
@@ -2319,7 +2348,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.ipv6.labeled-unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
@@ -2327,7 +2356,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv4.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.neighbor"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
@@ -2335,7 +2364,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "type.bgp.neighbor.address-family.state.address-family.vpnv6.unicast.disable.fib-check"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
-		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolNull()
+		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "action.track-down.error-disable.interfaces.interface"); value.Exists() {
 		data.TrackDownErrorDisableInterfaces = make([]TrackTrackDownErrorDisableInterfaces, 0)
@@ -2347,7 +2376,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolNull()
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackDownErrorDisableInterfaces = append(data.TrackDownErrorDisableInterfaces, item)
 			return true
@@ -2363,7 +2392,7 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("auto-recover"); cValue.Exists() {
 				item.AutoRecover = types.BoolValue(true)
 			} else {
-				item.AutoRecover = types.BoolNull()
+				item.AutoRecover = types.BoolValue(false)
 			}
 			data.TrackUpErrorDisableInterfaces = append(data.TrackUpErrorDisableInterfaces, item)
 			return true
@@ -2375,299 +2404,34 @@ func (data *TrackData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Track) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/up"); value.Exists() {
 		data.DelayUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/down"); value.Exists() {
 		data.DelayDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/address"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/ipv4/address"); value.Exists() {
 		data.RouteIpv4Address = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/mask"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/ipv4/mask"); value.Exists() {
 		data.RouteIpv4Mask = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/address-prefix"); value.Exists() {
 		data.RouteAddressPrefix = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix-length"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/address-prefix-length"); value.Exists() {
 		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/vrf"); value.Exists() {
 		data.RouteVrf = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/line-protocol/state/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/line-protocol/state/interface"); value.Exists() {
 		data.LineProtocolState = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/rtr"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/rtr"); value.Exists() {
 		data.Rtr = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/and/objects/object"); value.Exists() {
-		data.BooleanAndList = make([]TrackBooleanAndList, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackBooleanAndList{}
-			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
-				item.ObjectName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
-				item.Not = types.BoolValue(true)
-			} else {
-				item.Not = types.BoolNull()
-			}
-			data.BooleanAndList = append(data.BooleanAndList, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/or/objects/object"); value.Exists() {
-		data.BooleanOrList = make([]TrackBooleanOrList, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackBooleanOrList{}
-			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
-				item.ObjectName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
-				item.Not = types.BoolValue(true)
-			} else {
-				item.Not = types.BoolNull()
-			}
-			data.BooleanOrList = append(data.BooleanOrList, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/objects/object"); value.Exists() {
-		data.ThresholdPercentage = make([]TrackThresholdPercentage, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackThresholdPercentage{}
-			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
-				item.ObjectName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "weight"); cValue.Exists() {
-				item.Weight = types.Int64Value(cValue.Int())
-			}
-			data.ThresholdPercentage = append(data.ThresholdPercentage, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
-		data.ThresholdPercentageUp = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
-		data.ThresholdPercentageDown = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/objects/object"); value.Exists() {
-		data.ThresholdWeight = make([]TrackThresholdWeight, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackThresholdWeight{}
-			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
-				item.ObjectName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "weight"); cValue.Exists() {
-				item.Weight = types.Int64Value(cValue.Int())
-			}
-			data.ThresholdWeight = append(data.ThresholdWeight, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
-		data.ThresholdWeightUp = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
-		data.ThresholdWeightDown = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
-		data.LineProtocolWeightUp = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
-		data.LineProtocolWeightDown = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface"); value.Exists() {
-		data.LineProtocolWeight = make([]TrackLineProtocolWeight, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackLineProtocolWeight{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "weight"); cValue.Exists() {
-				item.Weight = types.Int64Value(cValue.Int())
-			}
-			data.LineProtocolWeight = append(data.LineProtocolWeight, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
-		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
-		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface"); value.Exists() {
-		data.LineProtocolPercentage = make([]TrackLineProtocolPercentage, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackLineProtocolPercentage{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			data.LineProtocolPercentage = append(data.LineProtocolPercentage, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface"); value.Exists() {
-		data.LineProtocolBooleanAnd = make([]TrackLineProtocolBooleanAnd, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackLineProtocolBooleanAnd{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			data.LineProtocolBooleanAnd = append(data.LineProtocolBooleanAnd, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface"); value.Exists() {
-		data.LineProtocolBooleanOr = make([]TrackLineProtocolBooleanOr, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackLineProtocolBooleanOr{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			data.LineProtocolBooleanOr = append(data.LineProtocolBooleanOr, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/rate"); value.Exists() {
-		data.BfdRate = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/debounce"); value.Exists() {
-		data.BfdDebounce = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/interface"); value.Exists() {
-		data.BfdInterface = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/destaddress"); value.Exists() {
-		data.BfdDestinationAddress = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
-		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
-		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
-		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
-		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
-		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
-		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
-		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
-		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
-		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
-		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
-	} else {
-		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-down/error-disable/interfaces/interface"); value.Exists() {
-		data.TrackDownErrorDisableInterfaces = make([]TrackTrackDownErrorDisableInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackTrackDownErrorDisableInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
-				item.AutoRecover = types.BoolValue(true)
-			} else {
-				item.AutoRecover = types.BoolNull()
-			}
-			data.TrackDownErrorDisableInterfaces = append(data.TrackDownErrorDisableInterfaces, item)
-			return true
-		})
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-up/error-disable/interfaces/interface"); value.Exists() {
-		data.TrackUpErrorDisableInterfaces = make([]TrackTrackUpErrorDisableInterfaces, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := TrackTrackUpErrorDisableInterfaces{}
-			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
-				item.AutoRecover = types.BoolValue(true)
-			} else {
-				item.AutoRecover = types.BoolNull()
-			}
-			data.TrackUpErrorDisableInterfaces = append(data.TrackUpErrorDisableInterfaces, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
-
-func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/up"); value.Exists() {
-		data.DelayUp = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/delay/down"); value.Exists() {
-		data.DelayDown = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/address"); value.Exists() {
-		data.RouteIpv4Address = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/ipv4/mask"); value.Exists() {
-		data.RouteIpv4Mask = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix"); value.Exists() {
-		data.RouteAddressPrefix = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/route/address-prefix-length"); value.Exists() {
-		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/route/reachability/vrf"); value.Exists() {
-		data.RouteVrf = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/line-protocol/state/interface"); value.Exists() {
-		data.LineProtocolState = types.StringValue(value.String())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/rtr"); value.Exists() {
-		data.Rtr = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/and/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/boolean/and/objects/object"); value.Exists() {
 		data.BooleanAndList = make([]TrackBooleanAndList, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackBooleanAndList{}
@@ -2683,7 +2447,7 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/boolean/or/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/boolean/or/objects/object"); value.Exists() {
 		data.BooleanOrList = make([]TrackBooleanOrList, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackBooleanOrList{}
@@ -2699,7 +2463,7 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/percentage/objects/object"); value.Exists() {
 		data.ThresholdPercentage = make([]TrackThresholdPercentage, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackThresholdPercentage{}
@@ -2713,13 +2477,13 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
 		data.ThresholdPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
 		data.ThresholdPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/objects/object"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/weight/objects/object"); value.Exists() {
 		data.ThresholdWeight = make([]TrackThresholdWeight, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackThresholdWeight{}
@@ -2733,19 +2497,19 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
 		data.ThresholdWeightUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
 		data.ThresholdWeightDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
 		data.LineProtocolWeightUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
 		data.LineProtocolWeightDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface"); value.Exists() {
 		data.LineProtocolWeight = make([]TrackLineProtocolWeight, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolWeight{}
@@ -2759,13 +2523,13 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
 		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
 		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface"); value.Exists() {
 		data.LineProtocolPercentage = make([]TrackLineProtocolPercentage, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolPercentage{}
@@ -2776,7 +2540,7 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface"); value.Exists() {
 		data.LineProtocolBooleanAnd = make([]TrackLineProtocolBooleanAnd, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolBooleanAnd{}
@@ -2787,7 +2551,7 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface"); value.Exists() {
 		data.LineProtocolBooleanOr = make([]TrackLineProtocolBooleanOr, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackLineProtocolBooleanOr{}
@@ -2798,76 +2562,76 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/rate"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/rate"); value.Exists() {
 		data.BfdRate = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/debounce"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/debounce"); value.Exists() {
 		data.BfdDebounce = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/interface"); value.Exists() {
 		data.BfdInterface = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bfdrtr/destaddress"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/destaddress"); value.Exists() {
 		data.BfdDestinationAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
 		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
 	} else {
 		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-down/error-disable/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/action/track-down/error-disable/interfaces/interface"); value.Exists() {
 		data.TrackDownErrorDisableInterfaces = make([]TrackTrackDownErrorDisableInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackTrackDownErrorDisableInterfaces{}
@@ -2883,7 +2647,272 @@ func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/action/track-up/error-disable/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/action/track-up/error-disable/interfaces/interface"); value.Exists() {
+		data.TrackUpErrorDisableInterfaces = make([]TrackTrackUpErrorDisableInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackTrackUpErrorDisableInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
+				item.AutoRecover = types.BoolValue(true)
+			} else {
+				item.AutoRecover = types.BoolValue(false)
+			}
+			data.TrackUpErrorDisableInterfaces = append(data.TrackUpErrorDisableInterfaces, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *TrackData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/up"); value.Exists() {
+		data.DelayUp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay/down"); value.Exists() {
+		data.DelayDown = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/ipv4/address"); value.Exists() {
+		data.RouteIpv4Address = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/ipv4/mask"); value.Exists() {
+		data.RouteIpv4Mask = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/address-prefix"); value.Exists() {
+		data.RouteAddressPrefix = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/route/address-prefix-length"); value.Exists() {
+		data.RouteAddressPrefixLength = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/route/reachability/vrf"); value.Exists() {
+		data.RouteVrf = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/line-protocol/state/interface"); value.Exists() {
+		data.LineProtocolState = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/rtr"); value.Exists() {
+		data.Rtr = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/boolean/and/objects/object"); value.Exists() {
+		data.BooleanAndList = make([]TrackBooleanAndList, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackBooleanAndList{}
+			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
+				item.ObjectName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
+				item.Not = types.BoolValue(true)
+			} else {
+				item.Not = types.BoolValue(false)
+			}
+			data.BooleanAndList = append(data.BooleanAndList, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/boolean/or/objects/object"); value.Exists() {
+		data.BooleanOrList = make([]TrackBooleanOrList, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackBooleanOrList{}
+			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
+				item.ObjectName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "not"); cValue.Exists() {
+				item.Not = types.BoolValue(true)
+			} else {
+				item.Not = types.BoolValue(false)
+			}
+			data.BooleanOrList = append(data.BooleanOrList, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/percentage/objects/object"); value.Exists() {
+		data.ThresholdPercentage = make([]TrackThresholdPercentage, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackThresholdPercentage{}
+			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
+				item.ObjectName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "weight"); cValue.Exists() {
+				item.Weight = types.Int64Value(cValue.Int())
+			}
+			data.ThresholdPercentage = append(data.ThresholdPercentage, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/up"); value.Exists() {
+		data.ThresholdPercentageUp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/percentage/threshold/percentage/down"); value.Exists() {
+		data.ThresholdPercentageDown = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/weight/objects/object"); value.Exists() {
+		data.ThresholdWeight = make([]TrackThresholdWeight, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackThresholdWeight{}
+			if cValue := helpers.GetFromXPath(v, "object-name"); cValue.Exists() {
+				item.ObjectName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "weight"); cValue.Exists() {
+				item.Weight = types.Int64Value(cValue.Int())
+			}
+			data.ThresholdWeight = append(data.ThresholdWeight, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/up"); value.Exists() {
+		data.ThresholdWeightUp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/threshold/weight/threshold/weight/down"); value.Exists() {
+		data.ThresholdWeightDown = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/up"); value.Exists() {
+		data.LineProtocolWeightUp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/threshold/weight/down"); value.Exists() {
+		data.LineProtocolWeightDown = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface"); value.Exists() {
+		data.LineProtocolWeight = make([]TrackLineProtocolWeight, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackLineProtocolWeight{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "weight"); cValue.Exists() {
+				item.Weight = types.Int64Value(cValue.Int())
+			}
+			data.LineProtocolWeight = append(data.LineProtocolWeight, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"); value.Exists() {
+		data.LineProtocolPercentageUp = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"); value.Exists() {
+		data.LineProtocolPercentageDown = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface"); value.Exists() {
+		data.LineProtocolPercentage = make([]TrackLineProtocolPercentage, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackLineProtocolPercentage{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.LineProtocolPercentage = append(data.LineProtocolPercentage, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface"); value.Exists() {
+		data.LineProtocolBooleanAnd = make([]TrackLineProtocolBooleanAnd, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackLineProtocolBooleanAnd{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.LineProtocolBooleanAnd = append(data.LineProtocolBooleanAnd, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface"); value.Exists() {
+		data.LineProtocolBooleanOr = make([]TrackLineProtocolBooleanOr, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackLineProtocolBooleanOr{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.LineProtocolBooleanOr = append(data.LineProtocolBooleanOr, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/rate"); value.Exists() {
+		data.BfdRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/debounce"); value.Exists() {
+		data.BfdDebounce = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/interface"); value.Exists() {
+		data.BfdInterface = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bfdrtr/destaddress"); value.Exists() {
+		data.BfdDestinationAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"); value.Exists() {
+		data.BgpNeighborIpv4UnicastAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"); value.Exists() {
+		data.BgpNeighborIpv4UnicastVrfName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"); value.Exists() {
+		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(true)
+	} else {
+		data.BgpNeighborIpv4UnicastDisableFibCheck = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"); value.Exists() {
+		data.BgpNeighborIpv4LabeledUnicastAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"); value.Exists() {
+		data.BgpNeighborIpv4LabeledUnicastVrfName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"); value.Exists() {
+		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(true)
+	} else {
+		data.BgpNeighborIpv4LabeledUnicastDisableFibCheck = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"); value.Exists() {
+		data.BgpNeighborIpv6UnicastAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"); value.Exists() {
+		data.BgpNeighborIpv6UnicastVrfName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"); value.Exists() {
+		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(true)
+	} else {
+		data.BgpNeighborIpv6UnicastDisableFibCheck = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"); value.Exists() {
+		data.BgpNeighborIpv6LabeledUnicastAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"); value.Exists() {
+		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(true)
+	} else {
+		data.BgpNeighborIpv6LabeledUnicastDisableFibCheck = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"); value.Exists() {
+		data.BgpNeighborVpnv4UnicastAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"); value.Exists() {
+		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(true)
+	} else {
+		data.BgpNeighborVpnv4UnicastDisableFibCheck = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"); value.Exists() {
+		data.BgpNeighborVpnv6UnicastAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"); value.Exists() {
+		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(true)
+	} else {
+		data.BgpNeighborVpnv6UnicastDisableFibCheck = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/action/track-down/error-disable/interfaces/interface"); value.Exists() {
+		data.TrackDownErrorDisableInterfaces = make([]TrackTrackDownErrorDisableInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TrackTrackDownErrorDisableInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "auto-recover"); cValue.Exists() {
+				item.AutoRecover = types.BoolValue(true)
+			} else {
+				item.AutoRecover = types.BoolValue(false)
+			}
+			data.TrackDownErrorDisableInterfaces = append(data.TrackDownErrorDisableInterfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/action/track-up/error-disable/interfaces/interface"); value.Exists() {
 		data.TrackUpErrorDisableInterfaces = make([]TrackTrackUpErrorDisableInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := TrackTrackUpErrorDisableInterfaces{}
@@ -3496,14 +3525,16 @@ func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track) []stri
 func (data *Track) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.TrackUpErrorDisableInterfaces {
-		keyValues := [...]string{data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/action/track-up/error-disable/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.TrackUpErrorDisableInterfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/action/track-up/error-disable/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	for i := range data.TrackDownErrorDisableInterfaces {
-		keyValues := [...]string{data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/action/track-down/error-disable/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.TrackDownErrorDisableInterfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/action/track-down/error-disable/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	if !data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check", data.getPath()))
@@ -3563,19 +3594,22 @@ func (data *Track) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/bfdrtr/rate", data.getPath()))
 	}
 	for i := range data.LineProtocolBooleanOr {
-		keyValues := [...]string{data.LineProtocolBooleanOr[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/boolean/or/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.LineProtocolBooleanOr[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/boolean/or/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	for i := range data.LineProtocolBooleanAnd {
-		keyValues := [...]string{data.LineProtocolBooleanAnd[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/boolean/and/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.LineProtocolBooleanAnd[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/boolean/and/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	for i := range data.LineProtocolPercentage {
-		keyValues := [...]string{data.LineProtocolPercentage[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/percentage/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.LineProtocolPercentage[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/percentage/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	if !data.LineProtocolPercentageDown.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down", data.getPath()))
@@ -3584,9 +3618,10 @@ func (data *Track) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up", data.getPath()))
 	}
 	for i := range data.LineProtocolWeight {
-		keyValues := [...]string{data.LineProtocolWeight[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/weight/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.LineProtocolWeight[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/weight/interfaces/interface%v", data.getPath(), keyPath))
 	}
 	if !data.LineProtocolWeightDown.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/line-protocol/state/threshold/weight/threshold/weight/down", data.getPath()))
@@ -3601,9 +3636,10 @@ func (data *Track) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/weight/threshold/weight/up", data.getPath()))
 	}
 	for i := range data.ThresholdWeight {
-		keyValues := [...]string{data.ThresholdWeight[i].ObjectName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/weight/objects/object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[object-name=" + data.ThresholdWeight[i].ObjectName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/weight/objects/object%v", data.getPath(), keyPath))
 	}
 	if !data.ThresholdPercentageDown.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/percentage/threshold/percentage/down", data.getPath()))
@@ -3612,19 +3648,22 @@ func (data *Track) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/percentage/threshold/percentage/up", data.getPath()))
 	}
 	for i := range data.ThresholdPercentage {
-		keyValues := [...]string{data.ThresholdPercentage[i].ObjectName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/percentage/objects/object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[object-name=" + data.ThresholdPercentage[i].ObjectName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/threshold/percentage/objects/object%v", data.getPath(), keyPath))
 	}
 	for i := range data.BooleanOrList {
-		keyValues := [...]string{data.BooleanOrList[i].ObjectName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/boolean/or/objects/object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[object-name=" + data.BooleanOrList[i].ObjectName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/boolean/or/objects/object%v", data.getPath(), keyPath))
 	}
 	for i := range data.BooleanAndList {
-		keyValues := [...]string{data.BooleanAndList[i].ObjectName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/boolean/and/objects/object=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[object-name=" + data.BooleanAndList[i].ObjectName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/list/boolean/and/objects/object%v", data.getPath(), keyPath))
 	}
 	if !data.Rtr.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/rtr", data.getPath()))
@@ -3661,7 +3700,8 @@ func (data *Track) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.TrackUpErrorDisableInterfaces {
@@ -3689,13 +3729,13 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && state.TrackUpErrorDisableInterfaces[i].AutoRecover.ValueBool() && data.TrackUpErrorDisableInterfaces[j].AutoRecover.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/action/track-up/error-disable/interfaces/interface%v/auto-recover", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/action/track-up/error-disable/interfaces/interface%v/auto-recover", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/action/track-up/error-disable/interfaces/interface%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/action/track-up/error-disable/interfaces/interface%v", predicates))
 		}
 	}
 	for i := range state.TrackDownErrorDisableInterfaces {
@@ -3723,151 +3763,303 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && state.TrackDownErrorDisableInterfaces[i].AutoRecover.ValueBool() && data.TrackDownErrorDisableInterfaces[j].AutoRecover.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/action/track-down/error-disable/interfaces/interface%v/auto-recover", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/action/track-down/error-disable/interfaces/interface%v/auto-recover", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/action/track-down/error-disable/interfaces/interface%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/action/track-down/error-disable/interfaces/interface%v", predicates))
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() && state.BgpNeighborVpnv6UnicastDisableFibCheck.ValueBool() && data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborVpnv6UnicastAddress.IsNull() && data.BgpNeighborVpnv6UnicastAddress.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/neighbor"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() && state.BgpNeighborVpnv4UnicastDisableFibCheck.ValueBool() && data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborVpnv4UnicastAddress.IsNull() && data.BgpNeighborVpnv4UnicastAddress.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/neighbor"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv6LabeledUnicastDisableFibCheck.ValueBool() && data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv6LabeledUnicastAddress.IsNull() && data.BgpNeighborIpv6LabeledUnicastAddress.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/neighbor"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv6UnicastDisableFibCheck.ValueBool() && data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv6UnicastVrfName.IsNull() && data.BgpNeighborIpv6UnicastVrfName.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/vrf"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv6UnicastAddress.IsNull() && data.BgpNeighborIpv6UnicastAddress.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/neighbor"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv4LabeledUnicastDisableFibCheck.ValueBool() && data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() && data.BgpNeighborIpv4LabeledUnicastVrfName.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/vrf"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv4LabeledUnicastAddress.IsNull() && data.BgpNeighborIpv4LabeledUnicastAddress.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/neighbor"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv4UnicastDisableFibCheck.ValueBool() && data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv4UnicastVrfName.IsNull() && data.BgpNeighborIpv4UnicastVrfName.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/vrf"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BgpNeighborIpv4UnicastAddress.IsNull() && data.BgpNeighborIpv4UnicastAddress.IsNull() {
 		deletePath := state.getXPath() + "/type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/neighbor"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdDestinationAddress.IsNull() && data.BfdDestinationAddress.IsNull() {
 		deletePath := state.getXPath() + "/type/bfdrtr/destaddress"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdInterface.IsNull() && data.BfdInterface.IsNull() {
 		deletePath := state.getXPath() + "/type/bfdrtr/interface"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdDebounce.IsNull() && data.BfdDebounce.IsNull() {
 		deletePath := state.getXPath() + "/type/bfdrtr/debounce"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.BfdRate.IsNull() && data.BfdRate.IsNull() {
 		deletePath := state.getXPath() + "/type/bfdrtr/rate"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -3898,7 +4090,7 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/boolean/or/interfaces/interface%v", predicates))
 		}
 	}
 	for i := range state.LineProtocolBooleanAnd {
@@ -3928,7 +4120,7 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/boolean/and/interfaces/interface%v", predicates))
 		}
 	}
 	for i := range state.LineProtocolPercentage {
@@ -3958,20 +4150,36 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/threshold/percentage/interfaces/interface%v", predicates))
 		}
 	}
 	if !state.LineProtocolPercentageDown.IsNull() && data.LineProtocolPercentageDown.IsNull() {
 		deletePath := state.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/down"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LineProtocolPercentageUp.IsNull() && data.LineProtocolPercentageUp.IsNull() {
 		deletePath := state.getXPath() + "/type/list/line-protocol/state/threshold/percentage/threshold/percentage/up"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -3999,40 +4207,72 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			}
 			if found {
 				if !state.LineProtocolWeight[i].Weight.IsNull() && data.LineProtocolWeight[j].Weight.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface%v/weight", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface%v/weight", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/line-protocol/state/threshold/weight/interfaces/interface%v", predicates))
 		}
 	}
 	if !state.LineProtocolWeightDown.IsNull() && data.LineProtocolWeightDown.IsNull() {
 		deletePath := state.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/down"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LineProtocolWeightUp.IsNull() && data.LineProtocolWeightUp.IsNull() {
 		deletePath := state.getXPath() + "/type/list/line-protocol/state/threshold/weight/threshold/weight/up"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ThresholdWeightDown.IsNull() && data.ThresholdWeightDown.IsNull() {
 		deletePath := state.getXPath() + "/type/list/threshold/weight/threshold/weight/down"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ThresholdWeightUp.IsNull() && data.ThresholdWeightUp.IsNull() {
 		deletePath := state.getXPath() + "/type/list/threshold/weight/threshold/weight/up"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -4060,26 +4300,42 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			}
 			if found {
 				if !state.ThresholdWeight[i].Weight.IsNull() && data.ThresholdWeight[j].Weight.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/threshold/weight/objects/object%v/weight", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/threshold/weight/objects/object%v/weight", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/threshold/weight/objects/object%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/threshold/weight/objects/object%v", predicates))
 		}
 	}
 	if !state.ThresholdPercentageDown.IsNull() && data.ThresholdPercentageDown.IsNull() {
 		deletePath := state.getXPath() + "/type/list/threshold/percentage/threshold/percentage/down"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ThresholdPercentageUp.IsNull() && data.ThresholdPercentageUp.IsNull() {
 		deletePath := state.getXPath() + "/type/list/threshold/percentage/threshold/percentage/up"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -4107,13 +4363,13 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			}
 			if found {
 				if !state.ThresholdPercentage[i].Weight.IsNull() && data.ThresholdPercentage[j].Weight.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/threshold/percentage/objects/object%v/weight", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/threshold/percentage/objects/object%v/weight", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/threshold/percentage/objects/object%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/threshold/percentage/objects/object%v", predicates))
 		}
 	}
 	for i := range state.BooleanOrList {
@@ -4141,13 +4397,13 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.BooleanOrList[i].Not.IsNull() && state.BooleanOrList[i].Not.ValueBool() && data.BooleanOrList[j].Not.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/boolean/or/objects/object%v/not", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/boolean/or/objects/object%v/not", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/boolean/or/objects/object%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/boolean/or/objects/object%v", predicates))
 		}
 	}
 	for i := range state.BooleanAndList {
@@ -4175,81 +4431,152 @@ func (data *Track) addDeletedItemsXML(ctx context.Context, state Track, body str
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.BooleanAndList[i].Not.IsNull() && state.BooleanAndList[i].Not.ValueBool() && data.BooleanAndList[j].Not.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/boolean/and/objects/object%v/not", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/boolean/and/objects/object%v/not", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/type/list/boolean/and/objects/object%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/type/list/boolean/and/objects/object%v", predicates))
 		}
 	}
 	if !state.Rtr.IsNull() && data.Rtr.IsNull() {
 		deletePath := state.getXPath() + "/type/rtr"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.LineProtocolState.IsNull() && data.LineProtocolState.IsNull() {
 		deletePath := state.getXPath() + "/type/line-protocol/state/interface"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteVrf.IsNull() && data.RouteVrf.IsNull() {
 		deletePath := state.getXPath() + "/type/route/reachability/vrf"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteAddressPrefixLength.IsNull() && data.RouteAddressPrefixLength.IsNull() {
 		deletePath := state.getXPath() + "/type/route/reachability/route/address-prefix-length"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteAddressPrefix.IsNull() && data.RouteAddressPrefix.IsNull() {
 		deletePath := state.getXPath() + "/type/route/reachability/route/address-prefix"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteIpv4Mask.IsNull() && data.RouteIpv4Mask.IsNull() {
 		deletePath := state.getXPath() + "/type/route/reachability/route/ipv4/mask"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RouteIpv4Address.IsNull() && data.RouteIpv4Address.IsNull() {
 		deletePath := state.getXPath() + "/type/route/reachability/route/ipv4/address"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DelayDown.IsNull() && data.DelayDown.IsNull() {
 		deletePath := state.getXPath() + "/delay/down"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.DelayUp.IsNull() && data.DelayUp.IsNull() {
 		deletePath := state.getXPath() + "/delay/up"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -4467,7 +4794,6 @@ func (data *Track) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay/up")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

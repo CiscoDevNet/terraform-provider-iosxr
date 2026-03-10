@@ -74,7 +74,7 @@ func TestAccDataSourceIosxrSegmentRoutingV6(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrSegmentRoutingV6PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
 	attributes = {
 		"enable" = "<NULL>"
@@ -119,7 +119,7 @@ func testAccDataSourceIosxrSegmentRoutingV6Config() string {
 		config += `	encapsulation_hop_limit_value = 1` + "\n"
 	}
 	config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

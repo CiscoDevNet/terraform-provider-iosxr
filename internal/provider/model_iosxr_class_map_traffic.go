@@ -392,9 +392,6 @@ func (data ClassMapTraffic) toBody(ctx context.Context) string {
 
 func (data ClassMapTraffic) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
-	if !data.ClassMapName.IsNull() && !data.ClassMapName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/class-map-name", data.ClassMapName.ValueString())
-	}
 	if !data.MatchAll.IsNull() && !data.MatchAll.IsUnknown() {
 		if data.MatchAll.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/match-all", "")
@@ -437,31 +434,25 @@ func (data ClassMapTraffic) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.MatchDestinationAddressIpv4) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MatchDestinationAddressIpv4 {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/match/destination-address/ipv4/address-prefix"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.Netmask.IsNull() && !item.Netmask.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "netmask", item.Netmask.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/netmask", item.Netmask.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"match/destination-address/ipv4/address-prefix", cBody.Res())
 		}
 	}
 	if len(data.MatchDestinationAddressIpv6) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MatchDestinationAddressIpv6 {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/match/destination-address/ipv6/address-prefix"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.PrefixLength.IsNull() && !item.PrefixLength.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "prefix-length", strconv.FormatInt(item.PrefixLength.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/prefix-length", strconv.FormatInt(item.PrefixLength.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"match/destination-address/ipv6/address-prefix", cBody.Res())
 		}
 	}
 	if !data.MatchDestinationMac.IsNull() && !data.MatchDestinationMac.IsUnknown() {
@@ -600,31 +591,25 @@ func (data ClassMapTraffic) toBodyXML(ctx context.Context) string {
 		}
 	}
 	if len(data.MatchSourceAddressIpv4) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MatchSourceAddressIpv4 {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/match/source-address/ipv4/address-prefix"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.Netmask.IsNull() && !item.Netmask.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "netmask", item.Netmask.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/netmask", item.Netmask.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"match/source-address/ipv4/address-prefix", cBody.Res())
 		}
 	}
 	if len(data.MatchSourceAddressIpv6) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MatchSourceAddressIpv6 {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/match/source-address/ipv6/address-prefix"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.PrefixLength.IsNull() && !item.PrefixLength.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "prefix-length", strconv.FormatInt(item.PrefixLength.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/prefix-length", strconv.FormatInt(item.PrefixLength.ValueInt64(), 10))
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"match/source-address/ipv6/address-prefix", cBody.Res())
 		}
 	}
 	if !data.MatchSourceMac.IsNull() && !data.MatchSourceMac.IsUnknown() {
@@ -659,10 +644,14 @@ func (data ClassMapTraffic) toBodyXML(ctx context.Context) string {
 			body = helpers.AppendFromXPath(body, data.getXPath()+"/match/vlan-inner/vlan-id", v)
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -672,48 +661,50 @@ func (data ClassMapTraffic) toBodyXML(ctx context.Context) string {
 
 func (data *ClassMapTraffic) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "match-all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MatchAll.IsNull() {
 			data.MatchAll = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MatchAll.IsNull() {
 			data.MatchAll = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MatchAny.IsNull() {
 			data.MatchAny = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MatchAny.IsNull() {
 			data.MatchAny = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
-	} else {
+	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "match.access-group.ipv4"); value.Exists() && !data.MatchAccessGroupIpv4.IsNull() {
 		data.MatchAccessGroupIpv4 = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchAccessGroupIpv4.IsNull() {
 		data.MatchAccessGroupIpv4 = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.access-group.ipv6"); value.Exists() && !data.MatchAccessGroupIpv6.IsNull() {
 		data.MatchAccessGroupIpv6 = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchAccessGroupIpv6.IsNull() {
 		data.MatchAccessGroupIpv6 = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.cos.value"); value.Exists() && !data.MatchCos.IsNull() {
 		data.MatchCos = helpers.GetInt64List(value.Array())
-	} else {
+	} else if data.MatchCos.IsNull() {
 		data.MatchCos = types.ListNull(types.Int64Type)
 	}
 	if value := gjson.GetBytes(res, "match.cos-inner.value"); value.Exists() && !data.MatchCosInner.IsNull() {
 		data.MatchCosInner = helpers.GetInt64List(value.Array())
-	} else {
+	} else if data.MatchCosInner.IsNull() {
 		data.MatchCosInner = types.ListNull(types.Int64Type)
 	}
 	for i := range data.MatchDestinationAddressIpv4 {
@@ -786,127 +777,131 @@ func (data *ClassMapTraffic) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "match.destination-address.mac"); value.Exists() && !data.MatchDestinationMac.IsNull() {
 		data.MatchDestinationMac = types.StringValue(value.String())
-	} else {
+	} else if data.MatchDestinationMac.IsNull() {
 		data.MatchDestinationMac = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "match.destination-port.port-number"); value.Exists() && !data.MatchDestinationPort.IsNull() {
 		data.MatchDestinationPort = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchDestinationPort.IsNull() {
 		data.MatchDestinationPort = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.dscp.value"); value.Exists() && !data.MatchDscp.IsNull() {
 		data.MatchDscp = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchDscp.IsNull() {
 		data.MatchDscp = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.dscp-ipv4.value"); value.Exists() && !data.MatchDscpIpv4.IsNull() {
 		data.MatchDscpIpv4 = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchDscpIpv4.IsNull() {
 		data.MatchDscpIpv4 = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.dscp-ipv6.value"); value.Exists() && !data.MatchDscpIpv6.IsNull() {
 		data.MatchDscpIpv6 = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchDscpIpv6.IsNull() {
 		data.MatchDscpIpv6 = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.ethertype.value"); value.Exists() && !data.MatchEthertype.IsNull() {
 		data.MatchEthertype = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchEthertype.IsNull() {
 		data.MatchEthertype = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.flow-tag.tag-number"); value.Exists() && !data.MatchFlowTag.IsNull() {
 		data.MatchFlowTag = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchFlowTag.IsNull() {
 		data.MatchFlowTag = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.fragment-type.dont-fragment"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MatchFragmentTypeDontFragment.IsNull() {
 			data.MatchFragmentTypeDontFragment = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MatchFragmentTypeDontFragment.IsNull() {
 			data.MatchFragmentTypeDontFragment = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "match.fragment-type.first-fragment"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MatchFragmentTypeFirstFragment.IsNull() {
 			data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MatchFragmentTypeFirstFragment.IsNull() {
 			data.MatchFragmentTypeFirstFragment = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "match.fragment-type.is-fragment"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MatchFragmentTypeIsFragment.IsNull() {
 			data.MatchFragmentTypeIsFragment = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MatchFragmentTypeIsFragment.IsNull() {
 			data.MatchFragmentTypeIsFragment = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "match.fragment-type.last-fragment"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MatchFragmentTypeLastFragment.IsNull() {
 			data.MatchFragmentTypeLastFragment = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MatchFragmentTypeLastFragment.IsNull() {
 			data.MatchFragmentTypeLastFragment = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "match.ipv4.icmp-code.value"); value.Exists() && !data.MatchIpv4IcmpCode.IsNull() {
 		data.MatchIpv4IcmpCode = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchIpv4IcmpCode.IsNull() {
 		data.MatchIpv4IcmpCode = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.ipv4.icmp-type.value"); value.Exists() && !data.MatchIpv4IcmpType.IsNull() {
 		data.MatchIpv4IcmpType = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchIpv4IcmpType.IsNull() {
 		data.MatchIpv4IcmpType = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.ipv6.icmp-code.value"); value.Exists() && !data.MatchIpv6IcmpCode.IsNull() {
 		data.MatchIpv6IcmpCode = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchIpv6IcmpCode.IsNull() {
 		data.MatchIpv6IcmpCode = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.ipv6.icmp-type.value"); value.Exists() && !data.MatchIpv6IcmpType.IsNull() {
 		data.MatchIpv6IcmpType = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchIpv6IcmpType.IsNull() {
 		data.MatchIpv6IcmpType = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.mpls.experimental.topmost.label"); value.Exists() && !data.MatchMplsExperimentalTopmost.IsNull() {
 		data.MatchMplsExperimentalTopmost = helpers.GetInt64List(value.Array())
-	} else {
+	} else if data.MatchMplsExperimentalTopmost.IsNull() {
 		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
 	}
 	if value := gjson.GetBytes(res, "match.packet.length.value"); value.Exists() && !data.MatchPacketLength.IsNull() {
 		data.MatchPacketLength = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchPacketLength.IsNull() {
 		data.MatchPacketLength = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.precedence.value"); value.Exists() && !data.MatchPrecedence.IsNull() {
 		data.MatchPrecedence = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchPrecedence.IsNull() {
 		data.MatchPrecedence = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.precedence-ipv4.value"); value.Exists() && !data.MatchPrecedenceIpv4.IsNull() {
 		data.MatchPrecedenceIpv4 = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchPrecedenceIpv4.IsNull() {
 		data.MatchPrecedenceIpv4 = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.precedence-ipv6.value"); value.Exists() && !data.MatchPrecedenceIpv6.IsNull() {
 		data.MatchPrecedenceIpv6 = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchPrecedenceIpv6.IsNull() {
 		data.MatchPrecedenceIpv6 = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.protocol.number"); value.Exists() && !data.MatchProtocol.IsNull() {
 		data.MatchProtocol = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchProtocol.IsNull() {
 		data.MatchProtocol = types.ListNull(types.StringType)
 	}
 	for i := range data.MatchSourceAddressIpv4 {
@@ -979,37 +974,38 @@ func (data *ClassMapTraffic) updateFromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "match.source-address.mac"); value.Exists() && !data.MatchSourceMac.IsNull() {
 		data.MatchSourceMac = types.StringValue(value.String())
-	} else {
+	} else if data.MatchSourceMac.IsNull() {
 		data.MatchSourceMac = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "match.source-port.number"); value.Exists() && !data.MatchSourcePort.IsNull() {
 		data.MatchSourcePort = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchSourcePort.IsNull() {
 		data.MatchSourcePort = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.tcp-flag.value"); value.Exists() && !data.MatchTcpFlag.IsNull() {
 		data.MatchTcpFlag = types.Int64Value(value.Int())
-	} else {
+	} else if data.MatchTcpFlag.IsNull() {
 		data.MatchTcpFlag = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "match.tcp-flag.any"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.MatchTcpFlagAny.IsNull() {
 			data.MatchTcpFlagAny = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.MatchTcpFlagAny.IsNull() {
 			data.MatchTcpFlagAny = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "match.vlan.vlan-id"); value.Exists() && !data.MatchVlan.IsNull() {
 		data.MatchVlan = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchVlan.IsNull() {
 		data.MatchVlan = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.vlan-inner.vlan-id"); value.Exists() && !data.MatchVlanInner.IsNull() {
 		data.MatchVlanInner = helpers.GetStringList(value.Array())
-	} else {
+	} else if data.MatchVlanInner.IsNull() {
 		data.MatchVlanInner = types.ListNull(types.StringType)
 	}
 }
@@ -1019,50 +1015,51 @@ func (data *ClassMapTraffic) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *ClassMapTraffic) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/class-map-name"); value.Exists() {
-		data.ClassMapName = types.StringValue(value.String())
-	} else if data.ClassMapName.IsNull() {
-		data.ClassMapName = types.StringNull()
-	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match-all"); value.Exists() {
-		data.MatchAll = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match-all"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MatchAll.IsNull() {
+			data.MatchAll = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MatchAll.IsNull() {
 			data.MatchAll = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match-any"); value.Exists() {
-		data.MatchAny = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match-any"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MatchAny.IsNull() {
+			data.MatchAny = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MatchAny.IsNull() {
 			data.MatchAny = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/access-group/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/access-group/ipv4"); value.Exists() && !data.MatchAccessGroupIpv4.IsNull() {
 		data.MatchAccessGroupIpv4 = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchAccessGroupIpv4.IsNull() {
 		data.MatchAccessGroupIpv4 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/access-group/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/access-group/ipv6"); value.Exists() && !data.MatchAccessGroupIpv6.IsNull() {
 		data.MatchAccessGroupIpv6 = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchAccessGroupIpv6.IsNull() {
 		data.MatchAccessGroupIpv6 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/cos/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/cos/value"); value.Exists() && !data.MatchCos.IsNull() {
 		data.MatchCos = helpers.GetInt64ListXML(value.Array())
-	} else {
+	} else if data.MatchCos.IsNull() {
 		data.MatchCos = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/cos-inner/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/cos-inner/value"); value.Exists() && !data.MatchCosInner.IsNull() {
 		data.MatchCosInner = helpers.GetInt64ListXML(value.Array())
-	} else {
+	} else if data.MatchCosInner.IsNull() {
 		data.MatchCosInner = types.ListNull(types.Int64Type)
 	}
 	for i := range data.MatchDestinationAddressIpv4 {
@@ -1070,7 +1067,7 @@ func (data *ClassMapTraffic) updateFromBodyXML(ctx context.Context, res xmldot.R
 		keyValues := [...]string{data.MatchDestinationAddressIpv4[i].Address.ValueString(), data.MatchDestinationAddressIpv4[i].Netmask.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-address/ipv4/address-prefix").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-address/ipv4/address-prefix").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1088,12 +1085,12 @@ func (data *ClassMapTraffic) updateFromBodyXML(ctx context.Context, res xmldot.R
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.MatchDestinationAddressIpv4[i].Address.IsNull() {
 			data.MatchDestinationAddressIpv4[i].Address = types.StringValue(value.String())
 		} else if data.MatchDestinationAddressIpv4[i].Address.IsNull() {
 			data.MatchDestinationAddressIpv4[i].Address = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "netmask"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "netmask"); value.Exists() && !data.MatchDestinationAddressIpv4[i].Netmask.IsNull() {
 			data.MatchDestinationAddressIpv4[i].Netmask = types.StringValue(value.String())
 		} else if data.MatchDestinationAddressIpv4[i].Netmask.IsNull() {
 			data.MatchDestinationAddressIpv4[i].Netmask = types.StringNull()
@@ -1104,7 +1101,7 @@ func (data *ClassMapTraffic) updateFromBodyXML(ctx context.Context, res xmldot.R
 		keyValues := [...]string{data.MatchDestinationAddressIpv6[i].Address.ValueString(), strconv.FormatInt(data.MatchDestinationAddressIpv6[i].PrefixLength.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-address/ipv6/address-prefix").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-address/ipv6/address-prefix").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1122,132 +1119,144 @@ func (data *ClassMapTraffic) updateFromBodyXML(ctx context.Context, res xmldot.R
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.MatchDestinationAddressIpv6[i].Address.IsNull() {
 			data.MatchDestinationAddressIpv6[i].Address = types.StringValue(value.String())
 		} else if data.MatchDestinationAddressIpv6[i].Address.IsNull() {
 			data.MatchDestinationAddressIpv6[i].Address = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "prefix-length"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "prefix-length"); value.Exists() && !data.MatchDestinationAddressIpv6[i].PrefixLength.IsNull() {
 			data.MatchDestinationAddressIpv6[i].PrefixLength = types.Int64Value(value.Int())
 		} else if data.MatchDestinationAddressIpv6[i].PrefixLength.IsNull() {
 			data.MatchDestinationAddressIpv6[i].PrefixLength = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-address/mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-address/mac"); value.Exists() && !data.MatchDestinationMac.IsNull() {
 		data.MatchDestinationMac = types.StringValue(value.String())
 	} else if data.MatchDestinationMac.IsNull() {
 		data.MatchDestinationMac = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-port/port-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-port/port-number"); value.Exists() && !data.MatchDestinationPort.IsNull() {
 		data.MatchDestinationPort = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchDestinationPort.IsNull() {
 		data.MatchDestinationPort = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/dscp/value"); value.Exists() && !data.MatchDscp.IsNull() {
 		data.MatchDscp = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchDscp.IsNull() {
 		data.MatchDscp = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp-ipv4/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/dscp-ipv4/value"); value.Exists() && !data.MatchDscpIpv4.IsNull() {
 		data.MatchDscpIpv4 = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchDscpIpv4.IsNull() {
 		data.MatchDscpIpv4 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp-ipv6/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/dscp-ipv6/value"); value.Exists() && !data.MatchDscpIpv6.IsNull() {
 		data.MatchDscpIpv6 = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchDscpIpv6.IsNull() {
 		data.MatchDscpIpv6 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ethertype/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ethertype/value"); value.Exists() && !data.MatchEthertype.IsNull() {
 		data.MatchEthertype = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchEthertype.IsNull() {
 		data.MatchEthertype = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/flow-tag/tag-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/flow-tag/tag-number"); value.Exists() && !data.MatchFlowTag.IsNull() {
 		data.MatchFlowTag = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchFlowTag.IsNull() {
 		data.MatchFlowTag = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/dont-fragment"); value.Exists() {
-		data.MatchFragmentTypeDontFragment = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/dont-fragment"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MatchFragmentTypeDontFragment.IsNull() {
+			data.MatchFragmentTypeDontFragment = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MatchFragmentTypeDontFragment.IsNull() {
 			data.MatchFragmentTypeDontFragment = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/first-fragment"); value.Exists() {
-		data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/first-fragment"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MatchFragmentTypeFirstFragment.IsNull() {
+			data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MatchFragmentTypeFirstFragment.IsNull() {
 			data.MatchFragmentTypeFirstFragment = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/is-fragment"); value.Exists() {
-		data.MatchFragmentTypeIsFragment = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/is-fragment"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MatchFragmentTypeIsFragment.IsNull() {
+			data.MatchFragmentTypeIsFragment = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MatchFragmentTypeIsFragment.IsNull() {
 			data.MatchFragmentTypeIsFragment = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/last-fragment"); value.Exists() {
-		data.MatchFragmentTypeLastFragment = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/last-fragment"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MatchFragmentTypeLastFragment.IsNull() {
+			data.MatchFragmentTypeLastFragment = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MatchFragmentTypeLastFragment.IsNull() {
 			data.MatchFragmentTypeLastFragment = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv4/icmp-code/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv4/icmp-code/value"); value.Exists() && !data.MatchIpv4IcmpCode.IsNull() {
 		data.MatchIpv4IcmpCode = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchIpv4IcmpCode.IsNull() {
 		data.MatchIpv4IcmpCode = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv4/icmp-type/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv4/icmp-type/value"); value.Exists() && !data.MatchIpv4IcmpType.IsNull() {
 		data.MatchIpv4IcmpType = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchIpv4IcmpType.IsNull() {
 		data.MatchIpv4IcmpType = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv6/icmp-code/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv6/icmp-code/value"); value.Exists() && !data.MatchIpv6IcmpCode.IsNull() {
 		data.MatchIpv6IcmpCode = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchIpv6IcmpCode.IsNull() {
 		data.MatchIpv6IcmpCode = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv6/icmp-type/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv6/icmp-type/value"); value.Exists() && !data.MatchIpv6IcmpType.IsNull() {
 		data.MatchIpv6IcmpType = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchIpv6IcmpType.IsNull() {
 		data.MatchIpv6IcmpType = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/mpls/experimental/topmost/label"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/mpls/experimental/topmost/label"); value.Exists() && !data.MatchMplsExperimentalTopmost.IsNull() {
 		data.MatchMplsExperimentalTopmost = helpers.GetInt64ListXML(value.Array())
-	} else {
+	} else if data.MatchMplsExperimentalTopmost.IsNull() {
 		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/packet/length/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/packet/length/value"); value.Exists() && !data.MatchPacketLength.IsNull() {
 		data.MatchPacketLength = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchPacketLength.IsNull() {
 		data.MatchPacketLength = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/precedence/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/precedence/value"); value.Exists() && !data.MatchPrecedence.IsNull() {
 		data.MatchPrecedence = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchPrecedence.IsNull() {
 		data.MatchPrecedence = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/precedence-ipv4/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/precedence-ipv4/value"); value.Exists() && !data.MatchPrecedenceIpv4.IsNull() {
 		data.MatchPrecedenceIpv4 = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchPrecedenceIpv4.IsNull() {
 		data.MatchPrecedenceIpv4 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/precedence-ipv6/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/precedence-ipv6/value"); value.Exists() && !data.MatchPrecedenceIpv6.IsNull() {
 		data.MatchPrecedenceIpv6 = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchPrecedenceIpv6.IsNull() {
 		data.MatchPrecedenceIpv6 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/protocol/number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/protocol/number"); value.Exists() && !data.MatchProtocol.IsNull() {
 		data.MatchProtocol = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchProtocol.IsNull() {
 		data.MatchProtocol = types.ListNull(types.StringType)
 	}
 	for i := range data.MatchSourceAddressIpv4 {
@@ -1255,7 +1264,7 @@ func (data *ClassMapTraffic) updateFromBodyXML(ctx context.Context, res xmldot.R
 		keyValues := [...]string{data.MatchSourceAddressIpv4[i].Address.ValueString(), data.MatchSourceAddressIpv4[i].Netmask.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-address/ipv4/address-prefix").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-address/ipv4/address-prefix").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1273,12 +1282,12 @@ func (data *ClassMapTraffic) updateFromBodyXML(ctx context.Context, res xmldot.R
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.MatchSourceAddressIpv4[i].Address.IsNull() {
 			data.MatchSourceAddressIpv4[i].Address = types.StringValue(value.String())
 		} else if data.MatchSourceAddressIpv4[i].Address.IsNull() {
 			data.MatchSourceAddressIpv4[i].Address = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "netmask"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "netmask"); value.Exists() && !data.MatchSourceAddressIpv4[i].Netmask.IsNull() {
 			data.MatchSourceAddressIpv4[i].Netmask = types.StringValue(value.String())
 		} else if data.MatchSourceAddressIpv4[i].Netmask.IsNull() {
 			data.MatchSourceAddressIpv4[i].Netmask = types.StringNull()
@@ -1289,7 +1298,7 @@ func (data *ClassMapTraffic) updateFromBodyXML(ctx context.Context, res xmldot.R
 		keyValues := [...]string{data.MatchSourceAddressIpv6[i].Address.ValueString(), strconv.FormatInt(data.MatchSourceAddressIpv6[i].PrefixLength.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-address/ipv6/address-prefix").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-address/ipv6/address-prefix").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1307,48 +1316,51 @@ func (data *ClassMapTraffic) updateFromBodyXML(ctx context.Context, res xmldot.R
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.MatchSourceAddressIpv6[i].Address.IsNull() {
 			data.MatchSourceAddressIpv6[i].Address = types.StringValue(value.String())
 		} else if data.MatchSourceAddressIpv6[i].Address.IsNull() {
 			data.MatchSourceAddressIpv6[i].Address = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "prefix-length"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "prefix-length"); value.Exists() && !data.MatchSourceAddressIpv6[i].PrefixLength.IsNull() {
 			data.MatchSourceAddressIpv6[i].PrefixLength = types.Int64Value(value.Int())
 		} else if data.MatchSourceAddressIpv6[i].PrefixLength.IsNull() {
 			data.MatchSourceAddressIpv6[i].PrefixLength = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-address/mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-address/mac"); value.Exists() && !data.MatchSourceMac.IsNull() {
 		data.MatchSourceMac = types.StringValue(value.String())
 	} else if data.MatchSourceMac.IsNull() {
 		data.MatchSourceMac = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-port/number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-port/number"); value.Exists() && !data.MatchSourcePort.IsNull() {
 		data.MatchSourcePort = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchSourcePort.IsNull() {
 		data.MatchSourcePort = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/tcp-flag/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/tcp-flag/value"); value.Exists() && !data.MatchTcpFlag.IsNull() {
 		data.MatchTcpFlag = types.Int64Value(value.Int())
 	} else if data.MatchTcpFlag.IsNull() {
 		data.MatchTcpFlag = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/tcp-flag/any"); value.Exists() {
-		data.MatchTcpFlagAny = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/tcp-flag/any"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MatchTcpFlagAny.IsNull() {
+			data.MatchTcpFlagAny = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.MatchTcpFlagAny.IsNull() {
 			data.MatchTcpFlagAny = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/vlan/vlan-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/vlan/vlan-id"); value.Exists() && !data.MatchVlan.IsNull() {
 		data.MatchVlan = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchVlan.IsNull() {
 		data.MatchVlan = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/vlan-inner/vlan-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/vlan-inner/vlan-id"); value.Exists() && !data.MatchVlanInner.IsNull() {
 		data.MatchVlanInner = helpers.GetStringListXML(value.Array())
-	} else {
+	} else if data.MatchVlanInner.IsNull() {
 		data.MatchVlanInner = types.ListNull(types.StringType)
 	}
 }
@@ -1362,15 +1374,21 @@ func (data *ClassMapTraffic) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "match-all"); value.Exists() {
 		data.MatchAll = types.BoolValue(true)
-	} else {
-		data.MatchAll = types.BoolNull()
+	} else if !data.MatchAll.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MatchAll = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match-any"); value.Exists() {
 		data.MatchAny = types.BoolValue(true)
-	} else {
-		data.MatchAny = types.BoolNull()
+	} else if !data.MatchAny.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MatchAny = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -1458,23 +1476,27 @@ func (data *ClassMapTraffic) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "match.fragment-type.dont-fragment"); value.Exists() {
 		data.MatchFragmentTypeDontFragment = types.BoolValue(true)
-	} else {
-		data.MatchFragmentTypeDontFragment = types.BoolNull()
+	} else if !data.MatchFragmentTypeDontFragment.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MatchFragmentTypeDontFragment = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.fragment-type.first-fragment"); value.Exists() {
 		data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
-	} else {
-		data.MatchFragmentTypeFirstFragment = types.BoolNull()
+	} else if !data.MatchFragmentTypeFirstFragment.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MatchFragmentTypeFirstFragment = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.fragment-type.is-fragment"); value.Exists() {
 		data.MatchFragmentTypeIsFragment = types.BoolValue(true)
-	} else {
-		data.MatchFragmentTypeIsFragment = types.BoolNull()
+	} else if !data.MatchFragmentTypeIsFragment.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MatchFragmentTypeIsFragment = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.fragment-type.last-fragment"); value.Exists() {
 		data.MatchFragmentTypeLastFragment = types.BoolValue(true)
-	} else {
-		data.MatchFragmentTypeLastFragment = types.BoolNull()
+	} else if !data.MatchFragmentTypeLastFragment.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MatchFragmentTypeLastFragment = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.ipv4.icmp-code.value"); value.Exists() {
 		data.MatchIpv4IcmpCode = helpers.GetStringList(value.Array())
@@ -1567,8 +1589,9 @@ func (data *ClassMapTraffic) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "match.tcp-flag.any"); value.Exists() {
 		data.MatchTcpFlagAny = types.BoolValue(true)
-	} else {
-		data.MatchTcpFlagAny = types.BoolNull()
+	} else if !data.MatchTcpFlagAny.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MatchTcpFlagAny = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.vlan.vlan-id"); value.Exists() {
 		data.MatchVlan = helpers.GetStringList(value.Array())
@@ -1587,19 +1610,24 @@ func (data *ClassMapTraffic) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *ClassMapTrafficData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "match-all"); value.Exists() {
 		data.MatchAll = types.BoolValue(true)
 	} else {
-		data.MatchAll = types.BoolNull()
+		data.MatchAll = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match-any"); value.Exists() {
 		data.MatchAny = types.BoolValue(true)
 	} else {
-		data.MatchAny = types.BoolNull()
+		data.MatchAny = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -1688,22 +1716,22 @@ func (data *ClassMapTrafficData) fromBody(ctx context.Context, res gjson.Result)
 	if value := res.Get(prefix + "match.fragment-type.dont-fragment"); value.Exists() {
 		data.MatchFragmentTypeDontFragment = types.BoolValue(true)
 	} else {
-		data.MatchFragmentTypeDontFragment = types.BoolNull()
+		data.MatchFragmentTypeDontFragment = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.fragment-type.first-fragment"); value.Exists() {
 		data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
 	} else {
-		data.MatchFragmentTypeFirstFragment = types.BoolNull()
+		data.MatchFragmentTypeFirstFragment = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.fragment-type.is-fragment"); value.Exists() {
 		data.MatchFragmentTypeIsFragment = types.BoolValue(true)
 	} else {
-		data.MatchFragmentTypeIsFragment = types.BoolNull()
+		data.MatchFragmentTypeIsFragment = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.fragment-type.last-fragment"); value.Exists() {
 		data.MatchFragmentTypeLastFragment = types.BoolValue(true)
 	} else {
-		data.MatchFragmentTypeLastFragment = types.BoolNull()
+		data.MatchFragmentTypeLastFragment = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.ipv4.icmp-code.value"); value.Exists() {
 		data.MatchIpv4IcmpCode = helpers.GetStringList(value.Array())
@@ -1797,7 +1825,7 @@ func (data *ClassMapTrafficData) fromBody(ctx context.Context, res gjson.Result)
 	if value := res.Get(prefix + "match.tcp-flag.any"); value.Exists() {
 		data.MatchTcpFlagAny = types.BoolValue(true)
 	} else {
-		data.MatchTcpFlagAny = types.BoolNull()
+		data.MatchTcpFlagAny = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "match.vlan.vlan-id"); value.Exists() {
 		data.MatchVlan = helpers.GetStringList(value.Array())
@@ -1816,40 +1844,40 @@ func (data *ClassMapTrafficData) fromBody(ctx context.Context, res gjson.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *ClassMapTraffic) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match-all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match-all"); value.Exists() {
 		data.MatchAll = types.BoolValue(true)
 	} else {
-		data.MatchAll = types.BoolNull()
+		data.MatchAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match-any"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match-any"); value.Exists() {
 		data.MatchAny = types.BoolValue(true)
 	} else {
-		data.MatchAny = types.BoolNull()
+		data.MatchAny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/access-group/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/access-group/ipv4"); value.Exists() {
 		data.MatchAccessGroupIpv4 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchAccessGroupIpv4 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/access-group/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/access-group/ipv6"); value.Exists() {
 		data.MatchAccessGroupIpv6 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchAccessGroupIpv6 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/cos/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/cos/value"); value.Exists() {
 		data.MatchCos = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.MatchCos = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/cos-inner/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/cos-inner/value"); value.Exists() {
 		data.MatchCosInner = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.MatchCosInner = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-address/ipv4/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-address/ipv4/address-prefix"); value.Exists() {
 		data.MatchDestinationAddressIpv4 = make([]ClassMapTrafficMatchDestinationAddressIpv4, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := ClassMapTrafficMatchDestinationAddressIpv4{}
@@ -1863,7 +1891,7 @@ func (data *ClassMapTraffic) fromBodyXML(ctx context.Context, res xmldot.Result)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-address/ipv6/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-address/ipv6/address-prefix"); value.Exists() {
 		data.MatchDestinationAddressIpv6 = make([]ClassMapTrafficMatchDestinationAddressIpv6, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := ClassMapTrafficMatchDestinationAddressIpv6{}
@@ -1877,110 +1905,110 @@ func (data *ClassMapTraffic) fromBodyXML(ctx context.Context, res xmldot.Result)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-address/mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-address/mac"); value.Exists() {
 		data.MatchDestinationMac = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-port/port-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-port/port-number"); value.Exists() {
 		data.MatchDestinationPort = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchDestinationPort = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/dscp/value"); value.Exists() {
 		data.MatchDscp = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchDscp = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp-ipv4/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/dscp-ipv4/value"); value.Exists() {
 		data.MatchDscpIpv4 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchDscpIpv4 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp-ipv6/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/dscp-ipv6/value"); value.Exists() {
 		data.MatchDscpIpv6 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchDscpIpv6 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ethertype/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ethertype/value"); value.Exists() {
 		data.MatchEthertype = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchEthertype = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/flow-tag/tag-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/flow-tag/tag-number"); value.Exists() {
 		data.MatchFlowTag = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchFlowTag = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/dont-fragment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/dont-fragment"); value.Exists() {
 		data.MatchFragmentTypeDontFragment = types.BoolValue(true)
 	} else {
-		data.MatchFragmentTypeDontFragment = types.BoolNull()
+		data.MatchFragmentTypeDontFragment = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/first-fragment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/first-fragment"); value.Exists() {
 		data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
 	} else {
-		data.MatchFragmentTypeFirstFragment = types.BoolNull()
+		data.MatchFragmentTypeFirstFragment = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/is-fragment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/is-fragment"); value.Exists() {
 		data.MatchFragmentTypeIsFragment = types.BoolValue(true)
 	} else {
-		data.MatchFragmentTypeIsFragment = types.BoolNull()
+		data.MatchFragmentTypeIsFragment = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/last-fragment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/last-fragment"); value.Exists() {
 		data.MatchFragmentTypeLastFragment = types.BoolValue(true)
 	} else {
-		data.MatchFragmentTypeLastFragment = types.BoolNull()
+		data.MatchFragmentTypeLastFragment = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv4/icmp-code/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv4/icmp-code/value"); value.Exists() {
 		data.MatchIpv4IcmpCode = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchIpv4IcmpCode = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv4/icmp-type/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv4/icmp-type/value"); value.Exists() {
 		data.MatchIpv4IcmpType = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchIpv4IcmpType = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv6/icmp-code/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv6/icmp-code/value"); value.Exists() {
 		data.MatchIpv6IcmpCode = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchIpv6IcmpCode = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv6/icmp-type/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv6/icmp-type/value"); value.Exists() {
 		data.MatchIpv6IcmpType = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchIpv6IcmpType = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/mpls/experimental/topmost/label"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/mpls/experimental/topmost/label"); value.Exists() {
 		data.MatchMplsExperimentalTopmost = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/packet/length/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/packet/length/value"); value.Exists() {
 		data.MatchPacketLength = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchPacketLength = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/precedence/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/precedence/value"); value.Exists() {
 		data.MatchPrecedence = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchPrecedence = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/precedence-ipv4/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/precedence-ipv4/value"); value.Exists() {
 		data.MatchPrecedenceIpv4 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchPrecedenceIpv4 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/precedence-ipv6/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/precedence-ipv6/value"); value.Exists() {
 		data.MatchPrecedenceIpv6 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchPrecedenceIpv6 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/protocol/number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/protocol/number"); value.Exists() {
 		data.MatchProtocol = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchProtocol = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-address/ipv4/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-address/ipv4/address-prefix"); value.Exists() {
 		data.MatchSourceAddressIpv4 = make([]ClassMapTrafficMatchSourceAddressIpv4, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := ClassMapTrafficMatchSourceAddressIpv4{}
@@ -1994,7 +2022,7 @@ func (data *ClassMapTraffic) fromBodyXML(ctx context.Context, res xmldot.Result)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-address/ipv6/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-address/ipv6/address-prefix"); value.Exists() {
 		data.MatchSourceAddressIpv6 = make([]ClassMapTrafficMatchSourceAddressIpv6, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := ClassMapTrafficMatchSourceAddressIpv6{}
@@ -2008,28 +2036,28 @@ func (data *ClassMapTraffic) fromBodyXML(ctx context.Context, res xmldot.Result)
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-address/mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-address/mac"); value.Exists() {
 		data.MatchSourceMac = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-port/number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-port/number"); value.Exists() {
 		data.MatchSourcePort = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchSourcePort = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/tcp-flag/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/tcp-flag/value"); value.Exists() {
 		data.MatchTcpFlag = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/tcp-flag/any"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/tcp-flag/any"); value.Exists() {
 		data.MatchTcpFlagAny = types.BoolValue(true)
 	} else {
-		data.MatchTcpFlagAny = types.BoolNull()
+		data.MatchTcpFlagAny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/vlan/vlan-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/vlan/vlan-id"); value.Exists() {
 		data.MatchVlan = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchVlan = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/vlan-inner/vlan-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/vlan-inner/vlan-id"); value.Exists() {
 		data.MatchVlanInner = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchVlanInner = types.ListNull(types.StringType)
@@ -2041,40 +2069,40 @@ func (data *ClassMapTraffic) fromBodyXML(ctx context.Context, res xmldot.Result)
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *ClassMapTrafficData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match-all"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match-all"); value.Exists() {
 		data.MatchAll = types.BoolValue(true)
 	} else {
 		data.MatchAll = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match-any"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match-any"); value.Exists() {
 		data.MatchAny = types.BoolValue(true)
 	} else {
 		data.MatchAny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/description"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/access-group/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/access-group/ipv4"); value.Exists() {
 		data.MatchAccessGroupIpv4 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchAccessGroupIpv4 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/access-group/ipv6"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/access-group/ipv6"); value.Exists() {
 		data.MatchAccessGroupIpv6 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchAccessGroupIpv6 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/cos/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/cos/value"); value.Exists() {
 		data.MatchCos = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.MatchCos = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/cos-inner/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/cos-inner/value"); value.Exists() {
 		data.MatchCosInner = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.MatchCosInner = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-address/ipv4/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-address/ipv4/address-prefix"); value.Exists() {
 		data.MatchDestinationAddressIpv4 = make([]ClassMapTrafficMatchDestinationAddressIpv4, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := ClassMapTrafficMatchDestinationAddressIpv4{}
@@ -2088,7 +2116,7 @@ func (data *ClassMapTrafficData) fromBodyXML(ctx context.Context, res xmldot.Res
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-address/ipv6/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-address/ipv6/address-prefix"); value.Exists() {
 		data.MatchDestinationAddressIpv6 = make([]ClassMapTrafficMatchDestinationAddressIpv6, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := ClassMapTrafficMatchDestinationAddressIpv6{}
@@ -2102,110 +2130,110 @@ func (data *ClassMapTrafficData) fromBodyXML(ctx context.Context, res xmldot.Res
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-address/mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-address/mac"); value.Exists() {
 		data.MatchDestinationMac = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/destination-port/port-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/destination-port/port-number"); value.Exists() {
 		data.MatchDestinationPort = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchDestinationPort = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/dscp/value"); value.Exists() {
 		data.MatchDscp = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchDscp = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp-ipv4/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/dscp-ipv4/value"); value.Exists() {
 		data.MatchDscpIpv4 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchDscpIpv4 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/dscp-ipv6/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/dscp-ipv6/value"); value.Exists() {
 		data.MatchDscpIpv6 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchDscpIpv6 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ethertype/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ethertype/value"); value.Exists() {
 		data.MatchEthertype = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchEthertype = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/flow-tag/tag-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/flow-tag/tag-number"); value.Exists() {
 		data.MatchFlowTag = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchFlowTag = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/dont-fragment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/dont-fragment"); value.Exists() {
 		data.MatchFragmentTypeDontFragment = types.BoolValue(true)
 	} else {
 		data.MatchFragmentTypeDontFragment = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/first-fragment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/first-fragment"); value.Exists() {
 		data.MatchFragmentTypeFirstFragment = types.BoolValue(true)
 	} else {
 		data.MatchFragmentTypeFirstFragment = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/is-fragment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/is-fragment"); value.Exists() {
 		data.MatchFragmentTypeIsFragment = types.BoolValue(true)
 	} else {
 		data.MatchFragmentTypeIsFragment = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/fragment-type/last-fragment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/fragment-type/last-fragment"); value.Exists() {
 		data.MatchFragmentTypeLastFragment = types.BoolValue(true)
 	} else {
 		data.MatchFragmentTypeLastFragment = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv4/icmp-code/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv4/icmp-code/value"); value.Exists() {
 		data.MatchIpv4IcmpCode = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchIpv4IcmpCode = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv4/icmp-type/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv4/icmp-type/value"); value.Exists() {
 		data.MatchIpv4IcmpType = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchIpv4IcmpType = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv6/icmp-code/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv6/icmp-code/value"); value.Exists() {
 		data.MatchIpv6IcmpCode = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchIpv6IcmpCode = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/ipv6/icmp-type/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/ipv6/icmp-type/value"); value.Exists() {
 		data.MatchIpv6IcmpType = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchIpv6IcmpType = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/mpls/experimental/topmost/label"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/mpls/experimental/topmost/label"); value.Exists() {
 		data.MatchMplsExperimentalTopmost = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/packet/length/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/packet/length/value"); value.Exists() {
 		data.MatchPacketLength = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchPacketLength = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/precedence/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/precedence/value"); value.Exists() {
 		data.MatchPrecedence = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchPrecedence = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/precedence-ipv4/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/precedence-ipv4/value"); value.Exists() {
 		data.MatchPrecedenceIpv4 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchPrecedenceIpv4 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/precedence-ipv6/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/precedence-ipv6/value"); value.Exists() {
 		data.MatchPrecedenceIpv6 = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchPrecedenceIpv6 = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/protocol/number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/protocol/number"); value.Exists() {
 		data.MatchProtocol = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchProtocol = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-address/ipv4/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-address/ipv4/address-prefix"); value.Exists() {
 		data.MatchSourceAddressIpv4 = make([]ClassMapTrafficMatchSourceAddressIpv4, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := ClassMapTrafficMatchSourceAddressIpv4{}
@@ -2219,7 +2247,7 @@ func (data *ClassMapTrafficData) fromBodyXML(ctx context.Context, res xmldot.Res
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-address/ipv6/address-prefix"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-address/ipv6/address-prefix"); value.Exists() {
 		data.MatchSourceAddressIpv6 = make([]ClassMapTrafficMatchSourceAddressIpv6, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := ClassMapTrafficMatchSourceAddressIpv6{}
@@ -2233,28 +2261,28 @@ func (data *ClassMapTrafficData) fromBodyXML(ctx context.Context, res xmldot.Res
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-address/mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-address/mac"); value.Exists() {
 		data.MatchSourceMac = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/source-port/number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/source-port/number"); value.Exists() {
 		data.MatchSourcePort = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchSourcePort = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/tcp-flag/value"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/tcp-flag/value"); value.Exists() {
 		data.MatchTcpFlag = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/tcp-flag/any"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/tcp-flag/any"); value.Exists() {
 		data.MatchTcpFlagAny = types.BoolValue(true)
 	} else {
 		data.MatchTcpFlagAny = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/vlan/vlan-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/vlan/vlan-id"); value.Exists() {
 		data.MatchVlan = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchVlan = types.ListNull(types.StringType)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/match/vlan-inner/vlan-id"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/match/vlan-inner/vlan-id"); value.Exists() {
 		data.MatchVlanInner = helpers.GetStringListXML(value.Array())
 	} else {
 		data.MatchVlanInner = types.ListNull(types.StringType)
@@ -2624,14 +2652,18 @@ func (data *ClassMapTraffic) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/source-address/mac", data.getPath()))
 	}
 	for i := range data.MatchSourceAddressIpv6 {
-		keyValues := [...]string{data.MatchSourceAddressIpv6[i].Address.ValueString(), strconv.FormatInt(data.MatchSourceAddressIpv6[i].PrefixLength.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/source-address/ipv6/address-prefix=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MatchSourceAddressIpv6[i].Address.ValueString() + "]"
+		keyPath += "[prefix-length=" + strconv.FormatInt(data.MatchSourceAddressIpv6[i].PrefixLength.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/source-address/ipv6/address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MatchSourceAddressIpv4 {
-		keyValues := [...]string{data.MatchSourceAddressIpv4[i].Address.ValueString(), data.MatchSourceAddressIpv4[i].Netmask.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/source-address/ipv4/address-prefix=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MatchSourceAddressIpv4[i].Address.ValueString() + "]"
+		keyPath += "[netmask=" + data.MatchSourceAddressIpv4[i].Netmask.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/source-address/ipv4/address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MatchProtocol.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/protocol/number", data.getPath()))
@@ -2697,14 +2729,18 @@ func (data *ClassMapTraffic) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/destination-address/mac", data.getPath()))
 	}
 	for i := range data.MatchDestinationAddressIpv6 {
-		keyValues := [...]string{data.MatchDestinationAddressIpv6[i].Address.ValueString(), strconv.FormatInt(data.MatchDestinationAddressIpv6[i].PrefixLength.ValueInt64(), 10)}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/destination-address/ipv6/address-prefix=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MatchDestinationAddressIpv6[i].Address.ValueString() + "]"
+		keyPath += "[prefix-length=" + strconv.FormatInt(data.MatchDestinationAddressIpv6[i].PrefixLength.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/destination-address/ipv6/address-prefix%v", data.getPath(), keyPath))
 	}
 	for i := range data.MatchDestinationAddressIpv4 {
-		keyValues := [...]string{data.MatchDestinationAddressIpv4[i].Address.ValueString(), data.MatchDestinationAddressIpv4[i].Netmask.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/destination-address/ipv4/address-prefix=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.MatchDestinationAddressIpv4[i].Address.ValueString() + "]"
+		keyPath += "[netmask=" + data.MatchDestinationAddressIpv4[i].Netmask.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/destination-address/ipv4/address-prefix%v", data.getPath(), keyPath))
 	}
 	if !data.MatchCosInner.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/cos-inner/value", data.getPath()))
@@ -2736,7 +2772,8 @@ func (data *ClassMapTraffic) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state ClassMapTraffic, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.MatchVlanInner.IsNull() {
@@ -2744,7 +2781,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchVlanInner.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/vlan-inner/vlan-id[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/vlan-inner/vlan-id[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -2759,7 +2796,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/vlan-inner/vlan-id[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/vlan-inner/vlan-id[.=%v]", v))
 				}
 			}
 		}
@@ -2769,7 +2806,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchVlan.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/vlan/vlan-id[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/vlan/vlan-id[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -2784,7 +2821,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/vlan/vlan-id[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/vlan/vlan-id[.=%v]", v))
 				}
 			}
 		}
@@ -2792,15 +2829,31 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MatchTcpFlagAny.IsNull() && state.MatchTcpFlagAny.ValueBool() && data.MatchTcpFlagAny.IsNull() {
 		deletePath := state.getXPath() + "/match/tcp-flag/any"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MatchTcpFlag.IsNull() && data.MatchTcpFlag.IsNull() {
 		deletePath := state.getXPath() + "/match/tcp-flag/value"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -2809,7 +2862,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchSourcePort.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/source-port/number[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/source-port/number[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -2824,15 +2877,23 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/source-port/number[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/source-port/number[.=%v]", v))
 				}
 			}
 		}
 	}
 	if !state.MatchSourceMac.IsNull() && data.MatchSourceMac.IsNull() {
 		deletePath := state.getXPath() + "/match/source-address/mac"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -2869,7 +2930,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/source-address/ipv6/address-prefix%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/source-address/ipv6/address-prefix%v", predicates))
 		}
 	}
 	for i := range state.MatchSourceAddressIpv4 {
@@ -2905,7 +2966,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/source-address/ipv4/address-prefix%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/source-address/ipv4/address-prefix%v", predicates))
 		}
 	}
 	if !state.MatchProtocol.IsNull() {
@@ -2913,7 +2974,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchProtocol.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/protocol/number[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/protocol/number[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -2928,7 +2989,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/protocol/number[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/protocol/number[.=%v]", v))
 				}
 			}
 		}
@@ -2938,7 +2999,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchPrecedenceIpv6.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/precedence-ipv6/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/precedence-ipv6/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -2953,7 +3014,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/precedence-ipv6/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/precedence-ipv6/value[.=%v]", v))
 				}
 			}
 		}
@@ -2963,7 +3024,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchPrecedenceIpv4.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/precedence-ipv4/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/precedence-ipv4/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -2978,7 +3039,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/precedence-ipv4/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/precedence-ipv4/value[.=%v]", v))
 				}
 			}
 		}
@@ -2988,7 +3049,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchPrecedence.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/precedence/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/precedence/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3003,7 +3064,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/precedence/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/precedence/value[.=%v]", v))
 				}
 			}
 		}
@@ -3013,7 +3074,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchPacketLength.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/packet/length/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/packet/length/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3028,7 +3089,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/packet/length/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/packet/length/value[.=%v]", v))
 				}
 			}
 		}
@@ -3038,7 +3099,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchMplsExperimentalTopmost.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/mpls/experimental/topmost/label[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/mpls/experimental/topmost/label[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []int
@@ -3053,7 +3114,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/mpls/experimental/topmost/label[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/mpls/experimental/topmost/label[.=%v]", v))
 				}
 			}
 		}
@@ -3063,7 +3124,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchIpv6IcmpType.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ipv6/icmp-type/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ipv6/icmp-type/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3078,7 +3139,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ipv6/icmp-type/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ipv6/icmp-type/value[.=%v]", v))
 				}
 			}
 		}
@@ -3088,7 +3149,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchIpv6IcmpCode.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ipv6/icmp-code/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ipv6/icmp-code/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3103,7 +3164,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ipv6/icmp-code/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ipv6/icmp-code/value[.=%v]", v))
 				}
 			}
 		}
@@ -3113,7 +3174,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchIpv4IcmpType.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ipv4/icmp-type/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ipv4/icmp-type/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3128,7 +3189,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ipv4/icmp-type/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ipv4/icmp-type/value[.=%v]", v))
 				}
 			}
 		}
@@ -3138,7 +3199,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchIpv4IcmpCode.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ipv4/icmp-code/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ipv4/icmp-code/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3153,7 +3214,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ipv4/icmp-code/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ipv4/icmp-code/value[.=%v]", v))
 				}
 			}
 		}
@@ -3161,32 +3222,64 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MatchFragmentTypeLastFragment.IsNull() && state.MatchFragmentTypeLastFragment.ValueBool() && data.MatchFragmentTypeLastFragment.IsNull() {
 		deletePath := state.getXPath() + "/match/fragment-type/last-fragment"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MatchFragmentTypeIsFragment.IsNull() && state.MatchFragmentTypeIsFragment.ValueBool() && data.MatchFragmentTypeIsFragment.IsNull() {
 		deletePath := state.getXPath() + "/match/fragment-type/is-fragment"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MatchFragmentTypeFirstFragment.IsNull() && state.MatchFragmentTypeFirstFragment.ValueBool() && data.MatchFragmentTypeFirstFragment.IsNull() {
 		deletePath := state.getXPath() + "/match/fragment-type/first-fragment"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MatchFragmentTypeDontFragment.IsNull() && state.MatchFragmentTypeDontFragment.ValueBool() && data.MatchFragmentTypeDontFragment.IsNull() {
 		deletePath := state.getXPath() + "/match/fragment-type/dont-fragment"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -3195,7 +3288,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchFlowTag.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/flow-tag/tag-number[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/flow-tag/tag-number[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3210,7 +3303,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/flow-tag/tag-number[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/flow-tag/tag-number[.=%v]", v))
 				}
 			}
 		}
@@ -3220,7 +3313,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchEthertype.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ethertype/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ethertype/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3235,7 +3328,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/ethertype/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/ethertype/value[.=%v]", v))
 				}
 			}
 		}
@@ -3245,7 +3338,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchDscpIpv6.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/dscp-ipv6/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/dscp-ipv6/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3260,7 +3353,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/dscp-ipv6/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/dscp-ipv6/value[.=%v]", v))
 				}
 			}
 		}
@@ -3270,7 +3363,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchDscpIpv4.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/dscp-ipv4/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/dscp-ipv4/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3285,7 +3378,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/dscp-ipv4/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/dscp-ipv4/value[.=%v]", v))
 				}
 			}
 		}
@@ -3295,7 +3388,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchDscp.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/dscp/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/dscp/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3310,7 +3403,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/dscp/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/dscp/value[.=%v]", v))
 				}
 			}
 		}
@@ -3320,7 +3413,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchDestinationPort.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/destination-port/port-number[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/destination-port/port-number[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3335,15 +3428,23 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/destination-port/port-number[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/destination-port/port-number[.=%v]", v))
 				}
 			}
 		}
 	}
 	if !state.MatchDestinationMac.IsNull() && data.MatchDestinationMac.IsNull() {
 		deletePath := state.getXPath() + "/match/destination-address/mac"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -3380,7 +3481,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/destination-address/ipv6/address-prefix%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/destination-address/ipv6/address-prefix%v", predicates))
 		}
 	}
 	for i := range state.MatchDestinationAddressIpv4 {
@@ -3416,7 +3517,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/destination-address/ipv4/address-prefix%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/destination-address/ipv4/address-prefix%v", predicates))
 		}
 	}
 	if !state.MatchCosInner.IsNull() {
@@ -3424,7 +3525,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchCosInner.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/cos-inner/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/cos-inner/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []int
@@ -3439,7 +3540,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/cos-inner/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/cos-inner/value[.=%v]", v))
 				}
 			}
 		}
@@ -3449,7 +3550,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchCos.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/cos/value[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/cos/value[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []int
@@ -3464,7 +3565,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/cos/value[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/cos/value[.=%v]", v))
 				}
 			}
 		}
@@ -3474,7 +3575,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchAccessGroupIpv6.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/access-group/ipv6[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/access-group/ipv6[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3489,7 +3590,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/access-group/ipv6[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/access-group/ipv6[.=%v]", v))
 				}
 			}
 		}
@@ -3499,7 +3600,7 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 			var values []string
 			state.MatchAccessGroupIpv4.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/access-group/ipv4[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/access-group/ipv4[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []string
@@ -3514,37 +3615,60 @@ func (data *ClassMapTraffic) addDeletedItemsXML(ctx context.Context, state Class
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/match/access-group/ipv4[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/match/access-group/ipv4[.=%v]", v))
 				}
 			}
 		}
 	}
 	if !state.Description.IsNull() && data.Description.IsNull() {
 		deletePath := state.getXPath() + "/description"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MatchAny.IsNull() && state.MatchAny.ValueBool() && data.MatchAny.IsNull() {
 		deletePath := state.getXPath() + "/match-any"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.MatchAll.IsNull() && state.MatchAll.ValueBool() && data.MatchAll.IsNull() {
 		deletePath := state.getXPath() + "/match-all"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -3789,7 +3913,6 @@ func (data *ClassMapTraffic) addDeletePathsXML(ctx context.Context, body string)
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/match-all")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

@@ -9,5 +9,4 @@ attributes:
   - yang_name: rplas-path-set
     tf_name: rpl
     description: "Configures an AS-PATH set"
-    read_raw: true
     example: "as-path-set TEST1\\n  length ge 10\\nend-set\\n"

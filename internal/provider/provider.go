@@ -44,12 +44,17 @@ import (
 )
 
 func New() provider.Provider {
-	return &iosxrProvider{}
+	return &iosxrProvider{
+		clientCache: make(map[string]*IosxrProviderDataDevice),
+	}
 }
 
 // provider satisfies the tfsdk.Provider interface and usually is included
 // with all Resource and DataSource implementations.
-type iosxrProvider struct{}
+type iosxrProvider struct {
+	clientCache   map[string]*IosxrProviderDataDevice
+	clientCacheMu sync.Mutex
+}
 
 // providerData can be used to store data from the Terraform configuration.
 type providerData struct {
@@ -65,7 +70,6 @@ type providerData struct {
 	Retries            types.Int64          `tfsdk:"retries"`
 	LockReleaseTimeout types.Int64          `tfsdk:"lock_release_timeout"`
 	ReuseConnection    types.Bool           `tfsdk:"reuse_connection"`
-	AutoCommit         types.Bool           `tfsdk:"auto_commit"`
 	SelectedDevices    types.List           `tfsdk:"selected_devices"`
 	Devices            []providerDataDevice `tfsdk:"devices"`
 }
@@ -79,6 +83,7 @@ type providerDataDevice struct {
 type IosxrProviderData struct {
 	Devices         map[string]*IosxrProviderDataDevice
 	ReuseConnection bool
+	MaxRetries      int
 }
 
 type IosxrProviderDataDevice struct {
@@ -86,9 +91,34 @@ type IosxrProviderDataDevice struct {
 	NetconfClient   *netconf.Client
 	Protocol        string
 	ReuseConnection bool
-	AutoCommit      bool
+	MaxRetries      int
 	Managed         bool
-	NetconfOpMutex  sync.Mutex // Serializes NETCONF operations (all ops when reuse disabled, writes only when reuse enabled)
+	OpMutex         sync.Mutex // Serializes operations on this device
+}
+
+// GetOpMutex returns the mutex for serializing operations on this device
+func (d *IosxrProviderDataDevice) GetOpMutex() *sync.Mutex {
+	return &d.OpMutex
+}
+
+// GetGnmiClient returns the gNMI client
+func (d *IosxrProviderDataDevice) GetGnmiClient() *gnmi.Client {
+	return d.GnmiClient
+}
+
+// GetNetconfClient returns the NETCONF client
+func (d *IosxrProviderDataDevice) GetNetconfClient() *netconf.Client {
+	return d.NetconfClient
+}
+
+// GetReuseConnection returns whether connection reuse is enabled
+func (d *IosxrProviderDataDevice) GetReuseConnection() bool {
+	return d.ReuseConnection
+}
+
+// GetMaxRetries returns the maximum number of retries
+func (d *IosxrProviderDataDevice) GetMaxRetries() int {
+	return d.MaxRetries
 }
 
 // Metadata returns the provider type name.
@@ -154,11 +184,7 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				},
 			},
 			"reuse_connection": schema.BoolAttribute{
-				MarkdownDescription: "Keep connections open between operations for better performance. **Required when auto_commit=false** - Manual commit mode requires persistent connections to maintain staged candidate configuration changes. When disabled, connections are closed and reopened for each operation. Only applies to NETCONF protocol. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
-				Optional:            true,
-			},
-			"auto_commit": schema.BoolAttribute{
-				MarkdownDescription: "Automatically commit configuration changes after each resource operation. When `true` (default), each resource commits its changes immediately. When `false`, changes are left in the candidate datastore and must be explicitly committed using the `iosxr_commit` resource. **Requires reuse_connection=true when disabled**. Only applies to NETCONF protocol with candidate datastore support. This can also be set as the IOSXR_AUTO_COMMIT environment variable. Defaults to `true`.",
+				MarkdownDescription: "Keep connections open between operations for better performance. When disabled, connections are closed and reopened for each operation. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
 				Optional:            true,
 			},
 			"selected_devices": schema.ListAttribute{
@@ -485,34 +511,6 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		reuseConnection = config.ReuseConnection.ValueBool()
 	}
 
-	var autoCommit bool
-	if config.AutoCommit.IsUnknown() {
-		resp.Diagnostics.AddWarning(
-			"Unable to create client",
-			"Cannot use unknown value as autoCommit",
-		)
-		return
-	}
-
-	if config.AutoCommit.IsNull() {
-		autoCommitStr := os.Getenv("IOSXR_AUTO_COMMIT")
-		if autoCommitStr == "" {
-			autoCommit = true
-		} else {
-			var err error
-			autoCommit, err = strconv.ParseBool(autoCommitStr)
-			if err != nil {
-				resp.Diagnostics.AddError(
-					"Invalid auto_commit value",
-					"IOSXR_AUTO_COMMIT must be a valid boolean (true/false/1/0), got: "+autoCommitStr,
-				)
-				return
-			}
-		}
-	} else {
-		autoCommit = config.AutoCommit.ValueBool()
-	}
-
 	var selectedDevices []string
 	if config.SelectedDevices.IsUnknown() {
 		// Cannot connect to client with an unknown value
@@ -564,100 +562,134 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		}
 	}
 
-	// Validate configuration dependencies
-	if protocol == "netconf" && !autoCommit && !reuseConnection {
-		resp.Diagnostics.AddError(
-			"Invalid Configuration",
-			"Manual commit mode (auto_commit=false) requires connection reuse (reuse_connection=true). "+
-				"Without connection reuse, staged candidate configuration changes would be lost when "+
-				"connections close between resource operations. Either set auto_commit=true or reuse_connection=true.",
-		)
-		return
-	}
-
 	data := IosxrProviderData{}
 	data.Devices = make(map[string]*IosxrProviderDataDevice)
 	data.ReuseConnection = reuseConnection
+	data.MaxRetries = int(retries)
 
 	// Create default device client based on protocol
 	if protocol == "gnmi" {
-		// Create TflogAdapter for automatic Terraform logging integration
-		logger := helpers.NewTflogAdapter("gnmi")
+		// Check cache first
+		cacheKey := fmt.Sprintf("gnmi:%s", host)
+		p.clientCacheMu.Lock()
+		cachedDevice, cacheHit := p.clientCache[cacheKey]
+		p.clientCacheMu.Unlock()
 
-		// Build options for go-gnmi client
-		opts := []func(*gnmi.Client){
-			gnmi.Username(username),
-			gnmi.Password(password),
-			gnmi.TLS(tls),
-			gnmi.VerifyCertificate(verifyCertificate),
-			gnmi.MaxRetries(int(retries)),
-			gnmi.WithLogger(logger),
-		}
-
-		if certificate != "" {
-			opts = append(opts, gnmi.TLSCert(certificate))
-		}
-		if key != "" {
-			opts = append(opts, gnmi.TLSKey(key))
-		}
-		if caCertificate != "" {
-			opts = append(opts, gnmi.TLSCA(caCertificate))
-		}
-
-		// Create default client
-		var defaultClient *gnmi.Client
-		var err error
-		if host != "" {
-			defaultClient, err = gnmi.NewClient(host, opts...)
-			if err != nil {
-				resp.Diagnostics.AddError(
-					"Unable to create gNMI client",
-					"Unable to create gNMI client:\n\n"+err.Error(),
-				)
-				return
+		if cacheHit && reuseConnection {
+			// Create a new device wrapper with a fresh mutex but reuse the client
+			data.Devices[""] = &IosxrProviderDataDevice{
+				GnmiClient:      cachedDevice.GnmiClient,
+				Protocol:        "gnmi",
+				ReuseConnection: reuseConnection,
+				MaxRetries:      int(retries),
+				Managed:         true,
+				OpMutex:         sync.Mutex{}, // Fresh mutex for each provider instance
 			}
-		}
-		data.Devices[""] = &IosxrProviderDataDevice{GnmiClient: defaultClient, Protocol: "gnmi", ReuseConnection: reuseConnection, AutoCommit: autoCommit, Managed: true}
-	} else {
-		// NETCONF
-		// Parse host and port - netconf library appends :830 if only hostname is given
-		// To use custom port, we need to pass hostname only and use Port() option
-		netconfHost := host
-		netconfPort := 830
-		if strings.Contains(host, ":") {
-			parts := strings.SplitN(host, ":", 2)
-			netconfHost = parts[0]
-			if len(parts) > 1 {
-				if p, err := strconv.Atoi(parts[1]); err == nil {
-					netconfPort = p
+		} else {
+			// Create TflogAdapter for automatic Terraform logging integration
+			logger := helpers.NewTflogAdapter("gnmi")
+
+			// Build options for go-gnmi client
+			opts := []func(*gnmi.Client){
+				gnmi.Username(username),
+				gnmi.Password(password),
+				gnmi.TLS(tls),
+				gnmi.VerifyCertificate(verifyCertificate),
+				gnmi.MaxRetries(int(retries)),
+				gnmi.WithLogger(logger),
+			}
+
+			if certificate != "" {
+				opts = append(opts, gnmi.TLSCert(certificate))
+			}
+			if key != "" {
+				opts = append(opts, gnmi.TLSKey(key))
+			}
+			if caCertificate != "" {
+				opts = append(opts, gnmi.TLSCA(caCertificate))
+			}
+
+			// Create default gNMI client
+			var defaultClient *gnmi.Client
+			if host != "" {
+				var err error
+				defaultClient, err = gnmi.NewClient(host, opts...)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to create gNMI client", "Unable to create gNMI client:\n\n"+err.Error())
+					return
 				}
 			}
+			deviceData := &IosxrProviderDataDevice{
+				GnmiClient:      defaultClient,
+				Protocol:        "gnmi",
+				ReuseConnection: reuseConnection,
+				MaxRetries:      int(retries),
+				Managed:         true,
+			}
+			data.Devices[""] = deviceData
+			if reuseConnection {
+				p.clientCacheMu.Lock()
+				p.clientCache[cacheKey] = deviceData
+				p.clientCacheMu.Unlock()
+			}
 		}
+	} else {
+		// NETCONF — parse host and port (default 830)
+		netconfHost, netconfPort := parseHostPort(host, 830)
+		cacheKey := fmt.Sprintf("netconf:%s:%d", netconfHost, netconfPort)
 
-		logger := helpers.NewTflogAdapter("netconf")
-		opts := []func(*netconf.Client){
-			netconf.Username(username),
-			netconf.Password(password),
-			netconf.Port(netconfPort),
-			netconf.MaxRetries(int(retries)),
-			netconf.LockReleaseTimeout(time.Duration(lockReleaseTimeout) * time.Second),
-			netconf.WithLogger(logger),
+		// Check cache first
+		p.clientCacheMu.Lock()
+		cachedDevice, cacheHit := p.clientCache[cacheKey]
+		p.clientCacheMu.Unlock()
+
+		if cacheHit && reuseConnection {
+			// Create a new device wrapper with a fresh mutex but reuse the client
+			data.Devices[""] = &IosxrProviderDataDevice{
+				NetconfClient:   cachedDevice.NetconfClient,
+				Protocol:        "netconf",
+				ReuseConnection: reuseConnection,
+				MaxRetries:      int(retries),
+				Managed:         true,
+				OpMutex:         sync.Mutex{}, // Fresh mutex for each provider instance
+			}
+		} else {
+			logger := helpers.NewTflogAdapter("netconf")
+			opts := []func(*netconf.Client){
+				netconf.Username(username),
+				netconf.Password(password),
+				netconf.Port(netconfPort),
+				netconf.MaxRetries(int(retries)),
+				netconf.LockReleaseTimeout(time.Duration(lockReleaseTimeout) * time.Second),
+				netconf.WithLogger(logger),
+			}
+			if !verifyCertificate {
+				opts = append(opts, netconf.InsecureSkipHostKeyVerification())
+			}
+			// Create default NETCONF client
+			var netconfClient *netconf.Client
+			var err error
+			netconfClient, err = netconf.NewClient(netconfHost, opts...)
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to create NETCONF client", "Unable to create NETCONF client:\n\n"+err.Error())
+				return
+			}
+			deviceData := &IosxrProviderDataDevice{
+				NetconfClient:   netconfClient,
+				Protocol:        "netconf",
+				ReuseConnection: reuseConnection,
+				MaxRetries:      int(retries),
+				Managed:         true,
+			}
+			data.Devices[""] = deviceData
+			if reuseConnection {
+				p.clientCacheMu.Lock()
+				p.clientCache[cacheKey] = deviceData
+				p.clientCacheMu.Unlock()
+			}
 		}
-		if !verifyCertificate {
-			opts = append(opts, netconf.InsecureSkipHostKeyVerification())
-		}
-		c, err := netconf.NewClient(netconfHost, opts...)
-		if err != nil {
-			resp.Diagnostics.AddError(
-				"Unable to create NETCONF client",
-				"Unable to create NETCONF client:\n\n"+err.Error(),
-			)
-			return
-		}
-		data.Devices[""] = &IosxrProviderDataDevice{NetconfClient: c, Protocol: "netconf", ReuseConnection: reuseConnection, AutoCommit: autoCommit, Managed: true}
 	}
 
-	// Add all devices with their managed status
 	// Add all devices with their managed status
 	for _, device := range config.Devices {
 		deviceName := device.Name.ValueString()
@@ -680,67 +712,127 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 		// Create device client based on protocol
 		if protocol == "gnmi" {
-			logger := helpers.NewTflogAdapter("gnmi")
-			opts := []func(*gnmi.Client){
-				gnmi.Username(username),
-				gnmi.Password(password),
-				gnmi.TLS(tls),
-				gnmi.VerifyCertificate(verifyCertificate),
-				gnmi.MaxRetries(int(retries)),
-				gnmi.WithLogger(logger),
-			}
+			cacheKey := fmt.Sprintf("gnmi:%s:%s", deviceName, deviceHost)
+			p.clientCacheMu.Lock()
+			cachedDevice, cacheHit := p.clientCache[cacheKey]
+			p.clientCacheMu.Unlock()
 
-			if certificate != "" {
-				opts = append(opts, gnmi.TLSCert(certificate))
-			}
-			if key != "" {
-				opts = append(opts, gnmi.TLSKey(key))
-			}
-			if caCertificate != "" {
-				opts = append(opts, gnmi.TLSCA(caCertificate))
-			}
-
-			var deviceClient *gnmi.Client
-			var err error
-			if managed {
-				deviceClient, err = gnmi.NewClient(deviceHost, opts...)
-				if err != nil {
-					resp.Diagnostics.AddError(
-						"Unable to create gNMI client",
-						fmt.Sprintf("Unable to create gNMI client for device '%s':\n\n%s", deviceName, err.Error()),
-					)
-					return
+			if cacheHit && reuseConnection {
+				// Create a new device wrapper with a fresh mutex but reuse the client
+				data.Devices[deviceName] = &IosxrProviderDataDevice{
+					GnmiClient:      cachedDevice.GnmiClient,
+					Protocol:        "gnmi",
+					ReuseConnection: reuseConnection,
+					MaxRetries:      int(retries),
+					Managed:         managed,
+					OpMutex:         sync.Mutex{}, // Fresh mutex for each provider instance
 				}
-				data.Devices[deviceName] = &IosxrProviderDataDevice{GnmiClient: deviceClient, Protocol: "gnmi", ReuseConnection: reuseConnection, AutoCommit: autoCommit, Managed: managed}
 			} else {
-				data.Devices[deviceName] = &IosxrProviderDataDevice{GnmiClient: nil, Protocol: "gnmi", ReuseConnection: reuseConnection, AutoCommit: autoCommit, Managed: managed}
+				logger := helpers.NewTflogAdapter("gnmi")
+				opts := []func(*gnmi.Client){
+					gnmi.Username(username),
+					gnmi.Password(password),
+					gnmi.TLS(tls),
+					gnmi.VerifyCertificate(verifyCertificate),
+					gnmi.MaxRetries(int(retries)),
+					gnmi.WithLogger(logger),
+				}
+
+				if certificate != "" {
+					opts = append(opts, gnmi.TLSCert(certificate))
+				}
+				if key != "" {
+					opts = append(opts, gnmi.TLSKey(key))
+				}
+				if caCertificate != "" {
+					opts = append(opts, gnmi.TLSCA(caCertificate))
+				}
+
+				var deviceClient *gnmi.Client
+				if managed {
+					var err error
+					deviceClient, err = gnmi.NewClient(deviceHost, opts...)
+					if err != nil {
+						resp.Diagnostics.AddError(
+							"Unable to create gNMI client",
+							fmt.Sprintf("Unable to create gNMI client for device '%s':\n\n%s", deviceName, err.Error()),
+						)
+						return
+					}
+				}
+				deviceData := &IosxrProviderDataDevice{
+					GnmiClient:      deviceClient,
+					Protocol:        "gnmi",
+					ReuseConnection: reuseConnection,
+					MaxRetries:      int(retries),
+					Managed:         managed,
+				}
+				data.Devices[deviceName] = deviceData
+				if reuseConnection && managed {
+					p.clientCacheMu.Lock()
+					p.clientCache[cacheKey] = deviceData
+					p.clientCacheMu.Unlock()
+				}
 			}
 		} else {
-			// NETCONF
-			logger := helpers.NewTflogAdapter("netconf")
-			opts := []func(*netconf.Client){
-				netconf.Username(username),
-				netconf.Password(password),
-				netconf.MaxRetries(int(retries)),
-				netconf.LockReleaseTimeout(time.Duration(lockReleaseTimeout) * time.Second),
-				netconf.WithLogger(logger),
-			}
-			if !verifyCertificate {
-				opts = append(opts, netconf.InsecureSkipHostKeyVerification())
-			}
+			// NETCONF — parse host and port (default 830)
+			devNetconfHost, devNetconfPort := parseHostPort(deviceHost, 830)
+			cacheKey := fmt.Sprintf("netconf:%s:%s:%d", deviceName, devNetconfHost, devNetconfPort)
 
-			if managed {
-				c, err := netconf.NewClient(deviceHost, opts...)
-				if err != nil {
-					resp.Diagnostics.AddError(
-						"Unable to create NETCONF client",
-						fmt.Sprintf("Unable to create NETCONF client for device '%s':\n\n%s", deviceName, err.Error()),
-					)
-					return
+			p.clientCacheMu.Lock()
+			cachedDevice, cacheHit := p.clientCache[cacheKey]
+			p.clientCacheMu.Unlock()
+
+			if cacheHit && reuseConnection {
+				// Create a new device wrapper with a fresh mutex but reuse the client
+				data.Devices[deviceName] = &IosxrProviderDataDevice{
+					NetconfClient:   cachedDevice.NetconfClient,
+					Protocol:        "netconf",
+					ReuseConnection: reuseConnection,
+					MaxRetries:      int(retries),
+					Managed:         managed,
+					OpMutex:         sync.Mutex{}, // Fresh mutex for each provider instance
 				}
-				data.Devices[deviceName] = &IosxrProviderDataDevice{NetconfClient: c, Protocol: "netconf", ReuseConnection: reuseConnection, AutoCommit: autoCommit, Managed: managed}
 			} else {
-				data.Devices[deviceName] = &IosxrProviderDataDevice{NetconfClient: nil, Protocol: "netconf", ReuseConnection: reuseConnection, AutoCommit: autoCommit, Managed: managed}
+				logger := helpers.NewTflogAdapter("netconf")
+				opts := []func(*netconf.Client){
+					netconf.Username(username),
+					netconf.Password(password),
+					netconf.Port(devNetconfPort),
+					netconf.MaxRetries(int(retries)),
+					netconf.LockReleaseTimeout(time.Duration(lockReleaseTimeout) * time.Second),
+					netconf.WithLogger(logger),
+				}
+				if !verifyCertificate {
+					opts = append(opts, netconf.InsecureSkipHostKeyVerification())
+				}
+
+				var deviceNetconfClient *netconf.Client
+				if managed {
+					var err error
+					deviceNetconfClient, err = netconf.NewClient(devNetconfHost, opts...)
+					if err != nil {
+						resp.Diagnostics.AddError(
+							"Unable to create NETCONF client",
+							fmt.Sprintf("Unable to create NETCONF client for device '%s':\n\n%s", deviceName, err.Error()),
+						)
+						return
+					}
+				}
+
+				deviceData := &IosxrProviderDataDevice{
+					NetconfClient:   deviceNetconfClient,
+					Protocol:        "netconf",
+					ReuseConnection: reuseConnection,
+					MaxRetries:      int(retries),
+					Managed:         managed,
+				}
+				data.Devices[deviceName] = deviceData
+				if reuseConnection && managed {
+					p.clientCacheMu.Lock()
+					p.clientCache[cacheKey] = deviceData
+					p.clientCacheMu.Unlock()
+				}
 			}
 		}
 	}
@@ -751,7 +843,8 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		//NewGnmiResource,
+		NewYangResource,
+		NewCliResource,
 		NewAAAResource,
 		NewAAAAccountingResource,
 		NewAAAAuthenticationResource,
@@ -809,7 +902,6 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewHWModuleProfile8000Resource,
 		NewHWModuleShutdownResource,
 		NewICMPResource,
-		NewInterfaceResource,
 		NewInterfaceBundleEtherResource,
 		NewInterfaceBundleEtherSubinterfaceResource,
 		NewInterfaceBVIResource,
@@ -955,7 +1047,7 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 
 func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		//NewGnmiDataSource,
+		NewYangDataSource,
 		NewAAADataSource,
 		NewAAAAccountingDataSource,
 		NewAAAAuthenticationDataSource,
@@ -1013,7 +1105,6 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewHWModuleProfile8000DataSource,
 		NewHWModuleShutdownDataSource,
 		NewICMPDataSource,
-		NewInterfaceDataSource,
 		NewInterfaceBundleEtherDataSource,
 		NewInterfaceBundleEtherSubinterfaceDataSource,
 		NewInterfaceBVIDataSource,
@@ -1158,3 +1249,18 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 }
 
 // End of section. //template:end provider
+
+// parseHostPort splits "host" or "host:port" and returns (host, port).
+// If no port is present in the string, defaultPort is returned.
+func parseHostPort(hostStr string, defaultPort int) (string, int) {
+	if strings.Contains(hostStr, ":") {
+		parts := strings.SplitN(hostStr, ":", 2)
+		if len(parts) == 2 {
+			if p, err := strconv.Atoi(parts[1]); err == nil {
+				return parts[0], p
+			}
+		}
+		return parts[0], defaultPort
+	}
+	return hostStr, defaultPort
+}

@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -30,7 +31,6 @@ import (
 	"github.com/netascode/go-netconf"
 	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
-	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
@@ -77,11 +77,10 @@ func (data BGPASFormatData) getXPath() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data BGPASFormat) toBody(ctx context.Context) string {
-	body := "{}"
 	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
-		body, _ = sjson.Set(body, "", data.AsFormat.ValueString())
+		return fmt.Sprintf(`"%s"`, data.AsFormat.ValueString())
 	}
-	return body
+	return "{}"
 }
 
 // End of section. //template:end toBody
@@ -89,9 +88,10 @@ func (data BGPASFormat) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data BGPASFormat) toBodyXML(ctx context.Context) string {
+	// Special case: value goes directly into root element text content
 	body := netconf.Body{}
 	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/", data.AsFormat.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath(), data.AsFormat.ValueString())
 	}
 	bodyString, err := body.String()
 	if err != nil {
@@ -105,8 +105,12 @@ func (data BGPASFormat) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, ""); value.Exists() && !data.AsFormat.IsNull() {
+	// For root element, value is at the element name in the response
+	lastElement := helpers.LastElement(data.getPath())
+	if value := gjson.GetBytes(res, lastElement); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
+	} else if !data.AsFormat.IsNull() {
+		data.AsFormat = types.StringValue(data.AsFormat.ValueString())
 	} else {
 		data.AsFormat = types.StringNull()
 	}
@@ -117,7 +121,7 @@ func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *BGPASFormat) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/as-format"); value.Exists() && !data.AsFormat.IsNull() {
 		data.AsFormat = types.StringValue(value.String())
 	} else if data.AsFormat.IsNull() {
 		data.AsFormat = types.StringNull()
@@ -129,12 +133,25 @@ func (data *BGPASFormat) updateFromBodyXML(ctx context.Context, res xmldot.Resul
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *BGPASFormat) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	if value := res.Get(prefix + ""); value.Exists() {
-		data.AsFormat = types.StringValue(value.String())
+	// For leaf at root, gNMI returns the value directly as a JSON string (e.g., "value")
+	// Check if the result is a simple string value
+	if res.IsArray() || res.IsObject() {
+		// Try to extract from nested structure
+		lastElement := helpers.LastElement(data.getPath())
+		if value := res.Get(lastElement); value.Exists() {
+			data.AsFormat = types.StringValue(value.String())
+			return
+		}
+		if value := res.Get("as-format"); value.Exists() {
+			data.AsFormat = types.StringValue(value.String())
+			return
+		}
+		data.AsFormat = types.StringNull()
+	} else if res.Exists() {
+		// Direct string value
+		data.AsFormat = types.StringValue(res.String())
+	} else {
+		data.AsFormat = types.StringNull()
 	}
 }
 
@@ -143,11 +160,21 @@ func (data *BGPASFormat) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *BGPASFormatData) fromBody(ctx context.Context, res gjson.Result) {
+	// Special case: single no_augment_config string attribute returns direct string value
+	if res.Type == gjson.String {
+		data.AsFormat = types.StringValue(res.String())
+		return
+	}
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
-	if value := res.Get(prefix + ""); value.Exists() {
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "as-format"); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	}
 }
@@ -157,7 +184,12 @@ func (data *BGPASFormatData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *BGPASFormat) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	// Special case: single no_augment_config string attribute - value is in root element text content
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+		return
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/as-format"); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	}
 }
@@ -167,7 +199,12 @@ func (data *BGPASFormat) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *BGPASFormatData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/"); value.Exists() {
+	// Special case: single no_augment_config string attribute - value is in root element text content
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+		return
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/as-format"); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	}
 }
@@ -211,19 +248,29 @@ func (data *BGPASFormat) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *BGPASFormat) addDeletedItemsXML(ctx context.Context, state BGPASFormat, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.AsFormat.IsNull() && data.AsFormat.IsNull() {
-		deletePath := state.getXPath() + "/"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + state.AsFormat.ValueString()
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -234,10 +281,12 @@ func (data *BGPASFormat) addDeletedItemsXML(ctx context.Context, state BGPASForm
 func (data *BGPASFormat) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	if !data.AsFormat.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/")
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

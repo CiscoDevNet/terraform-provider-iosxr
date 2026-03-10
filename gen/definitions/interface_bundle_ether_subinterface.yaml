@@ -373,9 +373,11 @@ attributes:
   - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/ra-interval/maximum-ra-interval
     optional: true
     tf_name: ipv6_nd_ra_interval_max
+    delete_parent: true
     example: 10
   - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/ra-interval/minimum-ra-interval
     tf_name: ipv6_nd_ra_interval_min
+    delete_parent: true
     example: 5
   - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/ra-lifetime
     tf_name: ipv6_nd_ra_lifetime

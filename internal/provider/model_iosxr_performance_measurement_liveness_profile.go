@@ -293,151 +293,157 @@ func (data PerformanceMeasurementLivenessProfile) toBody(ctx context.Context) st
 
 func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sr-policy.default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefault.IsNull() {
 			data.SrPolicyDefault = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefault.IsNull() {
 			data.SrPolicyDefault = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.liveness-detection.multiplier"); value.Exists() && !data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.tx-interval"); value.Exists() && !data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.explicits"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
 			data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
 			data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.explicits.explicit"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
-	} else {
+	} else if data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.from"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.to"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.increment"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	} else {
+	} else if data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.range"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.dscp"); value.Exists() && !data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.npu-offload"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SrPolicyDefaultNpuOffload.IsNull() {
 			data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultNpuOffload.IsNull() {
 			data.SrPolicyDefaultNpuOffload = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefault.IsNull() {
 			data.EndpointDefault = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefault.IsNull() {
 			data.EndpointDefault = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.tx-interval"); value.Exists() && !data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
 			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
 			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() && !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
-	} else {
+	} else if data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.from"); value.Exists() && !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.to"); value.Exists() && !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.increment"); value.Exists() && !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	} else {
+	} else if data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.range"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.probe.tos.dscp"); value.Exists() && !data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.multiplier"); value.Exists() && !data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
 		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
-	} else {
+	} else if data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
 		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.logging.state-change"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
 			data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
 			data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolNull()
 		}
@@ -476,11 +482,13 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 			data.Profiles[i].LivenessDetectionMultiplier = types.Int64Null()
 		}
 		if value := r.Get("liveness-detection.logging.state-change"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() {
 				data.Profiles[i].LivenessDetectionLoggingStateChange = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() {
 				data.Profiles[i].LivenessDetectionLoggingStateChange = types.BoolNull()
 			}
@@ -491,11 +499,13 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 			data.Profiles[i].ProbeTxInterval = types.Int64Null()
 		}
 		if value := r.Get("probe.flow-label.explicits"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
 				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
 				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolNull()
 			}
@@ -536,11 +546,13 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 			data.Profiles[i].ProbeTosDscp = types.Int64Null()
 		}
 		if value := r.Get("npu-offload"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
 			if !data.Profiles[i].NpuOffload.IsNull() {
 				data.Profiles[i].NpuOffload = types.BoolValue(true)
 			}
 		} else {
-			// For presence-based booleans, only set to null if the attribute is null in state
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
 			if data.Profiles[i].NpuOffload.IsNull() {
 				data.Profiles[i].NpuOffload = types.BoolNull()
 			}
@@ -646,66 +658,67 @@ func (data PerformanceMeasurementLivenessProfile) toBodyXML(ctx context.Context)
 		}
 	}
 	if len(data.Profiles) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Profiles {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/names/name"
 			if !item.ProfileName.IsNull() && !item.ProfileName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "profile-name", item.ProfileName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/profile-name", item.ProfileName.ValueString())
 			}
 			if !item.LivenessDetectionMultiplier.IsNull() && !item.LivenessDetectionMultiplier.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "liveness-detection/multiplier", strconv.FormatInt(item.LivenessDetectionMultiplier.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/liveness-detection/multiplier", strconv.FormatInt(item.LivenessDetectionMultiplier.ValueInt64(), 10))
 			}
 			if !item.LivenessDetectionLoggingStateChange.IsNull() && !item.LivenessDetectionLoggingStateChange.IsUnknown() {
 				if item.LivenessDetectionLoggingStateChange.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "liveness-detection/logging/state-change", "")
+					body = helpers.SetFromXPath(body, basePath+"/liveness-detection/logging/state-change", "")
 				}
 			}
 			if !item.ProbeTxInterval.IsNull() && !item.ProbeTxInterval.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/tx-interval", strconv.FormatInt(item.ProbeTxInterval.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/tx-interval", strconv.FormatInt(item.ProbeTxInterval.ValueInt64(), 10))
 			}
 			if !item.ProbeFlowLabelExplicit.IsNull() && !item.ProbeFlowLabelExplicit.IsUnknown() {
 				if item.ProbeFlowLabelExplicit.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "probe/flow-label/explicits", "")
+					body = helpers.SetFromXPath(body, basePath+"/probe/flow-label/explicits", "")
 				}
 			}
 			if !item.ProbeFlowLabelExplicitList.IsNull() && !item.ProbeFlowLabelExplicitList.IsUnknown() {
 				var values []int
 				item.ProbeFlowLabelExplicitList.ElementsAs(ctx, &values, false)
 				for _, v := range values {
-					cBody = helpers.AppendFromXPath(cBody, "probe/flow-label/explicits/explicit", v)
+					body = helpers.AppendFromXPath(body, basePath+"/probe/flow-label/explicits/explicit", v)
 				}
 			}
 			if !item.ProbeFlowLabelFrom.IsNull() && !item.ProbeFlowLabelFrom.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/flow-label/from", strconv.FormatInt(item.ProbeFlowLabelFrom.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/flow-label/from", strconv.FormatInt(item.ProbeFlowLabelFrom.ValueInt64(), 10))
 			}
 			if !item.ProbeFlowLabelTo.IsNull() && !item.ProbeFlowLabelTo.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/flow-label/to", strconv.FormatInt(item.ProbeFlowLabelTo.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/flow-label/to", strconv.FormatInt(item.ProbeFlowLabelTo.ValueInt64(), 10))
 			}
 			if !item.ProbeFlowLabelIncrement.IsNull() && !item.ProbeFlowLabelIncrement.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/flow-label/increment", strconv.FormatInt(item.ProbeFlowLabelIncrement.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/flow-label/increment", strconv.FormatInt(item.ProbeFlowLabelIncrement.ValueInt64(), 10))
 			}
 			if !item.ProbeSweepDestinationIpv4.IsNull() && !item.ProbeSweepDestinationIpv4.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/sweep/destination/ipv4", item.ProbeSweepDestinationIpv4.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/probe/sweep/destination/ipv4", item.ProbeSweepDestinationIpv4.ValueString())
 			}
 			if !item.ProbeSweepDestinationRange.IsNull() && !item.ProbeSweepDestinationRange.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/sweep/destination/range", strconv.FormatInt(item.ProbeSweepDestinationRange.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/sweep/destination/range", strconv.FormatInt(item.ProbeSweepDestinationRange.ValueInt64(), 10))
 			}
 			if !item.ProbeTosDscp.IsNull() && !item.ProbeTosDscp.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "probe/tos/dscp", strconv.FormatInt(item.ProbeTosDscp.ValueInt64(), 10))
+				body = helpers.SetFromXPath(body, basePath+"/probe/tos/dscp", strconv.FormatInt(item.ProbeTosDscp.ValueInt64(), 10))
 			}
 			if !item.NpuOffload.IsNull() && !item.NpuOffload.IsUnknown() {
 				if item.NpuOffload.ValueBool() {
-					cBody = helpers.SetFromXPath(cBody, "npu-offload", "")
+					body = helpers.SetFromXPath(body, basePath+"/npu-offload", "")
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"names/name", cBody.Res())
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -713,138 +726,156 @@ func (data PerformanceMeasurementLivenessProfile) toBodyXML(ctx context.Context)
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PerformanceMeasurementLivenessProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default"); value.Exists() {
-		data.SrPolicyDefault = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefault.IsNull() {
+			data.SrPolicyDefault = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefault.IsNull() {
 			data.SrPolicyDefault = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/liveness-detection/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/liveness-detection/multiplier"); value.Exists() && !data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() && !data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
+			data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
 			data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64ListXML(value.Array())
-	} else {
+	} else if data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/from"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/to"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/increment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/increment"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	} else if data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() && !data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/npu-offload"); value.Exists() {
-		data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/npu-offload"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultNpuOffload.IsNull() {
+			data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SrPolicyDefaultNpuOffload.IsNull() {
 			data.SrPolicyDefaultNpuOffload = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default"); value.Exists() {
-		data.EndpointDefault = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefault.IsNull() {
+			data.EndpointDefault = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefault.IsNull() {
 			data.EndpointDefault = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() && !data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
 			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() && !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64ListXML(value.Array())
-	} else {
+	} else if data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() && !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() && !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() && !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	} else if data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() && !data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/liveness-detection/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/multiplier"); value.Exists() && !data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
 		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
 		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/liveness-detection/logging/state-change"); value.Exists() {
-		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/logging/state-change"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
+			data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
@@ -856,7 +887,7 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBodyXML(ctx context
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/names/name").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/names/name").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -874,18 +905,21 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBodyXML(ctx context
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "profile-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "profile-name"); value.Exists() && !data.Profiles[i].ProfileName.IsNull() {
 			data.Profiles[i].ProfileName = types.StringValue(value.String())
 		} else if data.Profiles[i].ProfileName.IsNull() {
 			data.Profiles[i].ProfileName = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "liveness-detection/multiplier"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "liveness-detection/multiplier"); value.Exists() && !data.Profiles[i].LivenessDetectionMultiplier.IsNull() {
 			data.Profiles[i].LivenessDetectionMultiplier = types.Int64Value(value.Int())
 		} else if data.Profiles[i].LivenessDetectionMultiplier.IsNull() {
 			data.Profiles[i].LivenessDetectionMultiplier = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "liveness-detection/logging/state-change"); value.Exists() {
-			data.Profiles[i].LivenessDetectionLoggingStateChange = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() {
+				data.Profiles[i].LivenessDetectionLoggingStateChange = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -893,13 +927,16 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBodyXML(ctx context
 				data.Profiles[i].LivenessDetectionLoggingStateChange = types.BoolNull()
 			}
 		}
-		if value := helpers.GetFromXPath(r, "probe/tx-interval"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "probe/tx-interval"); value.Exists() && !data.Profiles[i].ProbeTxInterval.IsNull() {
 			data.Profiles[i].ProbeTxInterval = types.Int64Value(value.Int())
 		} else if data.Profiles[i].ProbeTxInterval.IsNull() {
 			data.Profiles[i].ProbeTxInterval = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "probe/flow-label/explicits"); value.Exists() {
-			data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() {
+				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -907,41 +944,46 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBodyXML(ctx context
 				data.Profiles[i].ProbeFlowLabelExplicit = types.BoolNull()
 			}
 		}
-		if childElements := helpers.GetAllChildElements(r, "probe/flow-label/explicits/explicit"); len(childElements) > 0 {
+		if childElements := helpers.GetAllChildElements(r, "probe/flow-label/explicits/explicit"); len(childElements) > 0 && !data.Profiles[i].ProbeFlowLabelExplicitList.IsNull() {
 			data.Profiles[i].ProbeFlowLabelExplicitList = helpers.GetInt64ListXML(childElements)
+		} else if data.Profiles[i].ProbeFlowLabelExplicitList.IsNull() {
+			data.Profiles[i].ProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 		}
-		if value := helpers.GetFromXPath(r, "probe/flow-label/from"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "probe/flow-label/from"); value.Exists() && !data.Profiles[i].ProbeFlowLabelFrom.IsNull() {
 			data.Profiles[i].ProbeFlowLabelFrom = types.Int64Value(value.Int())
 		} else if data.Profiles[i].ProbeFlowLabelFrom.IsNull() {
 			data.Profiles[i].ProbeFlowLabelFrom = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "probe/flow-label/to"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "probe/flow-label/to"); value.Exists() && !data.Profiles[i].ProbeFlowLabelTo.IsNull() {
 			data.Profiles[i].ProbeFlowLabelTo = types.Int64Value(value.Int())
 		} else if data.Profiles[i].ProbeFlowLabelTo.IsNull() {
 			data.Profiles[i].ProbeFlowLabelTo = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "probe/flow-label/increment"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "probe/flow-label/increment"); value.Exists() && !data.Profiles[i].ProbeFlowLabelIncrement.IsNull() {
 			data.Profiles[i].ProbeFlowLabelIncrement = types.Int64Value(value.Int())
 		} else if data.Profiles[i].ProbeFlowLabelIncrement.IsNull() {
 			data.Profiles[i].ProbeFlowLabelIncrement = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "probe/sweep/destination/ipv4"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "probe/sweep/destination/ipv4"); value.Exists() && !data.Profiles[i].ProbeSweepDestinationIpv4.IsNull() {
 			data.Profiles[i].ProbeSweepDestinationIpv4 = types.StringValue(value.String())
 		} else if data.Profiles[i].ProbeSweepDestinationIpv4.IsNull() {
 			data.Profiles[i].ProbeSweepDestinationIpv4 = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "probe/sweep/destination/range"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "probe/sweep/destination/range"); value.Exists() && !data.Profiles[i].ProbeSweepDestinationRange.IsNull() {
 			data.Profiles[i].ProbeSweepDestinationRange = types.Int64Value(value.Int())
 		} else if data.Profiles[i].ProbeSweepDestinationRange.IsNull() {
 			data.Profiles[i].ProbeSweepDestinationRange = types.Int64Null()
 		}
-		if value := helpers.GetFromXPath(r, "probe/tos/dscp"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "probe/tos/dscp"); value.Exists() && !data.Profiles[i].ProbeTosDscp.IsNull() {
 			data.Profiles[i].ProbeTosDscp = types.Int64Value(value.Int())
 		} else if data.Profiles[i].ProbeTosDscp.IsNull() {
 			data.Profiles[i].ProbeTosDscp = types.Int64Null()
 		}
 		if value := helpers.GetFromXPath(r, "npu-offload"); value.Exists() {
-			data.Profiles[i].NpuOffload = types.BoolValue(true)
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].NpuOffload.IsNull() {
+				data.Profiles[i].NpuOffload = types.BoolValue(true)
+			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
@@ -960,10 +1002,15 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "sr-policy.default"); value.Exists() {
 		data.SrPolicyDefault = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefault = types.BoolNull()
+	} else if !data.SrPolicyDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.liveness-detection.multiplier"); value.Exists() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
@@ -973,8 +1020,9 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.explicits"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolNull()
+	} else if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.explicits.explicit"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
@@ -1001,21 +1049,24 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 	}
 	if value := res.Get(prefix + "sr-policy.default.npu-offload"); value.Exists() {
 		data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultNpuOffload = types.BoolNull()
+	} else if !data.SrPolicyDefaultNpuOffload.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultNpuOffload = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default"); value.Exists() {
 		data.EndpointDefault = types.BoolValue(true)
-	} else {
-		data.EndpointDefault = types.BoolNull()
+	} else if !data.EndpointDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.tx-interval"); value.Exists() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
+	} else if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
@@ -1045,8 +1096,9 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 	}
 	if value := res.Get(prefix + "endpoint.default.liveness-detection.logging.state-change"); value.Exists() {
 		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolNull()
+	} else if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "names.name"); value.Exists() {
 		data.Profiles = make([]PerformanceMeasurementLivenessProfileProfiles, 0)
@@ -1060,16 +1112,18 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 			}
 			if cValue := v.Get("liveness-detection.logging.state-change"); cValue.Exists() {
 				item.LivenessDetectionLoggingStateChange = types.BoolValue(true)
-			} else {
-				item.LivenessDetectionLoggingStateChange = types.BoolNull()
+			} else if !item.LivenessDetectionLoggingStateChange.IsNull() {
+				// Only set to false if it was previously set
+				item.LivenessDetectionLoggingStateChange = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
 				item.ProbeTxInterval = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
-			} else {
-				item.ProbeFlowLabelExplicit = types.BoolNull()
+			} else if !item.ProbeFlowLabelExplicit.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
@@ -1096,8 +1150,9 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 			}
 			if cValue := v.Get("npu-offload"); cValue.Exists() {
 				item.NpuOffload = types.BoolValue(true)
-			} else {
-				item.NpuOffload = types.BoolNull()
+			} else if !item.NpuOffload.IsNull() {
+				// Only set to false if it was previously set
+				item.NpuOffload = types.BoolValue(false)
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true
@@ -1109,14 +1164,19 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "sr-policy.default"); value.Exists() {
 		data.SrPolicyDefault = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefault = types.BoolNull()
+		data.SrPolicyDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.liveness-detection.multiplier"); value.Exists() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
@@ -1127,7 +1187,7 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.explicits"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolNull()
+		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.explicits.explicit"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
@@ -1155,12 +1215,12 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 	if value := res.Get(prefix + "sr-policy.default.npu-offload"); value.Exists() {
 		data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultNpuOffload = types.BoolNull()
+		data.SrPolicyDefaultNpuOffload = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default"); value.Exists() {
 		data.EndpointDefault = types.BoolValue(true)
 	} else {
-		data.EndpointDefault = types.BoolNull()
+		data.EndpointDefault = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.tx-interval"); value.Exists() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
@@ -1168,7 +1228,7 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
@@ -1199,7 +1259,7 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 	if value := res.Get(prefix + "endpoint.default.liveness-detection.logging.state-change"); value.Exists() {
 		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolNull()
+		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "names.name"); value.Exists() {
 		data.Profiles = make([]PerformanceMeasurementLivenessProfileProfiles, 0)
@@ -1214,7 +1274,7 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 			if cValue := v.Get("liveness-detection.logging.state-change"); cValue.Exists() {
 				item.LivenessDetectionLoggingStateChange = types.BoolValue(true)
 			} else {
-				item.LivenessDetectionLoggingStateChange = types.BoolNull()
+				item.LivenessDetectionLoggingStateChange = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
 				item.ProbeTxInterval = types.Int64Value(cValue.Int())
@@ -1222,7 +1282,7 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
 			} else {
-				item.ProbeFlowLabelExplicit = types.BoolNull()
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
@@ -1250,7 +1310,7 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 			if cValue := v.Get("npu-offload"); cValue.Exists() {
 				item.NpuOffload = types.BoolValue(true)
 			} else {
-				item.NpuOffload = types.BoolNull()
+				item.NpuOffload = types.BoolValue(false)
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true
@@ -1262,95 +1322,95 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PerformanceMeasurementLivenessProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default"); value.Exists() {
 		data.SrPolicyDefault = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefault = types.BoolNull()
+		data.SrPolicyDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/liveness-detection/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/liveness-detection/multiplier"); value.Exists() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolNull()
+		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/from"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/to"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/increment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/increment"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/npu-offload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/npu-offload"); value.Exists() {
 		data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
 	} else {
-		data.SrPolicyDefaultNpuOffload = types.BoolNull()
+		data.SrPolicyDefaultNpuOffload = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default"); value.Exists() {
 		data.EndpointDefault = types.BoolValue(true)
 	} else {
-		data.EndpointDefault = types.BoolNull()
+		data.EndpointDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/liveness-detection/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/multiplier"); value.Exists() {
 		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/liveness-detection/logging/state-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/logging/state-change"); value.Exists() {
 		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolNull()
+		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/names/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/names/name"); value.Exists() {
 		data.Profiles = make([]PerformanceMeasurementLivenessProfileProfiles, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PerformanceMeasurementLivenessProfileProfiles{}
@@ -1363,7 +1423,7 @@ func (data *PerformanceMeasurementLivenessProfile) fromBodyXML(ctx context.Conte
 			if cValue := helpers.GetFromXPath(v, "liveness-detection/logging/state-change"); cValue.Exists() {
 				item.LivenessDetectionLoggingStateChange = types.BoolValue(true)
 			} else {
-				item.LivenessDetectionLoggingStateChange = types.BoolNull()
+				item.LivenessDetectionLoggingStateChange = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "probe/tx-interval"); cValue.Exists() {
 				item.ProbeTxInterval = types.Int64Value(cValue.Int())
@@ -1371,7 +1431,7 @@ func (data *PerformanceMeasurementLivenessProfile) fromBodyXML(ctx context.Conte
 			if cValue := helpers.GetFromXPath(v, "probe/flow-label/explicits"); cValue.Exists() {
 				item.ProbeFlowLabelExplicit = types.BoolValue(true)
 			} else {
-				item.ProbeFlowLabelExplicit = types.BoolNull()
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "probe/flow-label/explicits/explicit"); cValue.Exists() {
 				item.ProbeFlowLabelExplicitList = helpers.GetInt64ListXML(cValue.Array())
@@ -1399,7 +1459,7 @@ func (data *PerformanceMeasurementLivenessProfile) fromBodyXML(ctx context.Conte
 			if cValue := helpers.GetFromXPath(v, "npu-offload"); cValue.Exists() {
 				item.NpuOffload = types.BoolValue(true)
 			} else {
-				item.NpuOffload = types.BoolNull()
+				item.NpuOffload = types.BoolValue(false)
 			}
 			data.Profiles = append(data.Profiles, item)
 			return true
@@ -1411,95 +1471,95 @@ func (data *PerformanceMeasurementLivenessProfile) fromBodyXML(ctx context.Conte
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PerformanceMeasurementLivenessProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default"); value.Exists() {
 		data.SrPolicyDefault = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/liveness-detection/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/liveness-detection/multiplier"); value.Exists() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tx-interval"); value.Exists() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/from"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/to"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/flow-label/increment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/flow-label/increment"); value.Exists() {
 		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/sweep/destination/range"); value.Exists() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/tos/dscp"); value.Exists() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/sr-policy/default/npu-offload"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/npu-offload"); value.Exists() {
 		data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
 	} else {
 		data.SrPolicyDefaultNpuOffload = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default"); value.Exists() {
 		data.EndpointDefault = types.BoolValue(true)
 	} else {
 		data.EndpointDefault = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tx-interval"); value.Exists() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64ListXML(value.Array())
 	} else {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/from"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/to"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/flow-label/increment"); value.Exists() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/ipv4"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/sweep/destination/range"); value.Exists() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/tos/dscp"); value.Exists() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/liveness-detection/multiplier"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/multiplier"); value.Exists() {
 		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/endpoint/default/liveness-detection/logging/state-change"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/logging/state-change"); value.Exists() {
 		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
 	} else {
 		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/names/name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/names/name"); value.Exists() {
 		data.Profiles = make([]PerformanceMeasurementLivenessProfileProfiles, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := PerformanceMeasurementLivenessProfileProfiles{}
@@ -1781,9 +1841,10 @@ func (data *PerformanceMeasurementLivenessProfile) getEmptyLeafsDelete(ctx conte
 func (data *PerformanceMeasurementLivenessProfile) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Profiles {
-		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/names/name=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[profile-name=" + data.Profiles[i].ProfileName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/names/name%v", data.getPath(), keyPath))
 	}
 	if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/liveness-detection/logging/state-change", data.getPath()))
@@ -1865,7 +1926,8 @@ func (data *PerformanceMeasurementLivenessProfile) getDeletePaths(ctx context.Co
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx context.Context, state PerformanceMeasurementLivenessProfile, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Profiles {
@@ -1893,32 +1955,32 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].NpuOffload.IsNull() && state.Profiles[i].NpuOffload.ValueBool() && data.Profiles[j].NpuOffload.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/npu-offload", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/npu-offload", predicates))
 				}
 				if !state.Profiles[i].ProbeTosDscp.IsNull() && data.Profiles[j].ProbeTosDscp.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/tos/dscp", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/tos/dscp", predicates))
 				}
 				if !state.Profiles[i].ProbeSweepDestinationRange.IsNull() && data.Profiles[j].ProbeSweepDestinationRange.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/sweep/destination/range", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/sweep/destination/range", predicates))
 				}
 				if !state.Profiles[i].ProbeSweepDestinationIpv4.IsNull() && data.Profiles[j].ProbeSweepDestinationIpv4.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/sweep/destination/ipv4", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/sweep/destination/ipv4", predicates))
 				}
 				if !state.Profiles[i].ProbeFlowLabelIncrement.IsNull() && data.Profiles[j].ProbeFlowLabelIncrement.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/increment", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/increment", predicates))
 				}
 				if !state.Profiles[i].ProbeFlowLabelTo.IsNull() && data.Profiles[j].ProbeFlowLabelTo.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/to", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/to", predicates))
 				}
 				if !state.Profiles[i].ProbeFlowLabelFrom.IsNull() && data.Profiles[j].ProbeFlowLabelFrom.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/from", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/from", predicates))
 				}
 				if !state.Profiles[i].ProbeFlowLabelExplicitList.IsNull() {
 					if data.Profiles[j].ProbeFlowLabelExplicitList.IsNull() {
 						var values []string
 						state.Profiles[i].ProbeFlowLabelExplicitList.ElementsAs(ctx, &values, false)
 						for _, v := range values {
-							deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/explicits/explicit[.=%v]", predicates, v))
+							b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/explicits/explicit[.=%v]", predicates, v))
 						}
 					} else {
 						var dataValues, stateValues []int
@@ -1933,86 +1995,150 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 								}
 							}
 							if !found {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/explicits/explicit[.=%v]", predicates, v))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/explicits/explicit[.=%v]", predicates, v))
 							}
 						}
 					}
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].ProbeFlowLabelExplicit.IsNull() && state.Profiles[i].ProbeFlowLabelExplicit.ValueBool() && data.Profiles[j].ProbeFlowLabelExplicit.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/explicits", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/flow-label/explicits", predicates))
 				}
 				if !state.Profiles[i].ProbeTxInterval.IsNull() && data.Profiles[j].ProbeTxInterval.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/tx-interval", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/tx-interval", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() && state.Profiles[i].LivenessDetectionLoggingStateChange.ValueBool() && data.Profiles[j].LivenessDetectionLoggingStateChange.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/liveness-detection/logging/state-change", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/liveness-detection/logging/state-change", predicates))
 				}
 				if !state.Profiles[i].LivenessDetectionMultiplier.IsNull() && data.Profiles[j].LivenessDetectionMultiplier.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v/liveness-detection/multiplier", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/liveness-detection/multiplier", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/names/name%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v", predicates))
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() && state.EndpointDefaultLivenessDetectionLoggingStateChange.ValueBool() && data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/liveness-detection/logging/state-change"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EndpointDefaultLivenessDetectionMultiplier.IsNull() && data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/liveness-detection/multiplier"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EndpointDefaultProbeTosDscp.IsNull() && data.EndpointDefaultProbeTosDscp.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/probe/tos/dscp"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EndpointDefaultProbeSweepDestinationRange.IsNull() && data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/probe/sweep/destination/range"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EndpointDefaultProbeSweepDestinationIpv4.IsNull() && data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/probe/sweep/destination/ipv4"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EndpointDefaultProbeFlowLabelIncrement.IsNull() && data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/probe/flow-label/increment"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EndpointDefaultProbeFlowLabelTo.IsNull() && data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/probe/flow-label/to"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EndpointDefaultProbeFlowLabelFrom.IsNull() && data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/probe/flow-label/from"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -2021,7 +2147,7 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 			var values []string
 			state.EndpointDefaultProbeFlowLabelExplicitList.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []int
@@ -2036,7 +2162,7 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/endpoint/default/probe/flow-label/explicits/explicit[.=%v]", v))
 				}
 			}
 		}
@@ -2044,73 +2170,153 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.EndpointDefaultProbeFlowLabelExplicit.IsNull() && state.EndpointDefaultProbeFlowLabelExplicit.ValueBool() && data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/probe/flow-label/explicits"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.EndpointDefaultProbeTxInterval.IsNull() && data.EndpointDefaultProbeTxInterval.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/probe/tx-interval"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.EndpointDefault.IsNull() && state.EndpointDefault.ValueBool() && data.EndpointDefault.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SrPolicyDefaultNpuOffload.IsNull() && state.SrPolicyDefaultNpuOffload.ValueBool() && data.SrPolicyDefaultNpuOffload.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/npu-offload"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SrPolicyDefaultProbeTosDscp.IsNull() && data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/probe/tos/dscp"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SrPolicyDefaultProbeSweepDestinationRange.IsNull() && data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/probe/sweep/destination/range"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() && data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/probe/sweep/destination/ipv4"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() && data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/probe/flow-label/increment"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SrPolicyDefaultProbeFlowLabelTo.IsNull() && data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/probe/flow-label/to"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SrPolicyDefaultProbeFlowLabelFrom.IsNull() && data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/probe/flow-label/from"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -2119,7 +2325,7 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 			var values []string
 			state.SrPolicyDefaultProbeFlowLabelExplicitList.ElementsAs(ctx, &values, false)
 			for _, v := range values {
-				deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit[.=%v]", v))
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit[.=%v]", v))
 			}
 		} else {
 			var dataValues, stateValues []int
@@ -2134,7 +2340,7 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 					}
 				}
 				if !found {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit[.=%v]", v))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sr-policy/default/probe/flow-label/explicits/explicit[.=%v]", v))
 				}
 			}
 		}
@@ -2142,36 +2348,67 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() && state.SrPolicyDefaultProbeFlowLabelExplicit.ValueBool() && data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/probe/flow-label/explicits"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SrPolicyDefaultProbeTxInterval.IsNull() && data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/probe/tx-interval"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() && data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/liveness-detection/multiplier"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SrPolicyDefault.IsNull() && state.SrPolicyDefault.ValueBool() && data.SrPolicyDefault.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -2271,7 +2508,6 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletePathsXML(ctx context
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sr-policy/default")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

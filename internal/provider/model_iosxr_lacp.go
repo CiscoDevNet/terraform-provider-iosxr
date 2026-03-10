@@ -24,6 +24,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -102,10 +103,14 @@ func (data LACP) toBodyXML(ctx context.Context) string {
 	if !data.Priority.IsNull() && !data.Priority.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/priority", strconv.FormatInt(data.Priority.ValueInt64(), 10))
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -116,12 +121,12 @@ func (data LACP) toBodyXML(ctx context.Context) string {
 func (data *LACP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mac"); value.Exists() && !data.Mac.IsNull() {
 		data.Mac = types.StringValue(value.String())
-	} else {
+	} else if data.Mac.IsNull() {
 		data.Mac = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
-	} else {
+	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
 	}
 }
@@ -131,12 +136,12 @@ func (data *LACP) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *LACP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac"); value.Exists() && !data.Mac.IsNull() {
 		data.Mac = types.StringValue(value.String())
 	} else if data.Mac.IsNull() {
 		data.Mac = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
 	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
@@ -151,6 +156,10 @@ func (data *LACP) fromBody(ctx context.Context, res gjson.Result) {
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "mac"); value.Exists() {
 		data.Mac = types.StringValue(value.String())
 	}
@@ -163,9 +172,14 @@ func (data *LACP) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *LACPData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "mac"); value.Exists() {
 		data.Mac = types.StringValue(value.String())
@@ -179,10 +193,10 @@ func (data *LACPData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *LACP) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac"); value.Exists() {
 		data.Mac = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
 }
@@ -191,10 +205,10 @@ func (data *LACP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *LACPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/mac"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/mac"); value.Exists() {
 		data.Mac = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/priority"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
 	}
 }
@@ -240,26 +254,42 @@ func (data *LACP) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *LACP) addDeletedItemsXML(ctx context.Context, state LACP, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.Priority.IsNull() && data.Priority.IsNull() {
 		deletePath := state.getXPath() + "/priority"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Mac.IsNull() && data.Mac.IsNull() {
 		deletePath := state.getXPath() + "/mac"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -275,7 +305,6 @@ func (data *LACP) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/mac")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

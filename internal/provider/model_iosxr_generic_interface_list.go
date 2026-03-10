@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -108,24 +107,22 @@ func (data GenericInterfaceList) toBody(ctx context.Context) string {
 
 func (data GenericInterfaceList) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
-	if !data.ListName.IsNull() && !data.ListName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/generic-interface-list-name", data.ListName.ValueString())
-	}
 	if len(data.Interfaces) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.Interfaces {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/interfaces/interface"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "interface-name", item.InterfaceName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"interfaces/interface", cBody.Res())
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -170,17 +167,12 @@ func (data *GenericInterfaceList) updateFromBody(ctx context.Context, res []byte
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *GenericInterfaceList) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/generic-interface-list-name"); value.Exists() {
-		data.ListName = types.StringValue(value.String())
-	} else if data.ListName.IsNull() {
-		data.ListName = types.StringNull()
-	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -198,7 +190,7 @@ func (data *GenericInterfaceList) updateFromBodyXML(ctx context.Context, res xml
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.Interfaces[i].InterfaceName.IsNull() {
 			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
 		} else if data.Interfaces[i].InterfaceName.IsNull() {
 			data.Interfaces[i].InterfaceName = types.StringNull()
@@ -214,6 +206,10 @@ func (data *GenericInterfaceList) fromBody(ctx context.Context, res gjson.Result
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]GenericInterfaceListInterfaces, 0)
@@ -233,9 +229,14 @@ func (data *GenericInterfaceList) fromBody(ctx context.Context, res gjson.Result
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *GenericInterfaceListData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]GenericInterfaceListInterfaces, 0)
@@ -255,7 +256,7 @@ func (data *GenericInterfaceListData) fromBody(ctx context.Context, res gjson.Re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *GenericInterfaceList) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
 		data.Interfaces = make([]GenericInterfaceListInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := GenericInterfaceListInterfaces{}
@@ -273,7 +274,7 @@ func (data *GenericInterfaceList) fromBodyXML(ctx context.Context, res xmldot.Re
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *GenericInterfaceListData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
 		data.Interfaces = make([]GenericInterfaceListInterfaces, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := GenericInterfaceListInterfaces{}
@@ -349,9 +350,10 @@ func (data *GenericInterfaceList) getEmptyLeafsDelete(ctx context.Context, state
 func (data *GenericInterfaceList) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Interfaces {
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[interface-name=" + data.Interfaces[i].InterfaceName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyPath))
 	}
 
 	return deletePaths
@@ -362,7 +364,8 @@ func (data *GenericInterfaceList) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *GenericInterfaceList) addDeletedItemsXML(ctx context.Context, state GenericInterfaceList, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.Interfaces {
@@ -392,12 +395,11 @@ func (data *GenericInterfaceList) addDeletedItemsXML(ctx context.Context, state 
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v", predicates))
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -418,7 +420,6 @@ func (data *GenericInterfaceList) addDeletePathsXML(ctx context.Context, body st
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/interfaces/interface%v", predicates))
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

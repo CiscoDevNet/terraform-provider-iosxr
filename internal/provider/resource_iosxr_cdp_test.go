@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -68,6 +68,21 @@ func TestAccIosxrCDP(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrCDPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrCDPConfig_minimum() string {
@@ -93,16 +108,3 @@ func testAccIosxrCDPConfig_all() string {
 }
 
 // End of section. //template:end testAccConfigAll
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrCDPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-
-		return fmt.Sprintf(""), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-
-// End of section. //template:end testPrerequisites

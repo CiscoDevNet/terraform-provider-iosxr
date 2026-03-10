@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -85,12 +85,36 @@ func TestAccIosxrSegmentRoutingV6(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrSegmentRoutingV6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrSegmentRoutingV6PrerequisitesConfig = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
+	attributes = {
+		"enable" = "<NULL>"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrSegmentRoutingV6Config_minimum() string {
 	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
 	config += `	sid_holdtime = 10` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -130,31 +154,9 @@ func testAccIosxrSegmentRoutingV6Config_all() string {
 		config += `	encapsulation_hop_limit_value = 1` + "\n"
 	}
 	config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrSegmentRoutingV6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-
-		return fmt.Sprintf(""), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrSegmentRoutingV6PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
-	attributes = {
-		"enable" = "<NULL>"
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites

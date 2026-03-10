@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://mozilla.org/MPL/2.0/
+//	https://mozilla.org/MPL/2.0/
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -208,13 +208,48 @@ func TestAccIosxrVRF(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+
+		return fmt.Sprintf("%s", VrfName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrVRFPrerequisitesConfig = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_IMPORT_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "VRF_IMPORT_POLICY_1"
+		"rpl-route-policy" = "route-policy VRF_IMPORT_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_EXPORT_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "VRF_EXPORT_POLICY_1"
+		"rpl-route-policy" = "route-policy VRF_EXPORT_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+`
+
+// End of section. //template:end testPrerequisites
+
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrVRFConfig_minimum() string {
 	config := `resource "iosxr_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF4"` + "\n"
 	config += `	description = "My VRF Description"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -421,42 +456,9 @@ func testAccIosxrVRFConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	vpn_id = "1000:1000"` + "\n"
 	config += `	remote_route_filtering_disable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 // End of section. //template:end testAccConfigAll
-// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-
-func iosxrVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		primary := s.RootModule().Resources[resourceName].Primary
-		VrfName := primary.Attributes["vrf_name"]
-
-		return fmt.Sprintf("%s", VrfName), nil
-	}
-}
-
-// End of section. //template:end importStateIdFunc
-// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrVRFPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_IMPORT_POLICY_1]"
-	attributes = {
-		"route-policy-name" = "VRF_IMPORT_POLICY_1"
-		"rpl-route-policy" = "route-policy VRF_IMPORT_POLICY_1\n  pass\nend-policy\n"
-	}
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_EXPORT_POLICY_1]"
-	attributes = {
-		"route-policy-name" = "VRF_EXPORT_POLICY_1"
-		"rpl-route-policy" = "route-policy VRF_EXPORT_POLICY_1\n  pass\nend-policy\n"
-	}
-}
-
-`
-
-// End of section. //template:end testPrerequisites

@@ -208,82 +208,84 @@ func (data RouterMLD) toBody(ctx context.Context) string {
 func (data *RouterMLD) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "nsf.lifetime"); value.Exists() && !data.NsfLifetime.IsNull() {
 		data.NsfLifetime = types.Int64Value(value.Int())
-	} else {
+	} else if data.NsfLifetime.IsNull() {
 		data.NsfLifetime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "robustness-variable"); value.Exists() && !data.RobustnessVariable.IsNull() {
 		data.RobustnessVariable = types.Int64Value(value.Int())
-	} else {
+	} else if data.RobustnessVariable.IsNull() {
 		data.RobustnessVariable = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "maximum.groups"); value.Exists() && !data.MaximumGroups.IsNull() {
 		data.MaximumGroups = types.Int64Value(value.Int())
-	} else {
+	} else if data.MaximumGroups.IsNull() {
 		data.MaximumGroups = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "maximum.groups-per-interface.maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
-	} else {
+	} else if data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "maximum.groups-per-interface.threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "maximum.groups-per-interface.access-list"); value.Exists() && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
-	} else {
+	} else if data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "version"); value.Exists() && !data.Version.IsNull() {
 		data.Version = types.Int64Value(value.Int())
-	} else {
+	} else if data.Version.IsNull() {
 		data.Version = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "explicit-tracking"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ExplicitTracking.IsNull() {
 			data.ExplicitTracking = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ExplicitTracking.IsNull() {
 			data.ExplicitTracking = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "explicit-tracking.access-list"); value.Exists() && !data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
-	} else {
+	} else if data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "explicit-tracking.disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.ExplicitTrackingDisable.IsNull() {
 			data.ExplicitTrackingDisable = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.ExplicitTrackingDisable.IsNull() {
 			data.ExplicitTrackingDisable = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "access-group"); value.Exists() && !data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringValue(value.String())
-	} else {
+	} else if data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringNull()
 	}
 	for i := range data.SsmMapStatics {
@@ -321,33 +323,34 @@ func (data *RouterMLD) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	if value := gjson.GetBytes(res, "ssm.map.query.dns"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
 		if !data.SsmMapQueryDns.IsNull() {
 			data.SsmMapQueryDns = types.BoolValue(true)
 		}
 	} else {
-		// For presence-based booleans, only set to null if the attribute is null in state
+		// For presence-based booleans, only set to null if it's already null
 		if data.SsmMapQueryDns.IsNull() {
 			data.SsmMapQueryDns = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "missed-packets.gen-query"); value.Exists() && !data.MissedPacketsGenQuery.IsNull() {
 		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
-	} else {
+	} else if data.MissedPacketsGenQuery.IsNull() {
 		data.MissedPacketsGenQuery = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "missed-packets.grp-spec-query"); value.Exists() && !data.MissedPacketsGrpSpecQuery.IsNull() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
-	} else {
+	} else if data.MissedPacketsGrpSpecQuery.IsNull() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "missed-packets.ssm-query"); value.Exists() && !data.MissedPacketsSsmQuery.IsNull() {
 		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
-	} else {
+	} else if data.MissedPacketsSsmQuery.IsNull() {
 		data.MissedPacketsSsmQuery = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "missed-packets.member-report"); value.Exists() && !data.MissedPacketsMemberReport.IsNull() {
 		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
-	} else {
+	} else if data.MissedPacketsMemberReport.IsNull() {
 		data.MissedPacketsMemberReport = types.Int64Null()
 	}
 }
@@ -404,17 +407,14 @@ func (data RouterMLD) toBodyXML(ctx context.Context) string {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/access-group", data.AccessGroup.ValueString())
 	}
 	if len(data.SsmMapStatics) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.SsmMapStatics {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/ssm/map/statics/static"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "address", item.Address.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
 			if !item.AccessList.IsNull() && !item.AccessList.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "access-list", item.AccessList.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/access-list", item.AccessList.ValueString())
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"ssm/map/statics/static", cBody.Res())
 		}
 	}
 	if !data.SsmMapQueryDns.IsNull() && !data.SsmMapQueryDns.IsUnknown() {
@@ -434,10 +434,14 @@ func (data RouterMLD) toBodyXML(ctx context.Context) string {
 	if !data.MissedPacketsMemberReport.IsNull() && !data.MissedPacketsMemberReport.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/missed-packets/member-report", strconv.FormatInt(data.MissedPacketsMemberReport.ValueInt64(), 10))
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -445,78 +449,84 @@ func (data RouterMLD) toBodyXML(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterMLD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nsf/lifetime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/nsf/lifetime"); value.Exists() && !data.NsfLifetime.IsNull() {
 		data.NsfLifetime = types.Int64Value(value.Int())
 	} else if data.NsfLifetime.IsNull() {
 		data.NsfLifetime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/robustness-variable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/robustness-variable"); value.Exists() && !data.RobustnessVariable.IsNull() {
 		data.RobustnessVariable = types.Int64Value(value.Int())
 	} else if data.RobustnessVariable.IsNull() {
 		data.RobustnessVariable = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups"); value.Exists() && !data.MaximumGroups.IsNull() {
 		data.MaximumGroups = types.Int64Value(value.Int())
 	} else if data.MaximumGroups.IsNull() {
 		data.MaximumGroups = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
 	} else if data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version"); value.Exists() && !data.Version.IsNull() {
 		data.Version = types.Int64Value(value.Int())
 	} else if data.Version.IsNull() {
 		data.Version = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Value(value.Int())
 	} else if data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Value(value.Int())
 	} else if data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-max-response-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
 	} else if data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking"); value.Exists() {
-		data.ExplicitTracking = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ExplicitTracking.IsNull() {
+			data.ExplicitTracking = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ExplicitTracking.IsNull() {
 			data.ExplicitTracking = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() && !data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
 	} else if data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
-		data.ExplicitTrackingDisable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ExplicitTrackingDisable.IsNull() {
+			data.ExplicitTrackingDisable = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.ExplicitTrackingDisable.IsNull() {
 			data.ExplicitTrackingDisable = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group"); value.Exists() && !data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringValue(value.String())
 	} else if data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringNull()
@@ -526,7 +536,7 @@ func (data *RouterMLD) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 		keyValues := [...]string{data.SsmMapStatics[i].Address.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/ssm/map/statics/static").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ssm/map/statics/static").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -544,41 +554,44 @@ func (data *RouterMLD) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "address"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.SsmMapStatics[i].Address.IsNull() {
 			data.SsmMapStatics[i].Address = types.StringValue(value.String())
 		} else if data.SsmMapStatics[i].Address.IsNull() {
 			data.SsmMapStatics[i].Address = types.StringNull()
 		}
-		if value := helpers.GetFromXPath(r, "access-list"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "access-list"); value.Exists() && !data.SsmMapStatics[i].AccessList.IsNull() {
 			data.SsmMapStatics[i].AccessList = types.StringValue(value.String())
 		} else if data.SsmMapStatics[i].AccessList.IsNull() {
 			data.SsmMapStatics[i].AccessList = types.StringNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ssm/map/query/dns"); value.Exists() {
-		data.SsmMapQueryDns = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ssm/map/query/dns"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SsmMapQueryDns.IsNull() {
+			data.SsmMapQueryDns = types.BoolValue(true)
+		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
 		if data.SsmMapQueryDns.IsNull() {
 			data.SsmMapQueryDns = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/gen-query"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/gen-query"); value.Exists() && !data.MissedPacketsGenQuery.IsNull() {
 		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
 	} else if data.MissedPacketsGenQuery.IsNull() {
 		data.MissedPacketsGenQuery = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/grp-spec-query"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/grp-spec-query"); value.Exists() && !data.MissedPacketsGrpSpecQuery.IsNull() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
 	} else if data.MissedPacketsGrpSpecQuery.IsNull() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/ssm-query"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/ssm-query"); value.Exists() && !data.MissedPacketsSsmQuery.IsNull() {
 		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
 	} else if data.MissedPacketsSsmQuery.IsNull() {
 		data.MissedPacketsSsmQuery = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/member-report"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/member-report"); value.Exists() && !data.MissedPacketsMemberReport.IsNull() {
 		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
 	} else if data.MissedPacketsMemberReport.IsNull() {
 		data.MissedPacketsMemberReport = types.Int64Null()
@@ -592,6 +605,10 @@ func (data *RouterMLD) fromBody(ctx context.Context, res gjson.Result) {
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "nsf.lifetime"); value.Exists() {
 		data.NsfLifetime = types.Int64Value(value.Int())
@@ -625,16 +642,18 @@ func (data *RouterMLD) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "explicit-tracking"); value.Exists() {
 		data.ExplicitTracking = types.BoolValue(true)
-	} else {
-		data.ExplicitTracking = types.BoolNull()
+	} else if !data.ExplicitTracking.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ExplicitTracking = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "explicit-tracking.access-list"); value.Exists() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
 	}
 	if value := res.Get(prefix + "explicit-tracking.disable"); value.Exists() {
 		data.ExplicitTrackingDisable = types.BoolValue(true)
-	} else {
-		data.ExplicitTrackingDisable = types.BoolNull()
+	} else if !data.ExplicitTrackingDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ExplicitTrackingDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "access-group"); value.Exists() {
 		data.AccessGroup = types.StringValue(value.String())
@@ -655,8 +674,9 @@ func (data *RouterMLD) fromBody(ctx context.Context, res gjson.Result) {
 	}
 	if value := res.Get(prefix + "ssm.map.query.dns"); value.Exists() {
 		data.SsmMapQueryDns = types.BoolValue(true)
-	} else {
-		data.SsmMapQueryDns = types.BoolNull()
+	} else if !data.SsmMapQueryDns.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SsmMapQueryDns = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "missed-packets.gen-query"); value.Exists() {
 		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
@@ -676,9 +696,14 @@ func (data *RouterMLD) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterMLDData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "nsf.lifetime"); value.Exists() {
 		data.NsfLifetime = types.Int64Value(value.Int())
@@ -713,7 +738,7 @@ func (data *RouterMLDData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "explicit-tracking"); value.Exists() {
 		data.ExplicitTracking = types.BoolValue(true)
 	} else {
-		data.ExplicitTracking = types.BoolNull()
+		data.ExplicitTracking = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "explicit-tracking.access-list"); value.Exists() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
@@ -721,7 +746,7 @@ func (data *RouterMLDData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "explicit-tracking.disable"); value.Exists() {
 		data.ExplicitTrackingDisable = types.BoolValue(true)
 	} else {
-		data.ExplicitTrackingDisable = types.BoolNull()
+		data.ExplicitTrackingDisable = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "access-group"); value.Exists() {
 		data.AccessGroup = types.StringValue(value.String())
@@ -743,7 +768,7 @@ func (data *RouterMLDData) fromBody(ctx context.Context, res gjson.Result) {
 	if value := res.Get(prefix + "ssm.map.query.dns"); value.Exists() {
 		data.SsmMapQueryDns = types.BoolValue(true)
 	} else {
-		data.SsmMapQueryDns = types.BoolNull()
+		data.SsmMapQueryDns = types.BoolValue(false)
 	}
 	if value := res.Get(prefix + "missed-packets.gen-query"); value.Exists() {
 		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
@@ -763,53 +788,53 @@ func (data *RouterMLDData) fromBody(ctx context.Context, res gjson.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterMLD) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nsf/lifetime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/nsf/lifetime"); value.Exists() {
 		data.NsfLifetime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/robustness-variable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/robustness-variable"); value.Exists() {
 		data.RobustnessVariable = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups"); value.Exists() {
 		data.MaximumGroups = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version"); value.Exists() {
 		data.Version = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-interval"); value.Exists() {
 		data.QueryInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-timeout"); value.Exists() {
 		data.QueryTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-max-response-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-max-response-time"); value.Exists() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking"); value.Exists() {
 		data.ExplicitTracking = types.BoolValue(true)
 	} else {
-		data.ExplicitTracking = types.BoolNull()
+		data.ExplicitTracking = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
 		data.ExplicitTrackingDisable = types.BoolValue(true)
 	} else {
-		data.ExplicitTrackingDisable = types.BoolNull()
+		data.ExplicitTrackingDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group"); value.Exists() {
 		data.AccessGroup = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ssm/map/statics/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ssm/map/statics/static"); value.Exists() {
 		data.SsmMapStatics = make([]RouterMLDSsmMapStatics, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterMLDSsmMapStatics{}
@@ -823,21 +848,21 @@ func (data *RouterMLD) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ssm/map/query/dns"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ssm/map/query/dns"); value.Exists() {
 		data.SsmMapQueryDns = types.BoolValue(true)
 	} else {
-		data.SsmMapQueryDns = types.BoolNull()
+		data.SsmMapQueryDns = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/gen-query"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/gen-query"); value.Exists() {
 		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/grp-spec-query"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/grp-spec-query"); value.Exists() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/ssm-query"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/ssm-query"); value.Exists() {
 		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/member-report"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/member-report"); value.Exists() {
 		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
 	}
 }
@@ -846,53 +871,53 @@ func (data *RouterMLD) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterMLDData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/nsf/lifetime"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/nsf/lifetime"); value.Exists() {
 		data.NsfLifetime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/robustness-variable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/robustness-variable"); value.Exists() {
 		data.RobustnessVariable = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups"); value.Exists() {
 		data.MaximumGroups = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/maximum-number"); value.Exists() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/threshold"); value.Exists() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum/groups-per-interface/access-list"); value.Exists() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/version"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version"); value.Exists() {
 		data.Version = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-interval"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-interval"); value.Exists() {
 		data.QueryInterval = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-timeout"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-timeout"); value.Exists() {
 		data.QueryTimeout = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/query-max-response-time"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/query-max-response-time"); value.Exists() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking"); value.Exists() {
 		data.ExplicitTracking = types.BoolValue(true)
 	} else {
 		data.ExplicitTracking = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/access-list"); value.Exists() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/explicit-tracking/disable"); value.Exists() {
 		data.ExplicitTrackingDisable = types.BoolValue(true)
 	} else {
 		data.ExplicitTrackingDisable = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/access-group"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/access-group"); value.Exists() {
 		data.AccessGroup = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ssm/map/statics/static"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ssm/map/statics/static"); value.Exists() {
 		data.SsmMapStatics = make([]RouterMLDSsmMapStatics, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := RouterMLDSsmMapStatics{}
@@ -906,21 +931,21 @@ func (data *RouterMLDData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/ssm/map/query/dns"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ssm/map/query/dns"); value.Exists() {
 		data.SsmMapQueryDns = types.BoolValue(true)
 	} else {
 		data.SsmMapQueryDns = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/gen-query"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/gen-query"); value.Exists() {
 		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/grp-spec-query"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/grp-spec-query"); value.Exists() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/ssm-query"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/ssm-query"); value.Exists() {
 		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/missed-packets/member-report"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/missed-packets/member-report"); value.Exists() {
 		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
 	}
 }
@@ -1078,9 +1103,10 @@ func (data *RouterMLD) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssm/map/query/dns", data.getPath()))
 	}
 	for i := range data.SsmMapStatics {
-		keyValues := [...]string{data.SsmMapStatics[i].Address.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssm/map/statics/static=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.SsmMapStatics[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssm/map/statics/static%v", data.getPath(), keyPath))
 	}
 	if !data.AccessGroup.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/access-group", data.getPath()))
@@ -1132,42 +1158,83 @@ func (data *RouterMLD) getDeletePaths(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RouterMLD) addDeletedItemsXML(ctx context.Context, state RouterMLD, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.MissedPacketsMemberReport.IsNull() && data.MissedPacketsMemberReport.IsNull() {
 		deletePath := state.getXPath() + "/missed-packets/member-report"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MissedPacketsSsmQuery.IsNull() && data.MissedPacketsSsmQuery.IsNull() {
 		deletePath := state.getXPath() + "/missed-packets/ssm-query"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MissedPacketsGrpSpecQuery.IsNull() && data.MissedPacketsGrpSpecQuery.IsNull() {
 		deletePath := state.getXPath() + "/missed-packets/grp-spec-query"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MissedPacketsGenQuery.IsNull() && data.MissedPacketsGenQuery.IsNull() {
 		deletePath := state.getXPath() + "/missed-packets/gen-query"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SsmMapQueryDns.IsNull() && state.SsmMapQueryDns.ValueBool() && data.SsmMapQueryDns.IsNull() {
 		deletePath := state.getXPath() + "/ssm/map/query/dns"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1195,70 +1262,134 @@ func (data *RouterMLD) addDeletedItemsXML(ctx context.Context, state RouterMLD, 
 			}
 			if found {
 				if !state.SsmMapStatics[i].AccessList.IsNull() && data.SsmMapStatics[j].AccessList.IsNull() {
-					deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ssm/map/statics/static%v/access-list", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ssm/map/statics/static%v/access-list", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/ssm/map/statics/static%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ssm/map/statics/static%v", predicates))
 		}
 	}
 	if !state.AccessGroup.IsNull() && data.AccessGroup.IsNull() {
 		deletePath := state.getXPath() + "/access-group"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ExplicitTrackingDisable.IsNull() && state.ExplicitTrackingDisable.ValueBool() && data.ExplicitTrackingDisable.IsNull() {
 		deletePath := state.getXPath() + "/explicit-tracking/disable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.ExplicitTrackingAcl.IsNull() && data.ExplicitTrackingAcl.IsNull() {
 		deletePath := state.getXPath() + "/explicit-tracking/access-list"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ExplicitTracking.IsNull() && state.ExplicitTracking.ValueBool() && data.ExplicitTracking.IsNull() {
 		deletePath := state.getXPath() + "/explicit-tracking"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.QueryMaxResponseTime.IsNull() && data.QueryMaxResponseTime.IsNull() {
 		deletePath := state.getXPath() + "/query-max-response-time"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.QueryTimeout.IsNull() && data.QueryTimeout.IsNull() {
 		deletePath := state.getXPath() + "/query-timeout"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.QueryInterval.IsNull() && data.QueryInterval.IsNull() {
 		deletePath := state.getXPath() + "/query-interval"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.Version.IsNull() && data.Version.IsNull() {
 		deletePath := state.getXPath() + "/version"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1283,7 +1414,7 @@ func (data *RouterMLD) addDeletedItemsXML(ctx context.Context, state RouterMLD, 
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1308,7 +1439,7 @@ func (data *RouterMLD) addDeletedItemsXML(ctx context.Context, state RouterMLD, 
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
@@ -1333,34 +1464,57 @@ func (data *RouterMLD) addDeletedItemsXML(ctx context.Context, state RouterMLD, 
 			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
 		}
 		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.MaximumGroups.IsNull() && data.MaximumGroups.IsNull() {
 		deletePath := state.getXPath() + "/maximum/groups"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.RobustnessVariable.IsNull() && data.RobustnessVariable.IsNull() {
 		deletePath := state.getXPath() + "/robustness-variable"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	if !state.NsfLifetime.IsNull() && data.NsfLifetime.IsNull() {
 		deletePath := state.getXPath() + "/nsf/lifetime"
-		if !deletedPaths[deletePath] {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, deletePath)
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -1437,7 +1591,6 @@ func (data *RouterMLD) addDeletePathsXML(ctx context.Context, body string) strin
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/nsf/lifetime")
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

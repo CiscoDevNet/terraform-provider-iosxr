@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -99,7 +98,6 @@ func (data SegmentRoutingMappingServer) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.ValueString())
 			}
 			if len(item.PrefixAddresses) > 0 {
-				body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"prefix-address", []interface{}{})
 				for cindex, citem := range item.PrefixAddresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"prefix-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -191,14 +189,14 @@ func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res
 			} else {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length = types.StringNull()
 			}
-			if value := cr.Get("sid-index"); value.Exists() {
+			if value := cr.Get("sid-index"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Value(value.Int())
-			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() {
+			} else {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Null()
 			}
-			if value := cr.Get("range"); value.Exists() {
+			if value := cr.Get("range"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Value(value.Int())
-			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() {
+			} else {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Null()
 			}
 			if value := cr.Get("attached"); value.Exists() {
@@ -221,38 +219,43 @@ func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res
 func (data SegmentRoutingMappingServer) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
 	if len(data.MappingPrefixSidAddressFamily) > 0 {
-		// Build all list items and append them using AppendFromXPath
 		for _, item := range data.MappingPrefixSidAddressFamily {
-			cBody := netconf.Body{}
+			basePath := data.getXPath() + "/prefix-sid-map/address-families/address-family"
 			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
-				cBody = helpers.SetFromXPath(cBody, "af-name", item.AfName.ValueString())
+				body = helpers.SetFromXPath(body, basePath+"/af-name", item.AfName.ValueString())
 			}
 			if len(item.PrefixAddresses) > 0 {
 				for _, citem := range item.PrefixAddresses {
-					ccBody := netconf.Body{}
-					_ = citem // Suppress unused variable warning when all attributes are IDs
+					cbasePath := basePath + "/prefix-address[address='" + citem.Address.ValueString() + "' and length='" + citem.Length.ValueString() + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", citem.Length.ValueString())
+					}
 					if !citem.SidIndex.IsNull() && !citem.SidIndex.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "sid-index", strconv.FormatInt(citem.SidIndex.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/sid-index", strconv.FormatInt(citem.SidIndex.ValueInt64(), 10))
 					}
 					if !citem.Range.IsNull() && !citem.Range.IsUnknown() {
-						ccBody = helpers.SetFromXPath(ccBody, "range", strconv.FormatInt(citem.Range.ValueInt64(), 10))
+						body = helpers.SetFromXPath(body, cbasePath+"/range", strconv.FormatInt(citem.Range.ValueInt64(), 10))
 					}
 					if !citem.Attached.IsNull() && !citem.Attached.IsUnknown() {
 						if citem.Attached.ValueBool() {
-							ccBody = helpers.SetFromXPath(ccBody, "attached", "")
+							body = helpers.SetFromXPath(body, cbasePath+"/attached", "")
 						}
 					}
-					cBody = helpers.SetRawFromXPath(cBody, "prefix-address", ccBody.Res())
 				}
 			}
-			// Append each list item to the parent path using AppendFromXPath with raw XML
-			body = helpers.AppendRawFromXPath(body, data.getXPath()+"/"+"prefix-sid-map/address-families/address-family", cBody.Res())
 		}
 	}
-	bodyString, err := body.String()
+	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
 	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
 	return bodyString
 }
 
@@ -265,7 +268,7 @@ func (data *SegmentRoutingMappingServer) updateFromBodyXML(ctx context.Context, 
 		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid-map/address-families/address-family").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid-map/address-families/address-family").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -283,7 +286,7 @@ func (data *SegmentRoutingMappingServer) updateFromBodyXML(ctx context.Context, 
 				return true
 			},
 		)
-		if value := helpers.GetFromXPath(r, "af-name"); value.Exists() {
+		if value := helpers.GetFromXPath(r, "af-name"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].AfName.IsNull() {
 			data.MappingPrefixSidAddressFamily[i].AfName = types.StringValue(value.String())
 		} else if data.MappingPrefixSidAddressFamily[i].AfName.IsNull() {
 			data.MappingPrefixSidAddressFamily[i].AfName = types.StringNull()
@@ -311,24 +314,24 @@ func (data *SegmentRoutingMappingServer) updateFromBodyXML(ctx context.Context, 
 					return true
 				},
 			)
-			if value := helpers.GetFromXPath(cr, "address"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address = types.StringValue(value.String())
-			} else {
+			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Address = types.StringNull()
 			}
-			if value := helpers.GetFromXPath(cr, "length"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length = types.StringValue(value.String())
-			} else {
+			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Length = types.StringNull()
 			}
-			if value := helpers.GetFromXPath(cr, "sid-index"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "sid-index"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Value(value.Int())
-			} else {
+			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex = types.Int64Null()
 			}
-			if value := helpers.GetFromXPath(cr, "range"); value.Exists() {
+			if value := helpers.GetFromXPath(cr, "range"); value.Exists() && !data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Value(value.Int())
-			} else {
+			} else if data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() {
 				data.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "attached"); value.Exists() {
@@ -353,6 +356,10 @@ func (data *SegmentRoutingMappingServer) fromBody(ctx context.Context, res gjson
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
 	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
 	if value := res.Get(prefix + "prefix-sid-map.address-families.address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -378,8 +385,9 @@ func (data *SegmentRoutingMappingServer) fromBody(ctx context.Context, res gjson
 					}
 					if ccValue := cv.Get("attached"); ccValue.Exists() {
 						cItem.Attached = types.BoolValue(true)
-					} else {
-						cItem.Attached = types.BoolNull()
+					} else if !cItem.Attached.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Attached = types.BoolValue(false)
 					}
 					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
 					return true
@@ -395,9 +403,14 @@ func (data *SegmentRoutingMappingServer) fromBody(ctx context.Context, res gjson
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *SegmentRoutingMappingServerData) fromBody(ctx context.Context, res gjson.Result) {
+
 	prefix := helpers.LastElement(data.getPath()) + "."
 	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
 		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
 	}
 	if value := res.Get(prefix + "prefix-sid-map.address-families.address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
@@ -425,7 +438,7 @@ func (data *SegmentRoutingMappingServerData) fromBody(ctx context.Context, res g
 					if ccValue := cv.Get("attached"); ccValue.Exists() {
 						cItem.Attached = types.BoolValue(true)
 					} else {
-						cItem.Attached = types.BoolNull()
+						cItem.Attached = types.BoolValue(false)
 					}
 					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
 					return true
@@ -441,7 +454,7 @@ func (data *SegmentRoutingMappingServerData) fromBody(ctx context.Context, res g
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *SegmentRoutingMappingServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingMappingServerMappingPrefixSidAddressFamily{}
@@ -467,7 +480,7 @@ func (data *SegmentRoutingMappingServer) fromBodyXML(ctx context.Context, res xm
 					if ccValue := helpers.GetFromXPath(cv, "attached"); ccValue.Exists() {
 						cItem.Attached = types.BoolValue(true)
 					} else {
-						cItem.Attached = types.BoolNull()
+						cItem.Attached = types.BoolValue(false)
 					}
 					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
 					return true
@@ -483,7 +496,7 @@ func (data *SegmentRoutingMappingServer) fromBodyXML(ctx context.Context, res xm
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *SegmentRoutingMappingServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefix-sid-map/address-families/address-family"); value.Exists() {
 		data.MappingPrefixSidAddressFamily = make([]SegmentRoutingMappingServerMappingPrefixSidAddressFamily, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingMappingServerMappingPrefixSidAddressFamily{}
@@ -509,6 +522,7 @@ func (data *SegmentRoutingMappingServerData) fromBodyXML(ctx context.Context, re
 					if ccValue := helpers.GetFromXPath(cv, "attached"); ccValue.Exists() {
 						cItem.Attached = types.BoolValue(true)
 					} else {
+						cItem.Attached = types.BoolValue(false)
 					}
 					item.PrefixAddresses = append(item.PrefixAddresses, cItem)
 					return true
@@ -640,9 +654,10 @@ func (data *SegmentRoutingMappingServer) getEmptyLeafsDelete(ctx context.Context
 func (data *SegmentRoutingMappingServer) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.MappingPrefixSidAddressFamily {
-		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
-
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family=%v", data.getPath(), strings.Join(keyValues[:], ",")))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[af-name=" + data.MappingPrefixSidAddressFamily[i].AfName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid-map/address-families/address-family%v", data.getPath(), keyPath))
 	}
 
 	return deletePaths
@@ -652,7 +667,8 @@ func (data *SegmentRoutingMappingServer) getDeletePaths(ctx context.Context) []s
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *SegmentRoutingMappingServer) addDeletedItemsXML(ctx context.Context, state SegmentRoutingMappingServer, body string) string {
-	deleteXml := ""
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	for i := range state.MappingPrefixSidAddressFamily {
@@ -709,31 +725,30 @@ func (data *SegmentRoutingMappingServer) addDeletedItemsXML(ctx context.Context,
 						if found {
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.IsNull() && state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Attached.ValueBool() && data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].Attached.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v/prefix-address%v/attached", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v/prefix-address%v/attached", predicates, cpredicates))
 							}
 							if !state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].Range.IsNull() && data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].Range.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v/prefix-address%v/range", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v/prefix-address%v/range", predicates, cpredicates))
 							}
 							if !state.MappingPrefixSidAddressFamily[i].PrefixAddresses[ci].SidIndex.IsNull() && data.MappingPrefixSidAddressFamily[j].PrefixAddresses[cj].SidIndex.IsNull() {
-								deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v/prefix-address%v/sid-index", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v/prefix-address%v/sid-index", predicates, cpredicates))
 							}
 							break
 						}
 					}
 					if !found {
-						deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v/prefix-address%v", predicates, cpredicates))
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v/prefix-address%v", predicates, cpredicates))
 					}
 				}
 				break
 			}
 		}
 		if !found {
-			deleteXml += helpers.RemoveFromXPathString(netconf.Body{}, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/prefix-sid-map/address-families/address-family%v", predicates))
 		}
 	}
 
-	b := netconf.NewBody(deleteXml)
-	b = helpers.CleanupRedundantRemoveOperations(b)
+	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 
@@ -753,7 +768,6 @@ func (data *SegmentRoutingMappingServer) addDeletePathsXML(ctx context.Context, 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/prefix-sid-map/address-families/address-family%v", predicates))
 	}
 
-	b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
 }
 

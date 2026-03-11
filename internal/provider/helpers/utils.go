@@ -86,11 +86,7 @@ func GetValueSlice(result []gjson.Result) []attr.Value {
 
 // GetStringList converts gjson results to Terraform string list
 func GetStringList(result []gjson.Result) types.List {
-	v := make([]attr.Value, len(result))
-	for r := range result {
-		v[r] = types.StringValue(result[r].String())
-	}
-	return types.ListValueMust(types.StringType, v)
+	return types.ListValueMust(types.StringType, GetValueSlice(result))
 }
 
 // GetInt64List converts gjson results to Terraform int64 list
@@ -113,11 +109,7 @@ func GetStringSlice(result []gjson.Result) []types.String {
 
 // GetStringSet converts gjson results to Terraform string set
 func GetStringSet(result []gjson.Result) types.Set {
-	v := make([]attr.Value, len(result))
-	for r := range result {
-		v[r] = types.StringValue(result[r].String())
-	}
-	return types.SetValueMust(types.StringType, v)
+	return types.SetValueMust(types.StringType, GetValueSlice(result))
 }
 
 // GetInt64Set converts gjson results to Terraform int64 set
@@ -133,48 +125,49 @@ func GetInt64Set(result []gjson.Result) types.Set {
 // Terraform Type Conversion Utilities (XML/xmldot)
 // ============================================================================
 
-// GetStringListXML converts xmldot results to Terraform string list
-func GetStringListXML(result []xmldot.Result) types.List {
+// getStringAttrValuesXML is a helper that extracts string attr.Values from xmldot results
+func getStringAttrValuesXML(result []xmldot.Result) []attr.Value {
 	v := make([]attr.Value, len(result))
 	for r := range result {
 		v[r] = types.StringValue(result[r].String())
 	}
-	return types.ListValueMust(types.StringType, v)
+	return v
+}
+
+// getInt64AttrValuesXML is a helper that extracts int64 attr.Values from xmldot results
+func getInt64AttrValuesXML(result []xmldot.Result) []attr.Value {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.Int64Value(result[r].Int())
+	}
+	return v
+}
+
+// GetStringListXML converts xmldot results to Terraform string list
+func GetStringListXML(result []xmldot.Result) types.List {
+	return types.ListValueMust(types.StringType, getStringAttrValuesXML(result))
 }
 
 // GetInt64ListXML converts xmldot results to Terraform int64 list
 func GetInt64ListXML(result []xmldot.Result) types.List {
-	v := make([]attr.Value, len(result))
-	for r := range result {
-		v[r] = types.Int64Value(result[r].Int())
-	}
-	return types.ListValueMust(types.Int64Type, v)
+	return types.ListValueMust(types.Int64Type, getInt64AttrValuesXML(result))
 }
 
 // GetStringSetXML converts xmldot results to Terraform string set
 func GetStringSetXML(result []xmldot.Result) types.Set {
-	v := make([]attr.Value, len(result))
-	for r := range result {
-		v[r] = types.StringValue(result[r].String())
-	}
-	return types.SetValueMust(types.StringType, v)
+	return types.SetValueMust(types.StringType, getStringAttrValuesXML(result))
 }
 
 // GetInt64SetXML converts xmldot results to Terraform int64 set
 func GetInt64SetXML(result []xmldot.Result) types.Set {
-	v := make([]attr.Value, len(result))
-	for r := range result {
-		v[r] = types.Int64Value(result[r].Int())
-	}
-	return types.SetValueMust(types.Int64Type, v)
+	return types.SetValueMust(types.Int64Type, getInt64AttrValuesXML(result))
 }
 
 // GetAllChildElements returns all child elements with the given name from a parent xmldot.Result.
 // This is needed when multiple sibling elements have the same name in XML.
 func GetAllChildElements(parent xmldot.Result, elementName string) []xmldot.Result {
-	// Check if there are multiple elements
-	countPath := elementName + ".#"
-	count := parent.Get(countPath).Int()
+	// Check if there are multiple elements using BuildCountPath
+	count := parent.Get(BuildCountPath(elementName)).Int()
 
 	if count == 0 {
 		// No elements found
@@ -210,9 +203,7 @@ func GetAllChildElements(parent xmldot.Result, elementName string) []xmldot.Resu
 func ToYangShortName(s string) string {
 	elements := strings.Split(s, "/")
 	for i := range elements {
-		if strings.Contains(elements[i], ":") {
-			elements[i] = strings.Split(elements[i], ":")[1]
-		}
+		elements[i] = RemoveNamespacePrefix(elements[i])
 	}
 	return strings.Join(elements, "/")
 }
@@ -224,13 +215,10 @@ func ToGoName(s string) string {
 	p := strings.Split(s, "_")
 
 	for _, value := range p {
-		if strings.Contains(value, ":") {
-			value = strings.Split(value, ":")[1]
-		}
+		value = RemoveNamespacePrefix(value)
 		g = append(g, strings.Title(value))
 	}
-	s = strings.Join(g, "")
-	return s
+	return strings.Join(g, "")
 }
 
 // CamelCase converts string to camel case
@@ -288,10 +276,7 @@ func TopElementName(yangName string) string {
 	if idx := strings.Index(yangName, "/"); idx != -1 {
 		first = yangName[:idx]
 	}
-	if idx := strings.Index(first, ":"); idx != -1 {
-		return first[idx+1:]
-	}
-	return first
+	return RemoveNamespacePrefix(first)
 }
 
 // XmlNamespacePrefixFromXPath extracts the YANG module prefix from the first
@@ -304,19 +289,14 @@ func XmlNamespacePrefixFromXPath(xp string) string {
 	if idx := strings.Index(xp, "/"); idx != -1 {
 		first = xp[:idx]
 	}
-	if idx := strings.Index(first, ":"); idx != -1 {
-		return first[:idx]
-	}
-	return ""
+	return GetNamespacePrefixFromSegment(first)
 }
 
 // ExtractNamespacePrefix extracts namespace prefix from segment if present
 // Example: "Cisco-IOS-XR:interface" -> ("Cisco-IOS-XR", true)
 func ExtractNamespacePrefix(segment string) (string, bool) {
-	if idx := strings.Index(segment, ":"); idx != -1 {
-		return segment[:idx], true
-	}
-	return "", false
+	prefix := GetNamespacePrefixFromSegment(segment)
+	return prefix, prefix != ""
 }
 
 // ExtractNamespaceFromXPath extracts namespace prefix from XPath
@@ -361,7 +341,7 @@ func BuildParentPath(pathSegments []string) string {
 	if len(pathSegments) <= 1 {
 		return ""
 	}
-	return strings.Join(pathSegments[:len(pathSegments)-1], ".")
+	return BuildPathString(pathSegments[:len(pathSegments)-1])
 }
 
 // BuildXmlnsPath builds an xmldot path with .@xmlns suffix
@@ -386,7 +366,8 @@ func BuildPathFromSegments(segments []string, currentPath string) string {
 // BuildTentativePath creates a tentative path by appending a new element
 // Example: (["parent", "child"], "element") -> "parent.child.element"
 func BuildTentativePath(pathSegments []string, escapedElementName string) string {
-	return strings.Join(append(pathSegments[:len(pathSegments):len(pathSegments)], escapedElementName), ".")
+	newSegments := append(pathSegments[:len(pathSegments):len(pathSegments)], escapedElementName)
+	return BuildPathString(newSegments)
 }
 
 // ToDotPath converts path to dot notation
@@ -426,12 +407,7 @@ func GetLastPathElement(path string) string {
 	parts := strings.Split(path, "/")
 	for i := len(parts) - 1; i >= 0; i-- {
 		if parts[i] != "" {
-			// Remove namespace prefix if present (e.g., "Cisco-IOS-XR-um:element" -> "element")
-			element := parts[i]
-			if idx := strings.LastIndex(element, ":"); idx >= 0 {
-				element = element[idx+1:]
-			}
-			return element
+			return RemoveNamespacePrefix(parts[i])
 		}
 	}
 	return ""
@@ -519,9 +495,8 @@ func SplitXPathSegments(xPath string) []string {
 	return segments
 }
 
-// PrepareXPathSegments normalizes and cleans XPath segments for building structures.
-// This includes filtering empty segments and merging namespace prefixes.
-func PrepareXPathSegments(xPath string) []string {
+// prepareXPathSegmentsBase is a helper that normalizes, splits, and filters XPath segments
+func prepareXPathSegmentsBase(xPath string) []string {
 	xPath = NormalizeModuleXPath(xPath)
 	xPath = strings.TrimPrefix(xPath, "/")
 	segments := SplitXPathSegments(xPath)
@@ -533,7 +508,13 @@ func PrepareXPathSegments(xPath string) []string {
 			filteredSegments = append(filteredSegments, seg)
 		}
 	}
-	segments = filteredSegments
+	return filteredSegments
+}
+
+// PrepareXPathSegments normalizes and cleans XPath segments for building structures.
+// This includes filtering empty segments and merging namespace prefixes.
+func PrepareXPathSegments(xPath string) []string {
+	segments := prepareXPathSegmentsBase(xPath)
 
 	// Merge leading namespace prefix with next segment
 	if len(segments) > 0 && strings.HasSuffix(segments[0], ":") {
@@ -550,18 +531,7 @@ func PrepareXPathSegments(xPath string) []string {
 // PrepareGetFromXPathSegments normalizes and prepares segments for reading from XPath.
 // This merges namespace segments (e.g., ["ns:", "element"] -> ["ns:element"]).
 func PrepareGetFromXPathSegments(xPath string) []string {
-	xPath = NormalizeModuleXPath(xPath)
-	xPath = strings.TrimPrefix(xPath, "/")
-	segments := SplitXPathSegments(xPath)
-
-	// Filter empty segments
-	filteredSegments := make([]string, 0, len(segments))
-	for _, seg := range segments {
-		if seg != "" {
-			filteredSegments = append(filteredSegments, seg)
-		}
-	}
-	segments = filteredSegments
+	segments := prepareXPathSegmentsBase(xPath)
 
 	// Merge namespace segments (ns: + element)
 	mergedSegments := make([]string, 0, len(segments))
@@ -614,4 +584,149 @@ func ParseXPathSegment(segment string) (string, []KeyValue) {
 	}
 
 	return elementName, keys
+}
+
+// ============================================================================
+// XML String Manipulation Utilities
+// ============================================================================
+
+// FindRootElementBounds finds the start and end positions of root element tag
+func FindRootElementBounds(xmlStr string) (startIdx, closeIdx int, found bool) {
+	startIdx = strings.Index(xmlStr, "<")
+	if startIdx == -1 {
+		return 0, 0, false
+	}
+
+	closeIdx = strings.Index(xmlStr[startIdx:], ">")
+	if closeIdx == -1 {
+		return 0, 0, false
+	}
+	closeIdx += startIdx
+
+	return startIdx, closeIdx, true
+}
+
+// ExtractElementName extracts the element name from XML
+func ExtractElementName(xmlStr string, startIdx int) (string, bool) {
+	nameEndIdx := strings.IndexAny(xmlStr[startIdx+1:], "> ")
+	if nameEndIdx == -1 {
+		return "", false
+	}
+	nameEndIdx += startIdx + 1
+	return xmlStr[startIdx+1 : nameEndIdx], true
+}
+
+// CleanExistingNamespaces removes all xmlns declarations from a tag
+func CleanExistingNamespaces(rootTag string) string {
+	cleaned := rootTag
+	// Remove standard xmlns declarations
+	cleaned = regexp.MustCompile(`\s+xmlns="[^"]*"`).ReplaceAllString(cleaned, "")
+	// Remove malformed namespace declarations
+	cleaned = regexp.MustCompile(`\s+xmlns:_xmlns="[^"]*"`).ReplaceAllString(cleaned, "")
+	cleaned = regexp.MustCompile(`\s+_xmlns:nc="[^"]*"`).ReplaceAllString(cleaned, "")
+	return cleaned
+}
+
+// InsertNamespaceAfterElementName inserts xmlns attribute after element name
+func InsertNamespaceAfterElementName(cleaned, elementName, namespaceURL string) string {
+	insertPos := len("<" + elementName)
+	return cleaned[:insertPos] + fmt.Sprintf(` xmlns="%s"`, namespaceURL) + cleaned[insertPos:]
+}
+
+// InjectXMLSibling injects extra XML fragment(s) as siblings just before the closing tag
+// of the outermost element in xmlStr.
+// Example: InjectXMLSibling("<logging xmlns="..."><x/></logging>", "<y/>")
+// returns  "<logging xmlns="..."><x/><y/></logging>".
+// If extraXML is empty or xmlStr has no closing root tag, xmlStr is returned unchanged.
+func InjectXMLSibling(xmlStr string, extraXML string) string {
+	extraXML = strings.TrimSpace(extraXML)
+	if extraXML == "" {
+		return xmlStr
+	}
+	// Find the last closing tag
+	closeStart := strings.LastIndex(xmlStr, "</")
+	if closeStart == -1 {
+		return xmlStr
+	}
+	return xmlStr[:closeStart] + extraXML + xmlStr[closeStart:]
+}
+
+// ExtractInnerXML returns the XML content between the outermost element's opening and closing tags.
+// Given "<logging xmlns="..."><suppress>...</suppress></logging>", it returns
+// "<suppress>...</suppress>".
+// If the input is empty or has no inner content, it returns "".
+func ExtractInnerXML(xmlStr string) string {
+	xmlStr = strings.TrimSpace(xmlStr)
+	if xmlStr == "" {
+		return ""
+	}
+	// Find end of opening tag (first '>')
+	openEnd := strings.Index(xmlStr, ">")
+	if openEnd == -1 {
+		return ""
+	}
+	// Self-closing root element e.g. "<logging/>" has no inner content
+	if strings.HasSuffix(xmlStr[:openEnd+1], "/>") {
+		return ""
+	}
+	// Find the last closing tag (last '</')
+	closeStart := strings.LastIndex(xmlStr, "</")
+	if closeStart == -1 || closeStart <= openEnd {
+		return ""
+	}
+	inner := strings.TrimSpace(xmlStr[openEnd+1 : closeStart])
+	return inner
+}
+
+// CheckKeysMatch checks if an xmldot item matches all key-value pairs
+func CheckKeysMatch(item xmldot.Result, keys []KeyValue) bool {
+	for _, kv := range keys {
+		keyName := RemoveNamespacePrefix(kv.Key)
+		keyResult := item.Get(keyName)
+		if !keyResult.Exists() || keyResult.String() != kv.Value {
+			return false
+		}
+	}
+	return true
+}
+
+// FindElementByKeys finds element matching all key predicates in XML
+// Returns the path segments and whether the element was found
+func FindElementByKeys(xml, currentPath, escapedElementName string, keys []KeyValue, count int) ([]string, bool) {
+	pathSoFar := strings.Split(currentPath, ".")
+
+	if count > 1 {
+		// Multiple elements - search for matching keys
+		for idx := 0; idx < count; idx++ {
+			indexedPath := fmt.Sprintf("%s.%d", currentPath, idx)
+			item := xmldot.Get(xml, indexedPath)
+			if CheckKeysMatch(item, keys) {
+				pathSoFar[len(pathSoFar)-1] = fmt.Sprintf("%s.%d", escapedElementName, idx)
+				return pathSoFar, true
+			}
+		}
+	} else {
+		// Single element - check if it matches
+		item := xmldot.Get(xml, currentPath)
+		if CheckKeysMatch(item, keys) {
+			return pathSoFar, true
+		}
+	}
+
+	return pathSoFar, false
+}
+
+// BuildFinalResult builds final xmldot result from path, handling arrays
+func BuildFinalResult(xml string, pathSoFar []string) xmldot.Result {
+	finalPath := BuildPathString(pathSoFar)
+	count := xmldot.Get(xml, BuildCountPath(finalPath)).Int()
+
+	if count > 1 && len(pathSoFar) >= 2 {
+		parentPath := BuildParentPath(pathSoFar)
+		childName := pathSoFar[len(pathSoFar)-1]
+		arrayPath := parentPath + ".#." + childName
+		return xmldot.Get(xml, arrayPath)
+	}
+
+	return xmldot.Get(xml, finalPath)
 }

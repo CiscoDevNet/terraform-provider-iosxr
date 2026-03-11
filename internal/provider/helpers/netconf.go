@@ -268,16 +268,6 @@ func cacheKey(client *netconf.Client, uri string) string {
 	return fmt.Sprintf("%p:%s", client, uri)
 }
 
-func hasCapability(client *netconf.Client, uri string) bool {
-	key := cacheKey(client, uri)
-	if cached, ok := capabilityCache.Load(key); ok {
-		return cached.(bool)
-	}
-	supported := client.ServerHasCapability(uri)
-	capabilityCache.Store(key, supported)
-	return supported
-}
-
 // InvalidateCapabilityCache removes all cached capability entries for the given client.
 // Call this whenever the client reconnects so the next operation re-queries the server.
 func InvalidateCapabilityCache(client *netconf.Client) {
@@ -467,31 +457,14 @@ func IsGetConfigResponseEmpty(res *netconf.Res) bool {
 // IOS-XR devices do not support XPath filters, so we need to convert the XPath
 // into a subtree filter.
 func GetSubtreeFilter(xPath string) netconf.Filter {
-	// Remove leading slash if present
-	xPath = strings.TrimPrefix(xPath, "/")
+	// Use utility function to prepare XPath segments (handles trimming, splitting, filtering, and namespace merging)
+	segments := PrepareXPathSegments(xPath)
 
-	segments := SplitXPathSegments(xPath)
-
-	// Filter out empty segments (caused by // in XPath for augments)
-	filteredSegments := make([]string, 0, len(segments))
-	for _, seg := range segments {
-		if seg != "" {
-			filteredSegments = append(filteredSegments, seg)
-		}
-	}
-	segments = filteredSegments
-
-	// Handle the case where the namespace is in a separate segment (e.g., "Cisco-IOS-XR-um-hostname-cfg:" followed by "hostname")
+	// Extract namespace from first segment if present
 	var namespace string
-	processedSegments := make([]string, 0, len(segments))
-	for i, seg := range segments {
-		if strings.HasSuffix(seg, ":") && i == 0 {
-			namespace = strings.TrimSuffix(seg, ":")
-		} else if seg != "" {
-			processedSegments = append(processedSegments, seg)
-		}
+	if len(segments) > 0 {
+		namespace = GetNamespacePrefixFromSegment(segments[0])
 	}
-	segments = processedSegments
 
 	var content strings.Builder
 
@@ -501,21 +474,16 @@ func GetSubtreeFilter(xPath string) netconf.Filter {
 		var element string
 		var segmentNamespace string
 		if namespace == "" {
-			if idx := strings.Index(elementName, ":"); idx != -1 {
-				namespace = elementName[:idx]
-				segmentNamespace = namespace
-				element = elementName[idx+1:]
-			} else {
-				element = elementName
+			// Extract namespace from element name
+			segmentNamespace = GetNamespacePrefixFromSegment(elementName)
+			if segmentNamespace != "" {
+				namespace = segmentNamespace
 			}
+			element = RemoveNamespacePrefix(elementName)
 		} else {
 			// Check if this segment has its own namespace prefix
-			if idx := strings.Index(elementName, ":"); idx != -1 {
-				segmentNamespace = elementName[:idx]
-				element = elementName[idx+1:]
-			} else {
-				element = RemoveNamespacePrefix(elementName)
-			}
+			segmentNamespace = GetNamespacePrefixFromSegment(elementName)
+			element = RemoveNamespacePrefix(elementName)
 		}
 
 		if element == "" {
@@ -752,7 +720,7 @@ func augmentNamespaces(body netconf.Body, path string) netconf.Body {
 				xml = setRootElementNamespace(xml, cleanSegment, namespace)
 			} else {
 				// Nested element: use xmldot to insert xmlns
-				xmldotPath := currentPath + ".@xmlns"
+				xmldotPath := BuildXmlnsPath(currentPath)
 				xml = setNestedElementNamespace(xml, xmldotPath, namespace)
 			}
 		}
@@ -801,49 +769,6 @@ func ensureNCNamespaceOnRoot(body netconf.Body) netconf.Body {
 	return netconf.NewBody(newXML)
 }
 
-// findRootElementBounds finds the start and end positions of root element tag
-func findRootElementBounds(xmlStr string) (startIdx, closeIdx int, found bool) {
-	startIdx = strings.Index(xmlStr, "<")
-	if startIdx == -1 {
-		return 0, 0, false
-	}
-
-	closeIdx = strings.Index(xmlStr[startIdx:], ">")
-	if closeIdx == -1 {
-		return 0, 0, false
-	}
-	closeIdx += startIdx
-
-	return startIdx, closeIdx, true
-}
-
-// extractElementName extracts the element name from XML
-func extractElementName(xmlStr string, startIdx int) (string, bool) {
-	nameEndIdx := strings.IndexAny(xmlStr[startIdx+1:], "> ")
-	if nameEndIdx == -1 {
-		return "", false
-	}
-	nameEndIdx += startIdx + 1
-	return xmlStr[startIdx+1 : nameEndIdx], true
-}
-
-// cleanExistingNamespaces removes all xmlns declarations from a tag
-func cleanExistingNamespaces(rootTag string) string {
-	cleaned := rootTag
-	// Remove standard xmlns declarations
-	cleaned = regexp.MustCompile(`\s+xmlns="[^"]*"`).ReplaceAllString(cleaned, "")
-	// Remove malformed namespace declarations
-	cleaned = regexp.MustCompile(`\s+xmlns:_xmlns="[^"]*"`).ReplaceAllString(cleaned, "")
-	cleaned = regexp.MustCompile(`\s+_xmlns:nc="[^"]*"`).ReplaceAllString(cleaned, "")
-	return cleaned
-}
-
-// insertNamespaceAfterElementName inserts xmlns attribute after element name
-func insertNamespaceAfterElementName(cleaned, elementName, namespaceURL string) string {
-	insertPos := len("<" + elementName)
-	return cleaned[:insertPos] + fmt.Sprintf(` xmlns="%s"`, namespaceURL) + cleaned[insertPos:]
-}
-
 // AddNamespaceToRootElement adds a default namespace declaration to the root element of XML string.
 // This is needed because xmldot doesn't properly handle YANG namespace prefixes.
 // Given an XPath like "Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing/...", it extracts
@@ -858,7 +783,7 @@ func AddNamespaceToRootElement(xmlStr string, xPath string) string {
 	namespaceURL := getNamespaceURL(namespacePrefix)
 
 	// Find root element bounds
-	startIdx, closeIdx, found := findRootElementBounds(xmlStr)
+	startIdx, closeIdx, found := FindRootElementBounds(xmlStr)
 	if !found {
 		return xmlStr
 	}
@@ -866,15 +791,15 @@ func AddNamespaceToRootElement(xmlStr string, xPath string) string {
 	rootTag := xmlStr[startIdx : closeIdx+1]
 
 	// Extract element name
-	elementName, found := extractElementName(xmlStr, startIdx)
+	elementName, found := ExtractElementName(xmlStr, startIdx)
 	if !found {
 		return xmlStr
 	}
 
 	// If xmlns already exists, clean and re-add
 	if strings.Contains(rootTag, "xmlns=") {
-		cleaned := cleanExistingNamespaces(rootTag)
-		cleaned = insertNamespaceAfterElementName(cleaned, elementName, namespaceURL)
+		cleaned := CleanExistingNamespaces(rootTag)
+		cleaned = InsertNamespaceAfterElementName(cleaned, elementName, namespaceURL)
 		return xmlStr[:startIdx] + cleaned + xmlStr[closeIdx+1:]
 	}
 
@@ -924,7 +849,7 @@ func findOrCreateNamespacedSibling(body netconf.Body, tentativePath, cleanElemen
 
 	for n := 1; n <= maxSiblings; n++ {
 		idxPath := fmt.Sprintf("%s.%d", tentativePath, n)
-		ns := xmldot.Get(body.Res(), idxPath+".@xmlns").String()
+		ns := xmldot.Get(body.Res(), BuildXmlnsPath(idxPath)).String()
 		if ns == expectedNS {
 			siblingIdx = n
 			break
@@ -954,7 +879,7 @@ func findOrCreatePlainSibling(body netconf.Body, tentativePath, cleanElementName
 
 	for n := 1; n <= maxSiblings; n++ {
 		idxPath := fmt.Sprintf("%s.%d", tentativePath, n)
-		ns := xmldot.Get(body.Res(), idxPath+".@xmlns").String()
+		ns := xmldot.Get(body.Res(), BuildXmlnsPath(idxPath)).String()
 		if ns == "" {
 			if xmldot.Get(body.Res(), idxPath).Exists() {
 				siblingIdx = n
@@ -1129,58 +1054,6 @@ func resolveNamespaceForElement(xml, currentPath, escapedElementName, nsPrefix s
 	return pathSoFar, count, false
 }
 
-// checkKeysMatch checks if an item matches all key-value pairs
-func checkKeysMatch(item xmldot.Result, keys []KeyValue) bool {
-	for _, kv := range keys {
-		keyName := RemoveNamespacePrefix(kv.Key)
-		keyResult := item.Get(keyName)
-		if !keyResult.Exists() || keyResult.String() != kv.Value {
-			return false
-		}
-	}
-	return true
-}
-
-// findElementByKeys finds element matching all key predicates
-func findElementByKeys(xml, currentPath, escapedElementName string, keys []KeyValue, count int) ([]string, bool) {
-	pathSoFar := strings.Split(currentPath, ".")
-
-	if count > 1 {
-		// Multiple elements - search for matching keys
-		for idx := 0; idx < count; idx++ {
-			indexedPath := fmt.Sprintf("%s.%d", currentPath, idx)
-			item := xmldot.Get(xml, indexedPath)
-			if checkKeysMatch(item, keys) {
-				pathSoFar[len(pathSoFar)-1] = fmt.Sprintf("%s.%d", escapedElementName, idx)
-				return pathSoFar, true
-			}
-		}
-	} else {
-		// Single element - check if it matches
-		item := xmldot.Get(xml, currentPath)
-		if checkKeysMatch(item, keys) {
-			return pathSoFar, true
-		}
-	}
-
-	return pathSoFar, false
-}
-
-// buildFinalResult builds final result, handling arrays
-func buildFinalResult(xml string, pathSoFar []string) xmldot.Result {
-	finalPath := BuildPathString(pathSoFar)
-	count := xmldot.Get(xml, BuildCountPath(finalPath)).Int()
-
-	if count > 1 && len(pathSoFar) >= 2 {
-		parentPath := BuildParentPath(pathSoFar)
-		childName := pathSoFar[len(pathSoFar)-1]
-		arrayPath := parentPath + ".#." + childName
-		return xmldot.Get(xml, arrayPath)
-	}
-
-	return xmldot.Get(xml, finalPath)
-}
-
 // GetFromXPath reads from an xmldot.Result using an XPath that may contain predicates
 func GetFromXPath(res xmldot.Result, xPath string) xmldot.Result {
 	segments := PrepareGetFromXPathSegments(xPath)
@@ -1210,14 +1083,14 @@ func GetFromXPath(res xmldot.Result, xPath string) xmldot.Result {
 		// Handle key predicates
 		if len(keys) > 0 {
 			var found bool
-			pathSoFar, found = findElementByKeys(xml, currentPath, escapedElementName, keys, count)
+			pathSoFar, found = FindElementByKeys(xml, currentPath, escapedElementName, keys, count)
 			if !found {
 				return xmldot.Result{}
 			}
 		}
 	}
 
-	return buildFinalResult(xml, pathSoFar)
+	return BuildFinalResult(xml, pathSoFar)
 }
 
 // SetFromXPath creates all elements in an XPath and optionally sets a value
@@ -1230,9 +1103,9 @@ func SetFromXPath(body netconf.Body, xPath string, value any) netconf.Body {
 	body, pathSegments, originalSegments := buildXPathStructure(body, xPath, ensureStructure)
 
 	if hasValue && len(pathSegments) > 0 {
-		fullPath := strings.Join(pathSegments, ".")
+		fullPath := BuildPathString(pathSegments)
 		body = body.Set(fullPath, value)
-		originalPath := strings.Join(originalSegments, ".")
+		originalPath := BuildPathString(originalSegments)
 		body = augmentNamespaces(body, originalPath)
 	}
 
@@ -1249,9 +1122,9 @@ func AppendFromXPath(body netconf.Body, xPath string, value any) netconf.Body {
 	body, pathSegments, originalSegments := buildXPathStructure(body, xPath, ensureStructure)
 
 	if hasValue && len(pathSegments) > 0 {
-		fullPath := strings.Join(pathSegments, ".") + ".-1"
+		fullPath := BuildPathString(pathSegments) + ".-1"
 		body = body.Set(fullPath, value)
-		originalPath := strings.Join(originalSegments, ".")
+		originalPath := BuildPathString(originalSegments)
 		body = augmentNamespaces(body, originalPath)
 	}
 
@@ -1265,9 +1138,9 @@ func RemoveFromXPath(body netconf.Body, xPath string) netconf.Body {
 	body, pathSegments, originalSegments := buildXPathStructure(body, xPath, true)
 
 	if len(pathSegments) > 0 {
-		targetPath := strings.Join(pathSegments, ".")
+		targetPath := BuildPathString(pathSegments)
 
-		originalPath := strings.Join(originalSegments, ".")
+		originalPath := BuildPathString(originalSegments)
 		body = augmentNamespaces(body, originalPath)
 
 		body = ensureNCNamespaceOnRoot(body)
@@ -1287,49 +1160,4 @@ func BodyToNestedXML(body netconf.Body) (string, error) {
 	}
 
 	return xml, nil
-}
-
-// InjectXMLSibling injects extra XML fragment(s) as siblings just before the closing tag
-// of the outermost element in xmlStr.
-// Example: InjectXMLSibling("<logging xmlns="..."><x/></logging>", "<y/>")
-// returns  "<logging xmlns="..."><x/><y/></logging>".
-// If extraXML is empty or xmlStr has no closing root tag, xmlStr is returned unchanged.
-func InjectXMLSibling(xmlStr string, extraXML string) string {
-	extraXML = strings.TrimSpace(extraXML)
-	if extraXML == "" {
-		return xmlStr
-	}
-	// Find the last closing tag
-	closeStart := strings.LastIndex(xmlStr, "</")
-	if closeStart == -1 {
-		return xmlStr
-	}
-	return xmlStr[:closeStart] + extraXML + xmlStr[closeStart:]
-}
-
-// ExtractInnerXML returns the XML content between the outermost element's opening and closing tags.
-// Given "<logging xmlns="..."><suppress>...</suppress></logging>", it returns
-// "<suppress>...</suppress>".
-// If the input is empty or has no inner content, it returns "".
-func ExtractInnerXML(xmlStr string) string {
-	xmlStr = strings.TrimSpace(xmlStr)
-	if xmlStr == "" {
-		return ""
-	}
-	// Find end of opening tag (first '>')
-	openEnd := strings.Index(xmlStr, ">")
-	if openEnd == -1 {
-		return ""
-	}
-	// Self-closing root element e.g. "<logging/>" has no inner content
-	if strings.HasSuffix(xmlStr[:openEnd+1], "/>") {
-		return ""
-	}
-	// Find the last closing tag (last '</')
-	closeStart := strings.LastIndex(xmlStr, "</")
-	if closeStart == -1 || closeStart <= openEnd {
-		return ""
-	}
-	inner := strings.TrimSpace(xmlStr[openEnd+1 : closeStart])
-	return inner
 }

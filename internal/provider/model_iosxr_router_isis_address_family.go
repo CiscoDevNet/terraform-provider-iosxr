@@ -5895,10 +5895,10 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.PartitionDetectTracks[i].Ipv6.IsNull() && data.PartitionDetectTracks[j].Ipv6.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v/", state.getPath(), keyString))
 				}
 				if !state.PartitionDetectTracks[i].Ipv4.IsNull() && data.PartitionDetectTracks[j].Ipv4.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v/", state.getPath(), keyString))
 				}
 				break
 			}
@@ -7278,14 +7278,14 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		if !data.PartitionDetectTracks[i].Ipv6.IsNull() && !data.PartitionDetectTracks[i].Ipv6.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.PartitionDetectTracks) && !state.PartitionDetectTracks[i].Ipv6.IsNull() && state.PartitionDetectTracks[i].Ipv6.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect/tracks/track%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect/tracks/track%v/", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.PartitionDetectTracks[i].Ipv4.IsNull() && !data.PartitionDetectTracks[i].Ipv4.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.PartitionDetectTracks) && !state.PartitionDetectTracks[i].Ipv4.IsNull() && state.PartitionDetectTracks[i].Ipv4.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect/tracks/track%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect/tracks/track%v/", data.getXPath(), keyString))
 			}
 		}
 	}
@@ -13843,11 +13843,11 @@ func (data *RouterISISAddressFamily) addDeletedItemsXML(ctx context.Context, sta
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PartitionDetectTracks[i].Ipv6.IsNull() && state.PartitionDetectTracks[i].Ipv6.ValueBool() && data.PartitionDetectTracks[j].Ipv6.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/partition-detect/tracks/track%v/.", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/partition-detect/tracks/track%v/", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PartitionDetectTracks[i].Ipv4.IsNull() && state.PartitionDetectTracks[i].Ipv4.ValueBool() && data.PartitionDetectTracks[j].Ipv4.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/partition-detect/tracks/track%v/.", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/partition-detect/tracks/track%v/", predicates))
 				}
 				break
 			}

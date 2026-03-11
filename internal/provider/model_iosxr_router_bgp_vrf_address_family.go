@@ -5682,13 +5682,13 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 			}
 			if found {
 				if !state.Networks[i].Multipath.IsNull() && data.Networks[j].Multipath.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v/", state.getPath(), keyString))
 				}
 				if !state.Networks[i].Backdoor.IsNull() && data.Networks[j].Backdoor.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v/", state.getPath(), keyString))
 				}
 				if !state.Networks[i].RoutePolicy.IsNull() && data.Networks[j].RoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v/", state.getPath(), keyString))
 				}
 				break
 			}
@@ -6592,14 +6592,14 @@ func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context, 
 		if !data.Networks[i].Multipath.IsNull() && !data.Networks[i].Multipath.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.Networks) && !state.Networks[i].Multipath.IsNull() && state.Networks[i].Multipath.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/networks/network%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/networks/network%v/", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
 		if !data.Networks[i].Backdoor.IsNull() && !data.Networks[i].Backdoor.ValueBool() {
 			// Check if corresponding state item exists and has true value
 			if state != nil && i < len(state.Networks) && !state.Networks[i].Backdoor.IsNull() && state.Networks[i].Backdoor.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/networks/network%v/.", data.getXPath(), keyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/networks/network%v/", data.getXPath(), keyString))
 			}
 		}
 	}
@@ -13079,14 +13079,14 @@ func (data *RouterBGPVRFAddressFamily) addDeletedItemsXML(ctx context.Context, s
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Networks[i].Multipath.IsNull() && state.Networks[i].Multipath.ValueBool() && data.Networks[j].Multipath.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/networks/network%v/.", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/networks/network%v/", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Networks[i].Backdoor.IsNull() && state.Networks[i].Backdoor.ValueBool() && data.Networks[j].Backdoor.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/networks/network%v/.", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/networks/network%v/", predicates))
 				}
 				if !state.Networks[i].RoutePolicy.IsNull() && data.Networks[j].RoutePolicy.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/networks/network%v/.", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/networks/network%v/", predicates))
 				}
 				break
 			}

@@ -3254,6 +3254,4152 @@ func (data *PCE) updateFromBody(ctx context.Context, res []byte) {
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *PCE) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "address.ipv4"); value.Exists() {
+		data.AddressIpv4 = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "address.ipv6"); value.Exists() {
+		data.AddressIpv6 = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "state-sync.ipv4s.ipv4"); value.Exists() {
+		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEStateSyncIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.StateSyncIpv4s = append(data.StateSyncIpv4s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "state-sync.ipv6s.ipv6"); value.Exists() {
+		data.StateSyncIpv6s = make([]PCEStateSyncIpv6s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEStateSyncIpv6s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.StateSyncIpv6s = append(data.StateSyncIpv6s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "tcp-buffer.size"); value.Exists() {
+		data.TcpBufferSize = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "tcp-ao.key-chain-name"); value.Exists() {
+		data.TcpAoKeychainName = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "tcp-ao.include-tcp-options"); value.Exists() {
+		data.TcpAoIncludeTcpOptions = types.BoolValue(true)
+	} else if !data.TcpAoIncludeTcpOptions.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TcpAoIncludeTcpOptions = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "tcp-ao.accept-ao-mismatch-connection"); value.Exists() {
+		data.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
+	} else if !data.TcpAoAcceptAoMismatchConnection.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "disjoint-path.maximum-attempts"); value.Exists() {
+		data.DisjointPathMaximumAttempts = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "disjoint-path.group-ids.group-id"); value.Exists() {
+		data.DisjointPathGroupIds = make([]PCEDisjointPathGroupIds, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEDisjointPathGroupIds{}
+			if cValue := v.Get("group-id"); cValue.Exists() {
+				item.GroupId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.link.enable"); cValue.Exists() {
+				item.LinkDisjoint = types.BoolValue(true)
+			} else if !item.LinkDisjoint.IsNull() {
+				// Only set to false if it was previously set
+				item.LinkDisjoint = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.link.strict"); cValue.Exists() {
+				item.LinkDisjointStrict = types.BoolValue(true)
+			} else if !item.LinkDisjointStrict.IsNull() {
+				// Only set to false if it was previously set
+				item.LinkDisjointStrict = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.address-type"); cValue.Exists() {
+				item.LinkDisjointLspOnePccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.ip-address"); cValue.Exists() {
+				item.LinkDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.lsp-name"); cValue.Exists() {
+				item.LinkDisjointLspOnePccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.shortest-path"); cValue.Exists() {
+				item.LinkDisjointLspOnePccShortestPath = types.BoolValue(true)
+			} else if !item.LinkDisjointLspOnePccShortestPath.IsNull() {
+				// Only set to false if it was previously set
+				item.LinkDisjointLspOnePccShortestPath = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
+				item.LinkDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.link.lsp.two.pcc.address-type"); cValue.Exists() {
+				item.LinkDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.two.pcc.ip-address"); cValue.Exists() {
+				item.LinkDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.two.pcc.lsp-name"); cValue.Exists() {
+				item.LinkDisjointLspTwoPccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
+				item.LinkDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.link.sub-ids.sub-id"); cValue.Exists() {
+				item.LinkDisjointSubIds = make([]PCEDisjointPathGroupIdsLinkDisjointSubIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCEDisjointPathGroupIdsLinkDisjointSubIds{}
+					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
+						cItem.SubId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("strict"); ccValue.Exists() {
+						cItem.Strict = types.BoolValue(true)
+					} else if !cItem.Strict.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Strict = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
+						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
+						cItem.LspOnePccShortestPath = types.BoolValue(true)
+					} else if !cItem.LspOnePccShortestPath.IsNull() {
+						// Only set to false if it was previously set
+						cItem.LspOnePccShortestPath = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
+						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					item.LinkDisjointSubIds = append(item.LinkDisjointSubIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("type.node.enable"); cValue.Exists() {
+				item.NodeDisjoint = types.BoolValue(true)
+			} else if !item.NodeDisjoint.IsNull() {
+				// Only set to false if it was previously set
+				item.NodeDisjoint = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.node.strict"); cValue.Exists() {
+				item.NodeDisjointStrict = types.BoolValue(true)
+			} else if !item.NodeDisjointStrict.IsNull() {
+				// Only set to false if it was previously set
+				item.NodeDisjointStrict = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.address-type"); cValue.Exists() {
+				item.NodeDisjointLspOnePccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.ip-address"); cValue.Exists() {
+				item.NodeDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.lsp-name"); cValue.Exists() {
+				item.NodeDisjointLspOnePccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.shortest-path"); cValue.Exists() {
+				item.NodeDisjointLspOnePccShortestPath = types.BoolValue(true)
+			} else if !item.NodeDisjointLspOnePccShortestPath.IsNull() {
+				// Only set to false if it was previously set
+				item.NodeDisjointLspOnePccShortestPath = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
+				item.NodeDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.node.lsp.two.pcc.address-type"); cValue.Exists() {
+				item.NodeDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.two.pcc.ip-address"); cValue.Exists() {
+				item.NodeDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.two.pcc.lsp-name"); cValue.Exists() {
+				item.NodeDisjointLspTwoPccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
+				item.NodeDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.node.sub-ids.sub-id"); cValue.Exists() {
+				item.NodeDisjointSubIds = make([]PCEDisjointPathGroupIdsNodeDisjointSubIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCEDisjointPathGroupIdsNodeDisjointSubIds{}
+					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
+						cItem.SubId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("strict"); ccValue.Exists() {
+						cItem.Strict = types.BoolValue(true)
+					} else if !cItem.Strict.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Strict = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
+						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
+						cItem.LspOnePccShortestPath = types.BoolValue(true)
+					} else if !cItem.LspOnePccShortestPath.IsNull() {
+						// Only set to false if it was previously set
+						cItem.LspOnePccShortestPath = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
+						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					item.NodeDisjointSubIds = append(item.NodeDisjointSubIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("type.srlg.enable"); cValue.Exists() {
+				item.SrlgDisjoint = types.BoolValue(true)
+			} else if !item.SrlgDisjoint.IsNull() {
+				// Only set to false if it was previously set
+				item.SrlgDisjoint = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg.strict"); cValue.Exists() {
+				item.SrlgDisjointStrict = types.BoolValue(true)
+			} else if !item.SrlgDisjointStrict.IsNull() {
+				// Only set to false if it was previously set
+				item.SrlgDisjointStrict = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.address-type"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.ip-address"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.lsp-name"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.shortest-path"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccShortestPath = types.BoolValue(true)
+			} else if !item.SrlgDisjointLspOnePccShortestPath.IsNull() {
+				// Only set to false if it was previously set
+				item.SrlgDisjointLspOnePccShortestPath = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.srlg.lsp.two.pcc.address-type"); cValue.Exists() {
+				item.SrlgDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.two.pcc.ip-address"); cValue.Exists() {
+				item.SrlgDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.two.pcc.lsp-name"); cValue.Exists() {
+				item.SrlgDisjointLspTwoPccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
+				item.SrlgDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.srlg.sub-ids.sub-id"); cValue.Exists() {
+				item.SrlgDisjointSubIds = make([]PCEDisjointPathGroupIdsSrlgDisjointSubIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCEDisjointPathGroupIdsSrlgDisjointSubIds{}
+					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
+						cItem.SubId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("strict"); ccValue.Exists() {
+						cItem.Strict = types.BoolValue(true)
+					} else if !cItem.Strict.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Strict = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
+						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
+						cItem.LspOnePccShortestPath = types.BoolValue(true)
+					} else if !cItem.LspOnePccShortestPath.IsNull() {
+						// Only set to false if it was previously set
+						cItem.LspOnePccShortestPath = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
+						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					item.SrlgDisjointSubIds = append(item.SrlgDisjointSubIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("type.srlg-node.enable"); cValue.Exists() {
+				item.SrlgNodeDisjoint = types.BoolValue(true)
+			} else if !item.SrlgNodeDisjoint.IsNull() {
+				// Only set to false if it was previously set
+				item.SrlgNodeDisjoint = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg-node.strict"); cValue.Exists() {
+				item.SrlgNodeDisjointStrict = types.BoolValue(true)
+			} else if !item.SrlgNodeDisjointStrict.IsNull() {
+				// Only set to false if it was previously set
+				item.SrlgNodeDisjointStrict = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.address-type"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.ip-address"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.lsp-name"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.shortest-path"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccShortestPath = types.BoolValue(true)
+			} else if !item.SrlgNodeDisjointLspOnePccShortestPath.IsNull() {
+				// Only set to false if it was previously set
+				item.SrlgNodeDisjointLspOnePccShortestPath = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.two.pcc.address-type"); cValue.Exists() {
+				item.SrlgNodeDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.two.pcc.ip-address"); cValue.Exists() {
+				item.SrlgNodeDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.two.pcc.lsp-name"); cValue.Exists() {
+				item.SrlgNodeDisjointLspTwoPccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
+				item.SrlgNodeDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.srlg-node.sub-ids.sub-id"); cValue.Exists() {
+				item.SrlgNodeDisjointSubIds = make([]PCEDisjointPathGroupIdsSrlgNodeDisjointSubIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCEDisjointPathGroupIdsSrlgNodeDisjointSubIds{}
+					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
+						cItem.SubId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("strict"); ccValue.Exists() {
+						cItem.Strict = types.BoolValue(true)
+					} else if !cItem.Strict.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Strict = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
+						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
+						cItem.LspOnePccShortestPath = types.BoolValue(true)
+					} else if !cItem.LspOnePccShortestPath.IsNull() {
+						// Only set to false if it was previously set
+						cItem.LspOnePccShortestPath = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
+						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					item.SrlgNodeDisjointSubIds = append(item.SrlgNodeDisjointSubIds, cItem)
+					return true
+				})
+			}
+			data.DisjointPathGroupIds = append(data.DisjointPathGroupIds, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "peer.ipv4s.ipv4"); value.Exists() {
+		data.PeerIpv4s = make([]PCEPeerIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEPeerIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp-ao.key-chain-name"); cValue.Exists() {
+				item.TcpAoKeychainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp-ao.include-tcp-options"); cValue.Exists() {
+				item.TcpAoIncludeTcpOptions = types.BoolValue(true)
+			} else if !item.TcpAoIncludeTcpOptions.IsNull() {
+				// Only set to false if it was previously set
+				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
+			}
+			if cValue := v.Get("tcp-ao.accept-ao-mismatch-connection"); cValue.Exists() {
+				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
+			} else if !item.TcpAoAcceptAoMismatchConnection.IsNull() {
+				// Only set to false if it was previously set
+				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
+			}
+			data.PeerIpv4s = append(data.PeerIpv4s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "peer.ipv6s.ipv6"); value.Exists() {
+		data.PeerIpv6s = make([]PCEPeerIpv6s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEPeerIpv6s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp-ao.key-chain-name"); cValue.Exists() {
+				item.TcpAoKeychainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp-ao.include-tcp-options"); cValue.Exists() {
+				item.TcpAoIncludeTcpOptions = types.BoolValue(true)
+			} else if !item.TcpAoIncludeTcpOptions.IsNull() {
+				// Only set to false if it was previously set
+				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
+			}
+			if cValue := v.Get("tcp-ao.accept-ao-mismatch-connection"); cValue.Exists() {
+				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
+			} else if !item.TcpAoAcceptAoMismatchConnection.IsNull() {
+				// Only set to false if it was previously set
+				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
+			}
+			data.PeerIpv6s = append(data.PeerIpv6s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "netconf.ssh.user"); value.Exists() {
+		data.NetconfSshUser = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "api.authentication.digest"); value.Exists() {
+		data.ApiAuthenticationDigest = types.BoolValue(true)
+	} else if !data.ApiAuthenticationDigest.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ApiAuthenticationDigest = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "api.sibling.ipv4"); value.Exists() {
+		data.ApiSiblingIpv4 = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "api.vrf"); value.Exists() {
+		data.ApiVrf = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "api.users.user"); value.Exists() {
+		data.ApiUsers = make([]PCEApiUsers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEApiUsers{}
+			if cValue := v.Get("user-name"); cValue.Exists() {
+				item.UserName = types.StringValue(cValue.String())
+			}
+			data.ApiUsers = append(data.ApiUsers, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "api.ipv4.address"); value.Exists() {
+		data.ApiIpv4Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "api.ipv6.address"); value.Exists() {
+		data.ApiIpv6Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "timers.reoptimization"); value.Exists() {
+		data.TimersReoptimization = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.keepalive"); value.Exists() {
+		data.TimersKeepalive = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.minimum-peer-keepalive"); value.Exists() {
+		data.TimersMinimumPeerKeepalive = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.peer-zombie"); value.Exists() {
+		data.TimersPeerZombie = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.init-verify-restart"); value.Exists() {
+		data.TimersInitVerifyRestart = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.init-verify-switchover"); value.Exists() {
+		data.TimersInitVerifySwitchover = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.init-verify-startup"); value.Exists() {
+		data.TimersInitVerifyStartup = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "backoff.ratio"); value.Exists() {
+		data.BackoffRatio = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "backoff.difference"); value.Exists() {
+		data.BackoffDifference = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "backoff.threshold"); value.Exists() {
+		data.BackoffThreshold = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "logging.no-path"); value.Exists() {
+		data.LoggingNoPath = types.BoolValue(true)
+	} else if !data.LoggingNoPath.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingNoPath = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "logging.fallback"); value.Exists() {
+		data.LoggingFallback = types.BoolValue(true)
+	} else if !data.LoggingFallback.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingFallback = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "logging.pcep.pcerr-received"); value.Exists() {
+		data.LoggingPcepPcerrReceived = types.BoolValue(true)
+	} else if !data.LoggingPcepPcerrReceived.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingPcepPcerrReceived = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "logging.pcep.api.send-queue-congestion.disable"); value.Exists() {
+		data.LoggingPcepApiSendQueueCongestionDisable = types.BoolValue(true)
+	} else if !data.LoggingPcepApiSendQueueCongestionDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingPcepApiSendQueueCongestionDisable = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "logging.pcep.disjointness-status"); value.Exists() {
+		data.LoggingPcepDisjointnessStatus = types.BoolValue(true)
+	} else if !data.LoggingPcepDisjointnessStatus.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingPcepDisjointnessStatus = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.strict-sid-only"); value.Exists() {
+		data.SegmentRoutingStrictSidOnly = types.BoolValue(true)
+	} else if !data.SegmentRoutingStrictSidOnly.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SegmentRoutingStrictSidOnly = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.affinity.bit-map.affinity-colors.affinity-color"); value.Exists() {
+		data.SrteAffinityBitmaps = make([]PCESrteAffinityBitmaps, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteAffinityBitmaps{}
+			if cValue := v.Get("affinity-color-name"); cValue.Exists() {
+				item.AffinityColorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("affinity-attribute-bit"); cValue.Exists() {
+				item.AffinityBitPosition = types.Int64Value(cValue.Int())
+			}
+			data.SrteAffinityBitmaps = append(data.SrteAffinityBitmaps, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.segment-lists.segment-list"); value.Exists() {
+		data.SrteSegmentLists = make([]PCESrteSegmentLists, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteSegmentLists{}
+			if cValue := v.Get("segment-list-name"); cValue.Exists() {
+				item.SegmentListName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("indexes.index"); cValue.Exists() {
+				item.Indexes = make([]PCESrteSegmentListsIndexes, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteSegmentListsIndexes{}
+					if ccValue := cv.Get("index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("mpls.label"); ccValue.Exists() {
+						cItem.MplsLabel = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("mpls.adjacency"); ccValue.Exists() {
+						cItem.MplsAdjacency = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			data.SrteSegmentLists = append(data.SrteSegmentLists, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.peer.ipv4s.ipv4"); value.Exists() {
+		data.SrteIpv4Peers = make([]PCESrteIpv4Peers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteIpv4Peers{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("policies.policy"); cValue.Exists() {
+				item.Policies = make([]PCESrteIpv4PeersPolicies, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteIpv4PeersPolicies{}
+					if ccValue := cv.Get("policy-name"); ccValue.Exists() {
+						cItem.PolicyName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("candidate-paths.append-sid.mpls"); ccValue.Exists() {
+						cItem.CandidatePathsAppendSidMpls = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("candidate-paths.preferences.preference"); ccValue.Exists() {
+						cItem.CandidatePathsPreferences = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferences, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferences{}
+							if cccValue := ccv.Get("preference-id"); cccValue.Exists() {
+								ccItem.PreferenceId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("dynamic.mpls"); cccValue.Exists() {
+								ccItem.DynamicMpls = types.BoolValue(true)
+							} else if !ccItem.DynamicMpls.IsNull() {
+								// Only set to false if it was previously set
+								ccItem.DynamicMpls = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.te"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeTe = types.BoolValue(true)
+							} else if !ccItem.DynamicMetricTypeTe.IsNull() {
+								// Only set to false if it was previously set
+								ccItem.DynamicMetricTypeTe = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.igp"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeIgp = types.BoolValue(true)
+							} else if !ccItem.DynamicMetricTypeIgp.IsNull() {
+								// Only set to false if it was previously set
+								ccItem.DynamicMetricTypeIgp = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.latency"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeLatency = types.BoolValue(true)
+							} else if !ccItem.DynamicMetricTypeLatency.IsNull() {
+								// Only set to false if it was previously set
+								ccItem.DynamicMetricTypeLatency = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.hopcount"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeHopcount = types.BoolValue(true)
+							} else if !ccItem.DynamicMetricTypeHopcount.IsNull() {
+								// Only set to false if it was previously set
+								ccItem.DynamicMetricTypeHopcount = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.sid-limit"); cccValue.Exists() {
+								ccItem.DynamicMetricSidLimit = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("explicit.segment-list-names.segment-list-name"); cccValue.Exists() {
+								ccItem.ExplicitSegmentListNames = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames{}
+									if ccccValue := cccv.Get("segment-list-name"); ccccValue.Exists() {
+										cccItem.SegmentListName = types.StringValue(ccccValue.String())
+									}
+									ccItem.ExplicitSegmentListNames = append(ccItem.ExplicitSegmentListNames, cccItem)
+									return true
+								})
+							}
+							if cccValue := ccv.Get("constraints.segments.sid-algorithm"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsSidAlgorithm = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.protected-preferred"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(true)
+							} else if !ccItem.ConstraintsSegmentsProtectionProtectedPreferred.IsNull() {
+								// Only set to false if it was previously set
+								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.protected-only"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(true)
+							} else if !ccItem.ConstraintsSegmentsProtectionProtectedOnly.IsNull() {
+								// Only set to false if it was previously set
+								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.unprotected-only"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(true)
+							} else if !ccItem.ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() {
+								// Only set to false if it was previously set
+								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.unprotected-preferred"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(true)
+							} else if !ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() {
+								// Only set to false if it was previously set
+								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(false)
+							}
+							cItem.CandidatePathsPreferences = append(cItem.CandidatePathsPreferences, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.include-any.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityIncludeAnyColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityIncludeAnyColors = append(cItem.CandidatePathsAffinityIncludeAnyColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.include-all.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityIncludeAllColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityIncludeAllColors = append(cItem.CandidatePathsAffinityIncludeAllColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.exclude.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityExcludeColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityExcludeColors = append(cItem.CandidatePathsAffinityExcludeColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("color"); ccValue.Exists() {
+						cItem.Color = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("end-point.ipv4"); ccValue.Exists() {
+						cItem.EndPointIpv4 = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("binding-sid.mpls"); ccValue.Exists() {
+						cItem.BindingSidMpls = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("shutdown"); ccValue.Exists() {
+						cItem.Shutdown = types.BoolValue(true)
+					} else if !cItem.Shutdown.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Shutdown = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("profile-id"); ccValue.Exists() {
+						cItem.ProfileId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("path-selection.protected"); ccValue.Exists() {
+						cItem.PathSelectionProtected = types.BoolValue(true)
+					} else if !cItem.PathSelectionProtected.IsNull() {
+						// Only set to false if it was previously set
+						cItem.PathSelectionProtected = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("path-selection.unprotected"); ccValue.Exists() {
+						cItem.PathSelectionUnprotected = types.BoolValue(true)
+					} else if !cItem.PathSelectionUnprotected.IsNull() {
+						// Only set to false if it was previously set
+						cItem.PathSelectionUnprotected = types.BoolValue(false)
+					}
+					item.Policies = append(item.Policies, cItem)
+					return true
+				})
+			}
+			data.SrteIpv4Peers = append(data.SrteIpv4Peers, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.anycast-sid-inclusion"); value.Exists() {
+		data.SrteCspfAnycastSidInclusion = types.BoolValue(true)
+	} else if !data.SrteCspfAnycastSidInclusion.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrteCspfAnycastSidInclusion = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.sr-native"); value.Exists() {
+		data.SrteCspfSrNative = types.BoolValue(true)
+	} else if !data.SrteCspfSrNative.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrteCspfSrNative = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.sr-native.force"); value.Exists() {
+		data.SrteCspfSrNativeForce = types.BoolValue(true)
+	} else if !data.SrteCspfSrNativeForce.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrteCspfSrNativeForce = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.endpoint-sets.endpoint-set"); value.Exists() {
+		data.SrteP2mpEndpointSets = make([]PCESrteP2mpEndpointSets, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteP2mpEndpointSets{}
+			if cValue := v.Get("endpoint-set-name"); cValue.Exists() {
+				item.EndpointSetName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4s.ipv4"); cValue.Exists() {
+				item.Ipv4s = make([]PCESrteP2mpEndpointSetsIpv4s, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpEndpointSetsIpv4s{}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.Ipv4s = append(item.Ipv4s, cItem)
+					return true
+				})
+			}
+			data.SrteP2mpEndpointSets = append(data.SrteP2mpEndpointSets, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.policies.policy"); value.Exists() {
+		data.SrteP2mpPolicies = make([]PCESrteP2mpPolicies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteP2mpPolicies{}
+			if cValue := v.Get("policy-name"); cValue.Exists() {
+				item.PolicyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("color"); cValue.Exists() {
+				item.Color = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("endpoint-set"); cValue.Exists() {
+				item.EndpointSet = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("source.ipv4"); cValue.Exists() {
+				item.SourceIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else if !item.Shutdown.IsNull() {
+				// Only set to false if it was previously set
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("fast-reroute.lfa"); cValue.Exists() {
+				item.FastRerouteLfa = types.BoolValue(true)
+			} else if !item.FastRerouteLfa.IsNull() {
+				// Only set to false if it was previously set
+				item.FastRerouteLfa = types.BoolValue(false)
+			}
+			if cValue := v.Get("treesid.mpls"); cValue.Exists() {
+				item.TreesidMpls = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("candidate-paths.constraints.affinity.include-any.affinity-colors.affinity-color"); cValue.Exists() {
+				item.CandidatePathsConstraintsAffinityIncludeAnyColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAnyColors, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAnyColors{}
+					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
+						cItem.AffinityColorName = types.StringValue(ccValue.String())
+					}
+					item.CandidatePathsConstraintsAffinityIncludeAnyColors = append(item.CandidatePathsConstraintsAffinityIncludeAnyColors, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("candidate-paths.constraints.affinity.include-all.affinity-colors.affinity-color"); cValue.Exists() {
+				item.CandidatePathsConstraintsAffinityIncludeAllColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAllColors, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAllColors{}
+					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
+						cItem.AffinityColorName = types.StringValue(ccValue.String())
+					}
+					item.CandidatePathsConstraintsAffinityIncludeAllColors = append(item.CandidatePathsConstraintsAffinityIncludeAllColors, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("candidate-paths.constraints.affinity.exclude.affinity-colors.affinity-color"); cValue.Exists() {
+				item.CandidatePathsConstraintsAffinityExcludeColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityExcludeColors, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityExcludeColors{}
+					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
+						cItem.AffinityColorName = types.StringValue(ccValue.String())
+					}
+					item.CandidatePathsConstraintsAffinityExcludeColors = append(item.CandidatePathsConstraintsAffinityExcludeColors, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("candidate-paths.preferences.preference"); cValue.Exists() {
+				item.CandidatePathsPreferences = make([]PCESrteP2mpPoliciesCandidatePathsPreferences, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpPoliciesCandidatePathsPreferences{}
+					if ccValue := cv.Get("preference-id"); ccValue.Exists() {
+						cItem.PreferenceId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("dynamic"); ccValue.Exists() {
+						cItem.Dynamic = types.BoolValue(true)
+					} else if !cItem.Dynamic.IsNull() {
+						// Only set to false if it was previously set
+						cItem.Dynamic = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("dynamic.metric.type.te"); ccValue.Exists() {
+						cItem.DynamicMetricTypeTe = types.BoolValue(true)
+					} else if !cItem.DynamicMetricTypeTe.IsNull() {
+						// Only set to false if it was previously set
+						cItem.DynamicMetricTypeTe = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("dynamic.metric.type.igp"); ccValue.Exists() {
+						cItem.DynamicMetricTypeIgp = types.BoolValue(true)
+					} else if !cItem.DynamicMetricTypeIgp.IsNull() {
+						// Only set to false if it was previously set
+						cItem.DynamicMetricTypeIgp = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("dynamic.metric.type.latency"); ccValue.Exists() {
+						cItem.DynamicMetricTypeLatency = types.BoolValue(true)
+					} else if !cItem.DynamicMetricTypeLatency.IsNull() {
+						// Only set to false if it was previously set
+						cItem.DynamicMetricTypeLatency = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("dynamic.metric.type.hopcount"); ccValue.Exists() {
+						cItem.DynamicMetricTypeHopcount = types.BoolValue(true)
+					} else if !cItem.DynamicMetricTypeHopcount.IsNull() {
+						// Only set to false if it was previously set
+						cItem.DynamicMetricTypeHopcount = types.BoolValue(false)
+					}
+					item.CandidatePathsPreferences = append(item.CandidatePathsPreferences, cItem)
+					return true
+				})
+			}
+			data.SrteP2mpPolicies = append(data.SrteP2mpPolicies, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.timers.reoptimization"); value.Exists() {
+		data.SrteP2mpTimersReoptimization = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.timers.cleanup"); value.Exists() {
+		data.SrteP2mpTimersCleanup = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.label-range.min"); value.Exists() {
+		data.SrteP2mpLabelRangeMin = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.label-range.max"); value.Exists() {
+		data.SrteP2mpLabelRangeMax = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.multipath-disable"); value.Exists() {
+		data.SrteP2mpMultipathDisable = types.BoolValue(true)
+	} else if !data.SrteP2mpMultipathDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrteP2mpMultipathDisable = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.fast-reroute.lfa"); value.Exists() {
+		data.SrteP2mpFastRerouteLfa = types.BoolValue(true)
+	} else if !data.SrteP2mpFastRerouteLfa.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrteP2mpFastRerouteLfa = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.frr-node-set.from.ipv4s.ipv4"); value.Exists() {
+		data.SrteP2mpFrrNodeSetFromIpv4s = make([]PCESrteP2mpFrrNodeSetFromIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteP2mpFrrNodeSetFromIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.SrteP2mpFrrNodeSetFromIpv4s = append(data.SrteP2mpFrrNodeSetFromIpv4s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.frr-node-set.to.ipv4s.ipv4"); value.Exists() {
+		data.SrteP2mpFrrNodeSetToIpv4s = make([]PCESrteP2mpFrrNodeSetToIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteP2mpFrrNodeSetToIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.SrteP2mpFrrNodeSetToIpv4s = append(data.SrteP2mpFrrNodeSetToIpv4s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "peer-filter.ipv4.access-list"); value.Exists() {
+		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "hierarchical.underlay.enable-all"); value.Exists() {
+		data.HierarchicalUnderlayEnableAll = types.BoolValue(true)
+	} else if !data.HierarchicalUnderlayEnableAll.IsNull() {
+		// Only set to false if it was previously set in state
+		data.HierarchicalUnderlayEnableAll = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *PCEData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "address.ipv4"); value.Exists() {
+		data.AddressIpv4 = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "address.ipv6"); value.Exists() {
+		data.AddressIpv6 = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "state-sync.ipv4s.ipv4"); value.Exists() {
+		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEStateSyncIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.StateSyncIpv4s = append(data.StateSyncIpv4s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "state-sync.ipv6s.ipv6"); value.Exists() {
+		data.StateSyncIpv6s = make([]PCEStateSyncIpv6s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEStateSyncIpv6s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.StateSyncIpv6s = append(data.StateSyncIpv6s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "tcp-buffer.size"); value.Exists() {
+		data.TcpBufferSize = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "password.encrypted"); value.Exists() {
+		data.PasswordEncrypted = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "tcp-ao.key-chain-name"); value.Exists() {
+		data.TcpAoKeychainName = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "tcp-ao.include-tcp-options"); value.Exists() {
+		data.TcpAoIncludeTcpOptions = types.BoolValue(true)
+	} else {
+		data.TcpAoIncludeTcpOptions = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "tcp-ao.accept-ao-mismatch-connection"); value.Exists() {
+		data.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
+	} else {
+		data.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "disjoint-path.maximum-attempts"); value.Exists() {
+		data.DisjointPathMaximumAttempts = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "disjoint-path.group-ids.group-id"); value.Exists() {
+		data.DisjointPathGroupIds = make([]PCEDisjointPathGroupIds, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEDisjointPathGroupIds{}
+			if cValue := v.Get("group-id"); cValue.Exists() {
+				item.GroupId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.link.enable"); cValue.Exists() {
+				item.LinkDisjoint = types.BoolValue(true)
+			} else {
+				item.LinkDisjoint = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.link.strict"); cValue.Exists() {
+				item.LinkDisjointStrict = types.BoolValue(true)
+			} else {
+				item.LinkDisjointStrict = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.address-type"); cValue.Exists() {
+				item.LinkDisjointLspOnePccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.ip-address"); cValue.Exists() {
+				item.LinkDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.lsp-name"); cValue.Exists() {
+				item.LinkDisjointLspOnePccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.shortest-path"); cValue.Exists() {
+				item.LinkDisjointLspOnePccShortestPath = types.BoolValue(true)
+			} else {
+				item.LinkDisjointLspOnePccShortestPath = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.link.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
+				item.LinkDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.link.lsp.two.pcc.address-type"); cValue.Exists() {
+				item.LinkDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.two.pcc.ip-address"); cValue.Exists() {
+				item.LinkDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.two.pcc.lsp-name"); cValue.Exists() {
+				item.LinkDisjointLspTwoPccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.link.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
+				item.LinkDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.link.sub-ids.sub-id"); cValue.Exists() {
+				item.LinkDisjointSubIds = make([]PCEDisjointPathGroupIdsLinkDisjointSubIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCEDisjointPathGroupIdsLinkDisjointSubIds{}
+					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
+						cItem.SubId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("strict"); ccValue.Exists() {
+						cItem.Strict = types.BoolValue(true)
+					} else {
+						cItem.Strict = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
+						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
+						cItem.LspOnePccShortestPath = types.BoolValue(true)
+					} else {
+						cItem.LspOnePccShortestPath = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
+						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					item.LinkDisjointSubIds = append(item.LinkDisjointSubIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("type.node.enable"); cValue.Exists() {
+				item.NodeDisjoint = types.BoolValue(true)
+			} else {
+				item.NodeDisjoint = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.node.strict"); cValue.Exists() {
+				item.NodeDisjointStrict = types.BoolValue(true)
+			} else {
+				item.NodeDisjointStrict = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.address-type"); cValue.Exists() {
+				item.NodeDisjointLspOnePccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.ip-address"); cValue.Exists() {
+				item.NodeDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.lsp-name"); cValue.Exists() {
+				item.NodeDisjointLspOnePccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.shortest-path"); cValue.Exists() {
+				item.NodeDisjointLspOnePccShortestPath = types.BoolValue(true)
+			} else {
+				item.NodeDisjointLspOnePccShortestPath = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.node.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
+				item.NodeDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.node.lsp.two.pcc.address-type"); cValue.Exists() {
+				item.NodeDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.two.pcc.ip-address"); cValue.Exists() {
+				item.NodeDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.two.pcc.lsp-name"); cValue.Exists() {
+				item.NodeDisjointLspTwoPccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.node.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
+				item.NodeDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.node.sub-ids.sub-id"); cValue.Exists() {
+				item.NodeDisjointSubIds = make([]PCEDisjointPathGroupIdsNodeDisjointSubIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCEDisjointPathGroupIdsNodeDisjointSubIds{}
+					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
+						cItem.SubId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("strict"); ccValue.Exists() {
+						cItem.Strict = types.BoolValue(true)
+					} else {
+						cItem.Strict = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
+						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
+						cItem.LspOnePccShortestPath = types.BoolValue(true)
+					} else {
+						cItem.LspOnePccShortestPath = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
+						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					item.NodeDisjointSubIds = append(item.NodeDisjointSubIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("type.srlg.enable"); cValue.Exists() {
+				item.SrlgDisjoint = types.BoolValue(true)
+			} else {
+				item.SrlgDisjoint = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg.strict"); cValue.Exists() {
+				item.SrlgDisjointStrict = types.BoolValue(true)
+			} else {
+				item.SrlgDisjointStrict = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.address-type"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.ip-address"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.lsp-name"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.shortest-path"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccShortestPath = types.BoolValue(true)
+			} else {
+				item.SrlgDisjointLspOnePccShortestPath = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
+				item.SrlgDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.srlg.lsp.two.pcc.address-type"); cValue.Exists() {
+				item.SrlgDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.two.pcc.ip-address"); cValue.Exists() {
+				item.SrlgDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.two.pcc.lsp-name"); cValue.Exists() {
+				item.SrlgDisjointLspTwoPccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
+				item.SrlgDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.srlg.sub-ids.sub-id"); cValue.Exists() {
+				item.SrlgDisjointSubIds = make([]PCEDisjointPathGroupIdsSrlgDisjointSubIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCEDisjointPathGroupIdsSrlgDisjointSubIds{}
+					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
+						cItem.SubId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("strict"); ccValue.Exists() {
+						cItem.Strict = types.BoolValue(true)
+					} else {
+						cItem.Strict = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
+						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
+						cItem.LspOnePccShortestPath = types.BoolValue(true)
+					} else {
+						cItem.LspOnePccShortestPath = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
+						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					item.SrlgDisjointSubIds = append(item.SrlgDisjointSubIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("type.srlg-node.enable"); cValue.Exists() {
+				item.SrlgNodeDisjoint = types.BoolValue(true)
+			} else {
+				item.SrlgNodeDisjoint = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg-node.strict"); cValue.Exists() {
+				item.SrlgNodeDisjointStrict = types.BoolValue(true)
+			} else {
+				item.SrlgNodeDisjointStrict = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.address-type"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.ip-address"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.lsp-name"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.shortest-path"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccShortestPath = types.BoolValue(true)
+			} else {
+				item.SrlgNodeDisjointLspOnePccShortestPath = types.BoolValue(false)
+			}
+			if cValue := v.Get("type.srlg-node.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
+				item.SrlgNodeDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.two.pcc.address-type"); cValue.Exists() {
+				item.SrlgNodeDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.two.pcc.ip-address"); cValue.Exists() {
+				item.SrlgNodeDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.two.pcc.lsp-name"); cValue.Exists() {
+				item.SrlgNodeDisjointLspTwoPccLspName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type.srlg-node.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
+				item.SrlgNodeDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("type.srlg-node.sub-ids.sub-id"); cValue.Exists() {
+				item.SrlgNodeDisjointSubIds = make([]PCEDisjointPathGroupIdsSrlgNodeDisjointSubIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCEDisjointPathGroupIdsSrlgNodeDisjointSubIds{}
+					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
+						cItem.SubId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("strict"); ccValue.Exists() {
+						cItem.Strict = types.BoolValue(true)
+					} else {
+						cItem.Strict = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
+						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
+						cItem.LspOnePccShortestPath = types.BoolValue(true)
+					} else {
+						cItem.LspOnePccShortestPath = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
+						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
+						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
+						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
+						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
+					}
+					item.SrlgNodeDisjointSubIds = append(item.SrlgNodeDisjointSubIds, cItem)
+					return true
+				})
+			}
+			data.DisjointPathGroupIds = append(data.DisjointPathGroupIds, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "peer.ipv4s.ipv4"); value.Exists() {
+		data.PeerIpv4s = make([]PCEPeerIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEPeerIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("password.encrypted"); cValue.Exists() {
+				item.PasswordEncrypted = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp-ao.key-chain-name"); cValue.Exists() {
+				item.TcpAoKeychainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp-ao.include-tcp-options"); cValue.Exists() {
+				item.TcpAoIncludeTcpOptions = types.BoolValue(true)
+			} else {
+				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
+			}
+			if cValue := v.Get("tcp-ao.accept-ao-mismatch-connection"); cValue.Exists() {
+				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
+			} else {
+				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
+			}
+			data.PeerIpv4s = append(data.PeerIpv4s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "peer.ipv6s.ipv6"); value.Exists() {
+		data.PeerIpv6s = make([]PCEPeerIpv6s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEPeerIpv6s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("password.encrypted"); cValue.Exists() {
+				item.PasswordEncrypted = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp-ao.key-chain-name"); cValue.Exists() {
+				item.TcpAoKeychainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp-ao.include-tcp-options"); cValue.Exists() {
+				item.TcpAoIncludeTcpOptions = types.BoolValue(true)
+			} else {
+				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
+			}
+			if cValue := v.Get("tcp-ao.accept-ao-mismatch-connection"); cValue.Exists() {
+				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
+			} else {
+				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
+			}
+			data.PeerIpv6s = append(data.PeerIpv6s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "netconf.ssh.user"); value.Exists() {
+		data.NetconfSshUser = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "netconf.ssh.password.encrypted"); value.Exists() {
+		data.NetconfSshPasswordEncrypted = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "api.authentication.digest"); value.Exists() {
+		data.ApiAuthenticationDigest = types.BoolValue(true)
+	} else {
+		data.ApiAuthenticationDigest = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "api.sibling.ipv4"); value.Exists() {
+		data.ApiSiblingIpv4 = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "api.vrf"); value.Exists() {
+		data.ApiVrf = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "api.users.user"); value.Exists() {
+		data.ApiUsers = make([]PCEApiUsers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEApiUsers{}
+			if cValue := v.Get("user-name"); cValue.Exists() {
+				item.UserName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("password.encrypted"); cValue.Exists() {
+				item.PasswordEncrypted = types.StringValue(cValue.String())
+			}
+			data.ApiUsers = append(data.ApiUsers, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "api.ipv4.address"); value.Exists() {
+		data.ApiIpv4Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "api.ipv6.address"); value.Exists() {
+		data.ApiIpv6Address = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "timers.reoptimization"); value.Exists() {
+		data.TimersReoptimization = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.keepalive"); value.Exists() {
+		data.TimersKeepalive = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.minimum-peer-keepalive"); value.Exists() {
+		data.TimersMinimumPeerKeepalive = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.peer-zombie"); value.Exists() {
+		data.TimersPeerZombie = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.init-verify-restart"); value.Exists() {
+		data.TimersInitVerifyRestart = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.init-verify-switchover"); value.Exists() {
+		data.TimersInitVerifySwitchover = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "timers.init-verify-startup"); value.Exists() {
+		data.TimersInitVerifyStartup = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "backoff.ratio"); value.Exists() {
+		data.BackoffRatio = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "backoff.difference"); value.Exists() {
+		data.BackoffDifference = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "backoff.threshold"); value.Exists() {
+		data.BackoffThreshold = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "logging.no-path"); value.Exists() {
+		data.LoggingNoPath = types.BoolValue(true)
+	} else {
+		data.LoggingNoPath = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "logging.fallback"); value.Exists() {
+		data.LoggingFallback = types.BoolValue(true)
+	} else {
+		data.LoggingFallback = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "logging.pcep.pcerr-received"); value.Exists() {
+		data.LoggingPcepPcerrReceived = types.BoolValue(true)
+	} else {
+		data.LoggingPcepPcerrReceived = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "logging.pcep.api.send-queue-congestion.disable"); value.Exists() {
+		data.LoggingPcepApiSendQueueCongestionDisable = types.BoolValue(true)
+	} else {
+		data.LoggingPcepApiSendQueueCongestionDisable = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "logging.pcep.disjointness-status"); value.Exists() {
+		data.LoggingPcepDisjointnessStatus = types.BoolValue(true)
+	} else {
+		data.LoggingPcepDisjointnessStatus = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.strict-sid-only"); value.Exists() {
+		data.SegmentRoutingStrictSidOnly = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingStrictSidOnly = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.affinity.bit-map.affinity-colors.affinity-color"); value.Exists() {
+		data.SrteAffinityBitmaps = make([]PCESrteAffinityBitmaps, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteAffinityBitmaps{}
+			if cValue := v.Get("affinity-color-name"); cValue.Exists() {
+				item.AffinityColorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("affinity-attribute-bit"); cValue.Exists() {
+				item.AffinityBitPosition = types.Int64Value(cValue.Int())
+			}
+			data.SrteAffinityBitmaps = append(data.SrteAffinityBitmaps, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.segment-lists.segment-list"); value.Exists() {
+		data.SrteSegmentLists = make([]PCESrteSegmentLists, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteSegmentLists{}
+			if cValue := v.Get("segment-list-name"); cValue.Exists() {
+				item.SegmentListName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("indexes.index"); cValue.Exists() {
+				item.Indexes = make([]PCESrteSegmentListsIndexes, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteSegmentListsIndexes{}
+					if ccValue := cv.Get("index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("mpls.label"); ccValue.Exists() {
+						cItem.MplsLabel = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("mpls.adjacency"); ccValue.Exists() {
+						cItem.MplsAdjacency = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			data.SrteSegmentLists = append(data.SrteSegmentLists, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.peer.ipv4s.ipv4"); value.Exists() {
+		data.SrteIpv4Peers = make([]PCESrteIpv4Peers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteIpv4Peers{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("policies.policy"); cValue.Exists() {
+				item.Policies = make([]PCESrteIpv4PeersPolicies, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteIpv4PeersPolicies{}
+					if ccValue := cv.Get("policy-name"); ccValue.Exists() {
+						cItem.PolicyName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("candidate-paths.append-sid.mpls"); ccValue.Exists() {
+						cItem.CandidatePathsAppendSidMpls = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("candidate-paths.preferences.preference"); ccValue.Exists() {
+						cItem.CandidatePathsPreferences = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferences, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferences{}
+							if cccValue := ccv.Get("preference-id"); cccValue.Exists() {
+								ccItem.PreferenceId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("dynamic.mpls"); cccValue.Exists() {
+								ccItem.DynamicMpls = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMpls = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.te"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeTe = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeTe = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.igp"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeIgp = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeIgp = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.latency"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeLatency = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeLatency = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.type.hopcount"); cccValue.Exists() {
+								ccItem.DynamicMetricTypeHopcount = types.BoolValue(true)
+							} else {
+								ccItem.DynamicMetricTypeHopcount = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("dynamic.mpls.metric.sid-limit"); cccValue.Exists() {
+								ccItem.DynamicMetricSidLimit = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("explicit.segment-list-names.segment-list-name"); cccValue.Exists() {
+								ccItem.ExplicitSegmentListNames = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames, 0)
+								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
+									cccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames{}
+									if ccccValue := cccv.Get("segment-list-name"); ccccValue.Exists() {
+										cccItem.SegmentListName = types.StringValue(ccccValue.String())
+									}
+									ccItem.ExplicitSegmentListNames = append(ccItem.ExplicitSegmentListNames, cccItem)
+									return true
+								})
+							}
+							if cccValue := ccv.Get("constraints.segments.sid-algorithm"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsSidAlgorithm = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.protected-preferred"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.protected-only"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.unprotected-only"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(false)
+							}
+							if cccValue := ccv.Get("constraints.segments.protection.unprotected-preferred"); cccValue.Exists() {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(true)
+							} else {
+								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(false)
+							}
+							cItem.CandidatePathsPreferences = append(cItem.CandidatePathsPreferences, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.include-any.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityIncludeAnyColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityIncludeAnyColors = append(cItem.CandidatePathsAffinityIncludeAnyColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.include-all.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityIncludeAllColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityIncludeAllColors = append(cItem.CandidatePathsAffinityIncludeAllColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("candidate-paths.affinity.exclude.affinity-colors.affinity-color"); ccValue.Exists() {
+						cItem.CandidatePathsAffinityExcludeColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors{}
+							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
+								ccItem.AffinityColorName = types.StringValue(cccValue.String())
+							}
+							cItem.CandidatePathsAffinityExcludeColors = append(cItem.CandidatePathsAffinityExcludeColors, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("color"); ccValue.Exists() {
+						cItem.Color = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("end-point.ipv4"); ccValue.Exists() {
+						cItem.EndPointIpv4 = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("binding-sid.mpls"); ccValue.Exists() {
+						cItem.BindingSidMpls = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("shutdown"); ccValue.Exists() {
+						cItem.Shutdown = types.BoolValue(true)
+					} else {
+						cItem.Shutdown = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("profile-id"); ccValue.Exists() {
+						cItem.ProfileId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("path-selection.protected"); ccValue.Exists() {
+						cItem.PathSelectionProtected = types.BoolValue(true)
+					} else {
+						cItem.PathSelectionProtected = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("path-selection.unprotected"); ccValue.Exists() {
+						cItem.PathSelectionUnprotected = types.BoolValue(true)
+					} else {
+						cItem.PathSelectionUnprotected = types.BoolValue(false)
+					}
+					item.Policies = append(item.Policies, cItem)
+					return true
+				})
+			}
+			data.SrteIpv4Peers = append(data.SrteIpv4Peers, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.anycast-sid-inclusion"); value.Exists() {
+		data.SrteCspfAnycastSidInclusion = types.BoolValue(true)
+	} else {
+		data.SrteCspfAnycastSidInclusion = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.sr-native"); value.Exists() {
+		data.SrteCspfSrNative = types.BoolValue(true)
+	} else {
+		data.SrteCspfSrNative = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.sr-native.force"); value.Exists() {
+		data.SrteCspfSrNativeForce = types.BoolValue(true)
+	} else {
+		data.SrteCspfSrNativeForce = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.endpoint-sets.endpoint-set"); value.Exists() {
+		data.SrteP2mpEndpointSets = make([]PCESrteP2mpEndpointSets, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteP2mpEndpointSets{}
+			if cValue := v.Get("endpoint-set-name"); cValue.Exists() {
+				item.EndpointSetName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4s.ipv4"); cValue.Exists() {
+				item.Ipv4s = make([]PCESrteP2mpEndpointSetsIpv4s, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpEndpointSetsIpv4s{}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					item.Ipv4s = append(item.Ipv4s, cItem)
+					return true
+				})
+			}
+			data.SrteP2mpEndpointSets = append(data.SrteP2mpEndpointSets, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.policies.policy"); value.Exists() {
+		data.SrteP2mpPolicies = make([]PCESrteP2mpPolicies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteP2mpPolicies{}
+			if cValue := v.Get("policy-name"); cValue.Exists() {
+				item.PolicyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("color"); cValue.Exists() {
+				item.Color = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("endpoint-set"); cValue.Exists() {
+				item.EndpointSet = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("source.ipv4"); cValue.Exists() {
+				item.SourceIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("fast-reroute.lfa"); cValue.Exists() {
+				item.FastRerouteLfa = types.BoolValue(true)
+			} else {
+				item.FastRerouteLfa = types.BoolValue(false)
+			}
+			if cValue := v.Get("treesid.mpls"); cValue.Exists() {
+				item.TreesidMpls = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("candidate-paths.constraints.affinity.include-any.affinity-colors.affinity-color"); cValue.Exists() {
+				item.CandidatePathsConstraintsAffinityIncludeAnyColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAnyColors, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAnyColors{}
+					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
+						cItem.AffinityColorName = types.StringValue(ccValue.String())
+					}
+					item.CandidatePathsConstraintsAffinityIncludeAnyColors = append(item.CandidatePathsConstraintsAffinityIncludeAnyColors, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("candidate-paths.constraints.affinity.include-all.affinity-colors.affinity-color"); cValue.Exists() {
+				item.CandidatePathsConstraintsAffinityIncludeAllColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAllColors, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAllColors{}
+					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
+						cItem.AffinityColorName = types.StringValue(ccValue.String())
+					}
+					item.CandidatePathsConstraintsAffinityIncludeAllColors = append(item.CandidatePathsConstraintsAffinityIncludeAllColors, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("candidate-paths.constraints.affinity.exclude.affinity-colors.affinity-color"); cValue.Exists() {
+				item.CandidatePathsConstraintsAffinityExcludeColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityExcludeColors, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityExcludeColors{}
+					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
+						cItem.AffinityColorName = types.StringValue(ccValue.String())
+					}
+					item.CandidatePathsConstraintsAffinityExcludeColors = append(item.CandidatePathsConstraintsAffinityExcludeColors, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("candidate-paths.preferences.preference"); cValue.Exists() {
+				item.CandidatePathsPreferences = make([]PCESrteP2mpPoliciesCandidatePathsPreferences, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PCESrteP2mpPoliciesCandidatePathsPreferences{}
+					if ccValue := cv.Get("preference-id"); ccValue.Exists() {
+						cItem.PreferenceId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("dynamic"); ccValue.Exists() {
+						cItem.Dynamic = types.BoolValue(true)
+					} else {
+						cItem.Dynamic = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("dynamic.metric.type.te"); ccValue.Exists() {
+						cItem.DynamicMetricTypeTe = types.BoolValue(true)
+					} else {
+						cItem.DynamicMetricTypeTe = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("dynamic.metric.type.igp"); ccValue.Exists() {
+						cItem.DynamicMetricTypeIgp = types.BoolValue(true)
+					} else {
+						cItem.DynamicMetricTypeIgp = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("dynamic.metric.type.latency"); ccValue.Exists() {
+						cItem.DynamicMetricTypeLatency = types.BoolValue(true)
+					} else {
+						cItem.DynamicMetricTypeLatency = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("dynamic.metric.type.hopcount"); ccValue.Exists() {
+						cItem.DynamicMetricTypeHopcount = types.BoolValue(true)
+					} else {
+						cItem.DynamicMetricTypeHopcount = types.BoolValue(false)
+					}
+					item.CandidatePathsPreferences = append(item.CandidatePathsPreferences, cItem)
+					return true
+				})
+			}
+			data.SrteP2mpPolicies = append(data.SrteP2mpPolicies, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.timers.reoptimization"); value.Exists() {
+		data.SrteP2mpTimersReoptimization = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.timers.cleanup"); value.Exists() {
+		data.SrteP2mpTimersCleanup = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.label-range.min"); value.Exists() {
+		data.SrteP2mpLabelRangeMin = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.label-range.max"); value.Exists() {
+		data.SrteP2mpLabelRangeMax = types.Int64Value(value.Int())
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.multipath-disable"); value.Exists() {
+		data.SrteP2mpMultipathDisable = types.BoolValue(true)
+	} else {
+		data.SrteP2mpMultipathDisable = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.fast-reroute.lfa"); value.Exists() {
+		data.SrteP2mpFastRerouteLfa = types.BoolValue(true)
+	} else {
+		data.SrteP2mpFastRerouteLfa = types.BoolValue(false)
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.frr-node-set.from.ipv4s.ipv4"); value.Exists() {
+		data.SrteP2mpFrrNodeSetFromIpv4s = make([]PCESrteP2mpFrrNodeSetFromIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteP2mpFrrNodeSetFromIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.SrteP2mpFrrNodeSetFromIpv4s = append(data.SrteP2mpFrrNodeSetFromIpv4s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.frr-node-set.to.ipv4s.ipv4"); value.Exists() {
+		data.SrteP2mpFrrNodeSetToIpv4s = make([]PCESrteP2mpFrrNodeSetToIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCESrteP2mpFrrNodeSetToIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.SrteP2mpFrrNodeSetToIpv4s = append(data.SrteP2mpFrrNodeSetToIpv4s, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "peer-filter.ipv4.access-list"); value.Exists() {
+		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "hierarchical.underlay.enable-all"); value.Exists() {
+		data.HierarchicalUnderlayEnableAll = types.BoolValue(true)
+	} else {
+		data.HierarchicalUnderlayEnableAll = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
+	deletedItems := make([]string, 0)
+	if !state.HierarchicalUnderlayEnableAll.IsNull() && data.HierarchicalUnderlayEnableAll.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hierarchical/underlay/enable-all", state.getPath()))
+	}
+	if !state.PeerFilterIpv4AccessList.IsNull() && data.PeerFilterIpv4AccessList.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-filter/ipv4/access-list", state.getPath()))
+	}
+	for i := range state.SrteP2mpFrrNodeSetToIpv4s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrteP2mpFrrNodeSetToIpv4s {
+			found = true
+			if state.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString() != data.SrteP2mpFrrNodeSetToIpv4s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/frr-node-set/to/ipv4s/ipv4%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.SrteP2mpFrrNodeSetFromIpv4s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrteP2mpFrrNodeSetFromIpv4s {
+			found = true
+			if state.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString() != data.SrteP2mpFrrNodeSetFromIpv4s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/frr-node-set/from/ipv4s/ipv4%v", state.getPath(), keyString))
+		}
+	}
+	if !state.SrteP2mpFastRerouteLfa.IsNull() && data.SrteP2mpFastRerouteLfa.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/fast-reroute/lfa", state.getPath()))
+	}
+	if !state.SrteP2mpMultipathDisable.IsNull() && data.SrteP2mpMultipathDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/multipath-disable", state.getPath()))
+	}
+	if !state.SrteP2mpLabelRangeMax.IsNull() && data.SrteP2mpLabelRangeMax.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/label-range/max", state.getPath()))
+	}
+	if !state.SrteP2mpLabelRangeMin.IsNull() && data.SrteP2mpLabelRangeMin.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/label-range/min", state.getPath()))
+	}
+	if !state.SrteP2mpTimersCleanup.IsNull() && data.SrteP2mpTimersCleanup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/timers/cleanup", state.getPath()))
+	}
+	if !state.SrteP2mpTimersReoptimization.IsNull() && data.SrteP2mpTimersReoptimization.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/timers/reoptimization", state.getPath()))
+	}
+	for i := range state.SrteP2mpPolicies {
+		keys := [...]string{"policy-name"}
+		stateKeyValues := [...]string{state.SrteP2mpPolicies[i].PolicyName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrteP2mpPolicies[i].PolicyName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrteP2mpPolicies {
+			found = true
+			if state.SrteP2mpPolicies[i].PolicyName.ValueString() != data.SrteP2mpPolicies[j].PolicyName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SrteP2mpPolicies[i].CandidatePathsPreferences {
+					ckeys := [...]string{"preference-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].PreferenceId.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].PreferenceId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SrteP2mpPolicies[j].CandidatePathsPreferences {
+						found = true
+						if state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].PreferenceId.ValueInt64() != data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].PreferenceId.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].DynamicMetricTypeHopcount.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/hopcount", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].DynamicMetricTypeLatency.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/latency", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].DynamicMetricTypeIgp.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/igp", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].DynamicMetricTypeTe.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/te", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].Dynamic.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors {
+					ckeys := [...]string{"affinity-color-name"}
+					cstateKeyValues := [...]string{state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors[ci].AffinityColorName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors[ci].AffinityColorName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityExcludeColors {
+						found = true
+						if state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors[ci].AffinityColorName.ValueString() != data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityExcludeColors[cj].AffinityColorName.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/constraints/affinity/exclude/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors {
+					ckeys := [...]string{"affinity-color-name"}
+					cstateKeyValues := [...]string{state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors[ci].AffinityColorName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors[ci].AffinityColorName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityIncludeAllColors {
+						found = true
+						if state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors[ci].AffinityColorName.ValueString() != data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityIncludeAllColors[cj].AffinityColorName.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/constraints/affinity/include-all/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				for ci := range state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors {
+					ckeys := [...]string{"affinity-color-name"}
+					cstateKeyValues := [...]string{state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors[ci].AffinityColorName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors[ci].AffinityColorName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityIncludeAnyColors {
+						found = true
+						if state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors[ci].AffinityColorName.ValueString() != data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityIncludeAnyColors[cj].AffinityColorName.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/constraints/affinity/include-any/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				if !state.SrteP2mpPolicies[i].TreesidMpls.IsNull() && data.SrteP2mpPolicies[j].TreesidMpls.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/treesid/mpls", state.getPath(), keyString))
+				}
+				if !state.SrteP2mpPolicies[i].FastRerouteLfa.IsNull() && data.SrteP2mpPolicies[j].FastRerouteLfa.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/fast-reroute/lfa", state.getPath(), keyString))
+				}
+				if !state.SrteP2mpPolicies[i].Shutdown.IsNull() && data.SrteP2mpPolicies[j].Shutdown.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/shutdown", state.getPath(), keyString))
+				}
+				if !state.SrteP2mpPolicies[i].SourceIpv4.IsNull() && data.SrteP2mpPolicies[j].SourceIpv4.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/source/ipv4", state.getPath(), keyString))
+				}
+				if !state.SrteP2mpPolicies[i].EndpointSet.IsNull() && data.SrteP2mpPolicies[j].EndpointSet.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/endpoint-set", state.getPath(), keyString))
+				}
+				if !state.SrteP2mpPolicies[i].Color.IsNull() && data.SrteP2mpPolicies[j].Color.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/color", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.SrteP2mpEndpointSets {
+		keys := [...]string{"endpoint-set-name"}
+		stateKeyValues := [...]string{state.SrteP2mpEndpointSets[i].EndpointSetName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrteP2mpEndpointSets[i].EndpointSetName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrteP2mpEndpointSets {
+			found = true
+			if state.SrteP2mpEndpointSets[i].EndpointSetName.ValueString() != data.SrteP2mpEndpointSets[j].EndpointSetName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SrteP2mpEndpointSets[i].Ipv4s {
+					ckeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.SrteP2mpEndpointSets[i].Ipv4s[ci].Address.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SrteP2mpEndpointSets[i].Ipv4s[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SrteP2mpEndpointSets[j].Ipv4s {
+						found = true
+						if state.SrteP2mpEndpointSets[i].Ipv4s[ci].Address.ValueString() != data.SrteP2mpEndpointSets[j].Ipv4s[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/endpoint-sets/endpoint-set%v/ipv4s/ipv4%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/endpoint-sets/endpoint-set%v", state.getPath(), keyString))
+		}
+	}
+	if !state.SrteCspfSrNativeForce.IsNull() && data.SrteCspfSrNativeForce.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native/force", state.getPath()))
+	}
+	if !state.SrteCspfSrNative.IsNull() && data.SrteCspfSrNative.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native", state.getPath()))
+	}
+	if !state.SrteCspfAnycastSidInclusion.IsNull() && data.SrteCspfAnycastSidInclusion.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/anycast-sid-inclusion", state.getPath()))
+	}
+	for i := range state.SrteIpv4Peers {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SrteIpv4Peers[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrteIpv4Peers[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrteIpv4Peers {
+			found = true
+			if state.SrteIpv4Peers[i].Address.ValueString() != data.SrteIpv4Peers[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SrteIpv4Peers[i].Policies {
+					ckeys := [...]string{"policy-name"}
+					cstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SrteIpv4Peers[j].Policies {
+						found = true
+						if state.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].PolicyName.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && data.SrteIpv4Peers[j].Policies[cj].PathSelectionUnprotected.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/unprotected", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && data.SrteIpv4Peers[j].Policies[cj].PathSelectionProtected.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/protected", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].ProfileId.IsNull() && data.SrteIpv4Peers[j].Policies[cj].ProfileId.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/profile-id", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && data.SrteIpv4Peers[j].Policies[cj].Shutdown.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/shutdown", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].BindingSidMpls.IsNull() && data.SrteIpv4Peers[j].Policies[cj].BindingSidMpls.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/binding-sid/mpls", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].EndPointIpv4.IsNull() && data.SrteIpv4Peers[j].Policies[cj].EndPointIpv4.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/end-point/ipv4", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].Color.IsNull() && data.SrteIpv4Peers[j].Policies[cj].Color.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/color", state.getPath(), keyString, ckeyString))
+							}
+							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors {
+								cckeys := [...]string{"affinity-color-name"}
+								ccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityExcludeColors {
+									found = true
+									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityExcludeColors[ccj].AffinityColorName.ValueString() {
+										found = false
+									}
+									if found {
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/affinity/exclude/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors {
+								cckeys := [...]string{"affinity-color-name"}
+								ccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAllColors {
+									found = true
+									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAllColors[ccj].AffinityColorName.ValueString() {
+										found = false
+									}
+									if found {
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/affinity/include-all/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors {
+								cckeys := [...]string{"affinity-color-name"}
+								ccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAnyColors {
+									found = true
+									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAnyColors[ccj].AffinityColorName.ValueString() {
+										found = false
+									}
+									if found {
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/affinity/include-any/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences {
+								cckeys := [...]string{"preference-id"}
+								ccstateKeyValues := [...]string{strconv.FormatInt(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64(), 10)}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences {
+									found = true
+									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].PreferenceId.ValueInt64() {
+										found = false
+									}
+									if found {
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-preferred", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-only", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionProtectedOnly.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-only", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-preferred", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsSidAlgorithm.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsSidAlgorithm.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/sid-algorithm", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										for ccci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames {
+											ccckeys := [...]string{"segment-list-name"}
+											cccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()}
+											ccckeyString := ""
+											for cccki := range ccckeys {
+												ccckeyString += "[" + ccckeys[cccki] + "=" + cccstateKeyValues[cccki] + "]"
+											}
+
+											cccemptyKeys := true
+											if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()).IsZero() {
+												cccemptyKeys = false
+											}
+											if cccemptyKeys {
+												continue
+											}
+
+											found := false
+											for cccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ExplicitSegmentListNames {
+												found = true
+												if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ExplicitSegmentListNames[cccj].SegmentListName.ValueString() {
+													found = false
+												}
+												if found {
+													break
+												}
+											}
+											if !found {
+												deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/explicit/segment-list-names/segment-list-name%v", state.getPath(), keyString, ckeyString, cckeyString, ccckeyString))
+											}
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricSidLimit.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricSidLimit.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/sid-limit", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeHopcount.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/hopcount", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeLatency.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/latency", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeIgp.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/igp", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeTe.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/te", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMpls.IsNull() {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls", state.getPath(), keyString, ckeyString, cckeyString))
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v", state.getPath(), keyString, ckeyString, cckeyString))
+								}
+							}
+							if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAppendSidMpls.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAppendSidMpls.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/append-sid/mpls", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.SrteSegmentLists {
+		keys := [...]string{"segment-list-name"}
+		stateKeyValues := [...]string{state.SrteSegmentLists[i].SegmentListName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrteSegmentLists[i].SegmentListName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrteSegmentLists {
+			found = true
+			if state.SrteSegmentLists[i].SegmentListName.ValueString() != data.SrteSegmentLists[j].SegmentListName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SrteSegmentLists[i].Indexes {
+					ckeys := [...]string{"index-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.SrteSegmentLists[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SrteSegmentLists[i].Indexes[ci].IndexNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SrteSegmentLists[j].Indexes {
+						found = true
+						if state.SrteSegmentLists[i].Indexes[ci].IndexNumber.ValueInt64() != data.SrteSegmentLists[j].Indexes[cj].IndexNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.SrteSegmentLists[i].Indexes[ci].MplsAdjacency.IsNull() && data.SrteSegmentLists[j].Indexes[cj].MplsAdjacency.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v/indexes/index%v/mpls/adjacency", state.getPath(), keyString, ckeyString))
+							}
+							if !state.SrteSegmentLists[i].Indexes[ci].MplsLabel.IsNull() && data.SrteSegmentLists[j].Indexes[cj].MplsLabel.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v/indexes/index%v/mpls/label", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v/indexes/index%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.SrteAffinityBitmaps {
+		keys := [...]string{"affinity-color-name"}
+		stateKeyValues := [...]string{state.SrteAffinityBitmaps[i].AffinityColorName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrteAffinityBitmaps[i].AffinityColorName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrteAffinityBitmaps {
+			found = true
+			if state.SrteAffinityBitmaps[i].AffinityColorName.ValueString() != data.SrteAffinityBitmaps[j].AffinityColorName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SrteAffinityBitmaps[i].AffinityBitPosition.IsNull() && data.SrteAffinityBitmaps[j].AffinityBitPosition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/affinity/bit-map/affinity-colors/affinity-color%v/affinity-attribute-bit", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/affinity/bit-map/affinity-colors/affinity-color%v", state.getPath(), keyString))
+		}
+	}
+	if !state.SegmentRoutingStrictSidOnly.IsNull() && data.SegmentRoutingStrictSidOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/strict-sid-only", state.getPath()))
+	}
+	if !state.LoggingPcepDisjointnessStatus.IsNull() && data.LoggingPcepDisjointnessStatus.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/pcep/disjointness-status", state.getPath()))
+	}
+	if !state.LoggingPcepApiSendQueueCongestionDisable.IsNull() && data.LoggingPcepApiSendQueueCongestionDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/pcep/api/send-queue-congestion/disable", state.getPath()))
+	}
+	if !state.LoggingPcepPcerrReceived.IsNull() && data.LoggingPcepPcerrReceived.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/pcep/pcerr-received", state.getPath()))
+	}
+	if !state.LoggingFallback.IsNull() && data.LoggingFallback.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/fallback", state.getPath()))
+	}
+	if !state.LoggingNoPath.IsNull() && data.LoggingNoPath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/no-path", state.getPath()))
+	}
+	if !state.BackoffThreshold.IsNull() && data.BackoffThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/backoff/threshold", state.getPath()))
+	}
+	if !state.BackoffDifference.IsNull() && data.BackoffDifference.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/backoff/difference", state.getPath()))
+	}
+	if !state.BackoffRatio.IsNull() && data.BackoffRatio.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/backoff/ratio", state.getPath()))
+	}
+	if !state.TimersInitVerifyStartup.IsNull() && data.TimersInitVerifyStartup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/init-verify-startup", state.getPath()))
+	}
+	if !state.TimersInitVerifySwitchover.IsNull() && data.TimersInitVerifySwitchover.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/init-verify-switchover", state.getPath()))
+	}
+	if !state.TimersInitVerifyRestart.IsNull() && data.TimersInitVerifyRestart.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/init-verify-restart", state.getPath()))
+	}
+	if !state.TimersPeerZombie.IsNull() && data.TimersPeerZombie.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/peer-zombie", state.getPath()))
+	}
+	if !state.TimersMinimumPeerKeepalive.IsNull() && data.TimersMinimumPeerKeepalive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/minimum-peer-keepalive", state.getPath()))
+	}
+	if !state.TimersKeepalive.IsNull() && data.TimersKeepalive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/keepalive", state.getPath()))
+	}
+	if !state.TimersReoptimization.IsNull() && data.TimersReoptimization.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/reoptimization", state.getPath()))
+	}
+	if !state.ApiIpv6Address.IsNull() && data.ApiIpv6Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/ipv6/address", state.getPath()))
+	}
+	if !state.ApiIpv4Address.IsNull() && data.ApiIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/ipv4/address", state.getPath()))
+	}
+	for i := range state.ApiUsers {
+		keys := [...]string{"user-name"}
+		stateKeyValues := [...]string{state.ApiUsers[i].UserName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ApiUsers[i].UserName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ApiUsers {
+			found = true
+			if state.ApiUsers[i].UserName.ValueString() != data.ApiUsers[j].UserName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ApiUsers[i].PasswordEncrypted.IsNull() && data.ApiUsers[j].PasswordEncrypted.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/api/users/user%v/password/encrypted", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/api/users/user%v", state.getPath(), keyString))
+		}
+	}
+	if !state.ApiVrf.IsNull() && data.ApiVrf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/vrf", state.getPath()))
+	}
+	if !state.ApiSiblingIpv4.IsNull() && data.ApiSiblingIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/sibling/ipv4", state.getPath()))
+	}
+	if !state.ApiAuthenticationDigest.IsNull() && data.ApiAuthenticationDigest.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/authentication/digest", state.getPath()))
+	}
+	if !state.NetconfSshPasswordEncrypted.IsNull() && data.NetconfSshPasswordEncrypted.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/netconf/ssh/password/encrypted", state.getPath()))
+	}
+	if !state.NetconfSshUser.IsNull() && data.NetconfSshUser.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/netconf/ssh/user", state.getPath()))
+	}
+	for i := range state.PeerIpv6s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.PeerIpv6s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PeerIpv6s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PeerIpv6s {
+			found = true
+			if state.PeerIpv6s[i].Address.ValueString() != data.PeerIpv6s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.IsNull() && data.PeerIpv6s[j].TcpAoAcceptAoMismatchConnection.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", state.getPath(), keyString))
+				}
+				if !state.PeerIpv6s[i].TcpAoIncludeTcpOptions.IsNull() && data.PeerIpv6s[j].TcpAoIncludeTcpOptions.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", state.getPath(), keyString))
+				}
+				if !state.PeerIpv6s[i].TcpAoKeychainName.IsNull() && data.PeerIpv6s[j].TcpAoKeychainName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", state.getPath(), keyString))
+				}
+				if !state.PeerIpv6s[i].PasswordEncrypted.IsNull() && data.PeerIpv6s[j].PasswordEncrypted.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/password/encrypted", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.PeerIpv4s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.PeerIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PeerIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PeerIpv4s {
+			found = true
+			if state.PeerIpv4s[i].Address.ValueString() != data.PeerIpv4s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.IsNull() && data.PeerIpv4s[j].TcpAoAcceptAoMismatchConnection.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", state.getPath(), keyString))
+				}
+				if !state.PeerIpv4s[i].TcpAoIncludeTcpOptions.IsNull() && data.PeerIpv4s[j].TcpAoIncludeTcpOptions.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", state.getPath(), keyString))
+				}
+				if !state.PeerIpv4s[i].TcpAoKeychainName.IsNull() && data.PeerIpv4s[j].TcpAoKeychainName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", state.getPath(), keyString))
+				}
+				if !state.PeerIpv4s[i].PasswordEncrypted.IsNull() && data.PeerIpv4s[j].PasswordEncrypted.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/password/encrypted", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.DisjointPathGroupIds {
+		keys := [...]string{"group-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].GroupId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.DisjointPathGroupIds[i].GroupId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.DisjointPathGroupIds {
+			found = true
+			if state.DisjointPathGroupIds[i].GroupId.ValueInt64() != data.DisjointPathGroupIds[j].GroupId.ValueInt64() {
+				found = false
+			}
+			if found {
+				for ci := range state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds {
+					ckeys := [...]string{"sub-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].SubId.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].SubId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds {
+						found = true
+						if state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].SubId.ValueInt64() != data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].SubId.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspTwoPccExcludeSrlg.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/two/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspTwoPccLspName.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/two/pcc/lsp-name", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspTwoPccIpAddress.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/two/pcc/ip-address", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspTwoPccAddressType.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/two/pcc/address-type", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccExcludeSrlg.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccShortestPath.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccLspName.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/lsp-name", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccIpAddress.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/ip-address", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccAddressType.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/address-type", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].Strict.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/strict", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspTwoPccExcludeSrlg.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/two/pcc/exclude-srlg", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspTwoPccLspName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/two/pcc/lsp-name", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspTwoPccIpAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/two/pcc/ip-address", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspTwoPccAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/two/pcc/address-type", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccExcludeSrlg.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/exclude-srlg", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccShortestPath.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/shortest-path", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccLspName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/lsp-name", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccIpAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/ip-address", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/address-type", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointStrict.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/strict", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgNodeDisjoint.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjoint.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/enable", state.getPath(), keyString))
+				}
+				for ci := range state.DisjointPathGroupIds[i].SrlgDisjointSubIds {
+					ckeys := [...]string{"sub-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].SubId.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].SubId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.DisjointPathGroupIds[j].SrlgDisjointSubIds {
+						found = true
+						if state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].SubId.ValueInt64() != data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].SubId.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspTwoPccExcludeSrlg.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/two/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspTwoPccLspName.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/two/pcc/lsp-name", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspTwoPccIpAddress.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/two/pcc/ip-address", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspTwoPccAddressType.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/two/pcc/address-type", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccExcludeSrlg.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccShortestPath.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccLspName.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/lsp-name", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccIpAddress.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/ip-address", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccAddressType.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/address-type", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].Strict.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/strict", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointLspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspTwoPccExcludeSrlg.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/two/pcc/exclude-srlg", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointLspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspTwoPccLspName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/two/pcc/lsp-name", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointLspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspTwoPccIpAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/two/pcc/ip-address", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointLspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspTwoPccAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/two/pcc/address-type", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccExcludeSrlg.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/exclude-srlg", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccShortestPath.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/shortest-path", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccLspName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/lsp-name", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccIpAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/ip-address", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/address-type", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjointStrict.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointStrict.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/strict", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].SrlgDisjoint.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjoint.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/enable", state.getPath(), keyString))
+				}
+				for ci := range state.DisjointPathGroupIds[i].NodeDisjointSubIds {
+					ckeys := [...]string{"sub-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].SubId.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].SubId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.DisjointPathGroupIds[j].NodeDisjointSubIds {
+						found = true
+						if state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].SubId.ValueInt64() != data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].SubId.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspTwoPccExcludeSrlg.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/two/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspTwoPccLspName.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/two/pcc/lsp-name", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspTwoPccIpAddress.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/two/pcc/ip-address", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspTwoPccAddressType.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/two/pcc/address-type", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccExcludeSrlg.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccShortestPath.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccLspName.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/lsp-name", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccIpAddress.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/ip-address", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccAddressType.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/address-type", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].Strict.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/strict", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointLspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspTwoPccExcludeSrlg.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/two/pcc/exclude-srlg", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointLspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspTwoPccLspName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/two/pcc/lsp-name", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointLspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspTwoPccIpAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/two/pcc/ip-address", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointLspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspTwoPccAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/two/pcc/address-type", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccExcludeSrlg.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/exclude-srlg", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccShortestPath.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/shortest-path", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccLspName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/lsp-name", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccIpAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/ip-address", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/address-type", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjointStrict.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointStrict.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/strict", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].NodeDisjoint.IsNull() && data.DisjointPathGroupIds[j].NodeDisjoint.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/enable", state.getPath(), keyString))
+				}
+				for ci := range state.DisjointPathGroupIds[i].LinkDisjointSubIds {
+					ckeys := [...]string{"sub-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].SubId.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].SubId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.DisjointPathGroupIds[j].LinkDisjointSubIds {
+						found = true
+						if state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].SubId.ValueInt64() != data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].SubId.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspTwoPccExcludeSrlg.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/two/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspTwoPccLspName.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/two/pcc/lsp-name", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspTwoPccIpAddress.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/two/pcc/ip-address", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspTwoPccAddressType.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/two/pcc/address-type", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccExcludeSrlg.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccShortestPath.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccLspName.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/lsp-name", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccIpAddress.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/ip-address", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccAddressType.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/address-type", state.getPath(), keyString, ckeyString))
+							}
+							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].Strict.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/strict", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointLspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspTwoPccExcludeSrlg.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/two/pcc/exclude-srlg", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointLspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspTwoPccLspName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/two/pcc/lsp-name", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointLspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspTwoPccIpAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/two/pcc/ip-address", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointLspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspTwoPccAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/two/pcc/address-type", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccExcludeSrlg.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/exclude-srlg", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccShortestPath.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/shortest-path", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccLspName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/lsp-name", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccIpAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/ip-address", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/address-type", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjointStrict.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointStrict.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/strict", state.getPath(), keyString))
+				}
+				if !state.DisjointPathGroupIds[i].LinkDisjoint.IsNull() && data.DisjointPathGroupIds[j].LinkDisjoint.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/enable", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v", state.getPath(), keyString))
+		}
+	}
+	if !state.DisjointPathMaximumAttempts.IsNull() && data.DisjointPathMaximumAttempts.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/maximum-attempts", state.getPath()))
+	}
+	if !state.TcpAoAcceptAoMismatchConnection.IsNull() && data.TcpAoAcceptAoMismatchConnection.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcp-ao", state.getPath()))
+	}
+	if !state.TcpAoIncludeTcpOptions.IsNull() && data.TcpAoIncludeTcpOptions.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcp-ao", state.getPath()))
+	}
+	if !state.TcpAoKeychainName.IsNull() && data.TcpAoKeychainName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcp-ao", state.getPath()))
+	}
+	if !state.PasswordEncrypted.IsNull() && data.PasswordEncrypted.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/password/encrypted", state.getPath()))
+	}
+	if !state.TcpBufferSize.IsNull() && data.TcpBufferSize.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcp-buffer/size", state.getPath()))
+	}
+	for i := range state.StateSyncIpv6s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.StateSyncIpv6s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.StateSyncIpv6s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.StateSyncIpv6s {
+			found = true
+			if state.StateSyncIpv6s[i].Address.ValueString() != data.StateSyncIpv6s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/state-sync/ipv6s/ipv6%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.StateSyncIpv4s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.StateSyncIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.StateSyncIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.StateSyncIpv4s {
+			found = true
+			if state.StateSyncIpv4s[i].Address.ValueString() != data.StateSyncIpv4s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", state.getPath(), keyString))
+		}
+	}
+	if !state.AddressIpv6.IsNull() && data.AddressIpv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv6", state.getPath()))
+	}
+	if !state.AddressIpv4.IsNull() && data.AddressIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv4", state.getPath()))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE) []string {
+	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
+	if !data.HierarchicalUnderlayEnableAll.IsNull() && !data.HierarchicalUnderlayEnableAll.ValueBool() {
+		if state != nil && !state.HierarchicalUnderlayEnableAll.IsNull() && state.HierarchicalUnderlayEnableAll.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hierarchical/underlay/enable-all", data.getXPath()))
+		}
+	}
+	for i := range data.SrteP2mpFrrNodeSetToIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.SrteP2mpFrrNodeSetFromIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.SrteP2mpFastRerouteLfa.IsNull() && !data.SrteP2mpFastRerouteLfa.ValueBool() {
+		if state != nil && !state.SrteP2mpFastRerouteLfa.IsNull() && state.SrteP2mpFastRerouteLfa.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/fast-reroute/lfa", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.SrteP2mpMultipathDisable.IsNull() && !data.SrteP2mpMultipathDisable.ValueBool() {
+		if state != nil && !state.SrteP2mpMultipathDisable.IsNull() && state.SrteP2mpMultipathDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/multipath-disable", data.getXPath()))
+		}
+	}
+	for i := range data.SrteP2mpPolicies {
+		keys := [...]string{"policy-name"}
+		keyValues := [...]string{data.SrteP2mpPolicies[i].PolicyName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.SrteP2mpPolicies[i].CandidatePathsPreferences {
+			ckeys := [...]string{"preference-id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].PreferenceId.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			// Only delete if state has true and plan has false
+			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/hopcount", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/latency", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/igp", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/te", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic", data.getXPath(), keyString, ckeyString))
+				}
+			}
+		}
+		for ci := range data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors {
+			ckeys := [...]string{"affinity-color-name"}
+			ckeyValues := [...]string{data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors[ci].AffinityColorName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors {
+			ckeys := [...]string{"affinity-color-name"}
+			ckeyValues := [...]string{data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors[ci].AffinityColorName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors {
+			ckeys := [...]string{"affinity-color-name"}
+			ckeyValues := [...]string{data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors[ci].AffinityColorName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.SrteP2mpPolicies[i].FastRerouteLfa.IsNull() && !data.SrteP2mpPolicies[i].FastRerouteLfa.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.SrteP2mpPolicies) && !state.SrteP2mpPolicies[i].FastRerouteLfa.IsNull() && state.SrteP2mpPolicies[i].FastRerouteLfa.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/fast-reroute/lfa", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.SrteP2mpPolicies[i].Shutdown.IsNull() && !data.SrteP2mpPolicies[i].Shutdown.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.SrteP2mpPolicies) && !state.SrteP2mpPolicies[i].Shutdown.IsNull() && state.SrteP2mpPolicies[i].Shutdown.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/shutdown", data.getXPath(), keyString))
+			}
+		}
+	}
+	for i := range data.SrteP2mpEndpointSets {
+		keys := [...]string{"endpoint-set-name"}
+		keyValues := [...]string{data.SrteP2mpEndpointSets[i].EndpointSetName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.SrteP2mpEndpointSets[i].Ipv4s {
+			ckeys := [...]string{"address"}
+			ckeyValues := [...]string{data.SrteP2mpEndpointSets[i].Ipv4s[ci].Address.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.SrteCspfSrNativeForce.IsNull() && !data.SrteCspfSrNativeForce.ValueBool() {
+		if state != nil && !state.SrteCspfSrNativeForce.IsNull() && state.SrteCspfSrNativeForce.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native/force", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.SrteCspfSrNative.IsNull() && !data.SrteCspfSrNative.ValueBool() {
+		if state != nil && !state.SrteCspfSrNative.IsNull() && state.SrteCspfSrNative.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.SrteCspfAnycastSidInclusion.IsNull() && !data.SrteCspfAnycastSidInclusion.ValueBool() {
+		if state != nil && !state.SrteCspfAnycastSidInclusion.IsNull() && state.SrteCspfAnycastSidInclusion.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/anycast-sid-inclusion", data.getXPath()))
+		}
+	}
+	for i := range data.SrteIpv4Peers {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SrteIpv4Peers[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.SrteIpv4Peers[i].Policies {
+			ckeys := [...]string{"policy-name"}
+			ckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			// Only delete if state has true and plan has false
+			if !data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.SrteIpv4Peers) && ci < len(state.SrteIpv4Peers[i].Policies) && !state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/unprotected", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.SrteIpv4Peers) && ci < len(state.SrteIpv4Peers[i].Policies) && !state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/protected", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].Shutdown.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.SrteIpv4Peers) && ci < len(state.SrteIpv4Peers[i].Policies) && !state.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && state.SrteIpv4Peers[i].Policies[ci].Shutdown.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/shutdown", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors {
+				cckeys := [...]string{"affinity-color-name"}
+				cckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors {
+				cckeys := [...]string{"affinity-color-name"}
+				cckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors {
+				cckeys := [...]string{"affinity-color-name"}
+				cckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences {
+				cckeys := [...]string{"preference-id"}
+				cckeyValues := [...]string{strconv.FormatInt(data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64(), 10)}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-preferred", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-only", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-only", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-preferred", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				for ccci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames {
+					ccckeys := [...]string{"segment-list-name"}
+					ccckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()}
+					ccckeyString := ""
+					for cccki := range ccckeys {
+						ccckeyString += "[" + ccckeys[cccki] + "=" + ccckeyValues[cccki] + "]"
+					}
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/hopcount", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/latency", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/igp", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/te", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls", data.getPath(), keyString, ckeyString, cckeyString))
+				}
+			}
+		}
+	}
+	for i := range data.SrteSegmentLists {
+		keys := [...]string{"segment-list-name"}
+		keyValues := [...]string{data.SrteSegmentLists[i].SegmentListName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.SrteSegmentLists[i].Indexes {
+			ckeys := [...]string{"index-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.SrteSegmentLists[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+	}
+	for i := range data.SrteAffinityBitmaps {
+		keys := [...]string{"affinity-color-name"}
+		keyValues := [...]string{data.SrteAffinityBitmaps[i].AffinityColorName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.SegmentRoutingStrictSidOnly.IsNull() && !data.SegmentRoutingStrictSidOnly.ValueBool() {
+		if state != nil && !state.SegmentRoutingStrictSidOnly.IsNull() && state.SegmentRoutingStrictSidOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/strict-sid-only", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.LoggingPcepDisjointnessStatus.IsNull() && !data.LoggingPcepDisjointnessStatus.ValueBool() {
+		if state != nil && !state.LoggingPcepDisjointnessStatus.IsNull() && state.LoggingPcepDisjointnessStatus.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/pcep/disjointness-status", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.LoggingPcepApiSendQueueCongestionDisable.IsNull() && !data.LoggingPcepApiSendQueueCongestionDisable.ValueBool() {
+		if state != nil && !state.LoggingPcepApiSendQueueCongestionDisable.IsNull() && state.LoggingPcepApiSendQueueCongestionDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/pcep/api/send-queue-congestion/disable", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.LoggingPcepPcerrReceived.IsNull() && !data.LoggingPcepPcerrReceived.ValueBool() {
+		if state != nil && !state.LoggingPcepPcerrReceived.IsNull() && state.LoggingPcepPcerrReceived.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/pcep/pcerr-received", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.LoggingFallback.IsNull() && !data.LoggingFallback.ValueBool() {
+		if state != nil && !state.LoggingFallback.IsNull() && state.LoggingFallback.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/fallback", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.LoggingNoPath.IsNull() && !data.LoggingNoPath.ValueBool() {
+		if state != nil && !state.LoggingNoPath.IsNull() && state.LoggingNoPath.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/no-path", data.getXPath()))
+		}
+	}
+	for i := range data.ApiUsers {
+		keys := [...]string{"user-name"}
+		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.ApiAuthenticationDigest.IsNull() && !data.ApiAuthenticationDigest.ValueBool() {
+		if state != nil && !state.ApiAuthenticationDigest.IsNull() && state.ApiAuthenticationDigest.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/api/authentication/digest", data.getXPath()))
+		}
+	}
+	for i := range data.PeerIpv6s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PeerIpv6s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		// Only delete if state has true and plan has false
+		if !data.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.IsNull() && !data.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.PeerIpv6s) && !state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.IsNull() && state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.PeerIpv6s[i].TcpAoIncludeTcpOptions.IsNull() && !data.PeerIpv6s[i].TcpAoIncludeTcpOptions.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.PeerIpv6s) && !state.PeerIpv6s[i].TcpAoIncludeTcpOptions.IsNull() && state.PeerIpv6s[i].TcpAoIncludeTcpOptions.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", data.getXPath(), keyString))
+			}
+		}
+	}
+	for i := range data.PeerIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PeerIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		// Only delete if state has true and plan has false
+		if !data.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.IsNull() && !data.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.PeerIpv4s) && !state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.IsNull() && state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.PeerIpv4s[i].TcpAoIncludeTcpOptions.IsNull() && !data.PeerIpv4s[i].TcpAoIncludeTcpOptions.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.PeerIpv4s) && !state.PeerIpv4s[i].TcpAoIncludeTcpOptions.IsNull() && state.PeerIpv4s[i].TcpAoIncludeTcpOptions.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", data.getXPath(), keyString))
+			}
+		}
+	}
+	for i := range data.DisjointPathGroupIds {
+		keys := [...]string{"group-id"}
+		keyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].GroupId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds {
+			ckeys := [...]string{"sub-id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].SubId.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			// Only delete if state has true and plan has false
+			if !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/strict", data.getXPath(), keyString, ckeyString))
+				}
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/shortest-path", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/strict", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].SrlgNodeDisjoint.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjoint.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjoint.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjoint.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/enable", data.getXPath(), keyString))
+			}
+		}
+		for ci := range data.DisjointPathGroupIds[i].SrlgDisjointSubIds {
+			ckeys := [...]string{"sub-id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].SubId.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			// Only delete if state has true and plan has false
+			if !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/strict", data.getXPath(), keyString, ckeyString))
+				}
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/shortest-path", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].SrlgDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointStrict.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointStrict.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/strict", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].SrlgDisjoint.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjoint.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgDisjoint.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjoint.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/enable", data.getXPath(), keyString))
+			}
+		}
+		for ci := range data.DisjointPathGroupIds[i].NodeDisjointSubIds {
+			ckeys := [...]string{"sub-id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].SubId.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			// Only delete if state has true and plan has false
+			if !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].NodeDisjointSubIds) && !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].NodeDisjointSubIds) && !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/strict", data.getXPath(), keyString, ckeyString))
+				}
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/shortest-path", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].NodeDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointStrict.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].NodeDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointStrict.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/strict", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].NodeDisjoint.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjoint.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].NodeDisjoint.IsNull() && state.DisjointPathGroupIds[i].NodeDisjoint.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/enable", data.getXPath(), keyString))
+			}
+		}
+		for ci := range data.DisjointPathGroupIds[i].LinkDisjointSubIds {
+			ckeys := [...]string{"sub-id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].SubId.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			// Only delete if state has true and plan has false
+			if !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].LinkDisjointSubIds) && !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", data.getXPath(), keyString, ckeyString))
+				}
+			}
+			// Only delete if state has true and plan has false
+			if !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.ValueBool() {
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].LinkDisjointSubIds) && !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/strict", data.getXPath(), keyString, ckeyString))
+				}
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/shortest-path", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].LinkDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointStrict.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].LinkDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointStrict.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/strict", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.DisjointPathGroupIds[i].LinkDisjoint.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjoint.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].LinkDisjoint.IsNull() && state.DisjointPathGroupIds[i].LinkDisjoint.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/enable", data.getXPath(), keyString))
+			}
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.TcpAoAcceptAoMismatchConnection.IsNull() && !data.TcpAoAcceptAoMismatchConnection.ValueBool() {
+		if state != nil && !state.TcpAoAcceptAoMismatchConnection.IsNull() && state.TcpAoAcceptAoMismatchConnection.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/tcp-ao", data.getXPath()))
+		}
+	}
+	// Only delete if state has true and plan has false
+	if !data.TcpAoIncludeTcpOptions.IsNull() && !data.TcpAoIncludeTcpOptions.ValueBool() {
+		if state != nil && !state.TcpAoIncludeTcpOptions.IsNull() && state.TcpAoIncludeTcpOptions.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/tcp-ao", data.getXPath()))
+		}
+	}
+	for i := range data.StateSyncIpv6s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.StateSyncIpv6s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.StateSyncIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.StateSyncIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
+func (data *PCE) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.HierarchicalUnderlayEnableAll.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hierarchical/underlay/enable-all", data.getPath()))
+	}
+	if !data.PeerFilterIpv4AccessList.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-filter/ipv4/access-list", data.getPath()))
+	}
+	for i := range data.SrteP2mpFrrNodeSetToIpv4s {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/frr-node-set/to/ipv4s/ipv4%v", data.getPath(), keyPath))
+	}
+	for i := range data.SrteP2mpFrrNodeSetFromIpv4s {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/frr-node-set/from/ipv4s/ipv4%v", data.getPath(), keyPath))
+	}
+	if !data.SrteP2mpFastRerouteLfa.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/fast-reroute/lfa", data.getPath()))
+	}
+	if !data.SrteP2mpMultipathDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/multipath-disable", data.getPath()))
+	}
+	if !data.SrteP2mpLabelRangeMax.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/label-range/max", data.getPath()))
+	}
+	if !data.SrteP2mpLabelRangeMin.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/label-range/min", data.getPath()))
+	}
+	if !data.SrteP2mpTimersCleanup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/timers/cleanup", data.getPath()))
+	}
+	if !data.SrteP2mpTimersReoptimization.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/timers/reoptimization", data.getPath()))
+	}
+	for i := range data.SrteP2mpPolicies {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[policy-name=" + data.SrteP2mpPolicies[i].PolicyName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v", data.getPath(), keyPath))
+	}
+	for i := range data.SrteP2mpEndpointSets {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[endpoint-set-name=" + data.SrteP2mpEndpointSets[i].EndpointSetName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/endpoint-sets/endpoint-set%v", data.getPath(), keyPath))
+	}
+	if !data.SrteCspfSrNativeForce.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native/force", data.getPath()))
+	}
+	if !data.SrteCspfSrNative.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native", data.getPath()))
+	}
+	if !data.SrteCspfAnycastSidInclusion.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/anycast-sid-inclusion", data.getPath()))
+	}
+	for i := range data.SrteIpv4Peers {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.SrteIpv4Peers[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v", data.getPath(), keyPath))
+	}
+	for i := range data.SrteSegmentLists {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[segment-list-name=" + data.SrteSegmentLists[i].SegmentListName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v", data.getPath(), keyPath))
+	}
+	for i := range data.SrteAffinityBitmaps {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[affinity-color-name=" + data.SrteAffinityBitmaps[i].AffinityColorName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/affinity/bit-map/affinity-colors/affinity-color%v", data.getPath(), keyPath))
+	}
+	if !data.SegmentRoutingStrictSidOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/strict-sid-only", data.getPath()))
+	}
+	if !data.LoggingPcepDisjointnessStatus.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/pcep/disjointness-status", data.getPath()))
+	}
+	if !data.LoggingPcepApiSendQueueCongestionDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/pcep/api/send-queue-congestion/disable", data.getPath()))
+	}
+	if !data.LoggingPcepPcerrReceived.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/pcep/pcerr-received", data.getPath()))
+	}
+	if !data.LoggingFallback.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/fallback", data.getPath()))
+	}
+	if !data.LoggingNoPath.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/no-path", data.getPath()))
+	}
+	if !data.BackoffThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/backoff/threshold", data.getPath()))
+	}
+	if !data.BackoffDifference.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/backoff/difference", data.getPath()))
+	}
+	if !data.BackoffRatio.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/backoff/ratio", data.getPath()))
+	}
+	if !data.TimersInitVerifyStartup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/init-verify-startup", data.getPath()))
+	}
+	if !data.TimersInitVerifySwitchover.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/init-verify-switchover", data.getPath()))
+	}
+	if !data.TimersInitVerifyRestart.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/init-verify-restart", data.getPath()))
+	}
+	if !data.TimersPeerZombie.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/peer-zombie", data.getPath()))
+	}
+	if !data.TimersMinimumPeerKeepalive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/minimum-peer-keepalive", data.getPath()))
+	}
+	if !data.TimersKeepalive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/keepalive", data.getPath()))
+	}
+	if !data.TimersReoptimization.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/reoptimization", data.getPath()))
+	}
+	if !data.ApiIpv6Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/ipv6/address", data.getPath()))
+	}
+	if !data.ApiIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/ipv4/address", data.getPath()))
+	}
+	for i := range data.ApiUsers {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[user-name=" + data.ApiUsers[i].UserName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/users/user%v", data.getPath(), keyPath))
+	}
+	if !data.ApiVrf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/vrf", data.getPath()))
+	}
+	if !data.ApiSiblingIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/sibling/ipv4", data.getPath()))
+	}
+	if !data.ApiAuthenticationDigest.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/authentication/digest", data.getPath()))
+	}
+	if !data.NetconfSshPasswordEncrypted.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/netconf/ssh/password/encrypted", data.getPath()))
+	}
+	if !data.NetconfSshUser.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/netconf/ssh/user", data.getPath()))
+	}
+	for i := range data.PeerIpv6s {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.PeerIpv6s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer/ipv6s/ipv6%v", data.getPath(), keyPath))
+	}
+	for i := range data.PeerIpv4s {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.PeerIpv4s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer/ipv4s/ipv4%v", data.getPath(), keyPath))
+	}
+	for i := range data.DisjointPathGroupIds {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[group-id=" + strconv.FormatInt(data.DisjointPathGroupIds[i].GroupId.ValueInt64(), 10) + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v", data.getPath(), keyPath))
+	}
+	if !data.DisjointPathMaximumAttempts.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/disjoint-path/maximum-attempts", data.getPath()))
+	}
+	if !data.TcpAoAcceptAoMismatchConnection.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcp-ao", data.getPath()))
+	}
+	if !data.TcpAoIncludeTcpOptions.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcp-ao", data.getPath()))
+	}
+	if !data.TcpAoKeychainName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcp-ao", data.getPath()))
+	}
+	if !data.PasswordEncrypted.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/password/encrypted", data.getPath()))
+	}
+	if !data.TcpBufferSize.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcp-buffer/size", data.getPath()))
+	}
+	for i := range data.StateSyncIpv6s {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.StateSyncIpv6s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/state-sync/ipv6s/ipv6%v", data.getPath(), keyPath))
+	}
+	for i := range data.StateSyncIpv4s {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.StateSyncIpv4s[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", data.getPath(), keyPath))
+	}
+	if !data.AddressIpv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv6", data.getPath()))
+	}
+	if !data.AddressIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv4", data.getPath()))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data PCE) toBodyXML(ctx context.Context) string {
@@ -4122,6 +8268,7 @@ func (data PCE) toBodyXML(ctx context.Context) string {
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PCE) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -5880,1956 +10027,7 @@ func (data *PCE) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *PCE) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "address.ipv4"); value.Exists() {
-		data.AddressIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "address.ipv6"); value.Exists() {
-		data.AddressIpv6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "state-sync.ipv4s.ipv4"); value.Exists() {
-		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEStateSyncIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			data.StateSyncIpv4s = append(data.StateSyncIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "state-sync.ipv6s.ipv6"); value.Exists() {
-		data.StateSyncIpv6s = make([]PCEStateSyncIpv6s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEStateSyncIpv6s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			data.StateSyncIpv6s = append(data.StateSyncIpv6s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "tcp-buffer.size"); value.Exists() {
-		data.TcpBufferSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "tcp-ao.key-chain-name"); value.Exists() {
-		data.TcpAoKeychainName = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "tcp-ao.include-tcp-options"); value.Exists() {
-		data.TcpAoIncludeTcpOptions = types.BoolValue(true)
-	} else if !data.TcpAoIncludeTcpOptions.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TcpAoIncludeTcpOptions = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "tcp-ao.accept-ao-mismatch-connection"); value.Exists() {
-		data.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
-	} else if !data.TcpAoAcceptAoMismatchConnection.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "disjoint-path.maximum-attempts"); value.Exists() {
-		data.DisjointPathMaximumAttempts = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "disjoint-path.group-ids.group-id"); value.Exists() {
-		data.DisjointPathGroupIds = make([]PCEDisjointPathGroupIds, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEDisjointPathGroupIds{}
-			if cValue := v.Get("group-id"); cValue.Exists() {
-				item.GroupId = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.link.enable"); cValue.Exists() {
-				item.LinkDisjoint = types.BoolValue(true)
-			} else if !item.LinkDisjoint.IsNull() {
-				// Only set to false if it was previously set
-				item.LinkDisjoint = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.link.strict"); cValue.Exists() {
-				item.LinkDisjointStrict = types.BoolValue(true)
-			} else if !item.LinkDisjointStrict.IsNull() {
-				// Only set to false if it was previously set
-				item.LinkDisjointStrict = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.address-type"); cValue.Exists() {
-				item.LinkDisjointLspOnePccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.ip-address"); cValue.Exists() {
-				item.LinkDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.lsp-name"); cValue.Exists() {
-				item.LinkDisjointLspOnePccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.shortest-path"); cValue.Exists() {
-				item.LinkDisjointLspOnePccShortestPath = types.BoolValue(true)
-			} else if !item.LinkDisjointLspOnePccShortestPath.IsNull() {
-				// Only set to false if it was previously set
-				item.LinkDisjointLspOnePccShortestPath = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
-				item.LinkDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.link.lsp.two.pcc.address-type"); cValue.Exists() {
-				item.LinkDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.two.pcc.ip-address"); cValue.Exists() {
-				item.LinkDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.two.pcc.lsp-name"); cValue.Exists() {
-				item.LinkDisjointLspTwoPccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
-				item.LinkDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.link.sub-ids.sub-id"); cValue.Exists() {
-				item.LinkDisjointSubIds = make([]PCEDisjointPathGroupIdsLinkDisjointSubIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCEDisjointPathGroupIdsLinkDisjointSubIds{}
-					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
-						cItem.SubId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("strict"); ccValue.Exists() {
-						cItem.Strict = types.BoolValue(true)
-					} else if !cItem.Strict.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Strict = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
-						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
-						cItem.LspOnePccShortestPath = types.BoolValue(true)
-					} else if !cItem.LspOnePccShortestPath.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LspOnePccShortestPath = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
-						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					item.LinkDisjointSubIds = append(item.LinkDisjointSubIds, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("type.node.enable"); cValue.Exists() {
-				item.NodeDisjoint = types.BoolValue(true)
-			} else if !item.NodeDisjoint.IsNull() {
-				// Only set to false if it was previously set
-				item.NodeDisjoint = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.node.strict"); cValue.Exists() {
-				item.NodeDisjointStrict = types.BoolValue(true)
-			} else if !item.NodeDisjointStrict.IsNull() {
-				// Only set to false if it was previously set
-				item.NodeDisjointStrict = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.address-type"); cValue.Exists() {
-				item.NodeDisjointLspOnePccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.ip-address"); cValue.Exists() {
-				item.NodeDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.lsp-name"); cValue.Exists() {
-				item.NodeDisjointLspOnePccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.shortest-path"); cValue.Exists() {
-				item.NodeDisjointLspOnePccShortestPath = types.BoolValue(true)
-			} else if !item.NodeDisjointLspOnePccShortestPath.IsNull() {
-				// Only set to false if it was previously set
-				item.NodeDisjointLspOnePccShortestPath = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
-				item.NodeDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.node.lsp.two.pcc.address-type"); cValue.Exists() {
-				item.NodeDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.two.pcc.ip-address"); cValue.Exists() {
-				item.NodeDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.two.pcc.lsp-name"); cValue.Exists() {
-				item.NodeDisjointLspTwoPccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
-				item.NodeDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.node.sub-ids.sub-id"); cValue.Exists() {
-				item.NodeDisjointSubIds = make([]PCEDisjointPathGroupIdsNodeDisjointSubIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCEDisjointPathGroupIdsNodeDisjointSubIds{}
-					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
-						cItem.SubId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("strict"); ccValue.Exists() {
-						cItem.Strict = types.BoolValue(true)
-					} else if !cItem.Strict.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Strict = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
-						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
-						cItem.LspOnePccShortestPath = types.BoolValue(true)
-					} else if !cItem.LspOnePccShortestPath.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LspOnePccShortestPath = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
-						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					item.NodeDisjointSubIds = append(item.NodeDisjointSubIds, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("type.srlg.enable"); cValue.Exists() {
-				item.SrlgDisjoint = types.BoolValue(true)
-			} else if !item.SrlgDisjoint.IsNull() {
-				// Only set to false if it was previously set
-				item.SrlgDisjoint = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg.strict"); cValue.Exists() {
-				item.SrlgDisjointStrict = types.BoolValue(true)
-			} else if !item.SrlgDisjointStrict.IsNull() {
-				// Only set to false if it was previously set
-				item.SrlgDisjointStrict = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.address-type"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.ip-address"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.lsp-name"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.shortest-path"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccShortestPath = types.BoolValue(true)
-			} else if !item.SrlgDisjointLspOnePccShortestPath.IsNull() {
-				// Only set to false if it was previously set
-				item.SrlgDisjointLspOnePccShortestPath = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.srlg.lsp.two.pcc.address-type"); cValue.Exists() {
-				item.SrlgDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.two.pcc.ip-address"); cValue.Exists() {
-				item.SrlgDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.two.pcc.lsp-name"); cValue.Exists() {
-				item.SrlgDisjointLspTwoPccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
-				item.SrlgDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.srlg.sub-ids.sub-id"); cValue.Exists() {
-				item.SrlgDisjointSubIds = make([]PCEDisjointPathGroupIdsSrlgDisjointSubIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCEDisjointPathGroupIdsSrlgDisjointSubIds{}
-					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
-						cItem.SubId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("strict"); ccValue.Exists() {
-						cItem.Strict = types.BoolValue(true)
-					} else if !cItem.Strict.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Strict = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
-						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
-						cItem.LspOnePccShortestPath = types.BoolValue(true)
-					} else if !cItem.LspOnePccShortestPath.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LspOnePccShortestPath = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
-						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					item.SrlgDisjointSubIds = append(item.SrlgDisjointSubIds, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("type.srlg-node.enable"); cValue.Exists() {
-				item.SrlgNodeDisjoint = types.BoolValue(true)
-			} else if !item.SrlgNodeDisjoint.IsNull() {
-				// Only set to false if it was previously set
-				item.SrlgNodeDisjoint = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg-node.strict"); cValue.Exists() {
-				item.SrlgNodeDisjointStrict = types.BoolValue(true)
-			} else if !item.SrlgNodeDisjointStrict.IsNull() {
-				// Only set to false if it was previously set
-				item.SrlgNodeDisjointStrict = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.address-type"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.ip-address"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.lsp-name"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.shortest-path"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccShortestPath = types.BoolValue(true)
-			} else if !item.SrlgNodeDisjointLspOnePccShortestPath.IsNull() {
-				// Only set to false if it was previously set
-				item.SrlgNodeDisjointLspOnePccShortestPath = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.two.pcc.address-type"); cValue.Exists() {
-				item.SrlgNodeDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.two.pcc.ip-address"); cValue.Exists() {
-				item.SrlgNodeDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.two.pcc.lsp-name"); cValue.Exists() {
-				item.SrlgNodeDisjointLspTwoPccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
-				item.SrlgNodeDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.srlg-node.sub-ids.sub-id"); cValue.Exists() {
-				item.SrlgNodeDisjointSubIds = make([]PCEDisjointPathGroupIdsSrlgNodeDisjointSubIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCEDisjointPathGroupIdsSrlgNodeDisjointSubIds{}
-					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
-						cItem.SubId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("strict"); ccValue.Exists() {
-						cItem.Strict = types.BoolValue(true)
-					} else if !cItem.Strict.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Strict = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
-						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
-						cItem.LspOnePccShortestPath = types.BoolValue(true)
-					} else if !cItem.LspOnePccShortestPath.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LspOnePccShortestPath = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
-						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					item.SrlgNodeDisjointSubIds = append(item.SrlgNodeDisjointSubIds, cItem)
-					return true
-				})
-			}
-			data.DisjointPathGroupIds = append(data.DisjointPathGroupIds, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "peer.ipv4s.ipv4"); value.Exists() {
-		data.PeerIpv4s = make([]PCEPeerIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEPeerIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp-ao.key-chain-name"); cValue.Exists() {
-				item.TcpAoKeychainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp-ao.include-tcp-options"); cValue.Exists() {
-				item.TcpAoIncludeTcpOptions = types.BoolValue(true)
-			} else if !item.TcpAoIncludeTcpOptions.IsNull() {
-				// Only set to false if it was previously set
-				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
-			}
-			if cValue := v.Get("tcp-ao.accept-ao-mismatch-connection"); cValue.Exists() {
-				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
-			} else if !item.TcpAoAcceptAoMismatchConnection.IsNull() {
-				// Only set to false if it was previously set
-				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
-			}
-			data.PeerIpv4s = append(data.PeerIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "peer.ipv6s.ipv6"); value.Exists() {
-		data.PeerIpv6s = make([]PCEPeerIpv6s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEPeerIpv6s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp-ao.key-chain-name"); cValue.Exists() {
-				item.TcpAoKeychainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp-ao.include-tcp-options"); cValue.Exists() {
-				item.TcpAoIncludeTcpOptions = types.BoolValue(true)
-			} else if !item.TcpAoIncludeTcpOptions.IsNull() {
-				// Only set to false if it was previously set
-				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
-			}
-			if cValue := v.Get("tcp-ao.accept-ao-mismatch-connection"); cValue.Exists() {
-				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
-			} else if !item.TcpAoAcceptAoMismatchConnection.IsNull() {
-				// Only set to false if it was previously set
-				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
-			}
-			data.PeerIpv6s = append(data.PeerIpv6s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "netconf.ssh.user"); value.Exists() {
-		data.NetconfSshUser = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "api.authentication.digest"); value.Exists() {
-		data.ApiAuthenticationDigest = types.BoolValue(true)
-	} else if !data.ApiAuthenticationDigest.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ApiAuthenticationDigest = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "api.sibling.ipv4"); value.Exists() {
-		data.ApiSiblingIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "api.vrf"); value.Exists() {
-		data.ApiVrf = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "api.users.user"); value.Exists() {
-		data.ApiUsers = make([]PCEApiUsers, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEApiUsers{}
-			if cValue := v.Get("user-name"); cValue.Exists() {
-				item.UserName = types.StringValue(cValue.String())
-			}
-			data.ApiUsers = append(data.ApiUsers, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "api.ipv4.address"); value.Exists() {
-		data.ApiIpv4Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "api.ipv6.address"); value.Exists() {
-		data.ApiIpv6Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "timers.reoptimization"); value.Exists() {
-		data.TimersReoptimization = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.keepalive"); value.Exists() {
-		data.TimersKeepalive = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.minimum-peer-keepalive"); value.Exists() {
-		data.TimersMinimumPeerKeepalive = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.peer-zombie"); value.Exists() {
-		data.TimersPeerZombie = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.init-verify-restart"); value.Exists() {
-		data.TimersInitVerifyRestart = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.init-verify-switchover"); value.Exists() {
-		data.TimersInitVerifySwitchover = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.init-verify-startup"); value.Exists() {
-		data.TimersInitVerifyStartup = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "backoff.ratio"); value.Exists() {
-		data.BackoffRatio = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "backoff.difference"); value.Exists() {
-		data.BackoffDifference = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "backoff.threshold"); value.Exists() {
-		data.BackoffThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "logging.no-path"); value.Exists() {
-		data.LoggingNoPath = types.BoolValue(true)
-	} else if !data.LoggingNoPath.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingNoPath = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.fallback"); value.Exists() {
-		data.LoggingFallback = types.BoolValue(true)
-	} else if !data.LoggingFallback.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingFallback = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.pcep.pcerr-received"); value.Exists() {
-		data.LoggingPcepPcerrReceived = types.BoolValue(true)
-	} else if !data.LoggingPcepPcerrReceived.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingPcepPcerrReceived = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.pcep.api.send-queue-congestion.disable"); value.Exists() {
-		data.LoggingPcepApiSendQueueCongestionDisable = types.BoolValue(true)
-	} else if !data.LoggingPcepApiSendQueueCongestionDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingPcepApiSendQueueCongestionDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.pcep.disjointness-status"); value.Exists() {
-		data.LoggingPcepDisjointnessStatus = types.BoolValue(true)
-	} else if !data.LoggingPcepDisjointnessStatus.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingPcepDisjointnessStatus = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.strict-sid-only"); value.Exists() {
-		data.SegmentRoutingStrictSidOnly = types.BoolValue(true)
-	} else if !data.SegmentRoutingStrictSidOnly.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SegmentRoutingStrictSidOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.affinity.bit-map.affinity-colors.affinity-color"); value.Exists() {
-		data.SrteAffinityBitmaps = make([]PCESrteAffinityBitmaps, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteAffinityBitmaps{}
-			if cValue := v.Get("affinity-color-name"); cValue.Exists() {
-				item.AffinityColorName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("affinity-attribute-bit"); cValue.Exists() {
-				item.AffinityBitPosition = types.Int64Value(cValue.Int())
-			}
-			data.SrteAffinityBitmaps = append(data.SrteAffinityBitmaps, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.segment-lists.segment-list"); value.Exists() {
-		data.SrteSegmentLists = make([]PCESrteSegmentLists, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteSegmentLists{}
-			if cValue := v.Get("segment-list-name"); cValue.Exists() {
-				item.SegmentListName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("indexes.index"); cValue.Exists() {
-				item.Indexes = make([]PCESrteSegmentListsIndexes, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteSegmentListsIndexes{}
-					if ccValue := cv.Get("index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("mpls.label"); ccValue.Exists() {
-						cItem.MplsLabel = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("mpls.adjacency"); ccValue.Exists() {
-						cItem.MplsAdjacency = types.StringValue(ccValue.String())
-					}
-					item.Indexes = append(item.Indexes, cItem)
-					return true
-				})
-			}
-			data.SrteSegmentLists = append(data.SrteSegmentLists, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.peer.ipv4s.ipv4"); value.Exists() {
-		data.SrteIpv4Peers = make([]PCESrteIpv4Peers, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteIpv4Peers{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("policies.policy"); cValue.Exists() {
-				item.Policies = make([]PCESrteIpv4PeersPolicies, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteIpv4PeersPolicies{}
-					if ccValue := cv.Get("policy-name"); ccValue.Exists() {
-						cItem.PolicyName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("candidate-paths.append-sid.mpls"); ccValue.Exists() {
-						cItem.CandidatePathsAppendSidMpls = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("candidate-paths.preferences.preference"); ccValue.Exists() {
-						cItem.CandidatePathsPreferences = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferences, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferences{}
-							if cccValue := ccv.Get("preference-id"); cccValue.Exists() {
-								ccItem.PreferenceId = types.Int64Value(cccValue.Int())
-							}
-							if cccValue := ccv.Get("dynamic.mpls"); cccValue.Exists() {
-								ccItem.DynamicMpls = types.BoolValue(true)
-							} else if !ccItem.DynamicMpls.IsNull() {
-								// Only set to false if it was previously set
-								ccItem.DynamicMpls = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.type.te"); cccValue.Exists() {
-								ccItem.DynamicMetricTypeTe = types.BoolValue(true)
-							} else if !ccItem.DynamicMetricTypeTe.IsNull() {
-								// Only set to false if it was previously set
-								ccItem.DynamicMetricTypeTe = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.type.igp"); cccValue.Exists() {
-								ccItem.DynamicMetricTypeIgp = types.BoolValue(true)
-							} else if !ccItem.DynamicMetricTypeIgp.IsNull() {
-								// Only set to false if it was previously set
-								ccItem.DynamicMetricTypeIgp = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.type.latency"); cccValue.Exists() {
-								ccItem.DynamicMetricTypeLatency = types.BoolValue(true)
-							} else if !ccItem.DynamicMetricTypeLatency.IsNull() {
-								// Only set to false if it was previously set
-								ccItem.DynamicMetricTypeLatency = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.type.hopcount"); cccValue.Exists() {
-								ccItem.DynamicMetricTypeHopcount = types.BoolValue(true)
-							} else if !ccItem.DynamicMetricTypeHopcount.IsNull() {
-								// Only set to false if it was previously set
-								ccItem.DynamicMetricTypeHopcount = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.sid-limit"); cccValue.Exists() {
-								ccItem.DynamicMetricSidLimit = types.Int64Value(cccValue.Int())
-							}
-							if cccValue := ccv.Get("explicit.segment-list-names.segment-list-name"); cccValue.Exists() {
-								ccItem.ExplicitSegmentListNames = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames, 0)
-								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
-									cccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames{}
-									if ccccValue := cccv.Get("segment-list-name"); ccccValue.Exists() {
-										cccItem.SegmentListName = types.StringValue(ccccValue.String())
-									}
-									ccItem.ExplicitSegmentListNames = append(ccItem.ExplicitSegmentListNames, cccItem)
-									return true
-								})
-							}
-							if cccValue := ccv.Get("constraints.segments.sid-algorithm"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsSidAlgorithm = types.Int64Value(cccValue.Int())
-							}
-							if cccValue := ccv.Get("constraints.segments.protection.protected-preferred"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(true)
-							} else if !ccItem.ConstraintsSegmentsProtectionProtectedPreferred.IsNull() {
-								// Only set to false if it was previously set
-								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("constraints.segments.protection.protected-only"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(true)
-							} else if !ccItem.ConstraintsSegmentsProtectionProtectedOnly.IsNull() {
-								// Only set to false if it was previously set
-								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("constraints.segments.protection.unprotected-only"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(true)
-							} else if !ccItem.ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() {
-								// Only set to false if it was previously set
-								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("constraints.segments.protection.unprotected-preferred"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(true)
-							} else if !ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() {
-								// Only set to false if it was previously set
-								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(false)
-							}
-							cItem.CandidatePathsPreferences = append(cItem.CandidatePathsPreferences, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("candidate-paths.affinity.include-any.affinity-colors.affinity-color"); ccValue.Exists() {
-						cItem.CandidatePathsAffinityIncludeAnyColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors{}
-							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
-								ccItem.AffinityColorName = types.StringValue(cccValue.String())
-							}
-							cItem.CandidatePathsAffinityIncludeAnyColors = append(cItem.CandidatePathsAffinityIncludeAnyColors, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("candidate-paths.affinity.include-all.affinity-colors.affinity-color"); ccValue.Exists() {
-						cItem.CandidatePathsAffinityIncludeAllColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors{}
-							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
-								ccItem.AffinityColorName = types.StringValue(cccValue.String())
-							}
-							cItem.CandidatePathsAffinityIncludeAllColors = append(cItem.CandidatePathsAffinityIncludeAllColors, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("candidate-paths.affinity.exclude.affinity-colors.affinity-color"); ccValue.Exists() {
-						cItem.CandidatePathsAffinityExcludeColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors{}
-							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
-								ccItem.AffinityColorName = types.StringValue(cccValue.String())
-							}
-							cItem.CandidatePathsAffinityExcludeColors = append(cItem.CandidatePathsAffinityExcludeColors, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("color"); ccValue.Exists() {
-						cItem.Color = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("end-point.ipv4"); ccValue.Exists() {
-						cItem.EndPointIpv4 = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("binding-sid.mpls"); ccValue.Exists() {
-						cItem.BindingSidMpls = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("shutdown"); ccValue.Exists() {
-						cItem.Shutdown = types.BoolValue(true)
-					} else if !cItem.Shutdown.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Shutdown = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("profile-id"); ccValue.Exists() {
-						cItem.ProfileId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("path-selection.protected"); ccValue.Exists() {
-						cItem.PathSelectionProtected = types.BoolValue(true)
-					} else if !cItem.PathSelectionProtected.IsNull() {
-						// Only set to false if it was previously set
-						cItem.PathSelectionProtected = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("path-selection.unprotected"); ccValue.Exists() {
-						cItem.PathSelectionUnprotected = types.BoolValue(true)
-					} else if !cItem.PathSelectionUnprotected.IsNull() {
-						// Only set to false if it was previously set
-						cItem.PathSelectionUnprotected = types.BoolValue(false)
-					}
-					item.Policies = append(item.Policies, cItem)
-					return true
-				})
-			}
-			data.SrteIpv4Peers = append(data.SrteIpv4Peers, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.anycast-sid-inclusion"); value.Exists() {
-		data.SrteCspfAnycastSidInclusion = types.BoolValue(true)
-	} else if !data.SrteCspfAnycastSidInclusion.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrteCspfAnycastSidInclusion = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.sr-native"); value.Exists() {
-		data.SrteCspfSrNative = types.BoolValue(true)
-	} else if !data.SrteCspfSrNative.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrteCspfSrNative = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.sr-native.force"); value.Exists() {
-		data.SrteCspfSrNativeForce = types.BoolValue(true)
-	} else if !data.SrteCspfSrNativeForce.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrteCspfSrNativeForce = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.endpoint-sets.endpoint-set"); value.Exists() {
-		data.SrteP2mpEndpointSets = make([]PCESrteP2mpEndpointSets, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteP2mpEndpointSets{}
-			if cValue := v.Get("endpoint-set-name"); cValue.Exists() {
-				item.EndpointSetName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4s.ipv4"); cValue.Exists() {
-				item.Ipv4s = make([]PCESrteP2mpEndpointSetsIpv4s, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpEndpointSetsIpv4s{}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					item.Ipv4s = append(item.Ipv4s, cItem)
-					return true
-				})
-			}
-			data.SrteP2mpEndpointSets = append(data.SrteP2mpEndpointSets, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.policies.policy"); value.Exists() {
-		data.SrteP2mpPolicies = make([]PCESrteP2mpPolicies, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteP2mpPolicies{}
-			if cValue := v.Get("policy-name"); cValue.Exists() {
-				item.PolicyName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("color"); cValue.Exists() {
-				item.Color = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("endpoint-set"); cValue.Exists() {
-				item.EndpointSet = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("source.ipv4"); cValue.Exists() {
-				item.SourceIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("shutdown"); cValue.Exists() {
-				item.Shutdown = types.BoolValue(true)
-			} else if !item.Shutdown.IsNull() {
-				// Only set to false if it was previously set
-				item.Shutdown = types.BoolValue(false)
-			}
-			if cValue := v.Get("fast-reroute.lfa"); cValue.Exists() {
-				item.FastRerouteLfa = types.BoolValue(true)
-			} else if !item.FastRerouteLfa.IsNull() {
-				// Only set to false if it was previously set
-				item.FastRerouteLfa = types.BoolValue(false)
-			}
-			if cValue := v.Get("treesid.mpls"); cValue.Exists() {
-				item.TreesidMpls = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("candidate-paths.constraints.affinity.include-any.affinity-colors.affinity-color"); cValue.Exists() {
-				item.CandidatePathsConstraintsAffinityIncludeAnyColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAnyColors, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAnyColors{}
-					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
-						cItem.AffinityColorName = types.StringValue(ccValue.String())
-					}
-					item.CandidatePathsConstraintsAffinityIncludeAnyColors = append(item.CandidatePathsConstraintsAffinityIncludeAnyColors, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("candidate-paths.constraints.affinity.include-all.affinity-colors.affinity-color"); cValue.Exists() {
-				item.CandidatePathsConstraintsAffinityIncludeAllColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAllColors, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAllColors{}
-					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
-						cItem.AffinityColorName = types.StringValue(ccValue.String())
-					}
-					item.CandidatePathsConstraintsAffinityIncludeAllColors = append(item.CandidatePathsConstraintsAffinityIncludeAllColors, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("candidate-paths.constraints.affinity.exclude.affinity-colors.affinity-color"); cValue.Exists() {
-				item.CandidatePathsConstraintsAffinityExcludeColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityExcludeColors, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityExcludeColors{}
-					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
-						cItem.AffinityColorName = types.StringValue(ccValue.String())
-					}
-					item.CandidatePathsConstraintsAffinityExcludeColors = append(item.CandidatePathsConstraintsAffinityExcludeColors, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("candidate-paths.preferences.preference"); cValue.Exists() {
-				item.CandidatePathsPreferences = make([]PCESrteP2mpPoliciesCandidatePathsPreferences, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpPoliciesCandidatePathsPreferences{}
-					if ccValue := cv.Get("preference-id"); ccValue.Exists() {
-						cItem.PreferenceId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("dynamic"); ccValue.Exists() {
-						cItem.Dynamic = types.BoolValue(true)
-					} else if !cItem.Dynamic.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Dynamic = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("dynamic.metric.type.te"); ccValue.Exists() {
-						cItem.DynamicMetricTypeTe = types.BoolValue(true)
-					} else if !cItem.DynamicMetricTypeTe.IsNull() {
-						// Only set to false if it was previously set
-						cItem.DynamicMetricTypeTe = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("dynamic.metric.type.igp"); ccValue.Exists() {
-						cItem.DynamicMetricTypeIgp = types.BoolValue(true)
-					} else if !cItem.DynamicMetricTypeIgp.IsNull() {
-						// Only set to false if it was previously set
-						cItem.DynamicMetricTypeIgp = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("dynamic.metric.type.latency"); ccValue.Exists() {
-						cItem.DynamicMetricTypeLatency = types.BoolValue(true)
-					} else if !cItem.DynamicMetricTypeLatency.IsNull() {
-						// Only set to false if it was previously set
-						cItem.DynamicMetricTypeLatency = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("dynamic.metric.type.hopcount"); ccValue.Exists() {
-						cItem.DynamicMetricTypeHopcount = types.BoolValue(true)
-					} else if !cItem.DynamicMetricTypeHopcount.IsNull() {
-						// Only set to false if it was previously set
-						cItem.DynamicMetricTypeHopcount = types.BoolValue(false)
-					}
-					item.CandidatePathsPreferences = append(item.CandidatePathsPreferences, cItem)
-					return true
-				})
-			}
-			data.SrteP2mpPolicies = append(data.SrteP2mpPolicies, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.timers.reoptimization"); value.Exists() {
-		data.SrteP2mpTimersReoptimization = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.timers.cleanup"); value.Exists() {
-		data.SrteP2mpTimersCleanup = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.label-range.min"); value.Exists() {
-		data.SrteP2mpLabelRangeMin = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.label-range.max"); value.Exists() {
-		data.SrteP2mpLabelRangeMax = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.multipath-disable"); value.Exists() {
-		data.SrteP2mpMultipathDisable = types.BoolValue(true)
-	} else if !data.SrteP2mpMultipathDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrteP2mpMultipathDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.fast-reroute.lfa"); value.Exists() {
-		data.SrteP2mpFastRerouteLfa = types.BoolValue(true)
-	} else if !data.SrteP2mpFastRerouteLfa.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrteP2mpFastRerouteLfa = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.frr-node-set.from.ipv4s.ipv4"); value.Exists() {
-		data.SrteP2mpFrrNodeSetFromIpv4s = make([]PCESrteP2mpFrrNodeSetFromIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteP2mpFrrNodeSetFromIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			data.SrteP2mpFrrNodeSetFromIpv4s = append(data.SrteP2mpFrrNodeSetFromIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.frr-node-set.to.ipv4s.ipv4"); value.Exists() {
-		data.SrteP2mpFrrNodeSetToIpv4s = make([]PCESrteP2mpFrrNodeSetToIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteP2mpFrrNodeSetToIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			data.SrteP2mpFrrNodeSetToIpv4s = append(data.SrteP2mpFrrNodeSetToIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "peer-filter.ipv4.access-list"); value.Exists() {
-		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "hierarchical.underlay.enable-all"); value.Exists() {
-		data.HierarchicalUnderlayEnableAll = types.BoolValue(true)
-	} else if !data.HierarchicalUnderlayEnableAll.IsNull() {
-		// Only set to false if it was previously set in state
-		data.HierarchicalUnderlayEnableAll = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *PCEData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "address.ipv4"); value.Exists() {
-		data.AddressIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "address.ipv6"); value.Exists() {
-		data.AddressIpv6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "state-sync.ipv4s.ipv4"); value.Exists() {
-		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEStateSyncIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			data.StateSyncIpv4s = append(data.StateSyncIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "state-sync.ipv6s.ipv6"); value.Exists() {
-		data.StateSyncIpv6s = make([]PCEStateSyncIpv6s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEStateSyncIpv6s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			data.StateSyncIpv6s = append(data.StateSyncIpv6s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "tcp-buffer.size"); value.Exists() {
-		data.TcpBufferSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "password.encrypted"); value.Exists() {
-		data.PasswordEncrypted = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "tcp-ao.key-chain-name"); value.Exists() {
-		data.TcpAoKeychainName = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "tcp-ao.include-tcp-options"); value.Exists() {
-		data.TcpAoIncludeTcpOptions = types.BoolValue(true)
-	} else {
-		data.TcpAoIncludeTcpOptions = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "tcp-ao.accept-ao-mismatch-connection"); value.Exists() {
-		data.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
-	} else {
-		data.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "disjoint-path.maximum-attempts"); value.Exists() {
-		data.DisjointPathMaximumAttempts = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "disjoint-path.group-ids.group-id"); value.Exists() {
-		data.DisjointPathGroupIds = make([]PCEDisjointPathGroupIds, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEDisjointPathGroupIds{}
-			if cValue := v.Get("group-id"); cValue.Exists() {
-				item.GroupId = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.link.enable"); cValue.Exists() {
-				item.LinkDisjoint = types.BoolValue(true)
-			} else {
-				item.LinkDisjoint = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.link.strict"); cValue.Exists() {
-				item.LinkDisjointStrict = types.BoolValue(true)
-			} else {
-				item.LinkDisjointStrict = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.address-type"); cValue.Exists() {
-				item.LinkDisjointLspOnePccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.ip-address"); cValue.Exists() {
-				item.LinkDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.lsp-name"); cValue.Exists() {
-				item.LinkDisjointLspOnePccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.shortest-path"); cValue.Exists() {
-				item.LinkDisjointLspOnePccShortestPath = types.BoolValue(true)
-			} else {
-				item.LinkDisjointLspOnePccShortestPath = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.link.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
-				item.LinkDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.link.lsp.two.pcc.address-type"); cValue.Exists() {
-				item.LinkDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.two.pcc.ip-address"); cValue.Exists() {
-				item.LinkDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.two.pcc.lsp-name"); cValue.Exists() {
-				item.LinkDisjointLspTwoPccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.link.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
-				item.LinkDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.link.sub-ids.sub-id"); cValue.Exists() {
-				item.LinkDisjointSubIds = make([]PCEDisjointPathGroupIdsLinkDisjointSubIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCEDisjointPathGroupIdsLinkDisjointSubIds{}
-					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
-						cItem.SubId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("strict"); ccValue.Exists() {
-						cItem.Strict = types.BoolValue(true)
-					} else {
-						cItem.Strict = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
-						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
-						cItem.LspOnePccShortestPath = types.BoolValue(true)
-					} else {
-						cItem.LspOnePccShortestPath = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
-						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					item.LinkDisjointSubIds = append(item.LinkDisjointSubIds, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("type.node.enable"); cValue.Exists() {
-				item.NodeDisjoint = types.BoolValue(true)
-			} else {
-				item.NodeDisjoint = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.node.strict"); cValue.Exists() {
-				item.NodeDisjointStrict = types.BoolValue(true)
-			} else {
-				item.NodeDisjointStrict = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.address-type"); cValue.Exists() {
-				item.NodeDisjointLspOnePccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.ip-address"); cValue.Exists() {
-				item.NodeDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.lsp-name"); cValue.Exists() {
-				item.NodeDisjointLspOnePccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.shortest-path"); cValue.Exists() {
-				item.NodeDisjointLspOnePccShortestPath = types.BoolValue(true)
-			} else {
-				item.NodeDisjointLspOnePccShortestPath = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.node.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
-				item.NodeDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.node.lsp.two.pcc.address-type"); cValue.Exists() {
-				item.NodeDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.two.pcc.ip-address"); cValue.Exists() {
-				item.NodeDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.two.pcc.lsp-name"); cValue.Exists() {
-				item.NodeDisjointLspTwoPccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.node.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
-				item.NodeDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.node.sub-ids.sub-id"); cValue.Exists() {
-				item.NodeDisjointSubIds = make([]PCEDisjointPathGroupIdsNodeDisjointSubIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCEDisjointPathGroupIdsNodeDisjointSubIds{}
-					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
-						cItem.SubId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("strict"); ccValue.Exists() {
-						cItem.Strict = types.BoolValue(true)
-					} else {
-						cItem.Strict = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
-						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
-						cItem.LspOnePccShortestPath = types.BoolValue(true)
-					} else {
-						cItem.LspOnePccShortestPath = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
-						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					item.NodeDisjointSubIds = append(item.NodeDisjointSubIds, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("type.srlg.enable"); cValue.Exists() {
-				item.SrlgDisjoint = types.BoolValue(true)
-			} else {
-				item.SrlgDisjoint = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg.strict"); cValue.Exists() {
-				item.SrlgDisjointStrict = types.BoolValue(true)
-			} else {
-				item.SrlgDisjointStrict = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.address-type"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.ip-address"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.lsp-name"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.shortest-path"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccShortestPath = types.BoolValue(true)
-			} else {
-				item.SrlgDisjointLspOnePccShortestPath = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
-				item.SrlgDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.srlg.lsp.two.pcc.address-type"); cValue.Exists() {
-				item.SrlgDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.two.pcc.ip-address"); cValue.Exists() {
-				item.SrlgDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.two.pcc.lsp-name"); cValue.Exists() {
-				item.SrlgDisjointLspTwoPccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
-				item.SrlgDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.srlg.sub-ids.sub-id"); cValue.Exists() {
-				item.SrlgDisjointSubIds = make([]PCEDisjointPathGroupIdsSrlgDisjointSubIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCEDisjointPathGroupIdsSrlgDisjointSubIds{}
-					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
-						cItem.SubId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("strict"); ccValue.Exists() {
-						cItem.Strict = types.BoolValue(true)
-					} else {
-						cItem.Strict = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
-						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
-						cItem.LspOnePccShortestPath = types.BoolValue(true)
-					} else {
-						cItem.LspOnePccShortestPath = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
-						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					item.SrlgDisjointSubIds = append(item.SrlgDisjointSubIds, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("type.srlg-node.enable"); cValue.Exists() {
-				item.SrlgNodeDisjoint = types.BoolValue(true)
-			} else {
-				item.SrlgNodeDisjoint = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg-node.strict"); cValue.Exists() {
-				item.SrlgNodeDisjointStrict = types.BoolValue(true)
-			} else {
-				item.SrlgNodeDisjointStrict = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.address-type"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.ip-address"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.lsp-name"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.shortest-path"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccShortestPath = types.BoolValue(true)
-			} else {
-				item.SrlgNodeDisjointLspOnePccShortestPath = types.BoolValue(false)
-			}
-			if cValue := v.Get("type.srlg-node.lsp.one.pcc.exclude-srlg"); cValue.Exists() {
-				item.SrlgNodeDisjointLspOnePccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.two.pcc.address-type"); cValue.Exists() {
-				item.SrlgNodeDisjointLspTwoPccAddressType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.two.pcc.ip-address"); cValue.Exists() {
-				item.SrlgNodeDisjointLspTwoPccIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.two.pcc.lsp-name"); cValue.Exists() {
-				item.SrlgNodeDisjointLspTwoPccLspName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type.srlg-node.lsp.two.pcc.exclude-srlg"); cValue.Exists() {
-				item.SrlgNodeDisjointLspTwoPccExcludeSrlg = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("type.srlg-node.sub-ids.sub-id"); cValue.Exists() {
-				item.SrlgNodeDisjointSubIds = make([]PCEDisjointPathGroupIdsSrlgNodeDisjointSubIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCEDisjointPathGroupIdsSrlgNodeDisjointSubIds{}
-					if ccValue := cv.Get("sub-id"); ccValue.Exists() {
-						cItem.SubId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("strict"); ccValue.Exists() {
-						cItem.Strict = types.BoolValue(true)
-					} else {
-						cItem.Strict = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.address-type"); ccValue.Exists() {
-						cItem.LspOnePccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspOnePccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspOnePccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.one.pcc.shortest-path"); ccValue.Exists() {
-						cItem.LspOnePccShortestPath = types.BoolValue(true)
-					} else {
-						cItem.LspOnePccShortestPath = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("lsp.one.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspOnePccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.address-type"); ccValue.Exists() {
-						cItem.LspTwoPccAddressType = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.ip-address"); ccValue.Exists() {
-						cItem.LspTwoPccIpAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.lsp-name"); ccValue.Exists() {
-						cItem.LspTwoPccLspName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("lsp.two.pcc.exclude-srlg"); ccValue.Exists() {
-						cItem.LspTwoPccExcludeSrlg = types.Int64Value(ccValue.Int())
-					}
-					item.SrlgNodeDisjointSubIds = append(item.SrlgNodeDisjointSubIds, cItem)
-					return true
-				})
-			}
-			data.DisjointPathGroupIds = append(data.DisjointPathGroupIds, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "peer.ipv4s.ipv4"); value.Exists() {
-		data.PeerIpv4s = make([]PCEPeerIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEPeerIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("password.encrypted"); cValue.Exists() {
-				item.PasswordEncrypted = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp-ao.key-chain-name"); cValue.Exists() {
-				item.TcpAoKeychainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp-ao.include-tcp-options"); cValue.Exists() {
-				item.TcpAoIncludeTcpOptions = types.BoolValue(true)
-			} else {
-				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
-			}
-			if cValue := v.Get("tcp-ao.accept-ao-mismatch-connection"); cValue.Exists() {
-				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
-			} else {
-				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
-			}
-			data.PeerIpv4s = append(data.PeerIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "peer.ipv6s.ipv6"); value.Exists() {
-		data.PeerIpv6s = make([]PCEPeerIpv6s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEPeerIpv6s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("password.encrypted"); cValue.Exists() {
-				item.PasswordEncrypted = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp-ao.key-chain-name"); cValue.Exists() {
-				item.TcpAoKeychainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp-ao.include-tcp-options"); cValue.Exists() {
-				item.TcpAoIncludeTcpOptions = types.BoolValue(true)
-			} else {
-				item.TcpAoIncludeTcpOptions = types.BoolValue(false)
-			}
-			if cValue := v.Get("tcp-ao.accept-ao-mismatch-connection"); cValue.Exists() {
-				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(true)
-			} else {
-				item.TcpAoAcceptAoMismatchConnection = types.BoolValue(false)
-			}
-			data.PeerIpv6s = append(data.PeerIpv6s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "netconf.ssh.user"); value.Exists() {
-		data.NetconfSshUser = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "netconf.ssh.password.encrypted"); value.Exists() {
-		data.NetconfSshPasswordEncrypted = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "api.authentication.digest"); value.Exists() {
-		data.ApiAuthenticationDigest = types.BoolValue(true)
-	} else {
-		data.ApiAuthenticationDigest = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "api.sibling.ipv4"); value.Exists() {
-		data.ApiSiblingIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "api.vrf"); value.Exists() {
-		data.ApiVrf = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "api.users.user"); value.Exists() {
-		data.ApiUsers = make([]PCEApiUsers, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEApiUsers{}
-			if cValue := v.Get("user-name"); cValue.Exists() {
-				item.UserName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("password.encrypted"); cValue.Exists() {
-				item.PasswordEncrypted = types.StringValue(cValue.String())
-			}
-			data.ApiUsers = append(data.ApiUsers, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "api.ipv4.address"); value.Exists() {
-		data.ApiIpv4Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "api.ipv6.address"); value.Exists() {
-		data.ApiIpv6Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "timers.reoptimization"); value.Exists() {
-		data.TimersReoptimization = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.keepalive"); value.Exists() {
-		data.TimersKeepalive = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.minimum-peer-keepalive"); value.Exists() {
-		data.TimersMinimumPeerKeepalive = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.peer-zombie"); value.Exists() {
-		data.TimersPeerZombie = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.init-verify-restart"); value.Exists() {
-		data.TimersInitVerifyRestart = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.init-verify-switchover"); value.Exists() {
-		data.TimersInitVerifySwitchover = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "timers.init-verify-startup"); value.Exists() {
-		data.TimersInitVerifyStartup = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "backoff.ratio"); value.Exists() {
-		data.BackoffRatio = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "backoff.difference"); value.Exists() {
-		data.BackoffDifference = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "backoff.threshold"); value.Exists() {
-		data.BackoffThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "logging.no-path"); value.Exists() {
-		data.LoggingNoPath = types.BoolValue(true)
-	} else {
-		data.LoggingNoPath = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.fallback"); value.Exists() {
-		data.LoggingFallback = types.BoolValue(true)
-	} else {
-		data.LoggingFallback = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.pcep.pcerr-received"); value.Exists() {
-		data.LoggingPcepPcerrReceived = types.BoolValue(true)
-	} else {
-		data.LoggingPcepPcerrReceived = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.pcep.api.send-queue-congestion.disable"); value.Exists() {
-		data.LoggingPcepApiSendQueueCongestionDisable = types.BoolValue(true)
-	} else {
-		data.LoggingPcepApiSendQueueCongestionDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.pcep.disjointness-status"); value.Exists() {
-		data.LoggingPcepDisjointnessStatus = types.BoolValue(true)
-	} else {
-		data.LoggingPcepDisjointnessStatus = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.strict-sid-only"); value.Exists() {
-		data.SegmentRoutingStrictSidOnly = types.BoolValue(true)
-	} else {
-		data.SegmentRoutingStrictSidOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.affinity.bit-map.affinity-colors.affinity-color"); value.Exists() {
-		data.SrteAffinityBitmaps = make([]PCESrteAffinityBitmaps, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteAffinityBitmaps{}
-			if cValue := v.Get("affinity-color-name"); cValue.Exists() {
-				item.AffinityColorName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("affinity-attribute-bit"); cValue.Exists() {
-				item.AffinityBitPosition = types.Int64Value(cValue.Int())
-			}
-			data.SrteAffinityBitmaps = append(data.SrteAffinityBitmaps, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.segment-lists.segment-list"); value.Exists() {
-		data.SrteSegmentLists = make([]PCESrteSegmentLists, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteSegmentLists{}
-			if cValue := v.Get("segment-list-name"); cValue.Exists() {
-				item.SegmentListName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("indexes.index"); cValue.Exists() {
-				item.Indexes = make([]PCESrteSegmentListsIndexes, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteSegmentListsIndexes{}
-					if ccValue := cv.Get("index-number"); ccValue.Exists() {
-						cItem.IndexNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("mpls.label"); ccValue.Exists() {
-						cItem.MplsLabel = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("mpls.adjacency"); ccValue.Exists() {
-						cItem.MplsAdjacency = types.StringValue(ccValue.String())
-					}
-					item.Indexes = append(item.Indexes, cItem)
-					return true
-				})
-			}
-			data.SrteSegmentLists = append(data.SrteSegmentLists, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.peer.ipv4s.ipv4"); value.Exists() {
-		data.SrteIpv4Peers = make([]PCESrteIpv4Peers, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteIpv4Peers{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("policies.policy"); cValue.Exists() {
-				item.Policies = make([]PCESrteIpv4PeersPolicies, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteIpv4PeersPolicies{}
-					if ccValue := cv.Get("policy-name"); ccValue.Exists() {
-						cItem.PolicyName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("candidate-paths.append-sid.mpls"); ccValue.Exists() {
-						cItem.CandidatePathsAppendSidMpls = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("candidate-paths.preferences.preference"); ccValue.Exists() {
-						cItem.CandidatePathsPreferences = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferences, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferences{}
-							if cccValue := ccv.Get("preference-id"); cccValue.Exists() {
-								ccItem.PreferenceId = types.Int64Value(cccValue.Int())
-							}
-							if cccValue := ccv.Get("dynamic.mpls"); cccValue.Exists() {
-								ccItem.DynamicMpls = types.BoolValue(true)
-							} else {
-								ccItem.DynamicMpls = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.type.te"); cccValue.Exists() {
-								ccItem.DynamicMetricTypeTe = types.BoolValue(true)
-							} else {
-								ccItem.DynamicMetricTypeTe = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.type.igp"); cccValue.Exists() {
-								ccItem.DynamicMetricTypeIgp = types.BoolValue(true)
-							} else {
-								ccItem.DynamicMetricTypeIgp = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.type.latency"); cccValue.Exists() {
-								ccItem.DynamicMetricTypeLatency = types.BoolValue(true)
-							} else {
-								ccItem.DynamicMetricTypeLatency = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.type.hopcount"); cccValue.Exists() {
-								ccItem.DynamicMetricTypeHopcount = types.BoolValue(true)
-							} else {
-								ccItem.DynamicMetricTypeHopcount = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("dynamic.mpls.metric.sid-limit"); cccValue.Exists() {
-								ccItem.DynamicMetricSidLimit = types.Int64Value(cccValue.Int())
-							}
-							if cccValue := ccv.Get("explicit.segment-list-names.segment-list-name"); cccValue.Exists() {
-								ccItem.ExplicitSegmentListNames = make([]PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames, 0)
-								cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
-									cccItem := PCESrteIpv4PeersPoliciesCandidatePathsPreferencesExplicitSegmentListNames{}
-									if ccccValue := cccv.Get("segment-list-name"); ccccValue.Exists() {
-										cccItem.SegmentListName = types.StringValue(ccccValue.String())
-									}
-									ccItem.ExplicitSegmentListNames = append(ccItem.ExplicitSegmentListNames, cccItem)
-									return true
-								})
-							}
-							if cccValue := ccv.Get("constraints.segments.sid-algorithm"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsSidAlgorithm = types.Int64Value(cccValue.Int())
-							}
-							if cccValue := ccv.Get("constraints.segments.protection.protected-preferred"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(true)
-							} else {
-								ccItem.ConstraintsSegmentsProtectionProtectedPreferred = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("constraints.segments.protection.protected-only"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(true)
-							} else {
-								ccItem.ConstraintsSegmentsProtectionProtectedOnly = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("constraints.segments.protection.unprotected-only"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(true)
-							} else {
-								ccItem.ConstraintsSegmentsProtectionUnprotectedOnly = types.BoolValue(false)
-							}
-							if cccValue := ccv.Get("constraints.segments.protection.unprotected-preferred"); cccValue.Exists() {
-								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(true)
-							} else {
-								ccItem.ConstraintsSegmentsProtectionUnprotectedPreferred = types.BoolValue(false)
-							}
-							cItem.CandidatePathsPreferences = append(cItem.CandidatePathsPreferences, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("candidate-paths.affinity.include-any.affinity-colors.affinity-color"); ccValue.Exists() {
-						cItem.CandidatePathsAffinityIncludeAnyColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAnyColors{}
-							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
-								ccItem.AffinityColorName = types.StringValue(cccValue.String())
-							}
-							cItem.CandidatePathsAffinityIncludeAnyColors = append(cItem.CandidatePathsAffinityIncludeAnyColors, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("candidate-paths.affinity.include-all.affinity-colors.affinity-color"); ccValue.Exists() {
-						cItem.CandidatePathsAffinityIncludeAllColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityIncludeAllColors{}
-							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
-								ccItem.AffinityColorName = types.StringValue(cccValue.String())
-							}
-							cItem.CandidatePathsAffinityIncludeAllColors = append(cItem.CandidatePathsAffinityIncludeAllColors, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("candidate-paths.affinity.exclude.affinity-colors.affinity-color"); ccValue.Exists() {
-						cItem.CandidatePathsAffinityExcludeColors = make([]PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := PCESrteIpv4PeersPoliciesCandidatePathsAffinityExcludeColors{}
-							if cccValue := ccv.Get("affinity-color-name"); cccValue.Exists() {
-								ccItem.AffinityColorName = types.StringValue(cccValue.String())
-							}
-							cItem.CandidatePathsAffinityExcludeColors = append(cItem.CandidatePathsAffinityExcludeColors, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("color"); ccValue.Exists() {
-						cItem.Color = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("end-point.ipv4"); ccValue.Exists() {
-						cItem.EndPointIpv4 = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("binding-sid.mpls"); ccValue.Exists() {
-						cItem.BindingSidMpls = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("shutdown"); ccValue.Exists() {
-						cItem.Shutdown = types.BoolValue(true)
-					} else {
-						cItem.Shutdown = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("profile-id"); ccValue.Exists() {
-						cItem.ProfileId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("path-selection.protected"); ccValue.Exists() {
-						cItem.PathSelectionProtected = types.BoolValue(true)
-					} else {
-						cItem.PathSelectionProtected = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("path-selection.unprotected"); ccValue.Exists() {
-						cItem.PathSelectionUnprotected = types.BoolValue(true)
-					} else {
-						cItem.PathSelectionUnprotected = types.BoolValue(false)
-					}
-					item.Policies = append(item.Policies, cItem)
-					return true
-				})
-			}
-			data.SrteIpv4Peers = append(data.SrteIpv4Peers, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.anycast-sid-inclusion"); value.Exists() {
-		data.SrteCspfAnycastSidInclusion = types.BoolValue(true)
-	} else {
-		data.SrteCspfAnycastSidInclusion = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.sr-native"); value.Exists() {
-		data.SrteCspfSrNative = types.BoolValue(true)
-	} else {
-		data.SrteCspfSrNative = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.cspf.sr-native.force"); value.Exists() {
-		data.SrteCspfSrNativeForce = types.BoolValue(true)
-	} else {
-		data.SrteCspfSrNativeForce = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.endpoint-sets.endpoint-set"); value.Exists() {
-		data.SrteP2mpEndpointSets = make([]PCESrteP2mpEndpointSets, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteP2mpEndpointSets{}
-			if cValue := v.Get("endpoint-set-name"); cValue.Exists() {
-				item.EndpointSetName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4s.ipv4"); cValue.Exists() {
-				item.Ipv4s = make([]PCESrteP2mpEndpointSetsIpv4s, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpEndpointSetsIpv4s{}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					item.Ipv4s = append(item.Ipv4s, cItem)
-					return true
-				})
-			}
-			data.SrteP2mpEndpointSets = append(data.SrteP2mpEndpointSets, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.policies.policy"); value.Exists() {
-		data.SrteP2mpPolicies = make([]PCESrteP2mpPolicies, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteP2mpPolicies{}
-			if cValue := v.Get("policy-name"); cValue.Exists() {
-				item.PolicyName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("color"); cValue.Exists() {
-				item.Color = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("endpoint-set"); cValue.Exists() {
-				item.EndpointSet = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("source.ipv4"); cValue.Exists() {
-				item.SourceIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("shutdown"); cValue.Exists() {
-				item.Shutdown = types.BoolValue(true)
-			} else {
-				item.Shutdown = types.BoolValue(false)
-			}
-			if cValue := v.Get("fast-reroute.lfa"); cValue.Exists() {
-				item.FastRerouteLfa = types.BoolValue(true)
-			} else {
-				item.FastRerouteLfa = types.BoolValue(false)
-			}
-			if cValue := v.Get("treesid.mpls"); cValue.Exists() {
-				item.TreesidMpls = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("candidate-paths.constraints.affinity.include-any.affinity-colors.affinity-color"); cValue.Exists() {
-				item.CandidatePathsConstraintsAffinityIncludeAnyColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAnyColors, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAnyColors{}
-					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
-						cItem.AffinityColorName = types.StringValue(ccValue.String())
-					}
-					item.CandidatePathsConstraintsAffinityIncludeAnyColors = append(item.CandidatePathsConstraintsAffinityIncludeAnyColors, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("candidate-paths.constraints.affinity.include-all.affinity-colors.affinity-color"); cValue.Exists() {
-				item.CandidatePathsConstraintsAffinityIncludeAllColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAllColors, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityIncludeAllColors{}
-					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
-						cItem.AffinityColorName = types.StringValue(ccValue.String())
-					}
-					item.CandidatePathsConstraintsAffinityIncludeAllColors = append(item.CandidatePathsConstraintsAffinityIncludeAllColors, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("candidate-paths.constraints.affinity.exclude.affinity-colors.affinity-color"); cValue.Exists() {
-				item.CandidatePathsConstraintsAffinityExcludeColors = make([]PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityExcludeColors, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpPoliciesCandidatePathsConstraintsAffinityExcludeColors{}
-					if ccValue := cv.Get("affinity-color-name"); ccValue.Exists() {
-						cItem.AffinityColorName = types.StringValue(ccValue.String())
-					}
-					item.CandidatePathsConstraintsAffinityExcludeColors = append(item.CandidatePathsConstraintsAffinityExcludeColors, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("candidate-paths.preferences.preference"); cValue.Exists() {
-				item.CandidatePathsPreferences = make([]PCESrteP2mpPoliciesCandidatePathsPreferences, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := PCESrteP2mpPoliciesCandidatePathsPreferences{}
-					if ccValue := cv.Get("preference-id"); ccValue.Exists() {
-						cItem.PreferenceId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("dynamic"); ccValue.Exists() {
-						cItem.Dynamic = types.BoolValue(true)
-					} else {
-						cItem.Dynamic = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("dynamic.metric.type.te"); ccValue.Exists() {
-						cItem.DynamicMetricTypeTe = types.BoolValue(true)
-					} else {
-						cItem.DynamicMetricTypeTe = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("dynamic.metric.type.igp"); ccValue.Exists() {
-						cItem.DynamicMetricTypeIgp = types.BoolValue(true)
-					} else {
-						cItem.DynamicMetricTypeIgp = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("dynamic.metric.type.latency"); ccValue.Exists() {
-						cItem.DynamicMetricTypeLatency = types.BoolValue(true)
-					} else {
-						cItem.DynamicMetricTypeLatency = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("dynamic.metric.type.hopcount"); ccValue.Exists() {
-						cItem.DynamicMetricTypeHopcount = types.BoolValue(true)
-					} else {
-						cItem.DynamicMetricTypeHopcount = types.BoolValue(false)
-					}
-					item.CandidatePathsPreferences = append(item.CandidatePathsPreferences, cItem)
-					return true
-				})
-			}
-			data.SrteP2mpPolicies = append(data.SrteP2mpPolicies, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.timers.reoptimization"); value.Exists() {
-		data.SrteP2mpTimersReoptimization = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.timers.cleanup"); value.Exists() {
-		data.SrteP2mpTimersCleanup = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.label-range.min"); value.Exists() {
-		data.SrteP2mpLabelRangeMin = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.label-range.max"); value.Exists() {
-		data.SrteP2mpLabelRangeMax = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.multipath-disable"); value.Exists() {
-		data.SrteP2mpMultipathDisable = types.BoolValue(true)
-	} else {
-		data.SrteP2mpMultipathDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.fast-reroute.lfa"); value.Exists() {
-		data.SrteP2mpFastRerouteLfa = types.BoolValue(true)
-	} else {
-		data.SrteP2mpFastRerouteLfa = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.frr-node-set.from.ipv4s.ipv4"); value.Exists() {
-		data.SrteP2mpFrrNodeSetFromIpv4s = make([]PCESrteP2mpFrrNodeSetFromIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteP2mpFrrNodeSetFromIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			data.SrteP2mpFrrNodeSetFromIpv4s = append(data.SrteP2mpFrrNodeSetFromIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "segment-routing.traffic-eng.p2mp.frr-node-set.to.ipv4s.ipv4"); value.Exists() {
-		data.SrteP2mpFrrNodeSetToIpv4s = make([]PCESrteP2mpFrrNodeSetToIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCESrteP2mpFrrNodeSetToIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			data.SrteP2mpFrrNodeSetToIpv4s = append(data.SrteP2mpFrrNodeSetToIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "peer-filter.ipv4.access-list"); value.Exists() {
-		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "hierarchical.underlay.enable-all"); value.Exists() {
-		data.HierarchicalUnderlayEnableAll = types.BoolValue(true)
-	} else {
-		data.HierarchicalUnderlayEnableAll = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PCE) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -8775,6 +10973,7 @@ func (data *PCE) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PCEData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -9720,2196 +11919,7 @@ func (data *PCEData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
-	deletedItems := make([]string, 0)
-	if !state.HierarchicalUnderlayEnableAll.IsNull() && data.HierarchicalUnderlayEnableAll.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hierarchical/underlay/enable-all", state.getPath()))
-	}
-	if !state.PeerFilterIpv4AccessList.IsNull() && data.PeerFilterIpv4AccessList.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-filter/ipv4/access-list", state.getPath()))
-	}
-	for i := range state.SrteP2mpFrrNodeSetToIpv4s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SrteP2mpFrrNodeSetToIpv4s {
-			found = true
-			if state.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString() != data.SrteP2mpFrrNodeSetToIpv4s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/frr-node-set/to/ipv4s/ipv4%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.SrteP2mpFrrNodeSetFromIpv4s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SrteP2mpFrrNodeSetFromIpv4s {
-			found = true
-			if state.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString() != data.SrteP2mpFrrNodeSetFromIpv4s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/frr-node-set/from/ipv4s/ipv4%v", state.getPath(), keyString))
-		}
-	}
-	if !state.SrteP2mpFastRerouteLfa.IsNull() && data.SrteP2mpFastRerouteLfa.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/fast-reroute/lfa", state.getPath()))
-	}
-	if !state.SrteP2mpMultipathDisable.IsNull() && data.SrteP2mpMultipathDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/multipath-disable", state.getPath()))
-	}
-	if !state.SrteP2mpLabelRangeMax.IsNull() && data.SrteP2mpLabelRangeMax.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/label-range/max", state.getPath()))
-	}
-	if !state.SrteP2mpLabelRangeMin.IsNull() && data.SrteP2mpLabelRangeMin.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/label-range/min", state.getPath()))
-	}
-	if !state.SrteP2mpTimersCleanup.IsNull() && data.SrteP2mpTimersCleanup.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/timers/cleanup", state.getPath()))
-	}
-	if !state.SrteP2mpTimersReoptimization.IsNull() && data.SrteP2mpTimersReoptimization.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/timers/reoptimization", state.getPath()))
-	}
-	for i := range state.SrteP2mpPolicies {
-		keys := [...]string{"policy-name"}
-		stateKeyValues := [...]string{state.SrteP2mpPolicies[i].PolicyName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SrteP2mpPolicies[i].PolicyName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SrteP2mpPolicies {
-			found = true
-			if state.SrteP2mpPolicies[i].PolicyName.ValueString() != data.SrteP2mpPolicies[j].PolicyName.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.SrteP2mpPolicies[i].CandidatePathsPreferences {
-					ckeys := [...]string{"preference-id"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].PreferenceId.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].PreferenceId.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.SrteP2mpPolicies[j].CandidatePathsPreferences {
-						found = true
-						if state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].PreferenceId.ValueInt64() != data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].PreferenceId.ValueInt64() {
-							found = false
-						}
-						if found {
-							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].DynamicMetricTypeHopcount.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/hopcount", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].DynamicMetricTypeLatency.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/latency", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].DynamicMetricTypeIgp.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/igp", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].DynamicMetricTypeTe.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/te", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.IsNull() && data.SrteP2mpPolicies[j].CandidatePathsPreferences[cj].Dynamic.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				for ci := range state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors {
-					ckeys := [...]string{"affinity-color-name"}
-					cstateKeyValues := [...]string{state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors[ci].AffinityColorName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors[ci].AffinityColorName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityExcludeColors {
-						found = true
-						if state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors[ci].AffinityColorName.ValueString() != data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityExcludeColors[cj].AffinityColorName.ValueString() {
-							found = false
-						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/constraints/affinity/exclude/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				for ci := range state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors {
-					ckeys := [...]string{"affinity-color-name"}
-					cstateKeyValues := [...]string{state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors[ci].AffinityColorName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors[ci].AffinityColorName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityIncludeAllColors {
-						found = true
-						if state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors[ci].AffinityColorName.ValueString() != data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityIncludeAllColors[cj].AffinityColorName.ValueString() {
-							found = false
-						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/constraints/affinity/include-all/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				for ci := range state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors {
-					ckeys := [...]string{"affinity-color-name"}
-					cstateKeyValues := [...]string{state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors[ci].AffinityColorName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors[ci].AffinityColorName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityIncludeAnyColors {
-						found = true
-						if state.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors[ci].AffinityColorName.ValueString() != data.SrteP2mpPolicies[j].CandidatePathsConstraintsAffinityIncludeAnyColors[cj].AffinityColorName.ValueString() {
-							found = false
-						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/constraints/affinity/include-any/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				if !state.SrteP2mpPolicies[i].TreesidMpls.IsNull() && data.SrteP2mpPolicies[j].TreesidMpls.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/treesid/mpls", state.getPath(), keyString))
-				}
-				if !state.SrteP2mpPolicies[i].FastRerouteLfa.IsNull() && data.SrteP2mpPolicies[j].FastRerouteLfa.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/fast-reroute/lfa", state.getPath(), keyString))
-				}
-				if !state.SrteP2mpPolicies[i].Shutdown.IsNull() && data.SrteP2mpPolicies[j].Shutdown.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/shutdown", state.getPath(), keyString))
-				}
-				if !state.SrteP2mpPolicies[i].SourceIpv4.IsNull() && data.SrteP2mpPolicies[j].SourceIpv4.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/source/ipv4", state.getPath(), keyString))
-				}
-				if !state.SrteP2mpPolicies[i].EndpointSet.IsNull() && data.SrteP2mpPolicies[j].EndpointSet.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/endpoint-set", state.getPath(), keyString))
-				}
-				if !state.SrteP2mpPolicies[i].Color.IsNull() && data.SrteP2mpPolicies[j].Color.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/color", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.SrteP2mpEndpointSets {
-		keys := [...]string{"endpoint-set-name"}
-		stateKeyValues := [...]string{state.SrteP2mpEndpointSets[i].EndpointSetName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SrteP2mpEndpointSets[i].EndpointSetName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SrteP2mpEndpointSets {
-			found = true
-			if state.SrteP2mpEndpointSets[i].EndpointSetName.ValueString() != data.SrteP2mpEndpointSets[j].EndpointSetName.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.SrteP2mpEndpointSets[i].Ipv4s {
-					ckeys := [...]string{"address"}
-					cstateKeyValues := [...]string{state.SrteP2mpEndpointSets[i].Ipv4s[ci].Address.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.SrteP2mpEndpointSets[i].Ipv4s[ci].Address.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.SrteP2mpEndpointSets[j].Ipv4s {
-						found = true
-						if state.SrteP2mpEndpointSets[i].Ipv4s[ci].Address.ValueString() != data.SrteP2mpEndpointSets[j].Ipv4s[cj].Address.ValueString() {
-							found = false
-						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/endpoint-sets/endpoint-set%v/ipv4s/ipv4%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/endpoint-sets/endpoint-set%v", state.getPath(), keyString))
-		}
-	}
-	if !state.SrteCspfSrNativeForce.IsNull() && data.SrteCspfSrNativeForce.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native/force", state.getPath()))
-	}
-	if !state.SrteCspfSrNative.IsNull() && data.SrteCspfSrNative.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native", state.getPath()))
-	}
-	if !state.SrteCspfAnycastSidInclusion.IsNull() && data.SrteCspfAnycastSidInclusion.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/anycast-sid-inclusion", state.getPath()))
-	}
-	for i := range state.SrteIpv4Peers {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.SrteIpv4Peers[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SrteIpv4Peers[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SrteIpv4Peers {
-			found = true
-			if state.SrteIpv4Peers[i].Address.ValueString() != data.SrteIpv4Peers[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.SrteIpv4Peers[i].Policies {
-					ckeys := [...]string{"policy-name"}
-					cstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.SrteIpv4Peers[j].Policies {
-						found = true
-						if state.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].PolicyName.ValueString() {
-							found = false
-						}
-						if found {
-							if !state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && data.SrteIpv4Peers[j].Policies[cj].PathSelectionUnprotected.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/unprotected", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && data.SrteIpv4Peers[j].Policies[cj].PathSelectionProtected.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/protected", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteIpv4Peers[i].Policies[ci].ProfileId.IsNull() && data.SrteIpv4Peers[j].Policies[cj].ProfileId.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/profile-id", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && data.SrteIpv4Peers[j].Policies[cj].Shutdown.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/shutdown", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteIpv4Peers[i].Policies[ci].BindingSidMpls.IsNull() && data.SrteIpv4Peers[j].Policies[cj].BindingSidMpls.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/binding-sid/mpls", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteIpv4Peers[i].Policies[ci].EndPointIpv4.IsNull() && data.SrteIpv4Peers[j].Policies[cj].EndPointIpv4.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/end-point/ipv4", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteIpv4Peers[i].Policies[ci].Color.IsNull() && data.SrteIpv4Peers[j].Policies[cj].Color.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/color", state.getPath(), keyString, ckeyString))
-							}
-							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors {
-								cckeys := [...]string{"affinity-color-name"}
-								ccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()}
-								cckeyString := ""
-								for ccki := range cckeys {
-									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
-								}
-
-								ccemptyKeys := true
-								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()).IsZero() {
-									ccemptyKeys = false
-								}
-								if ccemptyKeys {
-									continue
-								}
-
-								found := false
-								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityExcludeColors {
-									found = true
-									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityExcludeColors[ccj].AffinityColorName.ValueString() {
-										found = false
-									}
-									if found {
-										break
-									}
-								}
-								if !found {
-									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/affinity/exclude/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString, cckeyString))
-								}
-							}
-							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors {
-								cckeys := [...]string{"affinity-color-name"}
-								ccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()}
-								cckeyString := ""
-								for ccki := range cckeys {
-									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
-								}
-
-								ccemptyKeys := true
-								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()).IsZero() {
-									ccemptyKeys = false
-								}
-								if ccemptyKeys {
-									continue
-								}
-
-								found := false
-								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAllColors {
-									found = true
-									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAllColors[ccj].AffinityColorName.ValueString() {
-										found = false
-									}
-									if found {
-										break
-									}
-								}
-								if !found {
-									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/affinity/include-all/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString, cckeyString))
-								}
-							}
-							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors {
-								cckeys := [...]string{"affinity-color-name"}
-								ccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()}
-								cckeyString := ""
-								for ccki := range cckeys {
-									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
-								}
-
-								ccemptyKeys := true
-								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()).IsZero() {
-									ccemptyKeys = false
-								}
-								if ccemptyKeys {
-									continue
-								}
-
-								found := false
-								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAnyColors {
-									found = true
-									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAffinityIncludeAnyColors[ccj].AffinityColorName.ValueString() {
-										found = false
-									}
-									if found {
-										break
-									}
-								}
-								if !found {
-									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/affinity/include-any/affinity-colors/affinity-color%v", state.getPath(), keyString, ckeyString, cckeyString))
-								}
-							}
-							for cci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences {
-								cckeys := [...]string{"preference-id"}
-								ccstateKeyValues := [...]string{strconv.FormatInt(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64(), 10)}
-								cckeyString := ""
-								for ccki := range cckeys {
-									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
-								}
-
-								ccemptyKeys := true
-								if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64()).IsZero() {
-									ccemptyKeys = false
-								}
-								if ccemptyKeys {
-									continue
-								}
-
-								found := false
-								for ccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences {
-									found = true
-									if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].PreferenceId.ValueInt64() {
-										found = false
-									}
-									if found {
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-preferred", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-only", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionProtectedOnly.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-only", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-preferred", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsSidAlgorithm.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ConstraintsSegmentsSidAlgorithm.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/sid-algorithm", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										for ccci := range state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames {
-											ccckeys := [...]string{"segment-list-name"}
-											cccstateKeyValues := [...]string{state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()}
-											ccckeyString := ""
-											for cccki := range ccckeys {
-												ccckeyString += "[" + ccckeys[cccki] + "=" + cccstateKeyValues[cccki] + "]"
-											}
-
-											cccemptyKeys := true
-											if !reflect.ValueOf(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()).IsZero() {
-												cccemptyKeys = false
-											}
-											if cccemptyKeys {
-												continue
-											}
-
-											found := false
-											for cccj := range data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ExplicitSegmentListNames {
-												found = true
-												if state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString() != data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].ExplicitSegmentListNames[cccj].SegmentListName.ValueString() {
-													found = false
-												}
-												if found {
-													break
-												}
-											}
-											if !found {
-												deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/explicit/segment-list-names/segment-list-name%v", state.getPath(), keyString, ckeyString, cckeyString, ccckeyString))
-											}
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricSidLimit.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricSidLimit.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/sid-limit", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeHopcount.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/hopcount", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeLatency.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/latency", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeIgp.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/igp", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMetricTypeTe.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/te", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsPreferences[ccj].DynamicMpls.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										break
-									}
-								}
-								if !found {
-									deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v", state.getPath(), keyString, ckeyString, cckeyString))
-								}
-							}
-							if !state.SrteIpv4Peers[i].Policies[ci].CandidatePathsAppendSidMpls.IsNull() && data.SrteIpv4Peers[j].Policies[cj].CandidatePathsAppendSidMpls.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/append-sid/mpls", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.SrteSegmentLists {
-		keys := [...]string{"segment-list-name"}
-		stateKeyValues := [...]string{state.SrteSegmentLists[i].SegmentListName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SrteSegmentLists[i].SegmentListName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SrteSegmentLists {
-			found = true
-			if state.SrteSegmentLists[i].SegmentListName.ValueString() != data.SrteSegmentLists[j].SegmentListName.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.SrteSegmentLists[i].Indexes {
-					ckeys := [...]string{"index-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.SrteSegmentLists[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.SrteSegmentLists[i].Indexes[ci].IndexNumber.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.SrteSegmentLists[j].Indexes {
-						found = true
-						if state.SrteSegmentLists[i].Indexes[ci].IndexNumber.ValueInt64() != data.SrteSegmentLists[j].Indexes[cj].IndexNumber.ValueInt64() {
-							found = false
-						}
-						if found {
-							if !state.SrteSegmentLists[i].Indexes[ci].MplsAdjacency.IsNull() && data.SrteSegmentLists[j].Indexes[cj].MplsAdjacency.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v/indexes/index%v/mpls/adjacency", state.getPath(), keyString, ckeyString))
-							}
-							if !state.SrteSegmentLists[i].Indexes[ci].MplsLabel.IsNull() && data.SrteSegmentLists[j].Indexes[cj].MplsLabel.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v/indexes/index%v/mpls/label", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v/indexes/index%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.SrteAffinityBitmaps {
-		keys := [...]string{"affinity-color-name"}
-		stateKeyValues := [...]string{state.SrteAffinityBitmaps[i].AffinityColorName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SrteAffinityBitmaps[i].AffinityColorName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SrteAffinityBitmaps {
-			found = true
-			if state.SrteAffinityBitmaps[i].AffinityColorName.ValueString() != data.SrteAffinityBitmaps[j].AffinityColorName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.SrteAffinityBitmaps[i].AffinityBitPosition.IsNull() && data.SrteAffinityBitmaps[j].AffinityBitPosition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/affinity/bit-map/affinity-colors/affinity-color%v/affinity-attribute-bit", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/traffic-eng/affinity/bit-map/affinity-colors/affinity-color%v", state.getPath(), keyString))
-		}
-	}
-	if !state.SegmentRoutingStrictSidOnly.IsNull() && data.SegmentRoutingStrictSidOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/strict-sid-only", state.getPath()))
-	}
-	if !state.LoggingPcepDisjointnessStatus.IsNull() && data.LoggingPcepDisjointnessStatus.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/pcep/disjointness-status", state.getPath()))
-	}
-	if !state.LoggingPcepApiSendQueueCongestionDisable.IsNull() && data.LoggingPcepApiSendQueueCongestionDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/pcep/api/send-queue-congestion/disable", state.getPath()))
-	}
-	if !state.LoggingPcepPcerrReceived.IsNull() && data.LoggingPcepPcerrReceived.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/pcep/pcerr-received", state.getPath()))
-	}
-	if !state.LoggingFallback.IsNull() && data.LoggingFallback.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/fallback", state.getPath()))
-	}
-	if !state.LoggingNoPath.IsNull() && data.LoggingNoPath.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/no-path", state.getPath()))
-	}
-	if !state.BackoffThreshold.IsNull() && data.BackoffThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/backoff/threshold", state.getPath()))
-	}
-	if !state.BackoffDifference.IsNull() && data.BackoffDifference.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/backoff/difference", state.getPath()))
-	}
-	if !state.BackoffRatio.IsNull() && data.BackoffRatio.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/backoff/ratio", state.getPath()))
-	}
-	if !state.TimersInitVerifyStartup.IsNull() && data.TimersInitVerifyStartup.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/init-verify-startup", state.getPath()))
-	}
-	if !state.TimersInitVerifySwitchover.IsNull() && data.TimersInitVerifySwitchover.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/init-verify-switchover", state.getPath()))
-	}
-	if !state.TimersInitVerifyRestart.IsNull() && data.TimersInitVerifyRestart.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/init-verify-restart", state.getPath()))
-	}
-	if !state.TimersPeerZombie.IsNull() && data.TimersPeerZombie.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/peer-zombie", state.getPath()))
-	}
-	if !state.TimersMinimumPeerKeepalive.IsNull() && data.TimersMinimumPeerKeepalive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/minimum-peer-keepalive", state.getPath()))
-	}
-	if !state.TimersKeepalive.IsNull() && data.TimersKeepalive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/keepalive", state.getPath()))
-	}
-	if !state.TimersReoptimization.IsNull() && data.TimersReoptimization.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/reoptimization", state.getPath()))
-	}
-	if !state.ApiIpv6Address.IsNull() && data.ApiIpv6Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/ipv6/address", state.getPath()))
-	}
-	if !state.ApiIpv4Address.IsNull() && data.ApiIpv4Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/ipv4/address", state.getPath()))
-	}
-	for i := range state.ApiUsers {
-		keys := [...]string{"user-name"}
-		stateKeyValues := [...]string{state.ApiUsers[i].UserName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.ApiUsers[i].UserName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.ApiUsers {
-			found = true
-			if state.ApiUsers[i].UserName.ValueString() != data.ApiUsers[j].UserName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.ApiUsers[i].PasswordEncrypted.IsNull() && data.ApiUsers[j].PasswordEncrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/api/users/user%v/password/encrypted", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/api/users/user%v", state.getPath(), keyString))
-		}
-	}
-	if !state.ApiVrf.IsNull() && data.ApiVrf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/vrf", state.getPath()))
-	}
-	if !state.ApiSiblingIpv4.IsNull() && data.ApiSiblingIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/sibling/ipv4", state.getPath()))
-	}
-	if !state.ApiAuthenticationDigest.IsNull() && data.ApiAuthenticationDigest.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/authentication/digest", state.getPath()))
-	}
-	if !state.NetconfSshPasswordEncrypted.IsNull() && data.NetconfSshPasswordEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/netconf/ssh/password/encrypted", state.getPath()))
-	}
-	if !state.NetconfSshUser.IsNull() && data.NetconfSshUser.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/netconf/ssh/user", state.getPath()))
-	}
-	for i := range state.PeerIpv6s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.PeerIpv6s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.PeerIpv6s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.PeerIpv6s {
-			found = true
-			if state.PeerIpv6s[i].Address.ValueString() != data.PeerIpv6s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.IsNull() && data.PeerIpv6s[j].TcpAoAcceptAoMismatchConnection.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", state.getPath(), keyString))
-				}
-				if !state.PeerIpv6s[i].TcpAoIncludeTcpOptions.IsNull() && data.PeerIpv6s[j].TcpAoIncludeTcpOptions.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", state.getPath(), keyString))
-				}
-				if !state.PeerIpv6s[i].TcpAoKeychainName.IsNull() && data.PeerIpv6s[j].TcpAoKeychainName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", state.getPath(), keyString))
-				}
-				if !state.PeerIpv6s[i].PasswordEncrypted.IsNull() && data.PeerIpv6s[j].PasswordEncrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/password/encrypted", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv6s/ipv6%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.PeerIpv4s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.PeerIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.PeerIpv4s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.PeerIpv4s {
-			found = true
-			if state.PeerIpv4s[i].Address.ValueString() != data.PeerIpv4s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.IsNull() && data.PeerIpv4s[j].TcpAoAcceptAoMismatchConnection.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", state.getPath(), keyString))
-				}
-				if !state.PeerIpv4s[i].TcpAoIncludeTcpOptions.IsNull() && data.PeerIpv4s[j].TcpAoIncludeTcpOptions.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", state.getPath(), keyString))
-				}
-				if !state.PeerIpv4s[i].TcpAoKeychainName.IsNull() && data.PeerIpv4s[j].TcpAoKeychainName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", state.getPath(), keyString))
-				}
-				if !state.PeerIpv4s[i].PasswordEncrypted.IsNull() && data.PeerIpv4s[j].PasswordEncrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/password/encrypted", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer/ipv4s/ipv4%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.DisjointPathGroupIds {
-		keys := [...]string{"group-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].GroupId.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.DisjointPathGroupIds[i].GroupId.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.DisjointPathGroupIds {
-			found = true
-			if state.DisjointPathGroupIds[i].GroupId.ValueInt64() != data.DisjointPathGroupIds[j].GroupId.ValueInt64() {
-				found = false
-			}
-			if found {
-				for ci := range state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds {
-					ckeys := [...]string{"sub-id"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].SubId.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].SubId.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds {
-						found = true
-						if state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].SubId.ValueInt64() != data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].SubId.ValueInt64() {
-							found = false
-						}
-						if found {
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspTwoPccExcludeSrlg.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/two/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspTwoPccLspName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/two/pcc/lsp-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspTwoPccIpAddress.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/two/pcc/ip-address", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspTwoPccAddressType.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/two/pcc/address-type", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccExcludeSrlg.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccShortestPath.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccLspName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/lsp-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccIpAddress.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/ip-address", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].LspOnePccAddressType.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/address-type", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointSubIds[cj].Strict.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/strict", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspTwoPccExcludeSrlg.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/two/pcc/exclude-srlg", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspTwoPccLspName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/two/pcc/lsp-name", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspTwoPccIpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/two/pcc/ip-address", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspTwoPccAddressType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/two/pcc/address-type", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccExcludeSrlg.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/exclude-srlg", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccShortestPath.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/shortest-path", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccLspName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/lsp-name", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccIpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/ip-address", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointLspOnePccAddressType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/address-type", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjointStrict.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/strict", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgNodeDisjoint.IsNull() && data.DisjointPathGroupIds[j].SrlgNodeDisjoint.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/enable", state.getPath(), keyString))
-				}
-				for ci := range state.DisjointPathGroupIds[i].SrlgDisjointSubIds {
-					ckeys := [...]string{"sub-id"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].SubId.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].SubId.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.DisjointPathGroupIds[j].SrlgDisjointSubIds {
-						found = true
-						if state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].SubId.ValueInt64() != data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].SubId.ValueInt64() {
-							found = false
-						}
-						if found {
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspTwoPccExcludeSrlg.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/two/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspTwoPccLspName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/two/pcc/lsp-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspTwoPccIpAddress.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/two/pcc/ip-address", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspTwoPccAddressType.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/two/pcc/address-type", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccExcludeSrlg.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccShortestPath.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccLspName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/lsp-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccIpAddress.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/ip-address", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].LspOnePccAddressType.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/address-type", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointSubIds[cj].Strict.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/strict", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointLspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspTwoPccExcludeSrlg.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/two/pcc/exclude-srlg", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointLspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspTwoPccLspName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/two/pcc/lsp-name", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointLspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspTwoPccIpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/two/pcc/ip-address", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointLspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspTwoPccAddressType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/two/pcc/address-type", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccExcludeSrlg.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/exclude-srlg", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccShortestPath.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/shortest-path", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccLspName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/lsp-name", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccIpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/ip-address", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointLspOnePccAddressType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/address-type", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjointStrict.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjointStrict.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/strict", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].SrlgDisjoint.IsNull() && data.DisjointPathGroupIds[j].SrlgDisjoint.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/enable", state.getPath(), keyString))
-				}
-				for ci := range state.DisjointPathGroupIds[i].NodeDisjointSubIds {
-					ckeys := [...]string{"sub-id"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].SubId.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].SubId.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.DisjointPathGroupIds[j].NodeDisjointSubIds {
-						found = true
-						if state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].SubId.ValueInt64() != data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].SubId.ValueInt64() {
-							found = false
-						}
-						if found {
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspTwoPccExcludeSrlg.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/two/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspTwoPccLspName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/two/pcc/lsp-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspTwoPccIpAddress.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/two/pcc/ip-address", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspTwoPccAddressType.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/two/pcc/address-type", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccExcludeSrlg.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccShortestPath.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccLspName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/lsp-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccIpAddress.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/ip-address", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].LspOnePccAddressType.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/address-type", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointSubIds[cj].Strict.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/strict", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointLspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspTwoPccExcludeSrlg.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/two/pcc/exclude-srlg", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointLspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspTwoPccLspName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/two/pcc/lsp-name", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointLspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspTwoPccIpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/two/pcc/ip-address", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointLspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspTwoPccAddressType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/two/pcc/address-type", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccExcludeSrlg.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/exclude-srlg", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccShortestPath.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/shortest-path", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccLspName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/lsp-name", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccIpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/ip-address", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointLspOnePccAddressType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/address-type", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjointStrict.IsNull() && data.DisjointPathGroupIds[j].NodeDisjointStrict.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/strict", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].NodeDisjoint.IsNull() && data.DisjointPathGroupIds[j].NodeDisjoint.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/enable", state.getPath(), keyString))
-				}
-				for ci := range state.DisjointPathGroupIds[i].LinkDisjointSubIds {
-					ckeys := [...]string{"sub-id"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].SubId.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].SubId.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.DisjointPathGroupIds[j].LinkDisjointSubIds {
-						found = true
-						if state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].SubId.ValueInt64() != data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].SubId.ValueInt64() {
-							found = false
-						}
-						if found {
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspTwoPccExcludeSrlg.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/two/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspTwoPccLspName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/two/pcc/lsp-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspTwoPccIpAddress.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/two/pcc/ip-address", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspTwoPccAddressType.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/two/pcc/address-type", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccExcludeSrlg.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/exclude-srlg", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccShortestPath.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccLspName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/lsp-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccIpAddress.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/ip-address", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].LspOnePccAddressType.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/address-type", state.getPath(), keyString, ckeyString))
-							}
-							if !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointSubIds[cj].Strict.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/strict", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointLspTwoPccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspTwoPccExcludeSrlg.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/two/pcc/exclude-srlg", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointLspTwoPccLspName.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspTwoPccLspName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/two/pcc/lsp-name", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointLspTwoPccIpAddress.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspTwoPccIpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/two/pcc/ip-address", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointLspTwoPccAddressType.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspTwoPccAddressType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/two/pcc/address-type", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccExcludeSrlg.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccExcludeSrlg.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/exclude-srlg", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccShortestPath.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/shortest-path", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccLspName.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccLspName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/lsp-name", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccIpAddress.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccIpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/ip-address", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccAddressType.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointLspOnePccAddressType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/address-type", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjointStrict.IsNull() && data.DisjointPathGroupIds[j].LinkDisjointStrict.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/strict", state.getPath(), keyString))
-				}
-				if !state.DisjointPathGroupIds[i].LinkDisjoint.IsNull() && data.DisjointPathGroupIds[j].LinkDisjoint.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/enable", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v", state.getPath(), keyString))
-		}
-	}
-	if !state.DisjointPathMaximumAttempts.IsNull() && data.DisjointPathMaximumAttempts.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/disjoint-path/maximum-attempts", state.getPath()))
-	}
-	if !state.TcpAoAcceptAoMismatchConnection.IsNull() && data.TcpAoAcceptAoMismatchConnection.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcp-ao", state.getPath()))
-	}
-	if !state.TcpAoIncludeTcpOptions.IsNull() && data.TcpAoIncludeTcpOptions.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcp-ao", state.getPath()))
-	}
-	if !state.TcpAoKeychainName.IsNull() && data.TcpAoKeychainName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcp-ao", state.getPath()))
-	}
-	if !state.PasswordEncrypted.IsNull() && data.PasswordEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/password/encrypted", state.getPath()))
-	}
-	if !state.TcpBufferSize.IsNull() && data.TcpBufferSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcp-buffer/size", state.getPath()))
-	}
-	for i := range state.StateSyncIpv6s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.StateSyncIpv6s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.StateSyncIpv6s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.StateSyncIpv6s {
-			found = true
-			if state.StateSyncIpv6s[i].Address.ValueString() != data.StateSyncIpv6s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/state-sync/ipv6s/ipv6%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.StateSyncIpv4s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.StateSyncIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.StateSyncIpv4s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.StateSyncIpv4s {
-			found = true
-			if state.StateSyncIpv4s[i].Address.ValueString() != data.StateSyncIpv4s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", state.getPath(), keyString))
-		}
-	}
-	if !state.AddressIpv6.IsNull() && data.AddressIpv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv6", state.getPath()))
-	}
-	if !state.AddressIpv4.IsNull() && data.AddressIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv4", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.HierarchicalUnderlayEnableAll.IsNull() && !data.HierarchicalUnderlayEnableAll.ValueBool() {
-		if state != nil && !state.HierarchicalUnderlayEnableAll.IsNull() && state.HierarchicalUnderlayEnableAll.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hierarchical/underlay/enable-all", data.getXPath()))
-		}
-	}
-	for i := range data.SrteP2mpFrrNodeSetToIpv4s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.SrteP2mpFrrNodeSetFromIpv4s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrteP2mpFastRerouteLfa.IsNull() && !data.SrteP2mpFastRerouteLfa.ValueBool() {
-		if state != nil && !state.SrteP2mpFastRerouteLfa.IsNull() && state.SrteP2mpFastRerouteLfa.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/fast-reroute/lfa", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrteP2mpMultipathDisable.IsNull() && !data.SrteP2mpMultipathDisable.ValueBool() {
-		if state != nil && !state.SrteP2mpMultipathDisable.IsNull() && state.SrteP2mpMultipathDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/multipath-disable", data.getXPath()))
-		}
-	}
-	for i := range data.SrteP2mpPolicies {
-		keys := [...]string{"policy-name"}
-		keyValues := [...]string{data.SrteP2mpPolicies[i].PolicyName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.SrteP2mpPolicies[i].CandidatePathsPreferences {
-			ckeys := [...]string{"preference-id"}
-			ckeyValues := [...]string{strconv.FormatInt(data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].PreferenceId.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/hopcount", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/latency", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/igp", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/metric/type/te", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/candidate-paths/preferences/preference%v/dynamic", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-		for ci := range data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors {
-			ckeys := [...]string{"affinity-color-name"}
-			ckeyValues := [...]string{data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityExcludeColors[ci].AffinityColorName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-		for ci := range data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors {
-			ckeys := [...]string{"affinity-color-name"}
-			ckeyValues := [...]string{data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAllColors[ci].AffinityColorName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-		for ci := range data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors {
-			ckeys := [...]string{"affinity-color-name"}
-			ckeyValues := [...]string{data.SrteP2mpPolicies[i].CandidatePathsConstraintsAffinityIncludeAnyColors[ci].AffinityColorName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.SrteP2mpPolicies[i].FastRerouteLfa.IsNull() && !data.SrteP2mpPolicies[i].FastRerouteLfa.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SrteP2mpPolicies) && !state.SrteP2mpPolicies[i].FastRerouteLfa.IsNull() && state.SrteP2mpPolicies[i].FastRerouteLfa.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/fast-reroute/lfa", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.SrteP2mpPolicies[i].Shutdown.IsNull() && !data.SrteP2mpPolicies[i].Shutdown.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SrteP2mpPolicies) && !state.SrteP2mpPolicies[i].Shutdown.IsNull() && state.SrteP2mpPolicies[i].Shutdown.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v/shutdown", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.SrteP2mpEndpointSets {
-		keys := [...]string{"endpoint-set-name"}
-		keyValues := [...]string{data.SrteP2mpEndpointSets[i].EndpointSetName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.SrteP2mpEndpointSets[i].Ipv4s {
-			ckeys := [...]string{"address"}
-			ckeyValues := [...]string{data.SrteP2mpEndpointSets[i].Ipv4s[ci].Address.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrteCspfSrNativeForce.IsNull() && !data.SrteCspfSrNativeForce.ValueBool() {
-		if state != nil && !state.SrteCspfSrNativeForce.IsNull() && state.SrteCspfSrNativeForce.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native/force", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrteCspfSrNative.IsNull() && !data.SrteCspfSrNative.ValueBool() {
-		if state != nil && !state.SrteCspfSrNative.IsNull() && state.SrteCspfSrNative.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrteCspfAnycastSidInclusion.IsNull() && !data.SrteCspfAnycastSidInclusion.ValueBool() {
-		if state != nil && !state.SrteCspfAnycastSidInclusion.IsNull() && state.SrteCspfAnycastSidInclusion.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/anycast-sid-inclusion", data.getXPath()))
-		}
-	}
-	for i := range data.SrteIpv4Peers {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SrteIpv4Peers[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.SrteIpv4Peers[i].Policies {
-			ckeys := [...]string{"policy-name"}
-			ckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].PolicyName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.SrteIpv4Peers) && ci < len(state.SrteIpv4Peers[i].Policies) && !state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/unprotected", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.SrteIpv4Peers) && ci < len(state.SrteIpv4Peers[i].Policies) && !state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/path-selection/protected", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].Shutdown.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.SrteIpv4Peers) && ci < len(state.SrteIpv4Peers[i].Policies) && !state.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && state.SrteIpv4Peers[i].Policies[ci].Shutdown.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/shutdown", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors {
-				cckeys := [...]string{"affinity-color-name"}
-				cckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityExcludeColors[cci].AffinityColorName.ValueString()}
-				cckeyString := ""
-				for ccki := range cckeys {
-					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
-				}
-			}
-			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors {
-				cckeys := [...]string{"affinity-color-name"}
-				cckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAllColors[cci].AffinityColorName.ValueString()}
-				cckeyString := ""
-				for ccki := range cckeys {
-					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
-				}
-			}
-			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors {
-				cckeys := [...]string{"affinity-color-name"}
-				cckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsAffinityIncludeAnyColors[cci].AffinityColorName.ValueString()}
-				cckeyString := ""
-				for ccki := range cckeys {
-					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
-				}
-			}
-			for cci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences {
-				cckeys := [...]string{"preference-id"}
-				cckeyValues := [...]string{strconv.FormatInt(data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].PreferenceId.ValueInt64(), 10)}
-				cckeyString := ""
-				for ccki := range cckeys {
-					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
-				}
-				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-preferred", data.getPath(), keyString, ckeyString, cckeyString))
-				}
-				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/unprotected-only", data.getPath(), keyString, ckeyString, cckeyString))
-				}
-				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-only", data.getPath(), keyString, ckeyString, cckeyString))
-				}
-				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/constraints/segments/protection/protected-preferred", data.getPath(), keyString, ckeyString, cckeyString))
-				}
-				for ccci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames {
-					ccckeys := [...]string{"segment-list-name"}
-					ccckeyValues := [...]string{data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames[ccci].SegmentListName.ValueString()}
-					ccckeyString := ""
-					for cccki := range ccckeys {
-						ccckeyString += "[" + ccckeys[cccki] + "=" + ccckeyValues[cccki] + "]"
-					}
-				}
-				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/hopcount", data.getPath(), keyString, ckeyString, cckeyString))
-				}
-				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/latency", data.getPath(), keyString, ckeyString, cckeyString))
-				}
-				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/igp", data.getPath(), keyString, ckeyString, cckeyString))
-				}
-				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls/metric/type/te", data.getPath(), keyString, ckeyString, cckeyString))
-				}
-				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v/policies/policy%v/candidate-paths/preferences/preference%v/dynamic/mpls", data.getPath(), keyString, ckeyString, cckeyString))
-				}
-			}
-		}
-	}
-	for i := range data.SrteSegmentLists {
-		keys := [...]string{"segment-list-name"}
-		keyValues := [...]string{data.SrteSegmentLists[i].SegmentListName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.SrteSegmentLists[i].Indexes {
-			ckeys := [...]string{"index-number"}
-			ckeyValues := [...]string{strconv.FormatInt(data.SrteSegmentLists[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-	}
-	for i := range data.SrteAffinityBitmaps {
-		keys := [...]string{"affinity-color-name"}
-		keyValues := [...]string{data.SrteAffinityBitmaps[i].AffinityColorName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SegmentRoutingStrictSidOnly.IsNull() && !data.SegmentRoutingStrictSidOnly.ValueBool() {
-		if state != nil && !state.SegmentRoutingStrictSidOnly.IsNull() && state.SegmentRoutingStrictSidOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/strict-sid-only", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingPcepDisjointnessStatus.IsNull() && !data.LoggingPcepDisjointnessStatus.ValueBool() {
-		if state != nil && !state.LoggingPcepDisjointnessStatus.IsNull() && state.LoggingPcepDisjointnessStatus.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/pcep/disjointness-status", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingPcepApiSendQueueCongestionDisable.IsNull() && !data.LoggingPcepApiSendQueueCongestionDisable.ValueBool() {
-		if state != nil && !state.LoggingPcepApiSendQueueCongestionDisable.IsNull() && state.LoggingPcepApiSendQueueCongestionDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/pcep/api/send-queue-congestion/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingPcepPcerrReceived.IsNull() && !data.LoggingPcepPcerrReceived.ValueBool() {
-		if state != nil && !state.LoggingPcepPcerrReceived.IsNull() && state.LoggingPcepPcerrReceived.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/pcep/pcerr-received", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingFallback.IsNull() && !data.LoggingFallback.ValueBool() {
-		if state != nil && !state.LoggingFallback.IsNull() && state.LoggingFallback.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/fallback", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingNoPath.IsNull() && !data.LoggingNoPath.ValueBool() {
-		if state != nil && !state.LoggingNoPath.IsNull() && state.LoggingNoPath.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/no-path", data.getXPath()))
-		}
-	}
-	for i := range data.ApiUsers {
-		keys := [...]string{"user-name"}
-		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ApiAuthenticationDigest.IsNull() && !data.ApiAuthenticationDigest.ValueBool() {
-		if state != nil && !state.ApiAuthenticationDigest.IsNull() && state.ApiAuthenticationDigest.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/api/authentication/digest", data.getXPath()))
-		}
-	}
-	for i := range data.PeerIpv6s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.PeerIpv6s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.IsNull() && !data.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.PeerIpv6s) && !state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.IsNull() && state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.PeerIpv6s[i].TcpAoIncludeTcpOptions.IsNull() && !data.PeerIpv6s[i].TcpAoIncludeTcpOptions.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.PeerIpv6s) && !state.PeerIpv6s[i].TcpAoIncludeTcpOptions.IsNull() && state.PeerIpv6s[i].TcpAoIncludeTcpOptions.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer/ipv6s/ipv6%v/tcp-ao", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.PeerIpv4s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.PeerIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.IsNull() && !data.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.PeerIpv4s) && !state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.IsNull() && state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.PeerIpv4s[i].TcpAoIncludeTcpOptions.IsNull() && !data.PeerIpv4s[i].TcpAoIncludeTcpOptions.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.PeerIpv4s) && !state.PeerIpv4s[i].TcpAoIncludeTcpOptions.IsNull() && state.PeerIpv4s[i].TcpAoIncludeTcpOptions.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer/ipv4s/ipv4%v/tcp-ao", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.DisjointPathGroupIds {
-		keys := [...]string{"group-id"}
-		keyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].GroupId.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds {
-			ckeys := [...]string{"sub-id"}
-			ckeyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].SubId.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/sub-ids/sub-id%v/strict", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/lsp/one/pcc/shortest-path", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/strict", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].SrlgNodeDisjoint.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjoint.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjoint.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjoint.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg-node/enable", data.getXPath(), keyString))
-			}
-		}
-		for ci := range data.DisjointPathGroupIds[i].SrlgDisjointSubIds {
-			ckeys := [...]string{"sub-id"}
-			ckeyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].SubId.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/sub-ids/sub-id%v/strict", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/lsp/one/pcc/shortest-path", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].SrlgDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointStrict.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointStrict.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/strict", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].SrlgDisjoint.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjoint.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgDisjoint.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjoint.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/srlg/enable", data.getXPath(), keyString))
-			}
-		}
-		for ci := range data.DisjointPathGroupIds[i].NodeDisjointSubIds {
-			ckeys := [...]string{"sub-id"}
-			ckeyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].SubId.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].NodeDisjointSubIds) && !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].NodeDisjointSubIds) && !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/sub-ids/sub-id%v/strict", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/lsp/one/pcc/shortest-path", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].NodeDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointStrict.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].NodeDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointStrict.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/strict", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].NodeDisjoint.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjoint.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].NodeDisjoint.IsNull() && state.DisjointPathGroupIds[i].NodeDisjoint.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/node/enable", data.getXPath(), keyString))
-			}
-		}
-		for ci := range data.DisjointPathGroupIds[i].LinkDisjointSubIds {
-			ckeys := [...]string{"sub-id"}
-			ckeyValues := [...]string{strconv.FormatInt(data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].SubId.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].LinkDisjointSubIds) && !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/lsp/one/pcc/shortest-path", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].LinkDisjointSubIds) && !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/sub-ids/sub-id%v/strict", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/lsp/one/pcc/shortest-path", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].LinkDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointStrict.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].LinkDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointStrict.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/strict", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.DisjointPathGroupIds[i].LinkDisjoint.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjoint.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].LinkDisjoint.IsNull() && state.DisjointPathGroupIds[i].LinkDisjoint.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v/type/link/enable", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TcpAoAcceptAoMismatchConnection.IsNull() && !data.TcpAoAcceptAoMismatchConnection.ValueBool() {
-		if state != nil && !state.TcpAoAcceptAoMismatchConnection.IsNull() && state.TcpAoAcceptAoMismatchConnection.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/tcp-ao", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TcpAoIncludeTcpOptions.IsNull() && !data.TcpAoIncludeTcpOptions.ValueBool() {
-		if state != nil && !state.TcpAoIncludeTcpOptions.IsNull() && state.TcpAoIncludeTcpOptions.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/tcp-ao", data.getXPath()))
-		}
-	}
-	for i := range data.StateSyncIpv6s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.StateSyncIpv6s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.StateSyncIpv4s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.StateSyncIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *PCE) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.HierarchicalUnderlayEnableAll.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hierarchical/underlay/enable-all", data.getPath()))
-	}
-	if !data.PeerFilterIpv4AccessList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-filter/ipv4/access-list", data.getPath()))
-	}
-	for i := range data.SrteP2mpFrrNodeSetToIpv4s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.SrteP2mpFrrNodeSetToIpv4s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/frr-node-set/to/ipv4s/ipv4%v", data.getPath(), keyPath))
-	}
-	for i := range data.SrteP2mpFrrNodeSetFromIpv4s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.SrteP2mpFrrNodeSetFromIpv4s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/frr-node-set/from/ipv4s/ipv4%v", data.getPath(), keyPath))
-	}
-	if !data.SrteP2mpFastRerouteLfa.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/fast-reroute/lfa", data.getPath()))
-	}
-	if !data.SrteP2mpMultipathDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/multipath-disable", data.getPath()))
-	}
-	if !data.SrteP2mpLabelRangeMax.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/label-range/max", data.getPath()))
-	}
-	if !data.SrteP2mpLabelRangeMin.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/label-range/min", data.getPath()))
-	}
-	if !data.SrteP2mpTimersCleanup.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/timers/cleanup", data.getPath()))
-	}
-	if !data.SrteP2mpTimersReoptimization.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/timers/reoptimization", data.getPath()))
-	}
-	for i := range data.SrteP2mpPolicies {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[policy-name=" + data.SrteP2mpPolicies[i].PolicyName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/policies/policy%v", data.getPath(), keyPath))
-	}
-	for i := range data.SrteP2mpEndpointSets {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[endpoint-set-name=" + data.SrteP2mpEndpointSets[i].EndpointSetName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/p2mp/endpoint-sets/endpoint-set%v", data.getPath(), keyPath))
-	}
-	if !data.SrteCspfSrNativeForce.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native/force", data.getPath()))
-	}
-	if !data.SrteCspfSrNative.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/sr-native", data.getPath()))
-	}
-	if !data.SrteCspfAnycastSidInclusion.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/cspf/anycast-sid-inclusion", data.getPath()))
-	}
-	for i := range data.SrteIpv4Peers {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.SrteIpv4Peers[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/peer/ipv4s/ipv4%v", data.getPath(), keyPath))
-	}
-	for i := range data.SrteSegmentLists {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[segment-list-name=" + data.SrteSegmentLists[i].SegmentListName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/segment-lists/segment-list%v", data.getPath(), keyPath))
-	}
-	for i := range data.SrteAffinityBitmaps {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[affinity-color-name=" + data.SrteAffinityBitmaps[i].AffinityColorName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/traffic-eng/affinity/bit-map/affinity-colors/affinity-color%v", data.getPath(), keyPath))
-	}
-	if !data.SegmentRoutingStrictSidOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/strict-sid-only", data.getPath()))
-	}
-	if !data.LoggingPcepDisjointnessStatus.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/pcep/disjointness-status", data.getPath()))
-	}
-	if !data.LoggingPcepApiSendQueueCongestionDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/pcep/api/send-queue-congestion/disable", data.getPath()))
-	}
-	if !data.LoggingPcepPcerrReceived.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/pcep/pcerr-received", data.getPath()))
-	}
-	if !data.LoggingFallback.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/fallback", data.getPath()))
-	}
-	if !data.LoggingNoPath.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/no-path", data.getPath()))
-	}
-	if !data.BackoffThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/backoff/threshold", data.getPath()))
-	}
-	if !data.BackoffDifference.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/backoff/difference", data.getPath()))
-	}
-	if !data.BackoffRatio.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/backoff/ratio", data.getPath()))
-	}
-	if !data.TimersInitVerifyStartup.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/init-verify-startup", data.getPath()))
-	}
-	if !data.TimersInitVerifySwitchover.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/init-verify-switchover", data.getPath()))
-	}
-	if !data.TimersInitVerifyRestart.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/init-verify-restart", data.getPath()))
-	}
-	if !data.TimersPeerZombie.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/peer-zombie", data.getPath()))
-	}
-	if !data.TimersMinimumPeerKeepalive.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/minimum-peer-keepalive", data.getPath()))
-	}
-	if !data.TimersKeepalive.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/keepalive", data.getPath()))
-	}
-	if !data.TimersReoptimization.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/reoptimization", data.getPath()))
-	}
-	if !data.ApiIpv6Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/ipv6/address", data.getPath()))
-	}
-	if !data.ApiIpv4Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/ipv4/address", data.getPath()))
-	}
-	for i := range data.ApiUsers {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[user-name=" + data.ApiUsers[i].UserName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/users/user%v", data.getPath(), keyPath))
-	}
-	if !data.ApiVrf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/vrf", data.getPath()))
-	}
-	if !data.ApiSiblingIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/sibling/ipv4", data.getPath()))
-	}
-	if !data.ApiAuthenticationDigest.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/authentication/digest", data.getPath()))
-	}
-	if !data.NetconfSshPasswordEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/netconf/ssh/password/encrypted", data.getPath()))
-	}
-	if !data.NetconfSshUser.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/netconf/ssh/user", data.getPath()))
-	}
-	for i := range data.PeerIpv6s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.PeerIpv6s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer/ipv6s/ipv6%v", data.getPath(), keyPath))
-	}
-	for i := range data.PeerIpv4s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.PeerIpv4s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer/ipv4s/ipv4%v", data.getPath(), keyPath))
-	}
-	for i := range data.DisjointPathGroupIds {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[group-id=" + strconv.FormatInt(data.DisjointPathGroupIds[i].GroupId.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/disjoint-path/group-ids/group-id%v", data.getPath(), keyPath))
-	}
-	if !data.DisjointPathMaximumAttempts.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/disjoint-path/maximum-attempts", data.getPath()))
-	}
-	if !data.TcpAoAcceptAoMismatchConnection.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcp-ao", data.getPath()))
-	}
-	if !data.TcpAoIncludeTcpOptions.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcp-ao", data.getPath()))
-	}
-	if !data.TcpAoKeychainName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcp-ao", data.getPath()))
-	}
-	if !data.PasswordEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/password/encrypted", data.getPath()))
-	}
-	if !data.TcpBufferSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcp-buffer/size", data.getPath()))
-	}
-	for i := range data.StateSyncIpv6s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.StateSyncIpv6s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/state-sync/ipv6s/ipv6%v", data.getPath(), keyPath))
-	}
-	for i := range data.StateSyncIpv4s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.StateSyncIpv4s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", data.getPath(), keyPath))
-	}
-	if !data.AddressIpv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv6", data.getPath()))
-	}
-	if !data.AddressIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv4", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *PCE) addDeletedItemsXML(ctx context.Context, state PCE, body string) string {
@@ -13697,6 +13707,7 @@ func (data *PCE) addDeletedItemsXML(ctx context.Context, state PCE, body string)
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *PCE) addDeletePathsXML(ctx context.Context, body string) string {

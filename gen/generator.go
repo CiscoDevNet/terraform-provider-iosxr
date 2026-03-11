@@ -174,72 +174,6 @@ type YamlTestListItem struct {
 	Attributes []YamlTestAttribute `yaml:"attributes"`
 }
 
-// Templating helper function to get short YANG name without prefix (xxx:abc -> abc)
-func ToYangShortName(s string) string {
-	elements := strings.Split(s, "/")
-	for i := range elements {
-		if strings.Contains(elements[i], ":") {
-			elements[i] = strings.Split(elements[i], ":")[1]
-		}
-	}
-	return strings.Join(elements, "/")
-}
-
-// Templating helper function to convert TF name to GO name
-func ToGoName(s string) string {
-	var g []string
-
-	p := strings.Split(s, "_")
-
-	for _, value := range p {
-		if strings.Contains(value, ":") {
-			value = strings.Split(value, ":")[1]
-		}
-		g = append(g, strings.Title(value))
-	}
-	s = strings.Join(g, "")
-	return s
-}
-
-// Templating helper function to convert YANG name to GO name
-func ToJsonPath(yangPath, xPath string) string {
-	path := yangPath
-	if xPath != "" {
-		path = xPath
-	}
-
-	// Split by /, escape dots in each segment, then join with .
-	parts := strings.Split(path, "/")
-	for i, part := range parts {
-		parts[i] = strings.ReplaceAll(part, ".", "\\\\.")
-	}
-	return strings.Join(parts, ".")
-}
-
-// Templating helper function to convert string to camel case
-func CamelCase(s string) string {
-	var g []string
-
-	p := strings.Fields(s)
-
-	for _, value := range p {
-		g = append(g, strings.Title(value))
-	}
-	return strings.Join(g, "")
-}
-
-// Templating helper function to convert string to snake case
-func SnakeCase(s string) string {
-	var g []string
-
-	p := strings.Fields(s)
-
-	for _, value := range p {
-		g = append(g, strings.ToLower(value))
-	}
-	return strings.Join(g, "_")
-}
-
 // Templating helper function to return true if id included in attributes
 func HasId(attributes []YamlConfigAttribute) bool {
 	for _, attr := range attributes {
@@ -307,63 +241,12 @@ func GetDeletePath(attribute YamlConfigAttribute) string {
 	path := attribute.XPath
 	if attribute.DeleteGrandparent {
 		// Remove two levels: grandparent
-		return RemoveLastPathElement(RemoveLastPathElement(path))
+		return helpers.RemoveLastPathElement(helpers.RemoveLastPathElement(path))
 	}
 	if attribute.DeleteParent {
-		return RemoveLastPathElement(path)
+		return helpers.RemoveLastPathElement(path)
 	}
 	return path
-}
-
-func GetLastPathElement(path string) string {
-	// Remove namespace prefix if present
-	// e.g., "ipv4//Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address" -> "address"
-	// Split by / and get the last non-empty element
-	parts := strings.Split(path, "/")
-	for i := len(parts) - 1; i >= 0; i-- {
-		if parts[i] != "" {
-			// Remove namespace prefix if present (e.g., "Cisco-IOS-XR-um:element" -> "element")
-			element := parts[i]
-			if idx := strings.LastIndex(element, ":"); idx >= 0 {
-				element = element[idx+1:]
-			}
-			return element
-		}
-	}
-	return ""
-}
-
-func ToDotPath(path string) string {
-	// Remove leading slash
-	path = strings.TrimPrefix(path, "/")
-
-	// Split by /, escape dots in each segment (which are part of YANG element names),
-	// then join with . (path separator)
-	parts := strings.Split(path, "/")
-	for i, part := range parts {
-		// Escape dots in element names for sjson/gjson
-		// In Go string literals, \\\\ becomes \\ in the string, which sjson interprets as \
-		parts[i] = strings.ReplaceAll(part, ".", "\\\\.")
-	}
-	path = strings.Join(parts, ".")
-
-	// Replace double slashes with single dot (if any remain)
-	path = strings.ReplaceAll(path, "//", ".")
-
-	return path
-}
-
-func ReverseAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
-	reversed := make([]YamlConfigAttribute, len(attributes))
-	for i, v := range attributes {
-		reversed[len(attributes)-1-i] = v
-	}
-	return reversed
-}
-
-// Templating helper function to add two integers
-func Add(a, b int) int {
-	return a + b
 }
 
 // Templating helper function to get example dn
@@ -377,33 +260,13 @@ func GetExamplePath(path string, attributes []YamlConfigAttribute) string {
 	return fmt.Sprintf(path, a...)
 }
 
-// Templating helper function to identify last element of list
-func IsLast(index int, len int) bool {
-	return index+1 == len
-}
-
-// Templating helper function to remove last element of path
-func RemoveLastPathElement(p string) string {
-	return path.Dir(p)
-}
-
-// topElementName returns the first path element name stripped of any namespace
-// prefix. e.g. "Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule"
-// → "suppress", and "suppress/duplicates" → "suppress".
-func topElementName(yangName string) string {
-	first := yangName
-	if idx := strings.Index(yangName, "/"); idx != -1 {
-		first = yangName[:idx]
+// ReverseAttributes reverses a slice of YamlConfigAttribute
+func ReverseAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
+	reversed := make([]YamlConfigAttribute, len(attributes))
+	for i, v := range attributes {
+		reversed[len(attributes)-1-i] = v
 	}
-	if idx := strings.Index(first, ":"); idx != -1 {
-		return first[idx+1:]
-	}
-	return first
-}
-
-// hasNamespacePrefix checks if a yang path contains any namespace prefix (e.g. "prefix:")
-func hasNamespacePrefix(yangName string) bool {
-	return strings.Contains(yangName, ":")
+	return reversed
 }
 
 // IsXmlNamespaceSibling reports whether attr must be emitted as a separate
@@ -419,16 +282,16 @@ func hasNamespacePrefix(yangName string) bool {
 // backward compatibility, but is no longer required.
 func IsXmlNamespaceSibling(attr YamlConfigAttribute, allAttrs []YamlConfigAttribute) bool {
 	// Auto-detect: must have a namespace prefix anywhere in the path.
-	if !hasNamespacePrefix(attr.YangName) {
+	if !helpers.HasNamespacePrefix(attr.YangName) {
 		return false
 	}
-	myTop := topElementName(attr.YangName)
+	myTop := helpers.TopElementName(attr.YangName)
 	// Check whether any other attribute in the list shares the same root element.
 	for _, other := range allAttrs {
 		if other.YangName == attr.YangName {
 			continue
 		}
-		if topElementName(other.YangName) == myTop {
+		if helpers.TopElementName(other.YangName) == myTop {
 			return true
 		}
 	}
@@ -468,8 +331,8 @@ func GroupXmlSiblings(allAttrs []YamlConfigAttribute) []SiblingGroup {
 			continue
 		}
 		// Build the group key: "<ns-prefix>:<top-element>"
-		prefix := XmlNamespacePrefixFromXPath(a.YangName)
-		top := topElementName(a.YangName)
+		prefix := helpers.XmlNamespacePrefixFromXPath(a.YangName)
+		top := helpers.TopElementName(a.YangName)
 		key := prefix + ":" + top
 		if prefix == "" {
 			key = top
@@ -484,44 +347,31 @@ func GroupXmlSiblings(allAttrs []YamlConfigAttribute) []SiblingGroup {
 	return groups
 }
 
-// XmlNamespacePrefixFromXPath extracts the YANG module prefix from the first
-// segment of an XPath that carries one, e.g.
-//
-//	"Cisco-IOS-XR-um-logging-cfg:suppress/duplicates" -> "Cisco-IOS-XR-um-logging-cfg"
-//	"suppress/duplicates"                              -> ""
-func XmlNamespacePrefixFromXPath(xp string) string {
-	first := xp
-	if idx := strings.Index(xp, "/"); idx != -1 {
-		first = xp[:idx]
-	}
-	if idx := strings.Index(first, ":"); idx != -1 {
-		return first[:idx]
-	}
-	return ""
-}
-
 // Map of templating functions
 var functions = template.FuncMap{
-	"toGoName":                    ToGoName,
-	"camelCase":                   CamelCase,
-	"snakeCase":                   SnakeCase,
+	"toGoName":                    helpers.ToGoName,
+	"camelCase":                   helpers.CamelCase,
+	"snakeCase":                   helpers.SnakeCase,
 	"hasId":                       HasId,
 	"hasReference":                HasReference,
 	"importParts":                 ImportParts,
 	"importAttributes":            ImportAttributes,
 	"getIdAttributes":             GetIdAttributes,
-	"add":                         Add,
+	"add":                         helpers.Add,
 	"sprintf":                     fmt.Sprintf,
-	"removeLastPathElement":       RemoveLastPathElement,
+	"removeLastPathElement":       helpers.RemoveLastPathElement,
 	"getDeletePath":               GetDeletePath,
-	"getLastPathElement":          GetLastPathElement,
+	"getLastPathElement":          helpers.GetLastPathElement,
 	"reverseAttributes":           ReverseAttributes,
-	"toDotPath":                   ToDotPath,
+	"toDotPath":                   helpers.ToDotPath,
 	"hasPrefix":                   strings.HasPrefix,
 	"hasXmlNamespaceSiblings":     HasXmlNamespaceSiblings,
 	"isXmlNamespaceSibling":       IsXmlNamespaceSibling,
-	"xmlNamespacePrefixFromXPath": XmlNamespacePrefixFromXPath,
+	"xmlNamespacePrefixFromXPath": helpers.XmlNamespacePrefixFromXPath,
 	"groupXmlSiblings":            GroupXmlSiblings,
+	"getExamplePath":              GetExamplePath,
+	"isLast":                      helpers.IsLast,
+	"getXPath":                    GetXPath,
 }
 
 func resolvePath(e *yang.Entry, path string) *yang.Entry {
@@ -654,7 +504,7 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		attr.XPath = attr.YangName
 	}
 	if attr.TfName == "" {
-		tfName := strings.ReplaceAll(ToYangShortName(attr.XPath), "-", "_")
+		tfName := strings.ReplaceAll(helpers.ToYangShortName(attr.XPath), "-", "_")
 		tfName = strings.ReplaceAll(tfName, "/", "_")
 		// Trim leading underscores to comply with tfsdk naming rules (must start with letter)
 		tfName = strings.TrimLeft(tfName, "_")
@@ -974,7 +824,7 @@ func main() {
 
 		// Iterate over templates and render files
 		for _, t := range templates {
-			renderTemplate(t.path, t.prefix+SnakeCase(configs[i].Name)+t.suffix, configs[i])
+			renderTemplate(t.path, t.prefix+helpers.SnakeCase(configs[i].Name)+t.suffix, configs[i])
 		}
 	}
 

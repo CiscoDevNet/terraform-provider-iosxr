@@ -26,7 +26,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -795,15 +794,17 @@ func (r *RouterStaticVRFIPv4MulticastResource) Read(ctx context.Context, req res
 				return
 			}
 
-			getResp, err := device.GnmiClient.Get(ctx, []string{state.Id.ValueString()})
+			// Use GetWithRetry to handle device sync delays
+			getResp, isEmpty, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
 			if err != nil {
-				if strings.Contains(err.Error(), "Requested element(s) not found") {
-					resp.State.RemoveResource(ctx)
-					return
-				} else {
-					resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-					return
-				}
+				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				return
+			}
+
+			// If resource not found after retries, remove from state
+			if isEmpty {
+				resp.State.RemoveResource(ctx)
+				return
 			}
 
 			// Defensive bounds checking for response structure
@@ -838,47 +839,24 @@ func (r *RouterStaticVRFIPv4MulticastResource) Read(ctx context.Context, req res
 
 			filter := helpers.GetSubtreeFilter(state.getXPath())
 
-			// Retry logic: NETCONF GetConfig may return empty data immediately after commit
-			// due to device sync delay. Retry with exponential backoff.
-			var res netconf.Res
-			var err error
-			maxRetries := 3
-			baseDelay := 200 * time.Millisecond
-
-			for attempt := 0; attempt <= maxRetries; attempt++ {
-				res, err = helpers.GetConfigWithTimeout(ctx, device.NetconfClient, "running", filter)
-				if err != nil {
-					resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object (%s), got error: %s", state.getPath(), err))
-					return
-				}
-
-				// Check if we got data back
-				isEmpty := helpers.IsGetConfigResponseEmpty(&res)
-				tflog.Debug(ctx, fmt.Sprintf("NETCONF GetConfig response for %s (attempt %d/%d): isEmpty=%v, isListPath=%v",
-					state.getXPath(), attempt+1, maxRetries+1, isEmpty, helpers.IsListPath(state.getXPath())))
-
-				// If we got data or this is the last attempt, break
-				if !isEmpty || attempt == maxRetries {
-					break
-				}
-
-				// Wait before retrying (exponential backoff)
-				delay := baseDelay * time.Duration(1<<uint(attempt))
-				tflog.Debug(ctx, fmt.Sprintf("NETCONF returned empty response, retrying after %v", delay))
-				time.Sleep(delay)
+			// Use GetConfigWithRetry to handle device sync delays
+			res, isEmpty, err := helpers.GetConfigWithRetry(ctx, device.NetconfClient, "running", filter, state.getXPath())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object: %s", err))
+				return
 			}
 
-			if helpers.IsGetConfigResponseEmpty(&res) {
+			if isEmpty {
 				if helpers.IsListPath(state.getXPath()) {
 					// NETCONF returned empty response for a list resource after retries
 					// This can happen on IOS-XR for certain resources even when they exist
 					// Instead of removing the resource, log a warning and preserve the current state
-					tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response for list path after %d retries, preserving state as-is", state.Id.ValueString(), maxRetries+1))
+					tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response for list path after retries, preserving state as-is", state.Id.ValueString()))
 					// Don't call updateFromBodyXML - keep state unchanged
 				} else {
 					// For non-list resources, also preserve state if empty after retries
 					// This handles the case where device hasn't fully synced yet
-					tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response after %d retries, preserving state as-is", state.Id.ValueString(), maxRetries+1))
+					tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response after retries, preserving state as-is", state.Id.ValueString()))
 					// Don't call updateFromBodyXML - keep state unchanged
 				}
 			} else {

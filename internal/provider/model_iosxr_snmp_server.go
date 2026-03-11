@@ -9678,10 +9678,10 @@ func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) [
 						}
 						if found {
 							if !state.Views[i].MibViewFamilies[ci].Excluded.IsNull() && data.Views[j].MibViewFamilies[cj].Excluded.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/views/view%v/mib-view-families/mib-view-family%v/.", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/views/view%v/mib-view-families/mib-view-family%v/", state.getPath(), keyString, ckeyString))
 							}
 							if !state.Views[i].MibViewFamilies[ci].Included.IsNull() && data.Views[j].MibViewFamilies[cj].Included.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/views/view%v/mib-view-families/mib-view-family%v/.", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/views/view%v/mib-view-families/mib-view-family%v/", state.getPath(), keyString, ckeyString))
 							}
 							break
 						}
@@ -10281,14 +10281,14 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context, state *SNMPServ
 			if !data.Views[i].MibViewFamilies[ci].Excluded.IsNull() && !data.Views[i].MibViewFamilies[ci].Excluded.ValueBool() {
 				// Check if corresponding state item exists and has true value
 				if state != nil && i < len(state.Views) && ci < len(state.Views[i].MibViewFamilies) && !state.Views[i].MibViewFamilies[ci].Excluded.IsNull() && state.Views[i].MibViewFamilies[ci].Excluded.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/views/view%v/mib-view-families/mib-view-family%v/.", data.getXPath(), keyString, ckeyString))
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/views/view%v/mib-view-families/mib-view-family%v/", data.getXPath(), keyString, ckeyString))
 				}
 			}
 			// Only delete if state has true and plan has false
 			if !data.Views[i].MibViewFamilies[ci].Included.IsNull() && !data.Views[i].MibViewFamilies[ci].Included.ValueBool() {
 				// Check if corresponding state item exists and has true value
 				if state != nil && i < len(state.Views) && ci < len(state.Views[i].MibViewFamilies) && !state.Views[i].MibViewFamilies[ci].Included.IsNull() && state.Views[i].MibViewFamilies[ci].Included.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/views/view%v/mib-view-families/mib-view-family%v/.", data.getXPath(), keyString, ckeyString))
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/views/view%v/mib-view-families/mib-view-family%v/", data.getXPath(), keyString, ckeyString))
 				}
 			}
 		}
@@ -11977,11 +11977,11 @@ func (data *SNMPServer) addDeletedItemsXML(ctx context.Context, state SNMPServer
 						if found {
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.Views[i].MibViewFamilies[ci].Excluded.IsNull() && state.Views[i].MibViewFamilies[ci].Excluded.ValueBool() && data.Views[j].MibViewFamilies[cj].Excluded.IsNull() {
-								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/views/view%v/mib-view-families/mib-view-family%v/.", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/views/view%v/mib-view-families/mib-view-family%v/", predicates, cpredicates))
 							}
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.Views[i].MibViewFamilies[ci].Included.IsNull() && state.Views[i].MibViewFamilies[ci].Included.ValueBool() && data.Views[j].MibViewFamilies[cj].Included.IsNull() {
-								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/views/view%v/mib-view-families/mib-view-family%v/.", predicates, cpredicates))
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/views/view%v/mib-view-families/mib-view-family%v/", predicates, cpredicates))
 							}
 							break
 						}

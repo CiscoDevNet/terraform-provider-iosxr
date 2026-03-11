@@ -3564,13 +3564,13 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/local-accounting/send-to-remote/facility/level", state.getPath(), keyString))
 				}
 				if !state.File[i].Severity.IsNull() && data.File[j].Severity.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/", state.getPath(), keyString))
 				}
 				if !state.File[i].Maxfilesize.IsNull() && data.File[j].Maxfilesize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/", state.getPath(), keyString))
 				}
 				if !state.File[i].Path.IsNull() && data.File[j].Path.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/.", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/", state.getPath(), keyString))
 				}
 				break
 			}
@@ -4484,13 +4484,13 @@ func (data *Logging) addDeletedItemsXML(ctx context.Context, state Logging, body
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/files/file%v/local-accounting/send-to-remote/facility/level", predicates))
 				}
 				if !state.File[i].Severity.IsNull() && data.File[j].Severity.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/files/file%v/", predicates))
 				}
 				if !state.File[i].Maxfilesize.IsNull() && data.File[j].Maxfilesize.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/files/file%v/", predicates))
 				}
 				if !state.File[i].Path.IsNull() && data.File[j].Path.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/files/file%v/.", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/files/file%v/", predicates))
 				}
 				break
 			}

@@ -45,26 +45,9 @@ const (
 	namespaceBaseURL = "http://cisco.com/ns/yang/"
 )
 
-// ============================================================================
-// Types
-// ============================================================================
-
-// keyValue represents a key-value pair in XPath predicates
-type keyValue struct {
-	Key   string
-	Value string
-}
-
-// ============================================================================
-// Package Variables
-// ============================================================================
-
 // capabilityCache caches per-client capability check results
 // Key: "<pointer>:<uri>", Value: bool
 var capabilityCache sync.Map
-
-// Pre-compiled regular expression for XPath predicate parsing
-var predicatePattern = regexp.MustCompile(`\[([^]]+)\]`)
 
 // ============================================================================
 // NETCONF Connection Management
@@ -487,7 +470,7 @@ func GetSubtreeFilter(xPath string) netconf.Filter {
 	// Remove leading slash if present
 	xPath = strings.TrimPrefix(xPath, "/")
 
-	segments := splitXPathSegments(xPath)
+	segments := SplitXPathSegments(xPath)
 
 	// Filter out empty segments (caused by // in XPath for augments)
 	filteredSegments := make([]string, 0, len(segments))
@@ -513,7 +496,7 @@ func GetSubtreeFilter(xPath string) netconf.Filter {
 	var content strings.Builder
 
 	for i, segment := range segments {
-		elementName, keys := parseXPathSegment(segment)
+		elementName, keys := ParseXPathSegment(segment)
 
 		var element string
 		var segmentNamespace string
@@ -531,7 +514,7 @@ func GetSubtreeFilter(xPath string) netconf.Filter {
 				segmentNamespace = elementName[:idx]
 				element = elementName[idx+1:]
 			} else {
-				element = removeNamespacePrefix(elementName)
+				element = RemoveNamespacePrefix(elementName)
 			}
 		}
 
@@ -554,7 +537,7 @@ func GetSubtreeFilter(xPath string) netconf.Filter {
 		if len(keys) > 0 {
 			content.WriteString(">")
 			for _, kv := range keys {
-				keyName := removeNamespacePrefix(kv.Key)
+				keyName := RemoveNamespacePrefix(kv.Key)
 				content.WriteString(fmt.Sprintf("<%s>%s</%s>", keyName, kv.Value, keyName))
 			}
 		} else {
@@ -566,8 +549,8 @@ func GetSubtreeFilter(xPath string) netconf.Filter {
 
 	for i := len(segments) - 1; i >= 0; i-- {
 		segment := segments[i]
-		elementName, keys := parseXPathSegment(segment)
-		element := removeNamespacePrefix(elementName)
+		elementName, keys := ParseXPathSegment(segment)
+		element := RemoveNamespacePrefix(elementName)
 		if element == "" {
 			continue
 		}
@@ -630,121 +613,6 @@ func GetConfigWithRetry(ctx context.Context, client *netconf.Client, source stri
 	}
 
 	return res, IsGetConfigResponseEmpty(&res), nil
-}
-
-// ============================================================================
-// String Utility Functions
-// ============================================================================
-
-// removeNamespacePrefix removes the namespace prefix from an element name
-// Example: "Cisco-IOS-XR-um-logging-cfg:suppress" -> "suppress"
-func removeNamespacePrefix(name string) string {
-	if idx := strings.Index(name, ":"); idx != -1 {
-		return name[idx+1:]
-	}
-	return name
-}
-
-// getNamespacePrefixFromSegment extracts the namespace prefix from a segment name
-// Example: "Cisco-IOS-XR-um-logging-correlator-cfg:suppress" -> "Cisco-IOS-XR-um-logging-correlator-cfg"
-func getNamespacePrefixFromSegment(elementName string) string {
-	if idx := strings.Index(elementName, ":"); idx != -1 {
-		return elementName[:idx]
-	}
-	return ""
-}
-
-// getNamespaceURL returns the full namespace URL for a given prefix
-func getNamespaceURL(prefix string) string {
-	if prefix != "" {
-		return namespaceBaseURL + prefix
-	}
-	return ""
-}
-
-// normalizeModuleXPath converts IOS-XR module-prefixed XPaths
-// Example: `MODULE:/some/path` -> `MODULE:some/path`
-func normalizeModuleXPath(xPath string) string {
-	idx := strings.Index(xPath, ":/")
-	if idx == -1 {
-		return xPath
-	}
-	if strings.HasPrefix(xPath, "/") {
-		return xPath
-	}
-	module := xPath[:idx]
-	rest := xPath[idx+2:]
-	if module == "" || rest == "" {
-		return xPath
-	}
-	return module + ":" + rest
-}
-
-// ============================================================================
-// XPath Parsing Functions
-// ============================================================================
-
-// splitXPathSegments splits an XPath into segments while respecting bracket boundaries
-func splitXPathSegments(xPath string) []string {
-	segments := []string{}
-	var current strings.Builder
-	bracketDepth := 0
-
-	for _, r := range xPath {
-		switch r {
-		case '[':
-			bracketDepth++
-			current.WriteRune(r)
-		case ']':
-			bracketDepth--
-			current.WriteRune(r)
-		case '/':
-			if bracketDepth == 0 {
-				if current.Len() > 0 {
-					segments = append(segments, current.String())
-					current.Reset()
-				}
-			} else {
-				current.WriteRune(r)
-			}
-		default:
-			current.WriteRune(r)
-		}
-	}
-
-	if current.Len() > 0 {
-		segments = append(segments, current.String())
-	}
-
-	return segments
-}
-
-// parseXPathSegment parses an XPath segment to extract the element name and key-value pairs
-func parseXPathSegment(segment string) (string, []keyValue) {
-	elementName := segment
-	keys := []keyValue{}
-
-	if idx := strings.Index(segment, "["); idx != -1 {
-		elementName = segment[:idx]
-		predicates := predicatePattern.FindAllStringSubmatch(segment[idx:], -1)
-		for _, pred := range predicates {
-			if len(pred) < 2 {
-				continue
-			}
-			parts := strings.Split(pred[1], " and ")
-			for _, part := range parts {
-				kv := strings.SplitN(strings.TrimSpace(part), "=", 2)
-				if len(kv) != 2 {
-					continue
-				}
-				k := strings.TrimSpace(kv[0])
-				v := strings.Trim(strings.TrimSpace(kv[1]), "'\"")
-				keys = append(keys, keyValue{Key: k, Value: v})
-			}
-		}
-	}
-
-	return elementName, keys
 }
 
 // ============================================================================
@@ -814,75 +682,78 @@ func findNamespaceAwareSibling(xml string, currentPath string, count int, nsPref
 	return 0, false, false
 }
 
+// setRootElementNamespace adds xmlns to root element using regex
+func setRootElementNamespace(xml, cleanSegment, namespace string) string {
+	pattern := fmt.Sprintf(`<(%s)(\s[^>]*?)?(/?)>`, regexp.QuoteMeta(cleanSegment))
+	re := regexp.MustCompile(pattern)
+	match := re.FindStringIndex(xml)
+	if match == nil {
+		return xml
+	}
+
+	matchStart, matchEnd := match[0], match[1]
+	matchStr := xml[matchStart:matchEnd]
+
+	// Skip if xmlns already present
+	if strings.Contains(matchStr, `xmlns="`) {
+		return xml
+	}
+
+	// Determine insertion position (before closing > or />)
+	insertPos := len(matchStr) - 1
+	if strings.HasSuffix(matchStr, "/>") {
+		insertPos = len(matchStr) - 2
+	}
+
+	attrStr := fmt.Sprintf(` xmlns="%s"`, namespace)
+	newMatch := matchStr[:insertPos] + attrStr + matchStr[insertPos:]
+	return xml[:matchStart] + newMatch + xml[matchEnd:]
+}
+
+// setNestedElementNamespace adds xmlns to nested element using xmldot
+func setNestedElementNamespace(xml, xmldotPath, namespace string) string {
+	if xmldot.Get(xml, xmldotPath).String() == "" {
+		xml, _ = xmldot.Set(xml, xmldotPath, namespace)
+	}
+	return xml
+}
+
 // augmentNamespaces adds xmlns attributes to elements that have namespace prefixes
 func augmentNamespaces(body netconf.Body, path string) netconf.Body {
 	segments := strings.Split(path, ".")
 	xml := body.Res()
 
+	// First pass: Build map of elements that need namespaces
 	elementToNamespace := make(map[string]string)
-
 	currentPath := ""
+
 	for segIdx, segment := range segments {
-		cleanSegment := removeNamespacePrefix(segment)
-		if idx := strings.IndexByte(cleanSegment, '['); idx != -1 {
-			cleanSegment = cleanSegment[:idx]
-		}
+		cleanSegment := CleanSegmentName(segment)
+		currentPath = BuildPathFromSegments([]string{cleanSegment}, currentPath)
 
-		if currentPath != "" {
-			currentPath += "."
-		}
-		currentPath += cleanSegment
-
-		if idx := strings.Index(segment, ":"); idx != -1 {
-			prefix := segment[:idx]
+		if prefix, hasPrefix := ExtractNamespacePrefix(segment); hasPrefix {
 			key := fmt.Sprintf("%d:%s", segIdx, currentPath)
 			elementToNamespace[key] = prefix
 		}
 	}
 
+	// Second pass: Apply namespaces to XML
 	currentPath = ""
 	for segIdx, segment := range segments {
-		cleanSegment := removeNamespacePrefix(segment)
-		if idx := strings.IndexByte(cleanSegment, '['); idx != -1 {
-			cleanSegment = cleanSegment[:idx]
-		}
-
-		if currentPath != "" {
-			currentPath += "."
-		}
-		currentPath += cleanSegment
+		cleanSegment := CleanSegmentName(segment)
+		currentPath = BuildPathFromSegments([]string{cleanSegment}, currentPath)
 
 		key := fmt.Sprintf("%d:%s", segIdx, currentPath)
 		if prefix, hasNamespace := elementToNamespace[key]; hasNamespace {
 			namespace := namespaceBaseURL + prefix
 
 			if segIdx == 0 {
-				pattern := fmt.Sprintf(`<(%s)(\s[^>]*?)?(/?)>`, regexp.QuoteMeta(cleanSegment))
-				re := regexp.MustCompile(pattern)
-				match := re.FindStringIndex(xml)
-				if match != nil {
-					matchStart, matchEnd := match[0], match[1]
-					matchStr := xml[matchStart:matchEnd]
-
-					if !strings.Contains(matchStr, `xmlns="`) {
-						var insertPos int
-						if strings.HasSuffix(matchStr, "/>") {
-							insertPos = len(matchStr) - 2
-						} else {
-							insertPos = len(matchStr) - 1
-						}
-						attrStr := fmt.Sprintf(` xmlns="%s"`, namespace)
-						newMatch := matchStr[:insertPos] + attrStr + matchStr[insertPos:]
-						xml = xml[:matchStart] + newMatch + xml[matchEnd:]
-					}
-				}
+				// Root element: use regex to insert xmlns
+				xml = setRootElementNamespace(xml, cleanSegment, namespace)
 			} else {
+				// Nested element: use xmldot to insert xmlns
 				xmldotPath := currentPath + ".@xmlns"
-				existingNS := xmldot.Get(xml, xmldotPath).String()
-
-				if existingNS == "" {
-					xml, _ = xmldot.Set(xml, xmldotPath, namespace)
-				}
+				xml = setNestedElementNamespace(xml, xmldotPath, namespace)
 			}
 		}
 	}
@@ -930,124 +801,100 @@ func ensureNCNamespaceOnRoot(body netconf.Body) netconf.Body {
 	return netconf.NewBody(newXML)
 }
 
+// findRootElementBounds finds the start and end positions of root element tag
+func findRootElementBounds(xmlStr string) (startIdx, closeIdx int, found bool) {
+	startIdx = strings.Index(xmlStr, "<")
+	if startIdx == -1 {
+		return 0, 0, false
+	}
+
+	closeIdx = strings.Index(xmlStr[startIdx:], ">")
+	if closeIdx == -1 {
+		return 0, 0, false
+	}
+	closeIdx += startIdx
+
+	return startIdx, closeIdx, true
+}
+
+// extractElementName extracts the element name from XML
+func extractElementName(xmlStr string, startIdx int) (string, bool) {
+	nameEndIdx := strings.IndexAny(xmlStr[startIdx+1:], "> ")
+	if nameEndIdx == -1 {
+		return "", false
+	}
+	nameEndIdx += startIdx + 1
+	return xmlStr[startIdx+1 : nameEndIdx], true
+}
+
+// cleanExistingNamespaces removes all xmlns declarations from a tag
+func cleanExistingNamespaces(rootTag string) string {
+	cleaned := rootTag
+	// Remove standard xmlns declarations
+	cleaned = regexp.MustCompile(`\s+xmlns="[^"]*"`).ReplaceAllString(cleaned, "")
+	// Remove malformed namespace declarations
+	cleaned = regexp.MustCompile(`\s+xmlns:_xmlns="[^"]*"`).ReplaceAllString(cleaned, "")
+	cleaned = regexp.MustCompile(`\s+_xmlns:nc="[^"]*"`).ReplaceAllString(cleaned, "")
+	return cleaned
+}
+
+// insertNamespaceAfterElementName inserts xmlns attribute after element name
+func insertNamespaceAfterElementName(cleaned, elementName, namespaceURL string) string {
+	insertPos := len("<" + elementName)
+	return cleaned[:insertPos] + fmt.Sprintf(` xmlns="%s"`, namespaceURL) + cleaned[insertPos:]
+}
+
 // AddNamespaceToRootElement adds a default namespace declaration to the root element of XML string.
 // This is needed because xmldot doesn't properly handle YANG namespace prefixes.
 // Given an XPath like "Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing/...", it extracts
 // the namespace and adds it as xmlns="..." to the first XML element.
 func AddNamespaceToRootElement(xmlStr string, xPath string) string {
-	// Extract namespace prefix from XPath (format: "Namespace:/path")
-	if idx := strings.Index(xPath, ":/"); idx > 0 {
-		namespacePrefix := xPath[:idx]
-		// Remove leading slash if any
-		namespacePrefix = strings.TrimPrefix(namespacePrefix, "/")
-
-		// Build the full namespace URL
-		namespaceURL := getNamespaceURL(namespacePrefix)
-
-		// Find the first opening tag in the XML
-		// Look for pattern like "<element" or "<element>"
-		startIdx := strings.Index(xmlStr, "<")
-		if startIdx == -1 {
-			return xmlStr
-		}
-
-		// Find where the root element tag closes (the first '>')
-		closeIdx := strings.Index(xmlStr[startIdx:], ">")
-		if closeIdx == -1 {
-			return xmlStr
-		}
-		closeIdx += startIdx
-
-		// Get the root element tag
-		rootTag := xmlStr[startIdx : closeIdx+1]
-
-		// Find the element name
-		nameEndIdx := strings.IndexAny(xmlStr[startIdx+1:], "> ")
-		if nameEndIdx == -1 {
-			return xmlStr
-		}
-		nameEndIdx += startIdx + 1
-		elementName := xmlStr[startIdx+1 : nameEndIdx]
-
-		// Check if xmlns= is already present in the root element tag
-		if strings.Contains(rootTag, "xmlns=") {
-			// Remove ALL xmlns="..." patterns to avoid duplicates
-			cleaned := rootTag
-			xmlnsPattern := regexp.MustCompile(`\s+xmlns="[^"]*"`)
-			cleaned = xmlnsPattern.ReplaceAllString(cleaned, "")
-
-			// Also remove any malformed namespace declarations
-			cleaned = regexp.MustCompile(`\s+xmlns:_xmlns="[^"]*"`).ReplaceAllString(cleaned, "")
-			cleaned = regexp.MustCompile(`\s+_xmlns:nc="[^"]*"`).ReplaceAllString(cleaned, "")
-
-			// Find insertion point (after element name)
-			insertPos := len("<" + elementName)
-			cleaned = cleaned[:insertPos] + fmt.Sprintf(` xmlns="%s"`, namespaceURL) + cleaned[insertPos:]
-
-			return xmlStr[:startIdx] + cleaned + xmlStr[closeIdx+1:]
-		}
-
-		// Find where the tag name ends (either at '>' or ' ')
-		endIdx := strings.IndexAny(xmlStr[startIdx:], "> ")
-		if endIdx == -1 {
-			return xmlStr
-		}
-		endIdx += startIdx
-
-		// Insert namespace declaration after the element name
-		// If the tag ends with '>', insert before it
-		// If the tag has attributes (has ' '), insert after the element name
-		insertPos := endIdx
-		if xmlStr[endIdx] == '>' {
-			// Simple case: <element>
-			return xmlStr[:insertPos] + fmt.Sprintf(" xmlns=\"%s\"", namespaceURL) + xmlStr[insertPos:]
-		} else {
-			// Has attributes: <element attr="value">
-			return xmlStr[:insertPos] + fmt.Sprintf(" xmlns=\"%s\"", namespaceURL) + xmlStr[insertPos:]
-		}
+	// Extract namespace prefix from XPath
+	namespacePrefix, hasNamespace := ExtractNamespaceFromXPath(xPath)
+	if !hasNamespace {
+		return xmlStr
 	}
 
-	return xmlStr
+	namespaceURL := getNamespaceURL(namespacePrefix)
+
+	// Find root element bounds
+	startIdx, closeIdx, found := findRootElementBounds(xmlStr)
+	if !found {
+		return xmlStr
+	}
+
+	rootTag := xmlStr[startIdx : closeIdx+1]
+
+	// Extract element name
+	elementName, found := extractElementName(xmlStr, startIdx)
+	if !found {
+		return xmlStr
+	}
+
+	// If xmlns already exists, clean and re-add
+	if strings.Contains(rootTag, "xmlns=") {
+		cleaned := cleanExistingNamespaces(rootTag)
+		cleaned = insertNamespaceAfterElementName(cleaned, elementName, namespaceURL)
+		return xmlStr[:startIdx] + cleaned + xmlStr[closeIdx+1:]
+	}
+
+	// Insert new xmlns attribute after element name
+	endIdx := strings.IndexAny(xmlStr[startIdx:], "> ")
+	if endIdx == -1 {
+		return xmlStr
+	}
+	endIdx += startIdx
+
+	// Insert namespace (works for both <element> and <element attr="...">)
+	return xmlStr[:endIdx] + fmt.Sprintf(` xmlns="%s"`, namespaceURL) + xmlStr[endIdx:]
 }
 
 // ============================================================================
 // XPath Structure Building (Core Infrastructure)
 // ============================================================================
 
-// prepareXPathSegments normalizes and cleans XPath segments
-func prepareXPathSegments(xPath string) []string {
-	xPath = normalizeModuleXPath(xPath)
-	xPath = strings.TrimPrefix(xPath, "/")
-	segments := splitXPathSegments(xPath)
-
-	// Filter empty segments
-	filteredSegments := make([]string, 0, len(segments))
-	for _, seg := range segments {
-		if seg != "" {
-			filteredSegments = append(filteredSegments, seg)
-		}
-	}
-	segments = filteredSegments
-
-	// Merge leading namespace prefix with next segment
-	if len(segments) > 0 && strings.HasSuffix(segments[0], ":") {
-		namespace := strings.TrimSuffix(segments[0], ":")
-		if len(segments) > 1 {
-			segments[1] = namespace + ":" + segments[1]
-			segments = segments[1:]
-		}
-	}
-
-	return segments
-}
-
-// buildTentativePath creates a tentative path by appending a new element
-func buildTentativePath(pathSegments []string, escapedElementName string) string {
-	return strings.Join(append(pathSegments[:len(pathSegments):len(pathSegments)], escapedElementName), ".")
-}
-
 // checkIfAugmentedChild determines if an element is an augmented child
-func checkIfAugmentedChild(body netconf.Body, keys []keyValue, nsPrefix string, pathSegments []string, tentativePath string) bool {
+func checkIfAugmentedChild(body netconf.Body, keys []KeyValue, nsPrefix string, pathSegments []string, tentativePath string) bool {
 	if len(keys) == 0 && nsPrefix != "" && len(pathSegments) > 0 {
 		existingElement := xmldot.Get(body.Res(), tentativePath)
 		return !existingElement.Exists()
@@ -1059,10 +906,12 @@ func checkIfAugmentedChild(body netconf.Body, keys []keyValue, nsPrefix string, 
 func getEffectiveNamespace(body netconf.Body, xmlnsPath string, pathSegments []string) string {
 	existingNS := xmldot.Get(body.Res(), xmlnsPath).String()
 	if existingNS == "" && len(pathSegments) > 0 {
-		parentPath := strings.Join(pathSegments, ".")
-		parentNS := xmldot.Get(body.Res(), parentPath+".@xmlns").String()
-		if parentNS != "" {
-			existingNS = parentNS
+		parentPath := BuildParentPath(pathSegments)
+		if parentPath != "" {
+			parentNS := xmldot.Get(body.Res(), BuildXmlnsPath(parentPath)).String()
+			if parentNS != "" {
+				existingNS = parentNS
+			}
 		}
 	}
 	return existingNS
@@ -1133,7 +982,7 @@ func findOrCreatePlainSibling(body netconf.Body, tentativePath, cleanElementName
 // processSegmentNamespace handles namespace-aware segment processing
 func processSegmentNamespace(body netconf.Body, nsPrefix string, tentativePath, escapedElementName, cleanElementName string, pathSegments []string) ([]string, netconf.Body) {
 	expectedNS := namespaceBaseURL + nsPrefix
-	xmlnsPath := tentativePath + ".@xmlns"
+	xmlnsPath := BuildXmlnsPath(tentativePath)
 	existingNS := getEffectiveNamespace(body, xmlnsPath, pathSegments)
 
 	if existingNS != "" && existingNS != expectedNS {
@@ -1153,13 +1002,13 @@ func processSegmentNamespace(body netconf.Body, nsPrefix string, tentativePath, 
 
 // processSegmentWithoutNamespace handles non-namespaced segment processing
 func processSegmentWithoutNamespace(body netconf.Body, tentativePath, escapedElementName, cleanElementName string, pathSegments []string) ([]string, netconf.Body) {
-	xmlnsPath := tentativePath + ".@xmlns"
+	xmlnsPath := BuildXmlnsPath(tentativePath)
 	existingNS := xmldot.Get(body.Res(), xmlnsPath).String()
 
 	shouldCreateSibling := false
 	if existingNS != "" && len(pathSegments) > 0 {
-		parentPath := strings.Join(pathSegments, ".")
-		parentNS := xmldot.Get(body.Res(), parentPath+".@xmlns").String()
+		parentPath := BuildPathString(pathSegments)
+		parentNS := xmldot.Get(body.Res(), BuildXmlnsPath(parentPath)).String()
 		if existingNS != parentNS {
 			shouldCreateSibling = true
 		}
@@ -1181,7 +1030,7 @@ func processSegmentWithoutNamespace(body netconf.Body, tentativePath, escapedEle
 }
 
 // addKeysToPath adds XPath predicate keys to the body
-func addKeysToPath(body netconf.Body, fullPath string, keys []keyValue) netconf.Body {
+func addKeysToPath(body netconf.Body, fullPath string, keys []KeyValue) netconf.Body {
 	for _, kv := range keys {
 		keyPath := fullPath + "." + kv.Key
 		body = body.Set(keyPath, kv.Value)
@@ -1200,13 +1049,13 @@ func setNamespaceForPath(body netconf.Body, fullPath, nsPrefix string, originalS
 
 	if isIndexedSibling {
 		namespace := namespaceBaseURL + nsPrefix
-		xmlnsPath := fullPath + ".@xmlns"
+		xmlnsPath := BuildXmlnsPath(fullPath)
 		existingNS := xmldot.Get(body.Res(), xmlnsPath).String()
 		if existingNS == "" {
 			body = body.Set(xmlnsPath, namespace)
 		}
 	} else {
-		originalPath := strings.Join(originalSegments[:segmentIndex+1], ".")
+		originalPath := BuildPathString(originalSegments[:segmentIndex+1])
 		body = augmentNamespaces(body, originalPath)
 	}
 
@@ -1215,19 +1064,19 @@ func setNamespaceForPath(body netconf.Body, fullPath, nsPrefix string, originalS
 
 // buildXPathStructure creates all elements in an XPath, including keys and namespaces
 func buildXPathStructure(body netconf.Body, xPath string, ensureStructure bool) (netconf.Body, []string, []string) {
-	segments := prepareXPathSegments(xPath)
+	segments := PrepareXPathSegments(xPath)
 
 	pathSegments := make([]string, 0, len(segments))
 	originalSegments := make([]string, 0, len(segments))
 
 	for i, segment := range segments {
-		elementName, keys := parseXPathSegment(segment)
+		elementName, keys := ParseXPathSegment(segment)
 		originalSegments = append(originalSegments, elementName)
-		cleanElementName := removeNamespacePrefix(elementName)
+		cleanElementName := RemoveNamespacePrefix(elementName)
 		escapedElementName := strings.ReplaceAll(cleanElementName, ".", `\.`)
-		nsPrefix := getNamespacePrefixFromSegment(elementName)
+		nsPrefix := GetNamespacePrefixFromSegment(elementName)
 
-		tentativePath := buildTentativePath(pathSegments, escapedElementName)
+		tentativePath := BuildTentativePath(pathSegments, escapedElementName)
 
 		// Check if this is an augmented child
 		if checkIfAugmentedChild(body, keys, nsPrefix, pathSegments, tentativePath) {
@@ -1240,7 +1089,7 @@ func buildXPathStructure(body netconf.Body, xPath string, ensureStructure bool) 
 			pathSegments, body = processSegmentWithoutNamespace(body, tentativePath, escapedElementName, cleanElementName, pathSegments)
 		}
 
-		fullPath := strings.Join(pathSegments, ".")
+		fullPath := BuildPathString(pathSegments)
 
 		// Add keys if present
 		body = addKeysToPath(body, fullPath, keys)
@@ -1250,11 +1099,11 @@ func buildXPathStructure(body netconf.Body, xPath string, ensureStructure bool) 
 	}
 
 	if ensureStructure && len(pathSegments) > 0 {
-		fullPath := strings.Join(pathSegments, ".")
+		fullPath := BuildPathString(pathSegments)
 		result := xmldot.Get(body.Res(), fullPath)
 		if !result.Exists() {
 			body = body.Set(fullPath, "")
-			originalPath := strings.Join(originalSegments, ".")
+			originalPath := BuildPathString(originalSegments)
 			body = augmentNamespaces(body, originalPath)
 		}
 	}
@@ -1266,41 +1115,9 @@ func buildXPathStructure(body netconf.Body, xPath string, ensureStructure bool) 
 // Public XPath Query and Manipulation Functions
 // ============================================================================
 
-// prepareGetFromXPathSegments normalizes and prepares segments for reading
-func prepareGetFromXPathSegments(xPath string) []string {
-	xPath = normalizeModuleXPath(xPath)
-	xPath = strings.TrimPrefix(xPath, "/")
-	segments := splitXPathSegments(xPath)
-
-	// Filter empty segments
-	filteredSegments := make([]string, 0, len(segments))
-	for _, seg := range segments {
-		if seg != "" {
-			filteredSegments = append(filteredSegments, seg)
-		}
-	}
-	segments = filteredSegments
-
-	// Merge namespace segments (ns: + element)
-	mergedSegments := make([]string, 0, len(segments))
-	for i := 0; i < len(segments); i++ {
-		if strings.HasSuffix(segments[i], ":") && i+1 < len(segments) {
-			mergedSegments = append(mergedSegments, segments[i]+segments[i+1])
-			i++
-		} else {
-			mergedSegments = append(mergedSegments, segments[i])
-		}
-	}
-
-	return mergedSegments
-}
-
 // resolveNamespaceForElement resolves namespace-aware element location
 func resolveNamespaceForElement(xml, currentPath, escapedElementName, nsPrefix string, pathSoFar []string, count int) ([]string, int, bool) {
-	parentPath := ""
-	if len(pathSoFar) > 1 {
-		parentPath = strings.Join(pathSoFar[:len(pathSoFar)-1], ".")
-	}
+	parentPath := BuildParentPath(pathSoFar)
 
 	if idx, needsIndex, found := findNamespaceAwareSibling(xml, currentPath, count, nsPrefix, parentPath); found {
 		if needsIndex {
@@ -1313,9 +1130,9 @@ func resolveNamespaceForElement(xml, currentPath, escapedElementName, nsPrefix s
 }
 
 // checkKeysMatch checks if an item matches all key-value pairs
-func checkKeysMatch(item xmldot.Result, keys []keyValue) bool {
+func checkKeysMatch(item xmldot.Result, keys []KeyValue) bool {
 	for _, kv := range keys {
-		keyName := removeNamespacePrefix(kv.Key)
+		keyName := RemoveNamespacePrefix(kv.Key)
 		keyResult := item.Get(keyName)
 		if !keyResult.Exists() || keyResult.String() != kv.Value {
 			return false
@@ -1325,7 +1142,7 @@ func checkKeysMatch(item xmldot.Result, keys []keyValue) bool {
 }
 
 // findElementByKeys finds element matching all key predicates
-func findElementByKeys(xml, currentPath, escapedElementName string, keys []keyValue, count int) ([]string, bool) {
+func findElementByKeys(xml, currentPath, escapedElementName string, keys []KeyValue, count int) ([]string, bool) {
 	pathSoFar := strings.Split(currentPath, ".")
 
 	if count > 1 {
@@ -1351,12 +1168,11 @@ func findElementByKeys(xml, currentPath, escapedElementName string, keys []keyVa
 
 // buildFinalResult builds final result, handling arrays
 func buildFinalResult(xml string, pathSoFar []string) xmldot.Result {
-	finalPath := strings.Join(pathSoFar, ".")
-	countPath := finalPath + ".#"
-	count := xmldot.Get(xml, countPath).Int()
+	finalPath := BuildPathString(pathSoFar)
+	count := xmldot.Get(xml, BuildCountPath(finalPath)).Int()
 
 	if count > 1 && len(pathSoFar) >= 2 {
-		parentPath := strings.Join(pathSoFar[:len(pathSoFar)-1], ".")
+		parentPath := BuildParentPath(pathSoFar)
 		childName := pathSoFar[len(pathSoFar)-1]
 		arrayPath := parentPath + ".#." + childName
 		return xmldot.Get(xml, arrayPath)
@@ -1367,19 +1183,19 @@ func buildFinalResult(xml string, pathSoFar []string) xmldot.Result {
 
 // GetFromXPath reads from an xmldot.Result using an XPath that may contain predicates
 func GetFromXPath(res xmldot.Result, xPath string) xmldot.Result {
-	segments := prepareGetFromXPathSegments(xPath)
+	segments := PrepareGetFromXPathSegments(xPath)
 	xml := res.Raw
 	pathSoFar := make([]string, 0, len(segments))
 
 	for _, segment := range segments {
-		rawElementName, keys := parseXPathSegment(segment)
-		nsPrefix := getNamespacePrefixFromSegment(rawElementName)
-		elementName := removeNamespacePrefix(rawElementName)
+		rawElementName, keys := ParseXPathSegment(segment)
+		nsPrefix := GetNamespacePrefixFromSegment(rawElementName)
+		elementName := RemoveNamespacePrefix(rawElementName)
 		escapedElementName := strings.ReplaceAll(elementName, ".", `\.`)
 
 		pathSoFar = append(pathSoFar, escapedElementName)
-		currentPath := strings.Join(pathSoFar, ".")
-		count := int(xmldot.Get(xml, currentPath+".#").Int())
+		currentPath := BuildPathString(pathSoFar)
+		count := int(xmldot.Get(xml, BuildCountPath(currentPath)).Int())
 
 		// Handle namespace resolution
 		if nsPrefix != "" {
@@ -1388,7 +1204,7 @@ func GetFromXPath(res xmldot.Result, xPath string) xmldot.Result {
 			if !found {
 				return xmldot.Result{}
 			}
-			currentPath = strings.Join(pathSoFar, ".")
+			currentPath = BuildPathString(pathSoFar)
 		}
 
 		// Handle key predicates
@@ -1406,7 +1222,7 @@ func GetFromXPath(res xmldot.Result, xPath string) xmldot.Result {
 
 // SetFromXPath creates all elements in an XPath and optionally sets a value
 func SetFromXPath(body netconf.Body, xPath string, value any) netconf.Body {
-	xPath = normalizeModuleXPath(xPath)
+	xPath = NormalizeModuleXPath(xPath)
 
 	hasValue := value != nil && value != ""
 	ensureStructure := !hasValue
@@ -1425,7 +1241,7 @@ func SetFromXPath(body netconf.Body, xPath string, value any) netconf.Body {
 
 // AppendFromXPath creates all elements in an XPath and appends a value to a list
 func AppendFromXPath(body netconf.Body, xPath string, value any) netconf.Body {
-	xPath = normalizeModuleXPath(xPath)
+	xPath = NormalizeModuleXPath(xPath)
 
 	hasValue := value != nil && value != ""
 	ensureStructure := !hasValue
@@ -1444,7 +1260,7 @@ func AppendFromXPath(body netconf.Body, xPath string, value any) netconf.Body {
 
 // RemoveFromXPath creates all elements in an XPath with an nc:operation="remove" attribute
 func RemoveFromXPath(body netconf.Body, xPath string) netconf.Body {
-	xPath = normalizeModuleXPath(xPath)
+	xPath = NormalizeModuleXPath(xPath)
 
 	body, pathSegments, originalSegments := buildXPathStructure(body, xPath, true)
 
@@ -1469,12 +1285,6 @@ func BodyToNestedXML(body netconf.Body) (string, error) {
 	if xml == "" {
 		return "", nil
 	}
-
-	// Post-process XML to fix any malformed elements created by indexed siblings
-	// Remove any empty/malformed tags like "</>"
-	xml = strings.ReplaceAll(xml, "</>", "")
-	xml = strings.ReplaceAll(xml, "< >", "")
-	xml = strings.ReplaceAll(xml, "</ >", "")
 
 	return xml, nil
 }

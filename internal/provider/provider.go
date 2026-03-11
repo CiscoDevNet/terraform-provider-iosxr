@@ -39,7 +39,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
 )
@@ -597,8 +596,6 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				gnmi.TLS(tls),
 				gnmi.VerifyCertificate(verifyCertificate),
 				gnmi.MaxRetries(int(retries)),
-				gnmi.ConnectTimeout(60 * time.Second),    // Connection establishment timeout
-				gnmi.OperationTimeout(120 * time.Second), // Total operation timeout (allows multiple retries)
 				gnmi.WithLogger(logger),
 			}
 
@@ -620,13 +617,6 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				if err != nil {
 					resp.Diagnostics.AddError("Unable to create gNMI client", "Unable to create gNMI client:\n\n"+err.Error())
 					return
-				}
-
-				// Warmup: Wait for connection to establish (gRPC connection is async)
-				// Give the connection time to complete TCP handshake and TLS negotiation
-				if reuseConnection {
-					time.Sleep(2 * time.Second)
-					tflog.Debug(ctx, "gNMI client created, allowing connection to stabilize")
 				}
 			}
 			deviceData := &IosxrProviderDataDevice{
@@ -747,8 +737,6 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					gnmi.TLS(tls),
 					gnmi.VerifyCertificate(verifyCertificate),
 					gnmi.MaxRetries(int(retries)),
-					gnmi.ConnectTimeout(60 * time.Second),    // Connection establishment timeout
-					gnmi.OperationTimeout(120 * time.Second), // Total operation timeout (allows multiple retries)
 					gnmi.WithLogger(logger),
 				}
 
@@ -772,12 +760,6 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 							fmt.Sprintf("Unable to create gNMI client for device '%s':\n\n%s", deviceName, err.Error()),
 						)
 						return
-					}
-
-					// Warmup: Wait for connection to establish (gRPC connection is async)
-					if reuseConnection {
-						time.Sleep(2 * time.Second)
-						tflog.Debug(ctx, fmt.Sprintf("gNMI client created for device '%s', allowing connection to stabilize", deviceName))
 					}
 				}
 				deviceData := &IosxrProviderDataDevice{

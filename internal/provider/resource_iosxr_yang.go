@@ -185,8 +185,8 @@ func (r *YangResource) Create(ctx context.Context, req resource.CreateRequest, r
 
 			body := plan.toBody(ctx)
 			tflog.Debug(ctx, fmt.Sprintf("Yang toBody result: %s", body))
-			// Only send if we have actual content
-			if body != "" && body != "{}" {
+
+			if body != "" {
 				tflog.Debug(ctx, fmt.Sprintf("Sending gNMI Update: path=%s, body=%s", plan.Path.ValueString(), body))
 				_, err := device.GnmiClient.Set(ctx, []gnmi.SetOperation{gnmi.Update(plan.Path.ValueString(), body)})
 				if err != nil {

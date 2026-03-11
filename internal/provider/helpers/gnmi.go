@@ -72,7 +72,7 @@ func CloseGnmiConnection(ctx context.Context, client *gnmi.Client, reuseConnecti
 }
 
 // EnsureGnmiConnection checks if the gNMI connection is healthy and reconnects if needed.
-// When reuseConnection=true, performs a health check and reconnects if the channel is stale.
+// When reuseConnection=true, skip the health check and trust the cached connection.
 // When reuseConnection=false, runs a quick health check only.
 func EnsureGnmiConnection(ctx context.Context, client *gnmi.Client, reuseConnection bool, maxRetries int) error {
 	if client == nil {
@@ -83,19 +83,15 @@ func EnsureGnmiConnection(ctx context.Context, client *gnmi.Client, reuseConnect
 		maxRetries = 3
 	}
 
-	if !reuseConnection {
-		// No reuse: run a quick health-check to detect a stale connection
-		return gnmiHealthCheck(ctx, client)
-	}
-
-	// For reuse connections: check if health check passes
-	if err := gnmiHealthCheck(ctx, client); err == nil {
+	// When reusing connections, skip the health check - the connection will be used
+	// and any actual connectivity issues will be detected during the Set/Get operations.
+	// This avoids false positives when the connection is still establishing.
+	if reuseConnection {
 		return nil
 	}
 
-	// Channel is stale — reconnect
-	tflog.Warn(ctx, "gNMI connection is stale, reconnecting")
-	return reconnectGnmiWithRetries(ctx, client, maxRetries)
+	// No reuse: run a health-check to detect a stale connection
+	return gnmiHealthCheck(ctx, client)
 }
 
 // reconnectGnmiWithRetries attempts to reconnect a stale gNMI session with exponential back-off
@@ -122,10 +118,10 @@ func reconnectGnmiWithRetries(ctx context.Context, client *gnmi.Client, maxRetri
 	return fmt.Errorf("failed to connect gNMI after %d attempts: %w", maxRetries, lastErr)
 }
 
-// gnmiHealthCheck sends a Capabilities RPC with a short timeout to confirm the
-// gRPC channel is alive.
+// gnmiHealthCheck sends a Capabilities RPC with a timeout to confirm the
+// gRPC channel is alive. Uses 10s timeout to allow for connection establishment.
 func gnmiHealthCheck(ctx context.Context, client *gnmi.Client) error {
-	testCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	testCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	_, err := client.Capabilities(testCtx)
 	if err != nil && IsGnmiConnectionError(err) {

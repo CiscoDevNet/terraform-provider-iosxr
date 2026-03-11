@@ -39,6 +39,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
 )
@@ -93,12 +94,12 @@ type IosxrProviderDataDevice struct {
 	ReuseConnection bool
 	MaxRetries      int
 	Managed         bool
-	OpMutex         sync.Mutex // Serializes operations on this device
+	OpMutex         *sync.Mutex // Serializes operations on this device (pointer for sharing)
 }
 
 // GetOpMutex returns the mutex for serializing operations on this device
 func (d *IosxrProviderDataDevice) GetOpMutex() *sync.Mutex {
-	return &d.OpMutex
+	return d.OpMutex
 }
 
 // GetGnmiClient returns the gNMI client
@@ -576,14 +577,14 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		p.clientCacheMu.Unlock()
 
 		if cacheHit && reuseConnection {
-			// Create a new device wrapper with a fresh mutex but reuse the client
+			// Reuse both the client AND the mutex for proper serialization
 			data.Devices[""] = &IosxrProviderDataDevice{
 				GnmiClient:      cachedDevice.GnmiClient,
 				Protocol:        "gnmi",
 				ReuseConnection: reuseConnection,
 				MaxRetries:      int(retries),
 				Managed:         true,
-				OpMutex:         sync.Mutex{}, // Fresh mutex for each provider instance
+				OpMutex:         cachedDevice.OpMutex, // Share the same mutex
 			}
 		} else {
 			// Create TflogAdapter for automatic Terraform logging integration
@@ -596,6 +597,8 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				gnmi.TLS(tls),
 				gnmi.VerifyCertificate(verifyCertificate),
 				gnmi.MaxRetries(int(retries)),
+				gnmi.ConnectTimeout(60 * time.Second),    // Connection establishment timeout
+				gnmi.OperationTimeout(120 * time.Second), // Total operation timeout (allows multiple retries)
 				gnmi.WithLogger(logger),
 			}
 
@@ -618,6 +621,13 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					resp.Diagnostics.AddError("Unable to create gNMI client", "Unable to create gNMI client:\n\n"+err.Error())
 					return
 				}
+
+				// Warmup: Wait for connection to establish (gRPC connection is async)
+				// Give the connection time to complete TCP handshake and TLS negotiation
+				if reuseConnection {
+					time.Sleep(2 * time.Second)
+					tflog.Debug(ctx, "gNMI client created, allowing connection to stabilize")
+				}
 			}
 			deviceData := &IosxrProviderDataDevice{
 				GnmiClient:      defaultClient,
@@ -625,6 +635,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				ReuseConnection: reuseConnection,
 				MaxRetries:      int(retries),
 				Managed:         true,
+				OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 			}
 			data.Devices[""] = deviceData
 			if reuseConnection {
@@ -644,14 +655,14 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		p.clientCacheMu.Unlock()
 
 		if cacheHit && reuseConnection {
-			// Create a new device wrapper with a fresh mutex but reuse the client
+			// Reuse both the client AND the mutex for proper serialization
 			data.Devices[""] = &IosxrProviderDataDevice{
 				NetconfClient:   cachedDevice.NetconfClient,
 				Protocol:        "netconf",
 				ReuseConnection: reuseConnection,
 				MaxRetries:      int(retries),
 				Managed:         true,
-				OpMutex:         sync.Mutex{}, // Fresh mutex for each provider instance
+				OpMutex:         cachedDevice.OpMutex, // Share the same mutex
 			}
 		} else {
 			logger := helpers.NewTflogAdapter("netconf")
@@ -680,6 +691,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				ReuseConnection: reuseConnection,
 				MaxRetries:      int(retries),
 				Managed:         true,
+				OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 			}
 			data.Devices[""] = deviceData
 			if reuseConnection {
@@ -718,14 +730,14 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			p.clientCacheMu.Unlock()
 
 			if cacheHit && reuseConnection {
-				// Create a new device wrapper with a fresh mutex but reuse the client
+				// Reuse both the client AND the mutex for proper serialization
 				data.Devices[deviceName] = &IosxrProviderDataDevice{
 					GnmiClient:      cachedDevice.GnmiClient,
 					Protocol:        "gnmi",
 					ReuseConnection: reuseConnection,
 					MaxRetries:      int(retries),
 					Managed:         managed,
-					OpMutex:         sync.Mutex{}, // Fresh mutex for each provider instance
+					OpMutex:         cachedDevice.OpMutex, // Share the same mutex
 				}
 			} else {
 				logger := helpers.NewTflogAdapter("gnmi")
@@ -735,6 +747,8 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					gnmi.TLS(tls),
 					gnmi.VerifyCertificate(verifyCertificate),
 					gnmi.MaxRetries(int(retries)),
+					gnmi.ConnectTimeout(60 * time.Second),    // Connection establishment timeout
+					gnmi.OperationTimeout(120 * time.Second), // Total operation timeout (allows multiple retries)
 					gnmi.WithLogger(logger),
 				}
 
@@ -759,6 +773,12 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 						)
 						return
 					}
+
+					// Warmup: Wait for connection to establish (gRPC connection is async)
+					if reuseConnection {
+						time.Sleep(2 * time.Second)
+						tflog.Debug(ctx, fmt.Sprintf("gNMI client created for device '%s', allowing connection to stabilize", deviceName))
+					}
 				}
 				deviceData := &IosxrProviderDataDevice{
 					GnmiClient:      deviceClient,
@@ -766,6 +786,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					ReuseConnection: reuseConnection,
 					MaxRetries:      int(retries),
 					Managed:         managed,
+					OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 				}
 				data.Devices[deviceName] = deviceData
 				if reuseConnection && managed {
@@ -784,14 +805,14 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			p.clientCacheMu.Unlock()
 
 			if cacheHit && reuseConnection {
-				// Create a new device wrapper with a fresh mutex but reuse the client
+				// Reuse both the client AND the mutex for proper serialization
 				data.Devices[deviceName] = &IosxrProviderDataDevice{
 					NetconfClient:   cachedDevice.NetconfClient,
 					Protocol:        "netconf",
 					ReuseConnection: reuseConnection,
 					MaxRetries:      int(retries),
 					Managed:         managed,
-					OpMutex:         sync.Mutex{}, // Fresh mutex for each provider instance
+					OpMutex:         cachedDevice.OpMutex, // Share the same mutex
 				}
 			} else {
 				logger := helpers.NewTflogAdapter("netconf")
@@ -826,6 +847,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					ReuseConnection: reuseConnection,
 					MaxRetries:      int(retries),
 					Managed:         managed,
+					OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 				}
 				data.Devices[deviceName] = deviceData
 				if reuseConnection && managed {

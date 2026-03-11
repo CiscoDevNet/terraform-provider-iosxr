@@ -233,8 +233,24 @@ func (data Yang) toBody(ctx context.Context) string {
 		}
 	}
 
-	// Only create the wrapper if we have actual content after filtering
+	// Check if we have content after filtering
 	hasContent := len(filteredAttributes) > 0 || len(data.Lists) > 0
+
+	// Special case for gNMI: if we have no content after filtering keys,
+	// but we have keys in the path, include those keys in the body.
+	// This allows creating presence containers (like interfaces) with just keys.
+	if !hasContent && len(keysInPath) > 0 {
+		tflog.Debug(ctx, fmt.Sprintf("toBody: No attributes after filtering keys, including keys in body for presence container: %v", keysInPath))
+		// Use the keys as the body content
+		filteredAttributes = make(map[string]string)
+		for key := range keysInPath {
+			if val, exists := attributes[key]; exists {
+				filteredAttributes[key] = val
+			}
+		}
+		hasContent = len(filteredAttributes) > 0
+	}
+
 	if !hasContent {
 		return ""
 	}

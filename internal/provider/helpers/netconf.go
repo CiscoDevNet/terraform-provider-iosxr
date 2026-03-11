@@ -554,3 +554,49 @@ func GetSubtreeFilter(xPath string) netconf.Filter {
 
 	return netconf.Filter{Type: "subtree", Content: content.String()}
 }
+
+// GetConfigWithRetry retrieves configuration from the device with retry logic.
+// NETCONF GetConfig may return empty data immediately after commit due to device sync delay.
+// This function retries with exponential backoff to handle such cases.
+//
+// Parameters:
+//   - ctx: context.Context
+//   - client: *netconf.Client
+//   - source: string (e.g., "running", "candidate")
+//   - filter: netconf.Filter
+//   - xpath: string (for logging purposes)
+//
+// Returns:
+//   - netconf.Res: The response from GetConfig
+//   - bool: true if response is empty after all retries
+//   - error: any error that occurred
+func GetConfigWithRetry(ctx context.Context, client *netconf.Client, source string, filter netconf.Filter, xpath string) (netconf.Res, bool, error) {
+	var res netconf.Res
+	var err error
+	maxRetries := 3
+	baseDelay := 200 * time.Millisecond
+
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		res, err = GetConfigWithTimeout(ctx, client, source, filter)
+		if err != nil {
+			return res, false, fmt.Errorf("failed to retrieve object (%s): %w", xpath, err)
+		}
+
+		// Check if we got data back
+		isEmpty := IsGetConfigResponseEmpty(&res)
+		tflog.Debug(ctx, fmt.Sprintf("NETCONF GetConfig response for %s (attempt %d/%d): isEmpty=%v, isListPath=%v",
+			xpath, attempt+1, maxRetries+1, isEmpty, IsListPath(xpath)))
+
+		// If we got data or this is the last attempt, break
+		if !isEmpty || attempt == maxRetries {
+			return res, isEmpty, nil
+		}
+
+		// Wait before retrying (exponential backoff)
+		delay := baseDelay * time.Duration(1<<uint(attempt))
+		tflog.Debug(ctx, fmt.Sprintf("NETCONF returned empty response, retrying after %v", delay))
+		time.Sleep(delay)
+	}
+
+	return res, IsGetConfigResponseEmpty(&res), nil
+}

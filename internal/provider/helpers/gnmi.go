@@ -72,8 +72,8 @@ func CloseGnmiConnection(ctx context.Context, client *gnmi.Client, reuseConnecti
 }
 
 // EnsureGnmiConnection checks if the gNMI connection is healthy and reconnects if needed.
-// When reuseConnection=true, skip the health check and trust the cached connection.
-// When reuseConnection=false, runs a quick health check only.
+// When reuseConnection=true, performs a quick health check and reconnects if needed.
+// When reuseConnection=false, performs a more thorough health check.
 func EnsureGnmiConnection(ctx context.Context, client *gnmi.Client, reuseConnection bool, maxRetries int) error {
 	if client == nil {
 		return fmt.Errorf("gNMI client is nil")
@@ -83,15 +83,19 @@ func EnsureGnmiConnection(ctx context.Context, client *gnmi.Client, reuseConnect
 		maxRetries = 3
 	}
 
-	// When reusing connections, skip the health check - the connection will be used
-	// and any actual connectivity issues will be detected during the Set/Get operations.
-	// This avoids false positives when the connection is still establishing.
-	if reuseConnection {
-		return nil
+	if !reuseConnection {
+		// No reuse: run a health-check to detect a stale connection
+		return gnmiHealthCheck(ctx, client)
 	}
 
-	// No reuse: run a health-check to detect a stale connection
-	return gnmiHealthCheck(ctx, client)
+	// Fast path for reuse: do a quick health check
+	if err := gnmiHealthCheck(ctx, client); err != nil {
+		// Connection has issues, need to reconnect
+		tflog.Warn(ctx, "gNMI connection unhealthy, reconnecting")
+		return reconnectGnmiWithRetries(ctx, client, maxRetries)
+	}
+
+	return nil
 }
 
 // reconnectGnmiWithRetries attempts to reconnect a stale gNMI session with exponential back-off
@@ -143,4 +147,75 @@ func IsGnmiConnectionError(err error) bool {
 		strings.Contains(errMsg, "broken pipe") ||
 		strings.Contains(errMsg, "connection reset") ||
 		strings.Contains(errMsg, "resource exhausted")
+}
+
+// GetWithRetry retrieves data from the device with retry logic.
+// gNMI Get may return empty/incomplete data immediately after Set due to device sync delay.
+// This function retries with exponential backoff to handle such cases.
+//
+// Parameters:
+//   - ctx: context.Context
+//   - client: *gnmi.Client
+//   - paths: []string
+//   - pathForLogging: string (for logging purposes)
+//
+// Returns:
+//   - gnmi.GetRes: The response from Get (by value)
+//   - bool: true if response is empty after all retries
+//   - error: any error that occurred
+func GetWithRetry(ctx context.Context, client *gnmi.Client, paths []string, pathForLogging string) (gnmi.GetRes, bool, error) {
+	var getResp gnmi.GetRes
+	var err error
+	maxRetries := 3
+	baseDelay := 200 * time.Millisecond
+
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		getResp, err = client.Get(ctx, paths)
+		if err != nil {
+			// Check if this is a "not found" error
+			if strings.Contains(err.Error(), "Requested element(s) not found") {
+				return gnmi.GetRes{}, true, nil // Not an error, just empty result
+			}
+			return gnmi.GetRes{}, false, fmt.Errorf("failed to retrieve object (%s): %w", pathForLogging, err)
+		}
+
+		// Check if we got data back
+		isEmpty := isGnmiGetResponseEmpty(&getResp)
+		tflog.Debug(ctx, fmt.Sprintf("gNMI Get response for %s (attempt %d/%d): isEmpty=%v",
+			pathForLogging, attempt+1, maxRetries+1, isEmpty))
+
+		// If we got data or this is the last attempt, break
+		if !isEmpty || attempt == maxRetries {
+			return getResp, isEmpty, nil
+		}
+
+		// Wait before retrying (exponential backoff)
+		delay := baseDelay * time.Duration(1<<uint(attempt))
+		tflog.Debug(ctx, fmt.Sprintf("gNMI returned empty response, retrying after %v", delay))
+		time.Sleep(delay)
+	}
+
+	return getResp, isGnmiGetResponseEmpty(&getResp), nil
+}
+
+// isGnmiGetResponseEmpty checks if a gNMI Get response is empty or has no data
+func isGnmiGetResponseEmpty(resp *gnmi.GetRes) bool {
+	if resp == nil {
+		return true
+	}
+	if len(resp.Notifications) == 0 {
+		return true
+	}
+	if len(resp.Notifications[0].Update) == 0 {
+		return true
+	}
+
+	// Check if the value is actually empty
+	val := resp.Notifications[0].Update[0].Val
+	if val == nil {
+		return true
+	}
+	jsonVal := val.GetJsonIetfVal()
+	jsonStr := strings.TrimSpace(string(jsonVal))
+	return jsonStr == "" || jsonStr == "{}" || jsonStr == "[]"
 }

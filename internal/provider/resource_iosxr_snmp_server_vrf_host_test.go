@@ -79,7 +79,7 @@ func iosxrSNMPServerVRFHostImportStateIdFunc(resourceName string) resource.Impor
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrSNMPServerVRFHostPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
 		"vrf-name" = "VRF1"
@@ -104,7 +104,7 @@ func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 	config += `		community_string = "COMMUNITY2"` + "\n"
 	config += `		version_v3_security_level = "auth"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -125,7 +125,7 @@ func testAccIosxrSNMPServerVRFHostConfig_all() string {
 	config += `		community_string = "COMMUNITY2"` + "\n"
 	config += `		version_v3_security_level = "auth"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

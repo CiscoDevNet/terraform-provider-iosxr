@@ -105,13 +105,13 @@ func iosxrL2VPNXconnectGroupImportStateIdFunc(resourceName string) resource.Impo
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrL2VPNXconnectGroupPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
 	attributes = {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
 	attributes = {
 	}
@@ -127,7 +127,7 @@ resource "iosxr_gnmi" "PreReq1" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
 `
@@ -139,7 +139,7 @@ resource "iosxr_gnmi" "PreReq1" {
 func testAccIosxrL2VPNXconnectGroupConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_xconnect_group" "test" {` + "\n"
 	config += `	group_name = "P2P"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -198,7 +198,7 @@ func testAccIosxrL2VPNXconnectGroupConfig_all() string {
 	config += `		autodiscovery_bgp_signaling_protocol_bgp_load_balancing_flow_label_both = true` + "\n"
 	config += `		autodiscovery_bgp_route_policy_export = "EXPORT_POLICY"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

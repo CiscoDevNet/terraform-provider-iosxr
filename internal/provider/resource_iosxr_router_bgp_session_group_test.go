@@ -121,14 +121,14 @@ func iosxrRouterBGPSessionGroupImportStateIdFunc(resourceName string) resource.I
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterBGPSessionGroupPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
 	attributes = {
 	}
@@ -147,7 +147,7 @@ resource "iosxr_gnmi" "PreReq1" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -165,7 +165,7 @@ func testAccIosxrRouterBGPSessionGroupConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_session_group" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	name = "SGROUP1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -225,7 +225,7 @@ func testAccIosxrRouterBGPSessionGroupConfig_all() string {
 	config += `	fast_fallover = true` + "\n"
 	config += `	update_in_labeled_unicast_equivalent = true` + "\n"
 	config += `	update_in_error_handling_treat_as_withdraw = "enable"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

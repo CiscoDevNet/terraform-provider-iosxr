@@ -92,7 +92,7 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_mpls_traffic_eng_up", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_ntp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_cbgp_two_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_enable_cisco_bgp4_mib", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_enable_updown", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_hsrp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_database_overload", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_manual_address_drops", "true"))
@@ -333,7 +333,7 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config += `	traps_mpls_traffic_eng_up = true` + "\n"
 	config += `	traps_ntp = true` + "\n"
 	config += `	traps_bgp_cbgp_two_enable = true` + "\n"
-	config += `	traps_bgp_enable_cisco_bgp4_mib = true` + "\n"
+	config += `	traps_bgp_enable_updown = true` + "\n"
 	config += `	traps_hsrp = true` + "\n"
 	config += `	traps_isis_database_overload = true` + "\n"
 	config += `	traps_isis_manual_address_drops = true` + "\n"

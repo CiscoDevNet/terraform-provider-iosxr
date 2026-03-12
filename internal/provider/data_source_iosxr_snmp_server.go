@@ -312,11 +312,11 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
 				Computed:            true,
 			},
-			"traps_bgp_enable_updown": schema.BoolAttribute{
+			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
 				MarkdownDescription: "Enable BGP4-MIB and CISCO-BGP4-MIB traps",
 				Computed:            true,
 			},
-			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
+			"traps_bgp_enable_updown": schema.BoolAttribute{
 				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
 				Computed:            true,
 			},
@@ -809,6 +809,14 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 						},
 						"v3_priv": schema.BoolAttribute{
 							MarkdownDescription: "group using authPriv Security Level",
+							Computed:            true,
+						},
+						"v3_auth": schema.BoolAttribute{
+							MarkdownDescription: "group using the authNoPriv Security Level",
+							Computed:            true,
+						},
+						"v3_noauth": schema.BoolAttribute{
+							MarkdownDescription: "group using the noAuthNoPriv Security Level",
 							Computed:            true,
 						},
 						"v3_read": schema.StringAttribute{

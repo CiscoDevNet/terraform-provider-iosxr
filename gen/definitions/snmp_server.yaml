@@ -233,12 +233,12 @@ attributes:
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/CISCO-BGP4-MIB/cisco-bgp4-mib
     xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib
-    tf_name: traps_bgp_enable_updown
+    tf_name: traps_bgp_enable_cisco_bgp4_mib
     exclude_test: true
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/UPDOWN/updown
     xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown
-    tf_name: traps_bgp_enable_cisco_bgp4_mib
+    tf_name: traps_bgp_enable_updown
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-router-hsrp-cfg:hsrp
     example: true
@@ -607,6 +607,12 @@ attributes:
         example: ACL1
         exclude_test: true
       - yang_name: v3/priv
+        example: true
+      - yang_name: v3/auth
+        exclude_test: true
+        example: true
+      - yang_name: v3/noauth
+        exclude_test: true
         example: true
       - yang_name: v3/read
         example: VIEW1

@@ -76,7 +76,7 @@ resource "iosxr_snmp_server" "example" {
   traps_mpls_traffic_eng_up                              = true
   traps_ntp                                              = true
   traps_bgp_cbgp_two_enable                              = true
-  traps_bgp_enable_cisco_bgp4_mib                        = true
+  traps_bgp_enable_updown                                = true
   traps_hsrp                                             = true
   traps_isis_database_overload                           = true
   traps_isis_manual_address_drops                        = true
@@ -304,8 +304,8 @@ resource "iosxr_snmp_server" "example" {
 - `traps_bfd` (Boolean) Enable BFD traps
 - `traps_bgp_cbgp_two_enable` (Boolean) Enable CISCO-BGP4-MIB v2 traps
 - `traps_bgp_cbgp_two_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
-- `traps_bgp_enable_cisco_bgp4_mib` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
-- `traps_bgp_enable_updown` (Boolean) Enable BGP4-MIB and CISCO-BGP4-MIB traps
+- `traps_bgp_enable_cisco_bgp4_mib` (Boolean) Enable BGP4-MIB and CISCO-BGP4-MIB traps
+- `traps_bgp_enable_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
 - `traps_bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
 - `traps_cfm` (Boolean) Enable traps for 802.1ag Connectivity Fault Management
 - `traps_cisco_entity_ext` (Boolean) Enable SNMP entity traps
@@ -449,9 +449,11 @@ Optional:
 - `v2c_notify` (String) specify a notify view for the group
 - `v2c_read` (String) specify a read view for this group
 - `v2c_write` (String) specify a write view for this group
+- `v3_auth` (Boolean) group using the authNoPriv Security Level
 - `v3_context` (String) Attach a SNMP context
 - `v3_ipv4` (String) Type of Access-list
 - `v3_ipv6` (String) Type of Access-list
+- `v3_noauth` (Boolean) group using the noAuthNoPriv Security Level
 - `v3_notify` (String) specify a notify view for the group
 - `v3_priv` (Boolean) group using authPriv Security Level
 - `v3_read` (String) specify a read view for this group

@@ -90,8 +90,8 @@ type SNMPServer struct {
 	TrapsNtp                                       types.Bool                  `tfsdk:"traps_ntp"`
 	TrapsBgpCbgpTwoEnable                          types.Bool                  `tfsdk:"traps_bgp_cbgp_two_enable"`
 	TrapsBgpCbgpTwoUpdown                          types.Bool                  `tfsdk:"traps_bgp_cbgp_two_updown"`
-	TrapsBgpEnableUpdown                           types.Bool                  `tfsdk:"traps_bgp_enable_updown"`
 	TrapsBgpEnableCiscoBgp4Mib                     types.Bool                  `tfsdk:"traps_bgp_enable_cisco_bgp4_mib"`
+	TrapsBgpEnableUpdown                           types.Bool                  `tfsdk:"traps_bgp_enable_updown"`
 	TrapsHsrp                                      types.Bool                  `tfsdk:"traps_hsrp"`
 	TrapsIsisAll                                   types.Bool                  `tfsdk:"traps_isis_all"`
 	TrapsIsisDatabaseOverload                      types.Bool                  `tfsdk:"traps_isis_database_overload"`
@@ -223,8 +223,8 @@ type SNMPServerData struct {
 	TrapsNtp                                       types.Bool                  `tfsdk:"traps_ntp"`
 	TrapsBgpCbgpTwoEnable                          types.Bool                  `tfsdk:"traps_bgp_cbgp_two_enable"`
 	TrapsBgpCbgpTwoUpdown                          types.Bool                  `tfsdk:"traps_bgp_cbgp_two_updown"`
-	TrapsBgpEnableUpdown                           types.Bool                  `tfsdk:"traps_bgp_enable_updown"`
 	TrapsBgpEnableCiscoBgp4Mib                     types.Bool                  `tfsdk:"traps_bgp_enable_cisco_bgp4_mib"`
+	TrapsBgpEnableUpdown                           types.Bool                  `tfsdk:"traps_bgp_enable_updown"`
 	TrapsHsrp                                      types.Bool                  `tfsdk:"traps_hsrp"`
 	TrapsIsisAll                                   types.Bool                  `tfsdk:"traps_isis_all"`
 	TrapsIsisDatabaseOverload                      types.Bool                  `tfsdk:"traps_isis_database_overload"`
@@ -340,6 +340,8 @@ type SNMPServerGroups struct {
 	V2cIpv4    types.String `tfsdk:"v2c_ipv4"`
 	V2cIpv6    types.String `tfsdk:"v2c_ipv6"`
 	V3Priv     types.Bool   `tfsdk:"v3_priv"`
+	V3Auth     types.Bool   `tfsdk:"v3_auth"`
+	V3Noauth   types.Bool   `tfsdk:"v3_noauth"`
 	V3Read     types.String `tfsdk:"v3_read"`
 	V3Write    types.String `tfsdk:"v3_write"`
 	V3Context  types.String `tfsdk:"v3_context"`
@@ -677,13 +679,13 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown", []interface{}{nil})
 		}
 	}
-	if !data.TrapsBgpEnableUpdown.IsNull() && !data.TrapsBgpEnableUpdown.IsUnknown() {
-		if data.TrapsBgpEnableUpdown.ValueBool() {
+	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() && !data.TrapsBgpEnableCiscoBgp4Mib.IsUnknown() {
+		if data.TrapsBgpEnableCiscoBgp4Mib.ValueBool() {
 			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib", []interface{}{nil})
 		}
 	}
-	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() && !data.TrapsBgpEnableCiscoBgp4Mib.IsUnknown() {
-		if data.TrapsBgpEnableCiscoBgp4Mib.ValueBool() {
+	if !data.TrapsBgpEnableUpdown.IsNull() && !data.TrapsBgpEnableUpdown.IsUnknown() {
+		if data.TrapsBgpEnableUpdown.ValueBool() {
 			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown", []interface{}{nil})
 		}
 	}
@@ -1230,6 +1232,16 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 			if !item.V3Priv.IsNull() && !item.V3Priv.IsUnknown() {
 				if item.V3Priv.ValueBool() {
 					body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"v3.priv", map[string]string{})
+				}
+			}
+			if !item.V3Auth.IsNull() && !item.V3Auth.IsUnknown() {
+				if item.V3Auth.ValueBool() {
+					body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"v3.auth", map[string]string{})
+				}
+			}
+			if !item.V3Noauth.IsNull() && !item.V3Noauth.IsUnknown() {
+				if item.V3Noauth.ValueBool() {
+					body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"v3.noauth", map[string]string{})
 				}
 			}
 			if !item.V3Read.IsNull() && !item.V3Read.IsUnknown() {
@@ -1869,16 +1881,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsBgpCbgpTwoUpdown = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); !data.TrapsBgpEnableUpdown.IsNull() {
-		if value.Exists() {
-			data.TrapsBgpEnableUpdown = types.BoolValue(true)
-		} else {
-			data.TrapsBgpEnableUpdown = types.BoolValue(false)
-		}
-	} else {
-		data.TrapsBgpEnableUpdown = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
 		if value.Exists() {
 			data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(true)
 		} else {
@@ -1886,6 +1889,15 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.TrapsBgpEnableCiscoBgp4Mib = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); !data.TrapsBgpEnableUpdown.IsNull() {
+		if value.Exists() {
+			data.TrapsBgpEnableUpdown = types.BoolValue(true)
+		} else {
+			data.TrapsBgpEnableUpdown = types.BoolValue(false)
+		}
+	} else {
+		data.TrapsBgpEnableUpdown = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-hsrp-cfg:hsrp"); !data.TrapsHsrp.IsNull() {
 		if value.Exists() {
@@ -2838,6 +2850,24 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Groups[i].V3Priv = types.BoolNull()
 		}
+		if value := r.Get("v3.auth"); !data.Groups[i].V3Auth.IsNull() {
+			if value.Exists() {
+				data.Groups[i].V3Auth = types.BoolValue(true)
+			} else {
+				data.Groups[i].V3Auth = types.BoolValue(false)
+			}
+		} else {
+			data.Groups[i].V3Auth = types.BoolNull()
+		}
+		if value := r.Get("v3.noauth"); !data.Groups[i].V3Noauth.IsNull() {
+			if value.Exists() {
+				data.Groups[i].V3Noauth = types.BoolValue(true)
+			} else {
+				data.Groups[i].V3Noauth = types.BoolValue(false)
+			}
+		} else {
+			data.Groups[i].V3Noauth = types.BoolNull()
+		}
 		if value := r.Get("v3.read"); value.Exists() && !data.Groups[i].V3Read.IsNull() {
 			data.Groups[i].V3Read = types.StringValue(value.String())
 		} else {
@@ -3370,14 +3400,14 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); value.Exists() {
-		data.TrapsBgpEnableUpdown = types.BoolValue(true)
-	} else {
-		data.TrapsBgpEnableUpdown = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
 		data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(true)
 	} else {
 		data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
+		data.TrapsBgpEnableUpdown = types.BoolValue(true)
+	} else {
+		data.TrapsBgpEnableUpdown = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-hsrp-cfg:hsrp"); value.Exists() {
 		data.TrapsHsrp = types.BoolValue(true)
@@ -3858,6 +3888,16 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 				item.V3Priv = types.BoolValue(true)
 			} else {
 				item.V3Priv = types.BoolValue(false)
+			}
+			if cValue := v.Get("v3.auth"); cValue.Exists() {
+				item.V3Auth = types.BoolValue(true)
+			} else {
+				item.V3Auth = types.BoolValue(false)
+			}
+			if cValue := v.Get("v3.noauth"); cValue.Exists() {
+				item.V3Noauth = types.BoolValue(true)
+			} else {
+				item.V3Noauth = types.BoolValue(false)
 			}
 			if cValue := v.Get("v3.read"); cValue.Exists() {
 				item.V3Read = types.StringValue(cValue.String())
@@ -4278,14 +4318,14 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
 		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); value.Exists() {
-		data.TrapsBgpEnableUpdown = types.BoolValue(true)
-	} else {
-		data.TrapsBgpEnableUpdown = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
 		data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(true)
 	} else {
 		data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
+		data.TrapsBgpEnableUpdown = types.BoolValue(true)
+	} else {
+		data.TrapsBgpEnableUpdown = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-hsrp-cfg:hsrp"); value.Exists() {
 		data.TrapsHsrp = types.BoolValue(true)
@@ -4767,6 +4807,16 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.V3Priv = types.BoolValue(false)
 			}
+			if cValue := v.Get("v3.auth"); cValue.Exists() {
+				item.V3Auth = types.BoolValue(true)
+			} else {
+				item.V3Auth = types.BoolValue(false)
+			}
+			if cValue := v.Get("v3.noauth"); cValue.Exists() {
+				item.V3Noauth = types.BoolValue(true)
+			} else {
+				item.V3Noauth = types.BoolValue(false)
+			}
 			if cValue := v.Get("v3.read"); cValue.Exists() {
 				item.V3Read = types.StringValue(cValue.String())
 			}
@@ -5137,6 +5187,12 @@ func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) [
 				}
 				if !state.Groups[i].V3Read.IsNull() && data.Groups[j].V3Read.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/v3/read", state.getPath(), keyString))
+				}
+				if !state.Groups[i].V3Noauth.IsNull() && data.Groups[j].V3Noauth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/v3/noauth", state.getPath(), keyString))
+				}
+				if !state.Groups[i].V3Auth.IsNull() && data.Groups[j].V3Auth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/v3/auth", state.getPath(), keyString))
 				}
 				if !state.Groups[i].V3Priv.IsNull() && data.Groups[j].V3Priv.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v/v3/priv", state.getPath(), keyString))
@@ -5691,10 +5747,10 @@ func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) [
 	if !state.TrapsHsrp.IsNull() && data.TrapsHsrp.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-hsrp-cfg:hsrp", state.getPath()))
 	}
-	if !state.TrapsBgpEnableCiscoBgp4Mib.IsNull() && data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
+	if !state.TrapsBgpEnableUpdown.IsNull() && data.TrapsBgpEnableUpdown.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown", state.getPath()))
 	}
-	if !state.TrapsBgpEnableUpdown.IsNull() && data.TrapsBgpEnableUpdown.IsNull() {
+	if !state.TrapsBgpEnableCiscoBgp4Mib.IsNull() && data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib", state.getPath()))
 	}
 	if !state.TrapsBgpCbgpTwoUpdown.IsNull() && data.TrapsBgpCbgpTwoUpdown.IsNull() {
@@ -5954,6 +6010,12 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		if !data.Groups[i].V3Noauth.IsNull() && !data.Groups[i].V3Noauth.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/groups/group%v/v3/noauth", data.getPath(), keyString))
+		}
+		if !data.Groups[i].V3Auth.IsNull() && !data.Groups[i].V3Auth.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/groups/group%v/v3/auth", data.getPath(), keyString))
+		}
 		if !data.Groups[i].V3Priv.IsNull() && !data.Groups[i].V3Priv.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/groups/group%v/v3/priv", data.getPath(), keyString))
 		}
@@ -6201,10 +6263,10 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.TrapsHsrp.IsNull() && !data.TrapsHsrp.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-hsrp-cfg:hsrp", data.getPath()))
 	}
-	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() && !data.TrapsBgpEnableCiscoBgp4Mib.ValueBool() {
+	if !data.TrapsBgpEnableUpdown.IsNull() && !data.TrapsBgpEnableUpdown.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown", data.getPath()))
 	}
-	if !data.TrapsBgpEnableUpdown.IsNull() && !data.TrapsBgpEnableUpdown.ValueBool() {
+	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() && !data.TrapsBgpEnableCiscoBgp4Mib.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib", data.getPath()))
 	}
 	if !data.TrapsBgpCbgpTwoUpdown.IsNull() && !data.TrapsBgpCbgpTwoUpdown.ValueBool() {
@@ -6616,10 +6678,10 @@ func (data *SNMPServer) getDeletePaths(ctx context.Context) []string {
 	if !data.TrapsHsrp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-hsrp-cfg:hsrp", data.getPath()))
 	}
-	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
+	if !data.TrapsBgpEnableUpdown.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown", data.getPath()))
 	}
-	if !data.TrapsBgpEnableUpdown.IsNull() {
+	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib", data.getPath()))
 	}
 	if !data.TrapsBgpCbgpTwoUpdown.IsNull() {

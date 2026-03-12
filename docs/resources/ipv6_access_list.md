@@ -85,6 +85,7 @@ Optional:
 - `deny_eq` (String) Match only packets with exact protocol numbers
 - `deny_fragment_type` (String) Fragment type for a packet
   - Choices: `first-fragment`, `is-fragment`
+- `deny_headers` (String) Space-separated list of headers to match
 - `deny_icmp_message_code` (Number) ICMP message code
   - Range: `0`-`255`
 - `deny_icmp_message_type` (Number) ICMP message type
@@ -137,6 +138,7 @@ Optional:
 - `deny_source_prefix_length` (Number) Source IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
   - Range: `0`-`128`
 - `deny_source_wildcard_mask` (String) Source IP address mask. Either wildcard-mask or prefix-length is supported along with address.
+- `deny_tcp_flags_bits` (String) Space-separated list of TCP flags to match
 - `deny_ttl_eq` (Number) Match only packets with a given value
   - Range: `0`-`255`
 - `deny_ttl_gt` (Number) Match only packet with a greater value
@@ -175,6 +177,7 @@ Optional:
 - `permit_eq` (String) Match only packets with exact protocol numbers
 - `permit_fragment_type` (String) Fragment type for a packet
   - Choices: `first-fragment`, `is-fragment`
+- `permit_headers` (String) Space-separated list of headers to match
 - `permit_icmp_message_code` (Number) ICMP message code
   - Range: `0`-`255`
 - `permit_icmp_message_type` (Number) ICMP message type
@@ -234,6 +237,7 @@ Optional:
 - `permit_source_prefix_length` (Number) Source IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
   - Range: `0`-`128`
 - `permit_source_wildcard_mask` (String) Source IP address mask. Either wildcard-mask or prefix-length is supported along with address.
+- `permit_tcp_flags_bits` (String) Space-separated list of TCP flags to match
 - `permit_ttl_eq` (Number) Match only packets with a given value
   - Range: `0`-`255`
 - `permit_ttl_gt` (Number) Match only packet with a greater value

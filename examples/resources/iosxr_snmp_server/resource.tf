@@ -61,7 +61,7 @@ resource "iosxr_snmp_server" "example" {
   traps_mpls_traffic_eng_up                              = true
   traps_ntp                                              = true
   traps_bgp_cbgp_two_enable                              = true
-  traps_bgp_enable_cisco_bgp4_mib                        = true
+  traps_bgp_enable_updown                                = true
   traps_hsrp                                             = true
   traps_isis_database_overload                           = true
   traps_isis_manual_address_drops                        = true

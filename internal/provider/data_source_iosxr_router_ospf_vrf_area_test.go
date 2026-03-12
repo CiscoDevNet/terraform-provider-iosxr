@@ -59,7 +59,7 @@ func TestAccDataSourceIosxrRouterOSPFVRFArea(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "mtu_ignore_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "database_filter_all_out_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "passive_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "distribute_list_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "distribute_list_in_acl", "ACL_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "packet_size", "1400"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_vrf_area.test", "bfd_fast_detect_strict_mode", "true"))
@@ -123,7 +123,7 @@ func TestAccDataSourceIosxrRouterOSPFVRFArea(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterOSPFVRFAreaPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -131,12 +131,12 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
 	attributes = {
 		"process-name" = "OSPF1"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
 `
@@ -184,7 +184,7 @@ func testAccDataSourceIosxrRouterOSPFVRFAreaConfig() string {
 	config += `	mtu_ignore_enable = true` + "\n"
 	config += `	database_filter_all_out_enable = true` + "\n"
 	config += `	passive_disable = true` + "\n"
-	config += `	distribute_list_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_in_acl = "ACL_1"` + "\n"
 	config += `	packet_size = 1400` + "\n"
 	config += `	bfd_fast_detect = true` + "\n"
 	config += `	bfd_fast_detect_strict_mode = true` + "\n"
@@ -252,7 +252,7 @@ func testAccDataSourceIosxrRouterOSPFVRFAreaConfig() string {
 	config += `		authentication_message_digest = true` + "\n"
 	config += `		authentication_keychain_name = "KEY1"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

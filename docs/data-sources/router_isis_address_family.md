@@ -113,6 +113,7 @@ data "iosxr_router_isis_address_family" "example" {
 - `redistribute_connected_route_policy` (String) Route policy reference
 - `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
 - `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
+- `redistribute_ospfv3` (Attributes List) Open Shortest Path First (OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospfv3))
 - `redistribute_static` (Boolean) Static routes
 - `redistribute_static_level` (String) Redistribute routes into both levels
 - `redistribute_static_metric` (Number) Metric for redistributed routes
@@ -321,6 +322,20 @@ Read-Only:
 Read-Only:
 
 - `instance_id` (String) OSPF process ID
+- `level` (String) Redistribute routes into both levels
+- `match_external` (Boolean) Redistribute OSPF external routes
+- `match_internal` (Boolean) Redistribute OSPF internal routes
+- `metric` (Number) Metric for redistributed routes
+- `metric_type` (String) IS-IS metric type for redistributed routes
+- `route_policy` (String) Route policy reference
+
+
+<a id="nestedatt--redistribute_ospfv3"></a>
+### Nested Schema for `redistribute_ospfv3`
+
+Read-Only:
+
+- `instance_id` (String) OSPFv3 process ID
 - `level` (String) Redistribute routes into both levels
 - `match_external` (Boolean) Redistribute OSPF external routes
 - `match_internal` (Boolean) Redistribute OSPF internal routes

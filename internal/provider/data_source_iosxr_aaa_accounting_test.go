@@ -77,14 +77,14 @@ func TestAccDataSourceIosxrAAAAccounting(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrAAAAccountingPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA2]"
 	attributes = {
 		"server-group-name" = "AAA2"
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA3]"
 	attributes = {
 		"server-group-name" = "AAA3"
@@ -133,7 +133,7 @@ func testAccDataSourceIosxrAAAAccountingConfig() string {
 	config += `		a3_group = "AAA3"` + "\n"
 	config += `		a4_none = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

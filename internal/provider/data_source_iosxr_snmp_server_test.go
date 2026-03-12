@@ -199,7 +199,7 @@ func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrSNMPServerPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
 	attributes = {
 		"access-list-name" = "ACL1"
@@ -402,7 +402,7 @@ func testAccDataSourceIosxrSNMPServerConfig() string {
 	config += `	inform_retries = 10` + "\n"
 	config += `	inform_timeout = 10` + "\n"
 	config += `	inform_pending = 10` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

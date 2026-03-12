@@ -145,7 +145,7 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "ignore_lsp_errors_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "purge_transmit_strict", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "purge_transmit_strict_strict_value", "level-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "purge_transmit_strict_value", "level-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "srlg_admin_weight", "500"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "srlg_names.0.srlg_name", "SRLG-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "srlg_names.0.admin_weight", "500"))
@@ -216,7 +216,7 @@ func iosxrRouterISISImportStateIdFunc(resourceName string) resource.ImportStateI
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterISISPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -224,24 +224,24 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-1]"
 	delete = false
 	attributes = {
 		"affinity-attribute-name" = "AFFINITY-1"
 		"bit-position" = "1"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/affinity-maps/affinity-map[affinity-attribute-name=AFFINITY-2]"
 	delete = false
 	attributes = {
 		"affinity-attribute-name" = "AFFINITY-2"
 		"bit-position" = "2"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
 `
@@ -253,7 +253,7 @@ resource "iosxr_gnmi" "PreReq2" {
 func testAccIosxrRouterISISConfig_minimum() string {
 	config := `resource "iosxr_router_isis" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -402,7 +402,7 @@ func testAccIosxrRouterISISConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	ignore_lsp_errors_disable = true` + "\n"
 	config += `	purge_transmit_strict = true` + "\n"
-	config += `	purge_transmit_strict_strict_value = "level-1"` + "\n"
+	config += `	purge_transmit_strict_value = "level-1"` + "\n"
 	config += `	srlg_admin_weight = 500` + "\n"
 	config += `	srlg_names = [{` + "\n"
 	config += `		srlg_name = "SRLG-1"` + "\n"
@@ -441,7 +441,7 @@ func testAccIosxrRouterISISConfig_all() string {
 	config += `			maximum_paths = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

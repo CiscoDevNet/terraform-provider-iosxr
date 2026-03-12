@@ -41,6 +41,7 @@ data "iosxr_router_ospf_area_interface" "example" {
 - `affinity_flex_algos` (Attributes List) Affinity attribute name (see [below for nested schema](#nestedatt--affinity_flex_algos))
 - `authentication` (Boolean) Enable authentication
 - `authentication_key_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+- `authentication_keychain` (Boolean) Use keychain
 - `authentication_keychain_name` (String) Specify keychain name
 - `authentication_message_digest` (Boolean) Use message-digest authentication
 - `authentication_null` (Boolean) Use no authentication
@@ -67,8 +68,8 @@ data "iosxr_router_ospf_area_interface" "example" {
 - `delay_normalize_offset` (Number) Normalization offset
 - `demand_circuit_disable` (Boolean) Disable demand circuits
 - `demand_circuit_enable` (Boolean) Enable demand circuits
-- `distribute_list_acl` (String) In-bound access-list name.
-- `distribute_list_route_policy` (String) Route Policy to filter OSPF prefixes
+- `distribute_list_in_acl` (String) In-bound access-list name.
+- `distribute_list_in_route_policy` (String) Route Policy to filter OSPF prefixes
 - `fast_reroute_disable` (Boolean) Disable IP Fast Reroute
 - `fast_reroute_per_link` (Boolean) Enable per-link Computation
 - `fast_reroute_per_link_exclude_interfaces` (Attributes List) Exclude an interface from Per-link LFA (see [below for nested schema](#nestedatt--fast_reroute_per_link_exclude_interfaces))
@@ -237,7 +238,7 @@ Read-Only:
 - `absolute` (Number) SID value
 - `absolute_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
 - `absolute_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
-- `algorithm_number` (Number) Algorithm Specific Prefix SID Configuration
 - `index` (Number) SID Index
 - `index_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
 - `index_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
+- `number` (Number) Algorithm Specific Prefix SID Configuration

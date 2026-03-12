@@ -270,16 +270,16 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   - Range: `68`-`10000`
 - `tcp_mtu_discovery` (Boolean) Enable Path MTU discovery on TCP session
 - `tcp_mtu_discovery_inheritance_disable` (Boolean) Prevent TCP MTU cfg from being inherited from the parent
+- `timers_holddown_zero` (Boolean) Disable keepalives/hold time
+- `timers_holddown_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+  - Range: `3`-`65535`
+- `timers_holddown_zero_minimum_acceptable_zero` (Boolean) Disable keepalives/hold time
 - `timers_holdtime` (Number) Holdtime
   - Range: `3`-`65535`
 - `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
 - `timers_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
-- `timers_keepalive_zero` (Boolean) Disable keepalives/hold time
-- `timers_keepalive_zero_holdtime_zero` (Boolean) Disable keepalives/hold time
-- `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-  - Range: `3`-`65535`
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `ttl_security_inheritance_disable` (Boolean) Prevent ttl-security from being inherited from the parent
 - `update_in_error_handling_avoid_reset` (String) Avoid neighbor reset during inbound update message error handling

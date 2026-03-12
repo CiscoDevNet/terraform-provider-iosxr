@@ -192,18 +192,18 @@ attributes:
     example: 10
   - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero
     xpath: timers/zero
-    tf_name: timers_keepalive_zero
+    tf_name: timers_holddown_zero
     example: true
     exclude_test: true
   - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
     xpath: timers/zero/zero
-    tf_name: timers_keepalive_zero_holdtime_zero
+    tf_name: timers_holddown_zero_minimum_acceptable_zero
     delete_parent: true
     exclude_test: true
     example: true
   - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
     xpath: timers/zero/minimum-acceptable-holdtime
-    tf_name: timers_keepalive_zero_minimum_acceptable_holdtime
+    tf_name: timers_holddown_zero_minimum_acceptable_holdtime
     delete_parent: true
     exclude_test: true
     example: 30

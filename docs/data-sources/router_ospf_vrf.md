@@ -39,6 +39,7 @@ data "iosxr_router_ospf_vrf" "example" {
 - `adjacency_stagger_simultaneous_neighbors` (Number) Maximum simultaneous neighbors to bring up (default 64)
 - `authentication` (Boolean) Enable authentication
 - `authentication_key_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+- `authentication_keychain` (Boolean) Use keychain
 - `authentication_keychain_name` (String) Specify keychain name
 - `authentication_message_digest` (Boolean) Use message-digest authentication
 - `authentication_null` (Boolean) Use no authentication

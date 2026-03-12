@@ -58,7 +58,7 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "mtu_ignore_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "database_filter_all_out_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "passive_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "distribute_list_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "distribute_list_in_acl", "ACL_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "packet_size", "1400"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "bfd_fast_detect_strict_mode", "true"))
@@ -92,7 +92,7 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_strict_spf_index", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_strict_spf_index_explicit_null", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_strict_spf_index_n_flag_clear", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.algorithm_number", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.number", "128"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.index", "400"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.index_explicit_null", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "prefix_sid_algorithms.0.index_n_flag_clear", "true"))
@@ -113,36 +113,36 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterOSPFAreaInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
 	attributes = {
 		"process-name" = "OSPF1"
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]"
 	attributes = {
 		"area-id" = "0"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]/interfaces/interface[interface-name=Loopback1]"
 	attributes = {
 		"interface-name" = "Loopback1"
 	}
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_yang.PreReq1, ]
 }
 
-resource "iosxr_gnmi" "PreReq3" {
+resource "iosxr_yang" "PreReq3" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
 		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
 	}
-	depends_on = [iosxr_gnmi.PreReq2, ]
+	depends_on = [iosxr_yang.PreReq2, ]
 }
 
 `
@@ -191,7 +191,7 @@ func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config += `	mtu_ignore_enable = true` + "\n"
 	config += `	database_filter_all_out_enable = true` + "\n"
 	config += `	passive_disable = true` + "\n"
-	config += `	distribute_list_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_in_acl = "ACL_1"` + "\n"
 	config += `	packet_size = 1400` + "\n"
 	config += `	bfd_fast_detect = true` + "\n"
 	config += `	bfd_fast_detect_strict_mode = true` + "\n"
@@ -234,13 +234,13 @@ func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config += `	prefix_sid_strict_spf_index_explicit_null = true` + "\n"
 	config += `	prefix_sid_strict_spf_index_n_flag_clear = true` + "\n"
 	config += `	prefix_sid_algorithms = [{` + "\n"
-	config += `		algorithm_number = 128` + "\n"
+	config += `		number = 128` + "\n"
 	config += `		index = 400` + "\n"
 	config += `		index_explicit_null = true` + "\n"
 	config += `		index_n_flag_clear = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	advertise_prefix_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

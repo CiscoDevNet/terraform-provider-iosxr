@@ -24,8 +24,13 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -62,6 +67,17 @@ func (data IPv4AccessListOptionsData) getPath() string {
 	return "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-list-options"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data IPv4AccessListOptions) getXPath() string {
+	path := "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-list-options"
+	return path
+}
+
+func (data IPv4AccessListOptionsData) getXPath() string {
+	path := "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-list-options"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -84,60 +100,134 @@ func (data IPv4AccessListOptions) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data IPv4AccessListOptions) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.LogUpdateThreshold.IsNull() && !data.LogUpdateThreshold.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/log-update/threshold", strconv.FormatInt(data.LogUpdateThreshold.ValueInt64(), 10))
+	}
+	if !data.LogUpdateRate.IsNull() && !data.LogUpdateRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/log-update/rate", strconv.FormatInt(data.LogUpdateRate.ValueInt64(), 10))
+	}
+	if !data.IcmpOff.IsNull() && !data.IcmpOff.IsUnknown() {
+		if data.IcmpOff.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/icmp-off", "")
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *IPv4AccessListOptions) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() && !data.LogUpdateThreshold.IsNull() {
 		data.LogUpdateThreshold = types.Int64Value(value.Int())
-	} else {
+	} else if data.LogUpdateThreshold.IsNull() {
 		data.LogUpdateThreshold = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() && !data.LogUpdateRate.IsNull() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.LogUpdateRate.IsNull() {
 		data.LogUpdateRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "icmp-off"); !data.IcmpOff.IsNull() {
-		if value.Exists() {
+	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IcmpOff.IsNull() {
 			data.IcmpOff = types.BoolValue(true)
-		} else {
-			data.IcmpOff = types.BoolValue(false)
 		}
 	} else {
-		data.IcmpOff = types.BoolNull()
+		// For presence-based booleans, only set to null if it's already null
+		if data.IcmpOff.IsNull() {
+			data.IcmpOff = types.BoolNull()
+		}
 	}
 }
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *IPv4AccessListOptions) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log-update/threshold"); value.Exists() && !data.LogUpdateThreshold.IsNull() {
+		data.LogUpdateThreshold = types.Int64Value(value.Int())
+	} else if data.LogUpdateThreshold.IsNull() {
+		data.LogUpdateThreshold = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log-update/rate"); value.Exists() && !data.LogUpdateRate.IsNull() {
+		data.LogUpdateRate = types.Int64Value(value.Int())
+	} else if data.LogUpdateRate.IsNull() {
+		data.LogUpdateRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/icmp-off"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.IcmpOff.IsNull() {
+			data.IcmpOff = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.IcmpOff.IsNull() {
+			data.IcmpOff = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *IPv4AccessListOptions) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() {
+func (data *IPv4AccessListOptions) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "log-update.threshold"); value.Exists() {
 		data.LogUpdateThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() {
+	if value := res.Get(prefix + "log-update.rate"); value.Exists() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
+	if value := res.Get(prefix + "icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
-	} else {
+	} else if !data.IcmpOff.IsNull() {
+		// Only set to false if it was previously set in state
 		data.IcmpOff = types.BoolValue(false)
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() {
+func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "log-update.threshold"); value.Exists() {
 		data.LogUpdateThreshold = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() {
+	if value := res.Get(prefix + "log-update.rate"); value.Exists() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
+	if value := res.Get(prefix + "icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
 	} else {
 		data.IcmpOff = types.BoolValue(false)
@@ -145,7 +235,40 @@ func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res []byte)
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *IPv4AccessListOptions) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log-update/threshold"); value.Exists() {
+		data.LogUpdateThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log-update/rate"); value.Exists() {
+		data.LogUpdateRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/icmp-off"); value.Exists() {
+		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *IPv4AccessListOptionsData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log-update/threshold"); value.Exists() {
+		data.LogUpdateThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log-update/rate"); value.Exists() {
+		data.LogUpdateRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/icmp-off"); value.Exists() {
+		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IPv4AccessListOptions) []string {
@@ -163,19 +286,20 @@ func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IP
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context, state *IPv4AccessListOptions) []string {
 	emptyLeafsDelete := make([]string, 0)
+	// Only delete if state has true and plan has false
 	if !data.IcmpOff.IsNull() && !data.IcmpOff.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/icmp-off", data.getPath()))
+		if state != nil && !state.IcmpOff.IsNull() && state.IcmpOff.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/icmp-off", data.getXPath()))
+		}
 	}
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *IPv4AccessListOptions) getDeletePaths(ctx context.Context) []string {
@@ -189,7 +313,85 @@ func (data *IPv4AccessListOptions) getDeletePaths(ctx context.Context) []string 
 	if !data.LogUpdateThreshold.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/threshold", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *IPv4AccessListOptions) addDeletedItemsXML(ctx context.Context, state IPv4AccessListOptions, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.IcmpOff.IsNull() && state.IcmpOff.ValueBool() && data.IcmpOff.IsNull() {
+		deletePath := state.getXPath() + "/icmp-off"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LogUpdateRate.IsNull() && data.LogUpdateRate.IsNull() {
+		deletePath := state.getXPath() + "/log-update/rate"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LogUpdateThreshold.IsNull() && data.LogUpdateThreshold.IsNull() {
+		deletePath := state.getXPath() + "/log-update/threshold"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *IPv4AccessListOptions) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.IcmpOff.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/icmp-off")
+	}
+	if !data.LogUpdateRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log-update/rate")
+	}
+	if !data.LogUpdateThreshold.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log-update/threshold")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

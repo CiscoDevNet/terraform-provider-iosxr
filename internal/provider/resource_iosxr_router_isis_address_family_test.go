@@ -231,7 +231,7 @@ func iosxrRouterISISAddressFamilyImportStateIdFunc(resourceName string) resource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterISISAddressFamilyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -239,7 +239,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=PREFIX_LIST_1]"
 	attributes = {
 		"prefix-list-name" = "PREFIX_LIST_1"
@@ -258,23 +258,23 @@ resource "iosxr_gnmi" "PreReq1" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]"
 	attributes = {
 		"process-id" = "P1"
 	}
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_yang.PreReq1, ]
 }
 
-resource "iosxr_gnmi" "PreReq3" {
+resource "iosxr_yang" "PreReq3" {
 	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]"
 	attributes = {
 		"segment-routing/mpls/enable" = "<NULL>"
 	}
-	depends_on = [iosxr_gnmi.PreReq2, ]
+	depends_on = [iosxr_yang.PreReq2, ]
 }
 
 `
@@ -288,7 +288,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_minimum() string {
 	config += `	process_id = "P1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -502,7 +502,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 	config += `	prefix_unreachable_adv_lifetime = 120` + "\n"
 	config += `	prefix_unreachable_adv_metric = 4261412865` + "\n"
 	config += `	prefix_unreachable_rx_process_enable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

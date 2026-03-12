@@ -119,7 +119,7 @@ data "iosxr_router_isis" "example" {
 - `protocol_shutdown` (Boolean) Protocol Shutdown. ISIS will set overload-bit and isolate itself by not forming adjacencies.
 - `psnp_interval` (Number) Longest wait to send PSNP
 - `purge_transmit_strict` (Boolean) Only authentication TLV is allowed
-- `purge_transmit_strict_strict_value` (String) Only authentication TLV is allowed
+- `purge_transmit_strict_value` (String) Only authentication TLV is allowed
 - `receive_application_flex_algo_delay_app_only` (Boolean) ASLA to take precedence
 - `segment_routing_global_block_lower_bound` (Number) The lower bound of the SRGB
 - `segment_routing_global_block_upper_bound` (Number) The upper bound SRGB

@@ -180,7 +180,7 @@ func iosxrRouterPIMIPv6ImportStateIdFunc(resourceName string) resource.ImportSta
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterPIMIPv6PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
 	attributes = {
 	}
@@ -198,7 +198,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-pim-cfg:/router/pim"
 	attributes = {
 	}
@@ -213,7 +213,7 @@ resource "iosxr_gnmi" "PreReq1" {
 func testAccIosxrRouterPIMIPv6Config_minimum() string {
 	config := `resource "iosxr_router_pim_ipv6" "test" {` + "\n"
 	config += `	register_source = "Loopback0"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -341,7 +341,7 @@ func testAccIosxrRouterPIMIPv6Config_all() string {
 	config += `		bfd_fast_detect = true` + "\n"
 	config += `		bsr_border = true` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

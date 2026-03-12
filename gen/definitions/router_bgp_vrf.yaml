@@ -43,16 +43,16 @@ attributes:
     example: 0
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero
     xpath: timers/bgp/zero
-    tf_name: timers_bgp_keepalive_zero
+    tf_name: timers_bgp_holddown_zero
     example: true
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
     xpath: timers/bgp/zero/zero
-    tf_name: timers_bgp_keepalive_zero_holdtime_zero
+    tf_name: timers_bgp_holddown_zero_minimum_acceptable_zero
     delete_parent: true
     example: true
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
     xpath: timers/bgp/zero/minimum-acceptable-holdtime
-    tf_name: timers_bgp_keepalive_zero_minimum_acceptable_holdtime
+    tf_name: timers_bgp_holddown_zero_minimum_acceptable_holdtime
     delete_parent: true
     exclude_test: true
     example: 30
@@ -139,35 +139,41 @@ attributes:
   - yang_name: rd/RD/AUTO/auto
     xpath: rd/auto
     tf_name: rd_auto
+    requires_replace: true
     example: true
   - yang_name: rd/RD/TWO-BYTE-AS/two-byte-as/two-byte-as-number
     xpath: rd/two-byte-as/two-byte-as-number
     tf_name: rd_two_byte_as_number
     delete_parent: true
+    requires_replace: true
     example: "65004"
     exclude_test: true
   - yang_name: rd/RD/TWO-BYTE-AS/two-byte-as/asn2-index
     xpath: rd/two-byte-as/asn2-index
     tf_name: rd_two_byte_as_index
     delete_parent: true
+    requires_replace: true
     example: 1
     exclude_test: true
   - yang_name: rd/RD/FOUR-BYTE-AS/four-byte-as/four-byte-as-number
     xpath: rd/four-byte-as/four-byte-as-number
     tf_name: rd_four_byte_as_number
     delete_parent: true
+    requires_replace: true
     example: "65005"
     exclude_test: true
   - yang_name: rd/RD/FOUR-BYTE-AS/four-byte-as/asn4-index
     xpath: rd/four-byte-as/asn4-index
     tf_name: rd_four_byte_as_index
     delete_parent: true
+    requires_replace: true
     example: 2
     exclude_test: true
   - yang_name: rd/RD/IPV4-ADDRESS/ipv4-address/address
     xpath: rd/ipv4-address/address
     tf_name: rd_ipv4_address_address
     delete_parent: true
+    requires_replace: true
     example: "14.14.14.14"
     exclude_test: true
     description: "IPv4 address"
@@ -175,6 +181,7 @@ attributes:
     xpath: rd/ipv4-address/ipv4address-index
     tf_name: rd_ipv4_address_index
     delete_parent: true
+    requires_replace: true
     example: 2
     exclude_test: true
   - yang_name: neighbors/neighbor
@@ -358,17 +365,17 @@ attributes:
         example: 0
       - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero
         xpath: timers/zero
-        tf_name: timers_keepalive_zero
+        tf_name: timers_holddown_zero
         example: true
       - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
         xpath: timers/zero/zero
-        tf_name: timers_keepalive_zero_holdtime_zero
+        tf_name: timers_holddown_zero_minimum_acceptable_zero
         delete_parent: true
         exclude_test: true
         example: true
       - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
         xpath: timers/zero/minimum-acceptable-holdtime
-        tf_name: timers_keepalive_zero_minimum_acceptable_holdtime
+        tf_name: timers_holddown_zero_minimum_acceptable_holdtime
         delete_parent: true
         example: 30
       - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number

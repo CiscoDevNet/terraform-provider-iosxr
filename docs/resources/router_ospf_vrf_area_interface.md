@@ -53,7 +53,7 @@ resource "iosxr_router_ospf_vrf_area_interface" "example" {
   mtu_ignore_enable                            = true
   database_filter_all_out_enable               = true
   passive_disable                              = true
-  distribute_list_acl                          = "ACL_1"
+  distribute_list_in_acl                       = "ACL_1"
   packet_size                                  = 1400
   bfd_fast_detect                              = true
   bfd_fast_detect_strict_mode                  = true
@@ -129,6 +129,7 @@ resource "iosxr_router_ospf_vrf_area_interface" "example" {
 - `advertise_prefix_route_policy` (String) Specify the route-policy for conditional advertising
 - `authentication` (Boolean) Enable authentication
 - `authentication_key_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+- `authentication_keychain` (Boolean) Use keychain
 - `authentication_keychain_name` (String) Specify keychain name
 - `authentication_message_digest` (Boolean) Use message-digest authentication
 - `authentication_null` (Boolean) Use no authentication
@@ -172,8 +173,8 @@ resource "iosxr_router_ospf_vrf_area_interface" "example" {
 - `demand_circuit_disable` (Boolean) Disable demand circuits
 - `demand_circuit_enable` (Boolean) Enable demand circuits
 - `device` (String) A device name from the provider configuration.
-- `distribute_list_acl` (String) In-bound access-list name.
-- `distribute_list_route_policy` (String) Route Policy to filter OSPF prefixes
+- `distribute_list_in_acl` (String) In-bound access-list name.
+- `distribute_list_in_route_policy` (String) Route Policy to filter OSPF prefixes
 - `fast_reroute_disable` (Boolean) Disable IP Fast Reroute
 - `fast_reroute_per_link` (Boolean) Enable per-link Computation
 - `fast_reroute_per_link_exclude_interfaces` (Attributes List) Exclude an interface from Per-link LFA (see [below for nested schema](#nestedatt--fast_reroute_per_link_exclude_interfaces))

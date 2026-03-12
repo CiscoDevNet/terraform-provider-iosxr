@@ -55,7 +55,7 @@ func TestAccDataSourceIosxrRouterOSPFArea(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "multi_area_interfaces.0.transmit_delay", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "multi_area_interfaces.0.mtu_ignore_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "multi_area_interfaces.0.database_filter_all_out_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "multi_area_interfaces.0.distribute_list_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "multi_area_interfaces.0.distribute_list_in_acl", "ACL_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "multi_area_interfaces.0.packet_size", "1400"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "multi_area_interfaces.0.fast_reroute_per_link_exclude_interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "multi_area_interfaces.0.fast_reroute_per_link_lfa_candidate_interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
@@ -106,7 +106,7 @@ func TestAccDataSourceIosxrRouterOSPFArea(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "mtu_ignore_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "database_filter_all_out_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "passive_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "distribute_list_acl", "ACL_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "distribute_list_in_acl", "ACL_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "bfd_fast_detect_strict_mode", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area.test", "bfd_minimum_interval", "300"))
@@ -161,7 +161,7 @@ func TestAccDataSourceIosxrRouterOSPFArea(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterOSPFAreaPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -169,12 +169,12 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
 	attributes = {
 		"process-name" = "OSPF1"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
 `
@@ -220,7 +220,7 @@ func testAccDataSourceIosxrRouterOSPFAreaConfig() string {
 	config += `		transmit_delay = 100` + "\n"
 	config += `		mtu_ignore_enable = true` + "\n"
 	config += `		database_filter_all_out_enable = true` + "\n"
-	config += `		distribute_list_acl = "ACL_1"` + "\n"
+	config += `		distribute_list_in_acl = "ACL_1"` + "\n"
 	config += `		packet_size = 1400` + "\n"
 	config += `		fast_reroute_per_link_exclude_interfaces = [{` + "\n"
 	config += `			interface_name = "GigabitEthernet0/0/0/1"` + "\n"
@@ -284,7 +284,7 @@ func testAccDataSourceIosxrRouterOSPFAreaConfig() string {
 	config += `	mtu_ignore_enable = true` + "\n"
 	config += `	database_filter_all_out_enable = true` + "\n"
 	config += `	passive_disable = true` + "\n"
-	config += `	distribute_list_acl = "ACL_1"` + "\n"
+	config += `	distribute_list_in_acl = "ACL_1"` + "\n"
 	config += `	bfd_fast_detect = true` + "\n"
 	config += `	bfd_fast_detect_strict_mode = true` + "\n"
 	config += `	bfd_minimum_interval = 300` + "\n"
@@ -337,7 +337,7 @@ func testAccDataSourceIosxrRouterOSPFAreaConfig() string {
 	config += `		authentication_message_digest = true` + "\n"
 	config += `		authentication_keychain_name = "KEY1"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

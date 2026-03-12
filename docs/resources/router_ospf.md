@@ -358,6 +358,7 @@ resource "iosxr_router_ospf" "example" {
 - `affinity_maps` (Attributes List) Affinity attribute name (see [below for nested schema](#nestedatt--affinity_maps))
 - `authentication` (Boolean) Enable authentication
 - `authentication_key_encrypted` (String, Sensitive) Specifies an ENCRYPTED password (key) will follow
+- `authentication_keychain` (Boolean) Use keychain
 - `authentication_keychain_name` (String) Specify keychain name
 - `authentication_message_digest` (Boolean) Use message-digest authentication
 - `authentication_null` (Boolean) Use no authentication

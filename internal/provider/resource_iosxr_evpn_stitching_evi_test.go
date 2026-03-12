@@ -104,7 +104,7 @@ func iosxrEVPNStitchingEVIImportStateIdFunc(resourceName string) resource.Import
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrEVPNStitchingEVIPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "EVI_POLICY_1"
@@ -112,7 +112,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
 	attributes = {
 	}
@@ -127,7 +127,7 @@ resource "iosxr_gnmi" "PreReq1" {
 func testAccIosxrEVPNStitchingEVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_stitching_evi" "test" {` + "\n"
 	config += `	vpn_id = 102` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -171,7 +171,7 @@ func testAccIosxrEVPNStitchingEVIConfig_all() string {
 	config += `	etree_rt_leaf = true` + "\n"
 	config += `	vpws_single_active_backup_suppression = true` + "\n"
 	config += `	bvi_coupled_mode = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

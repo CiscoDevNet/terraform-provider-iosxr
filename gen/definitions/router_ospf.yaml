@@ -835,6 +835,9 @@ attributes:
     example: true
   - yang_name: authentication/keychain-name
     example: "KEY1"
+  - yang_name: authentication/keychain
+    exclude_test: true
+    example: true
   - yang_name: authentication/null
     exclude_test: true
     example: true

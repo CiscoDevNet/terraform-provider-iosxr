@@ -388,7 +388,7 @@ func iosxrInterfaceEthernetSubinterfaceImportStateIdFunc(resourceName string) re
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrInterfaceEthernetSubinterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]"
 	attributes = {
 		"policy-map-name" = "PMAP-IN"
@@ -408,7 +408,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-OUT]"
 	attributes = {
 		"policy-map-name" = "PMAP-OUT"
@@ -428,7 +428,7 @@ resource "iosxr_gnmi" "PreReq1" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
 	attributes = {
 		"access-list-name" = "ACL1"
@@ -449,7 +449,7 @@ resource "iosxr_gnmi" "PreReq2" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq3" {
+resource "iosxr_yang" "PreReq3" {
 	path = "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]"
 	attributes = {
 		"access-list-name" = "ACL2"
@@ -482,7 +482,7 @@ func testAccIosxrInterfaceEthernetSubinterfaceConfig_minimum() string {
 	config += `	name = "0/0/0/0.100"` + "\n"
 	config += `	shutdown = true` + "\n"
 	config += `	load_interval = 30` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -845,7 +845,7 @@ func testAccIosxrInterfaceEthernetSubinterfaceConfig_all() string {
 		config += `		clock_class_to_map_to = 6` + "\n"
 		config += `		}]` + "\n"
 	}
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

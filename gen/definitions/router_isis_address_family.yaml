@@ -132,6 +132,33 @@ attributes:
         example: "ROUTE_POLICY_1"
       - yang_name: metric-type
         example: "internal"
+  - yang_name: redistribute/ospfv3s/ospfv3
+    tf_name: redistribute_ospfv3
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: ospfv3-process-id
+        tf_name: instance_id
+        id: true
+        example: "OSPF1"
+      - yang_name: match/MATCH/INTERNAL/internal
+        xpath: match/internal
+        tf_name: match_internal
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external
+        xpath: match/external
+        tf_name: match_external
+        example: true
+      - yang_name: redistribute-route-level
+        tf_name: level
+        example: "level-2"
+      - yang_name: metric
+        example: 100
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+      - yang_name: metric-type
+        example: "internal"
   - yang_name: maximum-paths
     tf_name: maximum_paths
     example: 10

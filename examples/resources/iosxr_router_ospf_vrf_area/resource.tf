@@ -39,7 +39,7 @@ resource "iosxr_router_ospf_vrf_area" "example" {
   mtu_ignore_enable                            = true
   database_filter_all_out_enable               = true
   passive_disable                              = true
-  distribute_list_acl                          = "ACL_1"
+  distribute_list_in_acl                       = "ACL_1"
   packet_size                                  = 1400
   bfd_fast_detect                              = true
   bfd_fast_detect_strict_mode                  = true

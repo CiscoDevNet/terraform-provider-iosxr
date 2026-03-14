@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add `multipath_destinations` list to `iosxr_bfd` resource and data source
 - Add `permit_tcp_flags_bits`, `deny_tcp_flags_bits` to `iosxr_ipv4_access_list` resource and data source
 - Add `permit_tcp_flags_bits`, `deny_tcp_flags_bits`, `permit_headers`, `deny_headers` to `iosxr_ipv6_access_list` resource and data source
 - Add `v3_auth`, `v3_noauth` to `iosxr_snmp_server` resource and data source

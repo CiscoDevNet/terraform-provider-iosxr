@@ -63,6 +63,7 @@ Read-Only:
 - `deny_dscp_range_start` (String) DSCP value
 - `deny_eq` (String) Match only packets with exact protocol numbers
 - `deny_fragment_type` (String) Fragment type for a packet
+- `deny_headers` (String) Space-separated list of headers to match
 - `deny_icmp_message_code` (Number) ICMP message code
 - `deny_icmp_message_type` (Number) ICMP message type
 - `deny_icmp_message_type_name` (String) ICMP message type
@@ -100,6 +101,7 @@ Read-Only:
 - `deny_source_port_range_start` (String) Port number
 - `deny_source_prefix_length` (Number) Source IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
 - `deny_source_wildcard_mask` (String) Source IP address mask. Either wildcard-mask or prefix-length is supported along with address.
+- `deny_tcp_flags_bits` (String) Space-separated list of TCP flags to match
 - `deny_ttl_eq` (Number) Match only packets with a given value
 - `deny_ttl_gt` (Number) Match only packet with a greater value
 - `deny_ttl_lt` (Number) Match only packets with a lower value
@@ -130,6 +132,7 @@ Read-Only:
 - `permit_dscp_range_start` (String) DSCP value
 - `permit_eq` (String) Match only packets with exact protocol numbers
 - `permit_fragment_type` (String) Fragment type for a packet
+- `permit_headers` (String) Space-separated list of headers to match
 - `permit_icmp_message_code` (Number) ICMP message code
 - `permit_icmp_message_type` (Number) ICMP message type
 - `permit_icmp_message_type_name` (String) ICMP message type
@@ -174,6 +177,7 @@ Read-Only:
 - `permit_source_port_range_start` (String) Port number
 - `permit_source_prefix_length` (Number) Source IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
 - `permit_source_wildcard_mask` (String) Source IP address mask. Either wildcard-mask or prefix-length is supported along with address.
+- `permit_tcp_flags_bits` (String) Space-separated list of TCP flags to match
 - `permit_ttl_eq` (Number) Match only packets with a given value
 - `permit_ttl_gt` (Number) Match only packet with a greater value
 - `permit_ttl_lt` (Number) Match only packets with a lower value

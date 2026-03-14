@@ -1,3 +1,17 @@
+## Unreleased
+
+- Add `multipath_destinations` list to `iosxr_bfd` resource and data source
+- Add `permit_tcp_flags_bits`, `deny_tcp_flags_bits` to `iosxr_ipv4_access_list` resource and data source
+- Add `permit_tcp_flags_bits`, `deny_tcp_flags_bits`, `permit_headers`, `deny_headers` to `iosxr_ipv6_access_list` resource and data source
+- Add `v3_auth`, `v3_noauth` to `iosxr_snmp_server` resource and data source
+- Add `apply_weight_ecmp_only`, `apply_weight_ecmp_only_bandwidth`, `apply_weight_ucmp_only` to `iosxr_router_isis_address_family` resource and data source
+- BREAKING CHANGE: Refactor `iosxr_snmp_server_vrf_host` into `iosxr_snmp_server_vrf` resource and data source
+- Add `traps_encrypted_default`, `traps_encrypted_aes` lists to `iosxr_snmp_server_vrf` resource and data source
+- Add `informs_encrypted_default`, `informs_encrypted_aes` lists to `iosxr_snmp_server_vrf` resource and data source
+- Add `traps_encrypted_default`, `traps_encrypted_aes` lists to `iosxr_snmp_server` resource and data source
+- Add `informs_encrypted_default`, `informs_encrypted_aes` lists to `iosxr_snmp_server` resource and data source
+- Fix: Make `version_v3_security_level` attribute optional in `iosxr_snmp_server`, `iosxr_snmp_server_vrf` resource and data source
+
 ## 0.7.0
 
 - BREAKING CHANGE: Rename `purge_transmit_strict_strict_value` to `purge_transmit_strict_value` in `iosxr_router_isis` resource and data source

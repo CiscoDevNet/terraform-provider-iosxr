@@ -11,6 +11,12 @@ resource "iosxr_bfd" "example" {
       location_id = "0/0/CPU0"
     }
   ]
+  multipath_destinations = [
+    {
+      destination_address = "10.1.1.1"
+      location_id         = "0/0/CPU0"
+    }
+  ]
   multihop_ttl_drop_threshold            = 200
   dampening_initial_wait                 = 3600
   dampening_secondary_wait               = 3200

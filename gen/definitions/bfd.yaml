@@ -35,6 +35,16 @@ attributes:
       - yang_name: location-id
         id: true
         example: 0/0/CPU0
+  - yang_name: multipath/destinations/destination
+    tf_name: multipath_destinations
+    type: List
+    attributes:
+      - yang_name: destination-ip-address
+        id: true
+        tf_name: destination_address
+        example: 10.1.1.1
+      - yang_name: location-id
+        example: 0/0/CPU0
   - yang_name: multihop/ttl-drop-threshold
     example: 200
   - yang_name: dampening/initial-wait

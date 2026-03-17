@@ -265,7 +265,7 @@ func (data SegmentRoutingTEOnDemandColor) toBody(ctx context.Context) string {
 	}
 	if !data.PerFlow.IsNull() && !data.PerFlow.IsUnknown() {
 		if data.PerFlow.ValueBool() {
-			body, _ = sjson.Set(body, "per-flow.enable", []interface{}{nil})
+			body, _ = sjson.Set(body, "per-flow", map[string]string{})
 		}
 	}
 	if !data.PerFlowForwardClassDefault.IsNull() && !data.PerFlowForwardClassDefault.IsUnknown() {
@@ -276,7 +276,7 @@ func (data SegmentRoutingTEOnDemandColor) toBody(ctx context.Context) string {
 	}
 	if !data.BfdEnable.IsNull() && !data.BfdEnable.IsUnknown() {
 		if data.BfdEnable.ValueBool() {
-			body, _ = sjson.Set(body, "bfd.enable", []interface{}{nil})
+			body, _ = sjson.Set(body, "bfd", map[string]string{})
 		}
 	}
 	if !data.BfdDisable.IsNull() && !data.BfdDisable.IsUnknown() {
@@ -624,7 +624,7 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 	} else {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "per-flow.enable"); !data.PerFlow.IsNull() {
+	if value := gjson.GetBytes(res, "per-flow"); !data.PerFlow.IsNull() {
 		if value.Exists() {
 			data.PerFlow = types.BoolValue(true)
 		} else {
@@ -677,7 +677,7 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 	} else {
 		data.MaximumSidDepth = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.enable"); !data.BfdEnable.IsNull() {
+	if value := gjson.GetBytes(res, "bfd"); !data.BfdEnable.IsNull() {
 		if value.Exists() {
 			data.BfdEnable = types.BoolValue(true)
 		} else {
@@ -901,7 +901,7 @@ func (data *SegmentRoutingTEOnDemandColor) fromBody(ctx context.Context, res []b
 	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.label"); value.Exists() {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "per-flow.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "per-flow"); value.Exists() {
 		data.PerFlow = types.BoolValue(true)
 	} else {
 		data.PerFlow = types.BoolValue(false)
@@ -926,7 +926,7 @@ func (data *SegmentRoutingTEOnDemandColor) fromBody(ctx context.Context, res []b
 	if value := gjson.GetBytes(res, "maximum-sid-depth"); value.Exists() {
 		data.MaximumSidDepth = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd"); value.Exists() {
 		data.BfdEnable = types.BoolValue(true)
 	} else {
 		data.BfdEnable = types.BoolValue(false)
@@ -1114,7 +1114,7 @@ func (data *SegmentRoutingTEOnDemandColorData) fromBody(ctx context.Context, res
 	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.label"); value.Exists() {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "per-flow.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "per-flow"); value.Exists() {
 		data.PerFlow = types.BoolValue(true)
 	} else {
 		data.PerFlow = types.BoolValue(false)
@@ -1139,7 +1139,7 @@ func (data *SegmentRoutingTEOnDemandColorData) fromBody(ctx context.Context, res
 	if value := gjson.GetBytes(res, "maximum-sid-depth"); value.Exists() {
 		data.MaximumSidDepth = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd"); value.Exists() {
 		data.BfdEnable = types.BoolValue(true)
 	} else {
 		data.BfdEnable = types.BoolValue(false)
@@ -1241,7 +1241,7 @@ func (data *SegmentRoutingTEOnDemandColor) getDeletedItems(ctx context.Context, 
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/disable", state.getPath()))
 	}
 	if !state.BfdEnable.IsNull() && data.BfdEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/enable", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd", state.getPath()))
 	}
 	if !state.MaximumSidDepth.IsNull() && data.MaximumSidDepth.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-sid-depth", state.getPath()))
@@ -1283,7 +1283,7 @@ func (data *SegmentRoutingTEOnDemandColor) getDeletedItems(ctx context.Context, 
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/per-flow/default-forward-class", state.getPath()))
 	}
 	if !state.PerFlow.IsNull() && data.PerFlow.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/per-flow/enable", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/per-flow", state.getPath()))
 	}
 	if !state.PerformanceMeasurementReversePathLabel.IsNull() && data.PerformanceMeasurementReversePathLabel.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/pm-reverse-path/label", state.getPath()))
@@ -1475,7 +1475,7 @@ func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Conte
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/disable", data.getPath()))
 	}
 	if !data.BfdEnable.IsNull() && !data.BfdEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/enable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd", data.getPath()))
 	}
 	for i := range data.PerFlowForwardClasses {
 		keys := [...]string{"forward-class"}
@@ -1486,7 +1486,7 @@ func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Conte
 		}
 	}
 	if !data.PerFlow.IsNull() && !data.PerFlow.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/per-flow/enable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/per-flow", data.getPath()))
 	}
 	if !data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() && !data.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change", data.getPath()))
@@ -1582,7 +1582,7 @@ func (data *SegmentRoutingTEOnDemandColor) getDeletePaths(ctx context.Context) [
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/disable", data.getPath()))
 	}
 	if !data.BfdEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/enable", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd", data.getPath()))
 	}
 	if !data.MaximumSidDepth.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-sid-depth", data.getPath()))
@@ -1601,7 +1601,7 @@ func (data *SegmentRoutingTEOnDemandColor) getDeletePaths(ctx context.Context) [
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/per-flow/default-forward-class", data.getPath()))
 	}
 	if !data.PerFlow.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/per-flow/enable", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/per-flow", data.getPath()))
 	}
 	if !data.PerformanceMeasurementReversePathLabel.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/pm-reverse-path/label", data.getPath()))

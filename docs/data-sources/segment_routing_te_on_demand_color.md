@@ -60,7 +60,7 @@ data "iosxr_segment_routing_te_on_demand_color" "example" {
 - `max_install_standby_paths` (Number) Allow additional candidate paths to warm up non forwarding LSPs
 - `maximum_sid_depth` (Number) Maximum SID Depth Configuration
 - `pce_group` (String) Name of the PCE group - maximum 16 characters
-- `per_flow` (Boolean) True only
+- `per_flow` (Boolean) Policy per-flow configuration
 - `per_flow_forward_class_default` (Number) Default forward class entry
 - `per_flow_forward_classes` (Attributes List) Policy per-flow forward class entry and colorForwardClass, Color (see [below for nested schema](#nestedatt--per_flow_forward_classes))
 - `performance_measurement_delay_logging_delay_exceeded` (Boolean) Emit syslog when the delay exceeds the threshold

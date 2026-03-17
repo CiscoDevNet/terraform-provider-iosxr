@@ -10,6 +10,10 @@
 - Add `informs_encrypted_default`, `informs_encrypted_aes` lists to `iosxr_snmp_server_vrf` resource and data source
 - Add `traps_encrypted_default`, `traps_encrypted_aes` lists to `iosxr_snmp_server` resource and data source
 - Add `informs_encrypted_default`, `informs_encrypted_aes` lists to `iosxr_snmp_server` resource and data source
+- Fix: `bfd_enable` attribute in `iosxr_segment_routing_te_on_demand_color` resource and data source
+- Fix: `per_flow` attribute in `iosxr_segment_routing_te_on_demand_color` resource and data source
+- Fix: `bfd_enable` attribute in `iosxr_segment_routing_te_policy` resource and data source
+- Fix: `per_flow` attribute in `iosxr_segment_routing_te_policy` resource and data source
 - Fix: Make `version_v3_security_level` attribute optional in `iosxr_snmp_server`, `iosxr_snmp_server_vrf` resource and data source
 
 ## 0.7.0

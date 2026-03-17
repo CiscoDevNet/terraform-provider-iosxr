@@ -112,7 +112,7 @@ Read-Only:
 - `path_index` (Number) Path-option preference
 - `paths` (Attributes List) Policy configuration (see [below for nested schema](#nestedatt--candidate_paths_preferences--paths))
 - `pce_group` (String) Name of the PCE group - maximum 16 characters
-- `per_flow` (Boolean) True only
+- `per_flow` (Boolean) Policy per-flow configuration
 - `per_flow_forward_class_default` (Number) Default forward class entry
 - `per_flow_forward_classes` (Attributes List) Policy per-flow forward class entry and colorForwardClass, Color (see [below for nested schema](#nestedatt--candidate_paths_preferences--per_flow_forward_classes))
 

@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -137,7 +138,7 @@ func (data EthernetCFMData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data EthernetCFM) toBody(ctx context.Context) string {
+func (data EthernetCFM) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.TracerouteCacheHoldTime.IsNull() && !data.TracerouteCacheHoldTime.IsUnknown() {
 		body, _ = sjson.Set(body, "traceroute.cache.hold-time", strconv.FormatInt(data.TracerouteCacheHoldTime.ValueInt64(), 10))
@@ -172,7 +173,6 @@ func (data EthernetCFM) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"id.string", item.IdString.ValueString())
 			}
 			if len(item.Services) > 0 {
-				body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service", []interface{}{})
 				for cindex, citem := range item.Services {
 					if !citem.ServiceName.IsNull() && !citem.ServiceName.IsUnknown() {
 						body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service"+"."+strconv.Itoa(cindex)+"."+"service-name", citem.ServiceName.ValueString())
@@ -390,7 +390,6 @@ func (data EthernetCFM) toBody(ctx context.Context) string {
 						}
 					}
 					if len(citem.MepCrosschecks) > 0 {
-						body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service"+"."+strconv.Itoa(cindex)+"."+"mep.crosscheck.mep-ids.mep-id", []interface{}{})
 						for ccindex, ccitem := range citem.MepCrosschecks {
 							if !ccitem.MepId.IsNull() && !ccitem.MepId.IsUnknown() {
 								body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service"+"."+strconv.Itoa(cindex)+"."+"mep.crosscheck.mep-ids.mep-id"+"."+strconv.Itoa(ccindex)+"."+"mep-id", strconv.FormatInt(ccitem.MepId.ValueInt64(), 10))
@@ -409,8 +408,29 @@ func (data EthernetCFM) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data EthernetCFM) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data EthernetCFM) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *EthernetCFM) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traceroute.cache.hold-time"); value.Exists() && !data.TracerouteCacheHoldTime.IsNull() {
 		data.TracerouteCacheHoldTime = types.Int64Value(value.Int())
@@ -1889,7 +1909,6 @@ func (data *EthernetCFM) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *EthernetCFM) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Domains {

@@ -1,0 +1,32 @@
+---
+name: Netconf Yang Agent
+path: Cisco-IOS-XR-um-netconf-yang-cfg:/netconf-yang/agent
+doc_category: Management
+attributes:
+  - yang_name: ssh
+    tf_name: ssh
+    example: true
+  - yang_name: with-defaults-support/enable
+    tf_name: with_defaults_support
+    example: true
+  - yang_name: rate-limit
+    description: "Number of bytes to process per second"
+    example: 4096
+  - yang_name: session/limit
+    example: 50
+  - yang_name: session/idle-timeout
+    description: "Idle timeout in minutes"
+    example: 30
+  - yang_name: session/absolute-timeout
+    description: "Absolute timeout in minutes"
+    example: 1440
+  - yang_name: netconf1.0/support
+    tf_name: netconf_v1
+    description: "Enable/Disable NETCONF version 1.0 support"
+    optional: true
+    delete_parent: true
+    example: "1.0-only"
+  - yang_name: netconf1.0/streaming-disabled
+    tf_name: netconf_v1_streaming_disabled
+    delete_parent: true
+    example: true

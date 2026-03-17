@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -213,7 +214,7 @@ func (data SegmentRoutingTEPolicyData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
+func (data SegmentRoutingTEPolicy) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.PolicyName.IsNull() && !data.PolicyName.IsUnknown() {
 		body, _ = sjson.Set(body, "policy-name", data.PolicyName.ValueString())
@@ -455,13 +456,11 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"effective-metric.metric-value-type.metric-type", item.EffectiveMetricType.ValueString())
 			}
 			if len(item.ConstraintsAffinityRules) > 0 {
-				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.affinity-rules.affinity-rule", []interface{}{})
 				for cindex, citem := range item.ConstraintsAffinityRules {
 					if !citem.AffinityType.IsNull() && !citem.AffinityType.IsUnknown() {
 						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.affinity-rules.affinity-rule"+"."+strconv.Itoa(cindex)+"."+"rule", citem.AffinityType.ValueString())
 					}
 					if len(citem.Affinities) > 0 {
-						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.affinity-rules.affinity-rule"+"."+strconv.Itoa(cindex)+"."+"affinity-name", []interface{}{})
 						for ccindex, ccitem := range citem.Affinities {
 							if !ccitem.AffinityName.IsNull() && !ccitem.AffinityName.IsUnknown() {
 								body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.affinity-rules.affinity-rule"+"."+strconv.Itoa(cindex)+"."+"affinity-name"+"."+strconv.Itoa(ccindex)+"."+"affinity-name", ccitem.AffinityName.ValueString())
@@ -471,7 +470,6 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.ConstraintsBounds) > 0 {
-				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.bounds.bounds.bound", []interface{}{})
 				for cindex, citem := range item.ConstraintsBounds {
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
 						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.bounds.bounds.bound"+"."+strconv.Itoa(cindex)+"."+"scope-type", citem.Type.ValueString())
@@ -485,7 +483,6 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Paths) > 0 {
-				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"path-infos.path-info", []interface{}{})
 				for cindex, citem := range item.Paths {
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
 						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"path-infos.path-info"+"."+strconv.Itoa(cindex)+"."+"type", citem.Type.ValueString())
@@ -535,7 +532,6 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.PerFlowForwardClasses) > 0 {
-				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"per-flow.forward-class-and-colors.forward-class-and-color", []interface{}{})
 				for cindex, citem := range item.PerFlowForwardClasses {
 					if !citem.ForwardClass.IsNull() && !citem.ForwardClass.IsUnknown() {
 						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"per-flow.forward-class-and-colors.forward-class-and-color"+"."+strconv.Itoa(cindex)+"."+"forward-class", strconv.FormatInt(citem.ForwardClass.ValueInt64(), 10))
@@ -552,8 +548,29 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data SegmentRoutingTEPolicy) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data SegmentRoutingTEPolicy) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv6-disable"); !data.Ipv6Disable.IsNull() {
 		if value.Exists() {
@@ -2545,7 +2562,6 @@ func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context) []s
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *SegmentRoutingTEPolicy) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.Srv6LocatorBehavior.IsNull() {

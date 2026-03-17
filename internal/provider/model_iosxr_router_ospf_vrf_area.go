@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -333,7 +334,7 @@ func (data RouterOSPFVRFAreaData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterOSPFVRFArea) toBody(ctx context.Context) string {
+func (data RouterOSPFVRFArea) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AreaId.IsNull() && !data.AreaId.IsUnknown() {
 		body, _ = sjson.Set(body, "area-id", data.AreaId.ValueString())
@@ -850,7 +851,6 @@ func (data RouterOSPFVRFArea) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.MessageDigestKeys) > 0 {
-				body, _ = sjson.Set(body, "virtual-links.virtual-link"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key", []interface{}{})
 				for cindex, citem := range item.MessageDigestKeys {
 					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
 						body, _ = sjson.Set(body, "virtual-links.virtual-link"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key"+"."+strconv.Itoa(cindex)+"."+"message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))
@@ -913,7 +913,6 @@ func (data RouterOSPFVRFArea) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.MessageDigestKeys) > 0 {
-				body, _ = sjson.Set(body, "sham-links.sham-link"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key", []interface{}{})
 				for cindex, citem := range item.MessageDigestKeys {
 					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
 						body, _ = sjson.Set(body, "sham-links.sham-link"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key"+"."+strconv.Itoa(cindex)+"."+"message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))
@@ -930,8 +929,29 @@ func (data RouterOSPFVRFArea) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterOSPFVRFArea) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterOSPFVRFArea) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterOSPFVRFArea) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Ranges {
 		keys := [...]string{"address", "mask"}
@@ -4281,7 +4301,6 @@ func (data *RouterOSPFVRFArea) getEmptyLeafsDelete(ctx context.Context) []string
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterOSPFVRFArea) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.ShamLinks {

@@ -1,0 +1,32 @@
+---
+name: ICMP
+path: Cisco-IOS-XR-um-icmp-cfg:/icmp
+doc_category: System
+attributes:
+  - yang_name: ipv4/source/vrf
+    minimum_test_value: true
+    delete_parent: true
+    example: true
+  - yang_name: ipv4/source/rfc
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: ipv4/rate-limit/unreachable/rate
+    example: 1000
+  - yang_name: ipv4/rate-limit/unreachable/disable
+    exclude_test: true
+    example: true
+  - yang_name: ipv4/rate-limit/unreachable/df/rate
+    delete_parent: true
+    example: 1000
+  - yang_name: ipv4/rate-limit/unreachable/df/disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: ipv6/source/vrf
+    delete_parent: true
+    example: true
+  - yang_name: ipv6/source/rfc
+    delete_parent: true
+    exclude_test: true
+    example: true

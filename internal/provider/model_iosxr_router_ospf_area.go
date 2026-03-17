@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -425,7 +426,7 @@ func (data RouterOSPFAreaData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterOSPFArea) toBody(ctx context.Context) string {
+func (data RouterOSPFArea) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AreaId.IsNull() && !data.AreaId.IsUnknown() {
 		body, _ = sjson.Set(body, "area-id", data.AreaId.ValueString())
@@ -1155,7 +1156,6 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"delay.normalize.offset", strconv.FormatInt(item.DelayNormalizeOffset.ValueInt64(), 10))
 			}
 			if len(item.Neighbors) > 0 {
-				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor", []interface{}{})
 				for cindex, citem := range item.Neighbors {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1174,7 +1174,6 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.MessageDigestKeys) > 0 {
-				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key", []interface{}{})
 				for cindex, citem := range item.MessageDigestKeys {
 					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key"+"."+strconv.Itoa(cindex)+"."+"message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))
@@ -1185,7 +1184,6 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.FastReroutePerLinkExcludeInterfaces) > 0 {
-				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.exclude.interfaces.interface", []interface{}{})
 				for cindex, citem := range item.FastReroutePerLinkExcludeInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.exclude.interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -1193,7 +1191,6 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.FastReroutePerLinkLfaCandidateInterfaces) > 0 {
-				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.lfa-candidate.interfaces.interface", []interface{}{})
 				for cindex, citem := range item.FastReroutePerLinkLfaCandidateInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.lfa-candidate.interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -1201,7 +1198,6 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.FastReroutePerPrefixExcludeInterfaces) > 0 {
-				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-prefix.exclude.interfaces.interface", []interface{}{})
 				for cindex, citem := range item.FastReroutePerPrefixExcludeInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-prefix.exclude.interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -1209,7 +1205,6 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.FastReroutePerPrefixLfaCandidateInterfaces) > 0 {
-				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-prefix.lfa-candidate.interfaces.interface", []interface{}{})
 				for cindex, citem := range item.FastReroutePerPrefixLfaCandidateInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-prefix.lfa-candidate.interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -1301,7 +1296,6 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.MessageDigestKeys) > 0 {
-				body, _ = sjson.Set(body, "virtual-links.virtual-link"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key", []interface{}{})
 				for cindex, citem := range item.MessageDigestKeys {
 					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
 						body, _ = sjson.Set(body, "virtual-links.virtual-link"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key"+"."+strconv.Itoa(cindex)+"."+"message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))
@@ -1318,8 +1312,29 @@ func (data RouterOSPFArea) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterOSPFArea) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterOSPFArea) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterOSPFArea) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Ranges {
 		keys := [...]string{"address", "mask"}
@@ -6374,7 +6389,6 @@ func (data *RouterOSPFArea) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterOSPFArea) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.VirtualLinks {

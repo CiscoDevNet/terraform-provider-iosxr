@@ -1,0 +1,52 @@
+---
+name: CEF
+path: Cisco-IOS-XR-um-cef-accounting-cfg:/cef
+doc_category: System
+attributes:
+  - yang_name: adjacency/route/override/rib
+    minimum_test_value: true
+    example: true
+  - yang_name: platform/lsm/frr-holdtime
+    tf_name: platform_lsm_frr_holdtime
+    example: 60
+  - yang_name: retry/service-time
+    tf_name: retry_service_time
+    example: 50
+  - yang_name: retry/timeout
+    tf_name: retry_timeout
+    example: 15
+  - yang_name: retry/syslog-timer
+    tf_name: retry_syslog_timer
+    example: 120
+  - yang_name: encap-sharing/disable
+    tf_name: encap_sharing_disable
+    example: true
+  - yang_name: consistent-hashing/auto-recovery
+    tf_name: consistent_hashing_auto_recovery
+    example: true
+  - yang_name: proactive-arp-nd/enable
+    tf_name: proactive_arp_nd_enable
+    example: true
+  - yang_name: ltrace-multiplier
+    example: 8
+  - yang_name: load-balancing/mode/hierarchical/ecmp/min-paths
+    tf_name: load_balancing_mode_hierarchical_ecmp_min_paths
+    delete_parent: true
+    example: 16
+  - yang_name: load-balancing/mode/hierarchical/ucmp/group-size
+    tf_name: load_balancing_mode_hierarchical_ucmp_group_size
+    delete_parent: true
+    example: 32
+    exclude_test: true
+  - yang_name: load-balancing/recursive/oor/mode/dampening-and-dlb
+    tf_name: load_balancing_recursive_oor_mode_dampening_and_dlb
+    example: true
+  - yang_name: load-balancing/recursive/oor/mode/dampening-and-dlb/dampening/resource-threshold
+    tf_name: load_balancing_recursive_oor_mode_dampening_resource_threshold
+    example: 80
+  - yang_name: load-balancing/recursive/oor/mode/dampening-and-dlb/dlb/resource-threshold
+    tf_name: load_balancing_recursive_oor_mode_dlb_resource_threshold
+    example: 90
+  - yang_name: load-balancing/recursive/oor/mode/dampening-and-dlb/max-duration
+    tf_name: load_balancing_recursive_oor_mode_dampening_and_dlb_max_duration
+    example: 200

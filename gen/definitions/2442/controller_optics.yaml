@@ -1,0 +1,59 @@
+---
+name: Controller Optics
+path: Cisco-IOS-XR-ifmgr-cfg:/interface-configurations/interface-configuration[interface-name=%s%s][active=%s]
+augment_path: Cisco-IOS-XR-ifmgr-cfg:/interface-configurations/interface-configuration[interface-name=Optics%s][active=%s]
+doc_category: Controller
+test_tags: [NCS, C8000]
+attributes:
+  - tf_name: type
+    description: Controller type
+    type: String
+    id: true
+    no_augment_config: true
+    enum_values:
+      - Optics
+    example: Optics
+  - tf_name: name
+    description: Controller name
+    type: String
+    id: true
+    no_augment_config: true
+    string_patterns:
+      - '^[0-9]+(/[0-9]+)*(\.[0-9]+)?$'
+    example: 0/0/0/1
+  - tf_name: active
+    description: Interface active state
+    type: String
+    id: true
+    no_augment_config: true
+    enum_values:
+      - act
+    example: act
+  - yang_name: shutdown
+    minimum_test_value: true
+    example: true
+  - yang_name: link-status
+    exclude_test: true
+    example: true
+  - yang_name: description
+    exclude_test: true
+    example: "Controller description"
+  - yang_name: Cisco-IOS-XR-controller-optics-cfg:optics/optics-performance-monitoring
+    tf_name: performance_monitoring
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-controller-optics-cfg:optics/transceiver/disable
+    tf_name: transceiver_disable
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-optics-speed-cfg:speed
+    tf_name: speed
+    test_tags: [C8000]
+    include_example: true
+    example: 10g
+  - yang_name: Cisco-IOS-XR-optics-driver-cfg:breakout
+    tf_name: breakout
+    test_tags: [C8000]
+    include_example: true
+    requires_replace: true
+    example: 4x25

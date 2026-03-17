@@ -1,0 +1,93 @@
+---
+name: Policy Map PBR
+path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/pbr[policy-map-name=%s]
+no_delete_attributes: true
+doc_category: QoS
+attributes:
+  - yang_name: policy-map-name
+    example: PM-PBR
+  - yang_name: description
+    example: "PBR Policy-map"
+  - yang_name: class
+    tf_name: classes
+    type: List
+    minimum_test_value: '["class-default"]'
+    attributes:
+      - yang_name: name
+        id: true
+        minimum_test_value: '"class-default"'
+        example: class-default
+      - yang_name: type
+        id: true
+        minimum_test_value: '"traffic"'
+        example: traffic
+      - yang_name: police/rate/value
+        tf_name: police_rate_value
+        example: 5
+      - yang_name: police/rate/unit
+        tf_name: police_rate_unit
+        example: gbps
+      - yang_name: drop
+        exclude_test: true
+        example: true
+      - yang_name: redirect-ipv4/default-route
+        exclude_test: true
+      - yang_name: redirect-ipv4/nexthop1/address
+        tf_name: redirect_ipv4_nexthop1_address
+        example: 192.168.253.1
+      - yang_name: redirect-ipv4/nexthop1/vrf
+        tf_name: redirect_ipv4_nexthop1_vrf
+        example: VRF1
+      - yang_name: redirect-ipv4/nexthop2/address
+        tf_name: redirect_ipv4_nexthop2_address
+        example: 192.168.253.3
+      - yang_name: redirect-ipv4/nexthop2/vrf
+        tf_name: redirect_ipv4_nexthop2_vrf
+        example: VRF2
+      - yang_name: redirect-ipv4/nexthop3/address
+        tf_name: redirect_ipv4_nexthop3_address
+        example: 192.168.253.5
+      - yang_name: redirect-ipv4/nexthop3/vrf
+        tf_name: redirect_ipv4_nexthop3_vrf
+        example: VRF3
+      - yang_name: redirect-ipv6/default-route
+        exclude_test: true
+      - yang_name: redirect-ipv6/nexthop1/address
+        tf_name: redirect_ipv6_nexthop1_address
+        example: 2001:db8:1::1
+      - yang_name: redirect-ipv6/nexthop1/vrf
+        tf_name: redirect_ipv6_nexthop1_vrf
+        example: VRF1
+      - yang_name: redirect-ipv6/nexthop2/address
+        tf_name: redirect_ipv6_nexthop2_address
+        example: 2001:db8:2::1
+      - yang_name: redirect-ipv6/nexthop2/vrf
+        tf_name: redirect_ipv6_nexthop2_vrf
+        example: VRF2
+      - yang_name: redirect-ipv6/nexthop3/address
+        tf_name: redirect_ipv6_nexthop3_address
+        example: 2001:db8:3::1
+      - yang_name: redirect-ipv6/nexthop3/vrf
+        tf_name: redirect_ipv6_nexthop3_vrf
+        example: VRF3
+      # IP address configured on device in reverse format, DDTS filed.
+      # - yang_name: redirect-nexthop/route-target/address
+      #   tf_name: redirect_nexthop_route_target_ipv4_address_format
+      #   exclude_test: true
+      #   example: "192.168.1.1"
+      # - yang_name: redirect-nexthop/route-target/index
+      #   tf_name: redirect_nexthop_route_target_ipv4_address_index
+      #   exclude_test: true
+      #   example: 100
+      - yang_name: redirect-nexthop/route-target/as-number
+        tf_name: redirect_nexthop_route_target_as_format
+        example: 65001:100
+      - yang_name: set/dscp
+        minimum_test_value: '"ef"'
+        example: ef
+      - yang_name: set/forward-class
+        example: 1
+      - yang_name: decapsulate/gre
+        test_tags: [XRD, NCS, C8000]
+        include_example: true
+        example: true

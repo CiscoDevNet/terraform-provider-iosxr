@@ -1,0 +1,107 @@
+---
+name: AAA Authentication
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa/authentication
+doc_category: AAA
+test_tags: [AAA]
+attributes:
+  - yang_name: login/authentication-list
+    tf_name: login
+    minimum_test_value: '["AAA-LIST"]'
+    type: List
+    attributes:
+      - yang_name: list-name
+        tf_name: list
+        id: true
+        minimum_test_value: '"AAA-LIST"'
+        example: AAA-LIST
+      - yang_name: local
+        tf_name: a1_local
+        description: "Use local password for authentication"
+        exclude_test: true
+        example: true
+      - yang_name: line
+        tf_name: a1_line
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-1/tacacs
+        tf_name: a1_tacacs
+        minimum_test_value: true
+        example: true
+      - yang_name: groups/group-1/radius
+        tf_name: a1_radius
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-1/server-group-name
+        tf_name: a1_group
+        exclude_test: true
+        example: AAA
+      - yang_name: groups/group-2/local
+        tf_name: a2_local
+        description: "Use local password for authentication"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/line
+        tf_name: a2_line
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/tacacs
+        tf_name: a2_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-2/radius
+        tf_name: a2_radius
+        example: true
+      - yang_name: groups/group-2/server-group-name
+        tf_name: a2_group
+        exclude_test: true
+        example: AAA2
+      - yang_name: groups/group-3/local
+        tf_name: a3_local
+        description: "Use local password for authentication"
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/line
+        tf_name: a3_line
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/tacacs
+        tf_name: a3_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/radius
+        tf_name: a3_radius
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-3/server-group-name
+        tf_name: a3_group
+        example: AAA3
+      - yang_name: groups/group-4/local
+        tf_name: a4_local
+        description: "Use local password for authentication"
+        example: true
+      - yang_name: groups/group-4/line
+        tf_name: a4_line
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/tacacs
+        tf_name: a4_tacacs
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/radius
+        tf_name: a4_radius
+        exclude_test: true
+        example: true
+      - yang_name: groups/group-4/server-group-name
+        tf_name: a4_group
+        exclude_test: true
+        example: AAA4
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA2]
+    attributes:
+      - name: server-group-name
+        value: AAA2
+  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name=AAA3]
+    attributes:
+      - name: server-group-name
+        value: AAA3

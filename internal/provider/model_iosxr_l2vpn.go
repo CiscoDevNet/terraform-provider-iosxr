@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -156,7 +157,7 @@ func (data L2VPNData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data L2VPN) toBody(ctx context.Context) string {
+func (data L2VPN) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
@@ -291,7 +292,6 @@ func (data L2VPN) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "redundancy.iccp.groups.group"+"."+strconv.Itoa(index)+"."+"multi-homing.node-id", strconv.FormatInt(item.MultiHomingNodeId.ValueInt64(), 10))
 			}
 			if len(item.Interfaces) > 0 {
-				body, _ = sjson.Set(body, "redundancy.iccp.groups.group"+"."+strconv.Itoa(index)+"."+"interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "redundancy.iccp.groups.group"+"."+strconv.Itoa(index)+"."+"interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -321,7 +321,6 @@ func (data L2VPN) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"service-name", item.ServiceName.ValueString())
 			}
 			if len(item.Interfaces) > 0 {
-				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"interfaces.interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -329,7 +328,6 @@ func (data L2VPN) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NeighborEvpnEvis) > 0 {
-				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evis.evi", []interface{}{})
 				for cindex, citem := range item.NeighborEvpnEvis {
 					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evis.evi"+"."+strconv.Itoa(cindex)+"."+"vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
@@ -348,7 +346,6 @@ func (data L2VPN) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
 			}
 			if len(item.Interfaces) > 0 {
-				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"interfaces.interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -362,8 +359,29 @@ func (data L2VPN) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data L2VPN) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data L2VPN) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
@@ -1727,7 +1745,6 @@ func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *L2VPN) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.SnmpMibPseudowireStatistics.IsNull() {

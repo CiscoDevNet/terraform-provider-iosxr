@@ -1,0 +1,165 @@
+---
+name: Class Map Traffic
+path: Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/traffic[class-map-name=%s]
+no_delete_attributes: true
+doc_category: QoS
+attributes:
+  - yang_name: class-map-name
+    id: true
+    example: CM-TRAFFIC
+  - yang_name: match-all
+    minimum_test_value: true
+    example: true
+  - yang_name: match-any
+    example: true
+    exclude_test: true
+  - yang_name: description
+    example: "Traffic Class Map"
+  - yang_name: match/access-group/ipv4
+    tf_name: match_access_group_ipv4
+    test_tags: [XRD, C8000]
+    example: ACL1
+  - yang_name: match/access-group/ipv6
+    tf_name: match_access_group_ipv6
+    test_tags: [XRD, C8000]
+    example: ACL2
+  - yang_name: match/cos/value
+    tf_name: match_cos
+    exclude_test: true
+    example: "5"
+  - yang_name: match/cos-inner/value
+    tf_name: match_cos_inner
+    exclude_test: true
+    example: "4"
+  - yang_name: match/destination-address/ipv4/address-prefix
+    tf_name: match_destination_address_ipv4
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.0"
+      - yang_name: netmask
+        id: true
+        example: "255.255.255.0"
+  - yang_name: match/destination-address/ipv6/address-prefix
+    tf_name: match_destination_address_ipv6
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: prefix-length
+        id: true
+        example: 64
+  - yang_name: match/destination-address/mac
+    tf_name: match_destination_mac
+    exclude_test: true
+    example: "0011.2233.4455"
+  - yang_name: match/destination-port/port-number
+    tf_name: match_destination_port
+    example: 80
+  - yang_name: match/dscp/value
+    tf_name: match_dscp
+    minimum_test_value: '["46"]'
+    example: "46"
+  - yang_name: match/dscp-ipv4/value
+    tf_name: match_dscp_ipv4
+    example: "46"
+  - yang_name: match/dscp-ipv6/value
+    tf_name: match_dscp_ipv6
+    example: "46"
+  - yang_name: match/ethertype/value
+    tf_name: match_ethertype
+    test_tags: [XRD, C8000]
+    example: "arp"
+  - yang_name: match/flow-tag/tag-number
+    tf_name: match_flow_tag
+    test_tags: [XRD, C8000]
+    example: "1"
+  - yang_name: match/fragment-type/dont-fragment
+    tf_name: match_fragment_type_dont_fragment
+    example: true
+  - yang_name: match/fragment-type/first-fragment
+    tf_name: match_fragment_type_first_fragment
+    example: true
+  - yang_name: match/fragment-type/is-fragment
+    tf_name: match_fragment_type_is_fragment
+    example: true
+  - yang_name: match/fragment-type/last-fragment
+    tf_name: match_fragment_type_last_fragment
+    example: true
+  - yang_name: match/ipv4/icmp-code/value
+    tf_name: match_ipv4_icmp_code
+    example: "1-5"
+  - yang_name: match/ipv4/icmp-type/value
+    tf_name: match_ipv4_icmp_type
+    example: "1-5"
+  - yang_name: match/ipv6/icmp-code/value
+    tf_name: match_ipv6_icmp_code
+    example: "1-5"
+  - yang_name: match/ipv6/icmp-type/value
+    tf_name: match_ipv6_icmp_type
+    example: "1-5"
+  - yang_name: match/mpls/experimental/topmost/label
+    tf_name: match_mpls_experimental_topmost
+    exclude_test: true
+    example: 5
+  - yang_name: match/packet/length/value
+    tf_name: match_packet_length
+    example: "1000-1200"
+  - yang_name: match/precedence/value
+    tf_name: match_precedence
+    test_tags: [XRV9K, XRD]
+    example: "5"
+  - yang_name: match/precedence-ipv4/value
+    tf_name: match_precedence_ipv4
+    test_tags: [XRV9K, XRD]
+    example: "5"
+  - yang_name: match/precedence-ipv6/value
+    tf_name: match_precedence_ipv6
+    test_tags: [XRV9K, XRD]
+    example: "5"
+  - yang_name: match/protocol/number
+    tf_name: match_protocol
+    example: udp
+  - yang_name: match/source-address/ipv4/address-prefix
+    tf_name: match_source_address_ipv4
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.2.0"
+      - yang_name: netmask
+        id: true
+        example: 255.255.255.0
+  - yang_name: match/source-address/ipv6/address-prefix
+    tf_name: match_source_address_ipv6
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:2::"
+      - yang_name: prefix-length
+        id: true
+        example: 64
+  - yang_name: match/source-address/mac
+    tf_name: match_source_mac
+    example: "0011.2233.4455"
+    exclude_test: true
+  - yang_name: match/source-port/number
+    tf_name: match_source_port
+    example: 80
+  - yang_name: match/tcp-flag/value
+    tf_name: match_tcp_flag
+    example: "5"
+  - yang_name: match/tcp-flag/any
+    tf_name: match_tcp_flag_any
+    example: true
+  - yang_name: match/vlan/vlan-id
+    tf_name: match_vlan
+    example: 10
+    exclude_test: true
+  - yang_name: match/vlan-inner/vlan-id
+    tf_name: match_vlan_inner
+    example: 20
+    exclude_test: true

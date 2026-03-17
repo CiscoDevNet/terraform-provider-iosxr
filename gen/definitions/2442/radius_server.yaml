@@ -1,0 +1,153 @@
+---
+name: Radius Server
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius-server
+doc_category: AAA
+test_tags: [AAA]
+attributes:
+  - yang_name: hosts/host
+    tf_name: hosts
+    type: List
+    attributes:
+      - yang_name: ordering-index
+        tf_name: order
+        id: true
+        exclude_example: true
+        example: 1
+      - yang_name: address
+        id: true
+        example: 10.1.1.1
+      - yang_name: auth-port
+        id: true
+        example: 1812
+      - yang_name: acct-port
+        id: true
+        example: 1813
+      - yang_name: timeout
+        example: 120
+      - yang_name: retransmit
+        example: 5
+      - yang_name: key/seven
+        tf_name: key_type_7
+        sensitive: true
+        write_only: true
+        example: 060506324F41584B
+      - yang_name: key/six
+        tf_name: key_type_6
+        sensitive: true
+        write_only: true
+        exclude_test: true
+        example: 00071A150754
+      - yang_name: test/username
+        tf_name: test_username
+        example: cisco
+      - yang_name: idle-time
+        example: 30
+      - yang_name: ignore-auth-port
+        example: true
+      - yang_name: ignore-acct-port
+        example: true
+      - yang_name: dtls-server/trustpoint
+        tf_name: dtls_server_trustpoint
+        exclude_test: true
+        example: DTLS-TRUST
+      - yang_name: radsec-server/trustpoint
+        tf_name: radsec_server_trustpoint
+        exclude_test: true
+        example: RADSEC-TRUST
+  - yang_name: key/seven
+    tf_name: key_type_7
+    sensitive: true
+    write_only: true
+    example: 060506324F41584B
+  - yang_name: key/six
+    tf_name: key_type_6
+    sensitive: true
+    write_only: true
+    exclude_test: true
+    example: 00071A150754
+  - yang_name: timeout
+    tf_name: timeout
+    minimum_test_value: 120
+    example: 120
+  - yang_name: retransmit/retries
+    tf_name: retransmit_retries
+    delete_parent: true
+    example: 5
+  - yang_name: retransmit/disable
+    tf_name: retransmit_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: load-balance/method/least-outstanding/batch-size
+    tf_name: load_balance_method_least_outstanding_batch_size
+    example: 25
+  - yang_name: load-balance/method/least-outstanding/ignore-preferred-server
+    tf_name: load_balance_method_least_outstanding_ignore_preferred_server
+    example: true
+  - yang_name: throttle/access
+    tf_name: throttle_access
+    example: 100
+  - yang_name: throttle/access-timeout
+    tf_name: throttle_access_timeout
+    example: 5
+  - yang_name: throttle/accounting
+    tf_name: throttle_accounting
+    example: 50
+  - yang_name: deadtime
+    tf_name: deadtime
+    example: 10
+  - yang_name: dead-criteria/time
+    tf_name: dead_criteria_time
+    example: 10
+  - yang_name: dead-criteria/tries
+    tf_name: dead_criteria_tries
+    example: 5
+  - yang_name: source-port/extended
+    tf_name: source_port_extended
+    example: true
+  - yang_name: ipv4/dscp
+    tf_name: ipv4_dscp
+    example: cs6
+  - yang_name: ipv6/dscp
+    tf_name: ipv6_dscp
+    example: cs6
+  - yang_name: vsa/attribute/ignore/unknown
+    tf_name: vsa_attribute_ignore_unknown
+    example: true
+  - yang_name: disallow/null-username
+    tf_name: disallow_null_username
+    example: true
+  - yang_name: attribute/list
+    tf_name: attribute_lists
+    type: List
+    attributes:
+      - yang_name: list-name
+        tf_name: name
+        id: true
+        example: ATTR-LIST-1
+      - yang_name: attribute/radius-attributes
+        tf_name: radius_attributes
+        example: "1,2,3,4,5"
+      - yang_name: attribute/vendor-ids/vendor-id
+        tf_name: attribute_vendor_ids
+        type: List
+        attributes:
+          - yang_name: id
+            id: true
+            example: 9
+          - yang_name: vendor-types/vendor-type
+            tf_name: vendor_types
+            type: List
+            attributes:
+              - yang_name: vendor-type-id
+                id: true
+                example: 1
+  - yang_name: attribute/acct-session-id/prepend-nas-port-id
+    tf_name: attribute_acct_session_id_prepend_nas_port_id
+    example: true
+  - yang_name: attribute/acct-multi-session-id/include-parent-session-id
+    tf_name: attribute_acct_multi_session_id_include_parent_session_id
+    example: true
+  - yang_name: attribute/filter-id-11/default/direction
+    tf_name: attribute_filter_id_11_default_direction
+    example: inbound

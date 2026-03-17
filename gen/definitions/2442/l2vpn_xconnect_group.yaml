@@ -1,0 +1,388 @@
+---
+name: L2VPN Xconnect Group
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]
+doc_category: L2VPN
+attributes:
+  - yang_name: group-name
+    example: P2P
+  - yang_name: p2ps/p2p
+    tf_name: p2ps
+    type: List
+    attributes:
+      - yang_name: p2p-xconnect-name
+        id: true
+        example: XC
+      - yang_name: description
+        example: My P2P Description
+      - yang_name: interfaces/interface
+        tf_name: interfaces
+        type: List
+        attributes:
+          - yang_name: interface-name
+            id: true
+            example: Bundle-Ether11
+      - yang_name: interworking/ipv4
+        test_tags: [XRD, NCS]
+        exclude_test: true
+        example: true
+      - yang_name: interworking/ethernet
+        test_tags: [XRD, NCS]
+        exclude_test: true
+        example: true
+      - yang_name: backup/interface
+        tf_name: backup_interfaces
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: interface-name
+            id: true
+            example: GigabitEthernet0/0/0/2
+      - yang_name: neighbor/ipv4s/ipv4
+        tf_name: ipv4_neighbors
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: address
+            id: true
+            example: 1.1.1.1
+          - yang_name: pw-id
+            id: true
+            example: 1
+          - yang_name: pw-class
+            example: PW_CLASS_1
+          - yang_name: bandwidth
+            example: 1000000000
+          - yang_name: backup/neighbors/neighbor
+            tf_name: backup_neighbors
+            type: List
+            exclude_test: true
+            attributes:
+              - yang_name: address
+                tf_name: address
+                id: true
+                example: 1.1.1.2
+              - yang_name: pw-id
+                tf_name: pw_id
+                id: true
+                example: 2
+              - yang_name: pw-class
+                tf_name: pw_class
+                example: PW_CLASS_1
+              - yang_name: mpls/static/label/local
+                tf_name: mpls_static_label_local
+                example: 1000
+              - yang_name: mpls/static/label/remote
+                tf_name: mpls_static_label_remote
+                example: 1001
+          - yang_name: mpls/static/label/local
+            example: 1002
+          - yang_name: mpls/static/label/remote
+            example: 1003
+          - yang_name: tag-impose/vlan
+            exclude_test: true
+            example: 100
+      - yang_name: neighbor/ipv6s/ipv6
+        tf_name: ipv6_neighbors
+        test_tags: [XRD]
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: address
+            id: true
+            example: 2001:db8:1::1
+          - yang_name: pw-id
+            id: true
+            example: 3
+          - yang_name: pw-class
+            example: PW_CLASS_2
+          - yang_name: backup/neighbors/neighbor
+            tf_name: backup_neighbors
+            type: List
+            exclude_test: true
+            attributes:
+              - yang_name: address
+                tf_name: address
+                id: true
+                example: 1.2.3.6
+              - yang_name: pw-id
+                tf_name: pw_id
+                id: true
+                example: 4
+              - yang_name: pw-class
+                tf_name: pw_class
+                example: PW_CLASS_2
+              - yang_name: mpls/static/label/local
+                tf_name: mpls_static_label_local
+                example: 2000
+              - yang_name: mpls/static/label/remote
+                tf_name: mpls_static_label_remote
+                example: 2001
+          - yang_name: mpls/static/label/local
+            example: 2002
+          - yang_name: mpls/static/label/remote
+            example: 2003
+          - yang_name: tag-impose/vlan
+            exclude_test: true
+            example: 200
+          - yang_name: source/ipv6-address
+            example: 2001:db8:1::3
+      - yang_name: neighbor/evpn/evi/targets/target
+        tf_name: evpn_target_neighbors
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: vpn-id
+            id: true
+            example: 3000
+          - yang_name: remote-ac-id
+            id: true
+            example: 4000
+          - yang_name: source
+            id: true
+            example: 3001
+          - yang_name: pw-class
+            example: PW_CLASS_3
+      - yang_name: neighbor/evpn/evi/services/service
+        tf_name: evpn_service_neighbors
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: vpn-id
+            id: true
+            example: 5000
+          - yang_name: service-id
+            id: true
+            example: 6000
+          - yang_name: pw-class
+            example: PW_CLASS_4
+      - yang_name: neighbor/evpn/evi/segment-routing-targets/target
+        tf_name: evpn_target_neighbors_segment_routing
+        type: List
+        attributes:
+          - yang_name: vpn-id
+            id: true
+            example: 7000
+          - yang_name: remote-ac-id
+            id: true
+            example: 8000
+          - yang_name: source
+            id: true
+            example: 7001
+          - yang_name: segment-routing/srv6/locator
+            example: LOC12
+      - yang_name: neighbor/evpn/evi/segment-routing-services/service
+        tf_name: evpn_service_neighbors_segment_routing
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: vpn-id
+            id: true
+            example: 9000
+          - yang_name: service-id
+            id: true
+            example: 10000
+          - yang_name: segment-routing/srv6/locator
+            example: LOC13
+  - yang_name: mp2mps/mp2mp
+    tf_name: mp2mps
+    type: List
+    attributes:
+      - yang_name: instance-name
+        id: true
+        example: MP2MP1
+      - yang_name: vpn-id
+        example: 100
+      - yang_name: mtu
+        example: 1500
+      - yang_name: shutdown
+        example: false
+      - yang_name: l2-encapsulation
+        example: ethernet
+      - yang_name: interworking
+        exclude_test: true
+        example: ethernet
+      - yang_name: control-word/disable
+        example: true
+      - yang_name: autodiscovery/bgp
+        example: true
+      - yang_name: autodiscovery/bgp/rd/auto
+        exclude_test: true
+        example: true
+      - yang_name: autodiscovery/bgp/rd/two-byte-as-number
+        tf_name: autodiscovery_bgp_rd_two_byte_as_number
+        example: 65001
+        exclude_test: true
+      - yang_name: autodiscovery/bgp/rd/two-byte-as-assigned-number
+        tf_name: autodiscovery_bgp_rd_two_byte_as_index
+        example: 100
+        exclude_test: true
+      - yang_name: autodiscovery/bgp/rd/four-byte-as-number
+        tf_name: autodiscovery_bgp_rd_four_byte_as_number
+        example: 65536
+      - yang_name: autodiscovery/bgp/rd/four-byte-as-assigned-number
+        tf_name: autodiscovery_bgp_rd_four_byte_as_index
+        example: 100
+      - yang_name: autodiscovery/bgp/rd/ipv4-address
+        tf_name: autodiscovery_bgp_rd_ipv4_address
+        example: 10.0.0.1
+        exclude_test: true
+      - yang_name: autodiscovery/bgp/rd/ipv4-address-assigned-number
+        tf_name: autodiscovery_bgp_rd_ipv4_address_index
+        example: 100
+        exclude_test: true
+      - yang_name: autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt
+        tf_name: autodiscovery_bgp_route_target_import_two_byte_as_format
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: two-byte-as-number
+            id: true
+            example: 65001
+          - yang_name: assigned-number
+            id: true
+            example: 100
+      - yang_name: autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt
+        tf_name: autodiscovery_bgp_route_target_import_four_byte_as_format
+        type: List
+        attributes:
+          - yang_name: four-byte-as-number
+            id: true
+            example: 65536
+          - yang_name: assigned-number
+            id: true
+            example: 100
+      - yang_name: autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt
+        tf_name: autodiscovery_bgp_route_target_import_ipv4_address_format
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: ipv4-address
+            id: true
+            example: 10.0.0.1
+          - yang_name: assigned-number
+            id: true
+            example: 100
+      - yang_name: autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt
+        tf_name: autodiscovery_bgp_route_target_export_two_byte_as_format
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: two-byte-as-number
+            id: true
+            example: 65001
+          - yang_name: assigned-number
+            id: true
+            example: 200
+      - yang_name: autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt
+        tf_name: autodiscovery_bgp_route_target_export_four_byte_as_format
+        type: List
+        attributes:
+          - yang_name: four-byte-as-number
+            id: true
+            example: 65536
+          - yang_name: assigned-number
+            id: true
+            example: 200
+      - yang_name: autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt
+        tf_name: autodiscovery_bgp_route_target_export_ipv4_address_format
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: ipv4-address
+            id: true
+            example: 10.0.0.1
+          - yang_name: assigned-number
+            id: true
+            example: 200
+      - yang_name: autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt
+        tf_name: autodiscovery_bgp_route_target_two_byte_as_format
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: two-byte-as-number
+            id: true
+            example: 100
+          - yang_name: assigned-number
+            id: true
+            example: 300
+      - yang_name: autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt
+        tf_name: autodiscovery_bgp_route_target_four_byte_as_format
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: four-byte-as-number
+            id: true
+            example: 65536
+          - yang_name: assigned-number
+            id: true
+            example: 300
+      - yang_name: autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt
+        tf_name: autodiscovery_bgp_route_target_ipv4_address_format
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: ipv4-address
+            id: true
+            example: 10.0.0.3
+          - yang_name: assigned-number
+            id: true
+            example: 300
+      - yang_name: autodiscovery/bgp/signaling-protocol/bgp/ce-id
+        tf_name: autodiscovery_bgp_signaling_protocol_bgp_ce_ids
+        type: List
+        attributes:
+          - yang_name: local-ce-id-value
+            id: true
+            example: 10
+          - yang_name: interface
+            tf_name: interfaces
+            type: List
+            attributes:
+              - yang_name: interface-name
+                tf_name: interface_name
+                id: true
+                example: GigabitEthernet0/0/0/1
+              - yang_name: remote-ce-id
+                tf_name: remote_ce_ids
+                type: List
+                description: Remote Customer Edge Identifier
+                no_augment_config: true
+                attributes:
+                  - yang_name: remote-ce-id-value
+                    tf_name: remote_ce_id_value
+                    type: Int64
+                    description: Remote Customer Edge Identifier
+                    id: true
+                    example: 20
+          - yang_name: vpws-seamless-integration
+            tf_name: vpws_seamless_integration
+            test_tags: [NCS, C8000]
+            include_example: true
+            example: true
+      - yang_name: autodiscovery/bgp/signaling-protocol/bgp/ce-range
+        tf_name: autodiscovery_bgp_signaling_protocol_bgp_ce_range
+        example: 11
+      - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit
+        exclude_test: true
+        example: true
+      - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive
+        exclude_test: true
+        example: true
+      - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both
+        example: true
+      - yang_name: autodiscovery/bgp/route-policy/export
+        example: EXPORT_POLICY
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies
+    lists:
+      - name: route-policy
+        key: route-policy-name
+        items:
+          - attributes:
+              - name: route-policy-name
+                value: EXPORT_POLICY
+              - name: rpl-route-policy
+                value: "route-policy EXPORT_POLICY\\n  pass\\nend-policy\\n"
+    dependencies: [0]

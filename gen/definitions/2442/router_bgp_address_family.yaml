@@ -1,0 +1,1083 @@
+---
+name: Router BGP Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: as-number
+    example: 65001
+  - yang_name: af-name
+    example: ipv4-unicast
+  - yang_name: vrf/all/segment-routing/srv6/locator
+    exclude_test: true
+    example: locator99
+  - yang_name: vrf/all/segment-routing/srv6/usid/allocation/wide-local-id-block
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/segment-routing/srv6/alloc/mode/MODE/PER-CE/per-ce
+    xpath: vrf/all/segment-routing/srv6/alloc/mode/per-ce
+    tf_name: vrf_all_segment_routing_srv6_alloc_mode_per_ce
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/segment-routing/srv6/alloc/mode/MODE/PER-VRF/per-vrf
+    xpath: vrf/all/segment-routing/srv6/alloc/mode/per-vrf
+    tf_name: vrf_all_segment_routing_srv6_alloc_mode_per_vrf
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/segment-routing/srv6/alloc/mode/MODE/PER-VRF-46/per-vrf-46
+    xpath: vrf/all/segment-routing/srv6/alloc/mode/per-vrf-46
+    tf_name: vrf_all_segment_routing_srv6_alloc_mode_per_vrf_46
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/source/rt/import-policy
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/label/mode/MODE/PER-CE/per-ce
+    xpath: vrf/all/label/mode/per-ce
+    tf_name: vrf_all_label_mode_per_ce
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/label/mode/MODE/PER-VRF/per-vrf
+    xpath: vrf/all/label/mode/per-vrf
+    tf_name: vrf_all_label_mode_per_vrf
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/label/mode/MODE/PER-VRF-46/per-vrf-46
+    xpath: vrf/all/label/mode/per-vrf-46
+    tf_name: vrf_all_label_mode_per_vrf_46
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/label/mode/MODE/ROUTE-POLICY/route-policy/route-policy-name
+    xpath: vrf/all/label/mode/route-policy/route-policy-name
+    tf_name: vrf_all_label_mode_route_policy
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/rnh/install/extcomm
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/rnh/install/extcomm/only
+    exclude_test: true
+    example: true
+  - yang_name: vrf/all/table-policy
+    exclude_test: true
+    example: ROUTE_POLICY_1
+  - yang_name: domain-distinguisher/domain-distinguisher-number
+    tf_name: domain_distinguisher_as
+    exclude_test: true
+    example: 65001
+  - yang_name: domain-distinguisher/octet-routerid
+    tf_name: domain_distinguisher_router_id
+    exclude_test: true
+    example: 192.168.1.1
+  - yang_name: distance/bgp/external-route-distance
+    tf_name: distance_bgp_external_route
+    example: 200
+  - yang_name: distance/bgp/internal-route-distance
+    tf_name: distance_bgp_internal_route
+    example: 195
+  - yang_name: distance/bgp/local-route-distance
+    tf_name: distance_bgp_local_route
+    example: 190
+  - yang_name: maximum-paths/ebgp/ebgp-number
+    tf_name: maximum_paths_ebgp_multipath
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: maximum-paths/ebgp/selective
+    example: true
+    delete_parent: true
+  - yang_name: maximum-paths/ebgp/route-policy
+    delete_parent: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: maximum-paths/ibgp/ibgp-number
+    tf_name: maximum_paths_ibgp_multipath
+    optional: true
+    delete_parent: true
+    example: 10
+  - yang_name: maximum-paths/ibgp/unequal-cost
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: maximum-paths/ibgp/unequal-cost/deterministic
+    delete_grandparent: true
+    example: true
+  - yang_name: maximum-paths/ibgp/selective
+    delete_parent: true
+    example: true
+  - yang_name: maximum-paths/ibgp/route-policy
+    delete_parent: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: maximum-paths/eibgp/eibgp-number
+    tf_name: maximum_paths_eibgp_multipath
+    delete_parent: true
+    optional: true
+    example: 10
+    exclude_test: true
+  - yang_name: maximum-paths/eibgp/equal-cost
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: maximum-paths/eibgp/selective
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: maximum-paths/eibgp/route-policy
+    delete_parent: true
+    example: "ROUTE_POLICY_1"
+    exclude_test: true
+  - yang_name: maximum-paths/unique-nexthop-check-disable
+    example: true
+  - yang_name: import/from/bridge-domain
+    example: true
+  - yang_name: additional-paths/send
+    example: true
+  - yang_name: additional-paths/receive
+    example: true
+  - yang_name: additional-paths/advertise-limit/ADVERTISE-LIMIT/ADVERTISE-PATH-LIMIT/advertise-path-limit
+    xpath: additional-paths/advertise-limit/advertise-path-limit
+    tf_name: additional_paths_advertise_limit
+    delete_parent: true
+    example: 40
+  - yang_name: additional-paths/selection/SELECTION/ROUTE-POLICY/route-policy
+    xpath: additional-paths/selection/route-policy
+    tf_name: additional_paths_selection_route_policy
+    example: "ROUTE_POLICY_1"
+    delete_parent: true
+  - yang_name: additional-paths/selection/SELECTION/DISABLE/disable
+    xpath: additional-paths/selection/disable
+    tf_name: additional_paths_selection_disable
+    exclude_test: true
+    example: true
+    delete_parent: true
+  - yang_name: permanent-network/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: advertise/best-external
+    exclude_test: true
+    example: true
+  - yang_name: advertise/best-external/labeled-unicast
+    delete_parent: true
+    example: true
+  - yang_name: advertise/best-external/disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: advertise/local-labeled-route/safi-unicast
+    example: disable
+  - yang_name: advertise/epe-bgp/labeled-unicast
+    example: true
+  - yang_name: networks/network
+    tf_name: networks
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.1.0.0
+      - yang_name: address-prefix
+        tf_name: prefix
+        id: true
+        example: 16
+      - yang_name: NETWORK/ROUTE-POLICY/route-policy
+        xpath: route-policy
+        tf_name: route_policy
+        delete_parent: true
+        example: ROUTE_POLICY_1
+      - yang_name: NETWORK/BACKDOOR/backdoor
+        xpath: backdoor
+        tf_name: backdoor
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: NETWORK/MULTIPATH/multipath
+        xpath: multipath
+        tf_name: multipath
+        delete_parent: true
+        exclude_test: true
+        example: true
+  - yang_name: aggregate-addresses/aggregate-address
+    tf_name: aggregate_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.0.0.0
+      - yang_name: address-prefix
+        tf_name: prefix
+        id: true
+        example: 8
+      - yang_name: as-set
+        example: false
+      - yang_name: as-confed-set
+        example: false
+      - yang_name: summary-only
+        example: true
+      - yang_name: route-policy
+        example: ROUTE_POLICY_1
+      - yang_name: description
+        example: "Aggregate route description"
+      - yang_name: set-tag
+        example: 100
+  - yang_name: redistribute/ospfs/ospf
+    tf_name: redistribute_ospf
+    description: "Redistribute OSPF routes"
+    type: List
+    attributes:
+      - yang_name: ospf-router-tag
+        tf_name: router_tag
+        id: true
+        example: "OSPF1"
+        description: "OSPF router tag"
+      - yang_name: match/MATCH/INTERNAL/internal
+        xpath: match/internal
+        tf_name: match_internal
+        description: "Redistribute OSPF internal routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external
+        xpath: match/external
+        tf_name: match_external
+        description: "Redistribute OSPF external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/NSSA-EXTERNAL/nssa-external
+        xpath: match/nssa-external
+        tf_name: match_nssa_external
+        description: "Redistribute OSPF NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external
+        xpath: match/internal/external
+        tf_name: match_internal_external
+        description: "Redistribute OSPF internal and external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one
+        xpath: match/internal/external/one
+        tf_name: match_internal_external_1
+        description: "Redistribute OSPF internal and external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external
+        xpath: match/internal/external/one/nssa-external
+        tf_name: match_internal_external_1_nssa_external
+        description: "Redistribute OSPF internal, external type 1 and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/internal/external/one/nssa-external/one
+        tf_name: match_internal_external_1_nssa_external_1
+        description: "Redistribute OSPF internal, external type 1 and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/internal/external/one/nssa-external/two
+        tf_name: match_internal_external_1_nssa_external_2
+        description: "Redistribute OSPF internal, external type 1 and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two
+        xpath: match/internal/external/two
+        tf_name: match_internal_external_2
+        description: "Redistribute OSPF internal and external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external
+        xpath: match/internal/external/two/nssa-external
+        tf_name: match_internal_external_2_nssa_external
+        description: "Redistribute OSPF internal, external type 2 and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/internal/external/two/nssa-external/one
+        tf_name: match_internal_external_2_nssa_external_1
+        description: "Redistribute OSPF internal, external type 2 and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/internal/external/two/nssa-external/two
+        tf_name: match_internal_external_2_nssa_external_2
+        description: "Redistribute OSPF internal, external type 2 and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external
+        xpath: match/internal/external/nssa-external
+        tf_name: match_internal_external_nssa_external
+        description: "Redistribute OSPF internal, external and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/internal/external/nssa-external/one
+        tf_name: match_internal_external_nssa_external_1
+        description: "Redistribute OSPF internal, external and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/internal/external/nssa-external/two
+        tf_name: match_internal_external_nssa_external_2
+        description: "Redistribute OSPF internal, external and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external
+        xpath: match/internal/nssa-external
+        tf_name: match_internal_nssa_external
+        description: "Redistribute OSPF internal and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/internal/nssa-external/one
+        tf_name: match_internal_nssa_external_1
+        description: "Redistribute OSPF internal and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/internal/nssa-external/two
+        tf_name: match_internal_nssa_external_2
+        description: "Redistribute OSPF internal and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one
+        xpath: match/external/one
+        tf_name: match_external_1
+        description: "Redistribute OSPF external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external
+        xpath: match/external/one/nssa-external
+        tf_name: match_external_1_nssa_external
+        description: "Redistribute OSPF external type 1 and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/external/one/nssa-external/one
+        tf_name: match_external_1_nssa_external_1
+        description: "Redistribute OSPF external type 1 and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/external/one/nssa-external/two
+        tf_name: match_external_1_nssa_external_2
+        description: "Redistribute OSPF external type 1 and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two
+        xpath: match/external/two
+        tf_name: match_external_2
+        description: "Redistribute OSPF external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external
+        xpath: match/external/two/nssa-external
+        tf_name: match_external_2_nssa_external
+        description: "Redistribute OSPF external type 2 and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/one
+        xpath: match/external/two/nssa-external/one
+        tf_name: match_external_2_nssa_external_1
+        description: "Redistribute OSPF external type 2 and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/two
+        xpath: match/external/two/nssa-external/two
+        tf_name: match_external_2_nssa_external_2
+        description: "Redistribute OSPF external type 2 and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external
+        xpath: match/external/nssa-external
+        tf_name: match_external_nssa_external
+        description: "Redistribute OSPF external and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/external/nssa-external/one
+        tf_name: match_external_nssa_external_1
+        description: "Redistribute OSPF external and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/external/nssa-external/two
+        tf_name: match_external_nssa_external_2
+        description: "Redistribute OSPF external and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/nssa-external/one
+        tf_name: match_nssa_external_1
+        description: "Redistribute OSPF NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/nssa-external/two
+        tf_name: match_nssa_external_2
+        description: "Redistribute OSPF NSSA external type 2 routes"
+        exclude_test: true
+        example: true
+      - yang_name: metric
+        example: 100
+      - yang_name: multipath
+        example: true
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/ospfv3s/ospfv3
+    tf_name: redistribute_ospfv3
+    description: "Redistribute OSPFv3 routes"
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: ospfv3-router-tag
+        tf_name: router_tag
+        id: true
+        example: "OSPFV3"
+        description: "OSPFv3 router tag"
+      - yang_name: match/MATCH/INTERNAL/internal
+        xpath: match/internal
+        tf_name: match_internal
+        description: "Redistribute OSPFv3 internal routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external
+        xpath: match/external
+        tf_name: match_external
+        description: "Redistribute OSPFv3 external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/NSSA-EXTERNAL/nssa-external
+        xpath: match/nssa-external
+        tf_name: match_nssa_external
+        description: "Redistribute OSPFv3 NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external
+        xpath: match/internal/external
+        tf_name: match_internal_external
+        description: "Redistribute OSPFv3 internal and external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one
+        xpath: match/internal/external/one
+        tf_name: match_internal_external_1
+        description: "Redistribute OSPFv3 internal and external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external
+        xpath: match/internal/external/one/nssa-external
+        tf_name: match_internal_external_1_nssa_external
+        description: "Redistribute OSPFv3 internal, external type 1 and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/internal/external/one/nssa-external/one
+        tf_name: match_internal_external_1_nssa_external_1
+        description: "Redistribute OSPFv3 internal, external type 1 and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/internal/external/one/nssa-external/two
+        tf_name: match_internal_external_1_nssa_external_2
+        description: "Redistribute OSPFv3 internal, external type 1 and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two
+        xpath: match/internal/external/two
+        tf_name: match_internal_external_2
+        description: "Redistribute OSPFv3 internal and external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external
+        xpath: match/internal/external/two/nssa-external
+        tf_name: match_internal_external_2_nssa_external
+        description: "Redistribute OSPFv3 internal, external type 2 and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/internal/external/two/nssa-external/one
+        tf_name: match_internal_external_2_nssa_external_1
+        description: "Redistribute OSPFv3 internal, external type 2 and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/internal/external/two/nssa-external/two
+        tf_name: match_internal_external_2_nssa_external_2
+        description: "Redistribute OSPFv3 internal, external type 2 and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external
+        xpath: match/internal/external/nssa-external
+        tf_name: match_internal_external_nssa_external
+        description: "Redistribute OSPFv3 internal, external and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/internal/external/nssa-external/one
+        tf_name: match_internal_external_nssa_external_1
+        description: "Redistribute OSPFv3 internal, external and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/internal/external/nssa-external/two
+        tf_name: match_internal_external_nssa_external_2
+        description: "Redistribute OSPFv3 internal, external and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external
+        xpath: match/internal/nssa-external
+        tf_name: match_internal_nssa_external
+        description: "Redistribute OSPFv3 internal and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/internal/nssa-external/one
+        tf_name: match_internal_nssa_external_1
+        description: "Redistribute OSPFv3 internal and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/internal/nssa-external/two
+        tf_name: match_internal_nssa_external_2
+        description: "Redistribute OSPFv3 internal and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one
+        xpath: match/external/one
+        tf_name: match_external_1
+        description: "Redistribute OSPFv3 external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external
+        xpath: match/external/one/nssa-external
+        tf_name: match_external_1_nssa_external
+        description: "Redistribute OSPFv3 external type 1 and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/external/one/nssa-external/one
+        tf_name: match_external_1_nssa_external_1
+        description: "Redistribute OSPFv3 external type 1 and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/external/one/nssa-external/two
+        tf_name: match_external_1_nssa_external_2
+        description: "Redistribute OSPFv3 external type 1 and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two
+        xpath: match/external/two
+        tf_name: match_external_2
+        description: "Redistribute OSPFv3 external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external
+        xpath: match/external/two/nssa-external
+        tf_name: match_external_2_nssa_external
+        description: "Redistribute OSPFv3 external type 2 and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/one
+        xpath: match/external/two/nssa-external/one
+        tf_name: match_external_2_nssa_external_1
+        description: "Redistribute OSPFv3 external type 2 and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/two
+        xpath: match/external/two/nssa-external/two
+        tf_name: match_external_2_nssa_external_2
+        description: "Redistribute OSPFv3 external type 2 and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external
+        xpath: match/external/nssa-external
+        tf_name: match_external_nssa_external
+        description: "Redistribute OSPFv3 external and NSSA external routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/external/nssa-external/one
+        tf_name: match_external_nssa_external_1
+        description: "Redistribute OSPFv3 external and NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/external/nssa-external/two
+        tf_name: match_external_nssa_external_2
+        description: "Redistribute OSPFv3 external and NSSA external type 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one
+        xpath: match/nssa-external/one
+        tf_name: match_nssa_external_1
+        description: "Redistribute OSPFv3 NSSA external type 1 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two
+        xpath: match/nssa-external/two
+        tf_name: match_nssa_external_2
+        description: "Redistribute OSPFv3 NSSA external type 2 routes"
+        exclude_test: true
+        example: true
+      - yang_name: metric
+        example: 100
+      - yang_name: multipath
+        example: true
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/eigrps/eigrp
+    tf_name: redistribute_eigrp
+    description: "Redistribute EIGRP routes"
+    type: List
+    attributes:
+      - yang_name: eigrp-name
+        tf_name: instance_name
+        id: true
+        example: "EIGRP1"
+        description: "EIGRP instance name"
+      - yang_name: match/MATCH/INTERNAL/internal
+        xpath: match/internal
+        tf_name: match_internal
+        description: "Redistribute EIGRP internal routes"
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/INTERNAL/internal/external
+        xpath: match/internal/external
+        tf_name: match_internal_external
+        description: "Redistribute EIGRP internal and external routes"
+        delete_parent: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external
+        xpath: match/external
+        tf_name: match_external
+        description: "Redistribute EIGRP external routes"
+        exclude_test: true
+        example: true
+      - yang_name: metric
+        example: 100
+      - yang_name: multipath
+        example: true
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/isis-processes/isis-process
+    tf_name: redistribute_isis
+    description: "Redistribute ISIS routes"
+    type: List
+    attributes:
+      - yang_name: isis-name
+        tf_name: instance_name
+        id: true
+        example: "ISIS1"
+        description: "ISIS instance name"
+      - yang_name: level/LEVEL/ONE/one
+        xpath: level/one
+        tf_name: level_1
+        description: "Redistribute ISIS level 1 routes"
+        exclude_test: true
+        example: true
+      - yang_name: level/LEVEL/ONE/one/level/LEVEL/TWO/two
+        xpath: level/one/level/two
+        tf_name: level_1_level_2
+        description: "Redistribute ISIS level 1 and level 2 routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: level/LEVEL/ONE/one/level/LEVEL/TWO/two/level/one-inter-area
+        xpath: level/one/level/two/level/one-inter-area
+        tf_name: level_1_level_2_level_1_inter_area
+        description: "Redistribute ISIS level 1, level 2 and level 1 inter-area routes"
+        delete_parent: true
+        example: true
+      - yang_name: level/LEVEL/ONE/one/level/LEVEL/ONE-INTER-AREA/one-inter-area
+        xpath: level/one/level/one-inter-area
+        tf_name: level_1_level_1_inter_area
+        description: "Redistribute ISIS level 1 and level 1 inter-area routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: level/LEVEL/TWO/two
+        xpath: level/two
+        tf_name: level_2
+        description: "Redistribute ISIS level 2 routes"
+        exclude_test: true
+        example: true
+      - yang_name: level/LEVEL/TWO/two/level/one-inter-area
+        xpath: level/two/level/one-inter-area
+        tf_name: level_2_level_1_inter_area
+        description: "Redistribute ISIS level 2 and level 1 inter-area routes"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: level/LEVEL/ONE-INTER-AREA/one-inter-area
+        xpath: level/one-inter-area
+        tf_name: level_1_inter_area
+        description: "Redistribute ISIS level 1 inter-area routes"
+        exclude_test: true
+        example: true
+      - yang_name: metric
+        example: 100
+      - yang_name: multipath
+        example: true
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/connected
+    description: "Redistribute connected routes"
+    example: true
+  - yang_name: redistribute/connected/metric
+    example: 100
+  - yang_name: redistribute/connected/multipath
+    example: true
+  - yang_name: redistribute/connected/route-policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/static
+    description: "Redistribute static routes"
+    example: true
+  - yang_name: redistribute/static/metric
+    example: 100
+  - yang_name: redistribute/static/multipath
+    example: true
+  - yang_name: redistribute/static/route-policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/rip
+    description: "Redistribute RIP routes"
+    example: true
+  - yang_name: redistribute/rip/metric
+    example: 100
+  - yang_name: redistribute/rip/multipath
+    example: true
+  - yang_name: redistribute/rip/route-policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: table-policy
+    example: ROUTE_POLICY_1
+  - yang_name: retain/local-label
+    example: 30
+  - yang_name: retain/route-target/ROUTE-TARGET/ALL/all
+    xpath: retain/route-target/all
+    tf_name: retain_route_target_all
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: retain/route-target/ROUTE-TARGET/ROUTE-POLICY/route-policy
+    xpath: retain/route-target/route-policy
+    tf_name: retain_route_target_route_policy
+    delete_parent: true
+    exclude_test: true
+    example: ROUTE_POLICY_1
+  - yang_name: allocate-label/ALLOCATE-LABEL/ALL/all
+    xpath: allocate-label/all
+    tf_name: allocate_label_all
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: allocate-label/ALLOCATE-LABEL/ALL/all/unlabeled-path
+    xpath: allocate-label/all/unlabeled-path
+    tf_name: allocate_label_all_unlabeled_path
+    delete_parent: true
+    example: true
+  - yang_name: allocate-label/ALLOCATE-LABEL/ROUTE-POLICY/route-policy/route-policy-name
+    xpath: allocate-label/route-policy/route-policy-name
+    tf_name: allocate_label_route_policy
+    optional: true
+    description: "Allocate label route policy"
+    delete_parent: true
+    exclude_test: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: allocate-label/ALLOCATE-LABEL/ROUTE-POLICY/route-policy/unlabeled-path
+    xpath: allocate-label/route-policy/unlabeled-path
+    tf_name: allocate_label_route_policy_unlabeled_path
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-PREFIX/per-prefix
+    xpath: label/mode/per-prefix
+    tf_name: label_mode_per_prefix
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-CE/per-ce
+    xpath: label/mode/per-ce
+    tf_name: label_mode_per_ce
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-VRF/per-vrf
+    xpath: label/mode/per-vrf
+    tf_name: label_mode_per_vrf
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-VRF-46/per-vrf-46
+    xpath: label/mode/per-vrf-46
+    tf_name: label_mode_per_vrf_46
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/ROUTE-POLICY/route-policy
+    xpath: label/mode/route-policy
+    tf_name: label_mode_route_policy
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-NEXTHOP-RECEIVED-LABEL/per-nexthop-received-label
+    xpath: label/mode/per-nexthop-received-label
+    tf_name: label_mode_per_nexthop_received_label
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/MODE/PER-NEXTHOP-RECEIVED-LABEL/per-nexthop-received-label/allocate-secondary-label
+    xpath: label/mode/per-nexthop-received-label/allocate-secondary-label
+    tf_name: label_mode_per_nexthop_received_label_allocate_secondary_label
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: rnh/install/extcomm
+    exclude_test: true
+    example: true
+  - yang_name: rnh/install/extcomm/only
+    example: true
+  - yang_name: prefix-ecmp-delay/prefix-ecmp-delay-number
+    tf_name: prefix_ecmp_delay
+    example: 1000
+  - yang_name: prefix-ecmp-delay/oor-threshold
+    example: 90
+  - yang_name: bgp/origin-as/validation/enable
+    example: true
+  - yang_name: bgp/origin-as/validation/signal/ibgp
+    example: true
+  - yang_name: bgp/bestpath/origin-as/use/validity
+    example: true
+  - yang_name: bgp/bestpath/origin-as/allow/invalid
+    example: true
+  - yang_name: bgp/scan-time
+    example: 60
+  - yang_name: bgp/attribute-download
+    example: true
+  - yang_name: bgp/import-delay/import-delay-seconds
+    tf_name: bgp_import_delay_seconds
+    exclude_test: true
+    example: 5
+  - yang_name: bgp/import-delay/import-delay-milliseconds
+    tf_name: bgp_import_delay_milliseconds
+    exclude_test: true
+    example: 500
+  - yang_name: bgp/label-delay/label-delay-seconds
+    tf_name: bgp_label_delay_seconds
+    example: 5
+  - yang_name: bgp/label-delay/label-delay-milliseconds
+    tf_name: bgp_label_delay_milliseconds
+    example: 500
+  - yang_name: bgp/client-to-client/reflection/disable
+    example: true
+  - yang_name: bgp/client-to-client/reflection/cluster-ids/cluster-id-number
+    tf_name: bgp_client_to_client_reflection_cluster_ids_32bit_format
+    type: List
+    attributes:
+      - yang_name: cluster-number
+        tf_name: cluster_as
+        id: true
+        example: 65001
+      - yang_name: disable
+        mandatory: true
+        example: true
+  - yang_name: bgp/client-to-client/reflection/cluster-ids/cluster-id-ip-address
+    tf_name: bgp_client_to_client_reflection_cluster_ids_ip_format
+    type: List
+    attributes:
+      - yang_name: cluster-ip-address
+        tf_name: cluster_ip
+        id: true
+        example: "192.168.1.1"
+      - yang_name: disable
+        mandatory: true
+        example: true
+  - yang_name: bgp/dampening/DAMPENING/HALFLIFE-TIME/halflife-time/half-life-time-number
+    xpath: bgp/dampening/halflife-time/half-life-time-number
+    tf_name: bgp_dampening_decay_half_life
+    example: 30
+  - yang_name: bgp/dampening/DAMPENING/HALFLIFE-TIME/halflife-time/route-reuse-number
+    xpath: bgp/dampening/halflife-time/route-reuse-number
+    tf_name: bgp_dampening_reuse_threshold
+    example: 40
+  - yang_name: bgp/dampening/DAMPENING/HALFLIFE-TIME/halflife-time/suppress-route-number
+    xpath: bgp/dampening/halflife-time/suppress-route-number
+    tf_name: bgp_dampening_suppress_threshold
+    example: 50
+  - yang_name: bgp/dampening/DAMPENING/HALFLIFE-TIME/halflife-time/stable-route-max-suppress-number
+    xpath: bgp/dampening/halflife-time/stable-route-max-suppress-number
+    tf_name: bgp_dampening_max_suppress_time
+    example: 30
+  - yang_name: bgp/dampening/DAMPENING/ROUTE-POLICY/route-policy
+    xpath: bgp/dampening/route-policy
+    tf_name: bgp_dampening_route_policy
+    delete_parent: true
+    exclude_test: true
+    example: ROUTE_POLICY_1
+  - yang_name: event/prefix/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: dynamic-med/interval
+    example: 5
+  - yang_name: weight/reset-on-import
+    example: true
+  - yang_name: nexthop/trigger-delay/critical
+    example: 1000
+  - yang_name: nexthop/trigger-delay/non-critical
+    example: 2000
+  - yang_name: nexthop/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: nexthop/resolution/prefix-length/minimum/ipv4-minimum
+    tf_name: nexthop_resolution_prefix_length_minimum_ipv4
+    example: 32
+  - yang_name: nexthop/resolution/prefix-length/minimum/ipv6-minimum
+    tf_name: nexthop_resolution_prefix_length_minimum_ipv6
+    example: 128
+  - yang_name: update/limit/sub-group/ebgp
+    example: 10
+  - yang_name: update/limit/sub-group/ibgp
+    example: 10
+  - yang_name: update/limit/address-family
+    example: 10
+  - yang_name: update/wait-install
+    example: true
+  - yang_name: update/wait-install/delay/startup
+    example: 300
+  - yang_name: as-path-loopcheck/out/disable
+    example: true
+  - yang_name: inter-as/install
+    exclude_test: true
+    example: true
+  - yang_name: global-table-multicast
+    exclude_test: true
+    example: true
+  - yang_name: segmented-multicast
+    exclude_test: true
+    example: true
+  - yang_name: label-security/asbr/rpf
+    exclude_test: true
+    example: true
+  - yang_name: epe/backup/enable
+    example: true
+  - yang_name: default-martian-check/disable
+    example: true
+  - yang_name: export/to/vrf/allow/backup
+    example: true
+  - yang_name: export/to/vrf/allow/best-external
+    example: true
+  - yang_name: segment-routing/prefix-sid-map
+    example: true
+  - yang_name: segment-routing/srv6/locator
+    example: locator100
+  - yang_name: segment-routing/srv6/usid/allocation/wide-local-id-block
+    example: true
+  - yang_name: segment-routing/srv6/alloc/mode/MODE/PER-CE/per-ce
+    xpath: segment-routing/srv6/alloc/mode/per-ce
+    tf_name: segment_routing_srv6_alloc_mode_per_ce
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing/srv6/alloc/mode/MODE/PER-VRF/per-vrf
+    xpath: segment-routing/srv6/alloc/mode/per-vrf
+    tf_name: segment_routing_srv6_alloc_mode_per_vrf
+    delete_parent: true
+    example: true
+  - yang_name: segment-routing/srv6/alloc/mode/MODE/PER-VRF-46/per-vrf-46
+    xpath: segment-routing/srv6/alloc/mode/per-vrf-46
+    tf_name: segment_routing_srv6_alloc_mode_per_vrf_46
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing/srv6/alloc/mode/MODE/ROUTE-POLICY/route-policy
+    xpath: segment-routing/srv6/alloc/mode/route-policy
+    tf_name: segment_routing_srv6_alloc_mode_route_policy
+    delete_parent: true
+    exclude_test: true
+    example: ROUTE_POLICY_1
+  - yang_name: peer-set-ids/peer-set-id
+    tf_name: peer_set_ids
+    type: List
+    attributes:
+      - yang_name: peer-set-id-number
+        tf_name: peer_id
+        id: true
+        example: 1
+      - yang_name: peer-set-sid/index
+        tf_name: peer_sid_index
+        example: 101
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies
+    lists:
+      - name: route-policy
+        key: route-policy-name
+        items:
+          - attributes:
+              - name: route-policy-name
+                value: ROUTE_POLICY_1
+              - name: rpl-route-policy
+                value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001

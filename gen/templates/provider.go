@@ -23,12 +23,14 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin provider
 import (
 	"context"
+	"fmt"
 	"os"
 	"slices"
 	"strconv"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -45,7 +47,9 @@ func New() provider.Provider {
 
 // provider satisfies the tfsdk.Provider interface and usually is included
 // with all Resource and DataSource implementations.
-type iosxrProvider struct {}
+type iosxrProvider struct {
+	version string // Stores the iosxr_version after Configure() is called
+}
 
 // providerData can be used to store data from the Terraform configuration.
 type providerData struct {
@@ -58,6 +62,7 @@ type providerData struct {
 	Key               types.String         `tfsdk:"key"`
 	CaCertificate     types.String         `tfsdk:"ca_certificate"`
 	ReuseConnection   types.Bool           `tfsdk:"reuse_connection"`
+	IosxrVersion      types.String         `tfsdk:"iosxr_version"`
 	SelectedDevices   types.List           `tfsdk:"selected_devices"`
 	Devices           []providerDataDevice `tfsdk:"devices"`
 }
@@ -69,13 +74,16 @@ type providerDataDevice struct {
 }
 
 type IosxrProviderData struct {
-	Devices map[string]*IosxrProviderDataDevice
+	Devices         map[string]*IosxrProviderDataDevice
 	ReuseConnection bool
+	Version         string // Default/global version for backward compatibility
 }
 
 type IosxrProviderDataDevice struct {
-	Client *gnmi.Client
-	Managed bool
+	Client          *gnmi.Client
+	Managed         bool
+	Version         string // Per-device IOS-XR version (normalized, e.g., "2442")
+	VersionDetected bool   // True if version was auto-detected
 }
 
 // Metadata returns the provider type name.
@@ -122,6 +130,13 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 			"reuse_connection": schema.BoolAttribute{
 				MarkdownDescription: "Reuse gNMI connection. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
 				Optional:            true,
+			},
+			"iosxr_version": schema.StringAttribute{
+				MarkdownDescription: "IOS-XR version. This determines which resource and data source versions to use. Supported versions: `24.4.2`. If not specified, the provider will attempt to auto-detect the version from each device. This can also be set as the IOSXR_VERSION environment variable.",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("24.4.2"),
+				},
 			},
 			"selected_devices": schema.ListAttribute{
 				MarkdownDescription: "This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.",
@@ -457,6 +472,36 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 	data.ReuseConnection = reuseConnection
 
+	// Handle iosxr_version configuration
+	var iosxrVersion string
+	var autoDetect bool
+
+	if config.IosxrVersion.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as iosxr_version",
+		)
+		return
+	}
+
+	if config.IosxrVersion.IsNull() {
+		iosxrVersion = os.Getenv("IOSXR_VERSION")
+	} else {
+		iosxrVersion = config.IosxrVersion.ValueString()
+	}
+
+	// If no version specified, we'll auto-detect per device
+	if iosxrVersion == "" {
+		autoDetect = true
+		tflog.Info(ctx, "iosxr_version not specified - will auto-detect version from each device")
+	} else {
+		// Convert version to internal format (e.g., "25.2.2" -> "2522", "24.4.2" -> "2442")
+		versionInternal := strings.ReplaceAll(iosxrVersion, ".", "")
+		data.Version = versionInternal
+		p.version = versionInternal
+		tflog.Info(ctx, fmt.Sprintf("Using explicitly configured IOS-XR version: %s (internal: %s)", iosxrVersion, versionInternal))
+	}
+
 	// Create default client
 	var defaultClient *gnmi.Client
 	var err error
@@ -469,12 +514,45 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			)
 			return
 		}
-	}
-	data.Devices[""] = &IosxrProviderDataDevice{Client: defaultClient, Managed: true}
 
-	// Add all devices with their managed status
+		// Auto-detect version for default device if needed
+		if autoDetect && defaultClient != nil {
+			detectedVersion, err := helpers.DetectIosxrVersion(ctx, defaultClient, "default")
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Unable to Auto-Detect IOS-XR Version",
+					helpers.FormatVersionError("default", host, err),
+				)
+				return
+			}
+
+			if !helpers.ValidateSupportedVersion(detectedVersion) {
+				resp.Diagnostics.AddError(
+					"Unsupported IOS-XR Version",
+					fmt.Sprintf("Detected IOS-XR version '%s' for default device is not supported. Supported versions: 24.4.2 (2442)", detectedVersion),
+				)
+				return
+			}
+
+			data.Version = detectedVersion
+			p.version = detectedVersion
+			tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for default device: %s", detectedVersion))
+		}
+	}
+
+	defaultDeviceVersion := data.Version
+	data.Devices[""] = &IosxrProviderDataDevice{
+		Client:          defaultClient,
+		Managed:         true,
+		Version:         defaultDeviceVersion,
+		VersionDetected: autoDetect,
+	}
+
+	// Add all devices with their managed status and version detection
 	for _, device := range config.Devices {
 		deviceName := device.Name.ValueString()
+		deviceHost := device.Host.ValueString()
+
 		var managed bool
 		if len(selectedDevices) > 0 {
 			managed = slices.Contains(selectedDevices, deviceName)
@@ -483,17 +561,58 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		}
 
 		var deviceClient *gnmi.Client
+		var deviceVersion string
+
 		if managed {
-			deviceClient, err = gnmi.NewClient(device.Host.ValueString(), opts...)
+			deviceClient, err = gnmi.NewClient(deviceHost, opts...)
 			if err != nil {
 				resp.Diagnostics.AddError(
 					"Unable to create client",
-					"Unable to create gNMI client:\n\n"+err.Error(),
+					fmt.Sprintf("Unable to create gNMI client for device '%s':\n\n%s", deviceName, err.Error()),
 				)
 				return
 			}
+
+			// Auto-detect version for this device if needed
+			if autoDetect {
+				detectedVersion, err := helpers.DetectIosxrVersion(ctx, deviceClient, deviceName)
+				if err != nil {
+					resp.Diagnostics.AddError(
+						"Unable to Auto-Detect IOS-XR Version",
+						helpers.FormatVersionError(deviceName, deviceHost, err),
+					)
+					return
+				}
+
+				if !helpers.ValidateSupportedVersion(detectedVersion) {
+					resp.Diagnostics.AddError(
+						"Unsupported IOS-XR Version",
+						fmt.Sprintf("Detected IOS-XR version '%s' for device '%s' is not supported. Supported versions: 24.4.2 (2442)", detectedVersion, deviceName),
+					)
+					return
+				}
+
+				deviceVersion = detectedVersion
+				tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for device '%s': %s", deviceName, detectedVersion))
+			} else {
+				// Use global version
+				deviceVersion = data.Version
+			}
+		} else {
+			// Unmanaged device - still set version for potential future use
+			if autoDetect {
+				deviceVersion = "" // Will be detected if device becomes managed
+			} else {
+				deviceVersion = data.Version
+			}
 		}
-		data.Devices[deviceName] = &IosxrProviderDataDevice{Client: deviceClient, Managed: managed}
+
+		data.Devices[deviceName] = &IosxrProviderDataDevice{
+			Client:          deviceClient,
+			Managed:         managed,
+			Version:         deviceVersion,
+			VersionDetected: autoDetect,
+		}
 	}
 
 	resp.DataSourceData = &data
@@ -504,18 +623,18 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 	return []func() resource.Resource{
 		NewGnmiResource,
 		NewCliResource,
-		{{- range .}}
-		New{{camelCase .Name}}Resource,
-		{{- end}}
+{{- range .UniqueResourceNames}}
+		New{{camelCase .}}Resource,
+{{- end}}
 	}
 }
 
 func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewGnmiDataSource,
-		{{- range .}}
-		New{{camelCase .Name}}DataSource,
-		{{- end}}
+{{- range .UniqueDataSourceNames}}
+		New{{camelCase .}}DataSource,
+{{- end}}
 	}
 }
 

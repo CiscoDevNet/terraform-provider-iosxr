@@ -1,0 +1,11 @@
+---
+name: MACSec
+path: Cisco-IOS-XR-um-macsec-cfg:/macsec
+doc_category: Security
+test_tags: [NCS]
+attributes:
+  - yang_name: shutdown
+    example: true
+  - yang_name: fips
+    minimum_test_value: '"true"'
+    example: true

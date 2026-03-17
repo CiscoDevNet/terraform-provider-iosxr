@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -586,7 +587,7 @@ func (data InterfaceEthernetSubinterfaceData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data InterfaceEthernetSubinterface) toBody(ctx context.Context) string {
+func (data InterfaceEthernetSubinterface) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Type.IsNull() && !data.Type.IsUnknown() {
 		body, _ = sjson.Set(body, "", data.Type.ValueString())
@@ -1347,7 +1348,6 @@ func (data InterfaceEthernetSubinterface) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-values.cos-value7", strconv.FormatInt(item.LossMeasurementCountersPriorityCosValue7.ValueInt64(), 10))
 			}
 			if len(item.SlaOperationProfileTargetMepIds) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mep-id.profile-target-mep-id", []interface{}{})
 				for cindex, citem := range item.SlaOperationProfileTargetMepIds {
 					if !citem.ProfileName.IsNull() && !citem.ProfileName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mep-id.profile-target-mep-id"+"."+strconv.Itoa(cindex)+"."+"profile-name", citem.ProfileName.ValueString())
@@ -1358,7 +1358,6 @@ func (data InterfaceEthernetSubinterface) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SlaOperationProfileTargetMacAddresses) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mac-address.profile-target-mac-address", []interface{}{})
 				for cindex, citem := range item.SlaOperationProfileTargetMacAddresses {
 					if !citem.ProfileName.IsNull() && !citem.ProfileName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mac-address.profile-target-mac-address"+"."+strconv.Itoa(cindex)+"."+"profile-name", citem.ProfileName.ValueString())
@@ -1693,8 +1692,29 @@ func (data InterfaceEthernetSubinterface) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data InterfaceEthernetSubinterface) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data InterfaceEthernetSubinterface) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *InterfaceEthernetSubinterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); !data.L2transport.IsNull() {
 		if value.Exists() {
@@ -8376,7 +8396,6 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *InterfaceEthernetSubinterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.PtpInteropIngressConversionClockClassMappings {

@@ -1,0 +1,107 @@
+---
+name: XML Agent
+path: Cisco-IOS-XR-um-xml-agent-cfg:/xr-xml/agent
+doc_category: Management
+attributes:
+  - yang_name: enable
+    example: true
+    minimum_test_value: true
+  - yang_name: tty
+    tf_name: tty_enable
+    example: true
+  - yang_name: tty/streaming/on/size
+    tf_name: tty_streaming_size
+    description: "Streaming size in Kbytes (1-100000)"
+    example: 1000
+  - yang_name: tty/iteration/size
+    tf_name: tty_iteration_size
+    description: "Iterator size in Kbytes (1-100000) or 'off' to disable"
+    example: "off"
+  - yang_name: tty/throttle/process-rate
+    tf_name: tty_throttle_process_rate
+    description: "Process rate in tags per second (1000-30000)"
+    example: 5000
+  - yang_name: tty/throttle/memory
+    tf_name: tty_throttle_memory
+    description: "Memory usage in Mbytes (100-1024)"
+    example: 300
+  - yang_name: tty/session/timeout
+    tf_name: tty_session_timeout
+    description: "Session timeout in seconds (1-1440)"
+    example: 30
+  - yang_name: ssl
+    tf_name: ssl_enable
+    example: true
+  - yang_name: ssl/streaming/on/size
+    tf_name: ssl_streaming_size
+    description: "Streaming size in Kbytes (1-100000)"
+    example: 1000
+  - yang_name: ssl/iteration/size
+    tf_name: ssl_iteration_size
+    description: "Iterator size in Kbytes (1-100000) or 'off' to disable"
+    example: "off"
+  - yang_name: ssl/throttle/process-rate
+    tf_name: ssl_throttle_process_rate
+    description: "Process rate in tags per second (1000-30000)"
+    example: 5000
+  - yang_name: ssl/throttle/memory
+    tf_name: ssl_throttle_memory
+    description: "Memory usage in Mbytes (100-1024)"
+    example: 300
+  - yang_name: ssl/session/timeout
+    tf_name: ssl_session_timeout
+    description: "Session timeout in seconds (1-1440)"
+    example: 30
+  - yang_name: ssl/vrfs/vrf
+    tf_name: ssl_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: default
+      - yang_name: shutdown
+        example: true
+      - yang_name: ipv4/access-list
+        tf_name: ipv4_access_list
+        example: ACL_IPV4
+  - yang_name: ipv6/enable
+    tf_name: ipv6_enable
+    example: true
+  - yang_name: ipv4/disable
+    tf_name: ipv4_disable
+    example: true
+  - yang_name: streaming/on/size
+    tf_name: streaming_size
+    description: "Streaming size in Kbytes (1-100000)"
+    example: 1000
+  - yang_name: iteration/size
+    tf_name: iteration_size
+    description: "Iterator size in Kbytes (1-100000) or 'off' to disable"
+    example: "off"
+  - yang_name: throttle/process-rate
+    tf_name: throttle_process_rate
+    description: "Process rate in tags per second (1000-30000)"
+    example: 5000
+  - yang_name: throttle/memory
+    tf_name: throttle_memory
+    description: "Memory usage in Mbytes (100-1024)"
+    example: 300
+  - yang_name: session/timeout
+    tf_name: session_timeout
+    description: "Session timeout in seconds (1-1440)"
+    example: 30
+  - yang_name: vrfs/vrf
+    tf_name: vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: VRF1
+      - yang_name: shutdown
+        example: false
+      - yang_name: ipv6/access-list
+        tf_name: ipv6_access_list
+        example: ACL1
+      - yang_name: ipv4/access-list
+        tf_name: ipv4_access_list
+        example: ACL2

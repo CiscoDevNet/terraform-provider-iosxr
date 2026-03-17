@@ -1,0 +1,40 @@
+---
+name: CLI Alias
+path: Cisco-IOS-XR-um-cli-alias-cfg:/alias
+doc_category: General
+attributes:
+  - yang_name: aliases/alias
+    tf_name: aliases
+    minimum_test_value: '["show-version"]'
+    type: List
+    attributes:
+      - yang_name: alias-name
+        tf_name: name
+        id: true
+        minimum_test_value: '"show-version"'
+        example: show-version
+      - yang_name: alias-body
+        tf_name: command
+        example: show version
+  - yang_name: exec/alias
+    tf_name: exec_aliases
+    type: List
+    attributes:
+      - yang_name: exec-alias-name
+        tf_name: name
+        id: true
+        example: sv
+      - yang_name: aliased-exec-command
+        tf_name: command
+        example: show version
+  - yang_name: config/alias
+    tf_name: config_aliases
+    type: List
+    attributes:
+      - yang_name: config-alias-name
+        tf_name: name
+        id: true
+        example: int-config
+      - yang_name: aliased-config-command
+        tf_name: command
+        example: interface GigabitEthernet0/0/0/0

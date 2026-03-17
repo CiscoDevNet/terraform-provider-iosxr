@@ -1,0 +1,11 @@
+---
+name: Policy Global Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/policy-global-set-table
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: policy-global-set
+    tf_name: rpl
+    mandatory: true
+    description: "Configures a policy global set"
+    example: "policy-global\\n  GLOBAL1 'global1',\\n  GLOBAL2 'global2'\\nend-global\\n"

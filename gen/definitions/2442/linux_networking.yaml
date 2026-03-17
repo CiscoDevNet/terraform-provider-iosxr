@@ -1,0 +1,159 @@
+---
+name: Linux Networking
+path: Cisco-IOS-XR-um-linux-networking-cfg:/linux/networking
+doc_category: System
+test_tags: [LINUX]
+attributes:
+  - yang_name: statistics-synchronization/from-xr/every/thirty-seconds
+    tf_name: statistics_synchronization_thirty_seconds
+    delete_grandparent: true
+    example: true
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: statistics-synchronization/from-xr/every/sixty-seconds
+    tf_name: statistics_synchronization_sixty_seconds
+    delete_grandparent: true
+    example: true
+    test_tags: [NCS, C8000]
+    include_example: true
+  - yang_name: statistics-synchronization/from-xr/every/twom
+    tf_name: statistics_synchronization_two_minutes
+    delete_grandparent: true
+    example: false
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: statistics-synchronization/from-xr/every/threem
+    tf_name: statistics_synchronization_three_minutes
+    delete_grandparent: true
+    example: false
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: statistics-synchronization/from-xr/every/fourm
+    tf_name: statistics_synchronization_four_minutes
+    delete_grandparent: true
+    example: false
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: statistics-synchronization/from-xr/every/fivem
+    tf_name: statistics_synchronization_five_minutes
+    delete_grandparent: true
+    example: true
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: statistics-synchronization/from-xr/every/sixm
+    tf_name: statistics_synchronization_six_minutes
+    delete_grandparent: true
+    example: false
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: statistics-synchronization/from-xr/every/sevenm
+    tf_name: statistics_synchronization_seven_minutes
+    delete_grandparent: true
+    example: false
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: statistics-synchronization/from-xr/every/eightm
+    tf_name: statistics_synchronization_eight_minutes
+    delete_grandparent: true
+    example: false
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: statistics-synchronization/from-xr/every/ninem
+    tf_name: statistics_synchronization_nine_minutes
+    delete_grandparent: true
+    example: false
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: statistics-synchronization/from-xr/every/ten-m
+    tf_name: statistics_synchronization_ten_minutes
+    delete_grandparent: true
+    example: false
+    exclude_test: true
+    test_tags: [NCS, C8000]
+  - yang_name: linux-owned-vrf
+    example: default
+    exclude_test: true
+  - yang_name: exposed-interfaces/interfaces/interface
+    tf_name: exposed_interfaces
+    minimum_test_value: '[interface-name="GigabitEthernet0/0/0/0"]'
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        minimum_test_value: '"GigabitEthernet0/0/0/0"'
+        example: GigabitEthernet0/0/0/0
+      - yang_name: linux-managed
+        example: disable
+      - yang_name: statistics-synchronization/from-xr/every/five-seconds
+        tf_name: statistics_synchronization_five_seconds
+        delete_grandparent: true
+        example: true
+        exclude_test: true
+        test_tags: [NCS, C8000]
+      - yang_name: statistics-synchronization/from-xr/every/ten-seconds
+        tf_name: statistics_synchronization_ten_seconds
+        delete_grandparent: true
+        example: false
+        exclude_test: true
+        test_tags: [NCS, C8000]
+      - yang_name: statistics-synchronization/from-xr/every/thirty-seconds
+        tf_name: statistics_synchronization_thirty_seconds
+        delete_grandparent: true
+        example: false
+        exclude_test: true
+        test_tags: [NCS, C8000]
+      - yang_name: statistics-synchronization/from-xr/every/sixty-seconds
+        tf_name: statistics_synchronization_sixty_seconds
+        delete_grandparent: true
+        example: true
+        test_tags: [NCS, C8000]
+        include_example: true
+  - yang_name: vrfs/vrf
+    tf_name: vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: default
+      - yang_name: disable
+        example: false
+        exclude_test: true
+      - yang_name: east-wests/east-west
+        tf_name: east_west_interfaces
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: east-west-name
+            tf_name: interface_name
+            id: true
+            example: GigabitEthernet0/0/0/1
+      - yang_name: address-family/ipv4/source-hint/default-route/interface
+        tf_name: ipv4_source_interface_default_route
+        example: GigabitEthernet0/0/0/0
+      - yang_name: address-family/ipv4/source-hint/default-route/active-management
+        tf_name: ipv4_source_default_route_active_management
+        example: false
+        exclude_test: true
+      - yang_name: address-family/ipv4/source-hint/management-route/interface
+        tf_name: ipv4_source_interface_management_route
+        example: GigabitEthernet0/0/0/0
+        exclude_test: true
+      - yang_name: address-family/ipv4/default-route/software-forwarding
+        tf_name: ipv4_default_route_software_forwarding
+        example: false
+        exclude_test: true
+      - yang_name: address-family/ipv6/source-hint/default-route/interface
+        tf_name: ipv6_source_interface_default_route
+        example: GigabitEthernet0/0/0/0
+      - yang_name: address-family/ipv6/source-hint/default-route/active-management
+        tf_name: ipv6_source_default_route_active_management
+        example: false
+        exclude_test: true
+      - yang_name: address-family/ipv6/source-hint/management-route/interface
+        tf_name: ipv6_source_interface_management_route
+        example: GigabitEthernet0/0/0/0
+        exclude_test: true
+      - yang_name: address-family/ipv6/default-route/software-forwarding
+        tf_name: ipv6_default_route_software_forwarding
+        example: false
+        exclude_test: true

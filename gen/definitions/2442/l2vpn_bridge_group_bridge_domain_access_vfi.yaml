@@ -1,0 +1,48 @@
+---
+name: L2VPN Bridge Group Bridge Domain Access VFI
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]/access-vfis/access-vfi[access-vfi-name=%s]
+doc_category: L2VPN
+test_tags: [XRD, NCS, C8000]
+attributes:
+  - yang_name: group-name
+    tf_name: bridge_group_name
+    example: BG123
+  - yang_name: bridge-domain-name
+    example: BD123
+  - yang_name: access-vfi-name
+    id: true
+    example: ACCESS_VFI1
+  - yang_name: shutdown
+    example: true
+  - yang_name: neighbors/neighbor
+    tf_name: neighbors
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.1.1.1
+      - yang_name: pw-id
+        id: true
+        example: 1000
+      - yang_name: static-mac-addresses/static-mac-address
+        tf_name: static_mac_addresses
+        type: List
+        attributes:
+          - yang_name: mac-address
+            id: true
+            example: aa:bb:cc:dd:ee:01
+      - yang_name: pw-class
+        example: PW_CLASS_1
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]
+    attributes:
+      - name: group-name
+        value: BG123
+    dependencies: [0]
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]/bridge-domains/bridge-domain[bridge-domain-name=BD123]
+    attributes:
+      - name: bridge-domain-name
+        value: BD123
+    dependencies: [1]

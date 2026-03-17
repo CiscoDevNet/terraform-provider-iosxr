@@ -1,0 +1,386 @@
+---
+name: HW Module Profile
+path: Cisco-IOS-XR-um-hw-module-profile-cfg:/hw-module
+doc_category: System
+test_tags: [NCS]
+attributes:
+  - yang_name: profile-load-balance/algorithm/layer2
+    tf_name: profile_load_balance_algorithm_layer2
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/ip-tunnel
+    tf_name: profile_load_balance_algorithm_ip_tunnel
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/mpls-safe-speculative-parsing
+    tf_name: profile_load_balance_algorithm_mpls_safe_speculative_parsing
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/l3-only
+    tf_name: profile_load_balance_algorithm_l3_only
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/gtp
+    tf_name: profile_load_balance_algorithm_gtp
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/gtp-mpls
+    tf_name: profile_load_balance_algorithm_gtp_mpls
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/mpls-lsr-ler
+    tf_name: profile_load_balance_algorithm_mpls_lsr_ler
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/mpls-lsr-ler-optimized
+    tf_name: profile_load_balance_algorithm_mpls_lsr_ler_optimized
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/fat-based-hash
+    tf_name: profile_load_balance_algorithm_fat_based_hash
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/pppo-e
+    tf_name: profile_load_balance_algorithm_pppoe
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/pppo-e/decap-fatbased-hashing
+    tf_name: profile_load_balance_algorithm_pppoe_decap_fatbased_hashing
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/inner-l2-field
+    tf_name: profile_load_balance_algorithm_inner_l2_field
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-load-balance/algorithm/hash-polynomial-index
+    tf_name: profile_load_balance_algorithm_hash_polynomial_index
+    test_tags: [NCS]
+    include_example: true
+    minimum_test_value: 5
+    example: 5
+  - yang_name: profile-bundle-hash/hash-index/locations/location
+    tf_name: profile_bundle_hash_index_locations
+    test_tags: [NCS]
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/0/CPU0
+      - yang_name: location-name2
+        id: true
+        example: 0/0/CPU0
+      - yang_name: index
+        example: 12
+  - yang_name: profile-bundle-hash/ignore-ingress-port
+    tf_name: profile_bundle_hash_ignore_ingress_port
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-bundle-hash/per-packet-round-robin
+    tf_name: profile_bundle_hash_per_packet_round_robin
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-qos/max-classmap-sizes/max-classmap-size
+    tf_name: profile_qos_max_classmap_size
+    test_tags: [NCS]
+    include_example: true
+    example: 8
+  - yang_name: profile-qos/max-classmap-sizes/locations/location
+    tf_name: profile_qos_max_classmap_size_locations
+    test_tags: [NCS]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/0/CPU0
+      - yang_name: max-classmap-size
+        example: 8
+  - yang_name: profile-qos/qosg-dscp-mark-enable/first-dscp-precedence-value
+    tf_name: profile_qos_qosg_dscp_mark_enable_first
+    optional: true
+    test_tags: [NCS]
+    include_example: true
+    delete_parent: true
+    example: 0
+  - yang_name: profile-qos/qosg-dscp-mark-enable/second-dscp-precedence-value
+    tf_name: profile_qos_qosg_dscp_mark_enable_second
+    test_tags: [NCS]
+    include_example: true
+    example: 63
+  - yang_name: profile-qos/free-buffer-int-threshold
+    tf_name: profile_qos_free_buffer_int_threshold_set
+    test_tags: [NCS]
+    include_example: true
+    example: 50
+  - yang_name: profile-qos/clear-value-in-percent
+    tf_name: profile_qos_free_buffer_int_threshold_clear
+    test_tags: [NCS]
+    include_example: true
+    example: 75
+  - yang_name: profile-qos/hqos-enable
+    tf_name: profile_qos_hqos_enable
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/qos-stats-collection
+    tf_name: profile_qos_stats_collection
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/ecn-marking-stats
+    tf_name: profile_qos_ecn_marking_stats
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/shared-policer-per-class-stats
+    tf_name: profile_qos_shared_policer_per_class_stats
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/wred-stats-enable
+    tf_name: profile_qos_wred_stats_enable
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/lag-scheduler
+    tf_name: profile_qos_lag_scheduler
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/conform-aware-policer
+    tf_name: profile_qos_conform_aware_policer
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/arp-isis-priority-enable
+    tf_name: profile_qos_arp_isis_priority_enable
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/gre-exp-classification-enable
+    tf_name: profile_qos_gre_exp_classification_enable
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/egress-compensation-setting-force
+    tf_name: profile_qos_egress_compensation_setting_force
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-qos/policer-scale/scale-value
+    tf_name: profile_qos_policer_scale
+    test_tags: [NCS]
+    include_example: true
+    example: 64000
+  - yang_name: profile-qos/nif-hp-fifo-reserve/percent
+    tf_name: profile_qos_nif_hp_fifo_reserve_percent
+    test_tags: [NCS]
+    include_example: true
+    example: 10
+  - yang_name: profile-qos/nif-hp-fifo-reserve-locations/location
+    tf_name: profile_qos_nif_hp_fifo_reserve_locations
+    test_tags: [NCS]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/0/CPU0
+      - yang_name: percent
+        example: 10
+  - yang_name: profile-npu/native-mode-enable
+    tf_name: npu_native_mode_enable
+    test_tags: [NCS]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: profile-netflow/ipfix315-enable
+    tf_name: netflow_ipfix315_enable
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-netflow/ipfix315-enable-locations/location
+    tf_name: netflow_ipfix315_enable_locations
+    test_tags: [NCS]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/0/CPU0
+      - yang_name: location-name2
+        id: true
+        example: 0/0/CPU0
+  - yang_name: profile-netflow/sflow-enable
+    tf_name: netflow_sflow_enable
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-netflow/sflow-enable-locations/location
+    tf_name: netflow_sflow_enable_locations
+    test_tags: [NCS]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/0/CPU0
+      - yang_name: location-name2
+        id: true
+        example: 0/0/CPU0
+  - yang_name: profile-stats/acl-permit
+    tf_name: stats_acl_permit
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-stats/qos-enhanced
+    tf_name: stats_qos_enhanced
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-stats/ingress-sr
+    tf_name: stats_ingress_sr
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-stats/enh-sr-policy
+    tf_name: stats_enhanced_sr_policy
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-stats/ingress-sr-mspw
+    tf_name: stats_ingress_sr_mspw
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-stats/tx-scale-enhanced
+    tf_name: stats_tx_scale_enhanced
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-stats/tx-scale-enhanced/acl-permit
+    tf_name: stats_tx_scale_enhanced_acl_permit
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-stats/tx-scale-enhanced/qos-enhanced
+    tf_name: stats_tx_scale_enhanced_qos_enhanced
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-stats/tx-scale-enhanced/ingress-sr
+    tf_name: stats_tx_scale_enhanced_ingress_sr
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-segment-routing/srv6/mode/base
+    tf_name: srv6_mode_base
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-segment-routing/srv6/mode/base-and-micro-segment-f3216
+    tf_name: srv6_mode_base_and_micro_segment_f3216
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-segment-routing/srv6/mode/micro-segment/format/f3216
+    tf_name: srv6_mode_micro_segment_format_f3216
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-segment-routing/srv6/mode/micro-segment/format/path-mtu
+    tf_name: srv6_mode_micro_segment_format_f3216_path_mtu
+    test_tags: [NCS]
+    type: Bool
+    type_yang_bool: empty
+    exclude_test: true
+    example: true
+  - yang_name: profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/propagate
+    tf_name: srv6_encapsulation_l2_traffic_class_propagate
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-segment-routing/srv6/mode/encapsulation/l2-traffic/traffic-class/traffic-class-value
+    tf_name: srv6_encapsulation_l2_traffic_class_value
+    test_tags: [NCS]
+    exclude_test: true
+    example: 1
+  - yang_name: profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/propagate
+    tf_name: srv6_encapsulation_l3_traffic_class_propagate
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/policy-map
+    tf_name: srv6_encapsulation_l3_traffic_class_policy_map
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class/traffic-class-value
+    tf_name: srv6_encapsulation_l3_traffic_class_value
+    test_tags: [NCS]
+    exclude_test: true
+    example: 1
+  - yang_name: profile-segment-routing/srv6/mode/encapsulation/l3-traffic/traffic-class-with-hoplimit/propagate
+    tf_name: srv6_encapsulation_l3_traffic_class_with_hoplimit_propagate
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-offload/one
+    tf_name: offload_one
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-offload/two
+    tf_name: offload_two
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-offload/three
+    tf_name: offload_three
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-offload/four
+    tf_name: offload_four
+    test_tags: [NCS]
+    example: true
+  - yang_name: profile-sr-policy/v6-null-label-autopush
+    tf_name: sr_policy_v6_null_label_autopush
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: profile-oam/sat-enable
+    tf_name: oam_sat_enable
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: profile-oam/four8byte-cfm-maid-enable
+    tf_name: oam_four8byte_cfm_maid_enable
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: fib-bgp-pic/multipath-core/enable
+    tf_name: fib_bgp_pic_multipath_core_enable
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: bgp-mp-pic/auto-protect/enable
+    tf_name: bgp_mp_pic_auto_protect_enable
+    test_tags: [NCS]
+    include_example: true
+    example: true

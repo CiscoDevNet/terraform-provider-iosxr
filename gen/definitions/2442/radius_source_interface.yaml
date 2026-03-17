@@ -1,0 +1,15 @@
+---
+name: Radius Source Interface
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius/vrfs/vrf[vrf-name=%s]
+doc_category: AAA
+no_delete_attributes: true
+test_tags: [AAA]
+attributes:
+  - yang_name: vrf-name
+    tf_name: vrf
+    id: true
+    minimum_test_value: '"VRF1"'
+    example: VRF1
+  - yang_name: source-interface
+    minimum_test_value: '"Loopback0"'
+    example: Loopback0

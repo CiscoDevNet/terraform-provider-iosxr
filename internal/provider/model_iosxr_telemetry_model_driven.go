@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -148,7 +149,7 @@ func (data TelemetryModelDrivenData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data TelemetryModelDriven) toBody(ctx context.Context) string {
+func (data TelemetryModelDriven) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.MaxContainersPerPath.IsNull() && !data.MaxContainersPerPath.IsUnknown() {
 		body, _ = sjson.Set(body, "max-containers-per-path", strconv.FormatInt(data.MaxContainersPerPath.ValueInt64(), 10))
@@ -203,7 +204,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"vrf", item.Vrf.ValueString())
 			}
 			if len(item.AddressFamily) > 0 {
-				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"address-families.address-family", []interface{}{})
 				for cindex, citem := range item.AddressFamily {
 					if !citem.AfName.IsNull() && !citem.AfName.IsUnknown() {
 						body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"address-families.address-family"+"."+strconv.Itoa(cindex)+"."+"af-name", citem.AfName.ValueString())
@@ -251,7 +251,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Destinations) > 0 {
-				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"destinations.destination", []interface{}{})
 				for cindex, citem := range item.Destinations {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"destinations.destination"+"."+strconv.Itoa(cindex)+"."+"destination-string", citem.Address.ValueString())
@@ -319,7 +318,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"send.retry.duration", strconv.FormatInt(item.SendRetryDuration.ValueInt64(), 10))
 			}
 			if len(item.SensorGroupIds) > 0 {
-				body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"sensor-group-ids.sensor-group-id", []interface{}{})
 				for cindex, citem := range item.SensorGroupIds {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"sensor-group-ids.sensor-group-id"+"."+strconv.Itoa(cindex)+"."+"sensor-group-id-string", citem.Name.ValueString())
@@ -346,7 +344,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.DestinationIds) > 0 {
-				body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"destination-ids.destination-id", []interface{}{})
 				for cindex, citem := range item.DestinationIds {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"destination-ids.destination-id"+"."+strconv.Itoa(cindex)+"."+"destination-id-string", citem.Name.ValueString())
@@ -362,7 +359,6 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "sensor-groups.sensor-group"+"."+strconv.Itoa(index)+"."+"sensor-group-string", item.Name.ValueString())
 			}
 			if len(item.SensorPaths) > 0 {
-				body, _ = sjson.Set(body, "sensor-groups.sensor-group"+"."+strconv.Itoa(index)+"."+"sensor-paths.sensor-path", []interface{}{})
 				for cindex, citem := range item.SensorPaths {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "sensor-groups.sensor-group"+"."+strconv.Itoa(index)+"."+"sensor-paths.sensor-path"+"."+strconv.Itoa(cindex)+"."+"sensor-path-string", citem.Name.ValueString())
@@ -376,8 +372,29 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data TelemetryModelDriven) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data TelemetryModelDriven) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "max-containers-per-path"); value.Exists() && !data.MaxContainersPerPath.IsNull() {
 		data.MaxContainersPerPath = types.Int64Value(value.Int())
@@ -1898,7 +1915,6 @@ func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context) []str
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *TelemetryModelDriven) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.SensorGroups {

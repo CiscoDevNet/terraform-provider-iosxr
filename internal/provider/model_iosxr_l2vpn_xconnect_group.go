@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -223,7 +224,7 @@ func (data L2VPNXconnectGroupData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
+func (data L2VPNXconnectGroup) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.GroupName.IsNull() && !data.GroupName.IsUnknown() {
 		body, _ = sjson.Set(body, "group-name", data.GroupName.ValueString())
@@ -248,7 +249,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Interfaces) > 0 {
-				body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"interfaces.interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -256,7 +256,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.BackupInterfaces) > 0 {
-				body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"backup.interface", []interface{}{})
 				for cindex, citem := range item.BackupInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"backup.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -264,7 +263,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Ipv4Neighbors) > 0 {
-				body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4", []interface{}{})
 				for cindex, citem := range item.Ipv4Neighbors {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -288,7 +286,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"tag-impose.vlan", strconv.FormatInt(citem.TagImposeVlan.ValueInt64(), 10))
 					}
 					if len(citem.BackupNeighbors) > 0 {
-						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor", []interface{}{})
 						for ccindex, ccitem := range citem.BackupNeighbors {
 							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
 								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.Address.ValueString())
@@ -310,7 +307,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Ipv6Neighbors) > 0 {
-				body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6", []interface{}{})
 				for cindex, citem := range item.Ipv6Neighbors {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -334,7 +330,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"source.ipv6-address", citem.SourceIpv6Address.ValueString())
 					}
 					if len(citem.BackupNeighbors) > 0 {
-						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor", []interface{}{})
 						for ccindex, ccitem := range citem.BackupNeighbors {
 							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
 								body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.ipv6s.ipv6"+"."+strconv.Itoa(cindex)+"."+"backup.neighbors.neighbor"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.Address.ValueString())
@@ -356,7 +351,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.EvpnTargetNeighbors) > 0 {
-				body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evi.targets.target", []interface{}{})
 				for cindex, citem := range item.EvpnTargetNeighbors {
 					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evi.targets.target"+"."+strconv.Itoa(cindex)+"."+"vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
@@ -373,7 +367,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.EvpnServiceNeighbors) > 0 {
-				body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evi.services.service", []interface{}{})
 				for cindex, citem := range item.EvpnServiceNeighbors {
 					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evi.services.service"+"."+strconv.Itoa(cindex)+"."+"vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
@@ -387,7 +380,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.EvpnTargetNeighborsSegmentRouting) > 0 {
-				body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evi.segment-routing-targets.target", []interface{}{})
 				for cindex, citem := range item.EvpnTargetNeighborsSegmentRouting {
 					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evi.segment-routing-targets.target"+"."+strconv.Itoa(cindex)+"."+"vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
@@ -404,7 +396,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.EvpnServiceNeighborsSegmentRouting) > 0 {
-				body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evi.segment-routing-services.service", []interface{}{})
 				for cindex, citem := range item.EvpnServiceNeighborsSegmentRouting {
 					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
 						body, _ = sjson.Set(body, "p2ps.p2p"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evi.segment-routing-services.service"+"."+strconv.Itoa(cindex)+"."+"vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
@@ -497,7 +488,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-policy.export", item.AutodiscoveryBgpRoutePolicyExport.ValueString())
 			}
 			if len(item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpRouteTargetImportTwoByteAsFormat {
 					if !citem.TwoByteAsNumber.IsNull() && !citem.TwoByteAsNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"two-byte-as-number", strconv.FormatInt(citem.TwoByteAsNumber.ValueInt64(), 10))
@@ -508,7 +498,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpRouteTargetImportFourByteAsFormat {
 					if !citem.FourByteAsNumber.IsNull() && !citem.FourByteAsNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"four-byte-as-number", strconv.FormatInt(citem.FourByteAsNumber.ValueInt64(), 10))
@@ -519,7 +508,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpRouteTargetImportIpv4AddressFormat {
 					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.import.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(cindex)+"."+"ipv4-address", citem.Ipv4Address.ValueString())
@@ -530,7 +518,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpRouteTargetExportTwoByteAsFormat {
 					if !citem.TwoByteAsNumber.IsNull() && !citem.TwoByteAsNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"two-byte-as-number", strconv.FormatInt(citem.TwoByteAsNumber.ValueInt64(), 10))
@@ -541,7 +528,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpRouteTargetExportFourByteAsFormat {
 					if !citem.FourByteAsNumber.IsNull() && !citem.FourByteAsNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"four-byte-as-number", strconv.FormatInt(citem.FourByteAsNumber.ValueInt64(), 10))
@@ -552,7 +538,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpRouteTargetExportIpv4AddressFormat {
 					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(cindex)+"."+"ipv4-address", citem.Ipv4Address.ValueString())
@@ -563,7 +548,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetTwoByteAsFormat) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpRouteTargetTwoByteAsFormat {
 					if !citem.TwoByteAsNumber.IsNull() && !citem.TwoByteAsNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"two-byte-as-number", strconv.FormatInt(citem.TwoByteAsNumber.ValueInt64(), 10))
@@ -574,7 +558,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetFourByteAsFormat) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpRouteTargetFourByteAsFormat {
 					if !citem.FourByteAsNumber.IsNull() && !citem.FourByteAsNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(cindex)+"."+"four-byte-as-number", strconv.FormatInt(citem.FourByteAsNumber.ValueInt64(), 10))
@@ -585,7 +568,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AutodiscoveryBgpRouteTargetIpv4AddressFormat) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpRouteTargetIpv4AddressFormat {
 					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.route-target.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(cindex)+"."+"ipv4-address", citem.Ipv4Address.ValueString())
@@ -596,7 +578,6 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AutodiscoveryBgpSignalingProtocolBgpCeIds) > 0 {
-				body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id", []interface{}{})
 				for cindex, citem := range item.AutodiscoveryBgpSignalingProtocolBgpCeIds {
 					if !citem.LocalCeIdValue.IsNull() && !citem.LocalCeIdValue.IsUnknown() {
 						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"local-ce-id-value", strconv.FormatInt(citem.LocalCeIdValue.ValueInt64(), 10))
@@ -607,13 +588,11 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 						}
 					}
 					if len(citem.Interfaces) > 0 {
-						body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface", []interface{}{})
 						for ccindex, ccitem := range citem.Interfaces {
 							if !ccitem.InterfaceName.IsNull() && !ccitem.InterfaceName.IsUnknown() {
 								body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"interface-name", ccitem.InterfaceName.ValueString())
 							}
 							if len(ccitem.RemoteCeIds) > 0 {
-								body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"remote-ce-id", []interface{}{})
 								for cccindex, cccitem := range ccitem.RemoteCeIds {
 									if !cccitem.RemoteCeIdValue.IsNull() && !cccitem.RemoteCeIdValue.IsUnknown() {
 										body, _ = sjson.Set(body, "mp2mps.mp2mp"+"."+strconv.Itoa(index)+"."+"autodiscovery.bgp.signaling-protocol.bgp.ce-id"+"."+strconv.Itoa(cindex)+"."+"interface"+"."+strconv.Itoa(ccindex)+"."+"remote-ce-id"+"."+strconv.Itoa(cccindex)+"."+"remote-ce-id-value", strconv.FormatInt(cccitem.RemoteCeIdValue.ValueInt64(), 10))
@@ -631,8 +610,29 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data L2VPNXconnectGroup) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data L2VPNXconnectGroup) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.P2ps {
 		keys := [...]string{"p2p-xconnect-name"}
@@ -3842,7 +3842,6 @@ func (data *L2VPNXconnectGroup) getEmptyLeafsDelete(ctx context.Context) []strin
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *L2VPNXconnectGroup) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Mp2mps {

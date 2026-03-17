@@ -1,0 +1,17 @@
+---
+name: Netconf Agent TTY
+path: Cisco-IOS-XR-um-xml-agent-cfg:/netconf/agent/tty
+doc_category: Management
+attributes:
+  - yang_name: throttle/process-rate
+    description: "Process rate in tags per second (1000-30000)"
+    example: 5000
+  - yang_name: throttle/memory
+    description: "Memory usage in Mbytes (100-1024)"
+    example: 300
+  - yang_name: throttle/offload-memory
+    description: "Memory offload to clients in Mbytes (0-12000)"
+    example: 0
+  - yang_name: session/timeout
+    description: "Session timeout in minutes (1-1440)"
+    example: 30

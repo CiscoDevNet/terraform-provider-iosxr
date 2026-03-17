@@ -24,7 +24,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
+	"regexp"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -38,27 +39,29 @@ import (
 
 // End of section. //template:end imports
 
+{{- $versionSuffix := versionSuffix .Version}}
+
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &{{camelCase .Name}}DataSource{}
-	_ datasource.DataSourceWithConfigure = &{{camelCase .Name}}DataSource{}
+	_ datasource.DataSource              = &{{camelCase .Name}}{{$versionSuffix}}DataSource{}
+	_ datasource.DataSourceWithConfigure = &{{camelCase .Name}}{{$versionSuffix}}DataSource{}
 )
 
-func New{{camelCase .Name}}DataSource() datasource.DataSource {
-	return &{{camelCase .Name}}DataSource{}
+func New{{camelCase .Name}}{{$versionSuffix}}DataSource() datasource.DataSource {
+	return &{{camelCase .Name}}{{$versionSuffix}}DataSource{}
 }
 
-type {{camelCase .Name}}DataSource struct{
+type {{camelCase .Name}}{{$versionSuffix}}DataSource struct{
 	data *IosxrProviderData
 }
 
-func (d *{{camelCase .Name}}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *{{camelCase .Name}}{{$versionSuffix}}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_{{snakeCase .Name}}"
 }
 
-func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *{{camelCase .Name}}{{$versionSuffix}}DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "{{.DsDescription}}",
@@ -174,7 +177,9 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 	}
 }
 
-func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+{{- $versionSuffix := versionSuffix .Version}}
+
+func (d *{{camelCase .Name}}{{$versionSuffix}}DataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -186,8 +191,8 @@ func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasou
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
 
-func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config {{camelCase .Name}}Data
+func (d *{{camelCase .Name}}{{$versionSuffix}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config {{camelCase .Name}}{{$versionSuffix}}Data
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -1,0 +1,1306 @@
+---
+name: AAA
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa
+doc_category: AAA
+default_delete_attributes: true
+test_tags: [AAA]
+attributes:
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:default-taskgroup
+    tf_name: default_taskgroup
+    example: "FULL-TGRP"
+  - yang_name: banner/login
+    tf_name: banner_login
+    example: "^C AAA Banner! ^C"
+  # radius:group/
+  - yang_name: Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group
+    tf_name: radius_server_groups
+    type: List
+    no_augment_config: true
+    description: "Radius Server Groups"
+    attributes:
+      - yang_name: server-group-name
+        tf_name: group_name
+        type: String
+        description: "Server group name"
+        id: true
+        example: RADIUS-1
+      - yang_name: servers/server
+        tf_name: servers
+        type: List
+        description: "Specify a RADIUS server"
+        attributes:
+          - yang_name: ordering-index
+            tf_name: order
+            type: Int64
+            description: "Ordering index"
+            id: true
+            example: 1
+          - yang_name: address
+            tf_name: address
+            type: String
+            description: "IP address or hostname"
+            id: true
+            example: 10.1.1.1
+          - yang_name: auth-port
+            tf_name: auth_port
+            type: Int64
+            description: "Authentication port"
+            id: true
+            example: 1812
+          - yang_name: acct-port
+            tf_name: acct_port
+            type: Int64
+            description: "Accounting port"
+            id: true
+            example: 1813
+      - yang_name: load-balance/method/least-outstanding/batch-size
+        tf_name: load_balance_method_least_outstanding_batch_size
+        type: Int64
+        description: "Batch size for load balancing"
+        example: 25
+      - yang_name: load-balance/method/least-outstanding
+        tf_name: load_balance_method_least_outstanding
+        type: Bool
+        type_yang_bool: presence
+        description: "Use least outstanding load balancing method"
+        example: true
+      - yang_name: load-balance/method/least-outstanding/ignore-preferred-server
+        tf_name: load_balance_method_least_outstanding_ignore_preferred_server
+        type: Bool
+        type_yang_bool: presence
+        description: "Ignore preferred server"
+        example: true
+      - yang_name: deadtime
+        tf_name: deadtime
+        type: Int64
+        description: "Dead time in minutes"
+        example: 5
+      - yang_name: throttle/access
+        tf_name: throttle_access
+        type: Int64
+        description: "Throttle access requests"
+        example: 100
+      - yang_name: throttle/access-timeout
+        tf_name: throttle_access_timeout
+        type: Int64
+        description: "Throttle access timeout"
+        example: 5
+      - yang_name: throttle/accounting
+        tf_name: throttle_accounting
+        type: Int64
+        description: "Throttle accounting requests"
+        example: 50
+      - yang_name: server-privates/server-private
+        tf_name: server_privates
+        type: List
+        no_augment_config: true
+        description: "Specify a private RADIUS server"
+        attributes:
+          - yang_name: ordering-index
+            tf_name: order
+            type: Int64
+            description: "Ordering index"
+            id: true
+            example: 1
+          - yang_name: address
+            tf_name: address
+            type: String
+            description: "IP address or hostname"
+            id: true
+            example: 10.1.1.2
+          - yang_name: auth-port
+            tf_name: auth_port
+            type: Int64
+            description: "Authentication port"
+            id: true
+            example: 1812
+          - yang_name: acct-port
+            tf_name: acct_port
+            type: Int64
+            description: "Accounting port"
+            id: true
+            example: 1813
+          - yang_name: key/seven
+            tf_name: key_type_7
+            type: String
+            description: "Type 7 encrypted key"
+            sensitive: true
+            write_only: true
+            example: 045802150C2E0C
+          - yang_name: key/six
+            tf_name: key_type_6
+            type: String
+            description: "Type 6 encrypted key"
+            sensitive: true
+            write_only: true
+            exclude_test: true
+            example: 00071A150754
+          - yang_name: timeout
+            tf_name: timeout
+            type: Int64
+            description: "Timeout in seconds"
+            example: 120
+          - yang_name: retransmit
+            tf_name: retransmit
+            type: Int64
+            description: "Retransmit count"
+            example: 5
+          - yang_name: test/username
+            tf_name: test_username
+            type: String
+            description: "Test username"
+            example: cisco
+          - yang_name: idle-time
+            tf_name: idle_time
+            type: Int64
+            description: "Idle time in minutes"
+            example: 30
+          - yang_name: ignore-auth-port
+            tf_name: ignore_auth_port
+            type: Bool
+            type_yang_bool: presence
+            description: "Ignore authentication port"
+            example: true
+          - yang_name: ignore-acct-port
+            tf_name: ignore_acct_port
+            type: Bool
+            type_yang_bool: presence
+            description: "Ignore accounting port"
+            example: true
+      - yang_name: vrf
+        tf_name: vrf
+        type: String
+        description: "VRF name"
+        example: VRF1
+      - yang_name: source-interface
+        tf_name: source_interface
+        type: String
+        description: "Source interface"
+        example: Loopback0
+      - yang_name: authorization/request/accept
+        tf_name: authorization_request_accept
+        type: Bool
+        type_yang_bool: presence
+        description: "Authorization request accept"
+        delete_parent: true
+        example: true
+      - yang_name: authorization/request/reject
+        tf_name: authorization_request_reject
+        type: Bool
+        type_yang_bool: presence
+        description: "Authorization request reject"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: authorization/request/radius-attribute-list
+        tf_name: authorization_request_radius_attribute_list
+        type: String
+        description: "Authorization request RADIUS attribute list"
+        example: AUTH-REQ-LIST
+      - yang_name: authorization/reply/accept
+        tf_name: authorization_reply_accept
+        type: Bool
+        type_yang_bool: presence
+        description: "Authorization reply accept"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: authorization/reply/reject
+        tf_name: authorization_reply_reject
+        type: Bool
+        type_yang_bool: presence
+        description: "Authorization reply reject"
+        delete_parent: true
+        example: true
+      - yang_name: authorization/reply/radius-attribute-list
+        tf_name: authorization_reply_radius_attribute_list
+        type: String
+        description: "Authorization reply RADIUS attribute list"
+        example: AUTH-REPLY-LIST
+      - yang_name: accounting/request/accept
+        tf_name: accounting_request_accept
+        type: Bool
+        type_yang_bool: presence
+        description: "Accounting request accept"
+        delete_parent: true
+        example: true
+      - yang_name: accounting/request/reject
+        tf_name: accounting_request_reject
+        type: Bool
+        type_yang_bool: presence
+        description: "Accounting request reject"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: accounting/request/radius-attribute-list
+        tf_name: accounting_request_radius_attribute_list
+        type: String
+        description: "Accounting request RADIUS attribute list"
+        example: ACCT-REQ-LIST
+      - yang_name: accounting/reply/accept
+        tf_name: accounting_reply_accept
+        type: Bool
+        type_yang_bool: presence
+        description: "Accounting reply accept"
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: accounting/reply/reject
+        tf_name: accounting_reply_reject
+        type: Bool
+        type_yang_bool: presence
+        description: "Accounting reply reject"
+        delete_parent: true
+        example: true
+      - yang_name: accounting/reply/radius-attribute-list
+        tf_name: accounting_reply_radius_attribute_list
+        type: String
+        description: "Accounting reply RADIUS attribute list"
+        example: ACCT-REPLY-LIST
+  # radius/dynamic-author
+  - yang_name: Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/port
+    tf_name: server_radius_dynamic_author_port
+    example: 3799
+  - yang_name: Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/ignore/server-key
+    tf_name: server_radius_dynamic_author_ignore_server_key
+    example: true
+  - yang_name: Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/server-key/seven
+    tf_name: server_radius_dynamic_author_server_key_type_7
+    sensitive: true
+    write_only: true
+    example: "03075218050061"
+  - yang_name: Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/server-key/six
+    tf_name: server_radius_dynamic_author_server_key_type_6
+    sensitive: true
+    write_only: true
+    example: "082E4C5D0A1C095F451F120D2D3B3837"
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client
+    tf_name: server_radius_dynamic_author_clients
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.10"
+      - yang_name: vrf
+        id: true
+        example: "VRF1"
+      - yang_name: server-key/seven
+        tf_name: server_key_type_7
+        sensitive: true
+        write_only: true
+        example: "03075218050061"
+      - yang_name: server-key/six
+        tf_name: server_key_type_6
+        sensitive: true
+        write_only: true
+        example: "082E4C5D0A1C095F451F120D2D3B3837"
+        exclude_test: true
+  # tacacs:group/
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group
+    tf_name: tacacs_server_groups
+    type: List
+    no_augment_config: true
+    description: "TACACS Server Groups"
+    attributes:
+      - yang_name: server-group-name
+        tf_name: group_name
+        type: String
+        description: "Server group name"
+        id: true
+        example: TACACS-1
+      - yang_name: servers/server
+        tf_name: servers
+        type: List
+        no_augment_config: true
+        description: "Specify a TACACS server"
+        attributes:
+          - yang_name: ordering-index
+            tf_name: order
+            type: Int64
+            description: "Ordering index"
+            id: true
+            example: 10
+          - yang_name: address
+            tf_name: address
+            type: String
+            description: "IP address or hostname"
+            id: true
+            example: 9.0.1.68
+      - yang_name: vrf
+        tf_name: vrf
+        type: String
+        description: "VRF name"
+        example: VRF1
+      - yang_name: holddown-time
+        tf_name: holddown_time
+        type: Int64
+        description: "Holddown time in minutes"
+        example: 300
+      - yang_name: server-privates/server-private
+        tf_name: server_privates
+        type: List
+        no_augment_config: true
+        description: "Specify a private TACACS server"
+        attributes:
+          - yang_name: ordering-index
+            tf_name: order
+            type: Int64
+            description: "Ordering index"
+            id: true
+            example: 10
+          - yang_name: address
+            tf_name: address
+            type: String
+            description: "IP address or hostname"
+            id: true
+            example: 9.0.1.68
+          - yang_name: port
+            tf_name: port
+            type: Int64
+            description: "TCP port"
+            id: true
+            example: 49
+          - yang_name: key/seven
+            tf_name: key_type_7
+            type: String
+            description: "Type 7 encrypted key"
+            sensitive: true
+            write_only: true
+            example: 0235347225301B204F4F0A0A
+          - yang_name: key/six
+            tf_name: key_type_6
+            type: String
+            description: "Type 6 encrypted key"
+            sensitive: true
+            write_only: true
+            exclude_test: true
+            example: 0235347225301B204F4F0A0A
+          - yang_name: single-connection
+            tf_name: single_connection
+            type: Bool
+            type_yang_bool: presence
+            description: "Use single connection"
+            example: true
+          - yang_name: single-connection-idle-timeout
+            tf_name: single_connection_idle_timeout
+            type: Int64
+            description: "Single connection idle timeout in seconds"
+            example: 1000
+          - yang_name: timeout
+            tf_name: timeout
+            type: Int64
+            description: "Timeout in seconds"
+            example: 10
+          - yang_name: holddown-time
+            tf_name: holddown_time
+            type: Int64
+            description: "Holddown time in minutes"
+            example: 300
+  # usernames/
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username
+    tf_name: usernames
+    type: List
+    attributes:
+      - yang_name: ordering-index
+        tf_name: order
+        id: true
+        example: 3
+      - yang_name: name
+        id: true
+        example: terraform-user
+      - yang_name: secret/eight
+        tf_name: secret_type_8
+        sensitive: true
+        write_only: true
+        example: "$8$$8$ir0jx0hkPjwq9x$jl8xAAF2VJRmXEt3Vb0usXZh3VPTLRAO4MVGDPthf8Q"
+        exclude_test: true
+      - yang_name: secret/nine
+        tf_name: secret_type_9
+        sensitive: true
+        write_only: true
+        example: "$9$$9$HOrww0qBDjnn9w$kWaupkPuoqhlBwefUoGqk6KuhX9hMk4gbXhYQHc/7FU"
+        exclude_test: true
+      - yang_name: secret/ten
+        tf_name: secret_type_10
+        sensitive: true
+        write_only: true
+        example: "$6$JX.ze16kjuwfCe1.$aAaA/Zc0/lI2C7VrT4PmeBh.tsQj1fKAR3q.Oqq214vrnCLjhezD9/asda5WB8tbO4wqKp3MsA5cv3B2uHJOj/"
+      - yang_name: login-history/enable
+        tf_name: login_history_enable
+        example: true
+      - yang_name: login-history/disable
+        tf_name: login_history_disable
+        exclude_test: true
+        example: true
+      - yang_name: policy
+        example: policy1
+        exclude_test: true
+      - yang_name: group/root-lr
+        tf_name: group_root_lr
+        example: true
+      - yang_name: group/netadmin
+        tf_name: group_netadmin
+        exclude_test: true
+        example: true
+      - yang_name: group/sysadmin
+        tf_name: group_sysadmin
+        exclude_test: true
+        example: true
+      - yang_name: group/serviceadmin
+        tf_name: group_serviceadmin
+        exclude_test: true
+        example: true
+      - yang_name: group/operator
+        tf_name: group_operator
+        exclude_test: true
+        example: true
+      - yang_name: group/cisco-support
+        tf_name: group_cisco_support
+        exclude_test: true
+        example: true
+      - yang_name: group/maintenance
+        tf_name: group_maintenance
+        exclude_test: true
+        example: true
+      - yang_name: group/provisioning
+        tf_name: group_provisioning
+        exclude_test: true
+        example: true
+      - yang_name: group/retrieve
+        tf_name: group_retrieve
+        exclude_test: true
+        example: true
+      - yang_name: group/read-only-tg
+        tf_name: group_read_only_tg
+        exclude_test: true
+        example: true
+      - yang_name: group/user-groups/user-group
+        tf_name: user_groups
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: user-group-name
+            tf_name: group_name
+            id: true
+            example: READ-ONLY-UGRP
+      - yang_name: shell-type
+        example: bash
+        exclude_test: true
+      - yang_name: directory
+        example: /home/admin
+        exclude_test: true
+  # taskgroups/
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup
+    tf_name: taskgroups
+    type: List
+    attributes:
+      - yang_name: taskgroup-name
+        tf_name: group_name
+        id: true
+        example: "FULL-TGRP"
+      - yang_name: description
+        example: "Read Only Taskgroup"
+      # read
+      - yang_name: task/read/bgp
+        example: true
+      - yang_name: task/read/ospf
+        example: true
+      - yang_name: task/read/hsrp
+        example: true
+      - yang_name: task/read/isis
+        example: true
+      - yang_name: task/read/route-map
+        example: true
+      - yang_name: task/read/route-policy
+        example: true
+      - yang_name: task/read/static
+        example: true
+      - yang_name: task/read/vrrp
+        example: true
+      - yang_name: task/read/cef
+        example: true
+      - yang_name: task/read/lpts
+        example: true
+      - yang_name: task/read/ipv4
+        example: true
+      - yang_name: task/read/rib
+        example: true
+      - yang_name: task/read/multicast
+        example: true
+      - yang_name: task/read/mpls-te
+        example: true
+      - yang_name: task/read/mpls-ldp
+        example: true
+      - yang_name: task/read/mpls-static
+        example: true
+      - yang_name: task/read/ouni
+        example: true
+      - yang_name: task/read/fabric
+        example: true
+      - yang_name: task/read/bundle
+        example: true
+      - yang_name: task/read/network
+        example: true
+      - yang_name: task/read/transport
+        example: true
+      - yang_name: task/read/ppp
+        example: true
+      - yang_name: task/read/hdlc
+        example: true
+      - yang_name: task/read/pos-dpt
+        example: true
+      - yang_name: task/read/sonet-sdh
+        example: true
+      - yang_name: task/read/dwdm
+        example: true
+      - yang_name: task/read/tunnel
+        example: true
+      - yang_name: task/read/vlan
+        example: true
+      - yang_name: task/read/qos
+        example: true
+      - yang_name: task/read/acl
+        example: true
+      - yang_name: task/read/aaa
+        example: true
+      - yang_name: task/read/crypto
+        example: true
+      - yang_name: task/read/snmp
+        example: true
+      - yang_name: task/read/config-mgmt
+        example: true
+      - yang_name: task/read/config-services
+        example: true
+      - yang_name: task/read/host-services
+        example: true
+      - yang_name: task/read/boot
+        example: true
+      - yang_name: task/read/fault-mgr
+        example: true
+      - yang_name: task/read/filesystem
+        example: true
+      - yang_name: task/read/interface
+        example: true
+      - yang_name: task/read/ip-services
+        example: true
+      - yang_name: task/read/pkg-mgmt
+        example: true
+      - yang_name: task/read/system
+        example: true
+      - yang_name: task/read/tty-access
+        example: true
+      - yang_name: task/read/basic-services
+        example: true
+      - yang_name: task/read/cdp
+        example: true
+      - yang_name: task/read/diag
+        example: true
+      - yang_name: task/read/ext-access
+        example: true
+      - yang_name: task/read/bcdl
+        example: true
+      - yang_name: task/read/sysmgr
+        example: true
+      - yang_name: task/read/logging
+        example: true
+      - yang_name: task/read/netflow
+        example: true
+      - yang_name: task/read/drivers
+        example: true
+      - yang_name: task/read/fr
+        example: true
+      - yang_name: task/read/monitor
+        example: true
+      - yang_name: task/read/inventory
+        example: true
+      - yang_name: task/read/ipv6
+        example: true
+      - yang_name: task/read/admin
+        example: true
+      - yang_name: task/read/atm
+        example: true
+      - yang_name: task/read/bfd
+        example: true
+      - yang_name: task/read/rip
+        example: true
+      - yang_name: task/read/eigrp
+        example: true
+      - yang_name: task/read/sbc
+        example: true
+      - yang_name: task/read/firewall
+        example: true
+      - yang_name: task/read/l2vpn
+        example: true
+      - yang_name: task/read/ethernet-services
+        example: true
+      - yang_name: task/read/eem
+        example: true
+      - yang_name: task/read/li
+        example: true
+      - yang_name: task/read/ancp
+        example: true
+      - yang_name: task/read/cgn
+        example: true
+      - yang_name: task/read/call-home
+        example: true
+      - yang_name: task/read/rcmd
+        example: true
+      - yang_name: task/read/vpdn
+        example: true
+      - yang_name: task/read/nps
+        example: true
+      - yang_name: task/read/lisp
+        example: true
+      - yang_name: task/read/pbr
+        example: true
+      - yang_name: task/read/otn
+        example: true
+      - yang_name: task/read/nacm
+        example: true
+      - yang_name: task/read/plat-mgr
+        example: true
+      - yang_name: task/read/cpri
+        example: true
+      - yang_name: task/read/lldp
+        example: true
+      - yang_name: task/read/l2rib
+        example: true
+      - yang_name: task/read/dossier
+        example: true
+      - yang_name: task/read/fti
+        example: true
+      - yang_name: task/read/fc
+        example: true
+      # write
+      - yang_name: task/write/bgp
+        example: true
+      - yang_name: task/write/ospf
+        example: true
+      - yang_name: task/write/hsrp
+        example: true
+      - yang_name: task/write/isis
+        example: true
+      - yang_name: task/write/route-map
+        example: true
+      - yang_name: task/write/route-policy
+        example: true
+      - yang_name: task/write/static
+        example: true
+      - yang_name: task/write/vrrp
+        example: true
+      - yang_name: task/write/cef
+        example: true
+      - yang_name: task/write/lpts
+        example: true
+      - yang_name: task/write/ipv4
+        example: true
+      - yang_name: task/write/rib
+        example: true
+      - yang_name: task/write/multicast
+        example: true
+      - yang_name: task/write/mpls-te
+        example: true
+      - yang_name: task/write/mpls-ldp
+        example: true
+      - yang_name: task/write/mpls-static
+        example: true
+      - yang_name: task/write/ouni
+        example: true
+      - yang_name: task/write/fabric
+        example: true
+      - yang_name: task/write/bundle
+        example: true
+      - yang_name: task/write/network
+        example: true
+      - yang_name: task/write/transport
+        example: true
+      - yang_name: task/write/ppp
+        example: true
+      - yang_name: task/write/hdlc
+        example: true
+      - yang_name: task/write/pos-dpt
+        example: true
+      - yang_name: task/write/sonet-sdh
+        example: true
+      - yang_name: task/write/dwdm
+        example: true
+      - yang_name: task/write/tunnel
+        example: true
+      - yang_name: task/write/vlan
+        example: true
+      - yang_name: task/write/qos
+        example: true
+      - yang_name: task/write/acl
+        example: true
+      - yang_name: task/write/aaa
+        example: true
+      - yang_name: task/write/crypto
+        example: true
+      - yang_name: task/write/snmp
+        example: true
+      - yang_name: task/write/config-mgmt
+        example: true
+      - yang_name: task/write/config-services
+        example: true
+      - yang_name: task/write/host-services
+        example: true
+      - yang_name: task/write/boot
+        example: true
+      - yang_name: task/write/fault-mgr
+        example: true
+      - yang_name: task/write/filesystem
+        example: true
+      - yang_name: task/write/interface
+        example: true
+      - yang_name: task/write/ip-services
+        example: true
+      - yang_name: task/write/pkg-mgmt
+        example: true
+      - yang_name: task/write/system
+        example: true
+      - yang_name: task/write/tty-access
+        example: true
+      - yang_name: task/write/basic-services
+        example: true
+      - yang_name: task/write/cdp
+        example: true
+      - yang_name: task/write/diag
+        example: true
+      - yang_name: task/write/ext-access
+        example: true
+      - yang_name: task/write/bcdl
+        example: true
+      - yang_name: task/write/sysmgr
+        example: true
+      - yang_name: task/write/logging
+        example: true
+      - yang_name: task/write/netflow
+        example: true
+      - yang_name: task/write/drivers
+        example: true
+      - yang_name: task/write/fr
+        example: true
+      - yang_name: task/write/monitor
+        example: true
+      - yang_name: task/write/inventory
+        example: true
+      - yang_name: task/write/ipv6
+        example: true
+      - yang_name: task/write/admin
+        example: true
+      - yang_name: task/write/atm
+        example: true
+      - yang_name: task/write/bfd
+        example: true
+      - yang_name: task/write/rip
+        example: true
+      - yang_name: task/write/eigrp
+        example: true
+      - yang_name: task/write/sbc
+        example: true
+      - yang_name: task/write/firewall
+        example: true
+      - yang_name: task/write/l2vpn
+        example: true
+      - yang_name: task/write/ethernet-services
+        example: true
+      - yang_name: task/write/eem
+        example: true
+      - yang_name: task/write/li
+        example: true
+      - yang_name: task/write/ancp
+        example: true
+      - yang_name: task/write/cgn
+        example: true
+      - yang_name: task/write/call-home
+        example: true
+      - yang_name: task/write/rcmd
+        example: true
+      - yang_name: task/write/vpdn
+        example: true
+      - yang_name: task/write/nps
+        example: true
+      - yang_name: task/write/lisp
+        example: true
+      - yang_name: task/write/pbr
+        example: true
+      - yang_name: task/write/otn
+        example: true
+      - yang_name: task/write/nacm
+        example: true
+      - yang_name: task/write/plat-mgr
+        example: true
+      - yang_name: task/write/cpri
+        example: true
+      - yang_name: task/write/lldp
+        example: true
+      - yang_name: task/write/l2rib
+        example: true
+      - yang_name: task/write/dossier
+        example: true
+      - yang_name: task/write/fti
+        example: true
+      - yang_name: task/write/fc
+        example: true
+      # execute
+      - yang_name: task/execute/bgp
+        example: true
+      - yang_name: task/execute/ospf
+        example: true
+      - yang_name: task/execute/hsrp
+        example: true
+      - yang_name: task/execute/isis
+        example: true
+      - yang_name: task/execute/route-map
+        example: true
+      - yang_name: task/execute/route-policy
+        example: true
+      - yang_name: task/execute/static
+        example: true
+      - yang_name: task/execute/vrrp
+        example: true
+      - yang_name: task/execute/cef
+        example: true
+      - yang_name: task/execute/lpts
+        example: true
+      - yang_name: task/execute/ipv4
+        example: true
+      - yang_name: task/execute/rib
+        example: true
+      - yang_name: task/execute/multicast
+        example: true
+      - yang_name: task/execute/mpls-te
+        example: true
+      - yang_name: task/execute/mpls-ldp
+        example: true
+      - yang_name: task/execute/mpls-static
+        example: true
+      - yang_name: task/execute/ouni
+        example: true
+      - yang_name: task/execute/fabric
+        example: true
+      - yang_name: task/execute/bundle
+        example: true
+      - yang_name: task/execute/network
+        example: true
+      - yang_name: task/execute/transport
+        example: true
+      - yang_name: task/execute/ppp
+        example: true
+      - yang_name: task/execute/hdlc
+        example: true
+      - yang_name: task/execute/pos-dpt
+        example: true
+      - yang_name: task/execute/sonet-sdh
+        example: true
+      - yang_name: task/execute/dwdm
+        example: true
+      - yang_name: task/execute/tunnel
+        example: true
+      - yang_name: task/execute/vlan
+        example: true
+      - yang_name: task/execute/qos
+        example: true
+      - yang_name: task/execute/acl
+        example: true
+      - yang_name: task/execute/aaa
+        example: true
+      - yang_name: task/execute/crypto
+        example: true
+      - yang_name: task/execute/snmp
+        example: true
+      - yang_name: task/execute/config-mgmt
+        example: true
+      - yang_name: task/execute/config-services
+        example: true
+      - yang_name: task/execute/host-services
+        example: true
+      - yang_name: task/execute/boot
+        example: true
+      - yang_name: task/execute/fault-mgr
+        example: true
+      - yang_name: task/execute/filesystem
+        example: true
+      - yang_name: task/execute/interface
+        example: true
+      - yang_name: task/execute/ip-services
+        example: true
+      - yang_name: task/execute/pkg-mgmt
+        example: true
+      - yang_name: task/execute/system
+        example: true
+      - yang_name: task/execute/tty-access
+        example: true
+      - yang_name: task/execute/basic-services
+        example: true
+      - yang_name: task/execute/cdp
+        example: true
+      - yang_name: task/execute/diag
+        example: true
+      - yang_name: task/execute/ext-access
+        example: true
+      - yang_name: task/execute/bcdl
+        example: true
+      - yang_name: task/execute/sysmgr
+        example: true
+      - yang_name: task/execute/logging
+        example: true
+      - yang_name: task/execute/netflow
+        example: true
+      - yang_name: task/execute/drivers
+        example: true
+      - yang_name: task/execute/fr
+        example: true
+      - yang_name: task/execute/monitor
+        example: true
+      - yang_name: task/execute/inventory
+        example: true
+      - yang_name: task/execute/ipv6
+        example: true
+      - yang_name: task/execute/admin
+        example: true
+      - yang_name: task/execute/atm
+        example: true
+      - yang_name: task/execute/bfd
+        example: true
+      - yang_name: task/execute/rip
+        example: true
+      - yang_name: task/execute/eigrp
+        example: true
+      - yang_name: task/execute/sbc
+        example: true
+      - yang_name: task/execute/firewall
+        example: true
+      - yang_name: task/execute/l2vpn
+        example: true
+      - yang_name: task/execute/ethernet-services
+        example: true
+      - yang_name: task/execute/eem
+        example: true
+      - yang_name: task/execute/li
+        example: true
+      - yang_name: task/execute/ancp
+        example: true
+      - yang_name: task/execute/cgn
+        example: true
+      - yang_name: task/execute/call-home
+        example: true
+      - yang_name: task/execute/rcmd
+        example: true
+      - yang_name: task/execute/vpdn
+        example: true
+      - yang_name: task/execute/nps
+        example: true
+      - yang_name: task/execute/lisp
+        example: true
+      - yang_name: task/execute/pbr
+        example: true
+      - yang_name: task/execute/otn
+        example: true
+      - yang_name: task/execute/nacm
+        example: true
+      - yang_name: task/execute/plat-mgr
+        example: true
+      - yang_name: task/execute/cpri
+        example: true
+      - yang_name: task/execute/lldp
+        example: true
+      - yang_name: task/execute/l2rib
+        example: true
+      - yang_name: task/execute/dossier
+        example: true
+      - yang_name: task/execute/fti
+        example: true
+      - yang_name: task/execute/fc
+        example: true
+      # debug
+      - yang_name: task/debug/bgp
+        example: true
+      - yang_name: task/debug/ospf
+        example: true
+      - yang_name: task/debug/hsrp
+        example: true
+      - yang_name: task/debug/isis
+        example: true
+      - yang_name: task/debug/route-map
+        example: true
+      - yang_name: task/debug/route-policy
+        example: true
+      - yang_name: task/debug/static
+        example: true
+      - yang_name: task/debug/vrrp
+        example: true
+      - yang_name: task/debug/cef
+        example: true
+      - yang_name: task/debug/lpts
+        example: true
+      - yang_name: task/debug/ipv4
+        example: true
+      - yang_name: task/debug/rib
+        example: true
+      - yang_name: task/debug/multicast
+        example: true
+      - yang_name: task/debug/mpls-te
+        example: true
+      - yang_name: task/debug/mpls-ldp
+        example: true
+      - yang_name: task/debug/mpls-static
+        example: true
+      - yang_name: task/debug/ouni
+        example: true
+      - yang_name: task/debug/fabric
+        example: true
+      - yang_name: task/debug/bundle
+        example: true
+      - yang_name: task/debug/network
+        example: true
+      - yang_name: task/debug/transport
+        example: true
+      - yang_name: task/debug/ppp
+        example: true
+      - yang_name: task/debug/hdlc
+        example: true
+      - yang_name: task/debug/pos-dpt
+        example: true
+      - yang_name: task/debug/sonet-sdh
+        example: true
+      - yang_name: task/debug/dwdm
+        example: true
+      - yang_name: task/debug/tunnel
+        example: true
+      - yang_name: task/debug/vlan
+        example: true
+      - yang_name: task/debug/qos
+        example: true
+      - yang_name: task/debug/acl
+        example: true
+      - yang_name: task/debug/aaa
+        example: true
+      - yang_name: task/debug/crypto
+        example: true
+      - yang_name: task/debug/snmp
+        example: true
+      - yang_name: task/debug/config-mgmt
+        example: true
+      - yang_name: task/debug/config-services
+        example: true
+      - yang_name: task/debug/host-services
+        example: true
+      - yang_name: task/debug/boot
+        example: true
+      - yang_name: task/debug/fault-mgr
+        example: true
+      - yang_name: task/debug/filesystem
+        example: true
+      - yang_name: task/debug/interface
+        example: true
+      - yang_name: task/debug/ip-services
+        example: true
+      - yang_name: task/debug/pkg-mgmt
+        example: true
+      - yang_name: task/debug/system
+        example: true
+      - yang_name: task/debug/tty-access
+        example: true
+      - yang_name: task/debug/basic-services
+        example: true
+      - yang_name: task/debug/cdp
+        example: true
+      - yang_name: task/debug/diag
+        example: true
+      - yang_name: task/debug/ext-access
+        example: true
+      - yang_name: task/debug/bcdl
+        example: true
+      - yang_name: task/debug/sysmgr
+        example: true
+      - yang_name: task/debug/logging
+        example: true
+      - yang_name: task/debug/netflow
+        example: true
+      - yang_name: task/debug/drivers
+        example: true
+      - yang_name: task/debug/fr
+        example: true
+      - yang_name: task/debug/monitor
+        example: true
+      - yang_name: task/debug/inventory
+        example: true
+      - yang_name: task/debug/ipv6
+        example: true
+      - yang_name: task/debug/admin
+        example: true
+      - yang_name: task/debug/atm
+        example: true
+      - yang_name: task/debug/bfd
+        example: true
+      - yang_name: task/debug/rip
+        example: true
+      - yang_name: task/debug/eigrp
+        example: true
+      - yang_name: task/debug/sbc
+        example: true
+      - yang_name: task/debug/firewall
+        example: true
+      - yang_name: task/debug/l2vpn
+        example: true
+      - yang_name: task/debug/ethernet-services
+        example: true
+      - yang_name: task/debug/eem
+        example: true
+      - yang_name: task/debug/li
+        example: true
+      - yang_name: task/debug/ancp
+        example: true
+      - yang_name: task/debug/cgn
+        example: true
+      - yang_name: task/debug/call-home
+        example: true
+      - yang_name: task/debug/rcmd
+        example: true
+      - yang_name: task/debug/vpdn
+        example: true
+      - yang_name: task/debug/nps
+        example: true
+      - yang_name: task/debug/lisp
+        example: true
+      - yang_name: task/debug/pbr
+        example: true
+      - yang_name: task/debug/otn
+        example: true
+      - yang_name: task/debug/nacm
+        example: true
+      - yang_name: task/debug/plat-mgr
+        example: true
+      - yang_name: task/debug/cpri
+        example: true
+      - yang_name: task/debug/lldp
+        example: true
+      - yang_name: task/debug/l2rib
+        example: true
+      - yang_name: task/debug/dossier
+        example: true
+      - yang_name: task/debug/fti
+        example: true
+      - yang_name: task/debug/fc
+        example: true
+      - yang_name: inherit/taskgroup/root-lr
+        tf_name: inherit_taskgroup_root_lr
+        example: true
+      - yang_name: inherit/taskgroup/netadmin
+        tf_name: inherit_taskgroup_netadmin
+        example: true
+      - yang_name: inherit/taskgroup/sysadmin
+        tf_name: inherit_taskgroup_sysadmin
+        example: true
+      - yang_name: inherit/taskgroup/serviceadmin
+        tf_name: inherit_taskgroup_serviceadmin
+        example: true
+      - yang_name: inherit/taskgroup/operator
+        tf_name: inherit_taskgroup_operator
+        example: true
+      - yang_name: inherit/taskgroup/cisco-support
+        tf_name: inherit_taskgroup_cisco_support
+        example: true
+      - yang_name: inherit/taskgroup/task-groups/task-group
+        tf_name: inherit_taskgroups
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: task-group-name
+            tf_name: group_name
+            id: true
+            example: "INHERIT-TGRP"
+  # usergroups/
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup
+    tf_name: usergroups
+    type: List
+    minimum_test_value: '[group_name="FULL-UGRP"]'
+    attributes:
+      - yang_name: usergroup-name
+        tf_name: group_name
+        id: true
+        example: "FULL-UGRP"
+      - yang_name: description
+        example: "Full User Group"
+      - yang_name: taskgroup/root-lr
+        tf_name: taskgroup_root_lr
+        minimum_test_value: true
+        example: true
+      - yang_name: taskgroup/netadmin
+        tf_name: taskgroup_netadmin
+        example: true
+      - yang_name: taskgroup/sysadmin
+        tf_name: taskgroup_sysadmin
+        example: true
+      - yang_name: taskgroup/serviceadmin
+        tf_name: taskgroup_serviceadmin
+        example: true
+      - yang_name: taskgroup/operator
+        tf_name: taskgroup_operator
+        example: true
+      - yang_name: taskgroup/cisco-support
+        tf_name: taskgroup_cisco_support
+        minimum_test_value: true
+        example: true
+      - yang_name: taskgroup/maintenance
+        tf_name: taskgroup_maintenance
+        example: true
+      - yang_name: taskgroup/provisioning
+        tf_name: taskgroup_provisioning
+        example: true
+      - yang_name: taskgroup/retrieve
+        tf_name: taskgroup_retrieve
+        example: true
+      - yang_name: taskgroup/read-only-tg
+        tf_name: taskgroup_read_only
+        example: true
+        exclude_test: true
+      - yang_name: taskgroup/task-groups/task-group
+        tf_name: taskgroups
+        type: List
+        attributes:
+          - yang_name: task-group-name
+            tf_name: group_name
+            id: true
+            example: "FULL-TGRP"
+      - yang_name: inherit/usergroup
+        tf_name: inherit_usergroups
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: usergroup-name
+            tf_name: group_name
+            id: true
+            example: "INHERIT-UGRP"
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1
+  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius-server/hosts/host[ordering-index=1][address=10.1.1.1][auth-port=1812][acct-port=1813]
+    attributes:
+      - name: ordering-index
+        value: 1
+      - name: address
+        value: 10.1.1.1
+      - name: auth-port
+        value: 1812
+      - name: acct-port
+        value: 1813
+      - name: key/seven
+        value: 060506324F41584B
+    dependencies: [0]
+  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/hosts/host[ordering-index=1][address=9.0.1.68][port=49]
+    attributes:
+      - name: ordering-index
+        value: 1
+      - name: address
+        value: 9.0.1.68
+      - name: port
+        value: 49
+      - name: key/seven
+        value: 0235347225301B204F4F0A0A
+    dependencies: [1]

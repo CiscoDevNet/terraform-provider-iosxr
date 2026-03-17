@@ -1,0 +1,275 @@
+---
+name: RSVP Interface
+path: Cisco-IOS-XR-um-rsvp-cfg:/rsvp/interfaces/interface[interface-name=%s]
+doc_category: MPLS
+attributes:
+  - yang_name: interface-name
+    id: true
+    reference: true
+    example: GigabitEthernet0/0/0/1
+  - yang_name: bandwidth/default
+    exclude_test: true
+    example: true
+  # bandwidth - absolute
+  - yang_name: bandwidth/total-reservable-bandwidth
+    tf_name: bandwidth_total
+    exclude_test: true
+    example: 1000000
+  - yang_name: bandwidth/largest-reservable-flow
+    tf_name: bandwidth_flow
+    exclude_test: true
+    example: 200000
+  # bandwidth - global
+  - yang_name: bandwidth/global-pool/total-reservable-bandwidth
+    tf_name: bandwidth_global_pool_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 1000000
+  - yang_name: bandwidth/global-pool/largest-reservable-flow
+    tf_name: bandwidth_global_pool_flow
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  - yang_name: bandwidth/sub-pool/reservable-bandwidth
+    tf_name: bandwidth_sub_pool_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  # bandwidth - bc0
+  - yang_name: bandwidth/bc0/total-reservable-bandwidth
+    tf_name: bandwidth_bc0_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 1000000
+  - yang_name: bandwidth/bc0/largest-reservable-flow
+    tf_name: bandwidth_bc0_flow
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  - yang_name: bandwidth/bc0/bc1/reservable-bandwidth
+    tf_name: bandwidth_bc1_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  # bandwidth - percentage (non-rdm)
+  - yang_name: bandwidth/percentage/total-reservable-bandwidth
+    tf_name: bandwidth_percentage_total
+    exclude_test: true
+    example: 80
+  - yang_name: bandwidth/percentage/largest-reservable-flow
+    tf_name: bandwidth_percentage_flow
+    exclude_test: true
+    example: 20
+  # bandwidth - percentage (non-rdm - global)
+  - yang_name: bandwidth/percentage/global-pool/total-reservable-bandwidth
+    tf_name: bandwidth_percentage_global_pool_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 80
+  - yang_name: bandwidth/percentage/global-pool/largest-reservable-flow
+    tf_name: bandwidth_percentage_global_pool_flow
+    delete_parent: true
+    exclude_test: true
+    example: 20
+  - yang_name: bandwidth/percentage/sub-pool/reservable-bandwidth
+    tf_name: bandwidth_percentage_sub_pool_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 20
+  # bandwidth - percentage (non-rdm - bc0)
+  - yang_name: bandwidth/percentage/bc0/total-reservable-bandwidth
+    tf_name: bandwidth_percentage_bc0_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 80
+  - yang_name: bandwidth/percentage/bc0/largest-reservable-flow
+    tf_name: bandwidth_percentage_bc0_flow
+    delete_parent: true
+    exclude_test: true
+    example: 20
+  - yang_name: bandwidth/percentage/bc0/bc1/reservable-bandwidth
+    tf_name: bandwidth_percentage_bc1_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 20
+  # bandwidth - percentage (rdm)
+  - yang_name: bandwidth/rdm/percentage/total-reservable-bandwidth
+    tf_name: bandwidth_rdm_percentage_total
+    exclude_test: true
+    example: 80
+  - yang_name: bandwidth/rdm/percentage/largest-reservable-flow
+    tf_name: bandwidth_rdm_percentage_flow
+    exclude_test: true
+    example: 20
+  # bandwidth - percentage (rdm - global)
+  - yang_name: bandwidth/rdm/percentage/global-pool/total-reservable-bandwidth
+    tf_name: bandwidth_rdm_percentage_global_pool_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 80
+  - yang_name: bandwidth/rdm/percentage/global-pool/largest-reservable-flow
+    tf_name: bandwidth_rdm_percentage_global_pool_flow
+    delete_parent: true
+    exclude_test: true
+    example: 20
+  - yang_name: bandwidth/rdm/percentage/sub-pool/reservable-bandwidth
+    tf_name: bandwidth_rdm_percentage_sub_pool_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 20
+  # bandwidth - percentage (rdm - bc0)
+  - yang_name: bandwidth/rdm/percentage/bc0/total-reservable-bandwidth
+    tf_name: bandwidth_rdm_percentage_bc0_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 80
+  - yang_name: bandwidth/rdm/percentage/bc0/largest-reservable-flow
+    tf_name: bandwidth_rdm_percentage_bc0_flow
+    delete_parent: true
+    exclude_test: true
+    example: 20
+  - yang_name: bandwidth/rdm/percentage/bc0/bc1/reservable-bandwidth
+    tf_name: bandwidth_rdm_percentage_bc1_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 20
+  # bandwidth - absolute (rdm)
+  - yang_name: bandwidth/rdm/total-reservable-bandwidth
+    tf_name: bandwidth_rdm_total
+    exclude_test: true
+    example: 1000000
+  - yang_name: bandwidth/rdm/largest-reservable-flow
+    tf_name: bandwidth_rdm_flow
+    exclude_test: true
+    example: 200000
+  # bandwidth - absolute (rdm - global)
+  - yang_name: bandwidth/rdm/global-pool/total-reservable-bandwidth
+    tf_name: bandwidth_rdm_global_pool_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 1000000
+  - yang_name: bandwidth/rdm/global-pool/largest-reservable-flow
+    tf_name: bandwidth_rdm_global_pool_flow
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  - yang_name: bandwidth/rdm/sub-pool/reservable-bandwidth
+    tf_name: bandwidth_rdm_sub_pool_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  # bandwidth - absolute (rdm - bc0)
+  - yang_name: bandwidth/rdm/bc0/total-reservable-bandwidth
+    tf_name: bandwidth_rdm_bc0_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 1000000
+  - yang_name: bandwidth/rdm/bc0/largest-reservable-flow
+    tf_name: bandwidth_rdm_bc0_flow
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  - yang_name: bandwidth/rdm/bc0/bc1/reservable-bandwidth
+    tf_name: bandwidth_rdm_bc1_total
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  # bandwidth - absolute (mam)
+  - yang_name: bandwidth/mam/max-reservable-bw/total-reservable-bandwidth
+    tf_name: bandwidth_mam_total
+    delete_parent: true
+    exclude_test: true
+    example: 1000000
+  - yang_name: bandwidth/mam/max-reservable-bw/largest-reservable-flow
+    tf_name: bandwidth_mam_flow
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  - yang_name: bandwidth/mam/max-reservable-bw/bc0
+    tf_name: bandwidth_mam_bc0_total
+    delete_parent: true
+    exclude_test: true
+    example: 800000
+  - yang_name: bandwidth/mam/max-reservable-bw/bc1
+    tf_name: bandwidth_mam_bc1_total
+    delete_parent: true
+    exclude_test: true
+    example: 200000
+  # bandwidth - percentage (mam)
+  - yang_name: bandwidth/mam/percentage/max-reservable-bw/total-reservable-bandwidth
+    tf_name: bandwidth_mam_percentage_total
+    delete_parent: true
+    example: 80
+  - yang_name: bandwidth/mam/percentage/max-reservable-bw/largest-reservable-flow
+    tf_name: bandwidth_mam_percentage_flow
+    delete_parent: true
+    example: 20
+  - yang_name: bandwidth/mam/percentage/max-reservable-bw/bc0
+    tf_name: bandwidth_mam_percentage_bc0_total
+    delete_parent: true
+    example: 80
+  - yang_name: bandwidth/mam/percentage/max-reservable-bw/bc1
+    tf_name: bandwidth_mam_percentage_bc1_total
+    delete_parent: true
+    example: 20
+  # signalling
+  - yang_name: signalling/dscp
+    example: 48
+  - yang_name: signalling/rate-limit/enable
+    example: true
+  - yang_name: signalling/rate-limit/rate
+    example: 200
+  - yang_name: signalling/rate-limit/interval
+    example: 1000
+  - yang_name: signalling/refresh/interval
+    example: 120
+  - yang_name: signalling/refresh/missed
+    example: 2
+  - yang_name: signalling/refresh/out-of-band/interval
+    tf_name: signalling_refresh_oob_interval
+    example: 200
+  - yang_name: signalling/refresh/out-of-band/missed
+    tf_name: signalling_refresh_oob_missed
+    example: 2
+  - yang_name: signalling/refresh/reduction/disable
+    exclude_test: true
+    example: true
+  - yang_name: signalling/refresh/reduction/reliable/ack-hold-time
+    example: 1000
+  - yang_name: signalling/refresh/reduction/reliable/ack-max-size
+    example: 2000
+  - yang_name: signalling/refresh/reduction/reliable/retransmit-time
+    example: 1000
+  - yang_name: signalling/refresh/reduction/reliable/retransmit-queue-depth
+    example: 100
+  - yang_name: signalling/refresh/reduction/reliable/summary-refresh
+    example: true
+  - yang_name: signalling/refresh/reduction/summary/max-size
+    example: 100
+  - yang_name: signalling/refresh/reduction/bundle-max-size
+    example: 1000
+  - yang_name: signalling/hello/graceful-restart/interface-based
+    example: true
+  - yang_name: authentication/key-source/key-chain
+    tf_name: authentication_key_chain
+    example: KEY1
+  - yang_name: authentication/window-size
+    example: 32
+  - yang_name: authentication/life-time
+    example: 60

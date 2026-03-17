@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -74,7 +75,7 @@ func (data SegmentRoutingMappingServerData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SegmentRoutingMappingServer) toBody(ctx context.Context) string {
+func (data SegmentRoutingMappingServer) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if len(data.MappingPrefixSidAddressFamily) > 0 {
 		body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family", []interface{}{})
@@ -83,7 +84,6 @@ func (data SegmentRoutingMappingServer) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.ValueString())
 			}
 			if len(item.PrefixAddresses) > 0 {
-				body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"prefix-address", []interface{}{})
 				for cindex, citem := range item.PrefixAddresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"prefix-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -111,8 +111,29 @@ func (data SegmentRoutingMappingServer) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data SegmentRoutingMappingServer) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data SegmentRoutingMappingServer) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.MappingPrefixSidAddressFamily {
 		keys := [...]string{"af-name"}
@@ -399,7 +420,6 @@ func (data *SegmentRoutingMappingServer) getEmptyLeafsDelete(ctx context.Context
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *SegmentRoutingMappingServer) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.MappingPrefixSidAddressFamily {

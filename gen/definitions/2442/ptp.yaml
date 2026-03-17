@@ -1,0 +1,173 @@
+---
+name: PTP
+path: Cisco-IOS-XR-um-ptp-cfg:/ptp
+doc_category: Timing
+test_tags: [NCS, C8000]
+attributes:
+  - yang_name: frequency/priority
+    example: 10
+  - yang_name: time-of-day/priority
+    example: 10
+  - yang_name: ipv6-verify-checksum
+    example: true
+  - yang_name: min-clock-class
+    example: 128
+  - yang_name: utc-offset/baseline
+    example: 37
+  - yang_name: utc-offset/offsets/offset
+    tf_name: utc_offsets
+    type: List
+    attributes:
+      - yang_name: date
+        id: true
+        example: "2025-12-01"
+      - yang_name: offset-value
+        example: 37
+  - yang_name: uncalibrated-clock-class/clock-class
+    optional: true
+    delete_parent: true
+    example: 248
+  - yang_name: uncalibrated-clock-class/unless-from-holdover
+    delete_parent: true
+    example: true
+  - yang_name: uncalibrated-traceable-override
+    example: true
+  - yang_name: startup-clock-class
+    example: 165
+  - yang_name: freerun-clock-class
+    example: 249
+  - yang_name: double-failure-clock-class
+    example: 250
+  - yang_name: transparent-clock/domain/all
+    exclude_test: true
+    example: true
+  - yang_name: physical-layer-frequency
+    example: true
+  - yang_name: network-type/high-pdv
+    example: true
+  - yang_name: servo-slow-tracking
+    test_tags: [NCS]
+    include_example: true
+    example: 16
+  - yang_name: holdover-spec-clock-class
+    example: 164
+  - yang_name: holdover-spec-duration
+    example: 600
+  - yang_name: holdover-spec-traceable-override
+    example: true
+  - yang_name: apts
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: phase-difference-threshold-breach
+    exclude_test: true
+    example: 1000000
+  - yang_name: detect-ptsf-unusable
+    exclude_test: true
+    example: true
+  - yang_name: performance-monitoring
+    example: true
+  - yang_name: log/best-primary-clock/changes
+    minimum_test_value: true
+    example: true
+  - yang_name: log/Cisco-IOS-XR-um-ptp-log-servo-cfg:servo/events
+    tf_name: log_servo_events
+    example: true
+  # virtual-port/
+  - yang_name: virtual-port
+    example: true
+  - yang_name: virtual-port/priority1
+    example: 128
+  - yang_name: virtual-port/priority2
+    example: 129
+  - yang_name: virtual-port/clock-class
+    example: 6
+  - yang_name: virtual-port/clock-accuracy
+    example: 33
+  - yang_name: virtual-port/offset-scaled-log-variance
+    example: 4100
+  - yang_name: virtual-port/local-priority
+    example: 128
+  - yang_name: virtual-port/gm-threshold-breach
+    test_tags: [NCS]
+    include_example: true
+    example: 1000000
+  # clock/
+  - yang_name: clock/identity/mac-address/custom
+    tf_name: clock_identity_mac_address_custom
+    example: 00:11:22:33:44:55
+  - yang_name: clock/identity/mac-address/router
+    tf_name: clock_identity_mac_address_router
+    exclude_test: true
+    example: true
+  - yang_name: clock/identity/eui-64
+    tf_name: clock_identity_eui_64
+    exclude_test: true
+    example: 0011223344556677
+  - yang_name: clock/domain
+    example: 24
+  - yang_name: clock/priority1
+    example: 128
+  - yang_name: clock/priority2
+    example: 128
+  - yang_name: clock/clock-class
+    example: 6
+  - yang_name: clock/timescale/ptp
+    example: true
+  - yang_name: clock/timescale/arb
+    exclude_test: true
+    example: true
+  - yang_name: clock/time-source/atomic-clock
+    example: true
+    exclude_test: true
+  - yang_name: clock/time-source/gps
+    example: true
+  - yang_name: clock/time-source/terrestrial-radio
+    exclude_test: true
+    example: true
+  - yang_name: clock/time-source/ptp
+    exclude_test: true
+    example: true
+  - yang_name: clock/time-source/ntp
+    exclude_test: true
+    example: true
+  - yang_name: clock/time-source/hand-set
+    exclude_test: true
+    example: true
+  - yang_name: clock/time-source/other
+    exclude_test: true
+    example: true
+  - yang_name: clock/time-source/internal-oscillator
+    exclude_test: true
+    example: true
+  - yang_name: clock/profile/g-8265-1
+    exclude_test: true
+    example: true
+  - yang_name: clock/profile/g-8265-1/clock-type/primary
+    tf_name: clock_profile_g_8265_1_clock_type_master
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: clock/profile/g-8265-1/clock-type/subordinate
+    tf_name: clock_profile_g_8265_1_clock_type_slave
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: clock/profile/g-8275-1/clock-type/t-bc
+    tf_name: clock_profile_g_8275_1_clock_type_t_bc
+    example: true
+  - yang_name: clock/profile/g-8275-1/clock-type/t-gm
+    exclude_test: true
+    example: true
+  - yang_name: clock/profile/g-8275-1/clock-type/t-tsc
+    exclude_test: true
+    example: true
+  - yang_name: clock/profile/g-8275-2/clock-type/t-bc
+    exclude_test: true
+    example: true
+  - yang_name: clock/profile/g-8275-2/clock-type/t-gm
+    exclude_test: true
+    example: true
+  - yang_name: clock/profile/g-8275-2/clock-type/t-tsc
+    exclude_test: true
+    example: true

@@ -22,10 +22,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"reflect"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/sjson"
 	"github.com/tidwall/gjson"
@@ -36,7 +38,8 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 {{- $name := camelCase .Name}}
-type {{camelCase .Name}} struct {
+{{- $versionSuffix := versionSuffix .Version}}
+type {{camelCase .Name}}{{$versionSuffix}} struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
 {{- if and (not .NoDelete) (not .NoDeleteAttributes)}}
@@ -44,7 +47,7 @@ type {{camelCase .Name}} struct {
 {{- end}}
 {{- range .Attributes}}
 {{- if or (eq .Type "List") (eq .Type "Set")}}
-	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
+	{{toGoName .TfName}} []{{$name}}{{$versionSuffix}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
 {{- else if or (eq .Type "StringList") (eq .Type "Int64List")}}
 	{{toGoName .TfName}} types.List `tfsdk:"{{.TfName}}"`
 {{- else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}
@@ -55,12 +58,12 @@ type {{camelCase .Name}} struct {
 {{- end}}
 }
 
-type {{camelCase .Name}}Data struct {
+type {{camelCase .Name}}{{$versionSuffix}}Data struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
 {{- range .Attributes}}
 {{- if or (eq .Type "List") (eq .Type "Set")}}
-	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
+	{{toGoName .TfName}} []{{$name}}{{$versionSuffix}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
 {{- else if or (eq .Type "StringList") (eq .Type "Int64List")}}
 	{{toGoName .TfName}} types.List `tfsdk:"{{.TfName}}"`
 {{- else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}
@@ -74,10 +77,10 @@ type {{camelCase .Name}}Data struct {
 {{- range .Attributes}}
 {{- $cname := toGoName .TfName}}
 {{- if or (eq .Type "List") (eq .Type "Set")}}
-type {{$name}}{{toGoName .TfName}} struct {
+type {{$name}}{{$versionSuffix}}{{toGoName .TfName}} struct {
 {{- range .Attributes}}
 {{- if or (eq .Type "List") (eq .Type "Set")}}
-	{{toGoName .TfName}} []{{$name}}{{$cname}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
+	{{toGoName .TfName}} []{{$name}}{{$versionSuffix}}{{$cname}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
 {{- else if or (eq .Type "StringList") (eq .Type "Int64List")}}
 	{{toGoName .TfName}} types.List `tfsdk:"{{.TfName}}"`
 {{- else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}
@@ -96,7 +99,7 @@ type {{$name}}{{toGoName .TfName}} struct {
 {{- range .Attributes}}
 {{- $ccname := toGoName .TfName}}
 {{- if or (eq .Type "List") (eq .Type "Set")}}
-type {{$name}}{{$cname}}{{toGoName .TfName}} struct {
+type {{$name}}{{$versionSuffix}}{{$cname}}{{toGoName .TfName}} struct {
 {{- range .Attributes}}
 {{- if and .TfName .Type}}
 {{- if or (eq .Type "List") (eq .Type "Set")}}
@@ -184,7 +187,9 @@ type {{$name}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}} struct {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
 
-func (data {{camelCase .Name}}) getPath() string {
+{{- $versionSuffix := versionSuffix .Version}}
+
+func (data {{camelCase .Name}}{{$versionSuffix}}) getPath() string {
 {{- if hasId .Attributes}}
 	return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or .Id .Reference}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
 {{- else}}
@@ -192,7 +197,7 @@ func (data {{camelCase .Name}}) getPath() string {
 {{- end}}
 }
 
-func (data {{camelCase .Name}}Data) getPath() string {
+func (data {{camelCase .Name}}{{$versionSuffix}}Data) getPath() string {
 {{- if hasId .Attributes}}
 	return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or .Id .Reference}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
 {{- else}}
@@ -204,10 +209,14 @@ func (data {{camelCase .Name}}Data) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
+func (data {{camelCase .Name}}{{$versionSuffix}}) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (ne .Type "List") (ne .Type "Set")}}
+	{{- if .AddedInVersion}}
+	// Field added in version {{.AddedInVersion}} - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "{{.AddedInVersion}}") {
+	{{- end}}
 	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
@@ -233,6 +242,9 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", values)
 		{{- end}}
 	}
+	{{- if .AddedInVersion}}
+	}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- range .Attributes}}
@@ -274,7 +286,6 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 			{{- if or (eq .Type "List") (eq .Type "Set")}}
 			{{- $clist := toJsonPath .YangName .XPath }}
 			if len(item.{{toGoName .TfName}}) > 0 {
-				body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{})
 				for cindex, citem := range item.{{toGoName .TfName}} {
 					{{- range .Attributes}}
 					{{- if and (ne .Type "List") (ne .Type "Set")}}
@@ -309,7 +320,6 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 					{{- if or (eq .Type "List") (eq .Type "Set")}}
 					{{- $cclist := toJsonPath .YangName .XPath }}
 					if len(citem.{{toGoName .TfName}}) > 0 {
-						body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{})
 						for ccindex, ccitem := range citem.{{toGoName .TfName}} {
 							{{- range .Attributes}}
 							{{- if and (ne .Type "List") (ne .Type "Set")}}
@@ -344,7 +354,6 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 							{{- if or (eq .Type "List") (eq .Type "Set")}}
 							{{- $ccclist := toJsonPath .YangName .XPath }}
 							if len(ccitem.{{toGoName .TfName}}) > 0 {
-								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{})
 								for cccindex, cccitem := range ccitem.{{toGoName .TfName}} {
 									{{- range .Attributes}}
 									{{- if and (ne .Type "List") (ne .Type "Set")}}
@@ -396,9 +405,71 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+{{- $versionSuffix := versionSuffix .Version}}
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data {{camelCase .Name}}{{$versionSuffix}}) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	{{- if .RemovedInVersion}}
+	// Entire resource is removed in version {{.RemovedInVersion}}
+	constraints = append(constraints, helpers.FieldVersionConstraint{
+		FieldPath:        "",
+		RemovedInVersion: "{{.RemovedInVersion}}",
+	})
+	{{- end}}
+	{{- if hasVersionConstraints .Attributes}}
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{{- range collectVersionConstraints .Attributes "" .BaseVersion}}
+		{
+			FieldPath:        "{{.TfName}}",
+			{{- if .AddedInVersion}}
+			AddedInVersion:   "{{.AddedInVersion}}",
+			{{- end}}
+			{{- if .RemovedInVersion}}
+			RemovedInVersion: "{{.RemovedInVersion}}",
+			{{- end}}
+		},
+		{{- end}}
+	}...)
+	{{- end}}
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+{{- $versionSuffix := versionSuffix .Version}}
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data {{camelCase .Name}}{{$versionSuffix}}) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	{{- if hasVersionRanges .Attributes}}
+	return []helpers.FieldRangeConstraint{
+		{{- range collectVersionRangeConstraints .Attributes "" .BaseVersion}}
+		{
+			FieldPath: "{{.FieldPath}}",
+			VersionRanges: map[string]helpers.VersionRange{
+				{{- range $version, $range := .VersionRanges}}
+				"{{$version}}": {Min: {{$range.Min}}, Max: {{$range.Max}}},
+				{{- end}}
+			},
+		},
+		{{- end}}
+	}
+	{{- else}}
+	return nil
+	{{- end}}
+}
+
+// End of section. //template:end getRangeConstraints
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte) {
+{{- $versionSuffix := versionSuffix .Version}}
+func (data *{{camelCase .Name}}{{$versionSuffix}}) updateFromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (not .Id) (not .WriteOnly)}}
 	{{- if eq .Type "Int64"}}
@@ -803,8 +874,9 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+{{- $versionSuffix := versionSuffix .Version}}
 
-func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
+func (data *{{camelCase .Name}}{{$versionSuffix}}) fromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
 	{{- $cname := toGoName .TfName}}
 	{{- if and (not .Reference) (not .Id) (not .WriteOnly)}}
@@ -852,9 +924,9 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 	}
 	{{- else if or (eq .Type "List") (eq .Type "Set")}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
-		data.{{toGoName .TfName}} = make([]{{$name}}{{toGoName .TfName}}, 0)
+		data.{{toGoName .TfName}} = make([]{{$name}}{{$versionSuffix}}{{toGoName .TfName}}, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := {{$name}}{{toGoName .TfName}}{}
+			item := {{$name}}{{$versionSuffix}}{{toGoName .TfName}}{}
 			{{- range .Attributes}}
 			{{- if not .WriteOnly}}
 			{{- if eq .Type "Int64"}}
@@ -890,9 +962,9 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 			{{- else if eq .Type "List"}}
 			{{- $ccname := toGoName .TfName}}
 			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
-				item.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{toGoName .TfName}}, 0)
+				item.{{toGoName .TfName}} = make([]{{$name}}{{$versionSuffix}}{{$cname}}{{toGoName .TfName}}, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := {{$name}}{{$cname}}{{toGoName .TfName}}{}
+					cItem := {{$name}}{{$versionSuffix}}{{$cname}}{{toGoName .TfName}}{}
 					{{- range .Attributes}}
 					{{- if not .WriteOnly}}
 					{{- if eq .Type "Int64"}}
@@ -928,9 +1000,9 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 				{{- else if eq .Type "List"}}
 				{{- $cccname := toGoName .TfName}}
 				if ccValue := cv.Get("{{toJsonPath .YangName .XPath}}"); ccValue.Exists() {
-					cItem.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{$ccname}}{{toGoName .TfName}}, 0)
+					cItem.{{toGoName .TfName}} = make([]{{$name}}{{$versionSuffix}}{{$cname}}{{$ccname}}{{toGoName .TfName}}, 0)
 					ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-						ccItem := {{$name}}{{$cname}}{{$ccname}}{{toGoName .TfName}}{}
+						ccItem := {{$name}}{{$versionSuffix}}{{$cname}}{{$ccname}}{{toGoName .TfName}}{}
 						{{- range .Attributes}}
 						{{- if and (not .WriteOnly) .TfName .Type}}
 						{{- if eq .Type "Int64"}}
@@ -965,9 +1037,9 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 						}
 						{{- else if eq .Type "List"}}
 						if cccValue := ccv.Get("{{toJsonPath .YangName .XPath}}"); cccValue.Exists() {
-							ccItem.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}, 0)
+							ccItem.{{toGoName .TfName}} = make([]{{$name}}{{$versionSuffix}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}, 0)
 							cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
-								cccItem := {{$name}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}{}
+								cccItem := {{$name}}{{$versionSuffix}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}{}
 								{{- range .Attributes}}
 								{{- if and (not .WriteOnly) .TfName .Type}}
 								{{- if eq .Type "Int64"}}
@@ -1037,7 +1109,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
+func (data *{{camelCase .Name}}{{$versionSuffix}}Data) fromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
 	{{- $cname := toGoName .TfName}}
 	{{- if and (not .Reference) (not .Id) (not .WriteOnly)}}
@@ -1085,9 +1157,9 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 	}
 	{{- else if or (eq .Type "List") (eq .Type "Set")}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
-		data.{{toGoName .TfName}} = make([]{{$name}}{{toGoName .TfName}}, 0)
+		data.{{toGoName .TfName}} = make([]{{$name}}{{$versionSuffix}}{{toGoName .TfName}}, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := {{$name}}{{toGoName .TfName}}{}
+			item := {{$name}}{{$versionSuffix}}{{toGoName .TfName}}{}
 			{{- range .Attributes}}
 			{{- if not .WriteOnly}}
 			{{- if eq .Type "Int64"}}
@@ -1123,9 +1195,9 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 			{{- else if eq .Type "List"}}
 			{{- $ccname := toGoName .TfName}}
 			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
-				item.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{toGoName .TfName}}, 0)
+				item.{{toGoName .TfName}} = make([]{{$name}}{{$versionSuffix}}{{$cname}}{{toGoName .TfName}}, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := {{$name}}{{$cname}}{{toGoName .TfName}}{}
+					cItem := {{$name}}{{$versionSuffix}}{{$cname}}{{toGoName .TfName}}{}
 					{{- range .Attributes}}
 					{{- if not .WriteOnly}}
 					{{- if eq .Type "Int64"}}
@@ -1161,9 +1233,9 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 				{{- else if eq .Type "List"}}
 				{{- $cccname := toGoName .TfName}}
 				if ccValue := cv.Get("{{toJsonPath .YangName .XPath}}"); ccValue.Exists() {
-					cItem.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{$ccname}}{{toGoName .TfName}}, 0)
+					cItem.{{toGoName .TfName}} = make([]{{$name}}{{$versionSuffix}}{{$cname}}{{$ccname}}{{toGoName .TfName}}, 0)
 					ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-						ccItem := {{$name}}{{$cname}}{{$ccname}}{{toGoName .TfName}}{}
+						ccItem := {{$name}}{{$versionSuffix}}{{$cname}}{{$ccname}}{{toGoName .TfName}}{}
 						{{- range .Attributes}}
 						{{- if and (not .WriteOnly) .TfName .Type}}
 						{{- if eq .Type "Int64"}}
@@ -1198,9 +1270,9 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 						}
 						{{- else if eq .Type "List"}}
 						if cccValue := ccv.Get("{{toJsonPath .YangName .XPath}}"); cccValue.Exists() {
-							ccItem.{{toGoName .TfName}} = make([]{{$name}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}, 0)
+							ccItem.{{toGoName .TfName}} = make([]{{$name}}{{$versionSuffix}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}, 0)
 							cccValue.ForEach(func(ccck, cccv gjson.Result) bool {
-								cccItem := {{$name}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}{}
+								cccItem := {{$name}}{{$versionSuffix}}{{$cname}}{{$ccname}}{{$cccname}}{{toGoName .TfName}}{}
 								{{- range .Attributes}}
 								{{- if and (not .WriteOnly) .TfName .Type}}
 								{{- if eq .Type "Int64"}}
@@ -1269,8 +1341,9 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 // End of section. //template:end fromBodyData
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+{{- $versionSuffix := versionSuffix .Version}}
 
-func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}) []string {
+func (data *{{camelCase .Name}}{{$versionSuffix}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}{{$versionSuffix}}) []string {
 	deletedItems := make([]string, 0)
 	{{- range reverseAttributes .Attributes}}
 	{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}
@@ -1477,8 +1550,9 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 // End of section. //template:end getDeletedItems
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+{{- $versionSuffix := versionSuffix .Version}}
 
-func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *{{camelCase .Name}}{{$versionSuffix}}) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	{{- range reverseAttributes .Attributes}}
 	{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
@@ -1570,7 +1644,8 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []stri
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
-func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
+{{- $versionSuffix := versionSuffix .Version}}
+func (data *{{camelCase .Name}}{{$versionSuffix}}) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	{{- range reverseAttributes .Attributes}}
 	{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}

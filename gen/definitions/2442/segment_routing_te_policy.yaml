@@ -1,0 +1,321 @@
+---
+name: Segment Routing TE Policy
+path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=%s]
+doc_category: Segment Routing
+attributes:
+  - yang_name: policy-name
+    example: POLICY1
+  - yang_name: ipv6-disable
+    example: true
+  - yang_name: transit-eligible
+    example: true
+  - yang_name: shutdown
+    example: false
+  - yang_name: bandwidth
+    example: 100000
+  - yang_name: max-install-standby-c-paths
+    tf_name: max_install_standby_paths
+    exclude_test: true
+    example: 2
+  - yang_name: pce-group
+    example: PCE-1
+  - yang_name: binding-sid/binding-sid-type
+    tf_name: binding_sid_type
+    example: mpls-label-specified
+  - yang_name: binding-sid/mpls-label
+    example: 16501
+  - yang_name: steering/labeled-services/disable
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: steering/invalidation-drop
+    example: true
+  - yang_name: policy-color-endpoint/color
+    tf_name: policy_color
+    optional: true
+    delete_parent: true
+    example: 20
+  - yang_name: policy-color-endpoint/end-point-type
+    tf_name: policy_color_endpoint_type
+    optional: true
+    delete_parent: true
+    example: end-point-type-ipv4
+  - yang_name: policy-color-endpoint/end-point-address
+    tf_name: policy_color_endpoint_address
+    optional: true
+    delete_parent: true
+    example: 192.168.1.1
+  - yang_name: protection
+    tf_name: path_protection
+    test_tags: [C8000]
+    exclude_test: true
+    example: true
+  - yang_name: auto-route/include-ipv4-all
+    tf_name: auto_route_include_all_ipv4
+    exclude_test: true
+    example: true
+  - yang_name: auto-route/include-ipv6-all
+    tf_name: auto_route_include_all_ipv6
+    example: true
+  - yang_name: auto-route/force-sr-include
+    tf_name: auto_route_force_sr_include
+    example: true
+  - yang_name: auto-route/forward-class
+    tf_name: auto_route_forward_class
+    example: 1
+  - yang_name: auto-route/auto-route-metric/autoroute-metric-type
+    tf_name: auto_route_metric_type
+    example: relative
+  - yang_name: auto-route/auto-route-metric/metric-relative-value
+    tf_name: auto_route_metric_relative_value
+    example: -10
+  - yang_name: auto-route/auto-route-metric/metric-constant-value
+    tf_name: auto_route_metric_constant_value
+    example: 100
+  - yang_name: auto-route/include-prefixes/include-prefix
+    tf_name: auto_route_include_prefixes
+    type: List
+    attributes:
+      - yang_name: af-type
+        id: true
+        example: af-type-ipv4
+      - yang_name: prefix-address
+        tf_name: address
+        id: true
+        example: 192.168.2.0
+      - yang_name: prefix-length
+        tf_name: length
+        id: true
+        example: 24
+  - yang_name: candidate-paths/preferences/preference
+    tf_name: candidate_paths_preferences
+    type: List
+    attributes:
+      - yang_name: path-index
+        id: true
+        example: 1
+      - yang_name: lock/duration
+        test_tags: [C8000]
+        exclude_test: true
+        example: 120
+      - yang_name: pce-group
+        example: PCE-1
+      - yang_name: constraints/disjoint-path/group-id
+        tf_name: constraints_disjoint_path_group_id
+        optional: true
+        delete_parent: true
+        example: 10
+      - yang_name: constraints/disjoint-path/disjointness-type
+        tf_name: constraints_disjoint_path_type
+        optional: true
+        delete_parent: true
+        example: link
+      - yang_name: constraints/disjoint-path/sub-id
+        tf_name: constraints_disjoint_path_sub_id
+        delete_parent: true
+        example: 1
+      - yang_name: constraints/disjoint-path/shortest-path
+        tf_name: constraints_disjoint_path_shortest_path
+        delete_parent: true
+        example: true
+      - yang_name: constraints/disjoint-path/fallback-disable
+        tf_name: constraints_disjoint_path_fallback_disable
+        delete_parent: true
+        example: true
+      - yang_name: constraints/segment-rules/protection-type
+        tf_name: constraints_segment_rules_protection_type
+        example: protected-preferred
+      - yang_name: constraints/segment-rules/sid-algorithm
+        tf_name: constraints_segment_rules_sid_algorithm
+        example: 128
+      - yang_name: constraints/segment-rules/adjacency-sid-only
+        tf_name: constraints_segment_rules_adjacency_sid_only
+        example: true
+      - yang_name: constraints/affinity-rules/affinity-rule
+        tf_name: constraints_affinity_rules
+        type: List
+        attributes:
+          - yang_name: rule
+            tf_name: affinity_type
+            id: true
+            example: affinity-exclude-any
+          - yang_name: affinity-name
+            tf_name: affinities
+            type: List
+            attributes:
+              - yang_name: affinity-name
+                id: true
+                example: AFFINITY-1
+      - yang_name: constraints/bounds/bounds/bound
+        tf_name: constraints_bounds
+        type: List
+        attributes:
+          - yang_name: scope-type
+            tf_name: type
+            id: true
+            example: bound-scope-cumulative
+          - yang_name: metric-type
+            id: true
+            example: latency
+          - yang_name: bound-value
+            tf_name: value
+            example: 100000
+      - yang_name: bidirectional/association-id
+        tf_name: bidirectional_association_id
+        example: 10
+      - yang_name: bidirectional/corouted
+        tf_name: bidirectional_corouted
+        example: true
+      - yang_name: path-infos/path-info
+        tf_name: paths
+        type: List
+        attributes:
+          - yang_name: type
+            id: true
+            example: dynamic
+          - yang_name: hop-type
+            example: mpls
+          - yang_name: segment-list-name
+            example: dynamic
+          - yang_name: disable-auto-reroute
+            tf_name: sticky
+            test_tags: [XRV9K, XRD, C8000]
+            include_example: true
+            example: true
+          - yang_name: metric/sid-limit
+            example: 6
+          - yang_name: metric/metric-type
+            tf_name: metric_type
+            example: latency
+          - yang_name: metric/metric-margin/value-type
+            tf_name: metric_margin_type
+            example: relative
+          - yang_name: metric/metric-margin/relative-value
+            tf_name: metric_margin_relative
+            example: 100
+          - yang_name: metric/metric-margin/absolute-value
+            tf_name: metric_margin_absolute
+            exclude_test: true
+            example: 100
+          - yang_name: anycast
+            example: true
+          - yang_name: pcep
+            example: true
+          - yang_name: reverse-path-segment-list-name
+            tf_name: reverse_path_segment_list
+            exclude_test: true
+            example: SEG-1
+          - yang_name: weight
+            exclude_test: true
+            example: 100
+      - yang_name: backup-ineligible
+        example: true
+      - yang_name: per-flow/enable
+        tf_name: per_flow
+        test_tags: [C8000]
+        exclude_test: true
+        example: true
+      - yang_name: per-flow/default-forward-class
+        tf_name: per_flow_forward_class_default
+        test_tags: [C8000]
+        exclude_test: true
+        example: 1
+      - yang_name: per-flow/forward-class-and-colors/forward-class-and-color
+        tf_name: per_flow_forward_classes
+        test_tags: [C8000]
+        exclude_test: true
+        type: List
+        attributes:
+          - yang_name: forward-class
+            id: true
+            example: 3
+          - yang_name: color
+            example: 200
+      - yang_name: effective-metric/metric-value-type/metric-value
+        tf_name: effective_metric_value
+        minimum_test_value: 1000
+        example: 1000
+      - yang_name: effective-metric/metric-value-type/metric-type
+        tf_name: effective_metric_type
+        minimum_test_value: '"default"'
+        example: igp
+  - yang_name: performance-measurement/delay-measurement/delay-profile/pm-profile-name
+    tf_name: performance_measurement_delay_profile
+    exclude_test: true
+    example: "DELAY-PROFILE-1"
+  - yang_name: performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded
+    tf_name: performance_measurement_delay_logging_delay_exceeded
+    exclude_test: true
+    example: true
+  - yang_name: performance-measurement/pm-liveness-detection/liveness-profile/pm-profile-name
+    tf_name: performance_measurement_liveness_profile
+    example: "LIVENESS-PROFILE-1"
+  - yang_name: performance-measurement/pm-liveness-detection/liveness-profile/backup/pm-profile-name
+    tf_name: performance_measurement_liveness_backup_profile
+    example: "LIVENESS-PROFILE-2"
+  - yang_name: performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change
+    tf_name: performance_measurement_liveness_logging_session_state_change
+    example: true
+  - yang_name: performance-measurement/pm-liveness-detection/pm-liveness-invalidation-action
+    tf_name: performance_measurement_liveness_invalidation_action
+    example: invalid-ation-action-down
+  - yang_name: performance-measurement/pm-reverse-path/segment-list-name
+    tf_name: performance_measurement_reverse_path_segment_list
+    example: "SEG-1"
+  - yang_name: performance-measurement/pm-reverse-path/label
+    tf_name: performance_measurement_reverse_path_label
+    exclude_test: true
+    example: 16412
+  - yang_name: bfd/enable
+    exclude_test: true
+    example: true
+  - yang_name: bfd/disable
+    exclude_test: true
+    example: true
+  - yang_name: bfd/multiplier
+    exclude_test: true
+    example: 3
+  - yang_name: bfd/minimum-interval
+    exclude_test: true
+    example: 300
+  - yang_name: bfd/invalidation-action
+    exclude_test: true
+    example: down
+  - yang_name: bfd/reverse-path/binding-label
+    tf_name: bfd_reverse_path_binding_label
+    exclude_test: true
+    example: 17510
+  - yang_name: bfd/bfd-logging/session-state-change
+    tf_name: bfd_logging_session_state_change
+    exclude_test: true
+    example: true
+  - yang_name: source-address/ip-address-type
+    tf_name: source_address_type
+    optional: true
+    delete_parent: true
+    example: end-point-type-ipv4
+  - yang_name: source-address/source-address
+    tf_name: source_address
+    optional: true
+    delete_parent: true
+    example: 192.168.1.1
+  - yang_name: effective-metric/metric-value-type/metric-value
+    tf_name: effective_metric_value
+    minimum_test_value: 1000
+    example: 1000
+  - yang_name: effective-metric/metric-value-type/metric-type
+    tf_name: effective_metric_type
+    minimum_test_value: '"default"'
+    example: igp
+  - yang_name: srv6/locator/locator-name
+    tf_name: srv6_locator_name
+    delete_parent: true
+    example: "LOC1"
+  - yang_name: srv6/locator/binding-sid-type
+    example: srv6-dynamic
+  - yang_name: srv6/locator/behavior
+    example: ub6-insert-reduced
+    #example: ub6-encaps-reduced
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering

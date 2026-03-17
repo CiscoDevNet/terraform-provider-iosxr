@@ -1,0 +1,93 @@
+---
+name: SRLG
+path: Cisco-IOS-XR-um-vrf-cfg:/srlg
+doc_category: MPLS
+attributes:
+  - yang_name: names/name
+    tf_name: names
+    type: List
+    attributes:
+      - yang_name: srlg-name
+        id: true
+        example: SRLG1
+      - yang_name: value
+        example: 100
+      - yang_name: description
+        example: SRLG for critical links
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: include-optical
+        tf_name: include_optical
+        example: true
+      - yang_name: include-optical/priority
+        tf_name: include_optical_priority
+        example: critical
+      - yang_name: indexes/index
+        tf_name: indexes
+        type: List
+        attributes:
+          - yang_name: index-number
+            id: true
+            example: 1
+          - yang_name: value
+            example: 300
+          - yang_name: priority
+            example: critical
+      - yang_name: names/name
+        tf_name: names
+        type: List
+        attributes:
+          - yang_name: srlg-name
+            id: true
+            example: INTF-SRLG1
+      - yang_name: groups/group
+        tf_name: groups
+        type: List
+        attributes:
+          - yang_name: index-number
+            id: true
+            example: 1
+          - yang_name: group-name
+            example: INTF-GROUP1
+  - yang_name: groups/group
+    tf_name: groups
+    type: List
+    attributes:
+      - yang_name: group-name
+        id: true
+        example: GROUP1
+      - yang_name: indexes/index
+        tf_name: indexes
+        type: List
+        attributes:
+          - yang_name: index-number
+            id: true
+            example: 1
+          - yang_name: value
+            example: 200
+          - yang_name: priority
+            example: critical
+  - yang_name: inherit-locations/inherit-location
+    tf_name: inherit_locations
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/0/CPU0
+      - yang_name: indexes/index
+        tf_name: indexes
+        type: List
+        attributes:
+          - yang_name: index-number
+            id: true
+            example: 1
+          - yang_name: value
+            example: 300
+          - yang_name: priority
+            example: critical

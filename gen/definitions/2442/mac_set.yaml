@@ -1,0 +1,12 @@
+---
+name: Mac Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/mac-sets/mac-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: MAC1
+  - yang_name: mac-set-as-text
+    tf_name: rpl
+    description: "Configures a MAC set"
+    example: "mac-set MAC1\\n  0011.2233.4455,\\n  2233.4455.5566\\nend-set\\n"

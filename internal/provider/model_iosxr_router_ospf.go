@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -707,7 +708,7 @@ func (data RouterOSPFData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterOSPF) toBody(ctx context.Context) string {
+func (data RouterOSPF) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.ProcessName.IsNull() && !data.ProcessName.IsUnknown() {
 		body, _ = sjson.Set(body, "process-name", data.ProcessName.ValueString())
@@ -2014,7 +2015,6 @@ func (data RouterOSPF) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AffinityExcludeAny) > 0 {
-				body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.exclude-any.affinity-attributes.affinity-attribute", []interface{}{})
 				for cindex, citem := range item.AffinityExcludeAny {
 					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.exclude-any.affinity-attributes.affinity-attribute"+"."+strconv.Itoa(cindex)+"."+"affinity-attribute-name", citem.AffinityName.ValueString())
@@ -2022,7 +2022,6 @@ func (data RouterOSPF) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AffinityIncludeAny) > 0 {
-				body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.include-any.affinity-attributes.affinity-attribute", []interface{}{})
 				for cindex, citem := range item.AffinityIncludeAny {
 					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.include-any.affinity-attributes.affinity-attribute"+"."+strconv.Itoa(cindex)+"."+"affinity-attribute-name", citem.AffinityName.ValueString())
@@ -2030,7 +2029,6 @@ func (data RouterOSPF) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AffinityIncludeAll) > 0 {
-				body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.include-all.affinity-attributes.affinity-attribute", []interface{}{})
 				for cindex, citem := range item.AffinityIncludeAll {
 					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.include-all.affinity-attributes.affinity-attribute"+"."+strconv.Itoa(cindex)+"."+"affinity-attribute-name", citem.AffinityName.ValueString())
@@ -2038,7 +2036,6 @@ func (data RouterOSPF) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SrlgExcludeAny) > 0 {
-				body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"srlg.exclude-any.srlgs.srlg", []interface{}{})
 				for cindex, citem := range item.SrlgExcludeAny {
 					if !citem.SrlgName.IsNull() && !citem.SrlgName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"srlg.exclude-any.srlgs.srlg"+"."+strconv.Itoa(cindex)+"."+"srlg-name", citem.SrlgName.ValueString())
@@ -2082,8 +2079,29 @@ func (data RouterOSPF) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterOSPF) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterOSPF) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ip-address"); value.Exists() && !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
 		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
@@ -9666,7 +9684,6 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterOSPF) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.ProtocolShutdownOnReload.IsNull() {

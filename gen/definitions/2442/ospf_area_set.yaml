@@ -1,0 +1,12 @@
+---
+name: OSPF Area Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/ospf-area-sets/ospf-area-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: OSPF1
+  - yang_name: rplospf-area-set
+    tf_name: rpl
+    description: "Configures an OSPF area set"
+    example: "ospf-area-set OSPF1\\n  65536,\\n  192.168.1.1\\nend-set\\n"

@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -95,7 +96,7 @@ func (data MPLSLDPMLDPData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data MPLSLDPMLDP) toBody(ctx context.Context) string {
+func (data MPLSLDPMLDP) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.LoggingNotifications.IsNull() && !data.LoggingNotifications.IsUnknown() {
 		if data.LoggingNotifications.ValueBool() {
@@ -163,7 +164,6 @@ func (data MPLSLDPMLDP) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Statics) > 0 {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"statics.static", []interface{}{})
 				for cindex, citem := range item.Statics {
 					if !citem.LspAddress.IsNull() && !citem.LspAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"statics.static"+"."+strconv.Itoa(cindex)+"."+"lsp-address", citem.LspAddress.ValueString())
@@ -177,7 +177,6 @@ func (data MPLSLDPMLDP) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Neighbors) > 0 {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor", []interface{}{})
 				for cindex, citem := range item.Neighbors {
 					if !citem.NeighborAddress.IsNull() && !citem.NeighborAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor"+"."+strconv.Itoa(cindex)+"."+"neighbor-address", citem.NeighborAddress.ValueString())
@@ -197,8 +196,29 @@ func (data MPLSLDPMLDP) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data MPLSLDPMLDP) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data MPLSLDPMLDP) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "logging.notifications"); !data.LoggingNotifications.IsNull() {
 		if value.Exists() {
@@ -847,7 +867,6 @@ func (data *MPLSLDPMLDP) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *MPLSLDPMLDP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.AddressFamily {

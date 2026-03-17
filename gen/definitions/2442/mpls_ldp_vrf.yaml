@@ -1,0 +1,211 @@
+---
+name: MPLS LDP VRF
+path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp/vrfs/vrf[vrf-name=%s]
+doc_category: MPLS
+test_tags: [XRV9K, XRD]
+attributes:
+  - yang_name: vrf-name
+    id: true
+    reference: true
+    example: VRF1
+  - yang_name: router-id
+    minimum_test_value: '"1.2.3.4"'
+    example: 1.2.3.4
+  - yang_name: session/downstream-on-demand/with
+    tf_name: session_downstream_on_demand_with
+    example: ACL1
+  - yang_name: graceful-restart/helper-peer/maintain-on-local-reset/for
+    tf_name: graceful_restart_helper_peer_maintain_on_local_reset_for
+    example: ACL2
+  - yang_name: neighbors/password/encrypted
+    tf_name: neighbors_password_encrypted
+    sensitive: true
+    write_only: true
+    example: 060506324F41
+  - yang_name: neighbors/neighbor
+    tf_name: neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 192.168.2.1
+      - yang_name: label-space-id
+        id: true
+        example: 0
+      - yang_name: password/encrypted
+        sensitive: true
+        write_only: true
+        example: 060506324F41
+      - yang_name: password/disable
+        example: true
+        exclude_test: true
+  - yang_name: address-family/ipv4
+    tf_name: address_family_ipv4
+    example: true
+  - yang_name: address-family/ipv4/discovery/transport-address/ip-address
+    tf_name: address_family_ipv4_discovery_transport_address_ip
+    optional: true
+    delete_parent: true
+    example: 192.168.1.1
+  - yang_name: address-family/ipv4/label/local/allocate/for/ip-access-list
+    tf_name: address_family_ipv4_label_local_allocate_for_acl
+    example: ACL1
+  - yang_name: address-family/ipv4/label/local/allocate/for/host-routes
+    tf_name: address_family_ipv4_label_local_allocate_for_host_routes
+    example: true
+    exclude_test: true
+  - yang_name: address-family/ipv4/label/local/default-route
+    example: true
+  - yang_name: address-family/ipv4/label/local/implicit-null-override/for
+    example: ACL1
+  - yang_name: address-family/ipv4/label/local/advertise/explicit-null
+    example: true
+  - yang_name: address-family/ipv4/label/local/advertise/explicit-null/for/access-list
+    tf_name: address_family_ipv4_label_local_advertise_explicit_null_for_acl
+    optional: true
+    delete_grandparent: true
+    example: ACL1
+  - yang_name: address-family/ipv4/label/local/advertise/explicit-null/for/to/access-list
+    tf_name: address_family_ipv4_label_local_advertise_explicit_null_for_acl_to_acl
+    optional: true
+    delete_grandparent: true
+    example: ACL2
+  - yang_name: address-family/ipv4/label/local/advertise/explicit-null/to/access-list
+    tf_name: address_family_ipv4_label_local_advertise_explicit_null_to_acl
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: ACL1
+  - yang_name: address-family/ipv4/label/local/advertise/to/neighbor
+    tf_name: address_family_ipv4_label_local_advertise_to_neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 192.168.1.1
+      - yang_name: label-space-id
+        id: true
+        example: 0
+      - yang_name: for
+        example: ACL1
+  - yang_name: address-family/ipv4/label/local/advertise/interfaces/interface
+    tf_name: address_family_ipv4_label_local_advertise_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+  - yang_name: address-family/ipv4/label/local/advertise/disable
+    example: true
+  - yang_name: address-family/ipv4/label/remote/accept/from/neighbor
+    tf_name: address_family_ipv4_label_remote_accept_from_neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 192.168.1.2
+      - yang_name: label-space-id
+        id: true
+        example: 0
+      - yang_name: for
+        example: ACL1
+  - yang_name: address-family/ipv6
+    tf_name: address_family_ipv6
+    example: true
+  - yang_name: address-family/ipv6/discovery/transport-address/ip-address
+    tf_name: address_family_ipv6_discovery_transport_address_ip
+    optional: true
+    delete_parent: true
+    example: 2001:db8::1
+  - yang_name: address-family/ipv6/label/local/allocate/for/ip-access-list
+    tf_name: address_family_ipv6_label_local_allocate_for_acl
+    example: ACL1
+  - yang_name: address-family/ipv6/label/local/allocate/for/host-routes
+    tf_name: address_family_ipv6_label_local_allocate_for_host_routes
+    example: true
+    exclude_test: true
+  - yang_name: address-family/ipv6/label/local/default-route
+    example: true
+  - yang_name: address-family/ipv6/label/local/implicit-null-override/for
+    example: ACL1
+  - yang_name: address-family/ipv6/label/local/advertise/explicit-null
+    example: true
+  - yang_name: address-family/ipv6/label/local/advertise/explicit-null/for/access-list
+    tf_name: address_family_ipv6_label_local_advertise_explicit_null_for_acl
+    optional: true
+    delete_grandparent: true
+    example: ACL1
+  - yang_name: address-family/ipv6/label/local/advertise/explicit-null/for/to/access-list
+    tf_name: address_family_ipv6_label_local_advertise_explicit_null_for_acl_to_acl
+    optional: true
+    delete_grandparent: true
+    example: ACL2
+  - yang_name: address-family/ipv6/label/local/advertise/explicit-null/to/access-list
+    tf_name: address_family_ipv6_label_local_advertise_explicit_null_to_acl
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: ACL1
+  - yang_name: address-family/ipv6/label/local/advertise/to/neighbor
+    tf_name: address_family_ipv6_label_local_advertise_to_neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 192.168.1.2
+      - yang_name: label-space-id
+        id: true
+        example: 0
+      - yang_name: for
+        example: ACL1
+  - yang_name: address-family/ipv6/label/local/advertise/interfaces/interface
+    tf_name: address_family_ipv6_label_local_advertise_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+  - yang_name: address-family/ipv6/label/local/advertise/disable
+    example: true
+  - yang_name: address-family/ipv6/label/remote/accept/from/neighbor
+    tf_name: address_family_ipv6_label_remote_accept_from_neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 192.168.1.2
+      - yang_name: label-space-id
+        id: true
+        example: 0
+      - yang_name: for
+        example: ACL1
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: address-family/ipv4
+        tf_name: address_family_ipv4
+        example: true
+      - yang_name: address-family/ipv4/discovery/transport-address/interface
+        tf_name: address_family_ipv4_discovery_transport_address_interface
+        example: true
+      - yang_name: address-family/ipv4/discovery/transport-address/ip-address
+        tf_name: address_family_ipv4_discovery_transport_address_ip
+        exclude_test: true
+        example: 192.168.1.1
+      - yang_name: address-family/ipv6
+        tf_name: address_family_ipv6
+        example: true
+      - yang_name: address-family/ipv6/discovery/transport-address/interface
+        tf_name: address_family_ipv6_discovery_transport_address_interface
+        exclude_test: true
+        example: true
+      - yang_name: address-family/ipv6/discovery/transport-address/ip-address
+        tf_name: address_family_ipv6_discovery_transport_address_ip
+        example: 2001:db8::1
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp

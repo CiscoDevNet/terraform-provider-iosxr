@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -723,7 +724,7 @@ func (data ControlPlaneData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data ControlPlane) toBody(ctx context.Context) string {
+func (data ControlPlane) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.MgmtInbandAllSsh.IsNull() && !data.MgmtInbandAllSsh.IsUnknown() {
 		if data.MgmtInbandAllSsh.ValueBool() {
@@ -860,7 +861,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.SshIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -871,7 +871,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.SshIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -879,7 +878,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.SshIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -890,7 +888,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.SshIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -898,7 +895,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.TelnetIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -909,7 +905,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.TelnetIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -917,7 +912,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.TelnetIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -928,7 +922,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.TelnetIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -936,7 +929,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.SnmpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -947,7 +939,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.SnmpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -955,7 +946,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.SnmpIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -966,7 +956,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.SnmpIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -974,7 +963,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.TftpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -985,7 +973,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.TftpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -993,7 +980,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.TftpIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1004,7 +990,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.TftpIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1012,7 +997,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.HttpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.HttpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1023,7 +1007,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.HttpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.HttpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1031,7 +1014,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.XmlIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1042,7 +1024,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.XmlIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1050,7 +1031,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.XmlIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1061,7 +1041,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.XmlIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1069,7 +1048,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.NetconfIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1080,7 +1058,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.NetconfIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1088,7 +1065,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.NetconfIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1099,7 +1075,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.NetconfIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1107,7 +1082,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1118,7 +1092,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1126,7 +1099,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1137,7 +1109,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.inband.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1478,7 +1449,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.SshIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1489,7 +1459,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.SshIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1497,7 +1466,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.SshIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1508,7 +1476,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SshIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.SshIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1516,7 +1483,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.TelnetIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1527,7 +1493,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.TelnetIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1535,7 +1500,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.TelnetIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1546,7 +1510,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TelnetIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.TelnetIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1554,7 +1517,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.SnmpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1565,7 +1527,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.SnmpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1573,7 +1534,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.SnmpIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1584,7 +1544,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SnmpIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.SnmpIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1592,7 +1551,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.TftpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1603,7 +1561,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.TftpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1611,7 +1568,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.TftpIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1622,7 +1578,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TftpIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.TftpIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1630,7 +1585,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.HttpIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.HttpIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1641,7 +1595,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.HttpIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.HttpIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1649,7 +1602,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.XmlIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1660,7 +1612,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.XmlIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1668,7 +1619,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.XmlIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1679,7 +1629,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.XmlIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.XmlIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1687,7 +1636,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.NetconfIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1698,7 +1646,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.NetconfIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1706,7 +1653,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.NetconfIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1717,7 +1663,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NetconfIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.NetconfIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1725,7 +1670,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv4Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv4Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1736,7 +1680,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv4Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv4Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1744,7 +1687,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv6Prefixes) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv6Prefixes {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1755,7 +1697,6 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AllowAllIpv6Hosts) > 0 {
-				body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.AllowAllIpv6Hosts {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "management-plane.out-of-band.interfaces.interface"+"."+strconv.Itoa(index)+"."+"allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -2054,8 +1995,29 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data ControlPlane) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data ControlPlane) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.MgmtInbandInterfaces {
 		keys := [...]string{"interface-name"}
@@ -14811,7 +14773,6 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *ControlPlane) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.MgmtOobAllAllowAllIpv6Hosts {

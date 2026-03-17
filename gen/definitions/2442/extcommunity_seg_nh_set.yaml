@@ -1,0 +1,12 @@
+---
+name: Extcommunity Seg NH Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-seg-nh-sets/extended-community-seg-nh-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: SEG1
+  - yang_name: rpl-extended-community-seg-nh-set
+    tf_name: rpl
+    description: "Configures an extended community P2MP segmented nexthop set"
+    example: "extcommunity-set seg-nh SEG1\\n  10.1.1.1,\\n  192.168.1.1\\nend-set\\n"

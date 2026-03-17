@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -561,7 +562,7 @@ func (data AAAData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data AAA) toBody(ctx context.Context) string {
+func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.DefaultTaskgroup.IsNull() && !data.DefaultTaskgroup.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:default-taskgroup", data.DefaultTaskgroup.ValueString())
@@ -673,7 +674,6 @@ func (data AAA) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"accounting.reply.radius-attribute-list", item.AccountingReplyRadiusAttributeList.ValueString())
 			}
 			if len(item.Servers) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"servers.server", []interface{}{})
 				for cindex, citem := range item.Servers {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"servers.server"+"."+strconv.Itoa(cindex)+"."+"ordering-index", strconv.FormatInt(citem.Order.ValueInt64(), 10))
@@ -690,7 +690,6 @@ func (data AAA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.ServerPrivates) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private", []interface{}{})
 				for cindex, citem := range item.ServerPrivates {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"ordering-index", strconv.FormatInt(citem.Order.ValueInt64(), 10))
@@ -766,7 +765,6 @@ func (data AAA) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"holddown-time", strconv.FormatInt(item.HolddownTime.ValueInt64(), 10))
 			}
 			if len(item.Servers) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"servers.server", []interface{}{})
 				for cindex, citem := range item.Servers {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"servers.server"+"."+strconv.Itoa(cindex)+"."+"ordering-index", strconv.FormatInt(citem.Order.ValueInt64(), 10))
@@ -777,7 +775,6 @@ func (data AAA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.ServerPrivates) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private", []interface{}{})
 				for cindex, citem := range item.ServerPrivates {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"ordering-index", strconv.FormatInt(citem.Order.ValueInt64(), 10))
@@ -900,7 +897,6 @@ func (data AAA) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames.username"+"."+strconv.Itoa(index)+"."+"directory", item.Directory.ValueString())
 			}
 			if len(item.UserGroups) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames.username"+"."+strconv.Itoa(index)+"."+"group.user-groups.user-group", []interface{}{})
 				for cindex, citem := range item.UserGroups {
 					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames.username"+"."+strconv.Itoa(index)+"."+"group.user-groups.user-group"+"."+strconv.Itoa(cindex)+"."+"user-group-name", citem.GroupName.ValueString())
@@ -2649,7 +2645,6 @@ func (data AAA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.InheritTaskgroups) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups.taskgroup"+"."+strconv.Itoa(index)+"."+"inherit.taskgroup.task-groups.task-group", []interface{}{})
 				for cindex, citem := range item.InheritTaskgroups {
 					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups.taskgroup"+"."+strconv.Itoa(index)+"."+"inherit.taskgroup.task-groups.task-group"+"."+strconv.Itoa(cindex)+"."+"task-group-name", citem.GroupName.ValueString())
@@ -2718,7 +2713,6 @@ func (data AAA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Taskgroups) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup"+"."+strconv.Itoa(index)+"."+"taskgroup.task-groups.task-group", []interface{}{})
 				for cindex, citem := range item.Taskgroups {
 					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup"+"."+strconv.Itoa(index)+"."+"taskgroup.task-groups.task-group"+"."+strconv.Itoa(cindex)+"."+"task-group-name", citem.GroupName.ValueString())
@@ -2726,7 +2720,6 @@ func (data AAA) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.InheritUsergroups) > 0 {
-				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup"+"."+strconv.Itoa(index)+"."+"inherit.usergroup", []interface{}{})
 				for cindex, citem := range item.InheritUsergroups {
 					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup"+"."+strconv.Itoa(index)+"."+"inherit.usergroup"+"."+strconv.Itoa(cindex)+"."+"usergroup-name", citem.GroupName.ValueString())
@@ -2740,8 +2733,29 @@ func (data AAA) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data AAA) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data AAA) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:default-taskgroup"); value.Exists() && !data.DefaultTaskgroup.IsNull() {
 		data.DefaultTaskgroup = types.StringValue(value.String())
@@ -14188,7 +14202,6 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *AAA) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Usergroups {

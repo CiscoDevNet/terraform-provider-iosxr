@@ -1,0 +1,43 @@
+---
+name: TFTP Server
+path: Cisco-IOS-XR-um-ftp-tftp-cfg:/tftp
+doc_category: Management
+attributes:
+  - yang_name: vrfs/vrf
+    tf_name: vrfs
+    minimum_test_value: '["VRF1"]'
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        tf_name: vrf_name
+        id: true
+        minimum_test_value: '"VRF1"'
+        example: VRF1
+      - yang_name: ipv4/server/access-list
+        tf_name: ipv4_server_access_list
+        example: ACL1
+      - yang_name: ipv4/server/max-servers
+        tf_name: ipv4_server_max_servers
+        minimum_test_value: '"no-limit"'
+        example: no-limit
+      - yang_name: ipv4/server/homedir
+        tf_name: ipv4_server_homedir
+        minimum_test_value: '"disk0:"'
+        example: "disk0:"
+      - yang_name: ipv4/server/dscp
+        tf_name: ipv4_server_dscp
+        description: "Set IP DSCP (DiffServ CodePoint) for TFTP Server Packets"
+        example: default
+      - yang_name: ipv6/server/access-list
+        tf_name: ipv6_server_access_list
+        example: ACL1
+      - yang_name: ipv6/server/max-servers
+        tf_name: ipv6_server_max_servers
+        example: no-limit
+      - yang_name: ipv6/server/homedir
+        tf_name: ipv6_server_homedir
+        example: "disk0:"
+      - yang_name: ipv6/server/dscp
+        tf_name: ipv6_server_dscp
+        description: "Set IP DSCP (DiffServ CodePoint) for TFTP Server Packets"
+        example: default

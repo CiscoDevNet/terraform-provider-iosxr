@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -141,7 +142,7 @@ func (data EthernetSLAData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data EthernetSLA) toBody(ctx context.Context) string {
+func (data EthernetSLA) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.ProfileName.IsNull() && !data.ProfileName.IsUnknown() {
 		body, _ = sjson.Set(body, "profile-name", data.ProfileName.ValueString())
@@ -326,8 +327,29 @@ func (data EthernetSLA) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data EthernetSLA) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data EthernetSLA) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "type"); value.Exists() && !data.Type.IsNull() {
 		data.Type = types.StringValue(value.String())
@@ -1256,7 +1278,6 @@ func (data *EthernetSLA) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *EthernetSLA) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.ScheduleEveryForUnit.IsNull() {

@@ -1,0 +1,64 @@
+---
+name: TCP
+path: Cisco-IOS-XR-um-tcp-cfg:/tcp
+doc_category: System
+attributes:
+  - yang_name: window-size
+    tf_name: window_size
+    example: 32768
+  - yang_name: synwait-time
+    tf_name: synwait_time
+    example: 15
+  - yang_name: path-mtu-discovery
+    tf_name: path_mtu_discovery
+    minimum_test_value: true
+    example: true
+  - yang_name: path-mtu-discovery/age-timer
+    tf_name: path_mtu_discovery_age_timer
+    example: 20
+  - yang_name: receive-queue
+    tf_name: receive_queue
+    example: 200
+  - yang_name: timestamp
+    tf_name: timestamp
+    example: true
+  - yang_name: throttle
+    tf_name: throttle
+    example: 40
+  - yang_name: high-water-mark-throttling
+    tf_name: throttle_high_water_mark
+    example: 70
+  - yang_name: selective-ack
+    tf_name: selective_ack
+    example: true
+  - yang_name: mss
+    tf_name: mss
+    example: 1460
+  - yang_name: accept-rate
+    tf_name: accept_rate
+    example: 500
+  - yang_name: ao
+    tf_name: ao
+    example: true
+  - yang_name: ao/keychains/keychain
+    tf_name: ao_keychains
+    type: List
+    attributes:
+      - yang_name: keychain-name
+        id: true
+        example: "TCP_KEYCHAIN"
+      - yang_name: keys/key
+        tf_name: keys
+        type: List
+        attributes:
+          - yang_name: key-name
+            id: true
+            example: "200"
+          - yang_name: send-id
+            optional: true
+            tf_name: send_id
+            example: 10
+          - yang_name: receive-id
+            optional: true
+            tf_name: receive_id
+            example: 20

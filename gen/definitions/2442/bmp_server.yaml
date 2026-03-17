@@ -1,0 +1,83 @@
+---
+name: BMP Server
+path: Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers
+doc_category: BGP
+attributes:
+  - yang_name: all/route-monitorings/route-monitoring
+    tf_name: all_route_monitorings
+    type: List
+    attributes:
+      - yang_name: route-mon
+        id: true
+        example: inbound-pre-policy
+      - yang_name: advertisement-interval
+        example: 60
+      - yang_name: scan-time
+        example: 5
+  - yang_name: all/route-mirroring/inbound/pre-policy
+    tf_name: all_route_mirroring_inbound_pre_policy
+    exclude_test: true
+    example: true
+  - yang_name: all/max-buffer-size
+    tf_name: all_max_buffer_size
+    minimum_test_value: 15
+    example: 15
+  - yang_name: server
+    tf_name: servers
+    type: List
+    attributes:
+      - yang_name: server-number
+        tf_name: number
+        id: true
+        example: 1
+      - yang_name: shutdown
+        example: false
+      - yang_name: host/host-name
+        tf_name: host
+        example: 192.168.1.100
+      - yang_name: host/port
+        tf_name: port
+        example: 5000
+      - yang_name: initial-delay
+        example: 60
+      - yang_name: flapping-delay
+        example: 300
+      - yang_name: initial-refresh/INITIAL-REFRESH/DELAY/delay
+        xpath: initial-refresh/delay
+        tf_name: initial_refresh_delay
+        delete_parent: true
+        example: 30
+      - yang_name: initial-refresh/INITIAL-REFRESH/DELAY/spread
+        xpath: initial-refresh/spread
+        tf_name: initial_refresh_spread
+        delete_parent: true
+        example: 60
+      - yang_name: initial-refresh/INITIAL-REFRESH/SKIP/skip
+        xpath: initial-refresh/skip
+        tf_name: initial_refresh_skip
+        delete_parent: true
+        exclude_test: true
+        example: true
+      - yang_name: stats-reporting-period
+        example: 60
+      - yang_name: description
+        example: "BMP Server 1"
+      - yang_name: dscp/dscp-value
+        tf_name: dscp_value
+        optional: true
+        delete_parent: true
+        example: ef
+      - yang_name: precedence/precedence-value
+        tf_name: precedence_value
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: 6
+      - yang_name: update-source
+        example: Loopback0
+      - yang_name: vrf
+        example: OOB
+      - yang_name: tcp/mss
+        example: 1460
+      - yang_name: tcp/keep-alive
+        example: 60

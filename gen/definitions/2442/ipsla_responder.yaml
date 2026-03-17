@@ -1,0 +1,95 @@
+---
+name: IPSLA Responder
+path: Cisco-IOS-XR-um-ipsla-cfg:/ipsla/responder
+doc_category: Performance Monitoring
+test_tags: [XRV9K, NCS, C8000]
+attributes:
+  - yang_name: type/udp/ipv4/address
+    tf_name: type_udp_ipv4
+    test_tags: [XRV9K, NCS]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: port
+        tf_name: ports
+        type: List
+        attributes:
+          - yang_name: port-number
+            id: true
+            example: 888
+  - yang_name: twamp
+    example: true
+  - yang_name: twamp/timeout
+    minimum_test_value: 600
+    example: 600
+  - yang_name: twamp-light/test-session/session
+    tf_name: twamp_light_sessions
+    test_tags: [XRV9K, NCS]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: session-id
+        id: true
+        example: 1
+      - yang_name: local-ip/ipv4-addresses/ipv4-address
+        tf_name: local_ipv4_addresses
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "10.1.1.1"
+          - yang_name: local-port
+            id: true
+            example: 862
+          - yang_name: remote-ip/ipv4-addresses/ipv4-address
+            tf_name: remote_ipv4_addresses
+            type: List
+            attributes:
+              - yang_name: address
+                tf_name: address
+                id: true
+                example: "10.1.1.2"
+              - yang_name: remote-port
+                tf_name: remote_port
+                id: true
+                example: 862
+              - yang_name: vrf
+                tf_name: vrf
+                id: true
+                example: default
+      - yang_name: local-ip/ipv6-addresses/ipv6-address
+        tf_name: local_ipv6_addresses
+        exclude_test: true
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8::1"
+          - yang_name: local-port
+            id: true
+            example: 863
+          - yang_name: remote-ip/ipv6-addresses/ipv6-address
+            tf_name: remote_ipv6_addresses
+            type: List
+            attributes:
+              - yang_name: address
+                tf_name: address
+                id: true
+                example: "2001:db8::2"
+              - yang_name: remote-port
+                tf_name: remote_port
+                id: true
+                example: 863
+              - yang_name: vrf
+                tf_name: vrf
+                id: true
+                example: default
+      - yang_name: authentication
+        example: true
+      - yang_name: encryption
+        example: true
+      - yang_name: timeout
+        example: 3600

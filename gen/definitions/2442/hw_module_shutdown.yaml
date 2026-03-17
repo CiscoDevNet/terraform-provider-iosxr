@@ -1,0 +1,16 @@
+---
+name: HW Module Shutdown
+path: Cisco-IOS-XR-um-hw-module-shut-cfg:/hw-module/locations/location[location-name=%s]
+doc_category: System
+no_delete_attributes: true
+test_tags: [HW]
+attributes:
+  - yang_name: location-name
+    example: 0/0/CPU0
+    minimum_test_value: '"0/0/CPU0"'
+  - yang_name: shut
+    exclude_test: true
+    example: false
+  - yang_name: unshut
+    minimum_test_value: true
+    example: true

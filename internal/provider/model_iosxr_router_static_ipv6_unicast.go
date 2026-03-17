@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -156,7 +157,7 @@ func (data RouterStaticIPv6UnicastData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterStaticIPv6Unicast) toBody(ctx context.Context) string {
+func (data RouterStaticIPv6Unicast) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.PrefixAddress.IsNull() && !data.PrefixAddress.IsUnknown() {
 		body, _ = sjson.Set(body, "prefix-address", data.PrefixAddress.ValueString())
@@ -286,7 +287,6 @@ func (data RouterStaticIPv6Unicast) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
 			}
 			if len(item.NexthopInterfaces) > 0 {
-				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interfaces.nexthop-interface", []interface{}{})
 				for cindex, citem := range item.NexthopInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interfaces.nexthop-interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -314,7 +314,6 @@ func (data RouterStaticIPv6Unicast) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NexthopInterfaceAddresses) > 0 {
-				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interface-addresses.nexthop-interface-address", []interface{}{})
 				for cindex, citem := range item.NexthopInterfaceAddresses {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interface-addresses.nexthop-interface-address"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -345,7 +344,6 @@ func (data RouterStaticIPv6Unicast) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NexthopAddresses) > 0 {
-				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-addresses.nexthop-address", []interface{}{})
 				for cindex, citem := range item.NexthopAddresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-addresses.nexthop-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -373,7 +371,6 @@ func (data RouterStaticIPv6Unicast) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SrPolicies) > 0 {
-				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"sr-policies.sr-policy", []interface{}{})
 				for cindex, citem := range item.SrPolicies {
 					if !citem.SrPolicyName.IsNull() && !citem.SrPolicyName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"sr-policies.sr-policy"+"."+strconv.Itoa(cindex)+"."+"sr-policy-name", citem.SrPolicyName.ValueString())
@@ -407,8 +404,29 @@ func (data RouterStaticIPv6Unicast) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterStaticIPv6Unicast) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterStaticIPv6Unicast) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterStaticIPv6Unicast) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.NexthopInterfaces {
 		keys := [...]string{"interface-name"}
@@ -2042,7 +2060,6 @@ func (data *RouterStaticIPv6Unicast) getEmptyLeafsDelete(ctx context.Context) []
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterStaticIPv6Unicast) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Vrfs {

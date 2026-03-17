@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -447,7 +448,7 @@ func (data RouterBGPData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterBGP) toBody(ctx context.Context) string {
+func (data RouterBGP) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AsNumber.IsNull() && !data.AsNumber.IsUnknown() {
 		body, _ = sjson.Set(body, "as-number", data.AsNumber.ValueString())
@@ -1358,7 +1359,6 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.BmpActivateServers) > 0 {
-				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"bmp-activate.servers.server", []interface{}{})
 				for cindex, citem := range item.BmpActivateServers {
 					if !citem.ServerNumber.IsNull() && !citem.ServerNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"bmp-activate.servers.server"+"."+strconv.Itoa(cindex)+"."+"server-number", strconv.FormatInt(citem.ServerNumber.ValueInt64(), 10))
@@ -1366,7 +1366,6 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.PeerSets) > 0 {
-				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"peer-set.peer-sets", []interface{}{})
 				for cindex, citem := range item.PeerSets {
 					if !citem.Peer.IsNull() && !citem.Peer.IsUnknown() {
 						body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"peer-set.peer-sets"+"."+strconv.Itoa(cindex)+"."+"peer", strconv.FormatInt(citem.Peer.ValueInt64(), 10))
@@ -1414,7 +1413,6 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "attribute-filter.groups.group"+"."+strconv.Itoa(index)+"."+"group-name", item.GroupName.ValueString())
 			}
 			if len(item.AttributeCodeRanges) > 0 {
-				body, _ = sjson.Set(body, "attribute-filter.groups.group"+"."+strconv.Itoa(index)+"."+"attributes.attribute-code-ranges.attribute-code-range", []interface{}{})
 				for cindex, citem := range item.AttributeCodeRanges {
 					if !citem.Start.IsNull() && !citem.Start.IsUnknown() {
 						body, _ = sjson.Set(body, "attribute-filter.groups.group"+"."+strconv.Itoa(index)+"."+"attributes.attribute-code-ranges.attribute-code-range"+"."+strconv.Itoa(cindex)+"."+"start", strconv.FormatInt(citem.Start.ValueInt64(), 10))
@@ -1443,7 +1441,6 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "as-lists.as-list"+"."+strconv.Itoa(index)+"."+"as-list-name", item.ListName.ValueString())
 			}
 			if len(item.AsNumbers) > 0 {
-				body, _ = sjson.Set(body, "as-lists.as-list"+"."+strconv.Itoa(index)+"."+"as-list-numbers.as-list-number", []interface{}{})
 				for cindex, citem := range item.AsNumbers {
 					if !citem.AsValue.IsNull() && !citem.AsValue.IsUnknown() {
 						body, _ = sjson.Set(body, "as-lists.as-list"+"."+strconv.Itoa(index)+"."+"as-list-numbers.as-list-number"+"."+strconv.Itoa(cindex)+"."+"as-list-value", citem.AsValue.ValueString())
@@ -1529,8 +1526,29 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterBGP) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterBGP) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-metric"); value.Exists() && !data.DefaultMetric.IsNull() {
 		data.DefaultMetric = types.Int64Value(value.Int())
@@ -7505,7 +7523,6 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.RpkiServers {

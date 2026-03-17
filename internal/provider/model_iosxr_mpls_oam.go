@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -80,7 +81,7 @@ func (data MPLSOAMData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data MPLSOAM) toBody(ctx context.Context) string {
+func (data MPLSOAM) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Oam.IsNull() && !data.Oam.IsUnknown() {
 		if data.Oam.ValueBool() {
@@ -133,8 +134,29 @@ func (data MPLSOAM) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data MPLSOAM) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data MPLSOAM) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "oam"); !data.Oam.IsNull() {
 		if value.Exists() {
@@ -401,7 +423,6 @@ func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *MPLSOAM) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.OamDpmDownstreamEcmpFaults.IsNull() {

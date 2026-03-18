@@ -22,27 +22,29 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"context"
-	"fmt"
-	"strconv"
-	"strings"
+        "context"
+        "fmt"
+        "regexp"
+        "strconv"
+        "strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
-	"github.com/netascode/go-gnmi"
+        "github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+        "github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+        "github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+        "github.com/hashicorp/terraform-plugin-framework/path"
+        "github.com/hashicorp/terraform-plugin-framework/resource"
+        "github.com/hashicorp/terraform-plugin-framework/resource/schema"
+        "github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+        "github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+        "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
+        "github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+        "github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+        "github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+        "github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+        "github.com/hashicorp/terraform-plugin-framework/schema/validator"
+        "github.com/hashicorp/terraform-plugin-framework/types"
+        "github.com/hashicorp/terraform-plugin-log/tflog"
+        "github.com/netascode/go-gnmi"
 )
 
 // End of section. //template:end imports
@@ -452,6 +454,12 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 			return
 		}
+
+		// Invalidate this path in cache after write so next Read fetches fresh data
+		if r.data.EnableConfigCache {
+			device.Cache.Delete(plan.getPath())
+			tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Create", plan.getPath()))
+		}
 	}
 
 	plan.Id = types.StringValue(plan.getPath())
@@ -484,32 +492,25 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
+	resourcePath := state.Id.ValueString()
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", resourcePath))
 
 	if device.Managed {
 		if !r.data.ReuseConnection {
 			defer device.Client.Disconnect()
 		}
-		getResp, err := device.Client.Get(ctx, []string{state.Id.ValueString()})
-		if err != nil {
-			if strings.Contains(err.Error(), "Requested element(s) not found") {
-				resp.State.RemoveResource(ctx)
-				return
-			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-				return
-			}
-		}
 
-		// Defensive bounds checking for response structure
-		if len(getResp.Notifications) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response contains no notifications")
+		respBody, notFound, fetchErr := helpers.ReadConfig(
+			ctx, device.Client, device.Cache,
+			r.data.EnableConfigCache, r.data.ConfigCacheTTL,
+			device.EnsureCacheWarmed, resourcePath,
+		)
+		if notFound {
+			resp.State.RemoveResource(ctx)
 			return
 		}
-		if len(getResp.Notifications[0].Update) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response notification contains no updates")
+		if fetchErr != nil {
+			resp.Diagnostics.AddError("Unable to fetch device configuration", fetchErr.Error())
 			return
 		}
 
@@ -518,8 +519,6 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 			return
 		}
 
-		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {
@@ -527,7 +526,7 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", resourcePath))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
@@ -592,6 +591,12 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		if err != nil {
 			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 			return
+		}
+
+		// Invalidate this path in cache after write so next Read fetches fresh data
+		if r.data.EnableConfigCache {
+			device.Cache.Delete(plan.Id.ValueString())
+			tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Update", plan.Id.ValueString()))
 		}
 	}
 
@@ -658,6 +663,12 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 				return
+			}
+
+			// Invalidate this path in cache after write so next Read fetches fresh data
+			if r.data.EnableConfigCache {
+				device.Cache.Delete(state.Id.ValueString())
+				tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Delete", state.Id.ValueString()))
 			}
 		}
 	}

@@ -337,6 +337,47 @@ func RemoveLastPathElement(p string) string {
 	return path.Dir(p)
 }
 
+// CacheRootPath returns the first path segment that has no key predicates or
+// format verbs — i.e. the highest-level stable container we can fetch once
+// and share across all instances of a resource type.
+//
+// Rules (module prefix is always kept):
+//
+//	"Cisco-IOS-XR-um-fpd-cfg:/fpd"
+//	    → "Cisco-IOS-XR-um-fpd-cfg:/fpd"           (no keys — keep as-is)
+//	"Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]"
+//	    → "Cisco-IOS-XR-um-router-hsrp-cfg:/router" (stop before first keyed segment)
+//	"Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]"
+//	    → "Cisco-IOS-XR-um-interface-cfg:/interfaces"
+func CacheRootPath(p string) string {
+	// Keep only module:/<first-segment>.
+	// Every deeper sub-path for the same module+root collapses to one entry,
+	// so the deduplication map in the generator produces a minimal unique list.
+	//
+	// Examples:
+	//   "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]"
+	//       → "Cisco-IOS-XR-um-interface-cfg:/interfaces"
+	slashIdx := strings.Index(p, "/")
+	if slashIdx < 0 {
+		return p
+	}
+	module := p[:slashIdx] // e.g. "Cisco-IOS-XR-um-route-policy-cfg:"
+	rest := p[slashIdx+1:] // e.g. "routing-policy/sets/prefix-sets"
+
+	// Take only up to the first '/', '[', or '%'
+	firstSeg := rest
+	for i, c := range rest {
+		if c == '/' || c == '[' || c == '%' {
+			firstSeg = rest[:i]
+			break
+		}
+	}
+	if firstSeg == "" {
+		return module + "/"
+	}
+	return module + "/" + firstSeg
+}
+
 func contains(s []string, str string) bool {
 	for _, v := range s {
 		if v == str {
@@ -364,6 +405,7 @@ var functions = template.FuncMap{
 	"getXPath":              GetXPath,
 	"getDeletePath":         GetDeletePath,
 	"reverseAttributes":     ReverseAttributes,
+	"cacheRootPath":         CacheRootPath,
 }
 
 func resolvePath(e *yang.Entry, path string) *yang.Entry {
@@ -727,6 +769,22 @@ func main() {
 
 	// render provider.go
 	renderTemplate(providerTemplate, providerLocation, configs)
+
+	// Build deduplicated list of cache-root paths from all definitions,
+	// then render config_cache.go (helpers) with that list.
+	seenCachePaths := make(map[string]bool)
+	var uniqueCachePaths []string
+	for _, cfg := range configs {
+		if cfg.Path == "" {
+			continue
+		}
+		cp := CacheRootPath(cfg.Path)
+		if cp != "" && !seenCachePaths[cp] {
+			seenCachePaths[cp] = true
+			uniqueCachePaths = append(uniqueCachePaths, cp)
+		}
+	}
+	renderTemplate("./gen/templates/config_cache.go", "./internal/provider/helpers/config_cache.go", uniqueCachePaths)
 
 	changelog, err := os.ReadFile(changelogOriginal)
 	if err != nil {

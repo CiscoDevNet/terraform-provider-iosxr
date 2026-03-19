@@ -156,7 +156,7 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				Optional:            true,
 			},
 			"enable_config_cache": schema.BoolAttribute{
-				MarkdownDescription: "Enable configuration caching. When enabled, the provider fetches the full device configuration once and caches it for subsequent read operations, significantly improving performance during `terraform refresh` and `terraform plan` operations. Cache is automatically invalidated after any write operation. This can also be set as the IOSXR_ENABLE_CONFIG_CACHE environment variable. Defaults to `false`.",
+				MarkdownDescription: "Enable configuration caching. When enabled, the provider fetches the full device configuration once and caches it for subsequent read operations, significantly improving performance during `terraform refresh` and `terraform plan` operations. Cache is automatically invalidated after any write operation. This can also be set as the IOSXR_ENABLE_CONFIG_CACHE environment variable. Defaults to `true`.",
 				Optional:            true,
 			},
 			"config_cache_ttl": schema.Int64Attribute{
@@ -429,7 +429,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 	if config.EnableConfigCache.IsNull() {
 		enableConfigCacheStr := os.Getenv("IOSXR_ENABLE_CONFIG_CACHE")
 		if enableConfigCacheStr == "" {
-			enableConfigCache = false
+			enableConfigCache = true
 		} else {
 			var err error
 			enableConfigCache, err = strconv.ParseBool(enableConfigCacheStr)

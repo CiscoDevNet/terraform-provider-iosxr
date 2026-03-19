@@ -122,6 +122,7 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `ipv6_verify_unicast_source_reachable_via_allow_default` (Boolean) Allow default route to match when checking source address
 - `ipv6_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
 - `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
+- `l2transport` (Boolean) l2transport sub-interface
 - `l2transport_encapsulation_dot1q_second_dot1q` (String) Single VLAN id or start of VLAN range
 - `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
 - `lldp` (Boolean) LLDP interface configuration commands

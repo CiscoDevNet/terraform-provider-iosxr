@@ -71,6 +71,10 @@ func (d *InterfaceBundleEtherSubinterfaceDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "Bundle-Ether subinterface ID",
 				Required:            true,
 			},
+			"l2transport": schema.BoolAttribute{
+				MarkdownDescription: "l2transport sub-interface",
+				Computed:            true,
+			},
 			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: "point-to-point sub-interface",
 				Computed:            true,

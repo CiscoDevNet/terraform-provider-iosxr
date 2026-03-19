@@ -39,6 +39,7 @@ type InterfaceBundleEtherSubinterface struct {
 	Id                                                 types.String                                                                    `tfsdk:"id"`
 	DeleteMode                                         types.String                                                                    `tfsdk:"delete_mode"`
 	Name                                               types.String                                                                    `tfsdk:"name"`
+	L2transport                                        types.Bool                                                                      `tfsdk:"l2transport"`
 	PointToPoint                                       types.Bool                                                                      `tfsdk:"point_to_point"`
 	Multipoint                                         types.Bool                                                                      `tfsdk:"multipoint"`
 	Dampening                                          types.Bool                                                                      `tfsdk:"dampening"`
@@ -222,6 +223,7 @@ type InterfaceBundleEtherSubinterfaceData struct {
 	Device                                             types.String                                                                    `tfsdk:"device"`
 	Id                                                 types.String                                                                    `tfsdk:"id"`
 	Name                                               types.String                                                                    `tfsdk:"name"`
+	L2transport                                        types.Bool                                                                      `tfsdk:"l2transport"`
 	PointToPoint                                       types.Bool                                                                      `tfsdk:"point_to_point"`
 	Multipoint                                         types.Bool                                                                      `tfsdk:"multipoint"`
 	Dampening                                          types.Bool                                                                      `tfsdk:"dampening"`
@@ -561,6 +563,11 @@ func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context) string 
 	body := "{}"
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
 		body, _ = sjson.Set(body, "", data.Name.ValueString())
+	}
+	if !data.L2transport.IsNull() && !data.L2transport.IsUnknown() {
+		if data.L2transport.ValueBool() {
+			body, _ = sjson.Set(body, "sub-interface-type.l2transport", map[string]string{})
+		}
 	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.IsUnknown() {
 		if data.PointToPoint.ValueBool() {
@@ -1597,6 +1604,15 @@ func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context) string 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *InterfaceBundleEtherSubinterface) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); !data.L2transport.IsNull() {
+		if value.Exists() {
+			data.L2transport = types.BoolValue(true)
+		} else {
+			data.L2transport = types.BoolValue(false)
+		}
+	} else {
+		data.L2transport = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); !data.PointToPoint.IsNull() {
 		if value.Exists() {
 			data.PointToPoint = types.BoolValue(true)
@@ -3774,6 +3790,11 @@ func (data *InterfaceBundleEtherSubinterface) updateFromBody(ctx context.Context
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *InterfaceBundleEtherSubinterface) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
+		data.L2transport = types.BoolValue(true)
+	} else {
+		data.L2transport = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
@@ -4891,6 +4912,11 @@ func (data *InterfaceBundleEtherSubinterface) fromBody(ctx context.Context, res 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *InterfaceBundleEtherSubinterfaceData) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
+		data.L2transport = types.BoolValue(true)
+	} else {
+		data.L2transport = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
@@ -7422,6 +7448,9 @@ func (data *InterfaceBundleEtherSubinterface) getDeletedItems(ctx context.Contex
 	if !state.PointToPoint.IsNull() && data.PointToPoint.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/point-to-point", state.getPath()))
 	}
+	if !state.L2transport.IsNull() && data.L2transport.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/l2transport", state.getPath()))
+	}
 	return deletedItems
 }
 
@@ -7894,6 +7923,9 @@ func (data *InterfaceBundleEtherSubinterface) getEmptyLeafsDelete(ctx context.Co
 	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/point-to-point", data.getPath()))
+	}
+	if !data.L2transport.IsNull() && !data.L2transport.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/l2transport", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -8586,6 +8618,9 @@ func (data *InterfaceBundleEtherSubinterface) getDeletePaths(ctx context.Context
 	}
 	if !data.PointToPoint.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/point-to-point", data.getPath()))
+	}
+	if !data.L2transport.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/l2transport", data.getPath()))
 	}
 	return deletePaths
 }

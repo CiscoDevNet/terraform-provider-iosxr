@@ -91,6 +91,10 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Schema(ctx context.Context, r
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"l2transport": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l2transport sub-interface").String,
+				Optional:            true,
+			},
 			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("point-to-point sub-interface").String,
 				Optional:            true,

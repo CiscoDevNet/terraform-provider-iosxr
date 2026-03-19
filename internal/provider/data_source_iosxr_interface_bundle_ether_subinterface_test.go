@@ -33,6 +33,7 @@ import (
 
 func TestAccDataSourceIosxrInterfaceBundleEtherSubinterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "l2transport", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "multipoint", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "dampening", "true"))
@@ -486,6 +487,7 @@ func testAccDataSourceIosxrInterfaceBundleEtherSubinterfaceConfig() string {
 	config := `resource "iosxr_interface_bundle_ether_subinterface" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	name = "100.100"` + "\n"
+	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
 	config += `	dampening = true` + "\n"

@@ -1,7 +1,8 @@
 ---
 name: Linux Networking
 path: Cisco-IOS-XR-um-linux-networking-cfg:/linux/networking
-doc_category: System
+doc_category: Management
+default_delete_attributes: true
 test_tags: [LINUX]
 attributes:
   - yang_name: statistics-synchronization/from-xr/every/thirty-seconds

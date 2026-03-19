@@ -19,6 +19,7 @@ attributes:
         example: Loopback0
       - yang_name: anonymous-password
         sensitive: true
+        write_only: true
         example: mypassword
       - yang_name: username
         minimum_test_value: '"ftpuser"'
@@ -26,4 +27,5 @@ attributes:
       - yang_name: password/encrypted
         tf_name: password
         sensitive: true
+        write_only: true
         example: myencryptedpassword

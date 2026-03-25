@@ -33,6 +33,8 @@ import (
 func TestAccDataSourceIosxrRouterStaticVRFIPv6Unicast(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.address", "3::3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.bfd_fast_detect_minimum_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.bfd_fast_detect_multiplier", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.description", "ip-description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.tag", "104"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "nexthop_addresses.0.distance_metric", "155"))
@@ -46,6 +48,8 @@ func TestAccDataSourceIosxrRouterStaticVRFIPv6Unicast(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "sr_policies.0.metric", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.vrf_name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.address", "3::3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.bfd_fast_detect_minimum_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.bfd_fast_detect_multiplier", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.description", "ip-description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.tag", "104"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_vrf_ipv6_unicast.test", "vrfs.0.nexthop_addresses.0.distance_metric", "155"))
@@ -94,6 +98,8 @@ func testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig() string {
 	config += `	prefix_length = 64` + "\n"
 	config += `	nexthop_addresses = [{` + "\n"
 	config += `		address = "3::3"` + "\n"
+	config += `		bfd_fast_detect_minimum_interval = 100` + "\n"
+	config += `		bfd_fast_detect_multiplier = 3` + "\n"
 	config += `		description = "ip-description"` + "\n"
 	config += `		tag = 104` + "\n"
 	config += `		distance_metric = 155` + "\n"
@@ -112,6 +118,8 @@ func testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig() string {
 	config += `		vrf_name = "VRF1"` + "\n"
 	config += `		nexthop_addresses = [{` + "\n"
 	config += `			address = "3::3"` + "\n"
+	config += `			bfd_fast_detect_minimum_interval = 100` + "\n"
+	config += `			bfd_fast_detect_multiplier = 3` + "\n"
 	config += `			description = "ip-description"` + "\n"
 	config += `			tag = 104` + "\n"
 	config += `			distance_metric = 155` + "\n"

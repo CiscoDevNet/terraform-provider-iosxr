@@ -180,6 +180,20 @@ func (r *RouterStaticIPv6MulticastResource) Schema(ctx context.Context, req reso
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
 							},
 						},
+						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 30000),
+							},
+						},
+						"bfd_fast_detect_multiplier": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 10),
+							},
+						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("description of the static route").String,
 							Optional:            true,
@@ -235,6 +249,20 @@ func (r *RouterStaticIPv6MulticastResource) Schema(ctx context.Context, req reso
 								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 30000),
+							},
+						},
+						"bfd_fast_detect_multiplier": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 10),
 							},
 						},
 						"description": schema.StringAttribute{
@@ -425,6 +453,20 @@ func (r *RouterStaticIPv6MulticastResource) Schema(ctx context.Context, req reso
 											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
 										},
 									},
+									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(3, 30000),
+										},
+									},
+									"bfd_fast_detect_multiplier": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 10),
+										},
+									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("description of the static route").String,
 										Optional:            true,
@@ -480,6 +522,20 @@ func (r *RouterStaticIPv6MulticastResource) Schema(ctx context.Context, req reso
 											stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
 											stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
 											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+										},
+									},
+									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(3, 30000),
+										},
+									},
+									"bfd_fast_detect_multiplier": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 10),
 										},
 									},
 									"description": schema.StringAttribute{

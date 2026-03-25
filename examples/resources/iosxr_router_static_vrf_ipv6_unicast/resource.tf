@@ -4,12 +4,14 @@ resource "iosxr_router_static_vrf_ipv6_unicast" "example" {
   prefix_length  = 64
   nexthop_addresses = [
     {
-      address         = "3::3"
-      description     = "ip-description"
-      tag             = 104
-      distance_metric = 155
-      track           = "TRACK1"
-      metric          = 10
+      address                          = "3::3"
+      bfd_fast_detect_minimum_interval = 100
+      bfd_fast_detect_multiplier       = 3
+      description                      = "ip-description"
+      tag                              = 104
+      distance_metric                  = 155
+      track                            = "TRACK1"
+      metric                           = 10
     }
   ]
   sr_policies = [
@@ -27,12 +29,14 @@ resource "iosxr_router_static_vrf_ipv6_unicast" "example" {
       vrf_name = "VRF1"
       nexthop_addresses = [
         {
-          address         = "3::3"
-          description     = "ip-description"
-          tag             = 104
-          distance_metric = 155
-          track           = "TRACK1"
-          metric          = 10
+          address                          = "3::3"
+          bfd_fast_detect_minimum_interval = 100
+          bfd_fast_detect_multiplier       = 3
+          description                      = "ip-description"
+          tag                              = 104
+          distance_metric                  = 155
+          track                            = "TRACK1"
+          metric                           = 10
         }
       ]
       sr_policies = [

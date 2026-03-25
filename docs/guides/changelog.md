@@ -9,6 +9,8 @@ description: |-
 
 ## Unreleased
 
+- Add `monitor_sessions` to `iosxr_interface_bundle_ether`, `iosxr_interface_bundle_ether_subinterface`, `iosxr_interface_bvi` resource and data source
+- Add `l2transport` to `iosxr_interface_bundle_ether`, `iosxr_interface_bundle_ether_subinterface` resource and data source
 - Change: Make default `delete_mode` attributes for `iosxr_linux_networking` resource and data source
 - Add `multipath_destinations` list to `iosxr_bfd` resource and data source
 - Add `permit_tcp_flags_bits`, `deny_tcp_flags_bits` to `iosxr_ipv4_access_list` resource and data source
@@ -20,6 +22,7 @@ description: |-
 - Add `informs_encrypted_default`, `informs_encrypted_aes` lists to `iosxr_snmp_server_vrf` resource and data source
 - Add `traps_encrypted_default`, `traps_encrypted_aes` lists to `iosxr_snmp_server` resource and data source
 - Add `informs_encrypted_default`, `informs_encrypted_aes` lists to `iosxr_snmp_server` resource and data source
+- Fix: `l2transport` attribute in `iosxr_interface_ethernet` resource and data source
 - Fix: `bfd_enable` attribute in `iosxr_segment_routing_te_on_demand_color` resource and data source
 - Fix: `per_flow` attribute in `iosxr_segment_routing_te_on_demand_color` resource and data source
 - Fix: `bfd_enable` attribute in `iosxr_segment_routing_te_policy` resource and data source

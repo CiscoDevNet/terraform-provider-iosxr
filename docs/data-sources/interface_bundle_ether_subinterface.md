@@ -122,6 +122,7 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `ipv6_verify_unicast_source_reachable_via_allow_default` (Boolean) Allow default route to match when checking source address
 - `ipv6_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
 - `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
+- `l2transport` (Boolean) l2transport sub-interface
 - `l2transport_encapsulation_dot1q_second_dot1q` (String) Single VLAN id or start of VLAN range
 - `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
 - `lldp` (Boolean) LLDP interface configuration commands
@@ -129,6 +130,7 @@ data "iosxr_interface_bundle_ether_subinterface" "example" {
 - `lldp_transmit_disable` (Boolean) Disable LLDP TX on an interface
 - `load_interval` (Number) Specify interval for load calculation for an interface
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
+- `monitor_sessions` (Attributes List) Monitor-session configuration commands (see [below for nested schema](#nestedatt--monitor_sessions))
 - `mpls_mtu` (Number) Set the MPLS MTU for the interface
 - `mtu` (Number) Set the MTU on an interface
 - `multipoint` (Boolean) multipoint sub-interface
@@ -361,6 +363,22 @@ Read-Only:
 - `prefix_length` (Number) Prefix Length
 - `route_tag` (Number) Route-tag to be associated with this address
 - `zone` (String) IPv6 address zone
+
+
+<a id="nestedatt--monitor_sessions"></a>
+### Nested Schema for `monitor_sessions`
+
+Read-Only:
+
+- `acl` (Boolean) Enable acl based mirroring
+- `acl_ipv4_name` (String) IPV4 ACL name
+- `acl_ipv6_name` (String) IPV6 ACL name
+- `direction_rx_only` (Boolean) Replicate only received (ingress) traffic
+- `direction_tx_only` (Boolean) Replicate only transmitted (egress) traffic
+- `ethernet` (Boolean) Replicate Ethernet traffic
+- `mirror_first` (Number) Enable mirroring on the first portion of a packet
+- `mirror_interval` (String) Enable mirroring of every Nth packet
+- `session_name` (String) Monitor-session configuration commands
 
 
 <a id="nestedatt--ptp_interop_egress_conversion_clock_class_mappings"></a>

@@ -11,6 +11,9 @@ attributes:
     string_patterns:
       - '^[0-9]+\.[0-9]+$'
     example: "100.100"
+  - yang_name: sub-interface-type/l2transport
+    tf_name: l2transport
+    example: false
   - yang_name: sub-interface-type/point-to-point
     tf_name: point_to_point
     example: false
@@ -726,6 +729,38 @@ attributes:
   - yang_name: Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable
     tf_name: lldp_receive_disable
     example: true
+  - yang_name: Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session
+    tf_name: monitor_sessions
+    test_tags: [NCS, C8000]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: session-name
+        id: true
+        example: SESSION-1
+      - yang_name: ethernet
+        example: true
+      - yang_name: direction/rx-only
+        tf_name: direction_rx_only
+        example: true
+      - yang_name: direction/tx-only
+        tf_name: direction_tx_only
+        exclude_test: true
+        example: true
+      - yang_name: acl
+        example: true
+      - yang_name: acl-ipv4/acl-name
+        tf_name: acl_ipv4_name
+        example: ACL1
+      - yang_name: acl-ipv6/acl-name
+        tf_name: acl_ipv6_name
+        example: ACL2
+      - yang_name: mirror/first
+        exclude_test: true
+        example: 256
+      - yang_name: mirror/interval
+        exclude_test: true
+        example: 512
   # ptp/
   - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp
     test_tags: [NCS, C8000]
@@ -1268,3 +1303,9 @@ test_prerequisites:
                 value: 2001::1
               - name: permit/destination/host
                 value: 2001::2
+  - path: Cisco-IOS-XR-um-monitor-session-cfg:/monitor-sessions/monitor-session[session-name=SESSION-1]
+    attributes:
+      - name: session-name
+        value: SESSION-1
+      - name: traffic-type
+        value: ethernet

@@ -33,7 +33,6 @@ import (
 
 func TestAccDataSourceIosxrInterfaceEthernet(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "l2transport", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "multipoint", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_ethernet.test", "dampening", "true"))
@@ -524,7 +523,6 @@ func testAccDataSourceIosxrInterfaceEthernetConfig() string {
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	type = "GigabitEthernet"` + "\n"
 	config += `	name = "0/0/0/1"` + "\n"
-	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
 	config += `	dampening = true` + "\n"

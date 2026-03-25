@@ -15,6 +15,7 @@ This resource can manage the Interface Bundle Ether Subinterface configuration.
 ```terraform
 resource "iosxr_interface_bundle_ether_subinterface" "example" {
   name                         = "100.100"
+  l2transport                  = false
   point_to_point               = false
   multipoint                   = false
   dampening                    = true
@@ -141,35 +142,45 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
   lldp                                                 = true
   lldp_transmit_disable                                = true
   lldp_receive_disable                                 = true
-  ptp                                                  = true
-  ptp_profile                                          = "Profile-1"
-  ptp_transport_ethernet                               = true
-  ptp_clock_operation_one_step                         = true
-  ptp_announce_interval                                = "2"
-  ptp_announce_timeout                                 = 5
-  ptp_announce_grant_duration                          = 300
-  ptp_sync_interval                                    = "2"
-  ptp_sync_grant_duration                              = 300
-  ptp_sync_timeout                                     = 3000
-  ptp_delay_request_interval                           = "2"
-  ptp_cos                                              = 6
-  ptp_cos_event                                        = 6
-  ptp_cos_general                                      = 6
-  ptp_dscp                                             = 46
-  ptp_dscp_event                                       = 46
-  ptp_dscp_general                                     = 46
-  ptp_ipv4_ttl                                         = 10
-  ptp_ipv6_hop_limit                                   = 10
-  ptp_delay_asymmetry_value                            = 1000
-  ptp_delay_asymmetry_unit_microseconds                = true
-  ptp_delay_response_grant_duration                    = 300
-  ptp_delay_response_timeout                           = 3000
-  ptp_unicast_grant_invalid_request_reduce             = true
-  ptp_multicast                                        = true
-  ptp_multicast_mixed                                  = true
-  ptp_multicast_target_address_mac_forwardable         = true
-  ptp_port_state_master_only                           = true
-  ptp_local_priority                                   = 128
+  monitor_sessions = [
+    {
+      session_name      = "SESSION-1"
+      ethernet          = true
+      direction_rx_only = true
+      acl               = true
+      acl_ipv4_name     = "ACL1"
+      acl_ipv6_name     = "ACL2"
+    }
+  ]
+  ptp                                          = true
+  ptp_profile                                  = "Profile-1"
+  ptp_transport_ethernet                       = true
+  ptp_clock_operation_one_step                 = true
+  ptp_announce_interval                        = "2"
+  ptp_announce_timeout                         = 5
+  ptp_announce_grant_duration                  = 300
+  ptp_sync_interval                            = "2"
+  ptp_sync_grant_duration                      = 300
+  ptp_sync_timeout                             = 3000
+  ptp_delay_request_interval                   = "2"
+  ptp_cos                                      = 6
+  ptp_cos_event                                = 6
+  ptp_cos_general                              = 6
+  ptp_dscp                                     = 46
+  ptp_dscp_event                               = 46
+  ptp_dscp_general                             = 46
+  ptp_ipv4_ttl                                 = 10
+  ptp_ipv6_hop_limit                           = 10
+  ptp_delay_asymmetry_value                    = 1000
+  ptp_delay_asymmetry_unit_microseconds        = true
+  ptp_delay_response_grant_duration            = 300
+  ptp_delay_response_timeout                   = 3000
+  ptp_unicast_grant_invalid_request_reduce     = true
+  ptp_multicast                                = true
+  ptp_multicast_mixed                          = true
+  ptp_multicast_target_address_mac_forwardable = true
+  ptp_port_state_master_only                   = true
+  ptp_local_priority                           = 128
   ptp_slave_ipv4s = [
     {
       address        = "10.2.2.2"
@@ -385,6 +396,7 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
 - `ipv6_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
 - `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
   - Choices: `any`, `rx`
+- `l2transport` (Boolean) l2transport sub-interface
 - `l2transport_encapsulation_dot1q_second_dot1q` (String) Single VLAN id or start of VLAN range
 - `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
 - `lldp` (Boolean) LLDP interface configuration commands
@@ -392,6 +404,7 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
 - `lldp_transmit_disable` (Boolean) Disable LLDP TX on an interface
 - `load_interval` (Number) Specify interval for load calculation for an interface
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
+- `monitor_sessions` (Attributes List) Monitor-session configuration commands (see [below for nested schema](#nestedatt--monitor_sessions))
 - `mpls_mtu` (Number) Set the MPLS MTU for the interface
   - Range: `68`-`65535`
 - `mtu` (Number) Set the MTU on an interface
@@ -685,6 +698,27 @@ Optional:
   - Range: `1`-`4294967295`
 - `zone` (String) IPv6 address zone
   - Default value: `0`
+
+
+<a id="nestedatt--monitor_sessions"></a>
+### Nested Schema for `monitor_sessions`
+
+Required:
+
+- `session_name` (String) Monitor-session configuration commands
+
+Optional:
+
+- `acl` (Boolean) Enable acl based mirroring
+- `acl_ipv4_name` (String) IPV4 ACL name
+- `acl_ipv6_name` (String) IPV6 ACL name
+- `direction_rx_only` (Boolean) Replicate only received (ingress) traffic
+- `direction_tx_only` (Boolean) Replicate only transmitted (egress) traffic
+- `ethernet` (Boolean) Replicate Ethernet traffic
+- `mirror_first` (Number) Enable mirroring on the first portion of a packet
+  - Range: `1`-`10000`
+- `mirror_interval` (String) Enable mirroring of every Nth packet
+  - Choices: `128`, `16`, `16K`, `1K`, `2`, `256`, `2K`, `32`, `4`, `4K`, `512`, `64`, `8`, `8K`
 
 
 <a id="nestedatt--ptp_interop_egress_conversion_clock_class_mappings"></a>

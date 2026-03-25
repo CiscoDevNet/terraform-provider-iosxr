@@ -16,7 +16,6 @@ This resource can manage the Interface Ethernet configuration.
 resource "iosxr_interface_ethernet" "example" {
   type                         = "GigabitEthernet"
   name                         = "0/0/0/1"
-  l2transport                  = false
   point_to_point               = false
   multipoint                   = false
   dampening                    = true
@@ -476,7 +475,7 @@ resource "iosxr_interface_ethernet" "example" {
 - `ipv6_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
 - `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
   - Choices: `any`, `rx`
-- `l2transport` (Boolean) l2transport sub-interface
+- `l2transport` (Boolean) Enable Layer 2 transport and enter its configuration submode
 - `l2transport_encapsulation_dot1q_second_dot1q` (String) Single VLAN id or start of VLAN range
 - `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
 - `lacp_period` (Number) Set the period on bundle to be used by its member link

@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## Unreleased
+## 0.7.1
 
 - Add `monitor_sessions` to `iosxr_interface_bundle_ether`, `iosxr_interface_bundle_ether_subinterface`, `iosxr_interface_bvi` resource and data source
 - Add `l2transport` to `iosxr_interface_bundle_ether`, `iosxr_interface_bundle_ether_subinterface` resource and data source

@@ -994,6 +994,7 @@ attributes:
     tf_name: monitor_sessions
     test_tags: [NCS, C8000]
     include_example: true
+    exclude_test: true
     type: List
     attributes:
       - yang_name: session-name

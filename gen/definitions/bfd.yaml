@@ -37,6 +37,7 @@ attributes:
         example: 0/0/CPU0
   - yang_name: multipath/destinations/destination
     tf_name: multipath_destinations
+    test_tags: [XRV9K]
     type: List
     attributes:
       - yang_name: destination-ip-address

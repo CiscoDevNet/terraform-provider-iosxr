@@ -424,14 +424,6 @@ resource "iosxr_gnmi" "PreReq3" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq4" {
-	path = "Cisco-IOS-XR-um-monitor-session-cfg:/monitor-sessions/monitor-session[session-name=SESSION-1]"
-	attributes = {
-		"session-name" = "SESSION-1"
-		"traffic-type" = "ethernet"
-	}
-}
-
 `
 
 // End of section. //template:end testPrerequisites
@@ -443,7 +435,7 @@ func testAccIosxrInterfaceBVIConfig_minimum() string {
 	config += `	name = "100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	load_interval = 30` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -743,7 +735,7 @@ func testAccIosxrInterfaceBVIConfig_all() string {
 		config += `		clock_class_to_map_to = 6` + "\n"
 		config += `		}]` + "\n"
 	}
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

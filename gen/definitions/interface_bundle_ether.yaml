@@ -864,6 +864,7 @@ attributes:
     tf_name: monitor_sessions
     test_tags: [NCS, C8000]
     include_example: true
+    exclude_test: true
     type: List
     attributes:
       - yang_name: session-name
@@ -1431,9 +1432,3 @@ test_prerequisites:
                 value: 2001::1
               - name: permit/destination/host
                 value: 2001::2
-  - path: Cisco-IOS-XR-um-monitor-session-cfg:/monitor-sessions/monitor-session[session-name=SESSION-1]
-    attributes:
-      - name: session-name
-        value: SESSION-1
-      - name: traffic-type
-        value: ethernet

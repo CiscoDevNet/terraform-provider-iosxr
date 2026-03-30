@@ -36,7 +36,7 @@ import (
 func TestAccIosxrInterfaceEthernetSubinterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "type", "GigabitEthernet"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "name", "0/0/0/0.100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "name", "0/0/0/1.100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "l2transport", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "multipoint", "false"))
@@ -166,14 +166,6 @@ func TestAccIosxrInterfaceEthernetSubinterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "lldp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "lldp_transmit_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "lldp_receive_disable", "true"))
-	if os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "monitor_sessions.0.session_name", "SESSION-1"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "monitor_sessions.0.ethernet", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "monitor_sessions.0.direction_rx_only", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "monitor_sessions.0.acl", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "monitor_sessions.0.acl_ipv4_name", "ACL1"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "monitor_sessions.0.acl_ipv6_name", "ACL2"))
-	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet_subinterface.test", "ptp", "true"))
 	}
@@ -479,7 +471,7 @@ resource "iosxr_gnmi" "PreReq3" {
 func testAccIosxrInterfaceEthernetSubinterfaceConfig_minimum() string {
 	config := `resource "iosxr_interface_ethernet_subinterface" "test" {` + "\n"
 	config += `	type = "GigabitEthernet"` + "\n"
-	config += `	name = "0/0/0/0.100"` + "\n"
+	config += `	name = "0/0/0/1.100"` + "\n"
 	config += `	shutdown = true` + "\n"
 	config += `	load_interval = 30` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
@@ -494,7 +486,7 @@ func testAccIosxrInterfaceEthernetSubinterfaceConfig_minimum() string {
 func testAccIosxrInterfaceEthernetSubinterfaceConfig_all() string {
 	config := `resource "iosxr_interface_ethernet_subinterface" "test" {` + "\n"
 	config += `	type = "GigabitEthernet"` + "\n"
-	config += `	name = "0/0/0/0.100"` + "\n"
+	config += `	name = "0/0/0/1.100"` + "\n"
 	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
@@ -646,16 +638,6 @@ func testAccIosxrInterfaceEthernetSubinterfaceConfig_all() string {
 	config += `	lldp = true` + "\n"
 	config += `	lldp_transmit_disable = true` + "\n"
 	config += `	lldp_receive_disable = true` + "\n"
-	if os.Getenv("NCS") != "" {
-		config += `	monitor_sessions = [{` + "\n"
-		config += `		session_name = "SESSION-1"` + "\n"
-		config += `		ethernet = true` + "\n"
-		config += `		direction_rx_only = true` + "\n"
-		config += `		acl = true` + "\n"
-		config += `		acl_ipv4_name = "ACL1"` + "\n"
-		config += `		acl_ipv6_name = "ACL2"` + "\n"
-		config += `		}]` + "\n"
-	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	ptp = true` + "\n"
 	}

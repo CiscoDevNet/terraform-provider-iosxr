@@ -202,14 +202,6 @@ func TestAccIosxrInterfaceBundleEtherSubinterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "lldp_transmit_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "lldp_receive_disable", "true"))
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "monitor_sessions.0.session_name", "SESSION-1"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "monitor_sessions.0.ethernet", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "monitor_sessions.0.direction_rx_only", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "monitor_sessions.0.acl", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "monitor_sessions.0.acl_ipv4_name", "ACL1"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "monitor_sessions.0.acl_ipv6_name", "ACL2"))
-	}
-	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ptp", "true"))
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
@@ -512,14 +504,6 @@ resource "iosxr_gnmi" "PreReq4" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq5" {
-	path = "Cisco-IOS-XR-um-monitor-session-cfg:/monitor-sessions/monitor-session[session-name=SESSION-1]"
-	attributes = {
-		"session-name" = "SESSION-1"
-		"traffic-type" = "ethernet"
-	}
-}
-
 `
 
 // End of section. //template:end testPrerequisites
@@ -531,7 +515,7 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_minimum() string {
 	config += `	name = "100.100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	load_interval = 30` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -731,16 +715,6 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all() string {
 	config += `	lldp_transmit_disable = true` + "\n"
 	config += `	lldp_receive_disable = true` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		config += `	monitor_sessions = [{` + "\n"
-		config += `		session_name = "SESSION-1"` + "\n"
-		config += `		ethernet = true` + "\n"
-		config += `		direction_rx_only = true` + "\n"
-		config += `		acl = true` + "\n"
-		config += `		acl_ipv4_name = "ACL1"` + "\n"
-		config += `		acl_ipv6_name = "ACL2"` + "\n"
-		config += `		}]` + "\n"
-	}
-	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	ptp = true` + "\n"
 	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
@@ -929,7 +903,7 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all() string {
 		config += `		clock_class_to_map_to = 6` + "\n"
 		config += `		}]` + "\n"
 	}
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

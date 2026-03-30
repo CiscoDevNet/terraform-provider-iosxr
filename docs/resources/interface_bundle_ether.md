@@ -437,6 +437,7 @@ resource "iosxr_interface_bundle_ether" "example" {
 - `ipv6_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
 - `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
   - Choices: `any`, `rx`
+- `l2transport` (Boolean) Enable Layer 2 transport and enter its configuration submode
 - `lacp_churn_logging` (String) Set parameters for logging of churn events
   - Choices: `actor`, `both`, `partner`
 - `lacp_cisco_enable` (Boolean) Enable the use of Cisco LACP extensions
@@ -458,6 +459,7 @@ resource "iosxr_interface_bundle_ether" "example" {
 - `load_interval` (Number) Specify interval for load calculation for an interface
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `mac_address` (String) Set the Mac address(xxxx.xxxx.xxxx) on an interface
+- `monitor_sessions` (Attributes List) Monitor-session configuration commands (see [below for nested schema](#nestedatt--monitor_sessions))
 - `mpls_mtu` (Number) Set the MPLS MTU for the interface
   - Range: `68`-`65535`
 - `mtu` (Number) Set the MTU on an interface
@@ -750,6 +752,28 @@ Optional:
   - Range: `1`-`4294967295`
 - `zone` (String) IPv6 address zone
   - Default value: `0`
+
+
+<a id="nestedatt--monitor_sessions"></a>
+### Nested Schema for `monitor_sessions`
+
+Required:
+
+- `session_name` (String) Monitor-session configuration commands
+
+Optional:
+
+- `acl` (Boolean) Enable acl based mirroring
+- `acl_ipv4_name` (String) IPV4 ACL name
+- `acl_ipv6_name` (String) IPV6 ACL name
+- `direction_rx_only` (Boolean) Replicate only received (ingress) traffic
+- `direction_tx_only` (Boolean) Replicate only transmitted (egress) traffic
+- `ethernet` (Boolean) Replicate Ethernet traffic
+- `mirror_first` (Number) Enable mirroring on the first portion of a packet
+  - Range: `1`-`10000`
+- `mirror_interval` (String) Enable mirroring of every Nth packet
+  - Choices: `128`, `16`, `16K`, `1K`, `2`, `256`, `2K`, `32`, `4`, `4K`, `512`, `64`, `8`, `8K`
+- `port_level` (Boolean) Replicate traffic on all interfaces of a main interface
 
 
 <a id="nestedatt--ptp_interop_egress_conversion_clock_class_mappings"></a>

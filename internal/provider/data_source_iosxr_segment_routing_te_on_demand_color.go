@@ -216,7 +216,7 @@ func (d *SegmentRoutingTEOnDemandColorDataSource) Schema(ctx context.Context, re
 				Computed:            true,
 			},
 			"per_flow": schema.BoolAttribute{
-				MarkdownDescription: "True only",
+				MarkdownDescription: "Policy per-flow configuration",
 				Computed:            true,
 			},
 			"per_flow_forward_class_default": schema.Int64Attribute{

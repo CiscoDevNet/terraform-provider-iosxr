@@ -75,10 +75,6 @@ func (d *InterfaceEthernetDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "Ethernet interface ID",
 				Required:            true,
 			},
-			"l2transport": schema.BoolAttribute{
-				MarkdownDescription: "l2transport sub-interface",
-				Computed:            true,
-			},
 			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: "point-to-point sub-interface",
 				Computed:            true,
@@ -141,6 +137,10 @@ func (d *InterfaceEthernetDataSource) Schema(ctx context.Context, req datasource
 			},
 			"encapsulation_dot1q_second_dot1q": schema.Int64Attribute{
 				MarkdownDescription: "Configure second (inner 802.1Q) VLAN ID on the subinterface",
+				Computed:            true,
+			},
+			"l2transport": schema.BoolAttribute{
+				MarkdownDescription: "Enable Layer 2 transport and enter its configuration submode",
 				Computed:            true,
 			},
 			"l2transport_encapsulation_dot1q_vlan_id": schema.StringAttribute{

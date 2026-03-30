@@ -48,6 +48,7 @@ data "iosxr_bfd" "example" {
 - `interfaces` (Attributes List) Configure BFD on an interface (see [below for nested schema](#nestedatt--interfaces))
 - `ipv6_checksum_disable` (Boolean) Disable BFD checksum
 - `multihop_ttl_drop_threshold` (Number) TTL Drop Threshold
+- `multipath_destinations` (Attributes List) A.B.C.D destination ip address (see [below for nested schema](#nestedatt--multipath_destinations))
 - `multipath_locations` (Attributes List) Specify a location (see [below for nested schema](#nestedatt--multipath_locations))
 - `trap_singlehop_pre_mapped` (Boolean) Configure BFD trap pre-mapped
 
@@ -65,6 +66,15 @@ Read-Only:
 - `multiplier` (Number) BFD multiplier for this interface
 - `rx_interval` (Number) BFD RX Interval for this interface in microseconds
 - `tx_interval` (Number) BFD TX Interval for this interface in microseconds
+
+
+<a id="nestedatt--multipath_destinations"></a>
+### Nested Schema for `multipath_destinations`
+
+Read-Only:
+
+- `destination_address` (String) IP address
+- `location_id` (String) Fully qualified location specification
 
 
 <a id="nestedatt--multipath_locations"></a>

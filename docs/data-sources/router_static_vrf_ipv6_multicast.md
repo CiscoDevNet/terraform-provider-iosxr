@@ -48,6 +48,8 @@ data "iosxr_router_static_vrf_ipv6_multicast" "example" {
 Read-Only:
 
 - `address` (String) Forwarding router's address
+- `bfd_fast_detect_minimum_interval` (Number) Hello interval
+- `bfd_fast_detect_multiplier` (Number) Detect multiplier
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
 - `metric` (Number) Set metric for this route
@@ -62,6 +64,8 @@ Read-Only:
 Read-Only:
 
 - `address` (String) Forwarding router's address
+- `bfd_fast_detect_minimum_interval` (Number) Hello interval
+- `bfd_fast_detect_multiplier` (Number) Detect multiplier
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
 - `interface_name` (String) Forwarding interface
@@ -116,6 +120,8 @@ Read-Only:
 Read-Only:
 
 - `address` (String) Forwarding router's address
+- `bfd_fast_detect_minimum_interval` (Number) Hello interval
+- `bfd_fast_detect_multiplier` (Number) Detect multiplier
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
 - `metric` (Number) Set metric for this route

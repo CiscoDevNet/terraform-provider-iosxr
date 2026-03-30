@@ -39,6 +39,10 @@ attributes:
       - yang_name: address
         id: true
         example: 2::2
+      - yang_name: bfd/fast-detect/minimum-interval
+        example: 100
+      - yang_name: bfd/fast-detect/multiplier
+        example: 3
       - yang_name: description
         example: interface-description
       - yang_name: tag
@@ -47,6 +51,7 @@ attributes:
         example: 144
       - yang_name: permanent
         example: true
+        exclude_test: true
       - yang_name: track
         example: TRACK1
         exclude_test: true
@@ -59,6 +64,10 @@ attributes:
       - yang_name: address
         id: true
         example: 3::3
+      - yang_name: bfd/fast-detect/minimum-interval
+        example: 100
+      - yang_name: bfd/fast-detect/multiplier
+        example: 3
       - yang_name: description
         example: ip-description
       - yang_name: tag
@@ -129,6 +138,10 @@ attributes:
           - yang_name: address
             id: true
             example: 2::2
+          - yang_name: bfd/fast-detect/minimum-interval
+            example: 100
+          - yang_name: bfd/fast-detect/multiplier
+            example: 3
           - yang_name: description
             example: interface-description
           - yang_name: tag
@@ -137,6 +150,7 @@ attributes:
             example: 144
           - yang_name: permanent
             example: true
+            exclude_test: true
           - yang_name: track
             example: TRACK1
             exclude_test: true
@@ -149,6 +163,10 @@ attributes:
           - yang_name: address
             id: true
             example: 3::3
+          - yang_name: bfd/fast-detect/minimum-interval
+            example: 100
+          - yang_name: bfd/fast-detect/multiplier
+            example: 3
           - yang_name: description
             example: ip-description
           - yang_name: tag

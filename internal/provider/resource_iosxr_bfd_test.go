@@ -46,6 +46,10 @@ func TestAccIosxrBFD(t *testing.T) {
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_locations.0.location_id", "0/0/CPU0"))
 	}
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_destinations.0.destination_address", "10.1.1.1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_destinations.0.location_id", "0/0/CPU0"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multihop_ttl_drop_threshold", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "dampening_initial_wait", "3600"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "dampening_secondary_wait", "3200"))
@@ -133,6 +137,12 @@ func testAccIosxrBFDConfig_all() string {
 	config += `	trap_singlehop_pre_mapped = true` + "\n"
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" {
 		config += `	multipath_locations = [{` + "\n"
+		config += `		location_id = "0/0/CPU0"` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("XRV9K") != "" {
+		config += `	multipath_destinations = [{` + "\n"
+		config += `		destination_address = "10.1.1.1"` + "\n"
 		config += `		location_id = "0/0/CPU0"` + "\n"
 		config += `		}]` + "\n"
 	}

@@ -1,0 +1,142 @@
+---
+name: SNMP Server VRF
+path: Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]
+doc_category: Management
+attributes:
+  - yang_name: vrf-name
+    example: VRF1
+  - yang_name: hosts/host
+    tf_name: hosts
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 11.11.11.11
+      - yang_name: traps/unencrypted/unencrypted-string
+        tf_name: traps_unencrypted_strings
+        type: List
+        minimum_test_value: '["COMMUNITY1"]'
+        attributes:
+          - yang_name: community-string
+            id: true
+            minimum_test_value: '"COMMUNITY1"'
+            sensitive: true
+            write_only: true
+            example: COMMUNITY1
+          - yang_name: udp-port
+            default_value: default
+            example: 1100
+            exclude_test: true
+          - yang_name: version/v2c
+            example: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+            exclude_test: true
+      - yang_name: traps/encrypted/encryption-defaults/encryption-default
+        tf_name: traps_encrypted_default
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: 15021E0E082328
+          - yang_name: udp-port
+            default_value: default
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+            exclude_test: true
+      - yang_name: traps/encrypted/encryption-aeses/encryption-aes
+        tf_name: traps_encrypted_aes
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: 06253E2C5A471E1C5E
+          - yang_name: udp-port
+            default_value: default
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+            exclude_test: true
+      - yang_name: informs/unencrypted/unencrypted-string
+        tf_name: informs_unencrypted_strings
+        type: List
+        minimum_test_value: '["COMMUNITY2"]'
+        attributes:
+          - yang_name: community-string
+            id: true
+            minimum_test_value: '"COMMUNITY2"'
+            sensitive: true
+            write_only: true
+            example: COMMUNITY2
+          - yang_name: udp-port
+            default_value: default
+            example: 1100
+            exclude_test: true
+          - yang_name: version/v2c
+            example: true
+            exclude_test: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+      - yang_name: informs/encrypted/encryption-defaults/encryption-default
+        tf_name: informs_encrypted_default
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: 15021E0E082328
+          - yang_name: udp-port
+            default_value: default
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+            exclude_test: true
+      - yang_name: informs/encrypted/encryption-aeses/encryption-aes
+        tf_name: informs_encrypted_aes
+        type: List
+        attributes:
+          - yang_name: community-string
+            id: true
+            sensitive: true
+            write_only: true
+            example: 06253E2C5A471E1C5E
+          - yang_name: udp-port
+            default_value: default
+            example: 1100
+          - yang_name: version/v2c
+            example: true
+          - yang_name: version/v3/security-level
+            optional: true
+            delete_parent: true
+            example: auth
+            exclude_test: true
+  - yang_name: contexts/context
+    tf_name: contexts
+    type: List
+    attributes:
+      - yang_name: context-name
+        tf_name: name
+        id: true
+        example: CONTEXT1

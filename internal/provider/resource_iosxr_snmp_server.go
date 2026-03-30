@@ -370,11 +370,11 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
 				Optional:            true,
 			},
-			"traps_bgp_enable_updown": schema.BoolAttribute{
+			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP4-MIB and CISCO-BGP4-MIB traps").String,
 				Optional:            true,
 			},
-			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
+			"traps_bgp_enable_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
 				Optional:            true,
 			},
@@ -593,7 +593,78 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"version_v3_security_level": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("auth", "noauth", "priv"),
+										},
+									},
+								},
+							},
+						},
+						"traps_encrypted_default": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED community string in default method").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED community string in default method").String,
 										Required:            true,
+										Sensitive:           true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 1024),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("udp port to which notifications should be sent").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use 2c for SNMPv2c").String,
+										Optional:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("auth", "noauth", "priv"),
+										},
+									},
+								},
+							},
+						},
+						"traps_encrypted_aes": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED community string in aes-128 method").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED community string in aes-128 method").String,
+										Required:            true,
+										Sensitive:           true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 1024),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+										},
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("udp port to which notifications should be sent").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use 2c for SNMPv2c").String,
+										Optional:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
+										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("auth", "noauth", "priv"),
 										},
@@ -627,7 +698,75 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"version_v3_security_level": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("auth", "noauth", "priv"),
+										},
+									},
+								},
+							},
+						},
+						"informs_encrypted_default": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED community string in default method").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED community string in default method").String,
 										Required:            true,
+										Sensitive:           true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 1024),
+										},
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("udp port to which notifications should be sent").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use 2c for SNMPv2c").String,
+										Optional:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("auth", "noauth", "priv"),
+										},
+									},
+								},
+							},
+						},
+						"informs_encrypted_aes": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED community string in aes-128 method").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"community_string": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED community string in aes-128 method").String,
+										Required:            true,
+										Sensitive:           true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 1024),
+										},
+									},
+									"udp_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("udp port to which notifications should be sent").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"version_v2c": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use 2c for SNMPv2c").String,
+										Optional:            true,
+									},
+									"version_v3_security_level": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
+										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("auth", "noauth", "priv"),
 										},
@@ -870,6 +1009,14 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						"v3_priv": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("group using authPriv Security Level").String,
+							Optional:            true,
+						},
+						"v3_auth": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("group using the authNoPriv Security Level").String,
+							Optional:            true,
+						},
+						"v3_noauth": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("group using the noAuthNoPriv Security Level").String,
 							Optional:            true,
 						},
 						"v3_read": schema.StringAttribute{

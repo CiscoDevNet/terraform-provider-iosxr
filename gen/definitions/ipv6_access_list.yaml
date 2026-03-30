@@ -127,6 +127,20 @@ attributes:
       - yang_name: permit/icmp/message-code
         example: 255
         exclude_test: true
+      - yang_name: permit/tcp-flags/tcp-bits
+        tf_name: permit_tcp_flags_bits
+        no_augment_config: true
+        type: String
+        description: "Space-separated list of TCP flags to match"
+        example: fin syn
+        exclude_test: true
+      - yang_name: permit/headers
+        tf_name: permit_headers
+        no_augment_config: true
+        type: String
+        description: "Space-separated list of headers to match"
+        example: routing destopts
+        exclude_test: true
       - yang_name: permit/dscp/dscp-value
         tf_name: permit_dscp
         example: 10
@@ -356,6 +370,20 @@ attributes:
         exclude_test: true
       - yang_name: deny/icmp/message-code
         example: 255
+        exclude_test: true
+      - yang_name: deny/tcp-flags/tcp-bits
+        tf_name: deny_tcp_flags_bits
+        no_augment_config: true
+        type: String
+        description: "Space-separated list of TCP flags to match"
+        example: fin syn
+        exclude_test: true
+      - yang_name: deny/headers
+        tf_name: deny_headers
+        no_augment_config: true
+        type: String
+        description: "Space-separated list of headers to match"
+        example: routing destopts
         exclude_test: true
       - yang_name: deny/dscp/dscp-value
         tf_name: deny_dscp

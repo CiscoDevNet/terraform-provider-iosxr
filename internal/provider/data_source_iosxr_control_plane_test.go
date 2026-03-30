@@ -133,7 +133,6 @@ func TestAccDataSourceIosxrControlPlane(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_control_plane.test", "mgmt_oob_interfaces.0.netconf_ipv6_prefixes.0.address", "2001:db8:1:1::"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_control_plane.test", "mgmt_oob_interfaces.0.netconf_ipv6_prefixes.0.length", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_control_plane.test", "mgmt_oob_interfaces.0.netconf_ipv6_hosts.0.address", "2001:db8:1:1::1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_control_plane.test", "mgmt_oob_interfaces.0.allow_all", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_control_plane.test", "mgmt_oob_interfaces.0.allow_all_ipv4_prefixes.0.address", "192.168.1.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_control_plane.test", "mgmt_oob_interfaces.0.allow_all_ipv4_prefixes.0.length", "24"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_control_plane.test", "mgmt_oob_interfaces.0.allow_all_ipv4_hosts.0.address", "192.168.1.1"))
@@ -380,7 +379,6 @@ func testAccDataSourceIosxrControlPlaneConfig() string {
 	config += `		netconf_ipv6_hosts = [{` + "\n"
 	config += `			address = "2001:db8:1:1::1"` + "\n"
 	config += `		}]` + "\n"
-	config += `		allow_all = true` + "\n"
 	config += `		allow_all_ipv4_prefixes = [{` + "\n"
 	config += `			address = "192.168.1.0"` + "\n"
 	config += `			length = 24` + "\n"

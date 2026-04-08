@@ -93,6 +93,7 @@ resource "iosxr_bfd" "example" {
 - `ipv6_checksum_disable` (Boolean) Disable BFD checksum
 - `multihop_ttl_drop_threshold` (Number) TTL Drop Threshold
   - Range: `0`-`254`
+- `multipath_destinations` (Attributes List) A.B.C.D destination ip address (see [below for nested schema](#nestedatt--multipath_destinations))
 - `multipath_locations` (Attributes List) Specify a location (see [below for nested schema](#nestedatt--multipath_locations))
 - `trap_singlehop_pre_mapped` (Boolean) Configure BFD trap pre-mapped
 
@@ -121,6 +122,15 @@ Optional:
   - Range: `3000`-`30000000`
 - `tx_interval` (Number) BFD TX Interval for this interface in microseconds
   - Range: `3000`-`30000000`
+
+
+<a id="nestedatt--multipath_destinations"></a>
+### Nested Schema for `multipath_destinations`
+
+Required:
+
+- `destination_address` (String) IP address
+- `location_id` (String) Fully qualified location specification
 
 
 <a id="nestedatt--multipath_locations"></a>

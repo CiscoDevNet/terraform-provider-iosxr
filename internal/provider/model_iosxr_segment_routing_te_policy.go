@@ -329,7 +329,7 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
 	}
 	if !data.BfdEnable.IsNull() && !data.BfdEnable.IsUnknown() {
 		if data.BfdEnable.ValueBool() {
-			body, _ = sjson.Set(body, "bfd.enable", []interface{}{nil})
+			body, _ = sjson.Set(body, "bfd", map[string]string{})
 		}
 	}
 	if !data.BfdDisable.IsNull() && !data.BfdDisable.IsUnknown() {
@@ -442,7 +442,7 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
 			}
 			if !item.PerFlow.IsNull() && !item.PerFlow.IsUnknown() {
 				if item.PerFlow.ValueBool() {
-					body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"per-flow.enable", []interface{}{nil})
+					body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"per-flow", map[string]string{})
 				}
 			}
 			if !item.PerFlowForwardClassDefault.IsNull() && !item.PerFlowForwardClassDefault.IsUnknown() {
@@ -1042,7 +1042,7 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.CandidatePathsPreferences[i].BackupIneligible = types.BoolNull()
 		}
-		if value := r.Get("per-flow.enable"); !data.CandidatePathsPreferences[i].PerFlow.IsNull() {
+		if value := r.Get("per-flow"); !data.CandidatePathsPreferences[i].PerFlow.IsNull() {
 			if value.Exists() {
 				data.CandidatePathsPreferences[i].PerFlow = types.BoolValue(true)
 			} else {
@@ -1149,7 +1149,7 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.enable"); !data.BfdEnable.IsNull() {
+	if value := gjson.GetBytes(res, "bfd"); !data.BfdEnable.IsNull() {
 		if value.Exists() {
 			data.BfdEnable = types.BoolValue(true)
 		} else {
@@ -1484,7 +1484,7 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.BackupIneligible = types.BoolValue(false)
 			}
-			if cValue := v.Get("per-flow.enable"); cValue.Exists() {
+			if cValue := v.Get("per-flow"); cValue.Exists() {
 				item.PerFlow = types.BoolValue(true)
 			} else {
 				item.PerFlow = types.BoolValue(false)
@@ -1544,7 +1544,7 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.label"); value.Exists() {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd"); value.Exists() {
 		data.BfdEnable = types.BoolValue(true)
 	} else {
 		data.BfdEnable = types.BoolValue(false)
@@ -1845,7 +1845,7 @@ func (data *SegmentRoutingTEPolicyData) fromBody(ctx context.Context, res []byte
 			} else {
 				item.BackupIneligible = types.BoolValue(false)
 			}
-			if cValue := v.Get("per-flow.enable"); cValue.Exists() {
+			if cValue := v.Get("per-flow"); cValue.Exists() {
 				item.PerFlow = types.BoolValue(true)
 			} else {
 				item.PerFlow = types.BoolValue(false)
@@ -1905,7 +1905,7 @@ func (data *SegmentRoutingTEPolicyData) fromBody(ctx context.Context, res []byte
 	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.label"); value.Exists() {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bfd.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd"); value.Exists() {
 		data.BfdEnable = types.BoolValue(true)
 	} else {
 		data.BfdEnable = types.BoolValue(false)
@@ -2001,7 +2001,7 @@ func (data *SegmentRoutingTEPolicy) getDeletedItems(ctx context.Context, state S
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/disable", state.getPath()))
 	}
 	if !state.BfdEnable.IsNull() && data.BfdEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/enable", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd", state.getPath()))
 	}
 	if !state.PerformanceMeasurementReversePathLabel.IsNull() && data.PerformanceMeasurementReversePathLabel.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/pm-reverse-path/label", state.getPath()))
@@ -2093,7 +2093,7 @@ func (data *SegmentRoutingTEPolicy) getDeletedItems(ctx context.Context, state S
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/candidate-paths/preferences/preference%v/per-flow/default-forward-class", state.getPath(), keyString))
 				}
 				if !state.CandidatePathsPreferences[i].PerFlow.IsNull() && data.CandidatePathsPreferences[j].PerFlow.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/candidate-paths/preferences/preference%v/per-flow/enable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/candidate-paths/preferences/preference%v/per-flow", state.getPath(), keyString))
 				}
 				if !state.CandidatePathsPreferences[i].BackupIneligible.IsNull() && data.CandidatePathsPreferences[j].BackupIneligible.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/candidate-paths/preferences/preference%v/backup-ineligible", state.getPath(), keyString))
@@ -2427,7 +2427,7 @@ func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context) []s
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/disable", data.getPath()))
 	}
 	if !data.BfdEnable.IsNull() && !data.BfdEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/enable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd", data.getPath()))
 	}
 	if !data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() && !data.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change", data.getPath()))
@@ -2451,7 +2451,7 @@ func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context) []s
 			}
 		}
 		if !data.CandidatePathsPreferences[i].PerFlow.IsNull() && !data.CandidatePathsPreferences[i].PerFlow.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/candidate-paths/preferences/preference%v/per-flow/enable", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/candidate-paths/preferences/preference%v/per-flow", data.getPath(), keyString))
 		}
 		if !data.CandidatePathsPreferences[i].BackupIneligible.IsNull() && !data.CandidatePathsPreferences[i].BackupIneligible.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/candidate-paths/preferences/preference%v/backup-ineligible", data.getPath(), keyString))
@@ -2588,7 +2588,7 @@ func (data *SegmentRoutingTEPolicy) getDeletePaths(ctx context.Context) []string
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/disable", data.getPath()))
 	}
 	if !data.BfdEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/enable", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd", data.getPath()))
 	}
 	if !data.PerformanceMeasurementReversePathLabel.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/pm-reverse-path/label", data.getPath()))

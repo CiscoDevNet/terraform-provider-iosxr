@@ -72,6 +72,10 @@ func (d *InterfaceBundleEtherSubinterfaceDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "Bundle-Ether subinterface ID",
 				Required:            true,
 			},
+			"l2transport": schema.BoolAttribute{
+				MarkdownDescription: "l2transport sub-interface",
+				Computed:            true,
+			},
 			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: "point-to-point sub-interface",
 				Computed:            true,
@@ -771,6 +775,50 @@ func (d *InterfaceBundleEtherSubinterfaceDataSource) Schema(ctx context.Context,
 			"lldp_receive_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable LLDP RX on an interface",
 				Computed:            true,
+			},
+			"monitor_sessions": schema.ListNestedAttribute{
+				MarkdownDescription: "Monitor-session configuration commands",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"session_name": schema.StringAttribute{
+							MarkdownDescription: "Monitor-session configuration commands",
+							Computed:            true,
+						},
+						"ethernet": schema.BoolAttribute{
+							MarkdownDescription: "Replicate Ethernet traffic",
+							Computed:            true,
+						},
+						"direction_rx_only": schema.BoolAttribute{
+							MarkdownDescription: "Replicate only received (ingress) traffic",
+							Computed:            true,
+						},
+						"direction_tx_only": schema.BoolAttribute{
+							MarkdownDescription: "Replicate only transmitted (egress) traffic",
+							Computed:            true,
+						},
+						"acl": schema.BoolAttribute{
+							MarkdownDescription: "Enable acl based mirroring",
+							Computed:            true,
+						},
+						"acl_ipv4_name": schema.StringAttribute{
+							MarkdownDescription: "IPV4 ACL name",
+							Computed:            true,
+						},
+						"acl_ipv6_name": schema.StringAttribute{
+							MarkdownDescription: "IPV6 ACL name",
+							Computed:            true,
+						},
+						"mirror_first": schema.Int64Attribute{
+							MarkdownDescription: "Enable mirroring on the first portion of a packet",
+							Computed:            true,
+						},
+						"mirror_interval": schema.StringAttribute{
+							MarkdownDescription: "Enable mirroring of every Nth packet",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"ptp": schema.BoolAttribute{
 				MarkdownDescription: "Precision Time Protocol config",

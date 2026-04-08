@@ -1,5 +1,6 @@
 resource "iosxr_interface_bundle_ether_subinterface" "example" {
   name                         = "100.100"
+  l2transport                  = false
   point_to_point               = false
   multipoint                   = false
   dampening                    = true

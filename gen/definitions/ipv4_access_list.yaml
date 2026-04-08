@@ -124,6 +124,13 @@ attributes:
       - yang_name: permit/icmp/message-code
         example: 255
         exclude_test: true
+      - yang_name: permit/tcp-flags/tcp-bits
+        tf_name: permit_tcp_flags_bits
+        no_augment_config: true
+        type: String
+        description: "Space-separated list of TCP flags to match"
+        example: fin syn
+        exclude_test: true
       - yang_name: permit/igmp-type
         example: 0
         exclude_test: true
@@ -383,6 +390,12 @@ attributes:
         exclude_test: true
       - yang_name: deny/icmp/message-code
         example: 255
+        exclude_test: true
+      - yang_name: deny/tcp-flags/tcp-bits
+        tf_name: deny_tcp_flags_bits
+        no_augment_config: true
+        type: String
+        example: fin syn
         exclude_test: true
       - yang_name: deny/igmp-type
         example: trace

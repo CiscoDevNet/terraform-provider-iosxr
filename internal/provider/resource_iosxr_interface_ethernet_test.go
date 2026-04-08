@@ -37,7 +37,6 @@ func TestAccIosxrInterfaceEthernet(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "type", "GigabitEthernet"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "name", "0/0/0/1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "l2transport", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "multipoint", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "dampening", "true"))
@@ -237,15 +236,6 @@ func TestAccIosxrInterfaceEthernet(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "lldp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "lldp_transmit_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "lldp_receive_disable", "true"))
-	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.session_name", "SESSION-1"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.ethernet", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.direction_rx_only", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.port_level", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.acl", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.acl_ipv4_name", "ACL1"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "monitor_sessions.0.acl_ipv6_name", "ACL2"))
-	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_ethernet.test", "ptp", "true"))
 	}
@@ -567,7 +557,6 @@ func testAccIosxrInterfaceEthernetConfig_all() string {
 	config := `resource "iosxr_interface_ethernet" "test" {` + "\n"
 	config += `	type = "GigabitEthernet"` + "\n"
 	config += `	name = "0/0/0/1"` + "\n"
-	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
 	config += `	dampening = true` + "\n"
@@ -789,17 +778,6 @@ func testAccIosxrInterfaceEthernetConfig_all() string {
 	config += `	lldp = true` + "\n"
 	config += `	lldp_transmit_disable = true` + "\n"
 	config += `	lldp_receive_disable = true` + "\n"
-	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		config += `	monitor_sessions = [{` + "\n"
-		config += `		session_name = "SESSION-1"` + "\n"
-		config += `		ethernet = true` + "\n"
-		config += `		direction_rx_only = true` + "\n"
-		config += `		port_level = true` + "\n"
-		config += `		acl = true` + "\n"
-		config += `		acl_ipv4_name = "ACL1"` + "\n"
-		config += `		acl_ipv6_name = "ACL2"` + "\n"
-		config += `		}]` + "\n"
-	}
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	ptp = true` + "\n"
 	}

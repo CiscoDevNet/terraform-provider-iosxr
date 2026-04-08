@@ -40,7 +40,7 @@ func TestAccDataSourceIosxrLineDefault(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_line_default.test", "session_timeout", "1440"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_line_default.test", "session_timeout_output", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_line_default.test", "transport_input_ssh", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_line_default.test", "transport_output_ssh_telnet", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_line_default.test", "transport_output_ssh", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_line_default.test", "transport_preferred_ssh", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_line_default.test", "session_limit", "15"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_line_default.test", "cli_whitespace_completion", "true"))
@@ -108,7 +108,7 @@ func testAccDataSourceIosxrLineDefaultConfig() string {
 	config += `	session_timeout = 1440` + "\n"
 	config += `	session_timeout_output = true` + "\n"
 	config += `	transport_input_ssh = true` + "\n"
-	config += `	transport_output_ssh_telnet = true` + "\n"
+	config += `	transport_output_ssh = true` + "\n"
 	config += `	transport_preferred_ssh = true` + "\n"
 	config += `	session_limit = 15` + "\n"
 	config += `	cli_whitespace_completion = true` + "\n"

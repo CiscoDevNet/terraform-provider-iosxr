@@ -112,6 +112,22 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
+			"multipath_destinations": schema.ListNestedAttribute{
+				MarkdownDescription: "A.B.C.D destination ip address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"destination_address": schema.StringAttribute{
+							MarkdownDescription: "IP address",
+							Computed:            true,
+						},
+						"location_id": schema.StringAttribute{
+							MarkdownDescription: "Fully qualified location specification",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"multihop_ttl_drop_threshold": schema.Int64Attribute{
 				MarkdownDescription: "TTL Drop Threshold",
 				Computed:            true,

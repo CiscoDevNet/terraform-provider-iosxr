@@ -68,8 +68,8 @@ data "iosxr_snmp_server" "example" {
 - `traps_bfd` (Boolean) Enable BFD traps
 - `traps_bgp_cbgp_two_enable` (Boolean) Enable CISCO-BGP4-MIB v2 traps
 - `traps_bgp_cbgp_two_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
-- `traps_bgp_enable_cisco_bgp4_mib` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
-- `traps_bgp_enable_updown` (Boolean) Enable BGP4-MIB and CISCO-BGP4-MIB traps
+- `traps_bgp_enable_cisco_bgp4_mib` (Boolean) Enable BGP4-MIB and CISCO-BGP4-MIB traps
+- `traps_bgp_enable_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
 - `traps_bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
 - `traps_cfm` (Boolean) Enable traps for 802.1ag Connectivity Fault Management
 - `traps_cisco_entity_ext` (Boolean) Enable SNMP entity traps
@@ -201,9 +201,11 @@ Read-Only:
 - `v2c_notify` (String) specify a notify view for the group
 - `v2c_read` (String) specify a read view for this group
 - `v2c_write` (String) specify a write view for this group
+- `v3_auth` (Boolean) group using the authNoPriv Security Level
 - `v3_context` (String) Attach a SNMP context
 - `v3_ipv4` (String) Type of Access-list
 - `v3_ipv6` (String) Type of Access-list
+- `v3_noauth` (Boolean) group using the noAuthNoPriv Security Level
 - `v3_notify` (String) specify a notify view for the group
 - `v3_priv` (Boolean) group using authPriv Security Level
 - `v3_read` (String) specify a read view for this group
@@ -216,8 +218,34 @@ Read-Only:
 Read-Only:
 
 - `address` (String) Specify hosts to receive SNMP notifications
+- `informs_encrypted_aes` (Attributes List) Specifies an ENCRYPTED community string in aes-128 method (see [below for nested schema](#nestedatt--hosts--informs_encrypted_aes))
+- `informs_encrypted_default` (Attributes List) Specifies an ENCRYPTED community string in default method (see [below for nested schema](#nestedatt--hosts--informs_encrypted_default))
 - `informs_unencrypted_strings` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--hosts--informs_unencrypted_strings))
+- `traps_encrypted_aes` (Attributes List) Specifies an ENCRYPTED community string in aes-128 method (see [below for nested schema](#nestedatt--hosts--traps_encrypted_aes))
+- `traps_encrypted_default` (Attributes List) Specifies an ENCRYPTED community string in default method (see [below for nested schema](#nestedatt--hosts--traps_encrypted_default))
 - `traps_unencrypted_strings` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--hosts--traps_unencrypted_strings))
+
+<a id="nestedatt--hosts--informs_encrypted_aes"></a>
+### Nested Schema for `hosts.informs_encrypted_aes`
+
+Read-Only:
+
+- `community_string` (String, Sensitive) Specifies an ENCRYPTED community string in aes-128 method
+- `udp_port` (Number) udp port to which notifications should be sent
+- `version_v2c` (Boolean) Use 2c for SNMPv2c
+- `version_v3_security_level` (String) Security level
+
+
+<a id="nestedatt--hosts--informs_encrypted_default"></a>
+### Nested Schema for `hosts.informs_encrypted_default`
+
+Read-Only:
+
+- `community_string` (String, Sensitive) Specifies an ENCRYPTED community string in default method
+- `udp_port` (Number) udp port to which notifications should be sent
+- `version_v2c` (Boolean) Use 2c for SNMPv2c
+- `version_v3_security_level` (String) Security level
+
 
 <a id="nestedatt--hosts--informs_unencrypted_strings"></a>
 ### Nested Schema for `hosts.informs_unencrypted_strings`
@@ -225,6 +253,28 @@ Read-Only:
 Read-Only:
 
 - `community_string` (String, Sensitive) The UNENCRYPTED (cleartext) community string
+- `udp_port` (Number) udp port to which notifications should be sent
+- `version_v2c` (Boolean) Use 2c for SNMPv2c
+- `version_v3_security_level` (String) Security level
+
+
+<a id="nestedatt--hosts--traps_encrypted_aes"></a>
+### Nested Schema for `hosts.traps_encrypted_aes`
+
+Read-Only:
+
+- `community_string` (String, Sensitive) Specifies an ENCRYPTED community string in aes-128 method
+- `udp_port` (Number) udp port to which notifications should be sent
+- `version_v2c` (Boolean) Use 2c for SNMPv2c
+- `version_v3_security_level` (String) Security level
+
+
+<a id="nestedatt--hosts--traps_encrypted_default"></a>
+### Nested Schema for `hosts.traps_encrypted_default`
+
+Read-Only:
+
+- `community_string` (String, Sensitive) Specifies an ENCRYPTED community string in default method
 - `udp_port` (Number) udp port to which notifications should be sent
 - `version_v2c` (Boolean) Use 2c for SNMPv2c
 - `version_v3_security_level` (String) Security level

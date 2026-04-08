@@ -738,6 +738,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "disjoint-path.group-ids.group-id"+"."+strconv.Itoa(index)+"."+"type.srlg-node.lsp.two.pcc.exclude-srlg", strconv.FormatInt(item.SrlgNodeDisjointLspTwoPccExcludeSrlg.ValueInt64(), 10))
 			}
 			if len(item.LinkDisjointSubIds) > 0 {
+				body, _ = sjson.Set(body, "disjoint-path.group-ids.group-id"+"."+strconv.Itoa(index)+"."+"type.link.sub-ids.sub-id", []interface{}{})
 				for cindex, citem := range item.LinkDisjointSubIds {
 					if !citem.SubId.IsNull() && !citem.SubId.IsUnknown() {
 						body, _ = sjson.Set(body, "disjoint-path.group-ids.group-id"+"."+strconv.Itoa(index)+"."+"type.link.sub-ids.sub-id"+"."+strconv.Itoa(cindex)+"."+"sub-id", strconv.FormatInt(citem.SubId.ValueInt64(), 10))
@@ -779,6 +780,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.NodeDisjointSubIds) > 0 {
+				body, _ = sjson.Set(body, "disjoint-path.group-ids.group-id"+"."+strconv.Itoa(index)+"."+"type.node.sub-ids.sub-id", []interface{}{})
 				for cindex, citem := range item.NodeDisjointSubIds {
 					if !citem.SubId.IsNull() && !citem.SubId.IsUnknown() {
 						body, _ = sjson.Set(body, "disjoint-path.group-ids.group-id"+"."+strconv.Itoa(index)+"."+"type.node.sub-ids.sub-id"+"."+strconv.Itoa(cindex)+"."+"sub-id", strconv.FormatInt(citem.SubId.ValueInt64(), 10))
@@ -820,6 +822,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.SrlgDisjointSubIds) > 0 {
+				body, _ = sjson.Set(body, "disjoint-path.group-ids.group-id"+"."+strconv.Itoa(index)+"."+"type.srlg.sub-ids.sub-id", []interface{}{})
 				for cindex, citem := range item.SrlgDisjointSubIds {
 					if !citem.SubId.IsNull() && !citem.SubId.IsUnknown() {
 						body, _ = sjson.Set(body, "disjoint-path.group-ids.group-id"+"."+strconv.Itoa(index)+"."+"type.srlg.sub-ids.sub-id"+"."+strconv.Itoa(cindex)+"."+"sub-id", strconv.FormatInt(citem.SubId.ValueInt64(), 10))
@@ -861,6 +864,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.SrlgNodeDisjointSubIds) > 0 {
+				body, _ = sjson.Set(body, "disjoint-path.group-ids.group-id"+"."+strconv.Itoa(index)+"."+"type.srlg-node.sub-ids.sub-id", []interface{}{})
 				for cindex, citem := range item.SrlgNodeDisjointSubIds {
 					if !citem.SubId.IsNull() && !citem.SubId.IsUnknown() {
 						body, _ = sjson.Set(body, "disjoint-path.group-ids.group-id"+"."+strconv.Itoa(index)+"."+"type.srlg-node.sub-ids.sub-id"+"."+strconv.Itoa(cindex)+"."+"sub-id", strconv.FormatInt(citem.SubId.ValueInt64(), 10))
@@ -980,6 +984,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "segment-routing.traffic-eng.segment-lists.segment-list"+"."+strconv.Itoa(index)+"."+"segment-list-name", item.SegmentListName.ValueString())
 			}
 			if len(item.Indexes) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.segment-lists.segment-list"+"."+strconv.Itoa(index)+"."+"indexes.index", []interface{}{})
 				for cindex, citem := range item.Indexes {
 					if !citem.IndexNumber.IsNull() && !citem.IndexNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.traffic-eng.segment-lists.segment-list"+"."+strconv.Itoa(index)+"."+"indexes.index"+"."+strconv.Itoa(cindex)+"."+"index-number", strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10))
@@ -1001,6 +1006,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
 			}
 			if len(item.Policies) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy", []interface{}{})
 				for cindex, citem := range item.Policies {
 					if !citem.PolicyName.IsNull() && !citem.PolicyName.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"policy-name", citem.PolicyName.ValueString())
@@ -1036,6 +1042,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 						}
 					}
 					if len(citem.CandidatePathsPreferences) > 0 {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference", []interface{}{})
 						for ccindex, ccitem := range citem.CandidatePathsPreferences {
 							if !ccitem.PreferenceId.IsNull() && !ccitem.PreferenceId.IsUnknown() {
 								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"preference-id", strconv.FormatInt(ccitem.PreferenceId.ValueInt64(), 10))
@@ -1092,6 +1099,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 								}
 							}
 							if len(ccitem.ExplicitSegmentListNames) > 0 {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"explicit.segment-list-names.segment-list-name", []interface{}{})
 								for cccindex, cccitem := range ccitem.ExplicitSegmentListNames {
 									if !cccitem.SegmentListName.IsNull() && !cccitem.SegmentListName.IsUnknown() {
 										body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(ccindex)+"."+"explicit.segment-list-names.segment-list-name"+"."+strconv.Itoa(cccindex)+"."+"segment-list-name", cccitem.SegmentListName.ValueString())
@@ -1101,6 +1109,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 						}
 					}
 					if len(citem.CandidatePathsAffinityIncludeAnyColors) > 0 {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.include-any.affinity-colors.affinity-color", []interface{}{})
 						for ccindex, ccitem := range citem.CandidatePathsAffinityIncludeAnyColors {
 							if !ccitem.AffinityColorName.IsNull() && !ccitem.AffinityColorName.IsUnknown() {
 								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.include-any.affinity-colors.affinity-color"+"."+strconv.Itoa(ccindex)+"."+"affinity-color-name", ccitem.AffinityColorName.ValueString())
@@ -1108,6 +1117,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 						}
 					}
 					if len(citem.CandidatePathsAffinityIncludeAllColors) > 0 {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.include-all.affinity-colors.affinity-color", []interface{}{})
 						for ccindex, ccitem := range citem.CandidatePathsAffinityIncludeAllColors {
 							if !ccitem.AffinityColorName.IsNull() && !ccitem.AffinityColorName.IsUnknown() {
 								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.include-all.affinity-colors.affinity-color"+"."+strconv.Itoa(ccindex)+"."+"affinity-color-name", ccitem.AffinityColorName.ValueString())
@@ -1115,6 +1125,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 						}
 					}
 					if len(citem.CandidatePathsAffinityExcludeColors) > 0 {
+						body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.exclude.affinity-colors.affinity-color", []interface{}{})
 						for ccindex, ccitem := range citem.CandidatePathsAffinityExcludeColors {
 							if !ccitem.AffinityColorName.IsNull() && !ccitem.AffinityColorName.IsUnknown() {
 								body, _ = sjson.Set(body, "segment-routing.traffic-eng.peer.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"policies.policy"+"."+strconv.Itoa(cindex)+"."+"candidate-paths.affinity.exclude.affinity-colors.affinity-color"+"."+strconv.Itoa(ccindex)+"."+"affinity-color-name", ccitem.AffinityColorName.ValueString())
@@ -1132,6 +1143,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.endpoint-sets.endpoint-set"+"."+strconv.Itoa(index)+"."+"endpoint-set-name", item.EndpointSetName.ValueString())
 			}
 			if len(item.Ipv4s) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.endpoint-sets.endpoint-set"+"."+strconv.Itoa(index)+"."+"ipv4s.ipv4", []interface{}{})
 				for cindex, citem := range item.Ipv4s {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.endpoint-sets.endpoint-set"+"."+strconv.Itoa(index)+"."+"ipv4s.ipv4"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1169,6 +1181,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.policies.policy"+"."+strconv.Itoa(index)+"."+"treesid.mpls", strconv.FormatInt(item.TreesidMpls.ValueInt64(), 10))
 			}
 			if len(item.CandidatePathsConstraintsAffinityIncludeAnyColors) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.policies.policy"+"."+strconv.Itoa(index)+"."+"candidate-paths.constraints.affinity.include-any.affinity-colors.affinity-color", []interface{}{})
 				for cindex, citem := range item.CandidatePathsConstraintsAffinityIncludeAnyColors {
 					if !citem.AffinityColorName.IsNull() && !citem.AffinityColorName.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.policies.policy"+"."+strconv.Itoa(index)+"."+"candidate-paths.constraints.affinity.include-any.affinity-colors.affinity-color"+"."+strconv.Itoa(cindex)+"."+"affinity-color-name", citem.AffinityColorName.ValueString())
@@ -1176,6 +1189,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.CandidatePathsConstraintsAffinityIncludeAllColors) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.policies.policy"+"."+strconv.Itoa(index)+"."+"candidate-paths.constraints.affinity.include-all.affinity-colors.affinity-color", []interface{}{})
 				for cindex, citem := range item.CandidatePathsConstraintsAffinityIncludeAllColors {
 					if !citem.AffinityColorName.IsNull() && !citem.AffinityColorName.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.policies.policy"+"."+strconv.Itoa(index)+"."+"candidate-paths.constraints.affinity.include-all.affinity-colors.affinity-color"+"."+strconv.Itoa(cindex)+"."+"affinity-color-name", citem.AffinityColorName.ValueString())
@@ -1183,6 +1197,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.CandidatePathsConstraintsAffinityExcludeColors) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.policies.policy"+"."+strconv.Itoa(index)+"."+"candidate-paths.constraints.affinity.exclude.affinity-colors.affinity-color", []interface{}{})
 				for cindex, citem := range item.CandidatePathsConstraintsAffinityExcludeColors {
 					if !citem.AffinityColorName.IsNull() && !citem.AffinityColorName.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.policies.policy"+"."+strconv.Itoa(index)+"."+"candidate-paths.constraints.affinity.exclude.affinity-colors.affinity-color"+"."+strconv.Itoa(cindex)+"."+"affinity-color-name", citem.AffinityColorName.ValueString())
@@ -1190,6 +1205,7 @@ func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.CandidatePathsPreferences) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.policies.policy"+"."+strconv.Itoa(index)+"."+"candidate-paths.preferences.preference", []interface{}{})
 				for cindex, citem := range item.CandidatePathsPreferences {
 					if !citem.PreferenceId.IsNull() && !citem.PreferenceId.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.traffic-eng.p2mp.policies.policy"+"."+strconv.Itoa(index)+"."+"candidate-paths.preferences.preference"+"."+strconv.Itoa(cindex)+"."+"preference-id", strconv.FormatInt(citem.PreferenceId.ValueInt64(), 10))

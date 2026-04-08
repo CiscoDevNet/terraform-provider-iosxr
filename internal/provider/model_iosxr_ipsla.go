@@ -628,6 +628,7 @@ func (data IPSLA) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.mpls.lsp.trace.statistics.hourly.distribution.interval", strconv.FormatInt(item.MplsLspTraceStatisticsHourlyDistributionInterval.ValueInt64(), 10))
 			}
 			if len(item.IcmpEchoStatisticsIntervals) > 0 {
+				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.icmp.echo.statistics.intervals.interval", []interface{}{})
 				for cindex, citem := range item.IcmpEchoStatisticsIntervals {
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
 						body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.icmp.echo.statistics.intervals.interval"+"."+strconv.Itoa(cindex)+"."+"interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
@@ -638,6 +639,7 @@ func (data IPSLA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.UdpEchoStatisticsIntervals) > 0 {
+				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.udp.echo.statistics.intervals.interval", []interface{}{})
 				for cindex, citem := range item.UdpEchoStatisticsIntervals {
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
 						body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.udp.echo.statistics.intervals.interval"+"."+strconv.Itoa(cindex)+"."+"interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
@@ -648,6 +650,7 @@ func (data IPSLA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.UdpJitterStatisticsIntervals) > 0 {
+				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.udp.jitter.statistics.intervals.interval", []interface{}{})
 				for cindex, citem := range item.UdpJitterStatisticsIntervals {
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
 						body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.udp.jitter.statistics.intervals.interval"+"."+strconv.Itoa(cindex)+"."+"interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))
@@ -658,6 +661,7 @@ func (data IPSLA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.MplsLspPingStatisticsIntervals) > 0 {
+				body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.mpls.lsp.ping.statistics.intervals.interval", []interface{}{})
 				for cindex, citem := range item.MplsLspPingStatisticsIntervals {
 					if !citem.Interval.IsNull() && !citem.Interval.IsUnknown() {
 						body, _ = sjson.Set(body, "operations.operation"+"."+strconv.Itoa(index)+"."+"type.mpls.lsp.ping.statistics.intervals.interval"+"."+strconv.Itoa(cindex)+"."+"interval-time", strconv.FormatInt(citem.Interval.ValueInt64(), 10))

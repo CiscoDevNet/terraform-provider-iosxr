@@ -203,6 +203,7 @@ func (data RouterIGMPInterface) toBody(ctx context.Context, providerVersion stri
 				}
 			}
 			if len(item.GroupMasks) > 0 {
+				body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-inc-mask.inc-mask", []interface{}{})
 				for cindex, citem := range item.GroupMasks {
 					if !citem.GroupIncMask.IsNull() && !citem.GroupIncMask.IsUnknown() {
 						body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-inc-mask.inc-mask"+"."+strconv.Itoa(cindex)+"."+"group-mask-address", citem.GroupIncMask.ValueString())
@@ -218,6 +219,7 @@ func (data RouterIGMPInterface) toBody(ctx context.Context, providerVersion stri
 				}
 			}
 			if len(item.SourceAddresses) > 0 {
+				body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-source-address.source-address", []interface{}{})
 				for cindex, citem := range item.SourceAddresses {
 					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
 						body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-source-address.source-address"+"."+strconv.Itoa(cindex)+"."+"source-address", citem.SourceIp.ValueString())
@@ -230,6 +232,7 @@ func (data RouterIGMPInterface) toBody(ctx context.Context, providerVersion stri
 				}
 			}
 			if len(item.GroupMasksSourceAddresses) > 0 {
+				body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-inc-mask-source-address.inc-mask", []interface{}{})
 				for cindex, citem := range item.GroupMasksSourceAddresses {
 					if !citem.GroupIncMask.IsNull() && !citem.GroupIncMask.IsUnknown() {
 						body, _ = sjson.Set(body, "static-groups.group-address"+"."+strconv.Itoa(index)+"."+"group-address-inc-mask-source-address.inc-mask"+"."+strconv.Itoa(cindex)+"."+"group-mask-address", citem.GroupIncMask.ValueString())
@@ -261,6 +264,7 @@ func (data RouterIGMPInterface) toBody(ctx context.Context, providerVersion stri
 				}
 			}
 			if len(item.SourceAddresses) > 0 {
+				body, _ = sjson.Set(body, "join-groups.join-group"+"."+strconv.Itoa(index)+"."+"source-addresses", []interface{}{})
 				for cindex, citem := range item.SourceAddresses {
 					if !citem.SourceIp.IsNull() && !citem.SourceIp.IsUnknown() {
 						body, _ = sjson.Set(body, "join-groups.join-group"+"."+strconv.Itoa(index)+"."+"source-addresses"+"."+strconv.Itoa(cindex)+"."+"source-address", citem.SourceIp.ValueString())

@@ -249,6 +249,7 @@ func (data LinuxNetworking) toBody(ctx context.Context, providerVersion string) 
 				}
 			}
 			if len(item.EastWestInterfaces) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"east-wests.east-west", []interface{}{})
 				for cindex, citem := range item.EastWestInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"east-wests.east-west"+"."+strconv.Itoa(cindex)+"."+"east-west-name", citem.InterfaceName.ValueString())

@@ -1064,6 +1064,7 @@ func (data RouterBGPVRF) toBody(ctx context.Context, providerVersion string) str
 				}
 			}
 			if len(item.BmpActivateServers) > 0 {
+				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"bmp-activate.servers.server", []interface{}{})
 				for cindex, citem := range item.BmpActivateServers {
 					if !citem.ServerNumber.IsNull() && !citem.ServerNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"bmp-activate.servers.server"+"."+strconv.Itoa(cindex)+"."+"server-number", strconv.FormatInt(citem.ServerNumber.ValueInt64(), 10))
@@ -1071,6 +1072,7 @@ func (data RouterBGPVRF) toBody(ctx context.Context, providerVersion string) str
 				}
 			}
 			if len(item.PeerSets) > 0 {
+				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"peer-set.peer-sets", []interface{}{})
 				for cindex, citem := range item.PeerSets {
 					if !citem.Peer.IsNull() && !citem.Peer.IsUnknown() {
 						body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"peer-set.peer-sets"+"."+strconv.Itoa(cindex)+"."+"peer", strconv.FormatInt(citem.Peer.ValueInt64(), 10))

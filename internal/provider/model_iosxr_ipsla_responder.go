@@ -122,6 +122,7 @@ func (data IPSLAResponder) toBody(ctx context.Context, providerVersion string) s
 				body, _ = sjson.Set(body, "type.udp.ipv4.address"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
 			}
 			if len(item.Ports) > 0 {
+				body, _ = sjson.Set(body, "type.udp.ipv4.address"+"."+strconv.Itoa(index)+"."+"port", []interface{}{})
 				for cindex, citem := range item.Ports {
 					if !citem.PortNumber.IsNull() && !citem.PortNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "type.udp.ipv4.address"+"."+strconv.Itoa(index)+"."+"port"+"."+strconv.Itoa(cindex)+"."+"port-number", strconv.FormatInt(citem.PortNumber.ValueInt64(), 10))
@@ -150,6 +151,7 @@ func (data IPSLAResponder) toBody(ctx context.Context, providerVersion string) s
 				body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"timeout", strconv.FormatInt(item.Timeout.ValueInt64(), 10))
 			}
 			if len(item.LocalIpv4Addresses) > 0 {
+				body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.LocalIpv4Addresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -158,6 +160,7 @@ func (data IPSLAResponder) toBody(ctx context.Context, providerVersion string) s
 						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"local-port", strconv.FormatInt(citem.LocalPort.ValueInt64(), 10))
 					}
 					if len(citem.RemoteIpv4Addresses) > 0 {
+						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"remote-ip.ipv4-addresses.ipv4-address", []interface{}{})
 						for ccindex, ccitem := range citem.RemoteIpv4Addresses {
 							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
 								body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"remote-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.Address.ValueString())
@@ -173,6 +176,7 @@ func (data IPSLAResponder) toBody(ctx context.Context, providerVersion string) s
 				}
 			}
 			if len(item.LocalIpv6Addresses) > 0 {
+				body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.LocalIpv6Addresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -181,6 +185,7 @@ func (data IPSLAResponder) toBody(ctx context.Context, providerVersion string) s
 						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"local-port", strconv.FormatInt(citem.LocalPort.ValueInt64(), 10))
 					}
 					if len(citem.RemoteIpv6Addresses) > 0 {
+						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"remote-ip.ipv6-addresses.ipv6-address", []interface{}{})
 						for ccindex, ccitem := range citem.RemoteIpv6Addresses {
 							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
 								body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"remote-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.Address.ValueString())

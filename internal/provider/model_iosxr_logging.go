@@ -427,6 +427,7 @@ func (data Logging) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"source-interface-name", item.Name.ValueString())
 			}
 			if len(item.Vrfs) > 0 {
+				body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"vrfs.vrf", []interface{}{})
 				for cindex, citem := range item.Vrfs {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"vrfs.vrf"+"."+strconv.Itoa(cindex)+"."+"vrf-name", citem.Name.ValueString())
@@ -452,6 +453,7 @@ func (data Logging) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.Alarms) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"alarms.alarm", []interface{}{})
 				for cindex, citem := range item.Alarms {
 					if !citem.MessageCategory.IsNull() && !citem.MessageCategory.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"alarms.alarm"+"."+strconv.Itoa(cindex)+"."+"message-category", citem.MessageCategory.ValueString())
@@ -465,6 +467,7 @@ func (data Logging) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.ApplySourceLocations) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"apply.source.locations.location", []interface{}{})
 				for cindex, citem := range item.ApplySourceLocations {
 					if !citem.LocationName.IsNull() && !citem.LocationName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-correlator-cfg:suppress.rules.rule"+"."+strconv.Itoa(index)+"."+"apply.source.locations.location"+"."+strconv.Itoa(cindex)+"."+"location-name", citem.LocationName.ValueString())

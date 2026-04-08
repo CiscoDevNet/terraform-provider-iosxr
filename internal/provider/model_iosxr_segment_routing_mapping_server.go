@@ -84,6 +84,7 @@ func (data SegmentRoutingMappingServer) toBody(ctx context.Context, providerVers
 				body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.ValueString())
 			}
 			if len(item.PrefixAddresses) > 0 {
+				body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"prefix-address", []interface{}{})
 				for cindex, citem := range item.PrefixAddresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "prefix-sid-map.address-families.address-family"+"."+strconv.Itoa(index)+"."+"prefix-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())

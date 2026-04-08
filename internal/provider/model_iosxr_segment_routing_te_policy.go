@@ -456,11 +456,13 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context, providerVersion s
 				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"effective-metric.metric-value-type.metric-type", item.EffectiveMetricType.ValueString())
 			}
 			if len(item.ConstraintsAffinityRules) > 0 {
+				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.affinity-rules.affinity-rule", []interface{}{})
 				for cindex, citem := range item.ConstraintsAffinityRules {
 					if !citem.AffinityType.IsNull() && !citem.AffinityType.IsUnknown() {
 						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.affinity-rules.affinity-rule"+"."+strconv.Itoa(cindex)+"."+"rule", citem.AffinityType.ValueString())
 					}
 					if len(citem.Affinities) > 0 {
+						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.affinity-rules.affinity-rule"+"."+strconv.Itoa(cindex)+"."+"affinity-name", []interface{}{})
 						for ccindex, ccitem := range citem.Affinities {
 							if !ccitem.AffinityName.IsNull() && !ccitem.AffinityName.IsUnknown() {
 								body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.affinity-rules.affinity-rule"+"."+strconv.Itoa(cindex)+"."+"affinity-name"+"."+strconv.Itoa(ccindex)+"."+"affinity-name", ccitem.AffinityName.ValueString())
@@ -470,6 +472,7 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context, providerVersion s
 				}
 			}
 			if len(item.ConstraintsBounds) > 0 {
+				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.bounds.bounds.bound", []interface{}{})
 				for cindex, citem := range item.ConstraintsBounds {
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
 						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"constraints.bounds.bounds.bound"+"."+strconv.Itoa(cindex)+"."+"scope-type", citem.Type.ValueString())
@@ -483,6 +486,7 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context, providerVersion s
 				}
 			}
 			if len(item.Paths) > 0 {
+				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"path-infos.path-info", []interface{}{})
 				for cindex, citem := range item.Paths {
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
 						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"path-infos.path-info"+"."+strconv.Itoa(cindex)+"."+"type", citem.Type.ValueString())
@@ -532,6 +536,7 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context, providerVersion s
 				}
 			}
 			if len(item.PerFlowForwardClasses) > 0 {
+				body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"per-flow.forward-class-and-colors.forward-class-and-color", []interface{}{})
 				for cindex, citem := range item.PerFlowForwardClasses {
 					if !citem.ForwardClass.IsNull() && !citem.ForwardClass.IsUnknown() {
 						body, _ = sjson.Set(body, "candidate-paths.preferences.preference"+"."+strconv.Itoa(index)+"."+"per-flow.forward-class-and-colors.forward-class-and-color"+"."+strconv.Itoa(cindex)+"."+"forward-class", strconv.FormatInt(citem.ForwardClass.ValueInt64(), 10))

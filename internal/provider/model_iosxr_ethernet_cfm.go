@@ -173,6 +173,7 @@ func (data EthernetCFM) toBody(ctx context.Context, providerVersion string) stri
 				body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"id.string", item.IdString.ValueString())
 			}
 			if len(item.Services) > 0 {
+				body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service", []interface{}{})
 				for cindex, citem := range item.Services {
 					if !citem.ServiceName.IsNull() && !citem.ServiceName.IsUnknown() {
 						body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service"+"."+strconv.Itoa(cindex)+"."+"service-name", citem.ServiceName.ValueString())
@@ -390,6 +391,7 @@ func (data EthernetCFM) toBody(ctx context.Context, providerVersion string) stri
 						}
 					}
 					if len(citem.MepCrosschecks) > 0 {
+						body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service"+"."+strconv.Itoa(cindex)+"."+"mep.crosscheck.mep-ids.mep-id", []interface{}{})
 						for ccindex, ccitem := range citem.MepCrosschecks {
 							if !ccitem.MepId.IsNull() && !ccitem.MepId.IsUnknown() {
 								body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service"+"."+strconv.Itoa(cindex)+"."+"mep.crosscheck.mep-ids.mep-id"+"."+strconv.Itoa(ccindex)+"."+"mep-id", strconv.FormatInt(ccitem.MepId.ValueInt64(), 10))

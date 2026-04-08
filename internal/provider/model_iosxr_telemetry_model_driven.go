@@ -204,6 +204,7 @@ func (data TelemetryModelDriven) toBody(ctx context.Context, providerVersion str
 				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"vrf", item.Vrf.ValueString())
 			}
 			if len(item.AddressFamily) > 0 {
+				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"address-families.address-family", []interface{}{})
 				for cindex, citem := range item.AddressFamily {
 					if !citem.AfName.IsNull() && !citem.AfName.IsUnknown() {
 						body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"address-families.address-family"+"."+strconv.Itoa(cindex)+"."+"af-name", citem.AfName.ValueString())
@@ -251,6 +252,7 @@ func (data TelemetryModelDriven) toBody(ctx context.Context, providerVersion str
 				}
 			}
 			if len(item.Destinations) > 0 {
+				body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"destinations.destination", []interface{}{})
 				for cindex, citem := range item.Destinations {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "destination-groups.destination-group"+"."+strconv.Itoa(index)+"."+"destinations.destination"+"."+strconv.Itoa(cindex)+"."+"destination-string", citem.Address.ValueString())
@@ -318,6 +320,7 @@ func (data TelemetryModelDriven) toBody(ctx context.Context, providerVersion str
 				body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"send.retry.duration", strconv.FormatInt(item.SendRetryDuration.ValueInt64(), 10))
 			}
 			if len(item.SensorGroupIds) > 0 {
+				body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"sensor-group-ids.sensor-group-id", []interface{}{})
 				for cindex, citem := range item.SensorGroupIds {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"sensor-group-ids.sensor-group-id"+"."+strconv.Itoa(cindex)+"."+"sensor-group-id-string", citem.Name.ValueString())
@@ -344,6 +347,7 @@ func (data TelemetryModelDriven) toBody(ctx context.Context, providerVersion str
 				}
 			}
 			if len(item.DestinationIds) > 0 {
+				body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"destination-ids.destination-id", []interface{}{})
 				for cindex, citem := range item.DestinationIds {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "subscriptions.subscription"+"."+strconv.Itoa(index)+"."+"destination-ids.destination-id"+"."+strconv.Itoa(cindex)+"."+"destination-id-string", citem.Name.ValueString())
@@ -359,6 +363,7 @@ func (data TelemetryModelDriven) toBody(ctx context.Context, providerVersion str
 				body, _ = sjson.Set(body, "sensor-groups.sensor-group"+"."+strconv.Itoa(index)+"."+"sensor-group-string", item.Name.ValueString())
 			}
 			if len(item.SensorPaths) > 0 {
+				body, _ = sjson.Set(body, "sensor-groups.sensor-group"+"."+strconv.Itoa(index)+"."+"sensor-paths.sensor-path", []interface{}{})
 				for cindex, citem := range item.SensorPaths {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "sensor-groups.sensor-group"+"."+strconv.Itoa(index)+"."+"sensor-paths.sensor-path"+"."+strconv.Itoa(cindex)+"."+"sensor-path-string", citem.Name.ValueString())

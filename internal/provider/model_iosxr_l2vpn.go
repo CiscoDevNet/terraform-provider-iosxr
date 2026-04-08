@@ -292,6 +292,7 @@ func (data L2VPN) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "redundancy.iccp.groups.group"+"."+strconv.Itoa(index)+"."+"multi-homing.node-id", strconv.FormatInt(item.MultiHomingNodeId.ValueInt64(), 10))
 			}
 			if len(item.Interfaces) > 0 {
+				body, _ = sjson.Set(body, "redundancy.iccp.groups.group"+"."+strconv.Itoa(index)+"."+"interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "redundancy.iccp.groups.group"+"."+strconv.Itoa(index)+"."+"interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -321,6 +322,7 @@ func (data L2VPN) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"service-name", item.ServiceName.ValueString())
 			}
 			if len(item.Interfaces) > 0 {
+				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"interfaces.interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -328,6 +330,7 @@ func (data L2VPN) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.NeighborEvpnEvis) > 0 {
+				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evis.evi", []interface{}{})
 				for cindex, citem := range item.NeighborEvpnEvis {
 					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evis.evi"+"."+strconv.Itoa(cindex)+"."+"vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
@@ -346,6 +349,7 @@ func (data L2VPN) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
 			}
 			if len(item.Interfaces) > 0 {
+				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"interfaces.interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())

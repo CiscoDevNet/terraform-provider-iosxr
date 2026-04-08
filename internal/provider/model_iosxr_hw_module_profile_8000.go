@@ -667,6 +667,7 @@ func (data HWModuleProfile8000) toBody(ctx context.Context, providerVersion stri
 				body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"location-name", item.LocationName.ValueString())
 			}
 			if len(item.BufferExtendedTrafficClass) > 0 {
+				body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-extended.traffic-class", []interface{}{})
 				for cindex, citem := range item.BufferExtendedTrafficClass {
 					if !citem.TrafficClassId.IsNull() && !citem.TrafficClassId.IsUnknown() {
 						body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-extended.traffic-class"+"."+strconv.Itoa(cindex)+"."+"traffic-class-id", strconv.FormatInt(citem.TrafficClassId.ValueInt64(), 10))
@@ -712,6 +713,7 @@ func (data HWModuleProfile8000) toBody(ctx context.Context, providerVersion stri
 				}
 			}
 			if len(item.BufferInternalTrafficClass) > 0 {
+				body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-internal.traffic-class", []interface{}{})
 				for cindex, citem := range item.BufferInternalTrafficClass {
 					if !citem.TrafficClassId.IsNull() && !citem.TrafficClassId.IsUnknown() {
 						body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-internal.traffic-class"+"."+strconv.Itoa(cindex)+"."+"traffic-class-id", strconv.FormatInt(citem.TrafficClassId.ValueInt64(), 10))

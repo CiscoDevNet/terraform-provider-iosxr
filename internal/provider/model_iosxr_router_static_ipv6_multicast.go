@@ -307,6 +307,7 @@ func (data RouterStaticIPv6Multicast) toBody(ctx context.Context, providerVersio
 				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
 			}
 			if len(item.NexthopInterfaces) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interfaces.nexthop-interface", []interface{}{})
 				for cindex, citem := range item.NexthopInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interfaces.nexthop-interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -334,6 +335,7 @@ func (data RouterStaticIPv6Multicast) toBody(ctx context.Context, providerVersio
 				}
 			}
 			if len(item.NexthopInterfaceAddresses) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interface-addresses.nexthop-interface-address", []interface{}{})
 				for cindex, citem := range item.NexthopInterfaceAddresses {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interface-addresses.nexthop-interface-address"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -370,6 +372,7 @@ func (data RouterStaticIPv6Multicast) toBody(ctx context.Context, providerVersio
 				}
 			}
 			if len(item.NexthopAddresses) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-addresses.nexthop-address", []interface{}{})
 				for cindex, citem := range item.NexthopAddresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-addresses.nexthop-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -403,6 +406,7 @@ func (data RouterStaticIPv6Multicast) toBody(ctx context.Context, providerVersio
 				}
 			}
 			if len(item.SrPolicies) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"sr-policies.sr-policy", []interface{}{})
 				for cindex, citem := range item.SrPolicies {
 					if !citem.SrPolicyName.IsNull() && !citem.SrPolicyName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"sr-policies.sr-policy"+"."+strconv.Itoa(cindex)+"."+"sr-policy-name", citem.SrPolicyName.ValueString())

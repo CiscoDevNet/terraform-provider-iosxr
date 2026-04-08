@@ -738,6 +738,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context, providerVer
 				}
 			}
 			if len(item.StaticMacAddresses) > 0 {
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"static-mac-addresses.static-mac-address", []interface{}{})
 				for cindex, citem := range item.StaticMacAddresses {
 					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"static-mac-addresses.static-mac-address"+"."+strconv.Itoa(cindex)+"."+"mac-address", citem.MacAddress.ValueString())
@@ -790,6 +791,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context, providerVer
 				body, _ = sjson.Set(body, "member.vnis.vni"+"."+strconv.Itoa(index)+"."+"vni-id", strconv.FormatInt(item.VniId.ValueInt64(), 10))
 			}
 			if len(item.StaticMacAddresses) > 0 {
+				body, _ = sjson.Set(body, "member.vnis.vni"+"."+strconv.Itoa(index)+"."+"static-mac-addresses.static-mac-address", []interface{}{})
 				for cindex, citem := range item.StaticMacAddresses {
 					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "member.vnis.vni"+"."+strconv.Itoa(index)+"."+"static-mac-addresses.static-mac-address"+"."+strconv.Itoa(cindex)+"."+"mac-address", citem.MacAddress.ValueString())

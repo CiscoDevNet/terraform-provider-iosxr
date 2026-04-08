@@ -674,6 +674,7 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"accounting.reply.radius-attribute-list", item.AccountingReplyRadiusAttributeList.ValueString())
 			}
 			if len(item.Servers) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"servers.server", []interface{}{})
 				for cindex, citem := range item.Servers {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"servers.server"+"."+strconv.Itoa(cindex)+"."+"ordering-index", strconv.FormatInt(citem.Order.ValueInt64(), 10))
@@ -690,6 +691,7 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.ServerPrivates) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private", []interface{}{})
 				for cindex, citem := range item.ServerPrivates {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"ordering-index", strconv.FormatInt(citem.Order.ValueInt64(), 10))
@@ -765,6 +767,7 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"holddown-time", strconv.FormatInt(item.HolddownTime.ValueInt64(), 10))
 			}
 			if len(item.Servers) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"servers.server", []interface{}{})
 				for cindex, citem := range item.Servers {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"servers.server"+"."+strconv.Itoa(cindex)+"."+"ordering-index", strconv.FormatInt(citem.Order.ValueInt64(), 10))
@@ -775,6 +778,7 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.ServerPrivates) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private", []interface{}{})
 				for cindex, citem := range item.ServerPrivates {
 					if !citem.Order.IsNull() && !citem.Order.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"ordering-index", strconv.FormatInt(citem.Order.ValueInt64(), 10))
@@ -897,6 +901,7 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames.username"+"."+strconv.Itoa(index)+"."+"directory", item.Directory.ValueString())
 			}
 			if len(item.UserGroups) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames.username"+"."+strconv.Itoa(index)+"."+"group.user-groups.user-group", []interface{}{})
 				for cindex, citem := range item.UserGroups {
 					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames.username"+"."+strconv.Itoa(index)+"."+"group.user-groups.user-group"+"."+strconv.Itoa(cindex)+"."+"user-group-name", citem.GroupName.ValueString())
@@ -2645,6 +2650,7 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.InheritTaskgroups) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups.taskgroup"+"."+strconv.Itoa(index)+"."+"inherit.taskgroup.task-groups.task-group", []interface{}{})
 				for cindex, citem := range item.InheritTaskgroups {
 					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups.taskgroup"+"."+strconv.Itoa(index)+"."+"inherit.taskgroup.task-groups.task-group"+"."+strconv.Itoa(cindex)+"."+"task-group-name", citem.GroupName.ValueString())
@@ -2713,6 +2719,7 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.Taskgroups) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup"+"."+strconv.Itoa(index)+"."+"taskgroup.task-groups.task-group", []interface{}{})
 				for cindex, citem := range item.Taskgroups {
 					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup"+"."+strconv.Itoa(index)+"."+"taskgroup.task-groups.task-group"+"."+strconv.Itoa(cindex)+"."+"task-group-name", citem.GroupName.ValueString())
@@ -2720,6 +2727,7 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.InheritUsergroups) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup"+"."+strconv.Itoa(index)+"."+"inherit.usergroup", []interface{}{})
 				for cindex, citem := range item.InheritUsergroups {
 					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup"+"."+strconv.Itoa(index)+"."+"inherit.usergroup"+"."+strconv.Itoa(cindex)+"."+"usergroup-name", citem.GroupName.ValueString())

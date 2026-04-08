@@ -331,6 +331,7 @@ func (data PolicyMapQoS) toBody(ctx context.Context, providerVersion string) str
 				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"shape.average.excess-burst.unit", item.ShapeAverageExcessBurstUnit.ValueString())
 			}
 			if len(item.QueueLimits) > 0 {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"queue-limits.queue-limit", []interface{}{})
 				for cindex, citem := range item.QueueLimits {
 					if !citem.Value.IsNull() && !citem.Value.IsUnknown() {
 						body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"queue-limits.queue-limit"+"."+strconv.Itoa(cindex)+"."+"value", citem.Value.ValueString())
@@ -341,6 +342,7 @@ func (data PolicyMapQoS) toBody(ctx context.Context, providerVersion string) str
 				}
 			}
 			if len(item.RandomDetect) > 0 {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"random-detect", []interface{}{})
 				for cindex, citem := range item.RandomDetect {
 					if !citem.MinimumThresholdValue.IsNull() && !citem.MinimumThresholdValue.IsUnknown() {
 						body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"random-detect"+"."+strconv.Itoa(cindex)+"."+"minimum-threshold-value", strconv.FormatInt(citem.MinimumThresholdValue.ValueInt64(), 10))

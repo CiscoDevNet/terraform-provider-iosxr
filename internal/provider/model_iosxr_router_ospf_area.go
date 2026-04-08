@@ -1156,6 +1156,7 @@ func (data RouterOSPFArea) toBody(ctx context.Context, providerVersion string) s
 				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"delay.normalize.offset", strconv.FormatInt(item.DelayNormalizeOffset.ValueInt64(), 10))
 			}
 			if len(item.Neighbors) > 0 {
+				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor", []interface{}{})
 				for cindex, citem := range item.Neighbors {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -1174,6 +1175,7 @@ func (data RouterOSPFArea) toBody(ctx context.Context, providerVersion string) s
 				}
 			}
 			if len(item.MessageDigestKeys) > 0 {
+				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key", []interface{}{})
 				for cindex, citem := range item.MessageDigestKeys {
 					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key"+"."+strconv.Itoa(cindex)+"."+"message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))
@@ -1184,6 +1186,7 @@ func (data RouterOSPFArea) toBody(ctx context.Context, providerVersion string) s
 				}
 			}
 			if len(item.FastReroutePerLinkExcludeInterfaces) > 0 {
+				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.exclude.interfaces.interface", []interface{}{})
 				for cindex, citem := range item.FastReroutePerLinkExcludeInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.exclude.interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -1191,6 +1194,7 @@ func (data RouterOSPFArea) toBody(ctx context.Context, providerVersion string) s
 				}
 			}
 			if len(item.FastReroutePerLinkLfaCandidateInterfaces) > 0 {
+				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.lfa-candidate.interfaces.interface", []interface{}{})
 				for cindex, citem := range item.FastReroutePerLinkLfaCandidateInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.lfa-candidate.interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -1198,6 +1202,7 @@ func (data RouterOSPFArea) toBody(ctx context.Context, providerVersion string) s
 				}
 			}
 			if len(item.FastReroutePerPrefixExcludeInterfaces) > 0 {
+				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-prefix.exclude.interfaces.interface", []interface{}{})
 				for cindex, citem := range item.FastReroutePerPrefixExcludeInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-prefix.exclude.interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -1205,6 +1210,7 @@ func (data RouterOSPFArea) toBody(ctx context.Context, providerVersion string) s
 				}
 			}
 			if len(item.FastReroutePerPrefixLfaCandidateInterfaces) > 0 {
+				body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-prefix.lfa-candidate.interfaces.interface", []interface{}{})
 				for cindex, citem := range item.FastReroutePerPrefixLfaCandidateInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "multi-area-interfaces.multi-area-interface"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-prefix.lfa-candidate.interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -1296,6 +1302,7 @@ func (data RouterOSPFArea) toBody(ctx context.Context, providerVersion string) s
 				}
 			}
 			if len(item.MessageDigestKeys) > 0 {
+				body, _ = sjson.Set(body, "virtual-links.virtual-link"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key", []interface{}{})
 				for cindex, citem := range item.MessageDigestKeys {
 					if !citem.KeyId.IsNull() && !citem.KeyId.IsUnknown() {
 						body, _ = sjson.Set(body, "virtual-links.virtual-link"+"."+strconv.Itoa(index)+"."+"message-digest-keys.message-digest-key"+"."+strconv.Itoa(cindex)+"."+"message-digest-key-id", strconv.FormatInt(citem.KeyId.ValueInt64(), 10))

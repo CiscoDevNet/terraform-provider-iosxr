@@ -1562,6 +1562,7 @@ func (data InterfaceEthernet) toBody(ctx context.Context, providerVersion string
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"loss-measurement.counters.priority.cos-values.cos-value7", strconv.FormatInt(item.LossMeasurementCountersPriorityCosValue7.ValueInt64(), 10))
 			}
 			if len(item.SlaOperationProfileTargetMepIds) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mep-id.profile-target-mep-id", []interface{}{})
 				for cindex, citem := range item.SlaOperationProfileTargetMepIds {
 					if !citem.ProfileName.IsNull() && !citem.ProfileName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mep-id.profile-target-mep-id"+"."+strconv.Itoa(cindex)+"."+"profile-name", citem.ProfileName.ValueString())
@@ -1572,6 +1573,7 @@ func (data InterfaceEthernet) toBody(ctx context.Context, providerVersion string
 				}
 			}
 			if len(item.SlaOperationProfileTargetMacAddresses) > 0 {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mac-address.profile-target-mac-address", []interface{}{})
 				for cindex, citem := range item.SlaOperationProfileTargetMacAddresses {
 					if !citem.ProfileName.IsNull() && !citem.ProfileName.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet.cfm.mep.domain"+"."+strconv.Itoa(index)+"."+"sla.operation.profile.target.mac-address.profile-target-mac-address"+"."+strconv.Itoa(cindex)+"."+"profile-name", citem.ProfileName.ValueString())

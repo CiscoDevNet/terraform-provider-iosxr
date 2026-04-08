@@ -333,6 +333,7 @@ func (data SegmentRoutingTEOnDemandColor) toBody(ctx context.Context, providerVe
 				body, _ = sjson.Set(body, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"+"."+strconv.Itoa(index)+"."+"rule", item.AffinityType.ValueString())
 			}
 			if len(item.Affinities) > 0 {
+				body, _ = sjson.Set(body, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"+"."+strconv.Itoa(index)+"."+"affinity-name", []interface{}{})
 				for cindex, citem := range item.Affinities {
 					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
 						body, _ = sjson.Set(body, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"+"."+strconv.Itoa(index)+"."+"affinity-name"+"."+strconv.Itoa(cindex)+"."+"affinity-name", citem.AffinityName.ValueString())

@@ -293,6 +293,7 @@ func (data CallHome) toBody(ctx context.Context, providerVersion string) string 
 				}
 			}
 			if len(item.DestinationAddresses) > 0 {
+				body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"destination.addresses.address", []interface{}{})
 				for cindex, citem := range item.DestinationAddresses {
 					if !citem.AddressType.IsNull() && !citem.AddressType.IsUnknown() {
 						body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"destination.addresses.address"+"."+strconv.Itoa(cindex)+"."+"address-type", citem.AddressType.ValueString())

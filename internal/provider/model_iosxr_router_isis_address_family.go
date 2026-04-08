@@ -1419,6 +1419,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context, providerVersion 
 				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
 			}
 			if len(item.MetricLevels) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"metric-levels.metric-level", []interface{}{})
 				for cindex, citem := range item.MetricLevels {
 					if !citem.LevelNumber.IsNull() && !citem.LevelNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"metric-levels.metric-level"+"."+strconv.Itoa(cindex)+"."+"level-number", strconv.FormatInt(citem.LevelNumber.ValueInt64(), 10))
@@ -1429,6 +1430,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context, providerVersion 
 				}
 			}
 			if len(item.TagLevels) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"tag-levels.tag-level", []interface{}{})
 				for cindex, citem := range item.TagLevels {
 					if !citem.LevelNumber.IsNull() && !citem.LevelNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"tag-levels.tag-level"+"."+strconv.Itoa(cindex)+"."+"level-number", strconv.FormatInt(citem.LevelNumber.ValueInt64(), 10))

@@ -1037,6 +1037,7 @@ func (data SNMPServer) toBody(ctx context.Context, providerVersion string) strin
 				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
 			}
 			if len(item.TrapsUnencryptedStrings) > 0 {
+				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.unencrypted.unencrypted-string", []interface{}{})
 				for cindex, citem := range item.TrapsUnencryptedStrings {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.unencrypted.unencrypted-string"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -1055,6 +1056,7 @@ func (data SNMPServer) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.TrapsEncryptedDefault) > 0 {
+				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.encrypted.encryption-defaults.encryption-default", []interface{}{})
 				for cindex, citem := range item.TrapsEncryptedDefault {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.encrypted.encryption-defaults.encryption-default"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -1073,6 +1075,7 @@ func (data SNMPServer) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.TrapsEncryptedAes) > 0 {
+				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.encrypted.encryption-aeses.encryption-aes", []interface{}{})
 				for cindex, citem := range item.TrapsEncryptedAes {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.encrypted.encryption-aeses.encryption-aes"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -1091,6 +1094,7 @@ func (data SNMPServer) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.InformsUnencryptedStrings) > 0 {
+				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.unencrypted.unencrypted-string", []interface{}{})
 				for cindex, citem := range item.InformsUnencryptedStrings {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.unencrypted.unencrypted-string"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -1109,6 +1113,7 @@ func (data SNMPServer) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.InformsEncryptedDefault) > 0 {
+				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.encrypted.encryption-defaults.encryption-default", []interface{}{})
 				for cindex, citem := range item.InformsEncryptedDefault {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.encrypted.encryption-defaults.encryption-default"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -1127,6 +1132,7 @@ func (data SNMPServer) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.InformsEncryptedAes) > 0 {
+				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.encrypted.encryption-aeses.encryption-aes", []interface{}{})
 				for cindex, citem := range item.InformsEncryptedAes {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.encrypted.encryption-aeses.encryption-aes"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -1153,6 +1159,7 @@ func (data SNMPServer) toBody(ctx context.Context, providerVersion string) strin
 				body, _ = sjson.Set(body, "views.view"+"."+strconv.Itoa(index)+"."+"view-name", item.ViewName.ValueString())
 			}
 			if len(item.MibViewFamilies) > 0 {
+				body, _ = sjson.Set(body, "views.view"+"."+strconv.Itoa(index)+"."+"mib-view-families.mib-view-family", []interface{}{})
 				for cindex, citem := range item.MibViewFamilies {
 					if !citem.Name.IsNull() && !citem.Name.IsUnknown() {
 						body, _ = sjson.Set(body, "views.view"+"."+strconv.Itoa(index)+"."+"mib-view-families.mib-view-family"+"."+strconv.Itoa(cindex)+"."+"mib-view-family-name", citem.Name.ValueString())

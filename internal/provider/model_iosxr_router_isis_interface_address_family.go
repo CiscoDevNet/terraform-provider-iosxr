@@ -511,6 +511,7 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context, provide
 				body, _ = sjson.Set(body, "generic-metric.flex-algo-levels.flex-algo-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
 			if len(item.FlexAlgosTypes) > 0 {
+				body, _ = sjson.Set(body, "generic-metric.flex-algo-levels.flex-algo-level"+"."+strconv.Itoa(index)+"."+"types.type", []interface{}{})
 				for cindex, citem := range item.FlexAlgosTypes {
 					if !citem.Type.IsNull() && !citem.Type.IsUnknown() {
 						body, _ = sjson.Set(body, "generic-metric.flex-algo-levels.flex-algo-level"+"."+strconv.Itoa(index)+"."+"types.type"+"."+strconv.Itoa(cindex)+"."+"type-number", strconv.FormatInt(citem.Type.ValueInt64(), 10))

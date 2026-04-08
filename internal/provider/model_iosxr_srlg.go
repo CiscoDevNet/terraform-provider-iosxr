@@ -144,6 +144,7 @@ func (data SRLG) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"include-optical.priority", item.IncludeOpticalPriority.ValueString())
 			}
 			if len(item.Indexes) > 0 {
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"indexes.index", []interface{}{})
 				for cindex, citem := range item.Indexes {
 					if !citem.IndexNumber.IsNull() && !citem.IndexNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"indexes.index"+"."+strconv.Itoa(cindex)+"."+"index-number", strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10))
@@ -157,6 +158,7 @@ func (data SRLG) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.Names) > 0 {
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"names.name", []interface{}{})
 				for cindex, citem := range item.Names {
 					if !citem.SrlgName.IsNull() && !citem.SrlgName.IsUnknown() {
 						body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"names.name"+"."+strconv.Itoa(cindex)+"."+"srlg-name", citem.SrlgName.ValueString())
@@ -164,6 +166,7 @@ func (data SRLG) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.Groups) > 0 {
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"groups.group", []interface{}{})
 				for cindex, citem := range item.Groups {
 					if !citem.IndexNumber.IsNull() && !citem.IndexNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"groups.group"+"."+strconv.Itoa(cindex)+"."+"index-number", strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10))
@@ -182,6 +185,7 @@ func (data SRLG) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"group-name", item.GroupName.ValueString())
 			}
 			if len(item.Indexes) > 0 {
+				body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"indexes.index", []interface{}{})
 				for cindex, citem := range item.Indexes {
 					if !citem.IndexNumber.IsNull() && !citem.IndexNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"indexes.index"+"."+strconv.Itoa(cindex)+"."+"index-number", strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10))
@@ -203,6 +207,7 @@ func (data SRLG) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "inherit-locations.inherit-location"+"."+strconv.Itoa(index)+"."+"location-name", item.LocationName.ValueString())
 			}
 			if len(item.Indexes) > 0 {
+				body, _ = sjson.Set(body, "inherit-locations.inherit-location"+"."+strconv.Itoa(index)+"."+"indexes.index", []interface{}{})
 				for cindex, citem := range item.Indexes {
 					if !citem.IndexNumber.IsNull() && !citem.IndexNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "inherit-locations.inherit-location"+"."+strconv.Itoa(index)+"."+"indexes.index"+"."+strconv.Itoa(cindex)+"."+"index-number", strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10))

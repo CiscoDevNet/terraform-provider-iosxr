@@ -2015,6 +2015,7 @@ func (data RouterOSPF) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.AffinityExcludeAny) > 0 {
+				body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.exclude-any.affinity-attributes.affinity-attribute", []interface{}{})
 				for cindex, citem := range item.AffinityExcludeAny {
 					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.exclude-any.affinity-attributes.affinity-attribute"+"."+strconv.Itoa(cindex)+"."+"affinity-attribute-name", citem.AffinityName.ValueString())
@@ -2022,6 +2023,7 @@ func (data RouterOSPF) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.AffinityIncludeAny) > 0 {
+				body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.include-any.affinity-attributes.affinity-attribute", []interface{}{})
 				for cindex, citem := range item.AffinityIncludeAny {
 					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.include-any.affinity-attributes.affinity-attribute"+"."+strconv.Itoa(cindex)+"."+"affinity-attribute-name", citem.AffinityName.ValueString())
@@ -2029,6 +2031,7 @@ func (data RouterOSPF) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.AffinityIncludeAll) > 0 {
+				body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.include-all.affinity-attributes.affinity-attribute", []interface{}{})
 				for cindex, citem := range item.AffinityIncludeAll {
 					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"affinity.include-all.affinity-attributes.affinity-attribute"+"."+strconv.Itoa(cindex)+"."+"affinity-attribute-name", citem.AffinityName.ValueString())
@@ -2036,6 +2039,7 @@ func (data RouterOSPF) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.SrlgExcludeAny) > 0 {
+				body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"srlg.exclude-any.srlgs.srlg", []interface{}{})
 				for cindex, citem := range item.SrlgExcludeAny {
 					if !citem.SrlgName.IsNull() && !citem.SrlgName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"srlg.exclude-any.srlgs.srlg"+"."+strconv.Itoa(cindex)+"."+"srlg-name", citem.SrlgName.ValueString())

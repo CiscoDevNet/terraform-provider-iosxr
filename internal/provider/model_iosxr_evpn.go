@@ -340,6 +340,7 @@ func (data EVPN) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"group-name", strconv.FormatInt(item.GroupId.ValueInt64(), 10))
 			}
 			if len(item.CoreInterfaces) > 0 {
+				body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"core.interface", []interface{}{})
 				for cindex, citem := range item.CoreInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"core.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())

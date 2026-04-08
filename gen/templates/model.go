@@ -286,6 +286,7 @@ func (data {{camelCase .Name}}{{$versionSuffix}}) toBody(ctx context.Context, pr
 			{{- if or (eq .Type "List") (eq .Type "Set")}}
 			{{- $clist := toJsonPath .YangName .XPath }}
 			if len(item.{{toGoName .TfName}}) > 0 {
+				body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{})
 				for cindex, citem := range item.{{toGoName .TfName}} {
 					{{- range .Attributes}}
 					{{- if and (ne .Type "List") (ne .Type "Set")}}
@@ -320,6 +321,7 @@ func (data {{camelCase .Name}}{{$versionSuffix}}) toBody(ctx context.Context, pr
 					{{- if or (eq .Type "List") (eq .Type "Set")}}
 					{{- $cclist := toJsonPath .YangName .XPath }}
 					if len(citem.{{toGoName .TfName}}) > 0 {
+						body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{})
 						for ccindex, ccitem := range citem.{{toGoName .TfName}} {
 							{{- range .Attributes}}
 							{{- if and (ne .Type "List") (ne .Type "Set")}}
@@ -354,6 +356,7 @@ func (data {{camelCase .Name}}{{$versionSuffix}}) toBody(ctx context.Context, pr
 							{{- if or (eq .Type "List") (eq .Type "Set")}}
 							{{- $ccclist := toJsonPath .YangName .XPath }}
 							if len(ccitem.{{toGoName .TfName}}) > 0 {
+								body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{$clist}}"+"."+strconv.Itoa(cindex)+"."+"{{$cclist}}"+"."+strconv.Itoa(ccindex)+"."+"{{toJsonPath .YangName .XPath}}", []interface{}{})
 								for cccindex, cccitem := range ccitem.{{toGoName .TfName}} {
 									{{- range .Attributes}}
 									{{- if and (ne .Type "List") (ne .Type "Set")}}

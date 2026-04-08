@@ -867,16 +867,19 @@ func (data RouterPIMIPv4) toBody(ctx context.Context, providerVersion string) st
 				body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"address", item.SourceAddress.ValueString())
 			}
 			if len(item.To) > 0 {
+				body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to", []interface{}{})
 				for cindex, citem := range item.To {
 					if !citem.PrimaryAddress.IsNull() && !citem.PrimaryAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"address", citem.PrimaryAddress.ValueString())
 					}
 					if len(citem.And) > 0 {
+						body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and", []interface{}{})
 						for ccindex, ccitem := range citem.And {
 							if !ccitem.BackupAddress.IsNull() && !ccitem.BackupAddress.IsUnknown() {
 								body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.BackupAddress.ValueString())
 							}
 							if len(ccitem.Masklen) > 0 {
+								body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"masklen", []interface{}{})
 								for cccindex, cccitem := range ccitem.Masklen {
 									if !cccitem.MaskLength.IsNull() && !cccitem.MaskLength.IsUnknown() {
 										body, _ = sjson.Set(body, "mofrr.clone.joins.join"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"masklen"+"."+strconv.Itoa(cccindex)+"."+"mask-length", strconv.FormatInt(cccitem.MaskLength.ValueInt64(), 10))
@@ -896,16 +899,19 @@ func (data RouterPIMIPv4) toBody(ctx context.Context, providerVersion string) st
 				body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"address", item.SourceAddress.ValueString())
 			}
 			if len(item.To) > 0 {
+				body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to", []interface{}{})
 				for cindex, citem := range item.To {
 					if !citem.PrimaryAddress.IsNull() && !citem.PrimaryAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"address", citem.PrimaryAddress.ValueString())
 					}
 					if len(citem.And) > 0 {
+						body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and", []interface{}{})
 						for ccindex, ccitem := range citem.And {
 							if !ccitem.BackupAddress.IsNull() && !ccitem.BackupAddress.IsUnknown() {
 								body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.BackupAddress.ValueString())
 							}
 							if len(ccitem.Masklen) > 0 {
+								body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"masklen", []interface{}{})
 								for cccindex, cccitem := range ccitem.Masklen {
 									if !cccitem.MaskLength.IsNull() && !cccitem.MaskLength.IsUnknown() {
 										body, _ = sjson.Set(body, "mofrr.clone.sources.source"+"."+strconv.Itoa(index)+"."+"to"+"."+strconv.Itoa(cindex)+"."+"and"+"."+strconv.Itoa(ccindex)+"."+"masklen"+"."+strconv.Itoa(cccindex)+"."+"mask-length", strconv.FormatInt(cccitem.MaskLength.ValueInt64(), 10))
@@ -925,6 +931,7 @@ func (data RouterPIMIPv4) toBody(ctx context.Context, providerVersion string) st
 				body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"sr-p2mp-policy-id", item.PolicyName.ValueString())
 			}
 			if len(item.StaticGroups) > 0 {
+				body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address", []interface{}{})
 				for cindex, citem := range item.StaticGroups {
 					if !citem.GroupAddress.IsNull() && !citem.GroupAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-address", citem.GroupAddress.ValueString())
@@ -935,6 +942,7 @@ func (data RouterPIMIPv4) toBody(ctx context.Context, providerVersion string) st
 						}
 					}
 					if len(citem.GroupMasks) > 0 {
+						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-address-inc-mask", []interface{}{})
 						for ccindex, ccitem := range citem.GroupMasks {
 							if !ccitem.GroupIncMask.IsNull() && !ccitem.GroupIncMask.IsUnknown() {
 								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"group-mask-address", ccitem.GroupIncMask.ValueString())
@@ -945,6 +953,7 @@ func (data RouterPIMIPv4) toBody(ctx context.Context, providerVersion string) st
 						}
 					}
 					if len(citem.GroupMasksSourceAddresses) > 0 {
+						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-inc-mask", []interface{}{})
 						for ccindex, ccitem := range citem.GroupMasksSourceAddresses {
 							if !ccitem.GroupIncMask.IsNull() && !ccitem.GroupIncMask.IsUnknown() {
 								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"group-mask-address", ccitem.GroupIncMask.ValueString())
@@ -958,6 +967,7 @@ func (data RouterPIMIPv4) toBody(ctx context.Context, providerVersion string) st
 						}
 					}
 					if len(citem.SourceMasks) > 0 {
+						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"source-address-source-mask-address-inc-mask", []interface{}{})
 						for ccindex, ccitem := range citem.SourceMasks {
 							if !ccitem.SourceIp.IsNull() && !ccitem.SourceIp.IsUnknown() {
 								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"source-address", ccitem.SourceIp.ValueString())
@@ -971,6 +981,7 @@ func (data RouterPIMIPv4) toBody(ctx context.Context, providerVersion string) st
 						}
 					}
 					if len(citem.GroupMasksSourceMasks) > 0 {
+						body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-source-mask-address-inc-mask", []interface{}{})
 						for ccindex, ccitem := range citem.GroupMasksSourceMasks {
 							if !ccitem.GroupIncMask.IsNull() && !ccitem.GroupIncMask.IsUnknown() {
 								body, _ = sjson.Set(body, "sr-p2mp-policies.sr-p2mp-policy"+"."+strconv.Itoa(index)+"."+"static-group.group-address"+"."+strconv.Itoa(cindex)+"."+"group-mask-address-source-address-source-mask-address-inc-mask"+"."+strconv.Itoa(ccindex)+"."+"group-mask-address", ccitem.GroupIncMask.ValueString())

@@ -549,6 +549,7 @@ func (data NTP) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "interfaces.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
 			}
 			if len(item.Interfaces) > 0 {
+				body, _ = sjson.Set(body, "interfaces.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "interfaces.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -709,6 +710,7 @@ func (data NTP) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
 			}
 			if len(item.Ipv4PeersServers) > 0 {
+				body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv4.ipv4-peer-server", []interface{}{})
 				for cindex, citem := range item.Ipv4PeersServers {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv4.ipv4-peer-server"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -749,6 +751,7 @@ func (data NTP) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.Ipv6PeersServers) > 0 {
+				body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv6.ipv6-peer-server", []interface{}{})
 				for cindex, citem := range item.Ipv6PeersServers {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv6.ipv6-peer-server"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -792,6 +795,7 @@ func (data NTP) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.HostnamePeersServers) > 0 {
+				body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server", []interface{}{})
 				for cindex, citem := range item.HostnamePeersServers {
 					if !citem.FqdnHostname.IsNull() && !citem.FqdnHostname.IsUnknown() {
 						body, _ = sjson.Set(body, "peer-server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"hostname.hostname-peer-server"+"."+strconv.Itoa(cindex)+"."+"fqdn-hostname", citem.FqdnHostname.ValueString())

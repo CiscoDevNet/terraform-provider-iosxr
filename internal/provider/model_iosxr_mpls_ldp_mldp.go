@@ -164,6 +164,7 @@ func (data MPLSLDPMLDP) toBody(ctx context.Context, providerVersion string) stri
 				}
 			}
 			if len(item.Statics) > 0 {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"statics.static", []interface{}{})
 				for cindex, citem := range item.Statics {
 					if !citem.LspAddress.IsNull() && !citem.LspAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"statics.static"+"."+strconv.Itoa(cindex)+"."+"lsp-address", citem.LspAddress.ValueString())
@@ -177,6 +178,7 @@ func (data MPLSLDPMLDP) toBody(ctx context.Context, providerVersion string) stri
 				}
 			}
 			if len(item.Neighbors) > 0 {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor", []interface{}{})
 				for cindex, citem := range item.Neighbors {
 					if !citem.NeighborAddress.IsNull() && !citem.NeighborAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor"+"."+strconv.Itoa(cindex)+"."+"neighbor-address", citem.NeighborAddress.ValueString())

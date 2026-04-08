@@ -1014,6 +1014,7 @@ func (data RouterISIS) toBody(ctx context.Context, providerVersion string) strin
 				body, _ = sjson.Set(body, "srlg.names.name"+"."+strconv.Itoa(index)+"."+"admin-weight", strconv.FormatInt(item.AdminWeight.ValueInt64(), 10))
 			}
 			if len(item.StaticIpv4Addresses) > 0 {
+				body, _ = sjson.Set(body, "srlg.names.name"+"."+strconv.Itoa(index)+"."+"static.ipv4.addresses.addresss", []interface{}{})
 				for cindex, citem := range item.StaticIpv4Addresses {
 					if !citem.LocalEndPoint.IsNull() && !citem.LocalEndPoint.IsUnknown() {
 						body, _ = sjson.Set(body, "srlg.names.name"+"."+strconv.Itoa(index)+"."+"static.ipv4.addresses.addresss"+"."+strconv.Itoa(cindex)+"."+"local-end-point", citem.LocalEndPoint.ValueString())
@@ -1125,6 +1126,7 @@ func (data RouterISIS) toBody(ctx context.Context, providerVersion string) strin
 				}
 			}
 			if len(item.AddressFamily) > 0 {
+				body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"address-families.address-family", []interface{}{})
 				for cindex, citem := range item.AddressFamily {
 					if !citem.AfName.IsNull() && !citem.AfName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"address-families.address-family"+"."+strconv.Itoa(cindex)+"."+"af-name", citem.AfName.ValueString())

@@ -156,6 +156,7 @@ func (data TPA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.Ipv4UpdateSourceDestinations) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"address-family.ipv4.update-source.destinations.destination", []interface{}{})
 				for cindex, citem := range item.Ipv4UpdateSourceDestinations {
 					if !citem.DestinationInterface.IsNull() && !citem.DestinationInterface.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"address-family.ipv4.update-source.destinations.destination"+"."+strconv.Itoa(cindex)+"."+"destination-interface", citem.DestinationInterface.ValueString())
@@ -166,6 +167,7 @@ func (data TPA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.Ipv6UpdateSourceDestinations) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"address-family.ipv6.update-source.destinations.destination", []interface{}{})
 				for cindex, citem := range item.Ipv6UpdateSourceDestinations {
 					if !citem.DestinationInterface.IsNull() && !citem.DestinationInterface.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"address-family.ipv6.update-source.destinations.destination"+"."+strconv.Itoa(cindex)+"."+"destination-interface", citem.DestinationInterface.ValueString())
@@ -176,6 +178,7 @@ func (data TPA) toBody(ctx context.Context, providerVersion string) string {
 				}
 			}
 			if len(item.EastWestInterfaces) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"east-wests.east-west", []interface{}{})
 				for cindex, citem := range item.EastWestInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"east-wests.east-west"+"."+strconv.Itoa(cindex)+"."+"east-west-interface", citem.InterfaceName.ValueString())

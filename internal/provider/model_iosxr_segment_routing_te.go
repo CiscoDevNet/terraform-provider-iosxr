@@ -471,6 +471,7 @@ func (data SegmentRoutingTE) toBody(ctx context.Context, providerVersion string)
 				}
 			}
 			if len(item.Srv6Segments) > 0 {
+				body, _ = sjson.Set(body, "segment-lists.explicit-segments.explicit-segment"+"."+strconv.Itoa(index)+"."+"segment-list-srv6.srv6-segments.srv6-segment", []interface{}{})
 				for cindex, citem := range item.Srv6Segments {
 					if !citem.Index.IsNull() && !citem.Index.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-lists.explicit-segments.explicit-segment"+"."+strconv.Itoa(index)+"."+"segment-list-srv6.srv6-segments.srv6-segment"+"."+strconv.Itoa(cindex)+"."+"index", strconv.FormatInt(citem.Index.ValueInt64(), 10))
@@ -492,6 +493,7 @@ func (data SegmentRoutingTE) toBody(ctx context.Context, providerVersion string)
 				body, _ = sjson.Set(body, "segments.segment"+"."+strconv.Itoa(index)+"."+"path-name", item.PathName.ValueString())
 			}
 			if len(item.SrMplsSegments) > 0 {
+				body, _ = sjson.Set(body, "segments.segment"+"."+strconv.Itoa(index)+"."+"segments.segment", []interface{}{})
 				for cindex, citem := range item.SrMplsSegments {
 					if !citem.Index.IsNull() && !citem.Index.IsUnknown() {
 						body, _ = sjson.Set(body, "segments.segment"+"."+strconv.Itoa(index)+"."+"segments.segment"+"."+strconv.Itoa(cindex)+"."+"segment-index", strconv.FormatInt(citem.Index.ValueInt64(), 10))
@@ -531,6 +533,7 @@ func (data SegmentRoutingTE) toBody(ctx context.Context, providerVersion string)
 				body, _ = sjson.Set(body, "resources.resource"+"."+strconv.Itoa(index)+"."+"path-name", item.PathName.ValueString())
 			}
 			if len(item.Resources) > 0 {
+				body, _ = sjson.Set(body, "resources.resource"+"."+strconv.Itoa(index)+"."+"resources.resource", []interface{}{})
 				for cindex, citem := range item.Resources {
 					if !citem.Index.IsNull() && !citem.Index.IsUnknown() {
 						body, _ = sjson.Set(body, "resources.resource"+"."+strconv.Itoa(index)+"."+"resources.resource"+"."+strconv.Itoa(cindex)+"."+"resource-index", strconv.FormatInt(citem.Index.ValueInt64(), 10))
@@ -555,6 +558,7 @@ func (data SegmentRoutingTE) toBody(ctx context.Context, providerVersion string)
 				body, _ = sjson.Set(body, "srte-interfaces.srte-interface"+"."+strconv.Itoa(index)+"."+"interface-metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
 			}
 			if len(item.Affinities) > 0 {
+				body, _ = sjson.Set(body, "srte-interfaces.srte-interface"+"."+strconv.Itoa(index)+"."+"interface-affinities.interface-affinity", []interface{}{})
 				for cindex, citem := range item.Affinities {
 					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
 						body, _ = sjson.Set(body, "srte-interfaces.srte-interface"+"."+strconv.Itoa(index)+"."+"interface-affinities.interface-affinity"+"."+strconv.Itoa(cindex)+"."+"affinity-name", citem.AffinityName.ValueString())

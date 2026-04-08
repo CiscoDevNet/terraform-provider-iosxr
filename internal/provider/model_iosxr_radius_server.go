@@ -276,11 +276,13 @@ func (data RadiusServer) toBody(ctx context.Context, providerVersion string) str
 				body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.radius-attributes", item.RadiusAttributes.ValueString())
 			}
 			if len(item.AttributeVendorIds) > 0 {
+				body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-ids.vendor-id", []interface{}{})
 				for cindex, citem := range item.AttributeVendorIds {
 					if !citem.Id.IsNull() && !citem.Id.IsUnknown() {
 						body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-ids.vendor-id"+"."+strconv.Itoa(cindex)+"."+"id", strconv.FormatInt(citem.Id.ValueInt64(), 10))
 					}
 					if len(citem.VendorTypes) > 0 {
+						body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-ids.vendor-id"+"."+strconv.Itoa(cindex)+"."+"vendor-types.vendor-type", []interface{}{})
 						for ccindex, ccitem := range citem.VendorTypes {
 							if !ccitem.VendorTypeId.IsNull() && !ccitem.VendorTypeId.IsUnknown() {
 								body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-ids.vendor-id"+"."+strconv.Itoa(cindex)+"."+"vendor-types.vendor-type"+"."+strconv.Itoa(ccindex)+"."+"vendor-type-id", strconv.FormatInt(ccitem.VendorTypeId.ValueInt64(), 10))

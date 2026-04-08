@@ -150,6 +150,7 @@ func (data TCP) toBody(ctx context.Context, providerVersion string) string {
 				body, _ = sjson.Set(body, "ao.keychains.keychain"+"."+strconv.Itoa(index)+"."+"keychain-name", item.KeychainName.ValueString())
 			}
 			if len(item.Keys) > 0 {
+				body, _ = sjson.Set(body, "ao.keychains.keychain"+"."+strconv.Itoa(index)+"."+"keys.key", []interface{}{})
 				for cindex, citem := range item.Keys {
 					if !citem.KeyName.IsNull() && !citem.KeyName.IsUnknown() {
 						body, _ = sjson.Set(body, "ao.keychains.keychain"+"."+strconv.Itoa(index)+"."+"keys.key"+"."+strconv.Itoa(cindex)+"."+"key-name", citem.KeyName.ValueString())

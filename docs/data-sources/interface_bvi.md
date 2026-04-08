@@ -109,6 +109,7 @@ data "iosxr_interface_bvi" "example" {
 - `load_interval` (Number) Specify interval for load calculation for an interface
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `mac_address` (String) Set the Mac address(xxxx.xxxx.xxxx) on an interface
+- `monitor_sessions` (Attributes List) Monitor-session configuration commands (see [below for nested schema](#nestedatt--monitor_sessions))
 - `mtu` (Number) Set the MTU on an interface
 - `multipoint` (Boolean) multipoint sub-interface
 - `point_to_point` (Boolean) point-to-point sub-interface
@@ -229,6 +230,23 @@ Read-Only:
 - `prefix_length` (Number) Prefix Length
 - `route_tag` (Number) Route-tag to be associated with this address
 - `zone` (String) IPv6 address zone
+
+
+<a id="nestedatt--monitor_sessions"></a>
+### Nested Schema for `monitor_sessions`
+
+Read-Only:
+
+- `acl` (Boolean) Enable acl based mirroring
+- `acl_ipv4_name` (String) IPV4 ACL name
+- `acl_ipv6_name` (String) IPV6 ACL name
+- `direction_rx_only` (Boolean) Replicate only received (ingress) traffic
+- `direction_tx_only` (Boolean) Replicate only transmitted (egress) traffic
+- `ethernet` (Boolean) Replicate Ethernet traffic
+- `mirror_first` (Number) Enable mirroring on the first portion of a packet
+- `mirror_interval` (String) Enable mirroring of every Nth packet
+- `port_level` (Boolean) Replicate traffic on all interfaces of a main interface
+- `session_name` (String) Monitor-session configuration commands
 
 
 <a id="nestedatt--ptp_interop_egress_conversion_clock_class_mappings"></a>

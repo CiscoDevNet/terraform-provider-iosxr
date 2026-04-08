@@ -175,6 +175,14 @@ func (d *RouterStaticVRFIPv6UnicastDataSource) Schema(ctx context.Context, req d
 							MarkdownDescription: "Forwarding router's address",
 							Computed:            true,
 						},
+						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+							MarkdownDescription: "Hello interval",
+							Computed:            true,
+						},
+						"bfd_fast_detect_multiplier": schema.Int64Attribute{
+							MarkdownDescription: "Detect multiplier",
+							Computed:            true,
+						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: "description of the static route",
 							Computed:            true,
@@ -296,6 +304,14 @@ func (d *RouterStaticVRFIPv6UnicastDataSource) Schema(ctx context.Context, req d
 										MarkdownDescription: "Forwarding router's address",
 										Computed:            true,
 									},
+									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+										MarkdownDescription: "Hello interval",
+										Computed:            true,
+									},
+									"bfd_fast_detect_multiplier": schema.Int64Attribute{
+										MarkdownDescription: "Detect multiplier",
+										Computed:            true,
+									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: "description of the static route",
 										Computed:            true,
@@ -330,6 +346,14 @@ func (d *RouterStaticVRFIPv6UnicastDataSource) Schema(ctx context.Context, req d
 								Attributes: map[string]schema.Attribute{
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Forwarding router's address",
+										Computed:            true,
+									},
+									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+										MarkdownDescription: "Hello interval",
+										Computed:            true,
+									},
+									"bfd_fast_detect_multiplier": schema.Int64Attribute{
+										MarkdownDescription: "Detect multiplier",
 										Computed:            true,
 									},
 									"description": schema.StringAttribute{

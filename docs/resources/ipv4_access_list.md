@@ -163,6 +163,7 @@ Optional:
 - `deny_source_prefix_length` (Number) Source IP address prefix length. Either wildcard-mask or prefix-length can be used along with address.
   - Range: `0`-`32`
 - `deny_source_wildcard_mask` (String) Source IP address wildcard mask. Either wildcard-mask or prefix-length can be used along with address.
+- `deny_tcp_flags_bits` (String)
 - `deny_ttl_eq` (Number) Match only packets with a given value
   - Range: `0`-`255`
 - `deny_ttl_gt` (Number) Match only packet with a greater value
@@ -275,6 +276,7 @@ Optional:
 - `permit_source_prefix_length` (Number) Source IP address prefix length. Either wildcard-mask or prefix-length can be used along with address.
   - Range: `0`-`32`
 - `permit_source_wildcard_mask` (String) Source IP address wildcard mask. Either wildcard-mask or prefix-length can be used along with address.
+- `permit_tcp_flags_bits` (String) Space-separated list of TCP flags to match
 - `permit_ttl_eq` (Number) Match only packets with a given value
   - Range: `0`-`255`
 - `permit_ttl_gt` (Number) Match only packet with a greater value

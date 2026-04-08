@@ -41,63 +41,69 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type BFD struct {
-	Device                                 types.String            `tfsdk:"device"`
-	Id                                     types.String            `tfsdk:"id"`
-	DeleteMode                             types.String            `tfsdk:"delete_mode"`
-	EchoDisable                            types.Bool              `tfsdk:"echo_disable"`
-	EchoLatencyDetect                      types.Bool              `tfsdk:"echo_latency_detect"`
-	EchoLatencyDetectPercentage            types.Int64             `tfsdk:"echo_latency_detect_percentage"`
-	EchoLatencyDetectCount                 types.Int64             `tfsdk:"echo_latency_detect_count"`
-	EchoStartupValidateForce               types.Bool              `tfsdk:"echo_startup_validate_force"`
-	EchoIpv4Source                         types.String            `tfsdk:"echo_ipv4_source"`
-	EchoIpv4BundlePerMemberMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_minimum_interval"`
-	TrapSinglehopPreMapped                 types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
-	MultipathLocations                     []BFDMultipathLocations `tfsdk:"multipath_locations"`
-	MultihopTtlDropThreshold               types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
-	DampeningInitialWait                   types.Int64             `tfsdk:"dampening_initial_wait"`
-	DampeningSecondaryWait                 types.Int64             `tfsdk:"dampening_secondary_wait"`
-	DampeningMaximumWait                   types.Int64             `tfsdk:"dampening_maximum_wait"`
-	DampeningThreshold                     types.Int64             `tfsdk:"dampening_threshold"`
-	DampeningExtensionsDownMonitoring      types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
-	DampeningDisable                       types.Bool              `tfsdk:"dampening_disable"`
-	DampeningBundleMemberL3OnlyMode        types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
-	DampeningBundleMemberInitialWait       types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
-	DampeningBundleMemberSecondaryWait     types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
-	DampeningBundleMemberMaximumWait       types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
-	BundleCoexistenceBobBlb                types.String            `tfsdk:"bundle_coexistence_bob_blb"`
-	Ipv6ChecksumDisable                    types.Bool              `tfsdk:"ipv6_checksum_disable"`
-	Interfaces                             []BFDInterfaces         `tfsdk:"interfaces"`
+	Device                                 types.String               `tfsdk:"device"`
+	Id                                     types.String               `tfsdk:"id"`
+	DeleteMode                             types.String               `tfsdk:"delete_mode"`
+	EchoDisable                            types.Bool                 `tfsdk:"echo_disable"`
+	EchoLatencyDetect                      types.Bool                 `tfsdk:"echo_latency_detect"`
+	EchoLatencyDetectPercentage            types.Int64                `tfsdk:"echo_latency_detect_percentage"`
+	EchoLatencyDetectCount                 types.Int64                `tfsdk:"echo_latency_detect_count"`
+	EchoStartupValidateForce               types.Bool                 `tfsdk:"echo_startup_validate_force"`
+	EchoIpv4Source                         types.String               `tfsdk:"echo_ipv4_source"`
+	EchoIpv4BundlePerMemberMinimumInterval types.Int64                `tfsdk:"echo_ipv4_bundle_per_member_minimum_interval"`
+	TrapSinglehopPreMapped                 types.Bool                 `tfsdk:"trap_singlehop_pre_mapped"`
+	MultipathLocations                     []BFDMultipathLocations    `tfsdk:"multipath_locations"`
+	MultipathDestinations                  []BFDMultipathDestinations `tfsdk:"multipath_destinations"`
+	MultihopTtlDropThreshold               types.Int64                `tfsdk:"multihop_ttl_drop_threshold"`
+	DampeningInitialWait                   types.Int64                `tfsdk:"dampening_initial_wait"`
+	DampeningSecondaryWait                 types.Int64                `tfsdk:"dampening_secondary_wait"`
+	DampeningMaximumWait                   types.Int64                `tfsdk:"dampening_maximum_wait"`
+	DampeningThreshold                     types.Int64                `tfsdk:"dampening_threshold"`
+	DampeningExtensionsDownMonitoring      types.Bool                 `tfsdk:"dampening_extensions_down_monitoring"`
+	DampeningDisable                       types.Bool                 `tfsdk:"dampening_disable"`
+	DampeningBundleMemberL3OnlyMode        types.Bool                 `tfsdk:"dampening_bundle_member_l3_only_mode"`
+	DampeningBundleMemberInitialWait       types.Int64                `tfsdk:"dampening_bundle_member_initial_wait"`
+	DampeningBundleMemberSecondaryWait     types.Int64                `tfsdk:"dampening_bundle_member_secondary_wait"`
+	DampeningBundleMemberMaximumWait       types.Int64                `tfsdk:"dampening_bundle_member_maximum_wait"`
+	BundleCoexistenceBobBlb                types.String               `tfsdk:"bundle_coexistence_bob_blb"`
+	Ipv6ChecksumDisable                    types.Bool                 `tfsdk:"ipv6_checksum_disable"`
+	Interfaces                             []BFDInterfaces            `tfsdk:"interfaces"`
 }
 
 type BFDData struct {
-	Device                                 types.String            `tfsdk:"device"`
-	Id                                     types.String            `tfsdk:"id"`
-	EchoDisable                            types.Bool              `tfsdk:"echo_disable"`
-	EchoLatencyDetect                      types.Bool              `tfsdk:"echo_latency_detect"`
-	EchoLatencyDetectPercentage            types.Int64             `tfsdk:"echo_latency_detect_percentage"`
-	EchoLatencyDetectCount                 types.Int64             `tfsdk:"echo_latency_detect_count"`
-	EchoStartupValidateForce               types.Bool              `tfsdk:"echo_startup_validate_force"`
-	EchoIpv4Source                         types.String            `tfsdk:"echo_ipv4_source"`
-	EchoIpv4BundlePerMemberMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_minimum_interval"`
-	TrapSinglehopPreMapped                 types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
-	MultipathLocations                     []BFDMultipathLocations `tfsdk:"multipath_locations"`
-	MultihopTtlDropThreshold               types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
-	DampeningInitialWait                   types.Int64             `tfsdk:"dampening_initial_wait"`
-	DampeningSecondaryWait                 types.Int64             `tfsdk:"dampening_secondary_wait"`
-	DampeningMaximumWait                   types.Int64             `tfsdk:"dampening_maximum_wait"`
-	DampeningThreshold                     types.Int64             `tfsdk:"dampening_threshold"`
-	DampeningExtensionsDownMonitoring      types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
-	DampeningDisable                       types.Bool              `tfsdk:"dampening_disable"`
-	DampeningBundleMemberL3OnlyMode        types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
-	DampeningBundleMemberInitialWait       types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
-	DampeningBundleMemberSecondaryWait     types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
-	DampeningBundleMemberMaximumWait       types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
-	BundleCoexistenceBobBlb                types.String            `tfsdk:"bundle_coexistence_bob_blb"`
-	Ipv6ChecksumDisable                    types.Bool              `tfsdk:"ipv6_checksum_disable"`
-	Interfaces                             []BFDInterfaces         `tfsdk:"interfaces"`
+	Device                                 types.String               `tfsdk:"device"`
+	Id                                     types.String               `tfsdk:"id"`
+	EchoDisable                            types.Bool                 `tfsdk:"echo_disable"`
+	EchoLatencyDetect                      types.Bool                 `tfsdk:"echo_latency_detect"`
+	EchoLatencyDetectPercentage            types.Int64                `tfsdk:"echo_latency_detect_percentage"`
+	EchoLatencyDetectCount                 types.Int64                `tfsdk:"echo_latency_detect_count"`
+	EchoStartupValidateForce               types.Bool                 `tfsdk:"echo_startup_validate_force"`
+	EchoIpv4Source                         types.String               `tfsdk:"echo_ipv4_source"`
+	EchoIpv4BundlePerMemberMinimumInterval types.Int64                `tfsdk:"echo_ipv4_bundle_per_member_minimum_interval"`
+	TrapSinglehopPreMapped                 types.Bool                 `tfsdk:"trap_singlehop_pre_mapped"`
+	MultipathLocations                     []BFDMultipathLocations    `tfsdk:"multipath_locations"`
+	MultipathDestinations                  []BFDMultipathDestinations `tfsdk:"multipath_destinations"`
+	MultihopTtlDropThreshold               types.Int64                `tfsdk:"multihop_ttl_drop_threshold"`
+	DampeningInitialWait                   types.Int64                `tfsdk:"dampening_initial_wait"`
+	DampeningSecondaryWait                 types.Int64                `tfsdk:"dampening_secondary_wait"`
+	DampeningMaximumWait                   types.Int64                `tfsdk:"dampening_maximum_wait"`
+	DampeningThreshold                     types.Int64                `tfsdk:"dampening_threshold"`
+	DampeningExtensionsDownMonitoring      types.Bool                 `tfsdk:"dampening_extensions_down_monitoring"`
+	DampeningDisable                       types.Bool                 `tfsdk:"dampening_disable"`
+	DampeningBundleMemberL3OnlyMode        types.Bool                 `tfsdk:"dampening_bundle_member_l3_only_mode"`
+	DampeningBundleMemberInitialWait       types.Int64                `tfsdk:"dampening_bundle_member_initial_wait"`
+	DampeningBundleMemberSecondaryWait     types.Int64                `tfsdk:"dampening_bundle_member_secondary_wait"`
+	DampeningBundleMemberMaximumWait       types.Int64                `tfsdk:"dampening_bundle_member_maximum_wait"`
+	BundleCoexistenceBobBlb                types.String               `tfsdk:"bundle_coexistence_bob_blb"`
+	Ipv6ChecksumDisable                    types.Bool                 `tfsdk:"ipv6_checksum_disable"`
+	Interfaces                             []BFDInterfaces            `tfsdk:"interfaces"`
 }
 type BFDMultipathLocations struct {
 	LocationId types.String `tfsdk:"location_id"`
+}
+type BFDMultipathDestinations struct {
+	DestinationAddress types.String `tfsdk:"destination_address"`
+	LocationId         types.String `tfsdk:"location_id"`
 }
 type BFDInterfaces struct {
 	InterfaceName       types.String `tfsdk:"interface_name"`
@@ -227,6 +233,17 @@ func (data BFD) toBody(ctx context.Context) string {
 			}
 		}
 	}
+	if len(data.MultipathDestinations) > 0 {
+		body, _ = sjson.Set(body, "multipath.destinations.destination", []interface{}{})
+		for index, item := range data.MultipathDestinations {
+			if !item.DestinationAddress.IsNull() && !item.DestinationAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "multipath.destinations.destination"+"."+strconv.Itoa(index)+"."+"destination-ip-address", item.DestinationAddress.ValueString())
+			}
+			if !item.LocationId.IsNull() && !item.LocationId.IsUnknown() {
+				body, _ = sjson.Set(body, "multipath.destinations.destination"+"."+strconv.Itoa(index)+"."+"location-id", item.LocationId.ValueString())
+			}
+		}
+	}
 	if len(data.Interfaces) > 0 {
 		body, _ = sjson.Set(body, "interfaces.interface", []interface{}{})
 		for index, item := range data.Interfaces {
@@ -307,6 +324,17 @@ func (data BFD) toBodyXML(ctx context.Context) string {
 	if len(data.MultipathLocations) > 0 {
 		for _, item := range data.MultipathLocations {
 			basePath := data.getXPath() + "/multipath/include/locations/location"
+			if !item.LocationId.IsNull() && !item.LocationId.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-id", item.LocationId.ValueString())
+			}
+		}
+	}
+	if len(data.MultipathDestinations) > 0 {
+		for _, item := range data.MultipathDestinations {
+			basePath := data.getXPath() + "/multipath/destinations/destination"
+			if !item.DestinationAddress.IsNull() && !item.DestinationAddress.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/destination-ip-address", item.DestinationAddress.ValueString())
+			}
 			if !item.LocationId.IsNull() && !item.LocationId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-id", item.LocationId.ValueString())
 			}
@@ -502,6 +530,40 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.MultipathLocations[i].LocationId = types.StringValue(value.String())
 		} else {
 			data.MultipathLocations[i].LocationId = types.StringNull()
+		}
+	}
+	for i := range data.MultipathDestinations {
+		keys := [...]string{"destination-ip-address"}
+		keyValues := [...]string{data.MultipathDestinations[i].DestinationAddress.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "multipath.destinations.destination").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("destination-ip-address"); value.Exists() && !data.MultipathDestinations[i].DestinationAddress.IsNull() {
+			data.MultipathDestinations[i].DestinationAddress = types.StringValue(value.String())
+		} else {
+			data.MultipathDestinations[i].DestinationAddress = types.StringNull()
+		}
+		if value := r.Get("location-id"); value.Exists() && !data.MultipathDestinations[i].LocationId.IsNull() {
+			data.MultipathDestinations[i].LocationId = types.StringValue(value.String())
+		} else {
+			data.MultipathDestinations[i].LocationId = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "multihop.ttl-drop-threshold"); value.Exists() && !data.MultihopTtlDropThreshold.IsNull() {
@@ -776,6 +838,40 @@ func (data *BFD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.MultipathLocations[i].LocationId = types.StringNull()
 		}
 	}
+	for i := range data.MultipathDestinations {
+		keys := [...]string{"destination-ip-address"}
+		keyValues := [...]string{data.MultipathDestinations[i].DestinationAddress.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multipath/destinations/destination").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "destination-ip-address"); value.Exists() && !data.MultipathDestinations[i].DestinationAddress.IsNull() {
+			data.MultipathDestinations[i].DestinationAddress = types.StringValue(value.String())
+		} else if data.MultipathDestinations[i].DestinationAddress.IsNull() {
+			data.MultipathDestinations[i].DestinationAddress = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "location-id"); value.Exists() && !data.MultipathDestinations[i].LocationId.IsNull() {
+			data.MultipathDestinations[i].LocationId = types.StringValue(value.String())
+		} else if data.MultipathDestinations[i].LocationId.IsNull() {
+			data.MultipathDestinations[i].LocationId = types.StringNull()
+		}
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multihop/ttl-drop-threshold"); value.Exists() && !data.MultihopTtlDropThreshold.IsNull() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
 	} else if data.MultihopTtlDropThreshold.IsNull() {
@@ -1010,6 +1106,20 @@ func (data *BFD) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
+	if value := res.Get(prefix + "multipath.destinations.destination"); value.Exists() {
+		data.MultipathDestinations = make([]BFDMultipathDestinations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := BFDMultipathDestinations{}
+			if cValue := v.Get("destination-ip-address"); cValue.Exists() {
+				item.DestinationAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("location-id"); cValue.Exists() {
+				item.LocationId = types.StringValue(cValue.String())
+			}
+			data.MultipathDestinations = append(data.MultipathDestinations, item)
+			return true
+		})
+	}
 	if value := res.Get(prefix + "multihop.ttl-drop-threshold"); value.Exists() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
 	}
@@ -1161,6 +1271,20 @@ func (data *BFDData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
+	if value := res.Get(prefix + "multipath.destinations.destination"); value.Exists() {
+		data.MultipathDestinations = make([]BFDMultipathDestinations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := BFDMultipathDestinations{}
+			if cValue := v.Get("destination-ip-address"); cValue.Exists() {
+				item.DestinationAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("location-id"); cValue.Exists() {
+				item.LocationId = types.StringValue(cValue.String())
+			}
+			data.MultipathDestinations = append(data.MultipathDestinations, item)
+			return true
+		})
+	}
 	if value := res.Get(prefix + "multihop.ttl-drop-threshold"); value.Exists() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
 	}
@@ -1297,6 +1421,20 @@ func (data *BFD) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multipath/destinations/destination"); value.Exists() {
+		data.MultipathDestinations = make([]BFDMultipathDestinations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := BFDMultipathDestinations{}
+			if cValue := helpers.GetFromXPath(v, "destination-ip-address"); cValue.Exists() {
+				item.DestinationAddress = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "location-id"); cValue.Exists() {
+				item.LocationId = types.StringValue(cValue.String())
+			}
+			data.MultipathDestinations = append(data.MultipathDestinations, item)
+			return true
+		})
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multihop/ttl-drop-threshold"); value.Exists() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
 	}
@@ -1430,6 +1568,20 @@ func (data *BFDData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 				item.LocationId = types.StringValue(cValue.String())
 			}
 			data.MultipathLocations = append(data.MultipathLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multipath/destinations/destination"); value.Exists() {
+		data.MultipathDestinations = make([]BFDMultipathDestinations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := BFDMultipathDestinations{}
+			if cValue := helpers.GetFromXPath(v, "destination-ip-address"); cValue.Exists() {
+				item.DestinationAddress = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "location-id"); cValue.Exists() {
+				item.LocationId = types.StringValue(cValue.String())
+			}
+			data.MultipathDestinations = append(data.MultipathDestinations, item)
 			return true
 		})
 	}
@@ -1620,6 +1772,39 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 	if !state.MultihopTtlDropThreshold.IsNull() && data.MultihopTtlDropThreshold.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/multihop/ttl-drop-threshold", state.getPath()))
 	}
+	for i := range state.MultipathDestinations {
+		keys := [...]string{"destination-ip-address"}
+		stateKeyValues := [...]string{state.MultipathDestinations[i].DestinationAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MultipathDestinations[i].DestinationAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MultipathDestinations {
+			found = true
+			if state.MultipathDestinations[i].DestinationAddress.ValueString() != data.MultipathDestinations[j].DestinationAddress.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.MultipathDestinations[i].LocationId.IsNull() && data.MultipathDestinations[j].LocationId.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/multipath/destinations/destination%v/location-id", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/multipath/destinations/destination%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.MultipathLocations {
 		keys := [...]string{"location-id"}
 		stateKeyValues := [...]string{state.MultipathLocations[i].LocationId.ValueString()}
@@ -1729,6 +1914,14 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context, state *BFD) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/dampening/extensions/down-monitoring", data.getXPath()))
 		}
 	}
+	for i := range data.MultipathDestinations {
+		keys := [...]string{"destination-ip-address"}
+		keyValues := [...]string{data.MultipathDestinations[i].DestinationAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.MultipathLocations {
 		keys := [...]string{"location-id"}
 		keyValues := [...]string{data.MultipathLocations[i].LocationId.ValueString()}
@@ -1814,6 +2007,12 @@ func (data *BFD) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.MultihopTtlDropThreshold.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/multihop/ttl-drop-threshold", data.getPath()))
+	}
+	for i := range data.MultipathDestinations {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[destination-ip-address=" + data.MultipathDestinations[i].DestinationAddress.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/multipath/destinations/destination%v", data.getPath(), keyPath))
 	}
 	for i := range data.MultipathLocations {
 		// Build path with bracket notation for keys
@@ -2113,6 +2312,39 @@ func (data *BFD) addDeletedItemsXML(ctx context.Context, state BFD, body string)
 			deletedPaths[deletePath] = true
 		}
 	}
+	for i := range state.MultipathDestinations {
+		stateKeys := [...]string{"destination-ip-address"}
+		stateKeyValues := [...]string{state.MultipathDestinations[i].DestinationAddress.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MultipathDestinations[i].DestinationAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MultipathDestinations {
+			found = true
+			if state.MultipathDestinations[i].DestinationAddress.ValueString() != data.MultipathDestinations[j].DestinationAddress.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.MultipathDestinations[i].LocationId.IsNull() && data.MultipathDestinations[j].LocationId.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/multipath/destinations/destination%v/location-id", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/multipath/destinations/destination%v", predicates))
+		}
+	}
 	for i := range state.MultipathLocations {
 		stateKeys := [...]string{"location-id"}
 		stateKeyValues := [...]string{state.MultipathLocations[i].LocationId.ValueString()}
@@ -2344,6 +2576,16 @@ func (data *BFD) addDeletePathsXML(ctx context.Context, body string) string {
 	}
 	if !data.MultihopTtlDropThreshold.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/multihop/ttl-drop-threshold")
+	}
+	for i := range data.MultipathDestinations {
+		keys := [...]string{"destination-ip-address"}
+		keyValues := [...]string{data.MultipathDestinations[i].DestinationAddress.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/multipath/destinations/destination%v", predicates))
 	}
 	for i := range data.MultipathLocations {
 		keys := [...]string{"location-id"}

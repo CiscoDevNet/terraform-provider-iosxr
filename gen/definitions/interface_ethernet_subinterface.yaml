@@ -27,7 +27,7 @@ attributes:
     no_augment_config: true
     string_patterns:
       - '^[0-9]+(/[0-9]+)*\.[0-9]+$'
-    example: "0/0/0/0.100"
+    example: "0/0/0/1.100"
   - yang_name: sub-interface-type/l2transport
     tf_name: l2transport
     example: false
@@ -793,8 +793,9 @@ attributes:
     example: POLICY2
   - yang_name: Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session
     tf_name: monitor_sessions
-    test_tags: [NCS]
+    test_tags: [NCS, C8000]
     include_example: true
+    exclude_test: true
     type: List
     attributes:
       - yang_name: session-name

@@ -1,4 +1,4 @@
 data "iosxr_interface_ethernet_subinterface" "example" {
   type = "GigabitEthernet"
-  name = "0/0/0/0.100"
+  name = "0/0/0/1.100"
 }

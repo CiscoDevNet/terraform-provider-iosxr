@@ -89,6 +89,7 @@ type IPv4AccessListSequences struct {
 	PermitIcmpMessageTypeName       types.String `tfsdk:"permit_icmp_message_type_name"`
 	PermitIcmpMessageType           types.Int64  `tfsdk:"permit_icmp_message_type"`
 	PermitIcmpMessageCode           types.Int64  `tfsdk:"permit_icmp_message_code"`
+	PermitTcpFlagsBits              types.String `tfsdk:"permit_tcp_flags_bits"`
 	PermitIgmpType                  types.String `tfsdk:"permit_igmp_type"`
 	PermitDscp                      types.String `tfsdk:"permit_dscp"`
 	PermitDscpEq                    types.String `tfsdk:"permit_dscp_eq"`
@@ -173,6 +174,7 @@ type IPv4AccessListSequences struct {
 	DenyIcmpMessageTypeName         types.String `tfsdk:"deny_icmp_message_type_name"`
 	DenyIcmpMessageType             types.Int64  `tfsdk:"deny_icmp_message_type"`
 	DenyIcmpMessageCode             types.Int64  `tfsdk:"deny_icmp_message_code"`
+	DenyTcpFlagsBits                types.String `tfsdk:"deny_tcp_flags_bits"`
 	DenyIgmpType                    types.String `tfsdk:"deny_igmp_type"`
 	DenyDscp                        types.String `tfsdk:"deny_dscp"`
 	DenyDscpEq                      types.String `tfsdk:"deny_dscp_eq"`
@@ -375,6 +377,9 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.PermitIcmpMessageCode.IsNull() && !item.PermitIcmpMessageCode.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.icmp.message-code", strconv.FormatInt(item.PermitIcmpMessageCode.ValueInt64(), 10))
+			}
+			if !item.PermitTcpFlagsBits.IsNull() && !item.PermitTcpFlagsBits.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.tcp-flags.tcp-bits", item.PermitTcpFlagsBits.ValueString())
 			}
 			if !item.PermitIgmpType.IsNull() && !item.PermitIgmpType.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.igmp-type", item.PermitIgmpType.ValueString())
@@ -641,6 +646,9 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.DenyIcmpMessageCode.IsNull() && !item.DenyIcmpMessageCode.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp.message-code", strconv.FormatInt(item.DenyIcmpMessageCode.ValueInt64(), 10))
+			}
+			if !item.DenyTcpFlagsBits.IsNull() && !item.DenyTcpFlagsBits.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.tcp-flags.tcp-bits", item.DenyTcpFlagsBits.ValueString())
 			}
 			if !item.DenyIgmpType.IsNull() && !item.DenyIgmpType.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.igmp-type", item.DenyIgmpType.ValueString())
@@ -1034,6 +1042,11 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Value(value.Int())
 		} else {
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Null()
+		}
+		if value := r.Get("permit.tcp-flags.tcp-bits"); value.Exists() && !data.Sequences[i].PermitTcpFlagsBits.IsNull() {
+			data.Sequences[i].PermitTcpFlagsBits = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].PermitTcpFlagsBits = types.StringNull()
 		}
 		if value := r.Get("permit.igmp-type"); value.Exists() && !data.Sequences[i].PermitIgmpType.IsNull() {
 			data.Sequences[i].PermitIgmpType = types.StringValue(value.String())
@@ -1504,6 +1517,11 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyIcmpMessageCode = types.Int64Null()
 		}
+		if value := r.Get("deny.tcp-flags.tcp-bits"); value.Exists() && !data.Sequences[i].DenyTcpFlagsBits.IsNull() {
+			data.Sequences[i].DenyTcpFlagsBits = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].DenyTcpFlagsBits = types.StringNull()
+		}
 		if value := r.Get("deny.igmp-type"); value.Exists() && !data.Sequences[i].DenyIgmpType.IsNull() {
 			data.Sequences[i].DenyIgmpType = types.StringValue(value.String())
 		} else {
@@ -1924,6 +1942,9 @@ func (data IPv4AccessList) toBodyXML(ctx context.Context) string {
 			if !item.PermitIcmpMessageCode.IsNull() && !item.PermitIcmpMessageCode.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/permit/icmp/message-code", strconv.FormatInt(item.PermitIcmpMessageCode.ValueInt64(), 10))
 			}
+			if !item.PermitTcpFlagsBits.IsNull() && !item.PermitTcpFlagsBits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/permit/tcp-flags/tcp-bits", item.PermitTcpFlagsBits.ValueString())
+			}
 			if !item.PermitIgmpType.IsNull() && !item.PermitIgmpType.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/permit/igmp-type", item.PermitIgmpType.ValueString())
 			}
@@ -2189,6 +2210,9 @@ func (data IPv4AccessList) toBodyXML(ctx context.Context) string {
 			}
 			if !item.DenyIcmpMessageCode.IsNull() && !item.DenyIcmpMessageCode.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/deny/icmp/message-code", strconv.FormatInt(item.DenyIcmpMessageCode.ValueInt64(), 10))
+			}
+			if !item.DenyTcpFlagsBits.IsNull() && !item.DenyTcpFlagsBits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/deny/tcp-flags/tcp-bits", item.DenyTcpFlagsBits.ValueString())
 			}
 			if !item.DenyIgmpType.IsNull() && !item.DenyIgmpType.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/deny/igmp-type", item.DenyIgmpType.ValueString())
@@ -2589,6 +2613,11 @@ func (data *IPv4AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Value(value.Int())
 		} else if data.Sequences[i].PermitIcmpMessageCode.IsNull() {
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "permit/tcp-flags/tcp-bits"); value.Exists() && !data.Sequences[i].PermitTcpFlagsBits.IsNull() {
+			data.Sequences[i].PermitTcpFlagsBits = types.StringValue(value.String())
+		} else if data.Sequences[i].PermitTcpFlagsBits.IsNull() {
+			data.Sequences[i].PermitTcpFlagsBits = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "permit/igmp-type"); value.Exists() && !data.Sequences[i].PermitIgmpType.IsNull() {
 			data.Sequences[i].PermitIgmpType = types.StringValue(value.String())
@@ -3059,6 +3088,11 @@ func (data *IPv4AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 		} else if data.Sequences[i].DenyIcmpMessageCode.IsNull() {
 			data.Sequences[i].DenyIcmpMessageCode = types.Int64Null()
 		}
+		if value := helpers.GetFromXPath(r, "deny/tcp-flags/tcp-bits"); value.Exists() && !data.Sequences[i].DenyTcpFlagsBits.IsNull() {
+			data.Sequences[i].DenyTcpFlagsBits = types.StringValue(value.String())
+		} else if data.Sequences[i].DenyTcpFlagsBits.IsNull() {
+			data.Sequences[i].DenyTcpFlagsBits = types.StringNull()
+		}
 		if value := helpers.GetFromXPath(r, "deny/igmp-type"); value.Exists() && !data.Sequences[i].DenyIgmpType.IsNull() {
 			data.Sequences[i].DenyIgmpType = types.StringValue(value.String())
 		} else if data.Sequences[i].DenyIgmpType.IsNull() {
@@ -3489,6 +3523,9 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.icmp.message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("permit.tcp-flags.tcp-bits"); cValue.Exists() {
+				item.PermitTcpFlagsBits = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("permit.igmp-type"); cValue.Exists() {
 				item.PermitIgmpType = types.StringValue(cValue.String())
 			}
@@ -3761,6 +3798,9 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("deny.icmp.message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.tcp-flags.tcp-bits"); cValue.Exists() {
+				item.DenyTcpFlagsBits = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.igmp-type"); cValue.Exists() {
 				item.DenyIgmpType = types.StringValue(cValue.String())
@@ -4068,6 +4108,9 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("permit.icmp.message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("permit.tcp-flags.tcp-bits"); cValue.Exists() {
+				item.PermitTcpFlagsBits = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("permit.igmp-type"); cValue.Exists() {
 				item.PermitIgmpType = types.StringValue(cValue.String())
 			}
@@ -4333,6 +4376,9 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			}
 			if cValue := v.Get("deny.icmp.message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.tcp-flags.tcp-bits"); cValue.Exists() {
+				item.DenyTcpFlagsBits = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.igmp-type"); cValue.Exists() {
 				item.DenyIgmpType = types.StringValue(cValue.String())
@@ -4624,6 +4670,9 @@ func (data *IPv4AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "permit/icmp/message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "permit/tcp-flags/tcp-bits"); cValue.Exists() {
+				item.PermitTcpFlagsBits = types.StringValue(cValue.String())
+			}
 			if cValue := helpers.GetFromXPath(v, "permit/igmp-type"); cValue.Exists() {
 				item.PermitIgmpType = types.StringValue(cValue.String())
 			}
@@ -4889,6 +4938,9 @@ func (data *IPv4AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/icmp/message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "deny/tcp-flags/tcp-bits"); cValue.Exists() {
+				item.DenyTcpFlagsBits = types.StringValue(cValue.String())
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/igmp-type"); cValue.Exists() {
 				item.DenyIgmpType = types.StringValue(cValue.String())
@@ -5180,6 +5232,9 @@ func (data *IPv4AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "permit/icmp/message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "permit/tcp-flags/tcp-bits"); cValue.Exists() {
+				item.PermitTcpFlagsBits = types.StringValue(cValue.String())
+			}
 			if cValue := helpers.GetFromXPath(v, "permit/igmp-type"); cValue.Exists() {
 				item.PermitIgmpType = types.StringValue(cValue.String())
 			}
@@ -5445,6 +5500,9 @@ func (data *IPv4AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/icmp/message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "deny/tcp-flags/tcp-bits"); cValue.Exists() {
+				item.DenyTcpFlagsBits = types.StringValue(cValue.String())
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/igmp-type"); cValue.Exists() {
 				item.DenyIgmpType = types.StringValue(cValue.String())
@@ -5788,6 +5846,9 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				if !state.Sequences[i].DenyIgmpType.IsNull() && data.Sequences[j].DenyIgmpType.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/igmp-type", state.getPath(), keyString))
 				}
+				if !state.Sequences[i].DenyTcpFlagsBits.IsNull() && data.Sequences[j].DenyTcpFlagsBits.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/tcp-flags/tcp-bits", state.getPath(), keyString))
+				}
 				if !state.Sequences[i].DenyIcmpMessageCode.IsNull() && data.Sequences[j].DenyIcmpMessageCode.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-code", state.getPath(), keyString))
 				}
@@ -6039,6 +6100,9 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 				}
 				if !state.Sequences[i].PermitIgmpType.IsNull() && data.Sequences[j].PermitIgmpType.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/igmp-type", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitTcpFlagsBits.IsNull() && data.Sequences[j].PermitTcpFlagsBits.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/tcp-flags/tcp-bits", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].PermitIcmpMessageCode.IsNull() && data.Sequences[j].PermitIcmpMessageCode.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/icmp/message-code", state.getPath(), keyString))
@@ -6486,6 +6550,9 @@ func (data *IPv4AccessList) addDeletedItemsXML(ctx context.Context, state IPv4Ac
 				if !state.Sequences[i].DenyIgmpType.IsNull() && data.Sequences[j].DenyIgmpType.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/igmp-type", predicates))
 				}
+				if !state.Sequences[i].DenyTcpFlagsBits.IsNull() && data.Sequences[j].DenyTcpFlagsBits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/tcp-flags/tcp-bits", predicates))
+				}
 				if !state.Sequences[i].DenyIcmpMessageCode.IsNull() && data.Sequences[j].DenyIcmpMessageCode.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp/message-code", predicates))
 				}
@@ -6744,6 +6811,9 @@ func (data *IPv4AccessList) addDeletedItemsXML(ctx context.Context, state IPv4Ac
 				}
 				if !state.Sequences[i].PermitIgmpType.IsNull() && data.Sequences[j].PermitIgmpType.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/igmp-type", predicates))
+				}
+				if !state.Sequences[i].PermitTcpFlagsBits.IsNull() && data.Sequences[j].PermitTcpFlagsBits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/tcp-flags/tcp-bits", predicates))
 				}
 				if !state.Sequences[i].PermitIcmpMessageCode.IsNull() && data.Sequences[j].PermitIcmpMessageCode.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/icmp/message-code", predicates))

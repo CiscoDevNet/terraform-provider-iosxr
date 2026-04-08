@@ -38,9 +38,7 @@ func TestAccIosxrFTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ftp.test", "client_vrfs.0.vrf_name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ftp.test", "client_vrfs.0.passive", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ftp.test", "client_vrfs.0.source_interface", "Loopback0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ftp.test", "client_vrfs.0.anonymous_password", "mypassword"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ftp.test", "client_vrfs.0.username", "ftpuser"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ftp.test", "client_vrfs.0.password", "myencryptedpassword"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{

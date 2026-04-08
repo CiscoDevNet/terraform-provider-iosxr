@@ -90,6 +90,8 @@ type IPv6AccessListSequences struct {
 	PermitIcmpMessageTypeName       types.String `tfsdk:"permit_icmp_message_type_name"`
 	PermitIcmpMessageType           types.Int64  `tfsdk:"permit_icmp_message_type"`
 	PermitIcmpMessageCode           types.Int64  `tfsdk:"permit_icmp_message_code"`
+	PermitTcpFlagsBits              types.String `tfsdk:"permit_tcp_flags_bits"`
+	PermitHeaders                   types.String `tfsdk:"permit_headers"`
 	PermitDscp                      types.String `tfsdk:"permit_dscp"`
 	PermitDscpEq                    types.String `tfsdk:"permit_dscp_eq"`
 	PermitDscpGt                    types.String `tfsdk:"permit_dscp_gt"`
@@ -164,6 +166,8 @@ type IPv6AccessListSequences struct {
 	DenyIcmpMessageTypeName         types.String `tfsdk:"deny_icmp_message_type_name"`
 	DenyIcmpMessageType             types.Int64  `tfsdk:"deny_icmp_message_type"`
 	DenyIcmpMessageCode             types.Int64  `tfsdk:"deny_icmp_message_code"`
+	DenyTcpFlagsBits                types.String `tfsdk:"deny_tcp_flags_bits"`
+	DenyHeaders                     types.String `tfsdk:"deny_headers"`
 	DenyDscp                        types.String `tfsdk:"deny_dscp"`
 	DenyDscpEq                      types.String `tfsdk:"deny_dscp_eq"`
 	DenyDscpGt                      types.String `tfsdk:"deny_dscp_gt"`
@@ -351,6 +355,12 @@ func (data IPv6AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.PermitIcmpMessageCode.IsNull() && !item.PermitIcmpMessageCode.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.icmp.message-code", strconv.FormatInt(item.PermitIcmpMessageCode.ValueInt64(), 10))
+			}
+			if !item.PermitTcpFlagsBits.IsNull() && !item.PermitTcpFlagsBits.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.tcp-flags.tcp-bits", item.PermitTcpFlagsBits.ValueString())
+			}
+			if !item.PermitHeaders.IsNull() && !item.PermitHeaders.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.headers", item.PermitHeaders.ValueString())
 			}
 			if !item.PermitDscp.IsNull() && !item.PermitDscp.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.dscp-value", item.PermitDscp.ValueString())
@@ -583,6 +593,12 @@ func (data IPv6AccessList) toBody(ctx context.Context) string {
 			}
 			if !item.DenyIcmpMessageCode.IsNull() && !item.DenyIcmpMessageCode.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp.message-code", strconv.FormatInt(item.DenyIcmpMessageCode.ValueInt64(), 10))
+			}
+			if !item.DenyTcpFlagsBits.IsNull() && !item.DenyTcpFlagsBits.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.tcp-flags.tcp-bits", item.DenyTcpFlagsBits.ValueString())
+			}
+			if !item.DenyHeaders.IsNull() && !item.DenyHeaders.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.headers", item.DenyHeaders.ValueString())
 			}
 			if !item.DenyDscp.IsNull() && !item.DenyDscp.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.dscp-value", item.DenyDscp.ValueString())
@@ -923,6 +939,16 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Value(value.Int())
 		} else {
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Null()
+		}
+		if value := r.Get("permit.tcp-flags.tcp-bits"); value.Exists() && !data.Sequences[i].PermitTcpFlagsBits.IsNull() {
+			data.Sequences[i].PermitTcpFlagsBits = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].PermitTcpFlagsBits = types.StringNull()
+		}
+		if value := r.Get("permit.headers"); value.Exists() && !data.Sequences[i].PermitHeaders.IsNull() {
+			data.Sequences[i].PermitHeaders = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].PermitHeaders = types.StringNull()
 		}
 		if value := r.Get("permit.dscp.dscp-value"); value.Exists() && !data.Sequences[i].PermitDscp.IsNull() {
 			data.Sequences[i].PermitDscp = types.StringValue(value.String())
@@ -1329,6 +1355,16 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyIcmpMessageCode = types.Int64Null()
 		}
+		if value := r.Get("deny.tcp-flags.tcp-bits"); value.Exists() && !data.Sequences[i].DenyTcpFlagsBits.IsNull() {
+			data.Sequences[i].DenyTcpFlagsBits = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].DenyTcpFlagsBits = types.StringNull()
+		}
+		if value := r.Get("deny.headers"); value.Exists() && !data.Sequences[i].DenyHeaders.IsNull() {
+			data.Sequences[i].DenyHeaders = types.StringValue(value.String())
+		} else {
+			data.Sequences[i].DenyHeaders = types.StringNull()
+		}
 		if value := r.Get("deny.dscp.dscp-value"); value.Exists() && !data.Sequences[i].DenyDscp.IsNull() {
 			data.Sequences[i].DenyDscp = types.StringValue(value.String())
 		} else {
@@ -1648,6 +1684,12 @@ func (data IPv6AccessList) toBodyXML(ctx context.Context) string {
 			if !item.PermitIcmpMessageCode.IsNull() && !item.PermitIcmpMessageCode.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/permit/icmp/message-code", strconv.FormatInt(item.PermitIcmpMessageCode.ValueInt64(), 10))
 			}
+			if !item.PermitTcpFlagsBits.IsNull() && !item.PermitTcpFlagsBits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/permit/tcp-flags/tcp-bits", item.PermitTcpFlagsBits.ValueString())
+			}
+			if !item.PermitHeaders.IsNull() && !item.PermitHeaders.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/permit/headers", item.PermitHeaders.ValueString())
+			}
 			if !item.PermitDscp.IsNull() && !item.PermitDscp.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/permit/dscp/dscp-value", item.PermitDscp.ValueString())
 			}
@@ -1879,6 +1921,12 @@ func (data IPv6AccessList) toBodyXML(ctx context.Context) string {
 			}
 			if !item.DenyIcmpMessageCode.IsNull() && !item.DenyIcmpMessageCode.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/deny/icmp/message-code", strconv.FormatInt(item.DenyIcmpMessageCode.ValueInt64(), 10))
+			}
+			if !item.DenyTcpFlagsBits.IsNull() && !item.DenyTcpFlagsBits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/deny/tcp-flags/tcp-bits", item.DenyTcpFlagsBits.ValueString())
+			}
+			if !item.DenyHeaders.IsNull() && !item.DenyHeaders.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/deny/headers", item.DenyHeaders.ValueString())
 			}
 			if !item.DenyDscp.IsNull() && !item.DenyDscp.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/deny/dscp/dscp-value", item.DenyDscp.ValueString())
@@ -2226,6 +2274,16 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Value(value.Int())
 		} else if data.Sequences[i].PermitIcmpMessageCode.IsNull() {
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "permit/tcp-flags/tcp-bits"); value.Exists() && !data.Sequences[i].PermitTcpFlagsBits.IsNull() {
+			data.Sequences[i].PermitTcpFlagsBits = types.StringValue(value.String())
+		} else if data.Sequences[i].PermitTcpFlagsBits.IsNull() {
+			data.Sequences[i].PermitTcpFlagsBits = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "permit/headers"); value.Exists() && !data.Sequences[i].PermitHeaders.IsNull() {
+			data.Sequences[i].PermitHeaders = types.StringValue(value.String())
+		} else if data.Sequences[i].PermitHeaders.IsNull() {
+			data.Sequences[i].PermitHeaders = types.StringNull()
 		}
 		if value := helpers.GetFromXPath(r, "permit/dscp/dscp-value"); value.Exists() && !data.Sequences[i].PermitDscp.IsNull() {
 			data.Sequences[i].PermitDscp = types.StringValue(value.String())
@@ -2632,6 +2690,16 @@ func (data *IPv6AccessList) updateFromBodyXML(ctx context.Context, res xmldot.Re
 		} else if data.Sequences[i].DenyIcmpMessageCode.IsNull() {
 			data.Sequences[i].DenyIcmpMessageCode = types.Int64Null()
 		}
+		if value := helpers.GetFromXPath(r, "deny/tcp-flags/tcp-bits"); value.Exists() && !data.Sequences[i].DenyTcpFlagsBits.IsNull() {
+			data.Sequences[i].DenyTcpFlagsBits = types.StringValue(value.String())
+		} else if data.Sequences[i].DenyTcpFlagsBits.IsNull() {
+			data.Sequences[i].DenyTcpFlagsBits = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "deny/headers"); value.Exists() && !data.Sequences[i].DenyHeaders.IsNull() {
+			data.Sequences[i].DenyHeaders = types.StringValue(value.String())
+		} else if data.Sequences[i].DenyHeaders.IsNull() {
+			data.Sequences[i].DenyHeaders = types.StringNull()
+		}
 		if value := helpers.GetFromXPath(r, "deny/dscp/dscp-value"); value.Exists() && !data.Sequences[i].DenyDscp.IsNull() {
 			data.Sequences[i].DenyDscp = types.StringValue(value.String())
 		} else if data.Sequences[i].DenyDscp.IsNull() {
@@ -2961,6 +3029,12 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("permit.icmp.message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("permit.tcp-flags.tcp-bits"); cValue.Exists() {
+				item.PermitTcpFlagsBits = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.headers"); cValue.Exists() {
+				item.PermitHeaders = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("permit.dscp.dscp-value"); cValue.Exists() {
 				item.PermitDscp = types.StringValue(cValue.String())
 			}
@@ -3197,6 +3271,12 @@ func (data *IPv6AccessList) fromBody(ctx context.Context, res gjson.Result) {
 			}
 			if cValue := v.Get("deny.icmp.message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.tcp-flags.tcp-bits"); cValue.Exists() {
+				item.DenyTcpFlagsBits = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.headers"); cValue.Exists() {
+				item.DenyHeaders = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.dscp.dscp-value"); cValue.Exists() {
 				item.DenyDscp = types.StringValue(cValue.String())
@@ -3447,6 +3527,12 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			if cValue := v.Get("permit.icmp.message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("permit.tcp-flags.tcp-bits"); cValue.Exists() {
+				item.PermitTcpFlagsBits = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.headers"); cValue.Exists() {
+				item.PermitHeaders = types.StringValue(cValue.String())
+			}
 			if cValue := v.Get("permit.dscp.dscp-value"); cValue.Exists() {
 				item.PermitDscp = types.StringValue(cValue.String())
 			}
@@ -3678,6 +3764,12 @@ func (data *IPv6AccessListData) fromBody(ctx context.Context, res gjson.Result) 
 			}
 			if cValue := v.Get("deny.icmp.message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.tcp-flags.tcp-bits"); cValue.Exists() {
+				item.DenyTcpFlagsBits = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.headers"); cValue.Exists() {
+				item.DenyHeaders = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.dscp.dscp-value"); cValue.Exists() {
 				item.DenyDscp = types.StringValue(cValue.String())
@@ -3914,6 +4006,12 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "permit/icmp/message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "permit/tcp-flags/tcp-bits"); cValue.Exists() {
+				item.PermitTcpFlagsBits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "permit/headers"); cValue.Exists() {
+				item.PermitHeaders = types.StringValue(cValue.String())
+			}
 			if cValue := helpers.GetFromXPath(v, "permit/dscp/dscp-value"); cValue.Exists() {
 				item.PermitDscp = types.StringValue(cValue.String())
 			}
@@ -4145,6 +4243,12 @@ func (data *IPv6AccessList) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/icmp/message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "deny/tcp-flags/tcp-bits"); cValue.Exists() {
+				item.DenyTcpFlagsBits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "deny/headers"); cValue.Exists() {
+				item.DenyHeaders = types.StringValue(cValue.String())
 			}
 			if cValue := helpers.GetFromXPath(v, "deny/dscp/dscp-value"); cValue.Exists() {
 				item.DenyDscp = types.StringValue(cValue.String())
@@ -4381,6 +4485,12 @@ func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "permit/icmp/message-code"); cValue.Exists() {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "permit/tcp-flags/tcp-bits"); cValue.Exists() {
+				item.PermitTcpFlagsBits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "permit/headers"); cValue.Exists() {
+				item.PermitHeaders = types.StringValue(cValue.String())
+			}
 			if cValue := helpers.GetFromXPath(v, "permit/dscp/dscp-value"); cValue.Exists() {
 				item.PermitDscp = types.StringValue(cValue.String())
 			}
@@ -4613,6 +4723,12 @@ func (data *IPv6AccessListData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "deny/icmp/message-code"); cValue.Exists() {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "deny/tcp-flags/tcp-bits"); cValue.Exists() {
+				item.DenyTcpFlagsBits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "deny/headers"); cValue.Exists() {
+				item.DenyHeaders = types.StringValue(cValue.String())
+			}
 			if cValue := helpers.GetFromXPath(v, "deny/dscp/dscp-value"); cValue.Exists() {
 				item.DenyDscp = types.StringValue(cValue.String())
 			}
@@ -4843,6 +4959,12 @@ func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6Acces
 				if !state.Sequences[i].DenyDscp.IsNull() && data.Sequences[j].DenyDscp.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/dscp/dscp-value", state.getPath(), keyString))
 				}
+				if !state.Sequences[i].DenyHeaders.IsNull() && data.Sequences[j].DenyHeaders.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/headers", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].DenyTcpFlagsBits.IsNull() && data.Sequences[j].DenyTcpFlagsBits.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/tcp-flags/tcp-bits", state.getPath(), keyString))
+				}
 				if !state.Sequences[i].DenyIcmpMessageCode.IsNull() && data.Sequences[j].DenyIcmpMessageCode.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/deny/icmp/message-code", state.getPath(), keyString))
 				}
@@ -5064,6 +5186,12 @@ func (data *IPv6AccessList) getDeletedItems(ctx context.Context, state IPv6Acces
 				}
 				if !state.Sequences[i].PermitDscp.IsNull() && data.Sequences[j].PermitDscp.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/dscp/dscp-value", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitHeaders.IsNull() && data.Sequences[j].PermitHeaders.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/headers", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].PermitTcpFlagsBits.IsNull() && data.Sequences[j].PermitTcpFlagsBits.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/tcp-flags/tcp-bits", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].PermitIcmpMessageCode.IsNull() && data.Sequences[j].PermitIcmpMessageCode.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permit/icmp/message-code", state.getPath(), keyString))
@@ -5430,6 +5558,12 @@ func (data *IPv6AccessList) addDeletedItemsXML(ctx context.Context, state IPv6Ac
 				if !state.Sequences[i].DenyDscp.IsNull() && data.Sequences[j].DenyDscp.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/dscp/dscp-value", predicates))
 				}
+				if !state.Sequences[i].DenyHeaders.IsNull() && data.Sequences[j].DenyHeaders.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/headers", predicates))
+				}
+				if !state.Sequences[i].DenyTcpFlagsBits.IsNull() && data.Sequences[j].DenyTcpFlagsBits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/tcp-flags/tcp-bits", predicates))
+				}
 				if !state.Sequences[i].DenyIcmpMessageCode.IsNull() && data.Sequences[j].DenyIcmpMessageCode.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/deny/icmp/message-code", predicates))
 				}
@@ -5656,6 +5790,12 @@ func (data *IPv6AccessList) addDeletedItemsXML(ctx context.Context, state IPv6Ac
 				}
 				if !state.Sequences[i].PermitDscp.IsNull() && data.Sequences[j].PermitDscp.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/dscp/dscp-value", predicates))
+				}
+				if !state.Sequences[i].PermitHeaders.IsNull() && data.Sequences[j].PermitHeaders.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/headers", predicates))
+				}
+				if !state.Sequences[i].PermitTcpFlagsBits.IsNull() && data.Sequences[j].PermitTcpFlagsBits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/tcp-flags/tcp-bits", predicates))
 				}
 				if !state.Sequences[i].PermitIcmpMessageCode.IsNull() && data.Sequences[j].PermitIcmpMessageCode.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/sequences/sequence%v/permit/icmp/message-code", predicates))

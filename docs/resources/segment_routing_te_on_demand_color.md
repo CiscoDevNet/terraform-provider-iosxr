@@ -123,7 +123,7 @@ resource "iosxr_segment_routing_te_on_demand_color" "example" {
 - `maximum_sid_depth` (Number) Maximum SID Depth Configuration
   - Range: `1`-`255`
 - `pce_group` (String) Name of the PCE group - maximum 16 characters
-- `per_flow` (Boolean) True only
+- `per_flow` (Boolean) Policy per-flow configuration
 - `per_flow_forward_class_default` (Number) Default forward class entry
   - Range: `0`-`7`
 - `per_flow_forward_classes` (Attributes List) Policy per-flow forward class entry and colorForwardClass, Color (see [below for nested schema](#nestedatt--per_flow_forward_classes))

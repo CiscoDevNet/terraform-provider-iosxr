@@ -227,6 +227,10 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "ICMP message code",
 							Computed:            true,
 						},
+						"permit_tcp_flags_bits": schema.StringAttribute{
+							MarkdownDescription: "Space-separated list of TCP flags to match",
+							Computed:            true,
+						},
 						"permit_igmp_type": schema.StringAttribute{
 							MarkdownDescription: "Match on IGMP message",
 							Computed:            true,
@@ -561,6 +565,10 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"deny_icmp_message_code": schema.Int64Attribute{
 							MarkdownDescription: "ICMP message code",
+							Computed:            true,
+						},
+						"deny_tcp_flags_bits": schema.StringAttribute{
+							MarkdownDescription: "",
 							Computed:            true,
 						},
 						"deny_igmp_type": schema.StringAttribute{

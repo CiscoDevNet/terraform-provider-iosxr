@@ -13,23 +13,26 @@ resource "iosxr_router_static_ipv6_multicast" "example" {
   ]
   nexthop_interface_addresses = [
     {
-      interface_name  = "GigabitEthernet0/0/0/2"
-      address         = "2::2"
-      description     = "interface-description"
-      tag             = 103
-      distance_metric = 144
-      permanent       = true
-      metric          = 10
+      interface_name                   = "GigabitEthernet0/0/0/2"
+      address                          = "2::2"
+      bfd_fast_detect_minimum_interval = 100
+      bfd_fast_detect_multiplier       = 3
+      description                      = "interface-description"
+      tag                              = 103
+      distance_metric                  = 144
+      metric                           = 10
     }
   ]
   nexthop_addresses = [
     {
-      address         = "3::3"
-      description     = "ip-description"
-      tag             = 104
-      distance_metric = 155
-      track           = "TRACK1"
-      metric          = 10
+      address                          = "3::3"
+      bfd_fast_detect_minimum_interval = 100
+      bfd_fast_detect_multiplier       = 3
+      description                      = "ip-description"
+      tag                              = 104
+      distance_metric                  = 155
+      track                            = "TRACK1"
+      metric                           = 10
     }
   ]
   sr_policies = [
@@ -57,23 +60,26 @@ resource "iosxr_router_static_ipv6_multicast" "example" {
       ]
       nexthop_interface_addresses = [
         {
-          interface_name  = "GigabitEthernet0/0/0/4"
-          address         = "2::2"
-          description     = "interface-description"
-          tag             = 103
-          distance_metric = 144
-          permanent       = true
-          metric          = 10
+          interface_name                   = "GigabitEthernet0/0/0/4"
+          address                          = "2::2"
+          bfd_fast_detect_minimum_interval = 100
+          bfd_fast_detect_multiplier       = 3
+          description                      = "interface-description"
+          tag                              = 103
+          distance_metric                  = 144
+          metric                           = 10
         }
       ]
       nexthop_addresses = [
         {
-          address         = "3::3"
-          description     = "ip-description"
-          tag             = 104
-          distance_metric = 155
-          track           = "TRACK1"
-          metric          = 10
+          address                          = "3::3"
+          bfd_fast_detect_minimum_interval = 100
+          bfd_fast_detect_multiplier       = 3
+          description                      = "ip-description"
+          tag                              = 104
+          distance_metric                  = 155
+          track                            = "TRACK1"
+          metric                           = 10
         }
       ]
       sr_policies = [

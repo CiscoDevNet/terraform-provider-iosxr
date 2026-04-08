@@ -61,7 +61,7 @@ resource "iosxr_snmp_server" "example" {
   traps_mpls_traffic_eng_up                              = true
   traps_ntp                                              = true
   traps_bgp_cbgp_two_enable                              = true
-  traps_bgp_enable_cisco_bgp4_mib                        = true
+  traps_bgp_enable_updown                                = true
   traps_hsrp                                             = true
   traps_isis_database_overload                           = true
   traps_isis_manual_address_drops                        = true
@@ -111,9 +111,23 @@ resource "iosxr_snmp_server" "example" {
       address = "11.11.11.11"
       traps_unencrypted_strings = [
         {
-          community_string          = "COMMUNITY1"
-          udp_port                  = 1100
-          version_v3_security_level = "auth"
+          community_string = "COMMUNITY1"
+          udp_port         = 1100
+          version_v2c      = true
+        }
+      ]
+      traps_encrypted_default = [
+        {
+          community_string = "15021E0E082328"
+          udp_port         = 1100
+          version_v2c      = true
+        }
+      ]
+      traps_encrypted_aes = [
+        {
+          community_string = "06253E2C5A471E1C5E"
+          udp_port         = 1100
+          version_v2c      = true
         }
       ]
       informs_unencrypted_strings = [
@@ -121,6 +135,20 @@ resource "iosxr_snmp_server" "example" {
           community_string          = "COMMUNITY2"
           udp_port                  = 1100
           version_v3_security_level = "auth"
+        }
+      ]
+      informs_encrypted_default = [
+        {
+          community_string = "15021E0E082328"
+          udp_port         = 1100
+          version_v2c      = true
+        }
+      ]
+      informs_encrypted_aes = [
+        {
+          community_string = "06253E2C5A471E1C5E"
+          udp_port         = 1100
+          version_v2c      = true
         }
       ]
     }

@@ -344,7 +344,7 @@ func (d *SegmentRoutingTEPolicyDataSource) Schema(ctx context.Context, req datas
 							Computed:            true,
 						},
 						"per_flow": schema.BoolAttribute{
-							MarkdownDescription: "True only",
+							MarkdownDescription: "Policy per-flow configuration",
 							Computed:            true,
 						},
 						"per_flow_forward_class_default": schema.Int64Attribute{

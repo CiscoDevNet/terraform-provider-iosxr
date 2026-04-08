@@ -45,6 +45,7 @@ type InterfaceBundleEtherSubinterface struct {
 	Id                                                 types.String                                                                    `tfsdk:"id"`
 	DeleteMode                                         types.String                                                                    `tfsdk:"delete_mode"`
 	Name                                               types.String                                                                    `tfsdk:"name"`
+	L2transport                                        types.Bool                                                                      `tfsdk:"l2transport"`
 	PointToPoint                                       types.Bool                                                                      `tfsdk:"point_to_point"`
 	Multipoint                                         types.Bool                                                                      `tfsdk:"multipoint"`
 	Dampening                                          types.Bool                                                                      `tfsdk:"dampening"`
@@ -153,6 +154,7 @@ type InterfaceBundleEtherSubinterface struct {
 	Lldp                                               types.Bool                                                                      `tfsdk:"lldp"`
 	LldpTransmitDisable                                types.Bool                                                                      `tfsdk:"lldp_transmit_disable"`
 	LldpReceiveDisable                                 types.Bool                                                                      `tfsdk:"lldp_receive_disable"`
+	MonitorSessions                                    []InterfaceBundleEtherSubinterfaceMonitorSessions                               `tfsdk:"monitor_sessions"`
 	Ptp                                                types.Bool                                                                      `tfsdk:"ptp"`
 	PtpProfile                                         types.String                                                                    `tfsdk:"ptp_profile"`
 	PtpTransportIpv4                                   types.Bool                                                                      `tfsdk:"ptp_transport_ipv4"`
@@ -228,6 +230,7 @@ type InterfaceBundleEtherSubinterfaceData struct {
 	Device                                             types.String                                                                    `tfsdk:"device"`
 	Id                                                 types.String                                                                    `tfsdk:"id"`
 	Name                                               types.String                                                                    `tfsdk:"name"`
+	L2transport                                        types.Bool                                                                      `tfsdk:"l2transport"`
 	PointToPoint                                       types.Bool                                                                      `tfsdk:"point_to_point"`
 	Multipoint                                         types.Bool                                                                      `tfsdk:"multipoint"`
 	Dampening                                          types.Bool                                                                      `tfsdk:"dampening"`
@@ -336,6 +339,7 @@ type InterfaceBundleEtherSubinterfaceData struct {
 	Lldp                                               types.Bool                                                                      `tfsdk:"lldp"`
 	LldpTransmitDisable                                types.Bool                                                                      `tfsdk:"lldp_transmit_disable"`
 	LldpReceiveDisable                                 types.Bool                                                                      `tfsdk:"lldp_receive_disable"`
+	MonitorSessions                                    []InterfaceBundleEtherSubinterfaceMonitorSessions                               `tfsdk:"monitor_sessions"`
 	Ptp                                                types.Bool                                                                      `tfsdk:"ptp"`
 	PtpProfile                                         types.String                                                                    `tfsdk:"ptp_profile"`
 	PtpTransportIpv4                                   types.Bool                                                                      `tfsdk:"ptp_transport_ipv4"`
@@ -482,6 +486,17 @@ type InterfaceBundleEtherSubinterfaceFlowIpv6EgressMonitorSamplers struct {
 	MonitorMapName types.String `tfsdk:"monitor_map_name"`
 	SamplerMapName types.String `tfsdk:"sampler_map_name"`
 }
+type InterfaceBundleEtherSubinterfaceMonitorSessions struct {
+	SessionName     types.String `tfsdk:"session_name"`
+	Ethernet        types.Bool   `tfsdk:"ethernet"`
+	DirectionRxOnly types.Bool   `tfsdk:"direction_rx_only"`
+	DirectionTxOnly types.Bool   `tfsdk:"direction_tx_only"`
+	Acl             types.Bool   `tfsdk:"acl"`
+	AclIpv4Name     types.String `tfsdk:"acl_ipv4_name"`
+	AclIpv6Name     types.String `tfsdk:"acl_ipv6_name"`
+	MirrorFirst     types.Int64  `tfsdk:"mirror_first"`
+	MirrorInterval  types.String `tfsdk:"mirror_interval"`
+}
 type InterfaceBundleEtherSubinterfacePtpSlaveIpv4s struct {
 	Address       types.String `tfsdk:"address"`
 	NonNegotiated types.Bool   `tfsdk:"non_negotiated"`
@@ -580,6 +595,11 @@ func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context) string 
 	body := "{}"
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
 		body, _ = sjson.Set(body, "", data.Name.ValueString())
+	}
+	if !data.L2transport.IsNull() && !data.L2transport.IsUnknown() {
+		if data.L2transport.ValueBool() {
+			body, _ = sjson.Set(body, "sub-interface-type.l2transport", map[string]string{})
+		}
 	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.IsUnknown() {
 		if data.PointToPoint.ValueBool() {
@@ -1404,6 +1424,46 @@ func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context) string 
 			}
 		}
 	}
+	if len(data.MonitorSessions) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session", []interface{}{})
+		for index, item := range data.MonitorSessions {
+			if !item.SessionName.IsNull() && !item.SessionName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"+"."+strconv.Itoa(index)+"."+"session-name", item.SessionName.ValueString())
+			}
+			if !item.Ethernet.IsNull() && !item.Ethernet.IsUnknown() {
+				if item.Ethernet.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"+"."+strconv.Itoa(index)+"."+"ethernet", map[string]string{})
+				}
+			}
+			if !item.DirectionRxOnly.IsNull() && !item.DirectionRxOnly.IsUnknown() {
+				if item.DirectionRxOnly.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"+"."+strconv.Itoa(index)+"."+"direction.rx-only", map[string]string{})
+				}
+			}
+			if !item.DirectionTxOnly.IsNull() && !item.DirectionTxOnly.IsUnknown() {
+				if item.DirectionTxOnly.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"+"."+strconv.Itoa(index)+"."+"direction.tx-only", map[string]string{})
+				}
+			}
+			if !item.Acl.IsNull() && !item.Acl.IsUnknown() {
+				if item.Acl.ValueBool() {
+					body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"+"."+strconv.Itoa(index)+"."+"acl", map[string]string{})
+				}
+			}
+			if !item.AclIpv4Name.IsNull() && !item.AclIpv4Name.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"+"."+strconv.Itoa(index)+"."+"acl-ipv4.acl-name", item.AclIpv4Name.ValueString())
+			}
+			if !item.AclIpv6Name.IsNull() && !item.AclIpv6Name.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"+"."+strconv.Itoa(index)+"."+"acl-ipv6.acl-name", item.AclIpv6Name.ValueString())
+			}
+			if !item.MirrorFirst.IsNull() && !item.MirrorFirst.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"+"."+strconv.Itoa(index)+"."+"mirror.first", strconv.FormatInt(item.MirrorFirst.ValueInt64(), 10))
+			}
+			if !item.MirrorInterval.IsNull() && !item.MirrorInterval.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"+"."+strconv.Itoa(index)+"."+"mirror.interval", item.MirrorInterval.ValueString())
+			}
+		}
+	}
 	if len(data.PtpSlaveIpv4s) > 0 {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ptp-cfg:ptp.subordinate.ipv4s.ipv4-non-negotiated", []interface{}{})
 		for index, item := range data.PtpSlaveIpv4s {
@@ -1614,6 +1674,17 @@ func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context) string 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *InterfaceBundleEtherSubinterface) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.L2transport.IsNull() {
+			data.L2transport = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.L2transport.IsNull() {
+			data.L2transport = types.BoolNull()
+		}
+	}
 	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PointToPoint.IsNull() {
@@ -2980,6 +3051,103 @@ func (data *InterfaceBundleEtherSubinterface) updateFromBody(ctx context.Context
 			data.LldpReceiveDisable = types.BoolNull()
 		}
 	}
+	for i := range data.MonitorSessions {
+		keys := [...]string{"session-name"}
+		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("session-name"); value.Exists() && !data.MonitorSessions[i].SessionName.IsNull() {
+			data.MonitorSessions[i].SessionName = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].SessionName = types.StringNull()
+		}
+		if value := r.Get("ethernet"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].Ethernet.IsNull() {
+				data.MonitorSessions[i].Ethernet = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].Ethernet.IsNull() {
+				data.MonitorSessions[i].Ethernet = types.BoolNull()
+			}
+		}
+		if value := r.Get("direction.rx-only"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DirectionRxOnly.IsNull() {
+				data.MonitorSessions[i].DirectionRxOnly = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DirectionRxOnly.IsNull() {
+				data.MonitorSessions[i].DirectionRxOnly = types.BoolNull()
+			}
+		}
+		if value := r.Get("direction.tx-only"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DirectionTxOnly.IsNull() {
+				data.MonitorSessions[i].DirectionTxOnly = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DirectionTxOnly.IsNull() {
+				data.MonitorSessions[i].DirectionTxOnly = types.BoolNull()
+			}
+		}
+		if value := r.Get("acl"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].Acl.IsNull() {
+				data.MonitorSessions[i].Acl = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].Acl.IsNull() {
+				data.MonitorSessions[i].Acl = types.BoolNull()
+			}
+		}
+		if value := r.Get("acl-ipv4.acl-name"); value.Exists() && !data.MonitorSessions[i].AclIpv4Name.IsNull() {
+			data.MonitorSessions[i].AclIpv4Name = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].AclIpv4Name = types.StringNull()
+		}
+		if value := r.Get("acl-ipv6.acl-name"); value.Exists() && !data.MonitorSessions[i].AclIpv6Name.IsNull() {
+			data.MonitorSessions[i].AclIpv6Name = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].AclIpv6Name = types.StringNull()
+		}
+		if value := r.Get("mirror.first"); value.Exists() && !data.MonitorSessions[i].MirrorFirst.IsNull() {
+			data.MonitorSessions[i].MirrorFirst = types.Int64Value(value.Int())
+		} else {
+			data.MonitorSessions[i].MirrorFirst = types.Int64Null()
+		}
+		if value := r.Get("mirror.interval"); value.Exists() && !data.MonitorSessions[i].MirrorInterval.IsNull() {
+			data.MonitorSessions[i].MirrorInterval = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].MirrorInterval = types.StringNull()
+		}
+	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ptp-cfg:ptp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ptp.IsNull() {
@@ -3981,6 +4149,11 @@ func (data *InterfaceBundleEtherSubinterface) updateFromBody(ctx context.Context
 
 func (data InterfaceBundleEtherSubinterface) toBodyXML(ctx context.Context) string {
 	body := netconf.Body{}
+	if !data.L2transport.IsNull() && !data.L2transport.IsUnknown() {
+		if data.L2transport.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/sub-interface-type/l2transport", "")
+		}
+	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.IsUnknown() {
 		if data.PointToPoint.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/sub-interface-type/point-to-point", "")
@@ -4040,6 +4213,46 @@ func (data InterfaceBundleEtherSubinterface) toBodyXML(ctx context.Context) stri
 	}
 	if !data.MplsMtu.IsNull() && !data.MplsMtu.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu", strconv.FormatInt(data.MplsMtu.ValueInt64(), 10))
+	}
+	if len(data.MonitorSessions) > 0 {
+		for _, item := range data.MonitorSessions {
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session"
+			if !item.SessionName.IsNull() && !item.SessionName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/session-name", item.SessionName.ValueString())
+			}
+			if !item.Ethernet.IsNull() && !item.Ethernet.IsUnknown() {
+				if item.Ethernet.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/ethernet", "")
+				}
+			}
+			if !item.DirectionRxOnly.IsNull() && !item.DirectionRxOnly.IsUnknown() {
+				if item.DirectionRxOnly.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/direction/rx-only", "")
+				}
+			}
+			if !item.DirectionTxOnly.IsNull() && !item.DirectionTxOnly.IsUnknown() {
+				if item.DirectionTxOnly.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/direction/tx-only", "")
+				}
+			}
+			if !item.Acl.IsNull() && !item.Acl.IsUnknown() {
+				if item.Acl.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/acl", "")
+				}
+			}
+			if !item.AclIpv4Name.IsNull() && !item.AclIpv4Name.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/acl-ipv4/acl-name", item.AclIpv4Name.ValueString())
+			}
+			if !item.AclIpv6Name.IsNull() && !item.AclIpv6Name.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/acl-ipv6/acl-name", item.AclIpv6Name.ValueString())
+			}
+			if !item.MirrorFirst.IsNull() && !item.MirrorFirst.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/mirror/first", strconv.FormatInt(item.MirrorFirst.ValueInt64(), 10))
+			}
+			if !item.MirrorInterval.IsNull() && !item.MirrorInterval.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/mirror/interval", item.MirrorInterval.ValueString())
+			}
+		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -5200,6 +5413,17 @@ func (data InterfaceBundleEtherSubinterface) toBodyXML(ctx context.Context) stri
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *InterfaceBundleEtherSubinterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sub-interface-type/l2transport"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.L2transport.IsNull() {
+			data.L2transport = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.L2transport.IsNull() {
+			data.L2transport = types.BoolNull()
+		}
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sub-interface-type/point-to-point"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PointToPoint.IsNull() {
@@ -6566,6 +6790,103 @@ func (data *InterfaceBundleEtherSubinterface) updateFromBodyXML(ctx context.Cont
 			data.LldpReceiveDisable = types.BoolNull()
 		}
 	}
+	for i := range data.MonitorSessions {
+		keys := [...]string{"session-name"}
+		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "session-name"); value.Exists() && !data.MonitorSessions[i].SessionName.IsNull() {
+			data.MonitorSessions[i].SessionName = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].SessionName.IsNull() {
+			data.MonitorSessions[i].SessionName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ethernet"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].Ethernet.IsNull() {
+				data.MonitorSessions[i].Ethernet = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].Ethernet.IsNull() {
+				data.MonitorSessions[i].Ethernet = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "direction/rx-only"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DirectionRxOnly.IsNull() {
+				data.MonitorSessions[i].DirectionRxOnly = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DirectionRxOnly.IsNull() {
+				data.MonitorSessions[i].DirectionRxOnly = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "direction/tx-only"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DirectionTxOnly.IsNull() {
+				data.MonitorSessions[i].DirectionTxOnly = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DirectionTxOnly.IsNull() {
+				data.MonitorSessions[i].DirectionTxOnly = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "acl"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].Acl.IsNull() {
+				data.MonitorSessions[i].Acl = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].Acl.IsNull() {
+				data.MonitorSessions[i].Acl = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "acl-ipv4/acl-name"); value.Exists() && !data.MonitorSessions[i].AclIpv4Name.IsNull() {
+			data.MonitorSessions[i].AclIpv4Name = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].AclIpv4Name.IsNull() {
+			data.MonitorSessions[i].AclIpv4Name = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "acl-ipv6/acl-name"); value.Exists() && !data.MonitorSessions[i].AclIpv6Name.IsNull() {
+			data.MonitorSessions[i].AclIpv6Name = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].AclIpv6Name.IsNull() {
+			data.MonitorSessions[i].AclIpv6Name = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "mirror/first"); value.Exists() && !data.MonitorSessions[i].MirrorFirst.IsNull() {
+			data.MonitorSessions[i].MirrorFirst = types.Int64Value(value.Int())
+		} else if data.MonitorSessions[i].MirrorFirst.IsNull() {
+			data.MonitorSessions[i].MirrorFirst = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "mirror/interval"); value.Exists() && !data.MonitorSessions[i].MirrorInterval.IsNull() {
+			data.MonitorSessions[i].MirrorInterval = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].MirrorInterval.IsNull() {
+			data.MonitorSessions[i].MirrorInterval = types.StringNull()
+		}
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ptp.IsNull() {
@@ -7601,6 +7922,11 @@ func (data *InterfaceBundleEtherSubinterfaceData) fromBody(ctx context.Context, 
 	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
 		prefix = ""
 	}
+	if value := res.Get(prefix + "sub-interface-type.l2transport"); value.Exists() {
+		data.L2transport = types.BoolValue(true)
+	} else {
+		data.L2transport = types.BoolValue(false)
+	}
 	if value := res.Get(prefix + "sub-interface-type.point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
@@ -8252,6 +8578,49 @@ func (data *InterfaceBundleEtherSubinterfaceData) fromBody(ctx context.Context, 
 	} else {
 		data.LldpReceiveDisable = types.BoolValue(false)
 	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"); value.Exists() {
+		data.MonitorSessions = make([]InterfaceBundleEtherSubinterfaceMonitorSessions, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceBundleEtherSubinterfaceMonitorSessions{}
+			if cValue := v.Get("session-name"); cValue.Exists() {
+				item.SessionName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ethernet"); cValue.Exists() {
+				item.Ethernet = types.BoolValue(true)
+			} else {
+				item.Ethernet = types.BoolValue(false)
+			}
+			if cValue := v.Get("direction.rx-only"); cValue.Exists() {
+				item.DirectionRxOnly = types.BoolValue(true)
+			} else {
+				item.DirectionRxOnly = types.BoolValue(false)
+			}
+			if cValue := v.Get("direction.tx-only"); cValue.Exists() {
+				item.DirectionTxOnly = types.BoolValue(true)
+			} else {
+				item.DirectionTxOnly = types.BoolValue(false)
+			}
+			if cValue := v.Get("acl"); cValue.Exists() {
+				item.Acl = types.BoolValue(true)
+			} else {
+				item.Acl = types.BoolValue(false)
+			}
+			if cValue := v.Get("acl-ipv4.acl-name"); cValue.Exists() {
+				item.AclIpv4Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("acl-ipv6.acl-name"); cValue.Exists() {
+				item.AclIpv6Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("mirror.first"); cValue.Exists() {
+				item.MirrorFirst = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("mirror.interval"); cValue.Exists() {
+				item.MirrorInterval = types.StringValue(cValue.String())
+			}
+			data.MonitorSessions = append(data.MonitorSessions, item)
+			return true
+		})
+	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-ptp-cfg:ptp"); value.Exists() {
 		data.Ptp = types.BoolValue(true)
 	} else {
@@ -8717,6 +9086,11 @@ func (data *InterfaceBundleEtherSubinterfaceData) fromBody(ctx context.Context, 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *InterfaceBundleEtherSubinterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sub-interface-type/l2transport"); value.Exists() {
+		data.L2transport = types.BoolValue(true)
+	} else {
+		data.L2transport = types.BoolValue(false)
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sub-interface-type/point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
@@ -9367,6 +9741,49 @@ func (data *InterfaceBundleEtherSubinterface) fromBodyXML(ctx context.Context, r
 		data.LldpReceiveDisable = types.BoolValue(true)
 	} else {
 		data.LldpReceiveDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session"); value.Exists() {
+		data.MonitorSessions = make([]InterfaceBundleEtherSubinterfaceMonitorSessions, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := InterfaceBundleEtherSubinterfaceMonitorSessions{}
+			if cValue := helpers.GetFromXPath(v, "session-name"); cValue.Exists() {
+				item.SessionName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet"); cValue.Exists() {
+				item.Ethernet = types.BoolValue(true)
+			} else {
+				item.Ethernet = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "direction/rx-only"); cValue.Exists() {
+				item.DirectionRxOnly = types.BoolValue(true)
+			} else {
+				item.DirectionRxOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "direction/tx-only"); cValue.Exists() {
+				item.DirectionTxOnly = types.BoolValue(true)
+			} else {
+				item.DirectionTxOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "acl"); cValue.Exists() {
+				item.Acl = types.BoolValue(true)
+			} else {
+				item.Acl = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "acl-ipv4/acl-name"); cValue.Exists() {
+				item.AclIpv4Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "acl-ipv6/acl-name"); cValue.Exists() {
+				item.AclIpv6Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "mirror/first"); cValue.Exists() {
+				item.MirrorFirst = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "mirror/interval"); cValue.Exists() {
+				item.MirrorInterval = types.StringValue(cValue.String())
+			}
+			data.MonitorSessions = append(data.MonitorSessions, item)
+			return true
+		})
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp"); value.Exists() {
 		data.Ptp = types.BoolValue(true)
@@ -9833,6 +10250,11 @@ func (data *InterfaceBundleEtherSubinterface) fromBodyXML(ctx context.Context, r
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *InterfaceBundleEtherSubinterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sub-interface-type/l2transport"); value.Exists() {
+		data.L2transport = types.BoolValue(true)
+	} else {
+		data.L2transport = types.BoolValue(false)
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sub-interface-type/point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
@@ -10483,6 +10905,49 @@ func (data *InterfaceBundleEtherSubinterfaceData) fromBodyXML(ctx context.Contex
 		data.LldpReceiveDisable = types.BoolValue(true)
 	} else {
 		data.LldpReceiveDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session"); value.Exists() {
+		data.MonitorSessions = make([]InterfaceBundleEtherSubinterfaceMonitorSessions, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := InterfaceBundleEtherSubinterfaceMonitorSessions{}
+			if cValue := helpers.GetFromXPath(v, "session-name"); cValue.Exists() {
+				item.SessionName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet"); cValue.Exists() {
+				item.Ethernet = types.BoolValue(true)
+			} else {
+				item.Ethernet = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "direction/rx-only"); cValue.Exists() {
+				item.DirectionRxOnly = types.BoolValue(true)
+			} else {
+				item.DirectionRxOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "direction/tx-only"); cValue.Exists() {
+				item.DirectionTxOnly = types.BoolValue(true)
+			} else {
+				item.DirectionTxOnly = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "acl"); cValue.Exists() {
+				item.Acl = types.BoolValue(true)
+			} else {
+				item.Acl = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "acl-ipv4/acl-name"); cValue.Exists() {
+				item.AclIpv4Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "acl-ipv6/acl-name"); cValue.Exists() {
+				item.AclIpv6Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "mirror/first"); cValue.Exists() {
+				item.MirrorFirst = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "mirror/interval"); cValue.Exists() {
+				item.MirrorInterval = types.StringValue(cValue.String())
+			}
+			data.MonitorSessions = append(data.MonitorSessions, item)
+			return true
+		})
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp"); value.Exists() {
 		data.Ptp = types.BoolValue(true)
@@ -11469,6 +11934,60 @@ func (data *InterfaceBundleEtherSubinterface) getDeletedItems(ctx context.Contex
 	if !state.Ptp.IsNull() && data.Ptp.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-ptp-cfg:ptp", state.getPath()))
 	}
+	for i := range state.MonitorSessions {
+		keys := [...]string{"session-name"}
+		stateKeyValues := [...]string{state.MonitorSessions[i].SessionName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MonitorSessions[i].SessionName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MonitorSessions {
+			found = true
+			if state.MonitorSessions[i].SessionName.ValueString() != data.MonitorSessions[j].SessionName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.MonitorSessions[i].MirrorInterval.IsNull() && data.MonitorSessions[j].MirrorInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/mirror/interval", state.getPath(), keyString))
+				}
+				if !state.MonitorSessions[i].MirrorFirst.IsNull() && data.MonitorSessions[j].MirrorFirst.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/mirror/first", state.getPath(), keyString))
+				}
+				if !state.MonitorSessions[i].AclIpv6Name.IsNull() && data.MonitorSessions[j].AclIpv6Name.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/acl-ipv6/acl-name", state.getPath(), keyString))
+				}
+				if !state.MonitorSessions[i].AclIpv4Name.IsNull() && data.MonitorSessions[j].AclIpv4Name.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/acl-ipv4/acl-name", state.getPath(), keyString))
+				}
+				if !state.MonitorSessions[i].Acl.IsNull() && data.MonitorSessions[j].Acl.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/acl", state.getPath(), keyString))
+				}
+				if !state.MonitorSessions[i].DirectionTxOnly.IsNull() && data.MonitorSessions[j].DirectionTxOnly.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/direction/tx-only", state.getPath(), keyString))
+				}
+				if !state.MonitorSessions[i].DirectionRxOnly.IsNull() && data.MonitorSessions[j].DirectionRxOnly.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/direction/rx-only", state.getPath(), keyString))
+				}
+				if !state.MonitorSessions[i].Ethernet.IsNull() && data.MonitorSessions[j].Ethernet.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/ethernet", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v", state.getPath(), keyString))
+		}
+	}
 	if !state.LldpReceiveDisable.IsNull() && data.LldpReceiveDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable", state.getPath()))
 	}
@@ -12363,6 +12882,9 @@ func (data *InterfaceBundleEtherSubinterface) getDeletedItems(ctx context.Contex
 	if !state.PointToPoint.IsNull() && data.PointToPoint.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/point-to-point", state.getPath()))
 	}
+	if !state.L2transport.IsNull() && data.L2transport.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/l2transport", state.getPath()))
+	}
 	return deletedItems
 }
 
@@ -12730,6 +13252,42 @@ func (data *InterfaceBundleEtherSubinterface) getEmptyLeafsDelete(ctx context.Co
 	if !data.Ptp.IsNull() && !data.Ptp.ValueBool() {
 		if state != nil && !state.Ptp.IsNull() && state.Ptp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-ptp-cfg:ptp", data.getXPath()))
+		}
+	}
+	for i := range data.MonitorSessions {
+		keys := [...]string{"session-name"}
+		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		// Only delete if state has true and plan has false
+		if !data.MonitorSessions[i].Acl.IsNull() && !data.MonitorSessions[i].Acl.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].Acl.IsNull() && state.MonitorSessions[i].Acl.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/acl", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.MonitorSessions[i].DirectionTxOnly.IsNull() && !data.MonitorSessions[i].DirectionTxOnly.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DirectionTxOnly.IsNull() && state.MonitorSessions[i].DirectionTxOnly.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/direction/tx-only", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.MonitorSessions[i].DirectionRxOnly.IsNull() && !data.MonitorSessions[i].DirectionRxOnly.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DirectionRxOnly.IsNull() && state.MonitorSessions[i].DirectionRxOnly.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/direction/rx-only", data.getXPath(), keyString))
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.MonitorSessions[i].Ethernet.IsNull() && !data.MonitorSessions[i].Ethernet.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].Ethernet.IsNull() && state.MonitorSessions[i].Ethernet.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/ethernet", data.getXPath(), keyString))
+			}
 		}
 	}
 	// Only delete if state has true and plan has false
@@ -13121,6 +13679,12 @@ func (data *InterfaceBundleEtherSubinterface) getEmptyLeafsDelete(ctx context.Co
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/point-to-point", data.getXPath()))
 		}
 	}
+	// Only delete if state has true and plan has false
+	if !data.L2transport.IsNull() && !data.L2transport.ValueBool() {
+		if state != nil && !state.L2transport.IsNull() && state.L2transport.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/l2transport", data.getXPath()))
+		}
+	}
 	return emptyLeafsDelete
 }
 
@@ -13359,6 +13923,12 @@ func (data *InterfaceBundleEtherSubinterface) getDeletePaths(ctx context.Context
 	}
 	if !data.Ptp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-ptp-cfg:ptp", data.getPath()))
+	}
+	for i := range data.MonitorSessions {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[session-name=" + data.MonitorSessions[i].SessionName.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v", data.getPath(), keyPath))
 	}
 	if !data.LldpReceiveDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable", data.getPath()))
@@ -13724,6 +14294,9 @@ func (data *InterfaceBundleEtherSubinterface) getDeletePaths(ctx context.Context
 	}
 	if !data.PointToPoint.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/point-to-point", data.getPath()))
+	}
+	if !data.L2transport.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/l2transport", data.getPath()))
 	}
 
 	return deletePaths
@@ -15060,6 +15633,64 @@ func (data *InterfaceBundleEtherSubinterface) addDeletedItemsXML(ctx context.Con
 		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
 			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.MonitorSessions {
+		stateKeys := [...]string{"session-name"}
+		stateKeyValues := [...]string{state.MonitorSessions[i].SessionName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MonitorSessions[i].SessionName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MonitorSessions {
+			found = true
+			if state.MonitorSessions[i].SessionName.ValueString() != data.MonitorSessions[j].SessionName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.MonitorSessions[i].MirrorInterval.IsNull() && data.MonitorSessions[j].MirrorInterval.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/mirror/interval", predicates))
+				}
+				if !state.MonitorSessions[i].MirrorFirst.IsNull() && data.MonitorSessions[j].MirrorFirst.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/mirror/first", predicates))
+				}
+				if !state.MonitorSessions[i].AclIpv6Name.IsNull() && data.MonitorSessions[j].AclIpv6Name.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/acl-ipv6/acl-name", predicates))
+				}
+				if !state.MonitorSessions[i].AclIpv4Name.IsNull() && data.MonitorSessions[j].AclIpv4Name.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/acl-ipv4/acl-name", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].Acl.IsNull() && state.MonitorSessions[i].Acl.ValueBool() && data.MonitorSessions[j].Acl.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/acl", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].DirectionTxOnly.IsNull() && state.MonitorSessions[i].DirectionTxOnly.ValueBool() && data.MonitorSessions[j].DirectionTxOnly.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/direction/tx-only", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].DirectionRxOnly.IsNull() && state.MonitorSessions[i].DirectionRxOnly.ValueBool() && data.MonitorSessions[j].DirectionRxOnly.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/direction/rx-only", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].Ethernet.IsNull() && state.MonitorSessions[i].Ethernet.ValueBool() && data.MonitorSessions[j].Ethernet.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v/ethernet", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v", predicates))
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
@@ -17370,6 +18001,22 @@ func (data *InterfaceBundleEtherSubinterface) addDeletedItemsXML(ctx context.Con
 			deletedPaths[deletePath] = true
 		}
 	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.L2transport.IsNull() && state.L2transport.ValueBool() && data.L2transport.IsNull() {
+		deletePath := state.getXPath() + "/sub-interface-type/l2transport"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 
 	//b = helpers.CleanupRedundantRemoveOperations(b)
 	return b.Res()
@@ -17642,6 +18289,16 @@ func (data *InterfaceBundleEtherSubinterface) addDeletePathsXML(ctx context.Cont
 	}
 	if !data.Ptp.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp")
+	}
+	for i := range data.MonitorSessions {
+		keys := [...]string{"session-name"}
+		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v", predicates))
 	}
 	if !data.LldpReceiveDisable.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable")
@@ -18086,6 +18743,9 @@ func (data *InterfaceBundleEtherSubinterface) addDeletePathsXML(ctx context.Cont
 	}
 	if !data.PointToPoint.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sub-interface-type/point-to-point")
+	}
+	if !data.L2transport.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sub-interface-type/l2transport")
 	}
 
 	return b.Res()

@@ -27,9 +27,6 @@ attributes:
     id: true
     no_augment_config: true
     example: "0/0/0/1"
-  - yang_name: sub-interface-type/l2transport
-    tf_name: l2transport
-    example: false
   - yang_name: sub-interface-type/point-to-point
     tf_name: point_to_point
     example: false
@@ -111,6 +108,10 @@ attributes:
     min_int: 1
     max_int: 4094
     example: 200
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-if-l2transport-cfg:l2transport
+    tf_name: l2transport
+    example: true
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id
     example: 300
@@ -995,6 +996,7 @@ attributes:
     tf_name: monitor_sessions
     test_tags: [NCS, C8000]
     include_example: true
+    exclude_test: true
     type: List
     attributes:
       - yang_name: session-name

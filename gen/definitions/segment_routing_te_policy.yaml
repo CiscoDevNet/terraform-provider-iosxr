@@ -210,7 +210,7 @@ attributes:
             example: 100
       - yang_name: backup-ineligible
         example: true
-      - yang_name: per-flow/enable
+      - yang_name: per-flow
         tf_name: per_flow
         test_tags: [C8000]
         exclude_test: true
@@ -266,7 +266,8 @@ attributes:
     tf_name: performance_measurement_reverse_path_label
     exclude_test: true
     example: 16412
-  - yang_name: bfd/enable
+  - yang_name: bfd
+    tf_name: bfd_enable
     exclude_test: true
     example: true
   - yang_name: bfd/disable

@@ -1660,6 +1660,18 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				MarkdownDescription: helpers.NewAttributeDescription("Enable processing of received prefix-unreachable advertisements").String,
 				Optional:            true,
 			},
+			"apply_weight_ecmp_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply weights to ecmp paths only").String,
+				Optional:            true,
+			},
+			"apply_weight_ecmp_only_bandwidth": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply weight calculated based on interface bandwidth").String,
+				Optional:            true,
+			},
+			"apply_weight_ucmp_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply weights to ucmp paths only").String,
+				Optional:            true,
+			},
 		},
 	}
 }

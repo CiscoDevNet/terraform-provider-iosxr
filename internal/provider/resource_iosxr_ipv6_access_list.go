@@ -306,6 +306,14 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 255),
 							},
 						},
+						"permit_tcp_flags_bits": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Space-separated list of TCP flags to match").String,
+							Optional:            true,
+						},
+						"permit_headers": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Space-separated list of headers to match").String,
+							Optional:            true,
+						},
 						"permit_dscp": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
 							Optional:            true,
@@ -747,6 +755,14 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
 							},
+						},
+						"deny_tcp_flags_bits": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Space-separated list of TCP flags to match").String,
+							Optional:            true,
+						},
+						"deny_headers": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Space-separated list of headers to match").String,
+							Optional:            true,
 						},
 						"deny_dscp": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,

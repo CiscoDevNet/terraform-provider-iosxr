@@ -330,7 +330,6 @@ resource "iosxr_control_plane" "example" {
           address = "2001:db8:1:1::1"
         }
       ]
-      allow_all = true
       allow_all_ipv4_prefixes = [
         {
           address = "192.168.1.0"

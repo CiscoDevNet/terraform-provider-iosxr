@@ -69,7 +69,6 @@ func TestAccDataSourceIosxrLinuxNetworking(t *testing.T) {
 
 func testAccDataSourceIosxrLinuxNetworkingConfig() string {
 	config := `resource "iosxr_linux_networking" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	statistics_synchronization_sixty_seconds = true` + "\n"
 	}

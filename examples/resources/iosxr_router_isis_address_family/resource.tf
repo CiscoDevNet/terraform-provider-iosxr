@@ -250,4 +250,5 @@ resource "iosxr_router_isis_address_family" "example" {
   prefix_unreachable_adv_lifetime      = 120
   prefix_unreachable_adv_metric        = 4261412865
   prefix_unreachable_rx_process_enable = true
+  apply_weight_ecmp_only_bandwidth     = true
 }

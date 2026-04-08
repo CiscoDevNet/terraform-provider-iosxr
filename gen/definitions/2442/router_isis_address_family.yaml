@@ -846,6 +846,23 @@ attributes:
   - yang_name: prefix-unreachable/rx-process-enable
     tf_name: prefix_unreachable_rx_process_enable
     example: true
+  - yang_name: apply-weight/APPLY-WEIGHT/ECMP-ONLY/ecmp-only
+    xpath: apply-weight/ecmp-only
+    tf_name: apply_weight_ecmp_only
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: apply-weight/APPLY-WEIGHT/ECMP-ONLY/ecmp-only/bandwidth
+    xpath: apply-weight/ecmp-only/bandwidth
+    tf_name: apply_weight_ecmp_only_bandwidth
+    delete_parent: true
+    example: true
+  - yang_name: apply-weight/APPLY-WEIGHT/UCMP-ONLY/ucmp-only
+    xpath: apply-weight/ucmp-only
+    tf_name: apply_weight_ucmp_only
+    delete_parent: true
+    example: true
+    exclude_test: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]

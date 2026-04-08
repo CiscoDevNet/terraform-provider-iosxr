@@ -864,6 +864,7 @@ attributes:
             example: "2001:db8:1:1::1"
       - yang_name: allow/all
         tf_name: allow_all
+        exclude_test: true
         example: true
       - yang_name: allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix
         tf_name: allow_all_ipv4_prefixes

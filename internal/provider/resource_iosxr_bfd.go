@@ -139,6 +139,25 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					},
 				},
 			},
+			"multipath_destinations": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("A.B.C.D destination ip address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"destination_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+							Required:            true,
+						},
+						"location_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fully qualified location specification").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`([a-zA-Z0-9_]*\d+/){1,2}([a-zA-Z0-9_]*\d*)`), ""),
+							},
+						},
+					},
+				},
+			},
 			"multihop_ttl_drop_threshold": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("TTL Drop Threshold").AddIntegerRangeDescription(0, 254).String,
 				Optional:            true,

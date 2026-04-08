@@ -41,7 +41,6 @@ type InterfaceEthernet struct {
 	DeleteMode                                                               types.String                                                     `tfsdk:"delete_mode"`
 	Type                                                                     types.String                                                     `tfsdk:"type"`
 	Name                                                                     types.String                                                     `tfsdk:"name"`
-	L2transport                                                              types.Bool                                                       `tfsdk:"l2transport"`
 	PointToPoint                                                             types.Bool                                                       `tfsdk:"point_to_point"`
 	Multipoint                                                               types.Bool                                                       `tfsdk:"multipoint"`
 	Dampening                                                                types.Bool                                                       `tfsdk:"dampening"`
@@ -54,6 +53,7 @@ type InterfaceEthernet struct {
 	ServicePolicyOutput                                                      []InterfaceEthernetServicePolicyOutput                           `tfsdk:"service_policy_output"`
 	EncapsulationDot1qVlanId                                                 types.Int64                                                      `tfsdk:"encapsulation_dot1q_vlan_id"`
 	EncapsulationDot1qSecondDot1q                                            types.Int64                                                      `tfsdk:"encapsulation_dot1q_second_dot1q"`
+	L2transport                                                              types.Bool                                                       `tfsdk:"l2transport"`
 	L2transportEncapsulationDot1qVlanId                                      types.String                                                     `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
 	L2transportEncapsulationDot1qSecondDot1q                                 types.String                                                     `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
 	RewriteIngressTagPopOne                                                  types.Bool                                                       `tfsdk:"rewrite_ingress_tag_pop_one"`
@@ -272,7 +272,6 @@ type InterfaceEthernetData struct {
 	Id                                                                       types.String                                                     `tfsdk:"id"`
 	Type                                                                     types.String                                                     `tfsdk:"type"`
 	Name                                                                     types.String                                                     `tfsdk:"name"`
-	L2transport                                                              types.Bool                                                       `tfsdk:"l2transport"`
 	PointToPoint                                                             types.Bool                                                       `tfsdk:"point_to_point"`
 	Multipoint                                                               types.Bool                                                       `tfsdk:"multipoint"`
 	Dampening                                                                types.Bool                                                       `tfsdk:"dampening"`
@@ -285,6 +284,7 @@ type InterfaceEthernetData struct {
 	ServicePolicyOutput                                                      []InterfaceEthernetServicePolicyOutput                           `tfsdk:"service_policy_output"`
 	EncapsulationDot1qVlanId                                                 types.Int64                                                      `tfsdk:"encapsulation_dot1q_vlan_id"`
 	EncapsulationDot1qSecondDot1q                                            types.Int64                                                      `tfsdk:"encapsulation_dot1q_second_dot1q"`
+	L2transport                                                              types.Bool                                                       `tfsdk:"l2transport"`
 	L2transportEncapsulationDot1qVlanId                                      types.String                                                     `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
 	L2transportEncapsulationDot1qSecondDot1q                                 types.String                                                     `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
 	RewriteIngressTagPopOne                                                  types.Bool                                                       `tfsdk:"rewrite_ingress_tag_pop_one"`
@@ -675,11 +675,6 @@ func (data InterfaceEthernet) toBody(ctx context.Context, providerVersion string
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
 		body, _ = sjson.Set(body, "", data.Name.ValueString())
 	}
-	if !data.L2transport.IsNull() && !data.L2transport.IsUnknown() {
-		if data.L2transport.ValueBool() {
-			body, _ = sjson.Set(body, "sub-interface-type.l2transport", map[string]string{})
-		}
-	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.IsUnknown() {
 		if data.PointToPoint.ValueBool() {
 			body, _ = sjson.Set(body, "sub-interface-type.point-to-point", map[string]string{})
@@ -715,6 +710,11 @@ func (data InterfaceEthernet) toBody(ctx context.Context, providerVersion string
 	}
 	if !data.EncapsulationDot1qSecondDot1q.IsNull() && !data.EncapsulationDot1qSecondDot1q.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.second-dot1q", strconv.FormatInt(data.EncapsulationDot1qSecondDot1q.ValueInt64(), 10))
+	}
+	if !data.L2transport.IsNull() && !data.L2transport.IsUnknown() {
+		if data.L2transport.ValueBool() {
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-l2transport-cfg:l2transport", map[string]string{})
+		}
 	}
 	if !data.L2transportEncapsulationDot1qVlanId.IsNull() && !data.L2transportEncapsulationDot1qVlanId.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id", data.L2transportEncapsulationDot1qVlanId.ValueString())
@@ -1935,15 +1935,6 @@ func (data InterfaceEthernet) GetRangeConstraints() []helpers.FieldRangeConstrai
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *InterfaceEthernet) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); !data.L2transport.IsNull() {
-		if value.Exists() {
-			data.L2transport = types.BoolValue(true)
-		} else {
-			data.L2transport = types.BoolValue(false)
-		}
-	} else {
-		data.L2transport = types.BoolNull()
-	}
 	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); !data.PointToPoint.IsNull() {
 		if value.Exists() {
 			data.PointToPoint = types.BoolValue(true)
@@ -2063,6 +2054,15 @@ func (data *InterfaceEthernet) updateFromBody(ctx context.Context, res []byte) {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Value(value.Int())
 	} else {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-l2transport-cfg:l2transport"); !data.L2transport.IsNull() {
+		if value.Exists() {
+			data.L2transport = types.BoolValue(true)
+		} else {
+			data.L2transport = types.BoolValue(false)
+		}
+	} else {
+		data.L2transport = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id"); value.Exists() && !data.L2transportEncapsulationDot1qVlanId.IsNull() {
 		data.L2transportEncapsulationDot1qVlanId = types.StringValue(value.String())
@@ -4481,11 +4481,6 @@ func (data *InterfaceEthernet) updateFromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *InterfaceEthernet) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
-		data.L2transport = types.BoolValue(true)
-	} else {
-		data.L2transport = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
@@ -4543,6 +4538,11 @@ func (data *InterfaceEthernet) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.second-dot1q"); value.Exists() {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-l2transport-cfg:l2transport"); value.Exists() {
+		data.L2transport = types.BoolValue(true)
+	} else {
+		data.L2transport = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id"); value.Exists() {
 		data.L2transportEncapsulationDot1qVlanId = types.StringValue(value.String())
@@ -5807,11 +5807,6 @@ func (data *InterfaceEthernet) fromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *InterfaceEthernetData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
-		data.L2transport = types.BoolValue(true)
-	} else {
-		data.L2transport = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); value.Exists() {
 		data.PointToPoint = types.BoolValue(true)
 	} else {
@@ -5869,6 +5864,11 @@ func (data *InterfaceEthernetData) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.second-dot1q"); value.Exists() {
 		data.EncapsulationDot1qSecondDot1q = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-l2transport-cfg:l2transport"); value.Exists() {
+		data.L2transport = types.BoolValue(true)
+	} else {
+		data.L2transport = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id"); value.Exists() {
 		data.L2transportEncapsulationDot1qVlanId = types.StringValue(value.String())
@@ -8661,6 +8661,9 @@ func (data *InterfaceEthernet) getDeletedItems(ctx context.Context, state Interf
 	if !state.L2transportEncapsulationDot1qVlanId.IsNull() && data.L2transportEncapsulationDot1qVlanId.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id", state.getPath()))
 	}
+	if !state.L2transport.IsNull() && data.L2transport.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-l2transport-cfg:l2transport", state.getPath()))
+	}
 	if !state.EncapsulationDot1qSecondDot1q.IsNull() && data.EncapsulationDot1qSecondDot1q.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q", state.getPath()))
 	}
@@ -8738,9 +8741,6 @@ func (data *InterfaceEthernet) getDeletedItems(ctx context.Context, state Interf
 	}
 	if !state.PointToPoint.IsNull() && data.PointToPoint.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/point-to-point", state.getPath()))
-	}
-	if !state.L2transport.IsNull() && data.L2transport.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/l2transport", state.getPath()))
 	}
 	return deletedItems
 }
@@ -9240,6 +9240,9 @@ func (data *InterfaceEthernet) getEmptyLeafsDelete(ctx context.Context) []string
 	if !data.RewriteIngressTagPopOne.IsNull() && !data.RewriteIngressTagPopOne.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/one", data.getPath()))
 	}
+	if !data.L2transport.IsNull() && !data.L2transport.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-l2transport-cfg:l2transport", data.getPath()))
+	}
 	for i := range data.ServicePolicyOutput {
 		keys := [...]string{"service-policy-name"}
 		keyValues := [...]string{data.ServicePolicyOutput[i].Name.ValueString()}
@@ -9264,9 +9267,6 @@ func (data *InterfaceEthernet) getEmptyLeafsDelete(ctx context.Context) []string
 	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/point-to-point", data.getPath()))
-	}
-	if !data.L2transport.IsNull() && !data.L2transport.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/l2transport", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -10063,6 +10063,9 @@ func (data *InterfaceEthernet) getDeletePaths(ctx context.Context) []string {
 	if !data.L2transportEncapsulationDot1qVlanId.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id", data.getPath()))
 	}
+	if !data.L2transport.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-l2transport-cfg:l2transport", data.getPath()))
+	}
 	if !data.EncapsulationDot1qSecondDot1q.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/second-dot1q", data.getPath()))
 	}
@@ -10100,9 +10103,6 @@ func (data *InterfaceEthernet) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.PointToPoint.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/point-to-point", data.getPath()))
-	}
-	if !data.L2transport.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/l2transport", data.getPath()))
 	}
 	return deletePaths
 }

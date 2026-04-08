@@ -16,7 +16,6 @@ This resource can manage the Interface Ethernet configuration.
 resource "iosxr_interface_ethernet" "example" {
   type                         = "GigabitEthernet"
   name                         = "0/0/0/1"
-  l2transport                  = false
   point_to_point               = false
   multipoint                   = false
   dampening                    = true
@@ -155,46 +154,35 @@ resource "iosxr_interface_ethernet" "example" {
   lldp                                                                               = true
   lldp_transmit_disable                                                              = true
   lldp_receive_disable                                                               = true
-  monitor_sessions = [
-    {
-      session_name      = "SESSION-1"
-      ethernet          = true
-      direction_rx_only = true
-      port_level        = true
-      acl               = true
-      acl_ipv4_name     = "ACL1"
-      acl_ipv6_name     = "ACL2"
-    }
-  ]
-  ptp                                          = true
-  ptp_profile                                  = "Profile-1"
-  ptp_transport_ethernet                       = true
-  ptp_clock_operation_one_step                 = true
-  ptp_announce_interval                        = "2"
-  ptp_announce_timeout                         = 5
-  ptp_announce_grant_duration                  = 300
-  ptp_sync_interval                            = "2"
-  ptp_sync_grant_duration                      = 300
-  ptp_sync_timeout                             = 3000
-  ptp_delay_request_interval                   = "2"
-  ptp_cos                                      = 6
-  ptp_cos_event                                = 6
-  ptp_cos_general                              = 6
-  ptp_dscp                                     = 46
-  ptp_dscp_event                               = 46
-  ptp_dscp_general                             = 46
-  ptp_ipv4_ttl                                 = 10
-  ptp_ipv6_hop_limit                           = 10
-  ptp_delay_asymmetry_value                    = 1000
-  ptp_delay_asymmetry_unit_microseconds        = true
-  ptp_delay_response_grant_duration            = 300
-  ptp_delay_response_timeout                   = 3000
-  ptp_unicast_grant_invalid_request_reduce     = true
-  ptp_multicast                                = true
-  ptp_multicast_mixed                          = true
-  ptp_multicast_target_address_mac_forwardable = true
-  ptp_port_state_master_only                   = true
-  ptp_local_priority                           = 128
+  ptp                                                                                = true
+  ptp_profile                                                                        = "Profile-1"
+  ptp_transport_ethernet                                                             = true
+  ptp_clock_operation_one_step                                                       = true
+  ptp_announce_interval                                                              = "2"
+  ptp_announce_timeout                                                               = 5
+  ptp_announce_grant_duration                                                        = 300
+  ptp_sync_interval                                                                  = "2"
+  ptp_sync_grant_duration                                                            = 300
+  ptp_sync_timeout                                                                   = 3000
+  ptp_delay_request_interval                                                         = "2"
+  ptp_cos                                                                            = 6
+  ptp_cos_event                                                                      = 6
+  ptp_cos_general                                                                    = 6
+  ptp_dscp                                                                           = 46
+  ptp_dscp_event                                                                     = 46
+  ptp_dscp_general                                                                   = 46
+  ptp_ipv4_ttl                                                                       = 10
+  ptp_ipv6_hop_limit                                                                 = 10
+  ptp_delay_asymmetry_value                                                          = 1000
+  ptp_delay_asymmetry_unit_microseconds                                              = true
+  ptp_delay_response_grant_duration                                                  = 300
+  ptp_delay_response_timeout                                                         = 3000
+  ptp_unicast_grant_invalid_request_reduce                                           = true
+  ptp_multicast                                                                      = true
+  ptp_multicast_mixed                                                                = true
+  ptp_multicast_target_address_mac_forwardable                                       = true
+  ptp_port_state_master_only                                                         = true
+  ptp_local_priority                                                                 = 128
   ptp_slave_ipv4s = [
     {
       address        = "10.2.2.2"
@@ -476,7 +464,7 @@ resource "iosxr_interface_ethernet" "example" {
 - `ipv6_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
 - `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
   - Choices: `any`, `rx`
-- `l2transport` (Boolean) l2transport sub-interface
+- `l2transport` (Boolean) Enable Layer 2 transport and enter its configuration submode
 - `l2transport_encapsulation_dot1q_second_dot1q` (String) Single VLAN id or start of VLAN range
 - `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
 - `lacp_period` (Number) Set the period on bundle to be used by its member link

@@ -90,6 +90,10 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Schema(ctx context.Context, r
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"l2transport": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l2transport sub-interface").String,
+				Optional:            true,
+			},
 			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("point-to-point sub-interface").String,
 				Optional:            true,
@@ -1017,6 +1021,67 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Schema(ctx context.Context, r
 			"lldp_receive_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable LLDP RX on an interface").String,
 				Optional:            true,
+			},
+			"monitor_sessions": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Monitor-session configuration commands").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"session_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Monitor-session configuration commands").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 79),
+							},
+						},
+						"ethernet": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Replicate Ethernet traffic").String,
+							Optional:            true,
+						},
+						"direction_rx_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Replicate only received (ingress) traffic").String,
+							Optional:            true,
+						},
+						"direction_tx_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Replicate only transmitted (egress) traffic").String,
+							Optional:            true,
+						},
+						"acl": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable acl based mirroring").String,
+							Optional:            true,
+						},
+						"acl_ipv4_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPV4 ACL name").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"acl_ipv6_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPV6 ACL name").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"mirror_first": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable mirroring on the first portion of a packet").AddIntegerRangeDescription(1, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 10000),
+							},
+						},
+						"mirror_interval": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable mirroring of every Nth packet").AddStringEnumDescription("128", "16", "16K", "1K", "2", "256", "2K", "32", "4", "4K", "512", "64", "8", "8K").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("128", "16", "16K", "1K", "2", "256", "2K", "32", "4", "4K", "512", "64", "8", "8K"),
+							},
+						},
+					},
+				},
 			},
 			"ptp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Precision Time Protocol config").String,

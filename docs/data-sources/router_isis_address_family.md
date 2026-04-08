@@ -38,6 +38,9 @@ data "iosxr_router_isis_address_family" "example" {
 - `adjacency_check_disable` (Boolean) Disable adjacency-checking
 - `advertise_link_attributes` (Boolean) Advertise additional link attributes
 - `advertise_passive_only` (Boolean) Advertise prefixes of passive interfaces only
+- `apply_weight_ecmp_only` (Boolean) Apply weights to ecmp paths only
+- `apply_weight_ecmp_only_bandwidth` (Boolean) Apply weight calculated based on interface bandwidth
+- `apply_weight_ucmp_only` (Boolean) Apply weights to ucmp paths only
 - `attached_bit_receive_ignore` (Boolean) Ignore the attached bit in received LSPs
 - `attached_bit_send` (String) Modify how we set the attached bit
 - `default_information_originate` (Boolean) Distribute a default route

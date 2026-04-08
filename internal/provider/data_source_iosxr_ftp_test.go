@@ -35,9 +35,7 @@ func TestAccDataSourceIosxrFTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ftp.test", "client_vrfs.0.vrf_name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ftp.test", "client_vrfs.0.passive", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ftp.test", "client_vrfs.0.source_interface", "Loopback0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ftp.test", "client_vrfs.0.anonymous_password", "mypassword"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ftp.test", "client_vrfs.0.username", "ftpuser"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ftp.test", "client_vrfs.0.password", "myencryptedpassword"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

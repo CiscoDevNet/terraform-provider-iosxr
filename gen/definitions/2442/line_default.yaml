@@ -58,11 +58,11 @@ attributes:
   - yang_name: transport/output/ssh
     tf_name: transport_output_ssh
     example: true
-    exclude_test: true
   - yang_name: transport/output/ssh/telnet
     tf_name: transport_output_ssh_telnet
     delete_parent: true
     example: true
+    exclude_test: true
   - yang_name: transport/output/telnet
     tf_name: transport_output_telnet
     example: true

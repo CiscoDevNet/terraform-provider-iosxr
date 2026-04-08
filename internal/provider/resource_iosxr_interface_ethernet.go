@@ -97,10 +97,6 @@ func (r *InterfaceEthernetResource) Schema(ctx context.Context, req resource.Sch
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"l2transport": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("l2transport sub-interface").String,
-				Optional:            true,
-			},
 			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("point-to-point sub-interface").String,
 				Optional:            true,
@@ -185,6 +181,10 @@ func (r *InterfaceEthernetResource) Schema(ctx context.Context, req resource.Sch
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4094),
 				},
+			},
+			"l2transport": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Layer 2 transport and enter its configuration submode").String,
+				Optional:            true,
 			},
 			"l2transport_encapsulation_dot1q_vlan_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,

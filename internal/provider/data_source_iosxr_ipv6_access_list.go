@@ -228,6 +228,14 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "ICMP message code",
 							Computed:            true,
 						},
+						"permit_tcp_flags_bits": schema.StringAttribute{
+							MarkdownDescription: "Space-separated list of TCP flags to match",
+							Computed:            true,
+						},
+						"permit_headers": schema.StringAttribute{
+							MarkdownDescription: "Space-separated list of headers to match",
+							Computed:            true,
+						},
 						"permit_dscp": schema.StringAttribute{
 							MarkdownDescription: "DSCP value",
 							Computed:            true,
@@ -522,6 +530,14 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 						},
 						"deny_icmp_message_code": schema.Int64Attribute{
 							MarkdownDescription: "ICMP message code",
+							Computed:            true,
+						},
+						"deny_tcp_flags_bits": schema.StringAttribute{
+							MarkdownDescription: "Space-separated list of TCP flags to match",
+							Computed:            true,
+						},
+						"deny_headers": schema.StringAttribute{
+							MarkdownDescription: "Space-separated list of headers to match",
 							Computed:            true,
 						},
 						"deny_dscp": schema.StringAttribute{

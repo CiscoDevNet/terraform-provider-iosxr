@@ -170,20 +170,10 @@ func (data *FTP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.ClientVrfs[i].SourceInterface = types.StringNull()
 		}
-		if value := r.Get("anonymous-password"); value.Exists() && !data.ClientVrfs[i].AnonymousPassword.IsNull() {
-			data.ClientVrfs[i].AnonymousPassword = types.StringValue(value.String())
-		} else {
-			data.ClientVrfs[i].AnonymousPassword = types.StringNull()
-		}
 		if value := r.Get("username"); value.Exists() && !data.ClientVrfs[i].Username.IsNull() {
 			data.ClientVrfs[i].Username = types.StringValue(value.String())
 		} else {
 			data.ClientVrfs[i].Username = types.StringNull()
-		}
-		if value := r.Get("password.encrypted"); value.Exists() && !data.ClientVrfs[i].Password.IsNull() {
-			data.ClientVrfs[i].Password = types.StringValue(value.String())
-		} else {
-			data.ClientVrfs[i].Password = types.StringNull()
 		}
 	}
 }
@@ -208,14 +198,8 @@ func (data *FTP) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("source-interface"); cValue.Exists() {
 				item.SourceInterface = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("anonymous-password"); cValue.Exists() {
-				item.AnonymousPassword = types.StringValue(cValue.String())
-			}
 			if cValue := v.Get("username"); cValue.Exists() {
 				item.Username = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("password.encrypted"); cValue.Exists() {
-				item.Password = types.StringValue(cValue.String())
 			}
 			data.ClientVrfs = append(data.ClientVrfs, item)
 			return true
@@ -243,14 +227,8 @@ func (data *FTPData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("source-interface"); cValue.Exists() {
 				item.SourceInterface = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("anonymous-password"); cValue.Exists() {
-				item.AnonymousPassword = types.StringValue(cValue.String())
-			}
 			if cValue := v.Get("username"); cValue.Exists() {
 				item.Username = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("password.encrypted"); cValue.Exists() {
-				item.Password = types.StringValue(cValue.String())
 			}
 			data.ClientVrfs = append(data.ClientVrfs, item)
 			return true

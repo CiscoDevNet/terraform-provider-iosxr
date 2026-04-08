@@ -165,6 +165,9 @@ type RouterISISAddressFamily struct {
 	PrefixUnreachableAdvLifetime                              types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_lifetime"`
 	PrefixUnreachableAdvMetric                                types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_metric"`
 	PrefixUnreachableRxProcessEnable                          types.Bool                                                                         `tfsdk:"prefix_unreachable_rx_process_enable"`
+	ApplyWeightEcmpOnly                                       types.Bool                                                                         `tfsdk:"apply_weight_ecmp_only"`
+	ApplyWeightEcmpOnlyBandwidth                              types.Bool                                                                         `tfsdk:"apply_weight_ecmp_only_bandwidth"`
+	ApplyWeightUcmpOnly                                       types.Bool                                                                         `tfsdk:"apply_weight_ucmp_only"`
 }
 
 type RouterISISAddressFamilyData struct {
@@ -296,6 +299,9 @@ type RouterISISAddressFamilyData struct {
 	PrefixUnreachableAdvLifetime                              types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_lifetime"`
 	PrefixUnreachableAdvMetric                                types.Int64                                                                        `tfsdk:"prefix_unreachable_adv_metric"`
 	PrefixUnreachableRxProcessEnable                          types.Bool                                                                         `tfsdk:"prefix_unreachable_rx_process_enable"`
+	ApplyWeightEcmpOnly                                       types.Bool                                                                         `tfsdk:"apply_weight_ecmp_only"`
+	ApplyWeightEcmpOnlyBandwidth                              types.Bool                                                                         `tfsdk:"apply_weight_ecmp_only_bandwidth"`
+	ApplyWeightUcmpOnly                                       types.Bool                                                                         `tfsdk:"apply_weight_ucmp_only"`
 }
 type RouterISISAddressFamilyDistanceSources struct {
 	Address     types.String `tfsdk:"address"`
@@ -878,6 +884,21 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context, providerVersion 
 	if !data.PrefixUnreachableRxProcessEnable.IsNull() && !data.PrefixUnreachableRxProcessEnable.IsUnknown() {
 		if data.PrefixUnreachableRxProcessEnable.ValueBool() {
 			body, _ = sjson.Set(body, "prefix-unreachable.rx-process-enable", []interface{}{nil})
+		}
+	}
+	if !data.ApplyWeightEcmpOnly.IsNull() && !data.ApplyWeightEcmpOnly.IsUnknown() {
+		if data.ApplyWeightEcmpOnly.ValueBool() {
+			body, _ = sjson.Set(body, "apply-weight.ecmp-only", map[string]string{})
+		}
+	}
+	if !data.ApplyWeightEcmpOnlyBandwidth.IsNull() && !data.ApplyWeightEcmpOnlyBandwidth.IsUnknown() {
+		if data.ApplyWeightEcmpOnlyBandwidth.ValueBool() {
+			body, _ = sjson.Set(body, "apply-weight.ecmp-only.bandwidth", []interface{}{nil})
+		}
+	}
+	if !data.ApplyWeightUcmpOnly.IsNull() && !data.ApplyWeightUcmpOnly.IsUnknown() {
+		if data.ApplyWeightUcmpOnly.ValueBool() {
+			body, _ = sjson.Set(body, "apply-weight.ucmp-only", []interface{}{nil})
 		}
 	}
 	if len(data.DistanceSources) > 0 {
@@ -3578,6 +3599,33 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 	} else {
 		data.PrefixUnreachableRxProcessEnable = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only"); !data.ApplyWeightEcmpOnly.IsNull() {
+		if value.Exists() {
+			data.ApplyWeightEcmpOnly = types.BoolValue(true)
+		} else {
+			data.ApplyWeightEcmpOnly = types.BoolValue(false)
+		}
+	} else {
+		data.ApplyWeightEcmpOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only.bandwidth"); !data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
+		if value.Exists() {
+			data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(true)
+		} else {
+			data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(false)
+		}
+	} else {
+		data.ApplyWeightEcmpOnlyBandwidth = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "apply-weight.ucmp-only"); !data.ApplyWeightUcmpOnly.IsNull() {
+		if value.Exists() {
+			data.ApplyWeightUcmpOnly = types.BoolValue(true)
+		} else {
+			data.ApplyWeightUcmpOnly = types.BoolValue(false)
+		}
+	} else {
+		data.ApplyWeightUcmpOnly = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -4624,6 +4672,21 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 		data.PrefixUnreachableRxProcessEnable = types.BoolValue(true)
 	} else {
 		data.PrefixUnreachableRxProcessEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only"); value.Exists() {
+		data.ApplyWeightEcmpOnly = types.BoolValue(true)
+	} else {
+		data.ApplyWeightEcmpOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only.bandwidth"); value.Exists() {
+		data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(true)
+	} else {
+		data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "apply-weight.ucmp-only"); value.Exists() {
+		data.ApplyWeightUcmpOnly = types.BoolValue(true)
+	} else {
+		data.ApplyWeightUcmpOnly = types.BoolValue(false)
 	}
 }
 
@@ -5672,6 +5735,21 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 	} else {
 		data.PrefixUnreachableRxProcessEnable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only"); value.Exists() {
+		data.ApplyWeightEcmpOnly = types.BoolValue(true)
+	} else {
+		data.ApplyWeightEcmpOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only.bandwidth"); value.Exists() {
+		data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(true)
+	} else {
+		data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "apply-weight.ucmp-only"); value.Exists() {
+		data.ApplyWeightUcmpOnly = types.BoolValue(true)
+	} else {
+		data.ApplyWeightUcmpOnly = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -5680,6 +5758,15 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 
 func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state RouterISISAddressFamily) []string {
 	deletedItems := make([]string, 0)
+	if !state.ApplyWeightUcmpOnly.IsNull() && data.ApplyWeightUcmpOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/apply-weight", state.getPath()))
+	}
+	if !state.ApplyWeightEcmpOnlyBandwidth.IsNull() && data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/apply-weight/ecmp-only", state.getPath()))
+	}
+	if !state.ApplyWeightEcmpOnly.IsNull() && data.ApplyWeightEcmpOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/apply-weight", state.getPath()))
+	}
 	if !state.PrefixUnreachableRxProcessEnable.IsNull() && data.PrefixUnreachableRxProcessEnable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable/rx-process-enable", state.getPath()))
 	}
@@ -7159,6 +7246,15 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 
 func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.ApplyWeightUcmpOnly.IsNull() && !data.ApplyWeightUcmpOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/apply-weight", data.getPath()))
+	}
+	if !data.ApplyWeightEcmpOnlyBandwidth.IsNull() && !data.ApplyWeightEcmpOnlyBandwidth.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/apply-weight/ecmp-only", data.getPath()))
+	}
+	if !data.ApplyWeightEcmpOnly.IsNull() && !data.ApplyWeightEcmpOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/apply-weight", data.getPath()))
+	}
 	if !data.PrefixUnreachableRxProcessEnable.IsNull() && !data.PrefixUnreachableRxProcessEnable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/prefix-unreachable/rx-process-enable", data.getPath()))
 	}
@@ -7612,6 +7708,15 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.ApplyWeightUcmpOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/apply-weight", data.getPath()))
+	}
+	if !data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/apply-weight/ecmp-only", data.getPath()))
+	}
+	if !data.ApplyWeightEcmpOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/apply-weight", data.getPath()))
+	}
 	if !data.PrefixUnreachableRxProcessEnable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable/rx-process-enable", data.getPath()))
 	}

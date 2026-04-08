@@ -40,6 +40,7 @@ type IPv4AccessListOptions struct {
 	DeleteMode         types.String `tfsdk:"delete_mode"`
 	LogUpdateThreshold types.Int64  `tfsdk:"log_update_threshold"`
 	LogUpdateRate      types.Int64  `tfsdk:"log_update_rate"`
+	LogUpdateDisable   types.Bool   `tfsdk:"log_update_disable"`
 	IcmpOff            types.Bool   `tfsdk:"icmp_off"`
 }
 
@@ -48,6 +49,7 @@ type IPv4AccessListOptionsData struct {
 	Id                 types.String `tfsdk:"id"`
 	LogUpdateThreshold types.Int64  `tfsdk:"log_update_threshold"`
 	LogUpdateRate      types.Int64  `tfsdk:"log_update_rate"`
+	LogUpdateDisable   types.Bool   `tfsdk:"log_update_disable"`
 	IcmpOff            types.Bool   `tfsdk:"icmp_off"`
 }
 
@@ -74,6 +76,11 @@ func (data IPv4AccessListOptions) toBody(ctx context.Context, providerVersion st
 	}
 	if !data.LogUpdateRate.IsNull() && !data.LogUpdateRate.IsUnknown() {
 		body, _ = sjson.Set(body, "log-update.rate", strconv.FormatInt(data.LogUpdateRate.ValueInt64(), 10))
+	}
+	if !data.LogUpdateDisable.IsNull() && !data.LogUpdateDisable.IsUnknown() {
+		if data.LogUpdateDisable.ValueBool() {
+			body, _ = sjson.Set(body, "log-update.disable", []interface{}{nil})
+		}
 	}
 	if !data.IcmpOff.IsNull() && !data.IcmpOff.IsUnknown() {
 		if data.IcmpOff.ValueBool() {
@@ -119,6 +126,15 @@ func (data *IPv4AccessListOptions) updateFromBody(ctx context.Context, res []byt
 	} else {
 		data.LogUpdateRate = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "log-update.disable"); !data.LogUpdateDisable.IsNull() {
+		if value.Exists() {
+			data.LogUpdateDisable = types.BoolValue(true)
+		} else {
+			data.LogUpdateDisable = types.BoolValue(false)
+		}
+	} else {
+		data.LogUpdateDisable = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "icmp-off"); !data.IcmpOff.IsNull() {
 		if value.Exists() {
 			data.IcmpOff = types.BoolValue(true)
@@ -141,6 +157,11 @@ func (data *IPv4AccessListOptions) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "log-update.disable"); value.Exists() {
+		data.LogUpdateDisable = types.BoolValue(true)
+	} else {
+		data.LogUpdateDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
 	} else {
@@ -159,6 +180,11 @@ func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res []byte)
 	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "log-update.disable"); value.Exists() {
+		data.LogUpdateDisable = types.BoolValue(true)
+	} else {
+		data.LogUpdateDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
 		data.IcmpOff = types.BoolValue(true)
 	} else {
@@ -174,6 +200,9 @@ func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IP
 	deletedItems := make([]string, 0)
 	if !state.IcmpOff.IsNull() && data.IcmpOff.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp-off", state.getPath()))
+	}
+	if !state.LogUpdateDisable.IsNull() && data.LogUpdateDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/disable", state.getPath()))
 	}
 	if !state.LogUpdateRate.IsNull() && data.LogUpdateRate.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/rate", state.getPath()))
@@ -193,6 +222,9 @@ func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context) []st
 	if !data.IcmpOff.IsNull() && !data.IcmpOff.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/icmp-off", data.getPath()))
 	}
+	if !data.LogUpdateDisable.IsNull() && !data.LogUpdateDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log-update/disable", data.getPath()))
+	}
 	return emptyLeafsDelete
 }
 
@@ -203,6 +235,9 @@ func (data *IPv4AccessListOptions) getDeletePaths(ctx context.Context) []string 
 	var deletePaths []string
 	if !data.IcmpOff.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp-off", data.getPath()))
+	}
+	if !data.LogUpdateDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/disable", data.getPath()))
 	}
 	if !data.LogUpdateRate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/rate", data.getPath()))

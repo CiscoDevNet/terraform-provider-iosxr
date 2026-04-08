@@ -293,6 +293,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 255),
 							},
 						},
+						"permit_tcp_flags_bits": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Space-separated list of TCP flags to match").String,
+							Optional:            true,
+						},
 						"permit_igmp_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match on IGMP message").String,
 							Optional:            true,
@@ -788,6 +792,10 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
 							},
+						},
+						"deny_tcp_flags_bits": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("").String,
+							Optional:            true,
 						},
 						"deny_igmp_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Match on IGMP message").String,

@@ -23,8 +23,13 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -58,6 +63,19 @@ func (data LargeCommunitySetData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/large-community-sets/large-community-set[set-name=%s]", data.SetName.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data LargeCommunitySet) getXPath() string {
+	path := "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/large-community-sets/large-community-set[set-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.SetName.ValueString()))
+	return path
+}
+
+func (data LargeCommunitySetData) getXPath() string {
+	path := "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/large-community-sets/large-community-set[set-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.SetName.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -80,33 +98,110 @@ func (data LargeCommunitySet) toBody(ctx context.Context) string {
 func (data *LargeCommunitySet) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "large-community-set-as-text"); value.Exists() && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
-	} else {
+	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data LargeCommunitySet) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/large-community-set-as-text", data.Rpl.ValueString())
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *LargeCommunitySet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/large-community-set-as-text"); value.Exists() && !data.Rpl.IsNull() {
+		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Rpl = types.StringValue(rplValue)
+	} else if data.Rpl.IsNull() {
+		data.Rpl = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *LargeCommunitySet) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "large-community-set-as-text"); value.Exists() {
+func (data *LargeCommunitySet) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "large-community-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *LargeCommunitySetData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "large-community-set-as-text"); value.Exists() {
+func (data *LargeCommunitySetData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "large-community-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *LargeCommunitySet) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/large-community-set-as-text"); value.Exists() {
+		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Rpl = types.StringValue(rplValue)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *LargeCommunitySetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/large-community-set-as-text"); value.Exists() {
+		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Rpl = types.StringValue(rplValue)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *LargeCommunitySet) getDeletedItems(ctx context.Context, state LargeCommunitySet) []string {
@@ -118,16 +213,14 @@ func (data *LargeCommunitySet) getDeletedItems(ctx context.Context, state LargeC
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *LargeCommunitySet) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *LargeCommunitySet) getEmptyLeafsDelete(ctx context.Context, state *LargeCommunitySet) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *LargeCommunitySet) getDeletePaths(ctx context.Context) []string {
@@ -135,7 +228,48 @@ func (data *LargeCommunitySet) getDeletePaths(ctx context.Context) []string {
 	if !data.Rpl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/large-community-set-as-text", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *LargeCommunitySet) addDeletedItemsXML(ctx context.Context, state LargeCommunitySet, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletePath := state.getXPath() + "/large-community-set-as-text"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *LargeCommunitySet) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Rpl.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/large-community-set-as-text")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

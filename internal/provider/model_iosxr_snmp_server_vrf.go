@@ -26,7 +26,11 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -111,6 +115,19 @@ func (data SNMPServerVRFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data SNMPServerVRF) getXPath() string {
+	path := "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.VrfName.ValueString()))
+	return path
+}
+
+func (data SNMPServerVRFData) getXPath() string {
+	path := "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.VrfName.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -127,7 +144,6 @@ func (data SNMPServerVRF) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
 			}
 			if len(item.TrapsUnencryptedStrings) > 0 {
-				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.unencrypted.unencrypted-string", []interface{}{})
 				for cindex, citem := range item.TrapsUnencryptedStrings {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.unencrypted.unencrypted-string"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -146,7 +162,6 @@ func (data SNMPServerVRF) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TrapsEncryptedDefault) > 0 {
-				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.encrypted.encryption-defaults.encryption-default", []interface{}{})
 				for cindex, citem := range item.TrapsEncryptedDefault {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.encrypted.encryption-defaults.encryption-default"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -165,7 +180,6 @@ func (data SNMPServerVRF) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TrapsEncryptedAes) > 0 {
-				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.encrypted.encryption-aeses.encryption-aes", []interface{}{})
 				for cindex, citem := range item.TrapsEncryptedAes {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"traps.encrypted.encryption-aeses.encryption-aes"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -184,7 +198,6 @@ func (data SNMPServerVRF) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.InformsUnencryptedStrings) > 0 {
-				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.unencrypted.unencrypted-string", []interface{}{})
 				for cindex, citem := range item.InformsUnencryptedStrings {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.unencrypted.unencrypted-string"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -203,7 +216,6 @@ func (data SNMPServerVRF) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.InformsEncryptedDefault) > 0 {
-				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.encrypted.encryption-defaults.encryption-default", []interface{}{})
 				for cindex, citem := range item.InformsEncryptedDefault {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.encrypted.encryption-defaults.encryption-default"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -222,7 +234,6 @@ func (data SNMPServerVRF) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.InformsEncryptedAes) > 0 {
-				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.encrypted.encryption-aeses.encryption-aes", []interface{}{})
 				for cindex, citem := range item.InformsEncryptedAes {
 					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.encrypted.encryption-aeses.encryption-aes"+"."+strconv.Itoa(cindex)+"."+"community-string", citem.CommunityString.ValueString())
@@ -314,14 +325,15 @@ func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
 			} else {
 				data.Hosts[i].TrapsUnencryptedStrings[ci].UdpPort = types.StringNull()
 			}
-			if value := cr.Get("version.v2c"); !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("version.v2c"); value.Exists() {
+				if !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() {
 					data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolValue(true)
-				} else {
-					data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolValue(false)
 				}
 			} else {
-				data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() {
+					data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolNull()
+				}
 			}
 			if value := cr.Get("version.v3.security-level"); value.Exists() && !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() {
 				data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV3SecurityLevel = types.StringValue(value.String())
@@ -357,14 +369,15 @@ func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
 			} else {
 				data.Hosts[i].TrapsEncryptedDefault[ci].UdpPort = types.StringNull()
 			}
-			if value := cr.Get("version.v2c"); !data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("version.v2c"); value.Exists() {
+				if !data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() {
 					data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c = types.BoolValue(true)
-				} else {
-					data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c = types.BoolValue(false)
 				}
 			} else {
-				data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() {
+					data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c = types.BoolNull()
+				}
 			}
 			if value := cr.Get("version.v3.security-level"); value.Exists() && !data.Hosts[i].TrapsEncryptedDefault[ci].VersionV3SecurityLevel.IsNull() {
 				data.Hosts[i].TrapsEncryptedDefault[ci].VersionV3SecurityLevel = types.StringValue(value.String())
@@ -400,14 +413,15 @@ func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
 			} else {
 				data.Hosts[i].TrapsEncryptedAes[ci].UdpPort = types.StringNull()
 			}
-			if value := cr.Get("version.v2c"); !data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("version.v2c"); value.Exists() {
+				if !data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() {
 					data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c = types.BoolValue(true)
-				} else {
-					data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c = types.BoolValue(false)
 				}
 			} else {
-				data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() {
+					data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c = types.BoolNull()
+				}
 			}
 			if value := cr.Get("version.v3.security-level"); value.Exists() && !data.Hosts[i].TrapsEncryptedAes[ci].VersionV3SecurityLevel.IsNull() {
 				data.Hosts[i].TrapsEncryptedAes[ci].VersionV3SecurityLevel = types.StringValue(value.String())
@@ -443,14 +457,15 @@ func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
 			} else {
 				data.Hosts[i].InformsUnencryptedStrings[ci].UdpPort = types.StringNull()
 			}
-			if value := cr.Get("version.v2c"); !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("version.v2c"); value.Exists() {
+				if !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() {
 					data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolValue(true)
-				} else {
-					data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolValue(false)
 				}
 			} else {
-				data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() {
+					data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolNull()
+				}
 			}
 			if value := cr.Get("version.v3.security-level"); value.Exists() && !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() {
 				data.Hosts[i].InformsUnencryptedStrings[ci].VersionV3SecurityLevel = types.StringValue(value.String())
@@ -486,14 +501,15 @@ func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
 			} else {
 				data.Hosts[i].InformsEncryptedDefault[ci].UdpPort = types.StringNull()
 			}
-			if value := cr.Get("version.v2c"); !data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("version.v2c"); value.Exists() {
+				if !data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() {
 					data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c = types.BoolValue(true)
-				} else {
-					data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c = types.BoolValue(false)
 				}
 			} else {
-				data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() {
+					data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c = types.BoolNull()
+				}
 			}
 			if value := cr.Get("version.v3.security-level"); value.Exists() && !data.Hosts[i].InformsEncryptedDefault[ci].VersionV3SecurityLevel.IsNull() {
 				data.Hosts[i].InformsEncryptedDefault[ci].VersionV3SecurityLevel = types.StringValue(value.String())
@@ -529,14 +545,15 @@ func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
 			} else {
 				data.Hosts[i].InformsEncryptedAes[ci].UdpPort = types.StringNull()
 			}
-			if value := cr.Get("version.v2c"); !data.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() {
-				if value.Exists() {
+			if value := cr.Get("version.v2c"); value.Exists() {
+				if !data.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() {
 					data.Hosts[i].InformsEncryptedAes[ci].VersionV2c = types.BoolValue(true)
-				} else {
-					data.Hosts[i].InformsEncryptedAes[ci].VersionV2c = types.BoolValue(false)
 				}
 			} else {
-				data.Hosts[i].InformsEncryptedAes[ci].VersionV2c = types.BoolNull()
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() {
+					data.Hosts[i].InformsEncryptedAes[ci].VersionV2c = types.BoolNull()
+				}
 			}
 			if value := cr.Get("version.v3.security-level"); value.Exists() && !data.Hosts[i].InformsEncryptedAes[ci].VersionV3SecurityLevel.IsNull() {
 				data.Hosts[i].InformsEncryptedAes[ci].VersionV3SecurityLevel = types.StringValue(value.String())
@@ -580,8 +597,16 @@ func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *SNMPServerVRF) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "hosts.host"); value.Exists() {
+func (data *SNMPServerVRF) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "hosts.host"); value.Exists() {
 		data.Hosts = make([]SNMPServerVRFHosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SNMPServerVRFHosts{}
@@ -597,7 +622,8 @@ func (data *SNMPServerVRF) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("version.v2c"); ccValue.Exists() {
 						cItem.VersionV2c = types.BoolValue(true)
-					} else {
+					} else if !cItem.VersionV2c.IsNull() {
+						// Only set to false if it was previously set
 						cItem.VersionV2c = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("version.v3.security-level"); ccValue.Exists() {
@@ -616,7 +642,8 @@ func (data *SNMPServerVRF) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("version.v2c"); ccValue.Exists() {
 						cItem.VersionV2c = types.BoolValue(true)
-					} else {
+					} else if !cItem.VersionV2c.IsNull() {
+						// Only set to false if it was previously set
 						cItem.VersionV2c = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("version.v3.security-level"); ccValue.Exists() {
@@ -635,7 +662,8 @@ func (data *SNMPServerVRF) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("version.v2c"); ccValue.Exists() {
 						cItem.VersionV2c = types.BoolValue(true)
-					} else {
+					} else if !cItem.VersionV2c.IsNull() {
+						// Only set to false if it was previously set
 						cItem.VersionV2c = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("version.v3.security-level"); ccValue.Exists() {
@@ -654,7 +682,8 @@ func (data *SNMPServerVRF) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("version.v2c"); ccValue.Exists() {
 						cItem.VersionV2c = types.BoolValue(true)
-					} else {
+					} else if !cItem.VersionV2c.IsNull() {
+						// Only set to false if it was previously set
 						cItem.VersionV2c = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("version.v3.security-level"); ccValue.Exists() {
@@ -673,7 +702,8 @@ func (data *SNMPServerVRF) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("version.v2c"); ccValue.Exists() {
 						cItem.VersionV2c = types.BoolValue(true)
-					} else {
+					} else if !cItem.VersionV2c.IsNull() {
+						// Only set to false if it was previously set
 						cItem.VersionV2c = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("version.v3.security-level"); ccValue.Exists() {
@@ -692,7 +722,8 @@ func (data *SNMPServerVRF) fromBody(ctx context.Context, res []byte) {
 					}
 					if ccValue := cv.Get("version.v2c"); ccValue.Exists() {
 						cItem.VersionV2c = types.BoolValue(true)
-					} else {
+					} else if !cItem.VersionV2c.IsNull() {
+						// Only set to false if it was previously set
 						cItem.VersionV2c = types.BoolValue(false)
 					}
 					if ccValue := cv.Get("version.v3.security-level"); ccValue.Exists() {
@@ -706,7 +737,7 @@ func (data *SNMPServerVRF) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "contexts.context"); value.Exists() {
+	if value := res.Get(prefix + "contexts.context"); value.Exists() {
 		data.Contexts = make([]SNMPServerVRFContexts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SNMPServerVRFContexts{}
@@ -723,8 +754,17 @@ func (data *SNMPServerVRF) fromBody(ctx context.Context, res []byte) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *SNMPServerVRFData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "hosts.host"); value.Exists() {
+func (data *SNMPServerVRFData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "hosts.host"); value.Exists() {
 		data.Hosts = make([]SNMPServerVRFHosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SNMPServerVRFHosts{}
@@ -735,6 +775,9 @@ func (data *SNMPServerVRFData) fromBody(ctx context.Context, res []byte) {
 				item.TrapsUnencryptedStrings = make([]SNMPServerVRFHostsTrapsUnencryptedStrings, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SNMPServerVRFHostsTrapsUnencryptedStrings{}
+					if ccValue := cv.Get("community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
 					if ccValue := cv.Get("udp-port"); ccValue.Exists() {
 						cItem.UdpPort = types.StringValue(ccValue.String())
 					}
@@ -754,6 +797,9 @@ func (data *SNMPServerVRFData) fromBody(ctx context.Context, res []byte) {
 				item.TrapsEncryptedDefault = make([]SNMPServerVRFHostsTrapsEncryptedDefault, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SNMPServerVRFHostsTrapsEncryptedDefault{}
+					if ccValue := cv.Get("community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
 					if ccValue := cv.Get("udp-port"); ccValue.Exists() {
 						cItem.UdpPort = types.StringValue(ccValue.String())
 					}
@@ -773,6 +819,9 @@ func (data *SNMPServerVRFData) fromBody(ctx context.Context, res []byte) {
 				item.TrapsEncryptedAes = make([]SNMPServerVRFHostsTrapsEncryptedAes, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SNMPServerVRFHostsTrapsEncryptedAes{}
+					if ccValue := cv.Get("community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
 					if ccValue := cv.Get("udp-port"); ccValue.Exists() {
 						cItem.UdpPort = types.StringValue(ccValue.String())
 					}
@@ -792,6 +841,9 @@ func (data *SNMPServerVRFData) fromBody(ctx context.Context, res []byte) {
 				item.InformsUnencryptedStrings = make([]SNMPServerVRFHostsInformsUnencryptedStrings, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SNMPServerVRFHostsInformsUnencryptedStrings{}
+					if ccValue := cv.Get("community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
 					if ccValue := cv.Get("udp-port"); ccValue.Exists() {
 						cItem.UdpPort = types.StringValue(ccValue.String())
 					}
@@ -811,6 +863,9 @@ func (data *SNMPServerVRFData) fromBody(ctx context.Context, res []byte) {
 				item.InformsEncryptedDefault = make([]SNMPServerVRFHostsInformsEncryptedDefault, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SNMPServerVRFHostsInformsEncryptedDefault{}
+					if ccValue := cv.Get("community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
 					if ccValue := cv.Get("udp-port"); ccValue.Exists() {
 						cItem.UdpPort = types.StringValue(ccValue.String())
 					}
@@ -830,6 +885,9 @@ func (data *SNMPServerVRFData) fromBody(ctx context.Context, res []byte) {
 				item.InformsEncryptedAes = make([]SNMPServerVRFHostsInformsEncryptedAes, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SNMPServerVRFHostsInformsEncryptedAes{}
+					if ccValue := cv.Get("community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
 					if ccValue := cv.Get("udp-port"); ccValue.Exists() {
 						cItem.UdpPort = types.StringValue(ccValue.String())
 					}
@@ -849,7 +907,7 @@ func (data *SNMPServerVRFData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "contexts.context"); value.Exists() {
+	if value := res.Get(prefix + "contexts.context"); value.Exists() {
 		data.Contexts = make([]SNMPServerVRFContexts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SNMPServerVRFContexts{}
@@ -1169,7 +1227,7 @@ func (data *SNMPServerVRF) getDeletedItems(ctx context.Context, state SNMPServer
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context, state *SNMPServerVRF) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Contexts {
 		keys := [...]string{"context-name"}
@@ -1193,8 +1251,12 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			// Only delete if state has true and plan has false
 			if !data.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() && !data.Hosts[i].InformsEncryptedAes[ci].VersionV2c.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/informs/encrypted/encryption-aeses/encryption-aes%v/version/v2c", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].InformsEncryptedAes) && !state.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() && state.Hosts[i].InformsEncryptedAes[ci].VersionV2c.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/informs/encrypted/encryption-aeses/encryption-aes%v/version/v2c", data.getXPath(), keyString, ckeyString))
+				}
 			}
 		}
 		for ci := range data.Hosts[i].InformsEncryptedDefault {
@@ -1204,8 +1266,12 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			// Only delete if state has true and plan has false
 			if !data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() && !data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/informs/encrypted/encryption-defaults/encryption-default%v/version/v2c", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].InformsEncryptedDefault) && !state.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() && state.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/informs/encrypted/encryption-defaults/encryption-default%v/version/v2c", data.getXPath(), keyString, ckeyString))
+				}
 			}
 		}
 		for ci := range data.Hosts[i].InformsUnencryptedStrings {
@@ -1215,8 +1281,12 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			// Only delete if state has true and plan has false
 			if !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() && !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/informs/unencrypted/unencrypted-string%v/version/v2c", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].InformsUnencryptedStrings) && !state.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() && state.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/informs/unencrypted/unencrypted-string%v/version/v2c", data.getXPath(), keyString, ckeyString))
+				}
 			}
 		}
 		for ci := range data.Hosts[i].TrapsEncryptedAes {
@@ -1226,8 +1296,12 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			// Only delete if state has true and plan has false
 			if !data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() && !data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/traps/encrypted/encryption-aeses/encryption-aes%v/version/v2c", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].TrapsEncryptedAes) && !state.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() && state.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/traps/encrypted/encryption-aeses/encryption-aes%v/version/v2c", data.getXPath(), keyString, ckeyString))
+				}
 			}
 		}
 		for ci := range data.Hosts[i].TrapsEncryptedDefault {
@@ -1237,8 +1311,12 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			// Only delete if state has true and plan has false
 			if !data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() && !data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/traps/encrypted/encryption-defaults/encryption-default%v/version/v2c", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].TrapsEncryptedDefault) && !state.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() && state.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/traps/encrypted/encryption-defaults/encryption-default%v/version/v2c", data.getXPath(), keyString, ckeyString))
+				}
 			}
 		}
 		for ci := range data.Hosts[i].TrapsUnencryptedStrings {
@@ -1248,8 +1326,12 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
+			// Only delete if state has true and plan has false
 			if !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() && !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/traps/unencrypted/unencrypted-string%v/version/v2c", data.getPath(), keyString, ckeyString))
+				// Check if corresponding state item exists and has true value
+				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].TrapsUnencryptedStrings) && !state.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() && state.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/traps/unencrypted/unencrypted-string%v/version/v2c", data.getXPath(), keyString, ckeyString))
+				}
 			}
 		}
 	}
@@ -1263,26 +1345,1161 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *SNMPServerVRF) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Contexts {
-		keys := [...]string{"context-name"}
-		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/contexts/context%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[context-name=" + data.Contexts[i].Name.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/contexts/context%v", data.getPath(), keyPath))
 	}
 	for i := range data.Hosts {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.Hosts[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hosts/host%v", data.getPath(), keyString))
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[address=" + data.Hosts[i].Address.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hosts/host%v", data.getPath(), keyPath))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data SNMPServerVRF) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if len(data.Hosts) > 0 {
+		for _, item := range data.Hosts {
+			basePath := data.getXPath() + "/hosts/host"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if len(item.TrapsUnencryptedStrings) > 0 {
+				for _, citem := range item.TrapsUnencryptedStrings {
+					cbasePath := basePath + "/traps/unencrypted/unencrypted-string[community-string='" + citem.CommunityString.ValueString() + "']"
+					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/community-string", citem.CommunityString.ValueString())
+					}
+					if !citem.UdpPort.IsNull() && !citem.UdpPort.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/udp-port", citem.UdpPort.ValueString())
+					}
+					if !citem.VersionV2c.IsNull() && !citem.VersionV2c.IsUnknown() {
+						if citem.VersionV2c.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/version/v2c", "")
+						}
+					}
+					if !citem.VersionV3SecurityLevel.IsNull() && !citem.VersionV3SecurityLevel.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/version/v3/security-level", citem.VersionV3SecurityLevel.ValueString())
+					}
+				}
+			}
+			if len(item.TrapsEncryptedDefault) > 0 {
+				for _, citem := range item.TrapsEncryptedDefault {
+					cbasePath := basePath + "/traps/encrypted/encryption-defaults/encryption-default[community-string='" + citem.CommunityString.ValueString() + "']"
+					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/community-string", citem.CommunityString.ValueString())
+					}
+					if !citem.UdpPort.IsNull() && !citem.UdpPort.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/udp-port", citem.UdpPort.ValueString())
+					}
+					if !citem.VersionV2c.IsNull() && !citem.VersionV2c.IsUnknown() {
+						if citem.VersionV2c.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/version/v2c", "")
+						}
+					}
+					if !citem.VersionV3SecurityLevel.IsNull() && !citem.VersionV3SecurityLevel.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/version/v3/security-level", citem.VersionV3SecurityLevel.ValueString())
+					}
+				}
+			}
+			if len(item.TrapsEncryptedAes) > 0 {
+				for _, citem := range item.TrapsEncryptedAes {
+					cbasePath := basePath + "/traps/encrypted/encryption-aeses/encryption-aes[community-string='" + citem.CommunityString.ValueString() + "']"
+					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/community-string", citem.CommunityString.ValueString())
+					}
+					if !citem.UdpPort.IsNull() && !citem.UdpPort.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/udp-port", citem.UdpPort.ValueString())
+					}
+					if !citem.VersionV2c.IsNull() && !citem.VersionV2c.IsUnknown() {
+						if citem.VersionV2c.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/version/v2c", "")
+						}
+					}
+					if !citem.VersionV3SecurityLevel.IsNull() && !citem.VersionV3SecurityLevel.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/version/v3/security-level", citem.VersionV3SecurityLevel.ValueString())
+					}
+				}
+			}
+			if len(item.InformsUnencryptedStrings) > 0 {
+				for _, citem := range item.InformsUnencryptedStrings {
+					cbasePath := basePath + "/informs/unencrypted/unencrypted-string[community-string='" + citem.CommunityString.ValueString() + "']"
+					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/community-string", citem.CommunityString.ValueString())
+					}
+					if !citem.UdpPort.IsNull() && !citem.UdpPort.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/udp-port", citem.UdpPort.ValueString())
+					}
+					if !citem.VersionV2c.IsNull() && !citem.VersionV2c.IsUnknown() {
+						if citem.VersionV2c.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/version/v2c", "")
+						}
+					}
+					if !citem.VersionV3SecurityLevel.IsNull() && !citem.VersionV3SecurityLevel.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/version/v3/security-level", citem.VersionV3SecurityLevel.ValueString())
+					}
+				}
+			}
+			if len(item.InformsEncryptedDefault) > 0 {
+				for _, citem := range item.InformsEncryptedDefault {
+					cbasePath := basePath + "/informs/encrypted/encryption-defaults/encryption-default[community-string='" + citem.CommunityString.ValueString() + "']"
+					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/community-string", citem.CommunityString.ValueString())
+					}
+					if !citem.UdpPort.IsNull() && !citem.UdpPort.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/udp-port", citem.UdpPort.ValueString())
+					}
+					if !citem.VersionV2c.IsNull() && !citem.VersionV2c.IsUnknown() {
+						if citem.VersionV2c.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/version/v2c", "")
+						}
+					}
+					if !citem.VersionV3SecurityLevel.IsNull() && !citem.VersionV3SecurityLevel.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/version/v3/security-level", citem.VersionV3SecurityLevel.ValueString())
+					}
+				}
+			}
+			if len(item.InformsEncryptedAes) > 0 {
+				for _, citem := range item.InformsEncryptedAes {
+					cbasePath := basePath + "/informs/encrypted/encryption-aeses/encryption-aes[community-string='" + citem.CommunityString.ValueString() + "']"
+					if !citem.CommunityString.IsNull() && !citem.CommunityString.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/community-string", citem.CommunityString.ValueString())
+					}
+					if !citem.UdpPort.IsNull() && !citem.UdpPort.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/udp-port", citem.UdpPort.ValueString())
+					}
+					if !citem.VersionV2c.IsNull() && !citem.VersionV2c.IsUnknown() {
+						if citem.VersionV2c.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/version/v2c", "")
+						}
+					}
+					if !citem.VersionV3SecurityLevel.IsNull() && !citem.VersionV3SecurityLevel.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/version/v3/security-level", citem.VersionV3SecurityLevel.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if len(data.Contexts) > 0 {
+		for _, item := range data.Contexts {
+			basePath := data.getXPath() + "/contexts/context"
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/context-name", item.Name.ValueString())
+			}
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *SNMPServerVRF) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	for i := range data.Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Hosts[i].Address.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hosts/host").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.Hosts[i].Address.IsNull() {
+			data.Hosts[i].Address = types.StringValue(value.String())
+		} else if data.Hosts[i].Address.IsNull() {
+			data.Hosts[i].Address = types.StringNull()
+		}
+		for ci := range data.Hosts[i].TrapsUnencryptedStrings {
+			keys := [...]string{"community-string"}
+			keyValues := [...]string{data.Hosts[i].TrapsUnencryptedStrings[ci].CommunityString.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "traps/unencrypted/unencrypted-string").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "udp-port"); value.Exists() && !data.Hosts[i].TrapsUnencryptedStrings[ci].UdpPort.IsNull() {
+				data.Hosts[i].TrapsUnencryptedStrings[ci].UdpPort = types.StringValue(value.String())
+			} else if data.Hosts[i].TrapsUnencryptedStrings[ci].UdpPort.IsNull() {
+				data.Hosts[i].TrapsUnencryptedStrings[ci].UdpPort = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "version/v2c"); value.Exists() {
+				if !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() {
+					data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() {
+					data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "version/v3/security-level"); value.Exists() && !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV3SecurityLevel = types.StringValue(value.String())
+			} else if data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV3SecurityLevel = types.StringNull()
+			}
+		}
+		for ci := range data.Hosts[i].TrapsEncryptedDefault {
+			keys := [...]string{"community-string"}
+			keyValues := [...]string{data.Hosts[i].TrapsEncryptedDefault[ci].CommunityString.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "traps/encrypted/encryption-defaults/encryption-default").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "udp-port"); value.Exists() && !data.Hosts[i].TrapsEncryptedDefault[ci].UdpPort.IsNull() {
+				data.Hosts[i].TrapsEncryptedDefault[ci].UdpPort = types.StringValue(value.String())
+			} else if data.Hosts[i].TrapsEncryptedDefault[ci].UdpPort.IsNull() {
+				data.Hosts[i].TrapsEncryptedDefault[ci].UdpPort = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "version/v2c"); value.Exists() {
+				if !data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() {
+					data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() {
+					data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "version/v3/security-level"); value.Exists() && !data.Hosts[i].TrapsEncryptedDefault[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].TrapsEncryptedDefault[ci].VersionV3SecurityLevel = types.StringValue(value.String())
+			} else if data.Hosts[i].TrapsEncryptedDefault[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].TrapsEncryptedDefault[ci].VersionV3SecurityLevel = types.StringNull()
+			}
+		}
+		for ci := range data.Hosts[i].TrapsEncryptedAes {
+			keys := [...]string{"community-string"}
+			keyValues := [...]string{data.Hosts[i].TrapsEncryptedAes[ci].CommunityString.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "traps/encrypted/encryption-aeses/encryption-aes").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "udp-port"); value.Exists() && !data.Hosts[i].TrapsEncryptedAes[ci].UdpPort.IsNull() {
+				data.Hosts[i].TrapsEncryptedAes[ci].UdpPort = types.StringValue(value.String())
+			} else if data.Hosts[i].TrapsEncryptedAes[ci].UdpPort.IsNull() {
+				data.Hosts[i].TrapsEncryptedAes[ci].UdpPort = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "version/v2c"); value.Exists() {
+				if !data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() {
+					data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() {
+					data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "version/v3/security-level"); value.Exists() && !data.Hosts[i].TrapsEncryptedAes[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].TrapsEncryptedAes[ci].VersionV3SecurityLevel = types.StringValue(value.String())
+			} else if data.Hosts[i].TrapsEncryptedAes[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].TrapsEncryptedAes[ci].VersionV3SecurityLevel = types.StringNull()
+			}
+		}
+		for ci := range data.Hosts[i].InformsUnencryptedStrings {
+			keys := [...]string{"community-string"}
+			keyValues := [...]string{data.Hosts[i].InformsUnencryptedStrings[ci].CommunityString.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "informs/unencrypted/unencrypted-string").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "udp-port"); value.Exists() && !data.Hosts[i].InformsUnencryptedStrings[ci].UdpPort.IsNull() {
+				data.Hosts[i].InformsUnencryptedStrings[ci].UdpPort = types.StringValue(value.String())
+			} else if data.Hosts[i].InformsUnencryptedStrings[ci].UdpPort.IsNull() {
+				data.Hosts[i].InformsUnencryptedStrings[ci].UdpPort = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "version/v2c"); value.Exists() {
+				if !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() {
+					data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() {
+					data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "version/v3/security-level"); value.Exists() && !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].InformsUnencryptedStrings[ci].VersionV3SecurityLevel = types.StringValue(value.String())
+			} else if data.Hosts[i].InformsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].InformsUnencryptedStrings[ci].VersionV3SecurityLevel = types.StringNull()
+			}
+		}
+		for ci := range data.Hosts[i].InformsEncryptedDefault {
+			keys := [...]string{"community-string"}
+			keyValues := [...]string{data.Hosts[i].InformsEncryptedDefault[ci].CommunityString.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "informs/encrypted/encryption-defaults/encryption-default").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "udp-port"); value.Exists() && !data.Hosts[i].InformsEncryptedDefault[ci].UdpPort.IsNull() {
+				data.Hosts[i].InformsEncryptedDefault[ci].UdpPort = types.StringValue(value.String())
+			} else if data.Hosts[i].InformsEncryptedDefault[ci].UdpPort.IsNull() {
+				data.Hosts[i].InformsEncryptedDefault[ci].UdpPort = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "version/v2c"); value.Exists() {
+				if !data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() {
+					data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() {
+					data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "version/v3/security-level"); value.Exists() && !data.Hosts[i].InformsEncryptedDefault[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].InformsEncryptedDefault[ci].VersionV3SecurityLevel = types.StringValue(value.String())
+			} else if data.Hosts[i].InformsEncryptedDefault[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].InformsEncryptedDefault[ci].VersionV3SecurityLevel = types.StringNull()
+			}
+		}
+		for ci := range data.Hosts[i].InformsEncryptedAes {
+			keys := [...]string{"community-string"}
+			keyValues := [...]string{data.Hosts[i].InformsEncryptedAes[ci].CommunityString.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "informs/encrypted/encryption-aeses/encryption-aes").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "udp-port"); value.Exists() && !data.Hosts[i].InformsEncryptedAes[ci].UdpPort.IsNull() {
+				data.Hosts[i].InformsEncryptedAes[ci].UdpPort = types.StringValue(value.String())
+			} else if data.Hosts[i].InformsEncryptedAes[ci].UdpPort.IsNull() {
+				data.Hosts[i].InformsEncryptedAes[ci].UdpPort = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "version/v2c"); value.Exists() {
+				if !data.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() {
+					data.Hosts[i].InformsEncryptedAes[ci].VersionV2c = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() {
+					data.Hosts[i].InformsEncryptedAes[ci].VersionV2c = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "version/v3/security-level"); value.Exists() && !data.Hosts[i].InformsEncryptedAes[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].InformsEncryptedAes[ci].VersionV3SecurityLevel = types.StringValue(value.String())
+			} else if data.Hosts[i].InformsEncryptedAes[ci].VersionV3SecurityLevel.IsNull() {
+				data.Hosts[i].InformsEncryptedAes[ci].VersionV3SecurityLevel = types.StringNull()
+			}
+		}
+	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contexts/context").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "context-name"); value.Exists() && !data.Contexts[i].Name.IsNull() {
+			data.Contexts[i].Name = types.StringValue(value.String())
+		} else if data.Contexts[i].Name.IsNull() {
+			data.Contexts[i].Name = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *SNMPServerVRF) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hosts/host"); value.Exists() {
+		data.Hosts = make([]SNMPServerVRFHosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerVRFHosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "traps/unencrypted/unencrypted-string"); cValue.Exists() {
+				item.TrapsUnencryptedStrings = make([]SNMPServerVRFHostsTrapsUnencryptedStrings, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsTrapsUnencryptedStrings{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.TrapsUnencryptedStrings = append(item.TrapsUnencryptedStrings, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "traps/encrypted/encryption-defaults/encryption-default"); cValue.Exists() {
+				item.TrapsEncryptedDefault = make([]SNMPServerVRFHostsTrapsEncryptedDefault, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsTrapsEncryptedDefault{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.TrapsEncryptedDefault = append(item.TrapsEncryptedDefault, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "traps/encrypted/encryption-aeses/encryption-aes"); cValue.Exists() {
+				item.TrapsEncryptedAes = make([]SNMPServerVRFHostsTrapsEncryptedAes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsTrapsEncryptedAes{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.TrapsEncryptedAes = append(item.TrapsEncryptedAes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "informs/unencrypted/unencrypted-string"); cValue.Exists() {
+				item.InformsUnencryptedStrings = make([]SNMPServerVRFHostsInformsUnencryptedStrings, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsInformsUnencryptedStrings{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.InformsUnencryptedStrings = append(item.InformsUnencryptedStrings, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "informs/encrypted/encryption-defaults/encryption-default"); cValue.Exists() {
+				item.InformsEncryptedDefault = make([]SNMPServerVRFHostsInformsEncryptedDefault, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsInformsEncryptedDefault{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.InformsEncryptedDefault = append(item.InformsEncryptedDefault, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "informs/encrypted/encryption-aeses/encryption-aes"); cValue.Exists() {
+				item.InformsEncryptedAes = make([]SNMPServerVRFHostsInformsEncryptedAes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsInformsEncryptedAes{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.InformsEncryptedAes = append(item.InformsEncryptedAes, cItem)
+					return true
+				})
+			}
+			data.Hosts = append(data.Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contexts/context"); value.Exists() {
+		data.Contexts = make([]SNMPServerVRFContexts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerVRFContexts{}
+			if cValue := helpers.GetFromXPath(v, "context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *SNMPServerVRFData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hosts/host"); value.Exists() {
+		data.Hosts = make([]SNMPServerVRFHosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerVRFHosts{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "traps/unencrypted/unencrypted-string"); cValue.Exists() {
+				item.TrapsUnencryptedStrings = make([]SNMPServerVRFHostsTrapsUnencryptedStrings, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsTrapsUnencryptedStrings{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.TrapsUnencryptedStrings = append(item.TrapsUnencryptedStrings, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "traps/encrypted/encryption-defaults/encryption-default"); cValue.Exists() {
+				item.TrapsEncryptedDefault = make([]SNMPServerVRFHostsTrapsEncryptedDefault, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsTrapsEncryptedDefault{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.TrapsEncryptedDefault = append(item.TrapsEncryptedDefault, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "traps/encrypted/encryption-aeses/encryption-aes"); cValue.Exists() {
+				item.TrapsEncryptedAes = make([]SNMPServerVRFHostsTrapsEncryptedAes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsTrapsEncryptedAes{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.TrapsEncryptedAes = append(item.TrapsEncryptedAes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "informs/unencrypted/unencrypted-string"); cValue.Exists() {
+				item.InformsUnencryptedStrings = make([]SNMPServerVRFHostsInformsUnencryptedStrings, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsInformsUnencryptedStrings{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.InformsUnencryptedStrings = append(item.InformsUnencryptedStrings, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "informs/encrypted/encryption-defaults/encryption-default"); cValue.Exists() {
+				item.InformsEncryptedDefault = make([]SNMPServerVRFHostsInformsEncryptedDefault, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsInformsEncryptedDefault{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.InformsEncryptedDefault = append(item.InformsEncryptedDefault, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "informs/encrypted/encryption-aeses/encryption-aes"); cValue.Exists() {
+				item.InformsEncryptedAes = make([]SNMPServerVRFHostsInformsEncryptedAes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SNMPServerVRFHostsInformsEncryptedAes{}
+					if ccValue := helpers.GetFromXPath(cv, "community-string"); ccValue.Exists() {
+						cItem.CommunityString = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "udp-port"); ccValue.Exists() {
+						cItem.UdpPort = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v2c"); ccValue.Exists() {
+						cItem.VersionV2c = types.BoolValue(true)
+					} else {
+						cItem.VersionV2c = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "version/v3/security-level"); ccValue.Exists() {
+						cItem.VersionV3SecurityLevel = types.StringValue(ccValue.String())
+					}
+					item.InformsEncryptedAes = append(item.InformsEncryptedAes, cItem)
+					return true
+				})
+			}
+			data.Hosts = append(data.Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/contexts/context"); value.Exists() {
+		data.Contexts = make([]SNMPServerVRFContexts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerVRFContexts{}
+			if cValue := helpers.GetFromXPath(v, "context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *SNMPServerVRF) addDeletedItemsXML(ctx context.Context, state SNMPServerVRF, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Contexts {
+		stateKeys := [...]string{"context-name"}
+		stateKeyValues := [...]string{state.Contexts[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Contexts[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Contexts {
+			found = true
+			if state.Contexts[i].Name.ValueString() != data.Contexts[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/contexts/context%v", predicates))
+		}
+	}
+	for i := range state.Hosts {
+		stateKeys := [...]string{"address"}
+		stateKeyValues := [...]string{state.Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Hosts {
+			found = true
+			if state.Hosts[i].Address.ValueString() != data.Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.Hosts[i].InformsEncryptedAes {
+					cstateKeys := [...]string{"community-string"}
+					cstateKeyValues := [...]string{state.Hosts[i].InformsEncryptedAes[ci].CommunityString.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Hosts[i].InformsEncryptedAes[ci].CommunityString.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Hosts[j].InformsEncryptedAes {
+						found = true
+						if state.Hosts[i].InformsEncryptedAes[ci].CommunityString.ValueString() != data.Hosts[j].InformsEncryptedAes[cj].CommunityString.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Hosts[i].InformsEncryptedAes[ci].VersionV3SecurityLevel.IsNull() && data.Hosts[j].InformsEncryptedAes[cj].VersionV3SecurityLevel.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/encrypted/encryption-aeses/encryption-aes%v/version/v3", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() && state.Hosts[i].InformsEncryptedAes[ci].VersionV2c.ValueBool() && data.Hosts[j].InformsEncryptedAes[cj].VersionV2c.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/encrypted/encryption-aeses/encryption-aes%v/version/v2c", predicates, cpredicates))
+							}
+							if !state.Hosts[i].InformsEncryptedAes[ci].UdpPort.IsNull() && data.Hosts[j].InformsEncryptedAes[cj].UdpPort.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/encrypted/encryption-aeses/encryption-aes%v/udp-port", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/encrypted/encryption-aeses/encryption-aes%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Hosts[i].InformsEncryptedDefault {
+					cstateKeys := [...]string{"community-string"}
+					cstateKeyValues := [...]string{state.Hosts[i].InformsEncryptedDefault[ci].CommunityString.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Hosts[i].InformsEncryptedDefault[ci].CommunityString.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Hosts[j].InformsEncryptedDefault {
+						found = true
+						if state.Hosts[i].InformsEncryptedDefault[ci].CommunityString.ValueString() != data.Hosts[j].InformsEncryptedDefault[cj].CommunityString.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Hosts[i].InformsEncryptedDefault[ci].VersionV3SecurityLevel.IsNull() && data.Hosts[j].InformsEncryptedDefault[cj].VersionV3SecurityLevel.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/encrypted/encryption-defaults/encryption-default%v/version/v3", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() && state.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.ValueBool() && data.Hosts[j].InformsEncryptedDefault[cj].VersionV2c.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/encrypted/encryption-defaults/encryption-default%v/version/v2c", predicates, cpredicates))
+							}
+							if !state.Hosts[i].InformsEncryptedDefault[ci].UdpPort.IsNull() && data.Hosts[j].InformsEncryptedDefault[cj].UdpPort.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/encrypted/encryption-defaults/encryption-default%v/udp-port", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/encrypted/encryption-defaults/encryption-default%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Hosts[i].InformsUnencryptedStrings {
+					cstateKeys := [...]string{"community-string"}
+					cstateKeyValues := [...]string{state.Hosts[i].InformsUnencryptedStrings[ci].CommunityString.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Hosts[i].InformsUnencryptedStrings[ci].CommunityString.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Hosts[j].InformsUnencryptedStrings {
+						found = true
+						if state.Hosts[i].InformsUnencryptedStrings[ci].CommunityString.ValueString() != data.Hosts[j].InformsUnencryptedStrings[cj].CommunityString.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Hosts[i].InformsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() && data.Hosts[j].InformsUnencryptedStrings[cj].VersionV3SecurityLevel.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/unencrypted/unencrypted-string%v/version/v3", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() && state.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.ValueBool() && data.Hosts[j].InformsUnencryptedStrings[cj].VersionV2c.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/unencrypted/unencrypted-string%v/version/v2c", predicates, cpredicates))
+							}
+							if !state.Hosts[i].InformsUnencryptedStrings[ci].UdpPort.IsNull() && data.Hosts[j].InformsUnencryptedStrings[cj].UdpPort.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/unencrypted/unencrypted-string%v/udp-port", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/informs/unencrypted/unencrypted-string%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Hosts[i].TrapsEncryptedAes {
+					cstateKeys := [...]string{"community-string"}
+					cstateKeyValues := [...]string{state.Hosts[i].TrapsEncryptedAes[ci].CommunityString.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Hosts[i].TrapsEncryptedAes[ci].CommunityString.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Hosts[j].TrapsEncryptedAes {
+						found = true
+						if state.Hosts[i].TrapsEncryptedAes[ci].CommunityString.ValueString() != data.Hosts[j].TrapsEncryptedAes[cj].CommunityString.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Hosts[i].TrapsEncryptedAes[ci].VersionV3SecurityLevel.IsNull() && data.Hosts[j].TrapsEncryptedAes[cj].VersionV3SecurityLevel.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/encrypted/encryption-aeses/encryption-aes%v/version/v3", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() && state.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.ValueBool() && data.Hosts[j].TrapsEncryptedAes[cj].VersionV2c.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/encrypted/encryption-aeses/encryption-aes%v/version/v2c", predicates, cpredicates))
+							}
+							if !state.Hosts[i].TrapsEncryptedAes[ci].UdpPort.IsNull() && data.Hosts[j].TrapsEncryptedAes[cj].UdpPort.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/encrypted/encryption-aeses/encryption-aes%v/udp-port", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/encrypted/encryption-aeses/encryption-aes%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Hosts[i].TrapsEncryptedDefault {
+					cstateKeys := [...]string{"community-string"}
+					cstateKeyValues := [...]string{state.Hosts[i].TrapsEncryptedDefault[ci].CommunityString.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Hosts[i].TrapsEncryptedDefault[ci].CommunityString.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Hosts[j].TrapsEncryptedDefault {
+						found = true
+						if state.Hosts[i].TrapsEncryptedDefault[ci].CommunityString.ValueString() != data.Hosts[j].TrapsEncryptedDefault[cj].CommunityString.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Hosts[i].TrapsEncryptedDefault[ci].VersionV3SecurityLevel.IsNull() && data.Hosts[j].TrapsEncryptedDefault[cj].VersionV3SecurityLevel.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/encrypted/encryption-defaults/encryption-default%v/version/v3", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() && state.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.ValueBool() && data.Hosts[j].TrapsEncryptedDefault[cj].VersionV2c.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/encrypted/encryption-defaults/encryption-default%v/version/v2c", predicates, cpredicates))
+							}
+							if !state.Hosts[i].TrapsEncryptedDefault[ci].UdpPort.IsNull() && data.Hosts[j].TrapsEncryptedDefault[cj].UdpPort.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/encrypted/encryption-defaults/encryption-default%v/udp-port", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/encrypted/encryption-defaults/encryption-default%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Hosts[i].TrapsUnencryptedStrings {
+					cstateKeys := [...]string{"community-string"}
+					cstateKeyValues := [...]string{state.Hosts[i].TrapsUnencryptedStrings[ci].CommunityString.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Hosts[i].TrapsUnencryptedStrings[ci].CommunityString.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Hosts[j].TrapsUnencryptedStrings {
+						found = true
+						if state.Hosts[i].TrapsUnencryptedStrings[ci].CommunityString.ValueString() != data.Hosts[j].TrapsUnencryptedStrings[cj].CommunityString.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Hosts[i].TrapsUnencryptedStrings[ci].VersionV3SecurityLevel.IsNull() && data.Hosts[j].TrapsUnencryptedStrings[cj].VersionV3SecurityLevel.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/unencrypted/unencrypted-string%v/version/v3", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() && state.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.ValueBool() && data.Hosts[j].TrapsUnencryptedStrings[cj].VersionV2c.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/unencrypted/unencrypted-string%v/version/v2c", predicates, cpredicates))
+							}
+							if !state.Hosts[i].TrapsUnencryptedStrings[ci].UdpPort.IsNull() && data.Hosts[j].TrapsUnencryptedStrings[cj].UdpPort.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/unencrypted/unencrypted-string%v/udp-port", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/traps/unencrypted/unencrypted-string%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v", predicates))
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *SNMPServerVRF) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/contexts/context%v", predicates))
+	}
+	for i := range data.Hosts {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Hosts[i].Address.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/hosts/host%v", predicates))
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

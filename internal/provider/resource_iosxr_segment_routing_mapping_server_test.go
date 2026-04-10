@@ -44,11 +44,11 @@ func TestAccIosxrSegmentRoutingMappingServer(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrSegmentRoutingMappingServerPrerequisitesConfig + testAccIosxrSegmentRoutingMappingServerConfig_minimum(),
+			Config: testAccIosxrSegmentRoutingMappingServerConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrSegmentRoutingMappingServerPrerequisitesConfig + testAccIosxrSegmentRoutingMappingServerConfig_all(),
+		Config: testAccIosxrSegmentRoutingMappingServerConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -78,15 +78,6 @@ func iosxrSegmentRoutingMappingServerImportStateIdFunc(resourceName string) reso
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrSegmentRoutingMappingServerPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing"
-	attributes = {
-		"enable" = "<NULL>"
-	}
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -103,7 +94,6 @@ func testAccIosxrSegmentRoutingMappingServerConfig_minimum() string {
 	config += `			range = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -124,7 +114,6 @@ func testAccIosxrSegmentRoutingMappingServerConfig_all() string {
 	config += `			attached = true` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

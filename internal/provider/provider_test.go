@@ -19,19 +19,31 @@ package provider
 
 import (
 	"os"
+	"sync"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 )
 
 var (
+	// Singleton provider instance to enable connection reuse across test steps
+	testProviderInstance     provider.Provider
+	testProviderInstanceOnce sync.Once
+
 	// testAccProtoV6ProviderFactories are used to instantiate a provider during
 	// acceptance testing. The factory function will be invoked for every Terraform
 	// CLI command executed to create a provider server to which the CLI can
 	// reattach.
 	testAccProtoV6ProviderFactories = map[string]func() (tfprotov6.ProviderServer, error){
-		"iosxr": providerserver.NewProtocol6WithError(New()),
+		"iosxr": func() (tfprotov6.ProviderServer, error) {
+			// Use a singleton provider instance to enable connection reuse across test steps
+			testProviderInstanceOnce.Do(func() {
+				testProviderInstance = New()
+			})
+			return providerserver.NewProtocol6(testProviderInstance)(), nil
+		},
 	}
 )
 

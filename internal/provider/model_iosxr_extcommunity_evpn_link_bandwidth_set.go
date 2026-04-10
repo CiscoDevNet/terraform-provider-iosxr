@@ -23,8 +23,13 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -58,6 +63,19 @@ func (data ExtcommunityEVPNLinkBandwidthSetData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-evpn-bandwidth-sets/extended-community-evpn-bandwidth-set[set-name=%s]", data.SetName.ValueString())
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data ExtcommunityEVPNLinkBandwidthSet) getXPath() string {
+	path := "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-evpn-bandwidth-sets/extended-community-evpn-bandwidth-set[set-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.SetName.ValueString()))
+	return path
+}
+
+func (data ExtcommunityEVPNLinkBandwidthSetData) getXPath() string {
+	path := "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-evpn-bandwidth-sets/extended-community-evpn-bandwidth-set[set-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.SetName.ValueString()))
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -75,22 +93,67 @@ func (data ExtcommunityEVPNLinkBandwidthSet) toBody(ctx context.Context) string 
 
 // End of section. //template:end toBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data ExtcommunityEVPNLinkBandwidthSet) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/rpl-extended-community-evpn-bandwidth-set", data.Rpl.ValueString())
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *ExtcommunityEVPNLinkBandwidthSet) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-evpn-bandwidth-set"); value.Exists() && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
-	} else {
+	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
 
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *ExtcommunityEVPNLinkBandwidthSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-evpn-bandwidth-set"); value.Exists() && !data.Rpl.IsNull() {
+		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Rpl = types.StringValue(rplValue)
+	} else if data.Rpl.IsNull() {
+		data.Rpl = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *ExtcommunityEVPNLinkBandwidthSet) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rpl-extended-community-evpn-bandwidth-set"); value.Exists() {
+func (data *ExtcommunityEVPNLinkBandwidthSet) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "rpl-extended-community-evpn-bandwidth-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
@@ -99,13 +162,52 @@ func (data *ExtcommunityEVPNLinkBandwidthSet) fromBody(ctx context.Context, res 
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *ExtcommunityEVPNLinkBandwidthSetData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rpl-extended-community-evpn-bandwidth-set"); value.Exists() {
+func (data *ExtcommunityEVPNLinkBandwidthSetData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "rpl-extended-community-evpn-bandwidth-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
 
 // End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *ExtcommunityEVPNLinkBandwidthSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-evpn-bandwidth-set"); value.Exists() {
+		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Rpl = types.StringValue(rplValue)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *ExtcommunityEVPNLinkBandwidthSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-evpn-bandwidth-set"); value.Exists() {
+		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Rpl = types.StringValue(rplValue)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
@@ -121,7 +223,7 @@ func (data *ExtcommunityEVPNLinkBandwidthSet) getDeletedItems(ctx context.Contex
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *ExtcommunityEVPNLinkBandwidthSet) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *ExtcommunityEVPNLinkBandwidthSet) getEmptyLeafsDelete(ctx context.Context, state *ExtcommunityEVPNLinkBandwidthSet) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
@@ -135,7 +237,50 @@ func (data *ExtcommunityEVPNLinkBandwidthSet) getDeletePaths(ctx context.Context
 	if !data.Rpl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpl-extended-community-evpn-bandwidth-set", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *ExtcommunityEVPNLinkBandwidthSet) addDeletedItemsXML(ctx context.Context, state ExtcommunityEVPNLinkBandwidthSet, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletePath := state.getXPath() + "/rpl-extended-community-evpn-bandwidth-set"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *ExtcommunityEVPNLinkBandwidthSet) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Rpl.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/rpl-extended-community-evpn-bandwidth-set")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

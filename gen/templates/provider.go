@@ -23,12 +23,16 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin provider
 import (
 	"context"
+	"fmt"
 	"os"
+	"regexp"
 	"slices"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -58,24 +62,60 @@ type providerData struct {
 	Key               types.String         `tfsdk:"key"`
 	CaCertificate     types.String         `tfsdk:"ca_certificate"`
 	ReuseConnection   types.Bool           `tfsdk:"reuse_connection"`
+	AutoCommit        types.Bool           `tfsdk:"auto_commit"`
 	SelectedDevices   types.List           `tfsdk:"selected_devices"`
 	Devices           []providerDataDevice `tfsdk:"devices"`
 }
 
 type providerDataDevice struct {
-	Name    types.String `tfsdk:"name"`
-	Host    types.String `tfsdk:"host"`
-	Managed types.Bool   `tfsdk:"managed"`
+	Name       types.String `tfsdk:"name"`
+	Host       types.String `tfsdk:"host"`
+	Managed    types.Bool   `tfsdk:"managed"`
+	AutoCommit types.Bool   `tfsdk:"auto_commit"`
 }
 
 type IosxrProviderData struct {
-	Devices map[string]*IosxrProviderDataDevice
+	Devices         map[string]*IosxrProviderDataDevice
 	ReuseConnection bool
 }
 
+
 type IosxrProviderDataDevice struct {
-	Client *gnmi.Client
-	Managed bool
+	Client         *gnmi.Client
+	Managed        bool
+	AutoCommit     bool
+	mu             sync.Mutex
+	CandidateStore []gnmi.SetOperation
+}
+
+// AppendCandidateOps safely appends gNMI operations to the device candidate store.
+func (d *IosxrProviderDataDevice) AppendCandidateOps(ops []gnmi.SetOperation) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	d.CandidateStore = append(d.CandidateStore, ops...)
+}
+
+// DrainCandidateOps atomically returns and clears the candidate store.
+func (d *IosxrProviderDataDevice) DrainCandidateOps() []gnmi.SetOperation {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	ops := d.CandidateStore
+	d.CandidateStore = nil
+	return ops
+}
+
+// HasPendingOps returns true if there are pending operations in the candidate store.
+func (d *IosxrProviderDataDevice) HasPendingOps() bool {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	return len(d.CandidateStore) > 0
+}
+
+// PendingOpsCount returns the number of pending operations in the candidate store.
+func (d *IosxrProviderDataDevice) PendingOpsCount() int {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	return len(d.CandidateStore)
 }
 
 // Metadata returns the provider type name.
@@ -123,6 +163,10 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				MarkdownDescription: "Reuse gNMI connection. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
 				Optional:            true,
 			},
+			"auto_commit": schema.BoolAttribute{
+				MarkdownDescription: "Automatically commit configuration changes after each resource operation. When true (default), each resource commits its changes immediately. When false, changes are left in the candidate datastore and must be explicitly committed using the iosxr_commit resource. This can also be set as the IOSXR_AUTO_COMMIT environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
 			"selected_devices": schema.ListAttribute{
 				MarkdownDescription: "This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.",
 				Optional:            true,
@@ -143,6 +187,10 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 						},
 						"managed": schema.BoolAttribute{
 							MarkdownDescription: "Enable or disable device management. This can be used to temporarily skip a device due to maintenance for example. Defaults to `true`.",
+							Optional:            true,
+						},
+						"auto_commit": schema.BoolAttribute{
+							MarkdownDescription: "Enable automatic commit of changes for this device. When `true` (default), changes will be automatically committed to the device. When `false`, changes must be explicitly committed using the iosxr_commit resource.",
 							Optional:            true,
 						},
 					},
@@ -377,6 +425,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		reuseConnection = config.ReuseConnection.ValueBool()
 	}
 
+
 	var selectedDevices []string
 	if config.SelectedDevices.IsUnknown() {
 		// Cannot connect to client with an unknown value
@@ -457,7 +506,36 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 	data.ReuseConnection = reuseConnection
 
-	// Create default client
+	// Parse auto_commit setting
+	var autoCommit bool
+	if config.AutoCommit.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as auto_commit",
+		)
+		return
+	}
+
+	if config.AutoCommit.IsNull() {
+		autoCommitStr := os.Getenv("IOSXR_AUTO_COMMIT")
+		if autoCommitStr == "" {
+			autoCommit = true
+		} else {
+			var err error
+			autoCommit, err = strconv.ParseBool(autoCommitStr)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid auto_commit value",
+					"IOSXR_AUTO_COMMIT must be a valid boolean (true/false/1/0), got: "+autoCommitStr,
+				)
+				return
+			}
+		}
+	} else {
+		autoCommit = config.AutoCommit.ValueBool()
+	}
+
+	// Default device with auto_commit setting
 	var defaultClient *gnmi.Client
 	var err error
 	if host != "" {
@@ -470,9 +548,9 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			return
 		}
 	}
-	data.Devices[""] = &IosxrProviderDataDevice{Client: defaultClient, Managed: true}
+	data.Devices[""] = &IosxrProviderDataDevice{Client: defaultClient, Managed: true, AutoCommit: autoCommit}
 
-	// Add all devices with their managed status
+	// Add all devices with their managed status and per-device auto_commit setting.
 	for _, device := range config.Devices {
 		deviceName := device.Name.ValueString()
 		var managed bool
@@ -480,6 +558,12 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			managed = slices.Contains(selectedDevices, deviceName)
 		} else {
 			managed = device.Managed.IsNull() || device.Managed.IsUnknown() || device.Managed.ValueBool()
+		}
+
+		// auto_commit defaults to provider-level setting
+		deviceAutoCommit := autoCommit
+		if !device.AutoCommit.IsNull() && !device.AutoCommit.IsUnknown() {
+			deviceAutoCommit = device.AutoCommit.ValueBool()
 		}
 
 		var deviceClient *gnmi.Client
@@ -493,17 +577,21 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				return
 			}
 		}
-		data.Devices[deviceName] = &IosxrProviderDataDevice{Client: deviceClient, Managed: managed}
+		tflog.Debug(ctx, fmt.Sprintf("Device '%s': managed=%v auto_commit=%v", deviceName, managed, deviceAutoCommit))
+		data.Devices[deviceName] = &IosxrProviderDataDevice{Client: deviceClient, Managed: managed, AutoCommit: deviceAutoCommit}
 	}
 
 	resp.DataSourceData = &data
 	resp.ResourceData = &data
+
+	// No auto-flush - commits only happen via explicit iosxr_commit resources
 }
 
 func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewGnmiResource,
 		NewCliResource,
+		NewCommitResource,
 		{{- range .}}
 		New{{camelCase .Name}}Resource,
 		{{- end}}

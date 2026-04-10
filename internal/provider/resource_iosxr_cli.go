@@ -145,7 +145,8 @@ func (r *CliResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	}
 
 	if d.Managed {
-		// Send CLI command as plain JSON string value to Cisco-IOS-XR-cli-cfg:/cli path
+		// CLI commands are always committed immediately — they cannot be batched
+		// into a gNMI candidate store, so batch_enable does not apply here.
 		body := fmt.Sprintf("\"%s\"", cli.ValueString())
 
 		var ops []gnmi.SetOperation

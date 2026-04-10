@@ -172,10 +172,15 @@ func (r *GnmiResource) Create(ctx context.Context, req resource.CreateRequest, r
 		if !plan.Attributes.IsNull() || len(plan.Lists) > 0 {
 			body := plan.toBody(ctx)
 
-			_, err := device.Client.Set(ctx, []gnmi.SetOperation{gnmi.Update(plan.Path.ValueString(), body)})
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
+			if device.AutoCommit {
+				_, err := device.Client.Set(ctx, []gnmi.SetOperation{gnmi.Update(plan.Path.ValueString(), body)})
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+			} else {
+				device.AppendCandidateOps([]gnmi.SetOperation{gnmi.Update(plan.Path.ValueString(), body)})
+				tflog.Debug(ctx, fmt.Sprintf("%s: Queued 1 operation in candidate store", plan.Path.ValueString()))
 			}
 		}
 	}
@@ -271,10 +276,15 @@ func (r *GnmiResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			ops = append(ops, gnmi.Delete(i))
 		}
 
-		_, err := device.Client.Set(ctx, ops)
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-			return
+		if device.AutoCommit {
+			_, err := device.Client.Set(ctx, ops)
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+				return
+			}
+		} else {
+			device.AppendCandidateOps(ops)
+			tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d operation(s) in candidate store", plan.Id.ValueString(), len(ops)))
 		}
 	}
 
@@ -304,10 +314,19 @@ func (r *GnmiResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 	if device.Managed {
 		if state.Delete.ValueBool() {
-			_, err := device.Client.Set(ctx, []gnmi.SetOperation{gnmi.Delete(state.Path.ValueString())})
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
+			ops := []gnmi.SetOperation{gnmi.Delete(state.Path.ValueString())}
+			if device.AutoCommit {
+				if !r.data.ReuseConnection {
+					defer device.Client.Disconnect()
+				}
+				_, err := device.Client.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+			} else {
+				device.AppendCandidateOps(ops)
+				tflog.Debug(ctx, fmt.Sprintf("%s: Queued delete operation in candidate store", state.Id.ValueString()))
 			}
 		}
 	}

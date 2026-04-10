@@ -23,10 +23,12 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin provider
 import (
 	"context"
+	"fmt"
 	"os"
 	"slices"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -60,6 +62,8 @@ type providerData struct {
 	ReuseConnection   types.Bool           `tfsdk:"reuse_connection"`
 	SelectedDevices   types.List           `tfsdk:"selected_devices"`
 	Devices           []providerDataDevice `tfsdk:"devices"`
+	EnableConfigCache types.Bool           `tfsdk:"enable_config_cache"`
+	ConfigCacheTTL    types.Int64          `tfsdk:"config_cache_ttl"`
 }
 
 type providerDataDevice struct {
@@ -69,13 +73,43 @@ type providerDataDevice struct {
 }
 
 type IosxrProviderData struct {
-	Devices map[string]*IosxrProviderDataDevice
-	ReuseConnection bool
+	Devices           map[string]*IosxrProviderDataDevice
+	ReuseConnection   bool
+	EnableConfigCache bool
+	ConfigCacheTTL    int64
 }
 
 type IosxrProviderDataDevice struct {
-	Client *gnmi.Client
+	Client  *gnmi.Client
 	Managed bool
+	// Cache holds the full device configuration fetched once on the first Read
+	// call (lazy warm). Resources/data-sources use helpers.GetFromCache + gjson.
+	// Zero additional gNMI requests after the initial warm.
+	Cache        *helpers.DeviceCache
+	cacheEnabled bool      // mirrors IosxrProviderData.EnableConfigCache
+	cacheTTL     int64     // mirrors IosxrProviderData.ConfigCacheTTL
+	cacheOnce    sync.Once // guarantees cache warm runs exactly once per device
+}
+
+// EnsureCacheWarmed warms the cache the first time it is called for this device.
+// Subsequent calls are no-ops (sync.Once). Safe for concurrent use.
+//
+// The cache is warmed lazily — only when a resource/data-source Read is actually
+// executed. This means:
+//   - `terraform apply` on a fresh config (no state) → no cache warm, no extra gNMI
+//   - `terraform refresh` / `terraform plan` with existing state → warmed once on
+//     the first Read, all subsequent reads are gjson cache hits
+func (d *IosxrProviderDataDevice) EnsureCacheWarmed(ctx context.Context) {
+	if !d.cacheEnabled {
+		return
+	}
+	d.cacheOnce.Do(func() {
+		tflog.Info(ctx, "EnsureCacheWarmed: first Read detected — warming device cache")
+		filteredPaths := helpers.FilterPathsByCapabilities(ctx, d.Client)
+		if err := helpers.FetchAndCache(ctx, d.Client, d.Cache, filteredPaths); err != nil {
+			tflog.Warn(ctx, fmt.Sprintf("EnsureCacheWarmed: cache warm failed: %v — reads will fall back to individual fetches", err))
+		}
+	})
 }
 
 // Metadata returns the provider type name.
@@ -121,6 +155,14 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 			},
 			"reuse_connection": schema.BoolAttribute{
 				MarkdownDescription: "Reuse gNMI connection. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
+			"enable_config_cache": schema.BoolAttribute{
+				MarkdownDescription: "Enable configuration caching. When enabled, the provider fetches the full device configuration once and caches it for subsequent read operations, significantly improving performance during `terraform refresh` and `terraform plan` operations. Cache is automatically invalidated after any write operation. This can also be set as the IOSXR_ENABLE_CONFIG_CACHE environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
+			"config_cache_ttl": schema.Int64Attribute{
+				MarkdownDescription: "Configuration cache time-to-live in seconds. After this duration, the cache is automatically invalidated and the next read operation will fetch fresh configuration from the device. Set to 0 to disable TTL-based expiration. This can also be set as the IOSXR_CONFIG_CACHE_TTL environment variable. Defaults to `300` (5 minutes).",
 				Optional:            true,
 			},
 			"selected_devices": schema.ListAttribute{
@@ -377,6 +419,62 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		reuseConnection = config.ReuseConnection.ValueBool()
 	}
 
+	var enableConfigCache bool
+	if config.EnableConfigCache.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as enable_config_cache",
+		)
+		return
+	}
+
+	if config.EnableConfigCache.IsNull() {
+		enableConfigCacheStr := os.Getenv("IOSXR_ENABLE_CONFIG_CACHE")
+		if enableConfigCacheStr == "" {
+			enableConfigCache = true
+		} else {
+			var err error
+			enableConfigCache, err = strconv.ParseBool(enableConfigCacheStr)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid enable_config_cache value",
+					"IOSXR_ENABLE_CONFIG_CACHE must be a valid boolean (true/false/1/0), got: "+enableConfigCacheStr,
+				)
+				return
+			}
+		}
+	} else {
+		enableConfigCache = config.EnableConfigCache.ValueBool()
+	}
+
+	var configCacheTTL int64
+	if config.ConfigCacheTTL.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as config_cache_ttl",
+		)
+		return
+	}
+
+	if config.ConfigCacheTTL.IsNull() {
+		configCacheTTLStr := os.Getenv("IOSXR_CONFIG_CACHE_TTL")
+		if configCacheTTLStr == "" {
+			configCacheTTL = 300 // Default 5 minutes
+		} else {
+			var err error
+			configCacheTTL, err = strconv.ParseInt(configCacheTTLStr, 10, 64)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid config_cache_ttl value",
+					"IOSXR_CONFIG_CACHE_TTL must be a valid integer, got: "+configCacheTTLStr,
+				)
+				return
+			}
+		}
+	} else {
+		configCacheTTL = config.ConfigCacheTTL.ValueInt64()
+	}
+
 	var selectedDevices []string
 	if config.SelectedDevices.IsUnknown() {
 		// Cannot connect to client with an unknown value
@@ -430,6 +528,8 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 	data := IosxrProviderData{}
 	data.Devices = make(map[string]*IosxrProviderDataDevice)
+	data.EnableConfigCache = enableConfigCache
+	data.ConfigCacheTTL = configCacheTTL
 
 	// Create TflogAdapter for automatic Terraform logging integration
 	// Context is automatically propagated via go-gnmi's Logger interface
@@ -470,7 +570,13 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			return
 		}
 	}
-	data.Devices[""] = &IosxrProviderDataDevice{Client: defaultClient, Managed: true}
+	data.Devices[""] = &IosxrProviderDataDevice{
+		Client:       defaultClient,
+		Managed:      true,
+		Cache:        helpers.NewDeviceCache(),
+		cacheEnabled: data.EnableConfigCache,
+		cacheTTL:     data.ConfigCacheTTL,
+	}
 
 	// Add all devices with their managed status
 	for _, device := range config.Devices {
@@ -493,8 +599,18 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				return
 			}
 		}
-		data.Devices[deviceName] = &IosxrProviderDataDevice{Client: deviceClient, Managed: managed}
+		data.Devices[deviceName] = &IosxrProviderDataDevice{
+			Client:       deviceClient,
+			Managed:      managed,
+			Cache:        helpers.NewDeviceCache(),
+			cacheEnabled: data.EnableConfigCache,
+			cacheTTL:     data.ConfigCacheTTL,
+		}
 	}
+
+	// Cache is warmed lazily on the first Read call per device (EnsureCacheWarmed).
+	// No gNMI requests are made here — this avoids unnecessary device fetches
+	// during `terraform plan` when there is no existing state to refresh.
 
 	resp.DataSourceData = &data
 	resp.ResourceData = &data

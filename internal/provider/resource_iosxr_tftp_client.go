@@ -177,6 +177,12 @@ func (r *TFTPClientResource) Create(ctx context.Context, req resource.CreateRequ
 			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 			return
 		}
+
+		// Invalidate this path in cache after write so next Read fetches fresh data
+		if r.data.EnableConfigCache {
+			device.Cache.Delete(plan.getPath())
+			tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Create", plan.getPath()))
+		}
 	}
 
 	plan.Id = types.StringValue(plan.getPath())
@@ -209,32 +215,25 @@ func (r *TFTPClientResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
+	resourcePath := state.Id.ValueString()
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", resourcePath))
 
 	if device.Managed {
 		if !r.data.ReuseConnection {
 			defer device.Client.Disconnect()
 		}
-		getResp, err := device.Client.Get(ctx, []string{state.Id.ValueString()})
-		if err != nil {
-			if strings.Contains(err.Error(), "Requested element(s) not found") {
-				resp.State.RemoveResource(ctx)
-				return
-			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-				return
-			}
-		}
 
-		// Defensive bounds checking for response structure
-		if len(getResp.Notifications) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response contains no notifications")
+		respBody, notFound, fetchErr := helpers.ReadConfig(
+			ctx, device.Client, device.Cache,
+			r.data.EnableConfigCache, r.data.ConfigCacheTTL,
+			device.EnsureCacheWarmed, resourcePath,
+		)
+		if notFound {
+			resp.State.RemoveResource(ctx)
 			return
 		}
-		if len(getResp.Notifications[0].Update) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response notification contains no updates")
+		if fetchErr != nil {
+			resp.Diagnostics.AddError("Unable to fetch device configuration", fetchErr.Error())
 			return
 		}
 
@@ -243,8 +242,6 @@ func (r *TFTPClientResource) Read(ctx context.Context, req resource.ReadRequest,
 			return
 		}
 
-		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {
@@ -252,7 +249,7 @@ func (r *TFTPClientResource) Read(ctx context.Context, req resource.ReadRequest,
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", resourcePath))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
@@ -318,6 +315,12 @@ func (r *TFTPClientResource) Update(ctx context.Context, req resource.UpdateRequ
 			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 			return
 		}
+
+		// Invalidate this path in cache after write so next Read fetches fresh data
+		if r.data.EnableConfigCache {
+			device.Cache.Delete(plan.Id.ValueString())
+			tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Update", plan.Id.ValueString()))
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
@@ -376,6 +379,12 @@ func (r *TFTPClientResource) Delete(ctx context.Context, req resource.DeleteRequ
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 				return
+			}
+
+			// Invalidate this path in cache after write so next Read fetches fresh data
+			if r.data.EnableConfigCache {
+				device.Cache.Delete(state.Id.ValueString())
+				tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Delete", state.Id.ValueString()))
 			}
 		}
 	}

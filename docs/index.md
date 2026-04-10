@@ -57,7 +57,9 @@ provider "iosxr" {
 
 - `ca_certificate` (String) TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
 - `certificate` (String) TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.
+- `config_cache_ttl` (Number) Configuration cache time-to-live in seconds. After this duration, the cache is automatically invalidated and the next read operation will fetch fresh configuration from the device. Set to 0 to disable TTL-based expiration. This can also be set as the IOSXR_CONFIG_CACHE_TTL environment variable. Defaults to `300` (5 minutes).
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
+- `enable_config_cache` (Boolean) Enable configuration caching. When enabled, the provider fetches the full device configuration once and caches it for subsequent read operations, significantly improving performance during `terraform refresh` and `terraform plan` operations. Cache is automatically invalidated after any write operation. This can also be set as the IOSXR_ENABLE_CONFIG_CACHE environment variable. Defaults to `true`.
 - `host` (String) IP or name of the Cisco IOS-XR device. Optionally a port can be added with `:12345`. The default port is `57400`. This can also be set as the IOSXR_HOST environment variable. If no `host` is provided, the `host` of the first device from the `devices` list is being used.
 - `key` (String) TLS private key content. This can also be set as the IOSXR_KEY environment variable.
 - `password` (String, Sensitive) Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.

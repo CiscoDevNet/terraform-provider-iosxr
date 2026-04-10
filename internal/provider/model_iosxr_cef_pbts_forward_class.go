@@ -67,7 +67,7 @@ func (data CEFPBTSForwardClassData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data CEFPBTSForwardClass) toBody(ctx context.Context) string {
+func (data CEFPBTSForwardClass) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.ForwardClass.IsNull() && !data.ForwardClass.IsUnknown() {
 		body, _ = sjson.Set(body, "forward-class-number", data.ForwardClass.ValueString())
@@ -92,8 +92,29 @@ func (data CEFPBTSForwardClass) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data CEFPBTSForwardClass) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data CEFPBTSForwardClass) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *CEFPBTSForwardClass) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "fallback-to.fallback-class-number"); value.Exists() && !data.FallbackToClass.IsNull() {
 		data.FallbackToClass = helpers.GetInt64List(value.Array())
@@ -200,7 +221,6 @@ func (data *CEFPBTSForwardClass) getEmptyLeafsDelete(ctx context.Context) []stri
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *CEFPBTSForwardClass) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.FallbackToDrop.IsNull() {

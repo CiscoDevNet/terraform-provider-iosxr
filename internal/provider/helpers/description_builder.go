@@ -19,6 +19,7 @@ package helpers
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -46,5 +47,28 @@ func (d *AttributeDescription) AddStringEnumDescription(values ...string) *Attri
 
 func (d *AttributeDescription) AddIntegerRangeDescription(min, max int64) *AttributeDescription {
 	d.String = fmt.Sprintf("%s\n  - Range: `%v`-`%v`", d.String, min, max)
+	return d
+}
+
+func (d *AttributeDescription) AddVersionRangeDescription(versionRanges map[string]struct{ Min, Max int64 }) *AttributeDescription {
+	if len(versionRanges) == 0 {
+		return d
+	}
+
+	// Sort versions for consistent output
+	versions := make([]string, 0, len(versionRanges))
+	for v := range versionRanges {
+		versions = append(versions, v)
+	}
+	sort.Strings(versions)
+
+	d.String = fmt.Sprintf("%s\n  - Range:", d.String)
+	for _, v := range versions {
+		r := versionRanges[v]
+		formattedVersion := FormatVersion(v)
+		d.String = fmt.Sprintf("%s `%v`-`%v` (v%s),", d.String, r.Min, r.Max, formattedVersion)
+	}
+	// Remove trailing comma
+	d.String = strings.TrimSuffix(d.String, ",")
 	return d
 }

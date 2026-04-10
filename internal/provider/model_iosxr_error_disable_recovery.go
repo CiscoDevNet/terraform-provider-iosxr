@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -100,7 +101,7 @@ func (data ErrorDisableRecoveryData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data ErrorDisableRecovery) toBody(ctx context.Context) string {
+func (data ErrorDisableRecovery) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.LinkOamSessionDownInterval.IsNull() && !data.LinkOamSessionDownInterval.IsUnknown() {
 		body, _ = sjson.Set(body, "link-oam-session-down.interval", strconv.FormatInt(data.LinkOamSessionDownInterval.ValueInt64(), 10))
@@ -167,8 +168,29 @@ func (data ErrorDisableRecovery) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data ErrorDisableRecovery) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data ErrorDisableRecovery) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *ErrorDisableRecovery) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "link-oam-session-down.interval"); value.Exists() && !data.LinkOamSessionDownInterval.IsNull() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
@@ -487,7 +509,6 @@ func (data *ErrorDisableRecovery) getEmptyLeafsDelete(ctx context.Context) []str
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *ErrorDisableRecovery) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.LinkOamDampeningInterval.IsNull() {

@@ -265,7 +265,10 @@ func (r *CEFResource) Create(ctx context.Context, req resource.CreateRequest, re
 				tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Final body with deletes: %s", bodyStr))
 			}
 
-			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
+			// Skip commit when auto_commit=false (batching mode)
+			// When auto_commit=true, commit each resource immediately
+			skipCommit := !device.AutoCommit
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, device.AutoCommit, skipCommit); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -489,7 +492,9 @@ func (r *CEFResource) Update(ctx context.Context, req resource.UpdateRequest, re
 
 			// Combine update and delete operations into a single transaction
 			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true); err != nil {
+			// Skip commit when auto_commit=false (batching mode)
+			skipCommit := !device.AutoCommit
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit, skipCommit); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -578,7 +583,10 @@ func (r *CEFResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 				// RemoveFromXPathString returns raw XML string for delete operations
 				xmlStr := helpers.RemoveFromXPath(body, xpath).Res()
 
-				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, true); err != nil {
+				// DESTROY: Always commit immediately, ignore auto_commit and confirmed_commit settings
+				// User requirement: "for destroy, don't batch the requests and don't use confirm commit"
+				tflog.Info(ctx, "NETCONF DELETE: Committing immediately (destroy always commits, no batching, no confirmed-commit)")
+				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, true, false); err != nil {
 					resp.Diagnostics.AddError("Client Error", err.Error())
 					return
 				}
@@ -626,9 +634,11 @@ func (r *CEFResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 
 				body := state.addDeletePathsXML(ctx, "")
 
+				// DESTROY: Always commit immediately, ignore auto_commit and confirmed_commit settings
+				// User requirement: "for destroy, don't batch the requests and don't use confirm commit"
 				// Use EditConfigWithOptions with ignoreDataMissing=true to allow graceful deletion
-				// of non-existent elements (matching gNMI behavior)
-				if err := helpers.EditConfigWithOptions(ctx, device.NetconfClient, body, true, true); err != nil {
+				tflog.Info(ctx, "NETCONF DELETE: Committing immediately (destroy always commits, no batching, no confirmed-commit)")
+				if err := helpers.EditConfigWithOptions(ctx, device.NetconfClient, body, true, false, true); err != nil {
 					resp.Diagnostics.AddError("Client Error", err.Error())
 					return
 				}

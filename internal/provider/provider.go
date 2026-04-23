@@ -58,20 +58,23 @@ type iosxrProvider struct {
 
 // providerData can be used to store data from the Terraform configuration.
 type providerData struct {
-	Username           types.String         `tfsdk:"username"`
-	Password           types.String         `tfsdk:"password"`
-	Host               types.String         `tfsdk:"host"`
-	Protocol           types.String         `tfsdk:"protocol"`
-	VerifyCertificate  types.Bool           `tfsdk:"verify_certificate"`
-	Tls                types.Bool           `tfsdk:"tls"`
-	Certificate        types.String         `tfsdk:"certificate"`
-	Key                types.String         `tfsdk:"key"`
-	CaCertificate      types.String         `tfsdk:"ca_certificate"`
-	Retries            types.Int64          `tfsdk:"retries"`
-	LockReleaseTimeout types.Int64          `tfsdk:"lock_release_timeout"`
-	ReuseConnection    types.Bool           `tfsdk:"reuse_connection"`
-	SelectedDevices    types.List           `tfsdk:"selected_devices"`
-	Devices            []providerDataDevice `tfsdk:"devices"`
+	Username               types.String         `tfsdk:"username"`
+	Password               types.String         `tfsdk:"password"`
+	Host                   types.String         `tfsdk:"host"`
+	Protocol               types.String         `tfsdk:"protocol"`
+	VerifyCertificate      types.Bool           `tfsdk:"verify_certificate"`
+	Tls                    types.Bool           `tfsdk:"tls"`
+	Certificate            types.String         `tfsdk:"certificate"`
+	Key                    types.String         `tfsdk:"key"`
+	CaCertificate          types.String         `tfsdk:"ca_certificate"`
+	Retries                types.Int64          `tfsdk:"retries"`
+	LockReleaseTimeout     types.Int64          `tfsdk:"lock_release_timeout"`
+	ReuseConnection        types.Bool           `tfsdk:"reuse_connection"`
+	AutoCommit             types.Bool           `tfsdk:"auto_commit"`
+	ConfirmedCommit        types.Bool           `tfsdk:"confirmed_commit"`
+	ConfirmedCommitTimeout types.Int64          `tfsdk:"confirmed_commit_timeout"`
+	SelectedDevices        types.List           `tfsdk:"selected_devices"`
+	Devices                []providerDataDevice `tfsdk:"devices"`
 }
 
 type providerDataDevice struct {
@@ -87,13 +90,16 @@ type IosxrProviderData struct {
 }
 
 type IosxrProviderDataDevice struct {
-	GnmiClient      *gnmi.Client
-	NetconfClient   *netconf.Client
-	Protocol        string
-	ReuseConnection bool
-	MaxRetries      int
-	Managed         bool
-	OpMutex         *sync.Mutex // Serializes operations on this device (pointer for sharing)
+	GnmiClient             *gnmi.Client
+	NetconfClient          *netconf.Client
+	Protocol               string
+	ReuseConnection        bool
+	MaxRetries             int
+	Managed                bool
+	AutoCommit             bool
+	ConfirmedCommit        bool
+	ConfirmedCommitTimeout int64
+	OpMutex                *sync.Mutex // Serializes operations on this device (pointer for sharing)
 }
 
 // GetOpMutex returns the mutex for serializing operations on this device
@@ -186,6 +192,21 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 			"reuse_connection": schema.BoolAttribute{
 				MarkdownDescription: "Keep connections open between operations for better performance. When disabled, connections are closed and reopened for each operation. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
 				Optional:            true,
+			},
+			"auto_commit": schema.BoolAttribute{
+				MarkdownDescription: "Automatically commit configuration changes after each resource operation (NETCONF only). When `true` (default), each resource commits its changes immediately. When `false`, changes are left in the candidate datastore and must be explicitly committed using the `iosxr_commit` resource. This can also be set as the IOSXR_AUTO_COMMIT environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
+			"confirmed_commit": schema.BoolAttribute{
+				MarkdownDescription: "Enable confirmed-commit mode for NETCONF commit operations. When enabled, the `iosxr_commit` resource uses confirmed-commit with automatic confirmation on success. Works with both `auto_commit=true` (resources commit separately) and `auto_commit=false` (batch mode). Requires NETCONF :confirmed-commit:1.1 capability. IOS XR automatically rolls back changes after timeout if not confirmed. This can also be set as the IOSXR_CONFIRMED_COMMIT environment variable. Defaults to `false`.",
+				Optional:            true,
+			},
+			"confirmed_commit_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Confirmed-commit timeout in seconds (60-240). If commit is not confirmed within this time, IOS XR automatically rolls back all changes. This can also be set as the IOSXR_CONFIRMED_COMMIT_TIMEOUT environment variable. Defaults to `60`.",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 240),
+				},
 			},
 			"selected_devices": schema.ListAttribute{
 				MarkdownDescription: "This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.",
@@ -511,6 +532,86 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		reuseConnection = config.ReuseConnection.ValueBool()
 	}
 
+	// Parse auto_commit
+	var autoCommit bool
+	if config.AutoCommit.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as auto_commit",
+		)
+		return
+	}
+
+	if config.AutoCommit.IsNull() {
+		autoCommitStr := os.Getenv("IOSXR_AUTO_COMMIT")
+		if autoCommitStr == "" {
+			autoCommit = true // default
+		} else {
+			var err error
+			autoCommit, err = strconv.ParseBool(autoCommitStr)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid auto_commit value",
+					"IOSXR_AUTO_COMMIT must be a valid boolean (true/false/1/0), got: "+autoCommitStr,
+				)
+				return
+			}
+		}
+	} else {
+		autoCommit = config.AutoCommit.ValueBool()
+	}
+
+	// Parse confirmed_commit
+	var confirmedCommit bool
+	if config.ConfirmedCommit.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as confirmed_commit",
+		)
+		return
+	}
+
+	if config.ConfirmedCommit.IsNull() {
+		confirmedCommitStr := os.Getenv("IOSXR_CONFIRMED_COMMIT")
+		if confirmedCommitStr == "" {
+			confirmedCommit = false // default
+		} else {
+			var err error
+			confirmedCommit, err = strconv.ParseBool(confirmedCommitStr)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid confirmed_commit value",
+					"IOSXR_CONFIRMED_COMMIT must be a valid boolean (true/false/1/0), got: "+confirmedCommitStr,
+				)
+				return
+			}
+		}
+	} else {
+		confirmedCommit = config.ConfirmedCommit.ValueBool()
+	}
+
+	// Parse confirmed_commit_timeout
+	var confirmedCommitTimeout int64 = 60
+	if config.ConfirmedCommitTimeout.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as confirmed_commit_timeout",
+		)
+		return
+	}
+
+	if !config.ConfirmedCommitTimeout.IsNull() {
+		confirmedCommitTimeout = config.ConfirmedCommitTimeout.ValueInt64()
+	} else if timeoutStr := os.Getenv("IOSXR_CONFIRMED_COMMIT_TIMEOUT"); timeoutStr != "" {
+		if val, err := strconv.ParseInt(timeoutStr, 10, 64); err == nil && val >= 60 && val <= 240 {
+			confirmedCommitTimeout = val
+		}
+	}
+
+	// No validation needed - confirmed_commit can work with any auto_commit setting
+	// auto_commit=false: Resources batch in candidate, iosxr_commit uses confirmed-commit
+	// auto_commit=true: Resources commit separately, iosxr_commit uses confirmed-commit
+
 	var selectedDevices []string
 	if config.SelectedDevices.IsUnknown() {
 		// Cannot connect to client with an unknown value
@@ -578,12 +679,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		if cacheHit && reuseConnection {
 			// Reuse both the client AND the mutex for proper serialization
 			data.Devices[""] = &IosxrProviderDataDevice{
-				GnmiClient:      cachedDevice.GnmiClient,
-				Protocol:        "gnmi",
-				ReuseConnection: reuseConnection,
-				MaxRetries:      int(retries),
-				Managed:         true,
-				OpMutex:         cachedDevice.OpMutex, // Share the same mutex
+				GnmiClient:             cachedDevice.GnmiClient,
+				Protocol:               "gnmi",
+				ReuseConnection:        reuseConnection,
+				MaxRetries:             int(retries),
+				Managed:                true,
+				AutoCommit:             autoCommit,
+				ConfirmedCommit:        confirmedCommit,
+				ConfirmedCommitTimeout: confirmedCommitTimeout,
+				OpMutex:                cachedDevice.OpMutex, // Share the same mutex
 			}
 		} else {
 			// Create TflogAdapter for automatic Terraform logging integration
@@ -620,12 +724,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				}
 			}
 			deviceData := &IosxrProviderDataDevice{
-				GnmiClient:      defaultClient,
-				Protocol:        "gnmi",
-				ReuseConnection: reuseConnection,
-				MaxRetries:      int(retries),
-				Managed:         true,
-				OpMutex:         &sync.Mutex{}, // Create new mutex for new client
+				GnmiClient:             defaultClient,
+				Protocol:               "gnmi",
+				ReuseConnection:        reuseConnection,
+				MaxRetries:             int(retries),
+				Managed:                true,
+				AutoCommit:             autoCommit,
+				ConfirmedCommit:        confirmedCommit,
+				ConfirmedCommitTimeout: confirmedCommitTimeout,
+				OpMutex:                &sync.Mutex{}, // Create new mutex for new client
 			}
 			data.Devices[""] = deviceData
 			if reuseConnection {
@@ -647,12 +754,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		if cacheHit && reuseConnection {
 			// Reuse both the client AND the mutex for proper serialization
 			data.Devices[""] = &IosxrProviderDataDevice{
-				NetconfClient:   cachedDevice.NetconfClient,
-				Protocol:        "netconf",
-				ReuseConnection: reuseConnection,
-				MaxRetries:      int(retries),
-				Managed:         true,
-				OpMutex:         cachedDevice.OpMutex, // Share the same mutex
+				NetconfClient:          cachedDevice.NetconfClient,
+				Protocol:               "netconf",
+				ReuseConnection:        reuseConnection,
+				MaxRetries:             int(retries),
+				Managed:                true,
+				AutoCommit:             autoCommit,
+				ConfirmedCommit:        confirmedCommit,
+				ConfirmedCommitTimeout: confirmedCommitTimeout,
+				OpMutex:                cachedDevice.OpMutex, // Share the same mutex
 			}
 		} else {
 			logger := helpers.NewTflogAdapter("netconf")
@@ -676,12 +786,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				return
 			}
 			deviceData := &IosxrProviderDataDevice{
-				NetconfClient:   netconfClient,
-				Protocol:        "netconf",
-				ReuseConnection: reuseConnection,
-				MaxRetries:      int(retries),
-				Managed:         true,
-				OpMutex:         &sync.Mutex{}, // Create new mutex for new client
+				NetconfClient:          netconfClient,
+				Protocol:               "netconf",
+				ReuseConnection:        reuseConnection,
+				MaxRetries:             int(retries),
+				Managed:                true,
+				AutoCommit:             autoCommit,
+				ConfirmedCommit:        confirmedCommit,
+				ConfirmedCommitTimeout: confirmedCommitTimeout,
+				OpMutex:                &sync.Mutex{}, // Create new mutex for new client
 			}
 			data.Devices[""] = deviceData
 			if reuseConnection {
@@ -722,12 +835,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			if cacheHit && reuseConnection {
 				// Reuse both the client AND the mutex for proper serialization
 				data.Devices[deviceName] = &IosxrProviderDataDevice{
-					GnmiClient:      cachedDevice.GnmiClient,
-					Protocol:        "gnmi",
-					ReuseConnection: reuseConnection,
-					MaxRetries:      int(retries),
-					Managed:         managed,
-					OpMutex:         cachedDevice.OpMutex, // Share the same mutex
+					GnmiClient:             cachedDevice.GnmiClient,
+					Protocol:               "gnmi",
+					ReuseConnection:        reuseConnection,
+					MaxRetries:             int(retries),
+					Managed:                managed,
+					AutoCommit:             autoCommit,
+					ConfirmedCommit:        confirmedCommit,
+					ConfirmedCommitTimeout: confirmedCommitTimeout,
+					OpMutex:                cachedDevice.OpMutex, // Share the same mutex
 				}
 			} else {
 				logger := helpers.NewTflogAdapter("gnmi")
@@ -763,12 +879,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					}
 				}
 				deviceData := &IosxrProviderDataDevice{
-					GnmiClient:      deviceClient,
-					Protocol:        "gnmi",
-					ReuseConnection: reuseConnection,
-					MaxRetries:      int(retries),
-					Managed:         managed,
-					OpMutex:         &sync.Mutex{}, // Create new mutex for new client
+					GnmiClient:             deviceClient,
+					Protocol:               "gnmi",
+					ReuseConnection:        reuseConnection,
+					MaxRetries:             int(retries),
+					Managed:                managed,
+					AutoCommit:             autoCommit,
+					ConfirmedCommit:        confirmedCommit,
+					ConfirmedCommitTimeout: confirmedCommitTimeout,
+					OpMutex:                &sync.Mutex{}, // Create new mutex for new client
 				}
 				data.Devices[deviceName] = deviceData
 				if reuseConnection && managed {
@@ -789,12 +908,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			if cacheHit && reuseConnection {
 				// Reuse both the client AND the mutex for proper serialization
 				data.Devices[deviceName] = &IosxrProviderDataDevice{
-					NetconfClient:   cachedDevice.NetconfClient,
-					Protocol:        "netconf",
-					ReuseConnection: reuseConnection,
-					MaxRetries:      int(retries),
-					Managed:         managed,
-					OpMutex:         cachedDevice.OpMutex, // Share the same mutex
+					NetconfClient:          cachedDevice.NetconfClient,
+					Protocol:               "netconf",
+					ReuseConnection:        reuseConnection,
+					MaxRetries:             int(retries),
+					Managed:                managed,
+					AutoCommit:             autoCommit,
+					ConfirmedCommit:        confirmedCommit,
+					ConfirmedCommitTimeout: confirmedCommitTimeout,
+					OpMutex:                cachedDevice.OpMutex, // Share the same mutex
 				}
 			} else {
 				logger := helpers.NewTflogAdapter("netconf")
@@ -824,12 +946,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				}
 
 				deviceData := &IosxrProviderDataDevice{
-					NetconfClient:   deviceNetconfClient,
-					Protocol:        "netconf",
-					ReuseConnection: reuseConnection,
-					MaxRetries:      int(retries),
-					Managed:         managed,
-					OpMutex:         &sync.Mutex{}, // Create new mutex for new client
+					NetconfClient:          deviceNetconfClient,
+					Protocol:               "netconf",
+					ReuseConnection:        reuseConnection,
+					MaxRetries:             int(retries),
+					Managed:                managed,
+					AutoCommit:             autoCommit,
+					ConfirmedCommit:        confirmedCommit,
+					ConfirmedCommitTimeout: confirmedCommitTimeout,
+					OpMutex:                &sync.Mutex{}, // Create new mutex for new client
 				}
 				data.Devices[deviceName] = deviceData
 				if reuseConnection && managed {
@@ -849,6 +974,7 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 	return []func() resource.Resource{
 		NewYangResource,
 		NewCliResource,
+		NewCommitResource,
 		NewAAAResource,
 		NewAAAAccountingResource,
 		NewAAAAuthenticationResource,

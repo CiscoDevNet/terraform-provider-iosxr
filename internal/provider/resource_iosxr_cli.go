@@ -123,7 +123,7 @@ func (r *CliResource) Create(ctx context.Context, req resource.CreateRequest, re
 				return
 			}
 			xmlBody := fmt.Sprintf(`<cli xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-cli-cfg">%s</cli>`, cli.ValueString())
-			if err := helpers.EditConfig(ctx, d.NetconfClient, xmlBody, true); err != nil {
+			if err := helpers.EditConfig(ctx, d.NetconfClient, xmlBody, true, false); err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
 				return
 			}
@@ -193,7 +193,7 @@ func (r *CliResource) Update(ctx context.Context, req resource.UpdateRequest, re
 				return
 			}
 			xmlBody := fmt.Sprintf(`<cli xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-cli-cfg">%s</cli>`, cli.ValueString())
-			if err := helpers.EditConfig(ctx, d.NetconfClient, xmlBody, true); err != nil {
+			if err := helpers.EditConfig(ctx, d.NetconfClient, xmlBody, true, false); err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
 				return
 			}

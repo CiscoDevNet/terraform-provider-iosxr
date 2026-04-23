@@ -90,8 +90,11 @@ provider "iosxr" {
 
 ### Optional
 
+- `auto_commit` (Boolean) Automatically commit configuration changes after each resource operation (NETCONF only). When `true` (default), each resource commits its changes immediately. When `false`, changes are left in the candidate datastore and must be explicitly committed using the `iosxr_commit` resource. This can also be set as the IOSXR_AUTO_COMMIT environment variable. Defaults to `true`.
 - `ca_certificate` (String) TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
 - `certificate` (String) TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.
+- `confirmed_commit` (Boolean) Enable confirmed-commit mode for NETCONF commit operations. When enabled, the `iosxr_commit` resource uses confirmed-commit with automatic confirmation on success. Works with both `auto_commit=true` (resources commit separately) and `auto_commit=false` (batch mode). Requires NETCONF :confirmed-commit:1.1 capability. IOS XR automatically rolls back changes after timeout if not confirmed. This can also be set as the IOSXR_CONFIRMED_COMMIT environment variable. Defaults to `false`.
+- `confirmed_commit_timeout` (Number) Confirmed-commit timeout in seconds (60-240). If commit is not confirmed within this time, IOS XR automatically rolls back all changes. This can also be set as the IOSXR_CONFIRMED_COMMIT_TIMEOUT environment variable. Defaults to `60`.
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
 - `host` (String) Hostname or IP address of the Cisco IOS-XR device. Optionally a port can be added with `:port`. Default port is `57400` for gNMI and `830` for NETCONF. This can also be set as the IOSXR_HOST environment variable.
 - `key` (String) TLS private key content. This can also be set as the IOSXR_KEY environment variable.

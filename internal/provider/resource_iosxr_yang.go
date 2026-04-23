@@ -215,7 +215,7 @@ func (r *YangResource) Create(ctx context.Context, req resource.CreateRequest, r
 				}
 			}
 
-			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true, false); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -381,7 +381,7 @@ func (r *YangResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			bodyStr := plan.toBodyXML(ctx)
 			tflog.Debug(ctx, fmt.Sprintf("NETCONF UPDATE: body=%s", bodyStr))
 
-			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true, false); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -447,7 +447,7 @@ func (r *YangResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 			bodyStr := body.Res()
 			tflog.Debug(ctx, fmt.Sprintf("NETCONF DELETE: body=%s", bodyStr))
 
-			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true, false); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}

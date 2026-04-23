@@ -260,7 +260,7 @@ func (r *SNMPServerVRFHostResource) Create(ctx context.Context, req resource.Cre
 				tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Final body with deletes: %s", bodyStr))
 			}
 
-			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true, false); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -484,7 +484,7 @@ func (r *SNMPServerVRFHostResource) Update(ctx context.Context, req resource.Upd
 
 			// Combine update and delete operations into a single transaction
 			combinedBody := body + deleteBody
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true); err != nil {
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true, false); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -573,7 +573,7 @@ func (r *SNMPServerVRFHostResource) Delete(ctx context.Context, req resource.Del
 				// RemoveFromXPathString returns raw XML string for delete operations
 				xmlStr := helpers.RemoveFromXPath(body, xpath).Res()
 
-				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, true); err != nil {
+				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, true, false); err != nil {
 					resp.Diagnostics.AddError("Client Error", err.Error())
 					return
 				}
@@ -623,7 +623,7 @@ func (r *SNMPServerVRFHostResource) Delete(ctx context.Context, req resource.Del
 
 				// Use EditConfigWithOptions with ignoreDataMissing=true to allow graceful deletion
 				// of non-existent elements (matching gNMI behavior)
-				if err := helpers.EditConfigWithOptions(ctx, device.NetconfClient, body, true, true); err != nil {
+				if err := helpers.EditConfigWithOptions(ctx, device.NetconfClient, body, true, false, true); err != nil {
 					resp.Diagnostics.AddError("Client Error", err.Error())
 					return
 				}

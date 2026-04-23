@@ -153,6 +153,11 @@ resource "iosxr_snmp_server" "example" {
       ]
     }
   ]
+  contexts = [
+    {
+      name = "CONTEXT1"
+    }
+  ]
   views = [
     {
       view_name = "VIEW1"

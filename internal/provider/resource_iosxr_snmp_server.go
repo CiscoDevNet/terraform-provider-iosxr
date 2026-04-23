@@ -777,6 +777,22 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
+			"contexts": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Context Name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Context Name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+					},
+				},
+			},
 			"views": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Name of the view").String,
 				Optional:            true,

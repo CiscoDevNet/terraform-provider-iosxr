@@ -138,6 +138,7 @@ type SNMPServer struct {
 	TrapsSyslog                                    types.Bool                  `tfsdk:"traps_syslog"`
 	TrapsSystem                                    types.Bool                  `tfsdk:"traps_system"`
 	Hosts                                          []SNMPServerHosts           `tfsdk:"hosts"`
+	Contexts                                       []SNMPServerContexts        `tfsdk:"contexts"`
 	Views                                          []SNMPServerViews           `tfsdk:"views"`
 	TrapSource                                     types.String                `tfsdk:"trap_source"`
 	TrapSourceIpv4                                 types.String                `tfsdk:"trap_source_ipv4"`
@@ -271,6 +272,7 @@ type SNMPServerData struct {
 	TrapsSyslog                                    types.Bool                  `tfsdk:"traps_syslog"`
 	TrapsSystem                                    types.Bool                  `tfsdk:"traps_system"`
 	Hosts                                          []SNMPServerHosts           `tfsdk:"hosts"`
+	Contexts                                       []SNMPServerContexts        `tfsdk:"contexts"`
 	Views                                          []SNMPServerViews           `tfsdk:"views"`
 	TrapSource                                     types.String                `tfsdk:"trap_source"`
 	TrapSourceIpv4                                 types.String                `tfsdk:"trap_source_ipv4"`
@@ -318,6 +320,9 @@ type SNMPServerHosts struct {
 	InformsUnencryptedStrings []SNMPServerHostsInformsUnencryptedStrings `tfsdk:"informs_unencrypted_strings"`
 	InformsEncryptedDefault   []SNMPServerHostsInformsEncryptedDefault   `tfsdk:"informs_encrypted_default"`
 	InformsEncryptedAes       []SNMPServerHostsInformsEncryptedAes       `tfsdk:"informs_encrypted_aes"`
+}
+type SNMPServerContexts struct {
+	Name types.String `tfsdk:"name"`
 }
 type SNMPServerViews struct {
 	ViewName        types.String                     `tfsdk:"view_name"`
@@ -1148,6 +1153,14 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"informs.encrypted.encryption-aeses.encryption-aes"+"."+strconv.Itoa(cindex)+"."+"version.v3.security-level", citem.VersionV3SecurityLevel.ValueString())
 					}
 				}
+			}
+		}
+	}
+	if len(data.Contexts) > 0 {
+		body, _ = sjson.Set(body, "context.contexts.context", []interface{}{})
+		for index, item := range data.Contexts {
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "context.contexts.context"+"."+strconv.Itoa(index)+"."+"context-name", item.Name.ValueString())
 			}
 		}
 	}
@@ -2591,6 +2604,35 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "context.contexts.context").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("context-name"); value.Exists() && !data.Contexts[i].Name.IsNull() {
+			data.Contexts[i].Name = types.StringValue(value.String())
+		} else {
+			data.Contexts[i].Name = types.StringNull()
+		}
+	}
 	for i := range data.Views {
 		keys := [...]string{"view-name"}
 		keyValues := [...]string{data.Views[i].ViewName.ValueString()}
@@ -3759,6 +3801,17 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "context.contexts.context"); value.Exists() {
+		data.Contexts = make([]SNMPServerContexts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerContexts{}
+			if cValue := v.Get("context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "views.view"); value.Exists() {
 		data.Views = make([]SNMPServerViews, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -4677,6 +4730,17 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "context.contexts.context"); value.Exists() {
+		data.Contexts = make([]SNMPServerContexts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerContexts{}
+			if cValue := v.Get("context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "views.view"); value.Exists() {
 		data.Views = make([]SNMPServerViews, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -5346,6 +5410,36 @@ func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) [
 		}
 		if !found {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/views/view%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Contexts {
+		keys := [...]string{"context-name"}
+		stateKeyValues := [...]string{state.Contexts[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Contexts[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Contexts {
+			found = true
+			if state.Contexts[i].Name.ValueString() != data.Contexts[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/context/contexts/context%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Hosts {
@@ -6054,6 +6148,14 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 			}
 		}
 	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.Hosts {
 		keys := [...]string{"address"}
 		keyValues := [...]string{data.Hosts[i].Address.ValueString()}
@@ -6532,6 +6634,16 @@ func (data *SNMPServer) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/views/view%v", data.getPath(), keyString))
+	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/context/contexts/context%v", data.getPath(), keyString))
 	}
 	for i := range data.Hosts {
 		keys := [...]string{"address"}

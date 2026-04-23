@@ -147,6 +147,7 @@ func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "hosts.0.informs_encrypted_default.0.version_v2c", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "hosts.0.informs_encrypted_aes.0.udp_port", "1100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "hosts.0.informs_encrypted_aes.0.version_v2c", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "contexts.0.name", "CONTEXT1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "views.0.view_name", "VIEW1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "views.0.mib_view_families.0.name", "1.3.6.1.2.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "views.0.mib_view_families.0.included", "true"))
@@ -374,6 +375,9 @@ func testAccDataSourceIosxrSNMPServerConfig() string {
 	config += `			udp_port = 1100` + "\n"
 	config += `			version_v2c = true` + "\n"
 	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `	contexts = [{` + "\n"
+	config += `		name = "CONTEXT1"` + "\n"
 	config += `	}]` + "\n"
 	config += `	views = [{` + "\n"
 	config += `		view_name = "VIEW1"` + "\n"

@@ -499,6 +499,14 @@ attributes:
             delete_parent: true
             example: auth
             exclude_test: true
+  - yang_name: context/contexts/context
+    tf_name: contexts
+    type: List
+    attributes:
+      - yang_name: context-name
+        tf_name: name
+        id: true
+        example: CONTEXT1
   - yang_name: views/view
     tf_name: views
     type: List

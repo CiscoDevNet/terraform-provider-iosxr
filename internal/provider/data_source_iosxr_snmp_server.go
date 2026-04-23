@@ -662,6 +662,18 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
+			"contexts": schema.ListNestedAttribute{
+				MarkdownDescription: "Context Name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Context Name",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"views": schema.ListNestedAttribute{
 				MarkdownDescription: "Name of the view",
 				Computed:            true,

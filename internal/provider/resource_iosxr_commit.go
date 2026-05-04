@@ -45,9 +45,8 @@ type CommitResource struct {
 }
 
 type Commit struct {
-	Id              types.String `tfsdk:"id"`
-	Device          types.String `tfsdk:"device"`
-	CommitOnDestroy types.Bool   `tfsdk:"commit_on_destroy"`
+	Id     types.String `tfsdk:"id"`
+	Device types.String `tfsdk:"device"`
 }
 
 func (r *CommitResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -173,10 +172,6 @@ resource "iosxr_commit" "safe_deploy" {
 				MarkdownDescription: "Device name. This corresponds to the name of a device configured in the provider.",
 				Optional:            true,
 			},
-			"commit_on_destroy": schema.BoolAttribute{
-				MarkdownDescription: "Whether to commit pending changes when this resource is destroyed. Default is `true`. Set to `false` for commit resources that should only commit during create/update but not during destroy.",
-				Optional:            true,
-			},
 		},
 	}
 }
@@ -224,29 +219,52 @@ func (r *CommitResource) Create(ctx context.Context, req resource.CreateRequest,
 			return
 		}
 
-		// Execute confirmed-commit if enabled, otherwise regular commit
-		tflog.Info(ctx, fmt.Sprintf("Commit check: ConfirmedCommit=%v, AutoCommit=%v, Timeout=%d", device.ConfirmedCommit, device.AutoCommit, device.ConfirmedCommitTimeout))
-		if device.ConfirmedCommit {
-			tflog.Info(ctx, fmt.Sprintf("Executing confirmed-commit with %d second timeout", device.ConfirmedCommitTimeout))
-			if err := helpers.CommitConfirmed(ctx, device.NetconfClient, device.ConfirmedCommitTimeout); err != nil {
-				resp.Diagnostics.AddError(
-					"Confirmed Commit Failed",
-					fmt.Sprintf("Failed to execute confirmed-commit: %s", err),
-				)
-				return
-			}
-			tflog.Info(ctx, "Confirmed-commit completed successfully with auto-confirmation")
-		} else {
-			// Regular commit operation
-			tflog.Info(ctx, "Executing regular NETCONF commit")
-			if err := helpers.Commit(ctx, device.NetconfClient); err != nil {
+		// In batch mode (auto_commit=false), commit and release batch locks
+		// Batch locks are acquired before first edit-config operation
+		if !device.AutoCommit {
+			tflog.Info(ctx, "Batch mode detected - committing without locks (locks already held by connection)")
+
+			// Commit without locking (locks already held by connection)
+			if err := helpers.CommitBatch(ctx, device.NetconfClient); err != nil {
 				resp.Diagnostics.AddError(
 					"Commit Failed",
-					fmt.Sprintf("Failed to commit configuration: %s", err),
+					fmt.Sprintf("Failed to commit configuration in batch mode: %s", err),
 				)
 				return
 			}
-			tflog.Info(ctx, "NETCONF commit completed successfully")
+
+			// Release batch locks after successful commit
+			if err := helpers.ReleaseBatchLocks(ctx, device.NetconfClient, device); err != nil {
+				// Log warning but don't fail - commit succeeded
+				tflog.Warn(ctx, fmt.Sprintf("Failed to release batch locks after commit: %s", err))
+			}
+
+			tflog.Info(ctx, "Batch commit completed successfully, locks released")
+		} else {
+			// Auto-commit mode: execute confirmed-commit if enabled, otherwise regular commit
+			tflog.Info(ctx, fmt.Sprintf("Commit check: ConfirmedCommit=%v, AutoCommit=%v, Timeout=%d", device.ConfirmedCommit, device.AutoCommit, device.ConfirmedCommitTimeout))
+			if device.ConfirmedCommit {
+				tflog.Info(ctx, fmt.Sprintf("Executing confirmed-commit with %d second timeout", device.ConfirmedCommitTimeout))
+				if err := helpers.CommitConfirmed(ctx, device.NetconfClient, device.ConfirmedCommitTimeout); err != nil {
+					resp.Diagnostics.AddError(
+						"Confirmed Commit Failed",
+						fmt.Sprintf("Failed to execute confirmed-commit: %s", err),
+					)
+					return
+				}
+				tflog.Info(ctx, "Confirmed-commit completed successfully with auto-confirmation")
+			} else {
+				// Regular commit operation (with locking)
+				tflog.Info(ctx, "Executing regular NETCONF commit")
+				if err := helpers.Commit(ctx, device.NetconfClient); err != nil {
+					resp.Diagnostics.AddError(
+						"Commit Failed",
+						fmt.Sprintf("Failed to commit configuration: %s", err),
+					)
+					return
+				}
+				tflog.Info(ctx, "NETCONF commit completed successfully")
+			}
 		}
 	} else {
 		// gNMI protocol - no-op (log only)
@@ -352,10 +370,47 @@ func (r *CommitResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		return
 	}
 
-	// DESTROY: Do nothing - each resource commits individually during destroy
-	// User requirement: "for destroy, don't batch the requests"
-	// Resources ignore auto_commit during destroy and commit immediately
-	tflog.Info(ctx, "Commit resource delete - skipping commit (resources commit individually during destroy)")
+	device, ok := r.data.Devices[state.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("device"),
+			"Invalid device",
+			fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()),
+		)
+		return
+	}
+
+	if device.Protocol == "netconf" {
+		// Lock for NETCONF operations
+		locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+		defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+		if locked {
+			defer device.GetOpMutex().Unlock()
+		}
+
+		if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+			resp.Diagnostics.AddError(
+				"NETCONF Connection Error",
+				fmt.Sprintf("Failed to ensure connection: %s", err),
+			)
+			return
+		}
+
+		// During destroy, commit whatever is in the candidate datastore (batched deletes)
+		// Don't use confirmed-commit during destroy - just regular commit
+		tflog.Info(ctx, "Executing NETCONF commit during destroy (regular commit, no confirmed-commit)")
+		if err := helpers.Commit(ctx, device.NetconfClient); err != nil {
+			resp.Diagnostics.AddError(
+				"Commit Failed During Destroy",
+				fmt.Sprintf("Failed to commit configuration during destroy: %s", err),
+			)
+			return
+		}
+		tflog.Info(ctx, "NETCONF commit during destroy completed successfully")
+	} else {
+		// gNMI protocol - no-op (log only)
+		tflog.Info(ctx, "gNMI protocol detected - commit operation skipped during destroy (gNMI is auto-commit)")
+	}
 }
 
 func (r *CommitResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

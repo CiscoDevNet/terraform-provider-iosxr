@@ -293,6 +293,30 @@ func EditConfig(ctx context.Context, client *netconf.Client, body string, commit
 	return EditConfigWithOptions(ctx, client, body, commit, skipCommit, false)
 }
 
+// EditConfigBatch handles edit-config with automatic batch lock management
+// This wraps EditConfig and automatically acquires batch locks when in batch mode (skipCommit=true)
+// Use this from resources to get automatic batch locking
+//
+// Parameters:
+//   - ctx: context.Context
+//   - client: *netconf.Client
+//   - device: BatchLockDevice interface (provides lock state management)
+//   - body: XML configuration body
+//   - commit: bool - whether to commit (matches device.AutoCommit)
+//   - skipCommit: bool - true in batch mode (!device.AutoCommit)
+func EditConfigBatch(ctx context.Context, client *netconf.Client, device BatchLockDevice, body string, commit bool, skipCommit bool) error {
+	// Acquire batch locks before first edit-config in batch mode
+	// This prevents "Operation denied" errors when iosxr_commit tries to lock later
+	if skipCommit {
+		if err := EnsureBatchLocks(ctx, client, device); err != nil {
+			return fmt.Errorf("failed to acquire batch locks: %w", err)
+		}
+	}
+
+	// Call regular EditConfig with the same parameters
+	return EditConfig(ctx, client, body, commit, skipCommit)
+}
+
 // EditConfigWithOptions edits the configuration on the device with additional options.
 // Parameters:
 //   - ctx: context.Context
@@ -404,8 +428,144 @@ func IsNoChangesToCommitError(err error) bool {
 	return false
 }
 
+// ============================================================================
+// Batch Mode Lock Management
+// ============================================================================
+
+// BatchLockDevice interface defines methods for managing batch locks
+type BatchLockDevice interface {
+	GetBatchLocksMutex() *sync.Mutex
+	IsBatchLocked() bool
+	SetBatchLocks(candidateLocked, runningLocked bool)
+	// Internal methods that don't acquire mutex - caller must hold lock
+	IsBatchLockedUnsafe() bool
+	SetBatchLocksUnsafe(candidateLocked, runningLocked bool)
+}
+
+// EnsureBatchLocks acquires connection-level locks for batch mode operations.
+// This MUST be called before the first edit-config in batch mode to prevent race conditions.
+//
+// Lock Strategy:
+//  1. Lock running datastore first (prevents other clients from committing)
+//  2. Lock candidate datastore second (prevents other clients from staging changes)
+//  3. Track lock state to avoid duplicate locking attempts
+//
+// This prevents the "Operation denied" error that occurs when trying to lock
+// a datastore that the same session has already modified.
+//
+// Thread-safe: Uses device-level mutex to serialize lock acquisition across parallel resources.
+func EnsureBatchLocks(ctx context.Context, client *netconf.Client, device BatchLockDevice) error {
+	if err := client.Open(); err != nil {
+		return fmt.Errorf("failed to open NETCONF connection: %w", err)
+	}
+
+	// Check if device supports candidate datastore
+	if !client.ServerHasCapability(candidateCapabilityURI) {
+		tflog.Debug(ctx, "Device does not support candidate datastore, no batch locks needed")
+		return nil
+	}
+
+	// Acquire the batch locks mutex FIRST to serialize lock attempts across parallel resources
+	// This prevents race conditions where multiple resources try to lock simultaneously
+	mutex := device.GetBatchLocksMutex()
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Check if locks are already held (must check AFTER acquiring mutex)
+	// Use unsafe method since we're already holding the mutex
+	if device.IsBatchLockedUnsafe() {
+		tflog.Debug(ctx, "Batch locks already acquired by another resource, skipping")
+		return nil
+	}
+
+	tflog.Info(ctx, "Acquiring batch mode locks (running + candidate datastores)")
+
+	// Lock running datastore first
+	if _, err := client.Lock(ctx, "running"); err != nil {
+		return fmt.Errorf("failed to lock running datastore for batch mode: %s", formatNetconfError(err))
+	}
+	tflog.Debug(ctx, "Successfully locked running datastore for batch mode")
+
+	// Lock candidate datastore second
+	if _, err := client.Lock(ctx, "candidate"); err != nil {
+		// Failed to lock candidate, unlock running before returning
+		if _, unlockErr := client.Unlock(ctx, "running"); unlockErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Failed to unlock running datastore during error cleanup: %s", formatNetconfError(unlockErr)))
+		}
+		return fmt.Errorf("failed to lock candidate datastore for batch mode: %s", formatNetconfError(err))
+	}
+	tflog.Debug(ctx, "Successfully locked candidate datastore for batch mode")
+
+	// Mark locks as acquired (use unsafe method since we're holding the mutex)
+	device.SetBatchLocksUnsafe(true, true)
+	tflog.Info(ctx, "Batch mode locks acquired successfully - all subsequent edit-config operations will use these locks")
+
+	return nil
+}
+
+// ReleaseBatchLocks releases connection-level locks after commit completes.
+// This MUST be called after commit in batch mode to release the locks acquired by EnsureBatchLocks.
+//
+// Thread-safe: Uses device-level mutex to protect lock state.
+func ReleaseBatchLocks(ctx context.Context, client *netconf.Client, device BatchLockDevice) error {
+	if err := client.Open(); err != nil {
+		return fmt.Errorf("failed to open NETCONF connection: %w", err)
+	}
+
+	// Check if device supports candidate datastore
+	if !client.ServerHasCapability(candidateCapabilityURI) {
+		tflog.Debug(ctx, "Device does not support candidate datastore, no batch locks to release")
+		return nil
+	}
+
+	// Acquire the batch locks mutex to serialize release attempts
+	mutex := device.GetBatchLocksMutex()
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Check if locks are held (use unsafe method since we're holding the mutex)
+	if !device.IsBatchLockedUnsafe() {
+		tflog.Debug(ctx, "Batch locks not held, skipping release")
+		return nil
+	}
+
+	tflog.Info(ctx, "Releasing batch mode locks (candidate + running datastores)")
+
+	var unlockErrors []string
+
+	// Unlock candidate datastore first (reverse order of locking)
+	if _, err := client.Unlock(ctx, "candidate"); err != nil {
+		errMsg := fmt.Sprintf("failed to unlock candidate datastore: %s", formatNetconfError(err))
+		tflog.Error(ctx, errMsg)
+		unlockErrors = append(unlockErrors, errMsg)
+	} else {
+		tflog.Debug(ctx, "Successfully unlocked candidate datastore")
+	}
+
+	// Unlock running datastore second
+	if _, err := client.Unlock(ctx, "running"); err != nil {
+		errMsg := fmt.Sprintf("failed to unlock running datastore: %s", formatNetconfError(err))
+		tflog.Error(ctx, errMsg)
+		unlockErrors = append(unlockErrors, errMsg)
+	} else {
+		tflog.Debug(ctx, "Successfully unlocked running datastore")
+	}
+
+	// Mark locks as released (use unsafe method since we're holding the mutex)
+	device.SetBatchLocksUnsafe(false, false)
+
+	if len(unlockErrors) > 0 {
+		return fmt.Errorf("errors releasing batch locks: %s", strings.Join(unlockErrors, "; "))
+	}
+
+	tflog.Info(ctx, "Batch mode locks released successfully")
+	return nil
+}
+
 // Commit commits the candidate datastore to running with proper locking
 // This is used by the iosxr_commit resource to commit batched changes
+//
+// DEPRECATED: Use CommitBatch() for batch mode operations
 func Commit(ctx context.Context, client *netconf.Client) error {
 	if err := client.Open(); err != nil {
 		return fmt.Errorf("failed to open NETCONF connection: %w", err)
@@ -439,6 +599,42 @@ func Commit(ctx context.Context, client *netconf.Client) error {
 		return fmt.Errorf("failed to commit config: %s", formatNetconfError(err))
 	}
 
+	return nil
+}
+
+// CommitBatch commits the candidate datastore to running WITHOUT locking.
+// This is used in batch mode where locks are already held by EnsureBatchLocks().
+//
+// Use this when:
+//   - auto_commit = false (batch mode)
+//   - reuse_connection = true (persistent session)
+//   - Locks acquired by EnsureBatchLocks() before first edit-config
+//
+// The caller is responsible for releasing locks using ReleaseBatchLocks() after commit.
+func CommitBatch(ctx context.Context, client *netconf.Client) error {
+	if err := client.Open(); err != nil {
+		return fmt.Errorf("failed to open NETCONF connection: %w", err)
+	}
+
+	candidate := client.ServerHasCapability("urn:ietf:params:netconf:capability:candidate:1.0")
+	if !candidate {
+		tflog.Debug(ctx, "Device does not support candidate datastore, nothing to commit")
+		return nil
+	}
+
+	tflog.Debug(ctx, "Committing candidate datastore (batch mode - locks already held)")
+
+	// Commit without locks - they're already held by the connection
+	if _, err := client.Commit(ctx); err != nil {
+		// Check if this is a "no changes to commit" error - not actually an error
+		if IsNoChangesToCommitError(err) {
+			tflog.Debug(ctx, "No configuration changes to commit - continuing")
+			return nil
+		}
+		return fmt.Errorf("failed to commit config: %s", formatNetconfError(err))
+	}
+
+	tflog.Debug(ctx, "Batch commit completed successfully")
 	return nil
 }
 

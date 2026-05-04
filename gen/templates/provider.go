@@ -102,6 +102,11 @@ type IosxrProviderDataDevice struct {
 	ConfirmedCommit        bool
 	ConfirmedCommitTimeout int64
 	OpMutex                *sync.Mutex // Serializes operations on this device (pointer for sharing)
+	
+	// Batch mode lock tracking
+	BatchLocksMutex     sync.Mutex // Protects the lock state fields below
+	CandidateLocked     bool       // True when candidate datastore is locked for batch mode
+	RunningLocked       bool       // True when running datastore is locked for batch mode
 }
 
 // GetOpMutex returns the mutex for serializing operations on this device
@@ -128,6 +133,39 @@ func (d *IosxrProviderDataDevice) GetReuseConnection() bool {
 // GetMaxRetries returns the maximum number of retries
 func (d *IosxrProviderDataDevice) GetMaxRetries() int {
 	return d.MaxRetries
+}
+
+// GetBatchLocksMutex returns a pointer to the batch locks mutex
+func (d *IosxrProviderDataDevice) GetBatchLocksMutex() *sync.Mutex {
+	return &d.BatchLocksMutex
+}
+
+// IsBatchLocked returns true if either candidate or running datastore is locked for batch mode
+func (d *IosxrProviderDataDevice) IsBatchLocked() bool {
+	d.BatchLocksMutex.Lock()
+	defer d.BatchLocksMutex.Unlock()
+	return d.CandidateLocked || d.RunningLocked
+}
+
+// IsBatchLockedUnsafe returns true if either candidate or running datastore is locked for batch mode
+// UNSAFE: Does not acquire mutex - caller must already hold the lock
+func (d *IosxrProviderDataDevice) IsBatchLockedUnsafe() bool {
+	return d.CandidateLocked || d.RunningLocked
+}
+
+// SetBatchLocks sets the batch lock state
+func (d *IosxrProviderDataDevice) SetBatchLocks(candidateLocked, runningLocked bool) {
+	d.BatchLocksMutex.Lock()
+	defer d.BatchLocksMutex.Unlock()
+	d.CandidateLocked = candidateLocked
+	d.RunningLocked = runningLocked
+}
+
+// SetBatchLocksUnsafe sets the batch lock state
+// UNSAFE: Does not acquire mutex - caller must already hold the lock
+func (d *IosxrProviderDataDevice) SetBatchLocksUnsafe(candidateLocked, runningLocked bool) {
+	d.CandidateLocked = candidateLocked
+	d.RunningLocked = runningLocked
 }
 
 // Metadata returns the provider type name.

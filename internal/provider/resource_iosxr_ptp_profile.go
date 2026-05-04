@@ -806,7 +806,7 @@ func (r *PTPProfileResource) Create(ctx context.Context, req resource.CreateRequ
 			// Skip commit when auto_commit=false (batching mode)
 			// When auto_commit=true, commit each resource immediately
 			skipCommit := !device.AutoCommit
-			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, device.AutoCommit, skipCommit); err != nil {
+			if err := helpers.EditConfigBatch(ctx, device.NetconfClient, device, bodyStr, device.AutoCommit, skipCommit); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
@@ -1032,7 +1032,7 @@ func (r *PTPProfileResource) Update(ctx context.Context, req resource.UpdateRequ
 			combinedBody := body + deleteBody
 			// Skip commit when auto_commit=false (batching mode)
 			skipCommit := !device.AutoCommit
-			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, device.AutoCommit, skipCommit); err != nil {
+			if err := helpers.EditConfigBatch(ctx, device.NetconfClient, device, combinedBody, device.AutoCommit, skipCommit); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}

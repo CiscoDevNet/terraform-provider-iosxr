@@ -223,7 +223,7 @@ func iosxrVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrVRFPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_IMPORT_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "VRF_IMPORT_POLICY_1"
@@ -231,7 +231,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_EXPORT_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "VRF_EXPORT_POLICY_1"
@@ -249,7 +249,7 @@ func testAccIosxrVRFConfig_minimum() string {
 	config := `resource "iosxr_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF4"` + "\n"
 	config += `	description = "My VRF Description"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -456,7 +456,7 @@ func testAccIosxrVRFConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	vpn_id = "1000:1000"` + "\n"
 	config += `	remote_route_filtering_disable = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

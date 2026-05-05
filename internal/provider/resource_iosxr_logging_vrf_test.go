@@ -94,7 +94,7 @@ func iosxrLoggingVRFImportStateIdFunc(resourceName string) resource.ImportStateI
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrLoggingVRFPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=server.cisco.com]"
 	attributes = {
 		"host-name" = "server.cisco.com"
@@ -121,7 +121,7 @@ func testAccIosxrLoggingVRFConfig_minimum() string {
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		severity = "info"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -157,7 +157,7 @@ func testAccIosxrLoggingVRFConfig_all() string {
 	config += `		facility = "local0"` + "\n"
 	config += `		ipv6_source_address = "2001:db8::2"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

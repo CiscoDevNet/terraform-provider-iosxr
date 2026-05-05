@@ -94,13 +94,13 @@ func iosxrMPLSLDPMLDPImportStateIdFunc(resourceName string) resource.ImportState
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrMPLSLDPMLDPPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
 	attributes = {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=LDP_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "LDP_POLICY_1"
@@ -117,7 +117,7 @@ resource "iosxr_gnmi" "PreReq1" {
 func testAccIosxrMPLSLDPMLDPConfig_minimum() string {
 	config := `resource "iosxr_mpls_ldp_mldp" "test" {` + "\n"
 	config += `	logging_notifications = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -155,7 +155,7 @@ func testAccIosxrMPLSLDPMLDPConfig_all() string {
 	config += `		forwarding_recursive_route_policy = "LDP_POLICY_1"` + "\n"
 	config += `		rib_unicast_always = true` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

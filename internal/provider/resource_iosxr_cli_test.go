@@ -25,7 +25,7 @@ import (
 
 func TestAccIosxrCli(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cli.test", "cli", "interface Loopback0 description configured-via-gnmi-cli"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cli.test", "cli", "interface Loopback0 description configured-via-cli"))
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -41,7 +41,7 @@ func TestAccIosxrCli(t *testing.T) {
 
 func testAccIosxrCliConfig_basic() string {
 	config := `resource "iosxr_cli" "test" {` + "\n"
-	config += `	cli = "interface Loopback0 description configured-via-gnmi-cli"` + "\n"
+	config += `	cli = "interface Loopback0 description configured-via-cli"` + "\n"
 	config += `}` + "\n"
 	return config
 }

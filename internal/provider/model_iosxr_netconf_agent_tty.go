@@ -24,8 +24,13 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -64,6 +69,17 @@ func (data NetconfAgentTTYData) getPath() string {
 	return "Cisco-IOS-XR-um-xml-agent-cfg:/netconf/agent/tty"
 }
 
+// getXPath returns the XPath for NETCONF operations
+func (data NetconfAgentTTY) getXPath() string {
+	path := "Cisco-IOS-XR-um-xml-agent-cfg:/netconf/agent/tty"
+	return path
+}
+
+func (data NetconfAgentTTYData) getXPath() string {
+	path := "Cisco-IOS-XR-um-xml-agent-cfg:/netconf/agent/tty"
+	return path
+}
+
 // End of section. //template:end getPath
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
@@ -92,66 +108,170 @@ func (data NetconfAgentTTY) toBody(ctx context.Context) string {
 func (data *NetconfAgentTTY) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "throttle.process-rate"); value.Exists() && !data.ThrottleProcessRate.IsNull() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThrottleProcessRate.IsNull() {
 		data.ThrottleProcessRate = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "throttle.memory"); value.Exists() && !data.ThrottleMemory.IsNull() {
 		data.ThrottleMemory = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThrottleMemory.IsNull() {
 		data.ThrottleMemory = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "throttle.offload-memory"); value.Exists() && !data.ThrottleOffloadMemory.IsNull() {
 		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
-	} else {
+	} else if data.ThrottleOffloadMemory.IsNull() {
 		data.ThrottleOffloadMemory = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "session.timeout"); value.Exists() && !data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Null()
 	}
 }
 
 // End of section. //template:end updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
+func (data NetconfAgentTTY) toBodyXML(ctx context.Context) string {
+	body := netconf.Body{}
+	if !data.ThrottleProcessRate.IsNull() && !data.ThrottleProcessRate.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/throttle/process-rate", strconv.FormatInt(data.ThrottleProcessRate.ValueInt64(), 10))
+	}
+	if !data.ThrottleMemory.IsNull() && !data.ThrottleMemory.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/throttle/memory", strconv.FormatInt(data.ThrottleMemory.ValueInt64(), 10))
+	}
+	if !data.ThrottleOffloadMemory.IsNull() && !data.ThrottleOffloadMemory.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/throttle/offload-memory", strconv.FormatInt(data.ThrottleOffloadMemory.ValueInt64(), 10))
+	}
+	if !data.SessionTimeout.IsNull() && !data.SessionTimeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/session/timeout", strconv.FormatInt(data.SessionTimeout.ValueInt64(), 10))
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *NetconfAgentTTY) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/process-rate"); value.Exists() && !data.ThrottleProcessRate.IsNull() {
+		data.ThrottleProcessRate = types.Int64Value(value.Int())
+	} else if data.ThrottleProcessRate.IsNull() {
+		data.ThrottleProcessRate = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/memory"); value.Exists() && !data.ThrottleMemory.IsNull() {
+		data.ThrottleMemory = types.Int64Value(value.Int())
+	} else if data.ThrottleMemory.IsNull() {
+		data.ThrottleMemory = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/offload-memory"); value.Exists() && !data.ThrottleOffloadMemory.IsNull() {
+		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
+	} else if data.ThrottleOffloadMemory.IsNull() {
+		data.ThrottleOffloadMemory = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/timeout"); value.Exists() && !data.SessionTimeout.IsNull() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	} else if data.SessionTimeout.IsNull() {
+		data.SessionTimeout = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *NetconfAgentTTY) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "throttle.process-rate"); value.Exists() {
+func (data *NetconfAgentTTY) fromBody(ctx context.Context, res gjson.Result) {
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "throttle.process-rate"); value.Exists() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "throttle.memory"); value.Exists() {
+	if value := res.Get(prefix + "throttle.memory"); value.Exists() {
 		data.ThrottleMemory = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "throttle.offload-memory"); value.Exists() {
+	if value := res.Get(prefix + "throttle.offload-memory"); value.Exists() {
 		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.timeout"); value.Exists() {
+	if value := res.Get(prefix + "session.timeout"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBody
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *NetconfAgentTTYData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "throttle.process-rate"); value.Exists() {
+func (data *NetconfAgentTTYData) fromBody(ctx context.Context, res gjson.Result) {
+
+	prefix := helpers.LastElement(data.getPath()) + "."
+	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
+		prefix += "0."
+	}
+	// Check if data is at root level (gNMI response case)
+	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
+		prefix = ""
+	}
+	if value := res.Get(prefix + "throttle.process-rate"); value.Exists() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "throttle.memory"); value.Exists() {
+	if value := res.Get(prefix + "throttle.memory"); value.Exists() {
 		data.ThrottleMemory = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "throttle.offload-memory"); value.Exists() {
+	if value := res.Get(prefix + "throttle.offload-memory"); value.Exists() {
 		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.timeout"); value.Exists() {
+	if value := res.Get(prefix + "session.timeout"); value.Exists() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	}
 }
 
 // End of section. //template:end fromBodyData
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
+func (data *NetconfAgentTTY) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/process-rate"); value.Exists() {
+		data.ThrottleProcessRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/memory"); value.Exists() {
+		data.ThrottleMemory = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/offload-memory"); value.Exists() {
+		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/timeout"); value.Exists() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *NetconfAgentTTYData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/process-rate"); value.Exists() {
+		data.ThrottleProcessRate = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/memory"); value.Exists() {
+		data.ThrottleMemory = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/throttle/offload-memory"); value.Exists() {
+		data.ThrottleOffloadMemory = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/session/timeout"); value.Exists() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *NetconfAgentTTY) getDeletedItems(ctx context.Context, state NetconfAgentTTY) []string {
@@ -172,16 +292,14 @@ func (data *NetconfAgentTTY) getDeletedItems(ctx context.Context, state NetconfA
 }
 
 // End of section. //template:end getDeletedItems
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *NetconfAgentTTY) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *NetconfAgentTTY) getEmptyLeafsDelete(ctx context.Context, state *NetconfAgentTTY) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
 
 // End of section. //template:end getEmptyLeafsDelete
-
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *NetconfAgentTTY) getDeletePaths(ctx context.Context) []string {
@@ -198,7 +316,102 @@ func (data *NetconfAgentTTY) getDeletePaths(ctx context.Context) []string {
 	if !data.ThrottleProcessRate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/throttle/process-rate", data.getPath()))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *NetconfAgentTTY) addDeletedItemsXML(ctx context.Context, state NetconfAgentTTY, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.SessionTimeout.IsNull() && data.SessionTimeout.IsNull() {
+		deletePath := state.getXPath() + "/session/timeout"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ThrottleOffloadMemory.IsNull() && data.ThrottleOffloadMemory.IsNull() {
+		deletePath := state.getXPath() + "/throttle/offload-memory"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ThrottleMemory.IsNull() && data.ThrottleMemory.IsNull() {
+		deletePath := state.getXPath() + "/throttle/memory"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ThrottleProcessRate.IsNull() && data.ThrottleProcessRate.IsNull() {
+		deletePath := state.getXPath() + "/throttle/process-rate"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *NetconfAgentTTY) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.SessionTimeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/session/timeout")
+	}
+	if !data.ThrottleOffloadMemory.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/throttle/offload-memory")
+	}
+	if !data.ThrottleMemory.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/throttle/memory")
+	}
+	if !data.ThrottleProcessRate.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/throttle/process-rate")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

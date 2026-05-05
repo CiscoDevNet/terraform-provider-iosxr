@@ -128,7 +128,7 @@ func iosxrEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc 
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrEVPNPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
 	attributes = {
 	}
@@ -142,7 +142,7 @@ resource "iosxr_gnmi" "PreReq0" {
 
 func testAccIosxrEVPNConfig_minimum() string {
 	config := `resource "iosxr_evpn" "test" {` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -218,7 +218,7 @@ func testAccIosxrEVPNConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	virtual_access_evi_ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.03"` + "\n"
 	config += `	virtual_access_evi_ethernet_segment_bgp_rt = "01:01:01:01:01:03"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

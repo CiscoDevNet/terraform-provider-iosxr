@@ -113,14 +113,14 @@ func TestAccDataSourceIosxrInterfaceTunnelIP(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrInterfaceTunnelIPPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
 		"vrf-name" = "VRF1"
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
 	attributes = {
 		"access-list-name" = "ACL1"
@@ -141,7 +141,7 @@ resource "iosxr_gnmi" "PreReq1" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]"
 	attributes = {
 		"access-list-name" = "ACL2"
@@ -234,7 +234,7 @@ func testAccDataSourceIosxrInterfaceTunnelIPConfig() string {
 		config += `	tunnel_key = 100` + "\n"
 	}
 	config += `	tunnel_vrf = "VRF1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -3,12 +3,12 @@
 page_title: "iosxr_commit Resource - terraform-provider-iosxr"
 subcategory: ""
 description: |-
-  This resource commits all pending batch operations for a device. Use this with depends_on to control when batched operations are flushed to the device. Only needed when auto_commit=false (batch mode).
+  Commits all pending batch operations for a device in a single atomic gNMI Set call. Use depends_on to ensure all resources are staged before committing. Only needed when auto_commit=false (batch mode). On destroy, each resource commits its own delete immediately — this resource is a no-op on destroy.
 ---
 
 # iosxr_commit (Resource)
 
-This resource commits all pending batch operations for a device. Use this with `depends_on` to control when batched operations are flushed to the device. Only needed when `auto_commit=false` (batch mode).
+Commits all pending batch operations for a device in a single atomic gNMI Set call. Use `depends_on` to ensure all resources are staged before committing. Only needed when `auto_commit=false` (batch mode). On destroy, each resource commits its own delete immediately — this resource is a no-op on destroy.
 
 ## Example Usage
 
@@ -54,9 +54,9 @@ resource "iosxr_commit" "all" {
 
 ### Optional
 
-- `commit` (Boolean) This attribute is only used internally to trigger commits on every apply.
+- `commit` (Boolean) Internal attribute used to trigger a commit on every apply.
 - `device` (String) A device name from the provider configuration.
 
 ### Read-Only
 
-- `id` (String) Internal identifier.
+- `id` (String) The ID of this resource.

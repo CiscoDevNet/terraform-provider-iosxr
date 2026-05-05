@@ -20,7 +20,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -50,7 +49,10 @@ func (r *CommitResource) Metadata(_ context.Context, req resource.MetadataReques
 
 func (r *CommitResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "This resource commits all pending batch operations for a device. Use this with `depends_on` to control when batched operations are flushed to the device. Only needed when `auto_commit=false` (batch mode).",
+		MarkdownDescription: "Commits all pending batch operations for a device in a single atomic gNMI Set call. " +
+			"Use `depends_on` to ensure all resources are staged before committing. " +
+			"Only needed when `auto_commit=false` (batch mode). " +
+			"On destroy, each resource commits its own delete immediately — this resource is a no-op on destroy.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -58,11 +60,11 @@ func (r *CommitResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional:            true,
 			},
 			"id": schema.StringAttribute{
-				MarkdownDescription: "Internal identifier.",
+				MarkdownDescription: "The ID of this resource.",
 				Computed:            true,
 			},
 			"commit": schema.BoolAttribute{
-				MarkdownDescription: "This attribute is only used internally to trigger commits on every apply.",
+				MarkdownDescription: "Internal attribute used to trigger a commit on every apply.",
 				Optional:            true,
 				Computed:            true,
 				Default:             booldefault.StaticBool(true),
@@ -78,6 +80,54 @@ func (r *CommitResource) Configure(_ context.Context, req resource.ConfigureRequ
 	r.data = req.ProviderData.(*IosxrProviderData)
 }
 
+// commitBatch drains the device CandidateStore and flushes all staged gNMI operations
+// in a single atomic Set call. This is the gNMI equivalent of NETCONF's CommitBatch().
+// Returns an error if the gNMI Set fails; ops are re-queued on failure.
+func (r *CommitResource) commitBatch(ctx context.Context, device *IosxrProviderDataDevice, deviceName string) error {
+	if device.AutoCommit {
+		tflog.Info(ctx, fmt.Sprintf("iosxr_commit: auto_commit=true for device '%s', nothing to batch commit", deviceName))
+		return nil
+	}
+	if !device.Managed {
+		tflog.Info(ctx, fmt.Sprintf("iosxr_commit: device '%s' is not managed, skipping", deviceName))
+		return nil
+	}
+
+	ops := device.DrainCandidateOps()
+	if len(ops) == 0 {
+		tflog.Info(ctx, fmt.Sprintf("iosxr_commit: No pending operations for device '%s'", deviceName))
+		return nil
+	}
+
+	// Count operation types for logging
+	updates, deletes, replaces := 0, 0, 0
+	for _, op := range ops {
+		switch op.OperationType {
+		case "update":
+			updates++
+		case "delete":
+			deletes++
+		case "replace":
+			replaces++
+		}
+	}
+	tflog.Info(ctx, fmt.Sprintf("iosxr_commit: Flushing %d staged operation(s) for device '%s' (updates=%d, deletes=%d, replaces=%d)",
+		len(ops), deviceName, updates, deletes, replaces))
+
+	if !r.data.ReuseConnection {
+		defer func() { _ = device.Client.Disconnect() }()
+	}
+
+	_, err := device.Client.Set(ctx, ops)
+	if err != nil {
+		device.AppendCandidateOps(ops) // re-queue on failure so next apply can retry
+		return fmt.Errorf("gNMI Set failed: %w", err)
+	}
+
+	tflog.Info(ctx, fmt.Sprintf("iosxr_commit: SUCCESS - %d operation(s) committed to device '%s'", len(ops), deviceName))
+	return nil
+}
+
 func (r *CommitResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan Commit
 
@@ -89,7 +139,8 @@ func (r *CommitResource) Create(ctx context.Context, req resource.CreateRequest,
 
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
-		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device",
+			fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
 
@@ -98,50 +149,14 @@ func (r *CommitResource) Create(ctx context.Context, req resource.CreateRequest,
 		deviceName = "default"
 	}
 
-	tflog.Info(ctx, fmt.Sprintf("iosxr_commit: Beginning commit for device '%s'", deviceName))
+	tflog.Info(ctx, fmt.Sprintf("iosxr_commit: Create - device '%s'", deviceName))
 
-	if device.Managed && !device.AutoCommit {
-		ops := device.DrainCandidateOps()
-		if len(ops) == 0 {
-			tflog.Info(ctx, fmt.Sprintf("iosxr_commit: No pending operations for device '%s'", deviceName))
-		} else {
-			// Count operation types for logging
-			updates, deletes, replaces := 0, 0, 0
-			for _, op := range ops {
-				switch op.OperationType {
-				case "update":
-					updates++
-				case "delete":
-					deletes++
-				case "replace":
-					replaces++
-				}
-			}
-
-			tflog.Info(ctx, fmt.Sprintf("iosxr_commit: Committing %d operation(s) for device '%s' (Updates: %d, Deletes: %d, Replaces: %d)",
-				len(ops), deviceName, updates, deletes, replaces))
-
-			if !r.data.ReuseConnection {
-				defer device.Client.Disconnect()
-			}
-			_, err := device.Client.Set(ctx, ops)
-			if err != nil {
-				// Re-queue on failure
-				device.AppendCandidateOps(ops)
-				resp.Diagnostics.AddError("iosxr_commit: Failed to commit operations", err.Error())
-				return
-			}
-
-			tflog.Info(ctx, fmt.Sprintf("iosxr_commit: SUCCESS - Committed %d operation(s) to device '%s'", len(ops), deviceName))
-		}
-	} else if device.AutoCommit {
-		tflog.Info(ctx, fmt.Sprintf("iosxr_commit: Auto-commit enabled for device '%s', nothing to commit", deviceName))
+	if err := r.commitBatch(ctx, device, deviceName); err != nil {
+		resp.Diagnostics.AddError("iosxr_commit: Batch commit failed", err.Error())
+		return
 	}
 
-	plan.Id = types.StringValue(fmt.Sprintf("commit-%s-%d", deviceName, time.Now().Unix()))
-
-	tflog.Debug(ctx, fmt.Sprintf("iosxr_commit: Create finished successfully"))
-
+	plan.Id = types.StringValue(fmt.Sprintf("commit-%s", deviceName))
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
@@ -155,8 +170,9 @@ func (r *CommitResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	// Set commit to false - this causes terraform to see it as changed and trigger Update() on next apply
-	// This is the same pattern used in iosxe_commit resource
+	// Set commit=false so Terraform detects a diff on the next plan and triggers Update.
+	// This guarantees a re-commit on every apply, even if nothing else changed.
+	// Same pattern used in the NETCONF iosxr_commit and iosxe_commit resources.
 	resp.State.SetAttribute(ctx, path.Root("commit"), false)
 }
 
@@ -171,7 +187,8 @@ func (r *CommitResource) Update(ctx context.Context, req resource.UpdateRequest,
 
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
-		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device",
+			fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
 
@@ -180,62 +197,36 @@ func (r *CommitResource) Update(ctx context.Context, req resource.UpdateRequest,
 		deviceName = "default"
 	}
 
-	tflog.Info(ctx, fmt.Sprintf("iosxr_commit: Beginning commit for device '%s' (UPDATE)", deviceName))
+	tflog.Info(ctx, fmt.Sprintf("iosxr_commit: Update - device '%s'", deviceName))
 
-	if device.Managed && !device.AutoCommit {
-		ops := device.DrainCandidateOps()
-		if len(ops) == 0 {
-			tflog.Info(ctx, fmt.Sprintf("iosxr_commit: No pending operations for device '%s'", deviceName))
-		} else {
-			// Count operation types for logging
-			updates, deletes, replaces := 0, 0, 0
-			for _, op := range ops {
-				switch op.OperationType {
-				case "update":
-					updates++
-				case "delete":
-					deletes++
-				case "replace":
-					replaces++
-				}
-			}
-
-			tflog.Info(ctx, fmt.Sprintf("iosxr_commit: Committing %d operation(s) for device '%s' (Updates: %d, Deletes: %d, Replaces: %d)",
-				len(ops), deviceName, updates, deletes, replaces))
-
-			if !r.data.ReuseConnection {
-				defer device.Client.Disconnect()
-			}
-			_, err := device.Client.Set(ctx, ops)
-			if err != nil {
-				// Re-queue on failure
-				device.AppendCandidateOps(ops)
-				resp.Diagnostics.AddError("iosxr_commit: Failed to commit operations", err.Error())
-				return
-			}
-
-			tflog.Info(ctx, fmt.Sprintf("iosxr_commit: SUCCESS - Committed %d operation(s) to device '%s'", len(ops), deviceName))
-		}
-	} else if device.AutoCommit {
-		tflog.Info(ctx, fmt.Sprintf("iosxr_commit: Auto-commit enabled for device '%s', nothing to commit", deviceName))
+	if err := r.commitBatch(ctx, device, deviceName); err != nil {
+		resp.Diagnostics.AddError("iosxr_commit: Batch commit failed", err.Error())
+		return
 	}
 
-	// Set ID with timestamp to track when commit was executed
-	plan.Id = types.StringValue(fmt.Sprintf("commit-%s-%d", deviceName, time.Now().Unix()))
-
+	plan.Id = types.StringValue(fmt.Sprintf("commit-%s", deviceName))
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
 func (r *CommitResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	// Commit resource doesn't need to do anything on delete
-	tflog.Debug(ctx, "iosxr_commit: Delete called (no-op)")
+	// No-op: during destroy, each resource commits its own delete operations immediately
+	// (auto_commit setting is ignored during destroy — resources always self-commit on delete).
+	// This matches the NETCONF PR #332 destroy behavior.
+	tflog.Debug(ctx, "iosxr_commit: Delete (no-op - resources handle their own destroy commits)")
 	resp.State.RemoveResource(ctx)
 }
 
 func (r *CommitResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError(
-		"Import not supported",
-		"The iosxr_commit resource does not support import. It's a trigger resource that commits pending batch operations.",
-	)
+	// iosxr_commit is a stateless trigger — nothing on the device represents a "commit".
+	// Import restores the resource into Terraform state. Read() will set commit=false,
+	// causing Update() to fire on the next apply which re-commits any staged operations.
+	//
+	// Usage:
+	//   terraform import iosxr_commit.safe_deploy default   # default device
+	//   terraform import iosxr_commit.safe_deploy xrd-1     # named device
+	tflog.Debug(ctx, fmt.Sprintf("iosxr_commit: ImportState id='%s'", req.ID))
+	resp.State.SetAttribute(ctx, path.Root("id"), req.ID)
+	resp.State.SetAttribute(ctx, path.Root("commit"), false) // triggers Update on next apply
+	resp.State.SetAttribute(ctx, path.Root("device"), "")
 }

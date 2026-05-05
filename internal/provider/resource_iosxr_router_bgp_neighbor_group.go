@@ -1492,19 +1492,19 @@ func (r *RouterBGPNeighborGroupResource) Delete(ctx context.Context, req resourc
 		}
 
 		if len(ops) > 0 {
-			if device.AutoCommit {
-				if !r.data.ReuseConnection {
-					defer device.Client.Disconnect()
-				}
-				_, err := device.Client.Set(ctx, ops)
-				if err != nil {
-					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-					return
-				}
-			} else {
-				device.AppendCandidateOps(ops)
-				tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d delete operation(s) in candidate store (total pending: %d)", state.Id.ValueString(), len(ops), device.PendingOpsCount()))
+			// DESTROY: Always commit immediately, ignore auto_commit setting.
+			// During destroy, iosxr_commit is already gone (destroyed first via depends_on),
+			// so batched ops would never be flushed. Each resource must self-commit its delete.
+			// This matches NETCONF PR #332 destroy behavior: auto_commit=true during destroy.
+			if !r.data.ReuseConnection {
+				defer device.Client.Disconnect()
 			}
+			_, err := device.Client.Set(ctx, ops)
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+				return
+			}
+			tflog.Debug(ctx, fmt.Sprintf("%s: Committed %d delete operation(s) immediately (destroy always commits)", state.Id.ValueString(), len(ops)))
 		}
 	}
 

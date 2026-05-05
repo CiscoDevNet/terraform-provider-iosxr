@@ -100,70 +100,75 @@ func (r *CommitResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 
 	if device.Protocol == "netconf" {
-		// Lock for NETCONF operations
-		locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
-		defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
-		if locked {
-			defer device.GetOpMutex().Unlock()
-		}
+		// In batch mode, check whether any dependent resource actually staged changes
+		// by inspecting the batch locks. Locks are acquired by EditConfigBatch() when
+		// resources stage NETCONF edits during apply. Because iosxr_commit has depends_on
+		// on all those resources, by the time Create() runs here they have all finished
+		// — so IsBatchLocked() is a reliable signal that there is something to commit.
+		if !device.AutoCommit && !device.IsBatchLocked() {
+			tflog.Info(ctx, "iosxr_commit: batch mode, no staged changes (batch locks not held) — skipping commit")
+		} else {
+			// Locks are held (staged changes exist) OR auto-commit mode: proceed with NETCONF commit
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
 
-		if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
-			resp.Diagnostics.AddError(
-				"NETCONF Connection Error",
-				fmt.Sprintf("Failed to ensure connection: %s", err),
-			)
-			return
-		}
-
-		// In batch mode (auto_commit=false), commit and release batch locks
-		// Batch locks are acquired before first edit-config operation
-		if !device.AutoCommit {
-			tflog.Info(ctx, "Batch mode detected - committing without locks (locks already held by connection)")
-
-			// Commit without locking (locks already held by connection)
-			if err := helpers.CommitBatch(ctx, device.NetconfClient); err != nil {
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
 				resp.Diagnostics.AddError(
-					"Commit Failed",
-					fmt.Sprintf("Failed to commit configuration in batch mode: %s", err),
+					"NETCONF Connection Error",
+					fmt.Sprintf("Failed to ensure connection: %s", err),
 				)
 				return
 			}
 
-			// Release batch locks after successful commit
-			if err := helpers.ReleaseBatchLocks(ctx, device.NetconfClient, device); err != nil {
-				// Log warning but don't fail - commit succeeded
-				tflog.Warn(ctx, fmt.Sprintf("Failed to release batch locks after commit: %s", err))
-			}
-
-			tflog.Info(ctx, "Batch commit completed successfully, locks released")
-		} else {
-			// Auto-commit mode: execute confirmed-commit if enabled, otherwise regular commit
-			tflog.Info(ctx, fmt.Sprintf("Commit check: ConfirmedCommit=%v, AutoCommit=%v, Timeout=%d", device.ConfirmedCommit, device.AutoCommit, device.ConfirmedCommitTimeout))
-			if device.ConfirmedCommit {
-				tflog.Info(ctx, fmt.Sprintf("Executing confirmed-commit with %d second timeout", device.ConfirmedCommitTimeout))
-				if err := helpers.CommitConfirmed(ctx, device.NetconfClient, device.ConfirmedCommitTimeout); err != nil {
-					resp.Diagnostics.AddError(
-						"Confirmed Commit Failed",
-						fmt.Sprintf("Failed to execute confirmed-commit: %s", err),
-					)
-					return
+			if !device.AutoCommit {
+				// Batch mode: commit staged edits and release locks
+				tflog.Info(ctx, "iosxr_commit: batch locks held — committing staged changes")
+				if err := helpers.CommitBatch(ctx, device.NetconfClient); err != nil {
+					if helpers.IsNoChangesToCommitError(err) {
+						tflog.Info(ctx, "iosxr_commit: no staged changes to commit (no-op)")
+					} else {
+						resp.Diagnostics.AddError(
+							"Commit Failed",
+							fmt.Sprintf("Failed to commit configuration in batch mode: %s", err),
+						)
+						return
+					}
 				}
-				tflog.Info(ctx, "Confirmed-commit completed successfully with auto-confirmation")
+				if err := helpers.ReleaseBatchLocks(ctx, device.NetconfClient, device); err != nil {
+					tflog.Warn(ctx, fmt.Sprintf("Failed to release batch locks after commit: %s", err))
+				}
+				tflog.Info(ctx, "iosxr_commit: batch commit completed, locks released")
 			} else {
-				// Regular commit operation (with locking)
-				tflog.Info(ctx, "Executing regular NETCONF commit")
-				if err := helpers.Commit(ctx, device.NetconfClient); err != nil {
-					resp.Diagnostics.AddError(
-						"Commit Failed",
-						fmt.Sprintf("Failed to commit configuration: %s", err),
-					)
-					return
+				// Auto-commit mode: confirmed-commit or regular commit
+				tflog.Info(ctx, fmt.Sprintf("Commit check: ConfirmedCommit=%v, AutoCommit=%v, Timeout=%d", device.ConfirmedCommit, device.AutoCommit, device.ConfirmedCommitTimeout))
+				if device.ConfirmedCommit {
+					tflog.Info(ctx, fmt.Sprintf("Executing confirmed-commit with %d second timeout", device.ConfirmedCommitTimeout))
+					if err := helpers.CommitConfirmed(ctx, device.NetconfClient, device.ConfirmedCommitTimeout); err != nil {
+						resp.Diagnostics.AddError(
+							"Confirmed Commit Failed",
+							fmt.Sprintf("Failed to execute confirmed-commit: %s", err),
+						)
+						return
+					}
+					tflog.Info(ctx, "Confirmed-commit completed successfully with auto-confirmation")
+				} else {
+					tflog.Info(ctx, "Executing regular NETCONF commit")
+					if err := helpers.Commit(ctx, device.NetconfClient); err != nil {
+						resp.Diagnostics.AddError(
+							"Commit Failed",
+							fmt.Sprintf("Failed to commit configuration: %s", err),
+						)
+						return
+					}
+					tflog.Info(ctx, "NETCONF commit completed successfully")
 				}
-				tflog.Info(ctx, "NETCONF commit completed successfully")
 			}
 		}
 	} else {
-		// gNMI protocol - no-op (log only)
+		// gNMI protocol — no-op
 		tflog.Info(ctx, "gNMI protocol detected - commit operation skipped (gNMI is auto-commit)")
 	}
 

@@ -22,10 +22,13 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"reflect"
+	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/sjson"
 	"github.com/tidwall/gjson"

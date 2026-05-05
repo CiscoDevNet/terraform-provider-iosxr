@@ -55,6 +55,7 @@ provider "iosxr" {
 
 ### Optional
 
+- `auto_commit` (Boolean) Automatically commit configuration changes after each resource operation. When true (default), each resource commits its changes immediately. When false, changes are left in the candidate datastore and must be explicitly committed using the iosxr_commit resource. This can also be set as the IOSXR_AUTO_COMMIT environment variable. Defaults to `true`.
 - `ca_certificate` (String) TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
 - `certificate` (String) TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
@@ -77,4 +78,5 @@ Required:
 
 Optional:
 
+- `auto_commit` (Boolean) Enable automatic commit of changes for this device. When `true` (default), changes will be automatically committed to the device. When `false`, changes must be explicitly committed using the iosxr_commit resource.
 - `managed` (Boolean) Enable or disable device management. This can be used to temporarily skip a device due to maintenance for example. Defaults to `true`.

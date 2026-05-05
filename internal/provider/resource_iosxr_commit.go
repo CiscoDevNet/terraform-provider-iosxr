@@ -24,7 +24,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -40,7 +39,6 @@ type CommitResource struct {
 type Commit struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
-	Commit types.Bool   `tfsdk:"commit"`
 }
 
 func (r *CommitResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -52,6 +50,7 @@ func (r *CommitResource) Schema(ctx context.Context, req resource.SchemaRequest,
 		MarkdownDescription: "Commits all pending batch operations for a device in a single atomic gNMI Set call. " +
 			"Use `depends_on` to ensure all resources are staged before committing. " +
 			"Only needed when `auto_commit=false` (batch mode). " +
+			"This resource always re-applies on every terraform apply (NETCONF PR #332 pattern). " +
 			"On destroy, each resource commits its own delete immediately — this resource is a no-op on destroy.",
 
 		Attributes: map[string]schema.Attribute{
@@ -62,12 +61,6 @@ func (r *CommitResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"id": schema.StringAttribute{
 				MarkdownDescription: "The ID of this resource.",
 				Computed:            true,
-			},
-			"commit": schema.BoolAttribute{
-				MarkdownDescription: "Internal attribute used to trigger a commit on every apply.",
-				Optional:            true,
-				Computed:            true,
-				Default:             booldefault.StaticBool(true),
 			},
 		},
 	}
@@ -162,18 +155,12 @@ func (r *CommitResource) Create(ctx context.Context, req resource.CreateRequest,
 }
 
 func (r *CommitResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state Commit
-
-	diags := req.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	// Set commit=false so Terraform detects a diff on the next plan and triggers Update.
-	// This guarantees a re-commit on every apply, even if nothing else changed.
-	// Same pattern used in the NETCONF iosxr_commit and iosxe_commit resources.
-	resp.State.SetAttribute(ctx, path.Root("commit"), false)
+	// Always remove this resource from state so Terraform plans a Create on every apply.
+	// Create() calls commitBatch() which flushes all staged gNMI operations (no-op if
+	// nothing is staged). This is the same mechanism as NETCONF PR #332: no lifecycle
+	// blocks or extra trigger attributes needed.
+	tflog.Debug(ctx, "iosxr_commit: Read - removing from state to force re-apply on next plan (PR #332 pattern)")
+	resp.State.RemoveResource(ctx)
 }
 
 func (r *CommitResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
@@ -218,15 +205,6 @@ func (r *CommitResource) Delete(ctx context.Context, req resource.DeleteRequest,
 }
 
 func (r *CommitResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	// iosxr_commit is a stateless trigger — nothing on the device represents a "commit".
-	// Import restores the resource into Terraform state. Read() will set commit=false,
-	// causing Update() to fire on the next apply which re-commits any staged operations.
-	//
-	// Usage:
-	//   terraform import iosxr_commit.safe_deploy default   # default device
-	//   terraform import iosxr_commit.safe_deploy xrd-1     # named device
 	tflog.Debug(ctx, fmt.Sprintf("iosxr_commit: ImportState id='%s'", req.ID))
-	resp.State.SetAttribute(ctx, path.Root("id"), req.ID)
-	resp.State.SetAttribute(ctx, path.Root("commit"), false) // triggers Update on next apply
-	resp.State.SetAttribute(ctx, path.Root("device"), "")
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

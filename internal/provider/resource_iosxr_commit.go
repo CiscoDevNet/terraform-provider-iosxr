@@ -25,8 +25,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -45,8 +43,8 @@ type CommitResource struct {
 }
 
 type Commit struct {
-	Id     types.String `tfsdk:"id"`
 	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
 }
 
 func (r *CommitResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -55,122 +53,20 @@ func (r *CommitResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *CommitResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: `This resource executes a NETCONF commit operation to persist all pending configuration changes.
-
-## Behavior
-- **NETCONF Protocol**: Performs a commit operation to copy candidate datastore to running datastore
-- **gNMI Protocol**: No operation (gNMI is auto-commit by design)
-- **Confirmed Commit Mode**: When ` + "`confirmed_commit=true`" + ` in provider configuration:
-  - Executes confirmed-commit with the configured timeout (60-240 seconds)
-  - Auto-confirms on success for seamless Terraform workflow
-  - IOS XR automatically rolls back if timeout expires without confirmation
-  - Requires :confirmed-commit:1.1 capability on the device
-
-## Use Cases
-1. **Batch Operations**: Group multiple resource changes into one transaction
-2. **Atomic Deployments**: Ensure all-or-nothing configuration changes
-3. **Confirmed Commit**: Safe configuration deployment with automatic rollback capability
-4. **Explicit Commit**: Control exactly when changes are committed to running datastore
-
-## Example Usage
-
-### Basic Commit (Auto-Commit)
-` + "```hcl" + `
-provider "iosxr" {
-  auto_commit = true  # Individual resources auto-commit
-}
-
-resource "iosxr_hostname" "example" {
-  system_network_name = "router1"
-}
-# No iosxr_commit needed - changes committed immediately
-` + "```" + `
-
-### Manual Batch Commit
-` + "```hcl" + `
-provider "iosxr" {
-  auto_commit = false  # Stage changes without committing
-}
-
-resource "iosxr_hostname" "example" {
-  system_network_name = "router1"
-}
-
-resource "iosxr_logging" "example" {
-  ipv4_dscp = "af11"
-}
-
-# Commit all changes in one transaction
-resource "iosxr_commit" "batch" {
-  depends_on = [
-    iosxr_hostname.example,
-    iosxr_logging.example,
-  ]
-
-  lifecycle {
-    replace_triggered_by = [
-      iosxr_hostname.example,
-      iosxr_logging.example,
-    ]
-  }
-}
-` + "```" + `
-
-### Confirmed Commit with Automatic Rollback
-` + "```hcl" + `
-provider "iosxr" {
-  protocol                   = "netconf"
-  auto_commit                = true
-  confirmed_commit           = true
-  confirmed_commit_timeout   = 120  # 2 minutes timeout
-}
-
-resource "iosxr_hostname" "example" {
-  system_network_name = "router1"
-}
-
-resource "iosxr_logging" "example" {
-  ipv4_dscp = "af11"
-}
-
-# Executes confirmed-commit with automatic confirmation on success
-resource "iosxr_commit" "safe_deploy" {
-  depends_on = [
-    iosxr_hostname.example,
-    iosxr_logging.example,
-  ]
-
-  lifecycle {
-    replace_triggered_by = [
-      iosxr_hostname.example,
-      iosxr_logging.example,
-    ]
-  }
-}
-# If commit succeeds, changes are auto-confirmed
-# If timeout expires, IOS XR automatically rolls back all changes
-` + "```" + `
-
-## Notes
-- This resource is primarily for NETCONF protocol users
-- For gNMI protocol, this resource has no effect (gNMI is auto-commit)
-- Use ` + "`depends_on`" + ` to ensure proper ordering of configuration changes
-- Use ` + "`replace_triggered_by`" + ` lifecycle meta-argument to force re-execution when dependencies change
-- The resource ID is a static timestamp of when the commit was executed
-- Confirmed commit requires IOS XR support for :confirmed-commit:1.1 capability
-`,
+		MarkdownDescription: "Commits all pending batch operations for a device. " +
+			"Use `depends_on` to ensure all resources are staged before committing. " +
+			"Only needed when `auto_commit=false` (batch mode). " +
+			"This resource always re-applies on every terraform apply (PR #329 pattern). " +
+			"The provider automatically sets `commit = true` — no user input required.",
 
 		Attributes: map[string]schema.Attribute{
-			"id": schema.StringAttribute{
-				Computed:            true,
-				MarkdownDescription: "The ID of the commit operation (timestamp).",
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.UseStateForUnknown(),
-				},
-			},
 			"device": schema.StringAttribute{
-				MarkdownDescription: "Device name. This corresponds to the name of a device configured in the provider.",
+				MarkdownDescription: "A device name from the provider configuration.",
 				Optional:            true,
+			},
+			"id": schema.StringAttribute{
+				MarkdownDescription: "The ID of this resource.",
+				Computed:            true,
 			},
 		},
 	}
@@ -277,20 +173,9 @@ func (r *CommitResource) Create(ctx context.Context, req resource.CreateRequest,
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *CommitResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state Commit
-
-	diags := req.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	// Commit resource is stateless - just preserve the existing state
-	tflog.Debug(ctx, "Commit resource read - preserving existing state")
-
-	diags = resp.State.Set(ctx, &state)
-	resp.Diagnostics.Append(diags...)
+func (r *CommitResource) Read(ctx context.Context, _ resource.ReadRequest, resp *resource.ReadResponse) {
+	tflog.Debug(ctx, "iosxr_commit: Read - removing state to force re-create on next plan (PR #329 pattern)")
+	resp.State.RemoveResource(ctx)
 }
 
 func (r *CommitResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {

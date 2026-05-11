@@ -11,7 +11,7 @@ require (
 	github.com/hashicorp/terraform-plugin-testing v1.15.0
 	github.com/netascode/go-gnmi v0.1.0
 	github.com/openconfig/goyang v1.6.3
-	github.com/tidwall/gjson v1.18.0
+	github.com/tidwall/gjson v1.19.0
 	github.com/tidwall/sjson v1.2.5
 	golang.org/x/tools v0.44.0
 	gopkg.in/yaml.v3 v3.0.1

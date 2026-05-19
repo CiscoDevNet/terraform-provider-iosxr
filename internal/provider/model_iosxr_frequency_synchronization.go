@@ -152,7 +152,11 @@ func (data FrequencySynchronization) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data FrequencySynchronization) toBodyXML(ctx context.Context) string {
+func (data FrequencySynchronization) toBodyXML(ctx context.Context, stateArg ...*FrequencySynchronization) string {
+	var state *FrequencySynchronization
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.QualityItuTOptionOne.IsNull() && !data.QualityItuTOptionOne.IsUnknown() {
 		if data.QualityItuTOptionOne.ValueBool() {
@@ -210,6 +214,11 @@ func (data FrequencySynchronization) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -217,8 +226,8 @@ func (data FrequencySynchronization) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "quality.itu-t.option.one"); value.Exists() {
+func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("quality.itu-t.option.one"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.QualityItuTOptionOne.IsNull() {
 			data.QualityItuTOptionOne = types.BoolValue(true)
@@ -229,7 +238,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 			data.QualityItuTOptionOne = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.one"); value.Exists() {
+	if value := res.Get("quality.itu-t.option.two.generation.one"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.QualityItuTOptionTwoGenerationOne.IsNull() {
 			data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
@@ -240,7 +249,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 			data.QualityItuTOptionTwoGenerationOne = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.two"); value.Exists() {
+	if value := res.Get("quality.itu-t.option.two.generation.two"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.QualityItuTOptionTwoGenerationTwo.IsNull() {
 			data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
@@ -251,7 +260,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 			data.QualityItuTOptionTwoGenerationTwo = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock-interface.timing-mode.system"); value.Exists() {
+	if value := res.Get("clock-interface.timing-mode.system"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockInterfaceTimingModeSystem.IsNull() {
 			data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
@@ -262,7 +271,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 			data.ClockInterfaceTimingModeSystem = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock-interface.timing-mode.independent"); value.Exists() {
+	if value := res.Get("clock-interface.timing-mode.independent"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockInterfaceTimingModeIndependent.IsNull() {
 			data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
@@ -273,7 +282,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 			data.ClockInterfaceTimingModeIndependent = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "system.timing-mode.line-only"); value.Exists() {
+	if value := res.Get("system.timing-mode.line-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SystemTimingModeLineOnly.IsNull() {
 			data.SystemTimingModeLineOnly = types.BoolValue(true)
@@ -284,7 +293,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 			data.SystemTimingModeLineOnly = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "system.timing-mode.clock-only"); value.Exists() {
+	if value := res.Get("system.timing-mode.clock-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SystemTimingModeClockOnly.IsNull() {
 			data.SystemTimingModeClockOnly = types.BoolValue(true)
@@ -295,7 +304,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 			data.SystemTimingModeClockOnly = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.selection.changes"); value.Exists() {
+	if value := res.Get("log.selection.changes"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogSelectionChanges.IsNull() {
 			data.LogSelectionChanges = types.BoolValue(true)
@@ -306,7 +315,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 			data.LogSelectionChanges = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.selection.errors"); value.Exists() {
+	if value := res.Get("log.selection.errors"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogSelectionErrors.IsNull() {
 			data.LogSelectionErrors = types.BoolValue(true)
@@ -317,7 +326,7 @@ func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []
 			data.LogSelectionErrors = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock-identity.mac-address"); value.Exists() && !data.ClockIdentityMacAddress.IsNull() {
+	if value := res.Get("clock-identity.mac-address"); value.Exists() && !data.ClockIdentityMacAddress.IsNull() {
 		data.ClockIdentityMacAddress = types.StringValue(value.String())
 	} else if data.ClockIdentityMacAddress.IsNull() {
 		data.ClockIdentityMacAddress = types.StringNull()

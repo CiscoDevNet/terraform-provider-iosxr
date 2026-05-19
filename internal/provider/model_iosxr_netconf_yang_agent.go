@@ -132,8 +132,8 @@ func (data NetconfYangAgent) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *NetconfYangAgent) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ssh"); value.Exists() {
+func (data *NetconfYangAgent) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("ssh"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ssh.IsNull() {
 			data.Ssh = types.BoolValue(true)
@@ -144,7 +144,7 @@ func (data *NetconfYangAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.Ssh = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "with-defaults-support.enable"); value.Exists() {
+	if value := res.Get("with-defaults-support.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.WithDefaultsSupport.IsNull() {
 			data.WithDefaultsSupport = types.BoolValue(true)
@@ -155,32 +155,32 @@ func (data *NetconfYangAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.WithDefaultsSupport = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "rate-limit"); value.Exists() && !data.RateLimit.IsNull() {
+	if value := res.Get("rate-limit"); value.Exists() && !data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Value(value.Int())
 	} else if data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "session.limit"); value.Exists() && !data.SessionLimit.IsNull() {
+	if value := res.Get("session.limit"); value.Exists() && !data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	} else if data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "session.idle-timeout"); value.Exists() && !data.SessionIdleTimeout.IsNull() {
+	if value := res.Get("session.idle-timeout"); value.Exists() && !data.SessionIdleTimeout.IsNull() {
 		data.SessionIdleTimeout = types.Int64Value(value.Int())
 	} else if data.SessionIdleTimeout.IsNull() {
 		data.SessionIdleTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() && !data.SessionAbsoluteTimeout.IsNull() {
+	if value := res.Get("session.absolute-timeout"); value.Exists() && !data.SessionAbsoluteTimeout.IsNull() {
 		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
 	} else if data.SessionAbsoluteTimeout.IsNull() {
 		data.SessionAbsoluteTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "netconf1\\.0.support"); value.Exists() && !data.NetconfV1.IsNull() {
+	if value := res.Get("netconf1\\.0.support"); value.Exists() && !data.NetconfV1.IsNull() {
 		data.NetconfV1 = types.StringValue(value.String())
 	} else if data.NetconfV1.IsNull() {
 		data.NetconfV1 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "netconf1\\.0.streaming-disabled"); value.Exists() {
+	if value := res.Get("netconf1\\.0.streaming-disabled"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NetconfV1StreamingDisabled.IsNull() {
 			data.NetconfV1StreamingDisabled = types.BoolValue(true)
@@ -196,7 +196,11 @@ func (data *NetconfYangAgent) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data NetconfYangAgent) toBodyXML(ctx context.Context) string {
+func (data NetconfYangAgent) toBodyXML(ctx context.Context, stateArg ...*NetconfYangAgent) string {
+	var state *NetconfYangAgent
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Ssh.IsNull() && !data.Ssh.IsUnknown() {
 		if data.Ssh.ValueBool() {
@@ -236,6 +240,11 @@ func (data NetconfYangAgent) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

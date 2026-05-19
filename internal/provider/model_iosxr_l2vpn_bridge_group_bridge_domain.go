@@ -825,13 +825,13 @@ func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mtu"); value.Exists() && !data.Mtu.IsNull() {
+func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("mtu"); value.Exists() && !data.Mtu.IsNull() {
 		data.Mtu = types.Int64Value(value.Int())
 	} else if data.Mtu.IsNull() {
 		data.Mtu = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
+	if value := res.Get("description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
@@ -841,7 +841,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "evis.evi").ForEach(
+		res.Get("evis.evi").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -870,7 +870,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.Srv6Evis[i].VpnId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "segment-routing-srv6-evis.evi").ForEach(
+		res.Get("segment-routing-srv6-evis.evi").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -899,7 +899,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "vnis.vni").ForEach(
+		res.Get("vnis.vni").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -923,7 +923,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Vnis[i].VniId = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "coupled-mode"); value.Exists() {
+	if value := res.Get("coupled-mode"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CoupledMode.IsNull() {
 			data.CoupledMode = types.BoolValue(true)
@@ -934,7 +934,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.CoupledMode = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport-mode.vlan.passthrough"); value.Exists() {
+	if value := res.Get("transport-mode.vlan.passthrough"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportModeVlanPassthrough.IsNull() {
 			data.TransportModeVlanPassthrough = types.BoolValue(true)
@@ -945,7 +945,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.TransportModeVlanPassthrough = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "flooding.disable"); value.Exists() {
+	if value := res.Get("flooding.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.FloodingDisable.IsNull() {
 			data.FloodingDisable = types.BoolValue(true)
@@ -956,7 +956,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.FloodingDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection"); value.Exists() {
+	if value := res.Get("dynamic-arp-inspection"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DynamicArpInspection.IsNull() {
 			data.DynamicArpInspection = types.BoolValue(true)
@@ -967,7 +967,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.DynamicArpInspection = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection.logging"); value.Exists() {
+	if value := res.Get("dynamic-arp-inspection.logging"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DynamicArpInspectionLogging.IsNull() {
 			data.DynamicArpInspectionLogging = types.BoolValue(true)
@@ -978,7 +978,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.DynamicArpInspectionLogging = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection.address-validation.src-mac"); value.Exists() {
+	if value := res.Get("dynamic-arp-inspection.address-validation.src-mac"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DynamicArpInspectionAddressValidationSrcMac.IsNull() {
 			data.DynamicArpInspectionAddressValidationSrcMac = types.BoolValue(true)
@@ -989,7 +989,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.DynamicArpInspectionAddressValidationSrcMac = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection.address-validation.dst-mac"); value.Exists() {
+	if value := res.Get("dynamic-arp-inspection.address-validation.dst-mac"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DynamicArpInspectionAddressValidationDstMac.IsNull() {
 			data.DynamicArpInspectionAddressValidationDstMac = types.BoolValue(true)
@@ -1000,7 +1000,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.DynamicArpInspectionAddressValidationDstMac = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "dynamic-arp-inspection.address-validation.ipv4"); value.Exists() {
+	if value := res.Get("dynamic-arp-inspection.address-validation.ipv4"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DynamicArpInspectionAddressValidationIpv4.IsNull() {
 			data.DynamicArpInspectionAddressValidationIpv4 = types.BoolValue(true)
@@ -1011,7 +1011,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.DynamicArpInspectionAddressValidationIpv4 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ip-source-guard"); value.Exists() {
+	if value := res.Get("ip-source-guard"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IpSourceGuard.IsNull() {
 			data.IpSourceGuard = types.BoolValue(true)
@@ -1022,7 +1022,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.IpSourceGuard = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ip-source-guard.logging"); value.Exists() {
+	if value := res.Get("ip-source-guard.logging"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IpSourceGuardLogging.IsNull() {
 			data.IpSourceGuardLogging = types.BoolValue(true)
@@ -1033,12 +1033,12 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.IpSourceGuardLogging = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "igmp.snooping.profile"); value.Exists() && !data.IgmpSnoopingProfile.IsNull() {
+	if value := res.Get("igmp.snooping.profile"); value.Exists() && !data.IgmpSnoopingProfile.IsNull() {
 		data.IgmpSnoopingProfile = types.StringValue(value.String())
 	} else if data.IgmpSnoopingProfile.IsNull() {
 		data.IgmpSnoopingProfile = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "igmp.snooping.disable"); value.Exists() {
+	if value := res.Get("igmp.snooping.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IgmpSnoopingDisable.IsNull() {
 			data.IgmpSnoopingDisable = types.BoolValue(true)
@@ -1049,42 +1049,42 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.IgmpSnoopingDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mld.snooping.profile"); value.Exists() && !data.MldSnoopingProfile.IsNull() {
+	if value := res.Get("mld.snooping.profile"); value.Exists() && !data.MldSnoopingProfile.IsNull() {
 		data.MldSnoopingProfile = types.StringValue(value.String())
 	} else if data.MldSnoopingProfile.IsNull() {
 		data.MldSnoopingProfile = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "storm-control.broadcast.pps"); value.Exists() && !data.StormControlBroadcastPps.IsNull() {
+	if value := res.Get("storm-control.broadcast.pps"); value.Exists() && !data.StormControlBroadcastPps.IsNull() {
 		data.StormControlBroadcastPps = types.Int64Value(value.Int())
 	} else if data.StormControlBroadcastPps.IsNull() {
 		data.StormControlBroadcastPps = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "storm-control.broadcast.kbps"); value.Exists() && !data.StormControlBroadcastKbps.IsNull() {
+	if value := res.Get("storm-control.broadcast.kbps"); value.Exists() && !data.StormControlBroadcastKbps.IsNull() {
 		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
 	} else if data.StormControlBroadcastKbps.IsNull() {
 		data.StormControlBroadcastKbps = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "storm-control.multicast.pps"); value.Exists() && !data.StormControlMulticastPps.IsNull() {
+	if value := res.Get("storm-control.multicast.pps"); value.Exists() && !data.StormControlMulticastPps.IsNull() {
 		data.StormControlMulticastPps = types.Int64Value(value.Int())
 	} else if data.StormControlMulticastPps.IsNull() {
 		data.StormControlMulticastPps = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "storm-control.multicast.kbps"); value.Exists() && !data.StormControlMulticastKbps.IsNull() {
+	if value := res.Get("storm-control.multicast.kbps"); value.Exists() && !data.StormControlMulticastKbps.IsNull() {
 		data.StormControlMulticastKbps = types.Int64Value(value.Int())
 	} else if data.StormControlMulticastKbps.IsNull() {
 		data.StormControlMulticastKbps = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "storm-control.unknown-unicast.pps"); value.Exists() && !data.StormControlUnknownUnicastPps.IsNull() {
+	if value := res.Get("storm-control.unknown-unicast.pps"); value.Exists() && !data.StormControlUnknownUnicastPps.IsNull() {
 		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
 	} else if data.StormControlUnknownUnicastPps.IsNull() {
 		data.StormControlUnknownUnicastPps = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "storm-control.unknown-unicast.kbps"); value.Exists() && !data.StormControlUnknownUnicastKbps.IsNull() {
+	if value := res.Get("storm-control.unknown-unicast.kbps"); value.Exists() && !data.StormControlUnknownUnicastKbps.IsNull() {
 		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
 	} else if data.StormControlUnknownUnicastKbps.IsNull() {
 		data.StormControlUnknownUnicastKbps = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "multicast-source.ipv4"); value.Exists() {
+	if value := res.Get("multicast-source.ipv4"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastSourceIpv4.IsNull() {
 			data.MulticastSourceIpv4 = types.BoolValue(true)
@@ -1095,7 +1095,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MulticastSourceIpv4 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "multicast-source.ipv6"); value.Exists() {
+	if value := res.Get("multicast-source.ipv6"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastSourceIpv6.IsNull() {
 			data.MulticastSourceIpv6 = types.BoolValue(true)
@@ -1106,7 +1106,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MulticastSourceIpv6 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "multicast-source.ipv4-ipv6"); value.Exists() {
+	if value := res.Get("multicast-source.ipv4-ipv6"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastSourceIpv4Ipv6.IsNull() {
 			data.MulticastSourceIpv4Ipv6 = types.BoolValue(true)
@@ -1122,7 +1122,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "interfaces.interface").ForEach(
+		res.Get("interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1667,7 +1667,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{data.RoutedInterface[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "routed.interface").ForEach(
+		res.Get("routed.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1703,7 +1703,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+	if value := res.Get("shutdown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolValue(true)
@@ -1714,12 +1714,12 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Shutdown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.aging.time"); value.Exists() && !data.MacAgingTime.IsNull() {
+	if value := res.Get("mac.aging.time"); value.Exists() && !data.MacAgingTime.IsNull() {
 		data.MacAgingTime = types.Int64Value(value.Int())
 	} else if data.MacAgingTime.IsNull() {
 		data.MacAgingTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mac.aging.type.absolute"); value.Exists() {
+	if value := res.Get("mac.aging.type.absolute"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacAgingTypeAbsolute.IsNull() {
 			data.MacAgingTypeAbsolute = types.BoolValue(true)
@@ -1735,7 +1735,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{data.MacStaticAddresses[i].MacAddress.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "mac.static-addresses.static-address").ForEach(
+		res.Get("mac.static-addresses.static-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1771,7 +1771,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.learning.disable"); value.Exists() {
+	if value := res.Get("mac.learning.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacLearningDisable.IsNull() {
 			data.MacLearningDisable = types.BoolValue(true)
@@ -1782,7 +1782,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacLearningDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.disable"); value.Exists() {
+	if value := res.Get("mac.withdraw.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacWithdrawDisable.IsNull() {
 			data.MacWithdrawDisable = types.BoolValue(true)
@@ -1793,7 +1793,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacWithdrawDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.access-pw.disable"); value.Exists() {
+	if value := res.Get("mac.withdraw.access-pw.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacWithdrawAccessPwDisable.IsNull() {
 			data.MacWithdrawAccessPwDisable = types.BoolValue(true)
@@ -1804,7 +1804,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacWithdrawAccessPwDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.relay"); value.Exists() {
+	if value := res.Get("mac.withdraw.relay"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacWithdrawRelay.IsNull() {
 			data.MacWithdrawRelay = types.BoolValue(true)
@@ -1815,7 +1815,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacWithdrawRelay = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.state-down"); value.Exists() {
+	if value := res.Get("mac.withdraw.state-down"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacWithdrawStateDown.IsNull() {
 			data.MacWithdrawStateDown = types.BoolValue(true)
@@ -1826,7 +1826,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacWithdrawStateDown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.withdraw.optimize"); value.Exists() {
+	if value := res.Get("mac.withdraw.optimize"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacWithdrawOptimize.IsNull() {
 			data.MacWithdrawOptimize = types.BoolValue(true)
@@ -1837,12 +1837,12 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacWithdrawOptimize = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.limit.maximum"); value.Exists() && !data.MacLimitMaximum.IsNull() {
+	if value := res.Get("mac.limit.maximum"); value.Exists() && !data.MacLimitMaximum.IsNull() {
 		data.MacLimitMaximum = types.Int64Value(value.Int())
 	} else if data.MacLimitMaximum.IsNull() {
 		data.MacLimitMaximum = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mac.limit.action.flood"); value.Exists() {
+	if value := res.Get("mac.limit.action.flood"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacLimitActionFlood.IsNull() {
 			data.MacLimitActionFlood = types.BoolValue(true)
@@ -1853,7 +1853,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacLimitActionFlood = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.limit.action.no-flood"); value.Exists() {
+	if value := res.Get("mac.limit.action.no-flood"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacLimitActionNoFlood.IsNull() {
 			data.MacLimitActionNoFlood = types.BoolValue(true)
@@ -1864,7 +1864,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacLimitActionNoFlood = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.limit.action.shutdown"); value.Exists() {
+	if value := res.Get("mac.limit.action.shutdown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacLimitActionShutdown.IsNull() {
 			data.MacLimitActionShutdown = types.BoolValue(true)
@@ -1875,7 +1875,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacLimitActionShutdown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.limit.notification.trap"); value.Exists() {
+	if value := res.Get("mac.limit.notification.trap"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacLimitNotificationTrap.IsNull() {
 			data.MacLimitNotificationTrap = types.BoolValue(true)
@@ -1886,7 +1886,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacLimitNotificationTrap = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.limit.notification.both"); value.Exists() {
+	if value := res.Get("mac.limit.notification.both"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacLimitNotificationBoth.IsNull() {
 			data.MacLimitNotificationBoth = types.BoolValue(true)
@@ -1897,7 +1897,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacLimitNotificationBoth = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.limit.notification.none"); value.Exists() {
+	if value := res.Get("mac.limit.notification.none"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacLimitNotificationNone.IsNull() {
 			data.MacLimitNotificationNone = types.BoolValue(true)
@@ -1908,7 +1908,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacLimitNotificationNone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.port-down.flush.disable"); value.Exists() {
+	if value := res.Get("mac.port-down.flush.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacPortDownFlushDisable.IsNull() {
 			data.MacPortDownFlushDisable = types.BoolValue(true)
@@ -1919,7 +1919,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacPortDownFlushDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.secure"); value.Exists() {
+	if value := res.Get("mac.secure"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacSecure.IsNull() {
 			data.MacSecure = types.BoolValue(true)
@@ -1930,7 +1930,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacSecure = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.secure.logging"); value.Exists() {
+	if value := res.Get("mac.secure.logging"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacSecureLogging.IsNull() {
 			data.MacSecureLogging = types.BoolValue(true)
@@ -1941,7 +1941,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacSecureLogging = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.secure.threshold"); value.Exists() {
+	if value := res.Get("mac.secure.threshold"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacSecureThreshold.IsNull() {
 			data.MacSecureThreshold = types.BoolValue(true)
@@ -1952,7 +1952,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacSecureThreshold = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.secure.action.none"); value.Exists() {
+	if value := res.Get("mac.secure.action.none"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacSecureActionNone.IsNull() {
 			data.MacSecureActionNone = types.BoolValue(true)
@@ -1963,7 +1963,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacSecureActionNone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.secure.action.shutdown"); value.Exists() {
+	if value := res.Get("mac.secure.action.shutdown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacSecureActionShutdown.IsNull() {
 			data.MacSecureActionShutdown = types.BoolValue(true)
@@ -1974,7 +1974,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.MacSecureActionShutdown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.secure.shutdown-recovery-timeout"); value.Exists() && !data.MacSecureShutdownRecoveryTimeout.IsNull() {
+	if value := res.Get("mac.secure.shutdown-recovery-timeout"); value.Exists() && !data.MacSecureShutdownRecoveryTimeout.IsNull() {
 		data.MacSecureShutdownRecoveryTimeout = types.Int64Value(value.Int())
 	} else if data.MacSecureShutdownRecoveryTimeout.IsNull() {
 		data.MacSecureShutdownRecoveryTimeout = types.Int64Null()
@@ -1984,7 +1984,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.NeighborsEvpnEvi[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborsEvpnEvi[i].Target.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "neighbors.evpn.evi").ForEach(
+		res.Get("neighbors.evpn.evi").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2013,7 +2013,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.NeighborsEvpnEvi[i].Target = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "efp-visibility"); value.Exists() {
+	if value := res.Get("efp-visibility"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EfpVisibility.IsNull() {
 			data.EfpVisibility = types.BoolValue(true)
@@ -2024,7 +2024,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.EfpVisibility = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "etree"); value.Exists() {
+	if value := res.Get("etree"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Etree.IsNull() {
 			data.Etree = types.BoolValue(true)
@@ -2035,7 +2035,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Etree = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "etree.leaf"); value.Exists() {
+	if value := res.Get("etree.leaf"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EtreeLeaf.IsNull() {
 			data.EtreeLeaf = types.BoolValue(true)
@@ -2051,7 +2051,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{strconv.FormatInt(data.MemberVnisVni[i].VniId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "member.vnis.vni").ForEach(
+		res.Get("member.vnis.vni").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2114,7 +2114,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
+func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context, stateArg ...*L2VPNBridgeGroupBridgeDomain) string {
+	var state *L2VPNBridgeGroupBridgeDomain
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Mtu.IsNull() && !data.Mtu.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/mtu", strconv.FormatInt(data.Mtu.ValueInt64(), 10))
@@ -2124,7 +2128,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Evis) > 0 {
 		for _, item := range data.Evis {
-			basePath := data.getXPath() + "/evis/evi"
+			basePath := data.getXPath() + "/evis/evi[vpn-id='" + strconv.FormatInt(item.VpnId.ValueInt64(), 10) + "']"
 			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
 			}
@@ -2132,7 +2136,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Srv6Evis) > 0 {
 		for _, item := range data.Srv6Evis {
-			basePath := data.getXPath() + "/segment-routing-srv6-evis/evi"
+			basePath := data.getXPath() + "/segment-routing-srv6-evis/evi[vpn-id='" + strconv.FormatInt(item.VpnId.ValueInt64(), 10) + "']"
 			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
 			}
@@ -2140,7 +2144,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Vnis) > 0 {
 		for _, item := range data.Vnis {
-			basePath := data.getXPath() + "/vnis/vni"
+			basePath := data.getXPath() + "/vnis/vni[vni-id='" + strconv.FormatInt(item.VniId.ValueInt64(), 10) + "']"
 			if !item.VniId.IsNull() && !item.VniId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vni-id", strconv.FormatInt(item.VniId.ValueInt64(), 10))
 			}
@@ -2242,7 +2246,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Interfaces) > 0 {
 		for _, item := range data.Interfaces {
-			basePath := data.getXPath() + "/interfaces/interface"
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -2471,7 +2475,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.RoutedInterface) > 0 {
 		for _, item := range data.RoutedInterface {
-			basePath := data.getXPath() + "/routed/interface"
+			basePath := data.getXPath() + "/routed/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -2497,7 +2501,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MacStaticAddresses) > 0 {
 		for _, item := range data.MacStaticAddresses {
-			basePath := data.getXPath() + "/mac/static-addresses/static-address"
+			basePath := data.getXPath() + "/mac/static-addresses/static-address[mac-address='" + item.MacAddress.ValueString() + "']"
 			if !item.MacAddress.IsNull() && !item.MacAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/mac-address", item.MacAddress.ValueString())
 			}
@@ -2606,7 +2610,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.NeighborsEvpnEvi) > 0 {
 		for _, item := range data.NeighborsEvpnEvi {
-			basePath := data.getXPath() + "/neighbors/evpn/evi"
+			basePath := data.getXPath() + "/neighbors/evpn/evi[vpn-id='" + strconv.FormatInt(item.VpnId.ValueInt64(), 10) + "' and target='" + strconv.FormatInt(item.Target.ValueInt64(), 10) + "']"
 			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
 			}
@@ -2632,7 +2636,7 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MemberVnisVni) > 0 {
 		for _, item := range data.MemberVnisVni {
-			basePath := data.getXPath() + "/member/vnis/vni"
+			basePath := data.getXPath() + "/member/vnis/vni[vni-id='" + strconv.FormatInt(item.VniId.ValueInt64(), 10) + "']"
 			if !item.VniId.IsNull() && !item.VniId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vni-id", strconv.FormatInt(item.VniId.ValueInt64(), 10))
 			}
@@ -2657,6 +2661,11 @@ func (data L2VPNBridgeGroupBridgeDomain) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

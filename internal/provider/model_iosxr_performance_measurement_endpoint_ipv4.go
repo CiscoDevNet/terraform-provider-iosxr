@@ -185,18 +185,18 @@ func (data PerformanceMeasurementEndpointIPv4) toBody(ctx context.Context) strin
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source-address.ipv4"); value.Exists() && !data.SourceAddressIpv4.IsNull() {
+func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("source-address.ipv4"); value.Exists() && !data.SourceAddressIpv4.IsNull() {
 		data.SourceAddressIpv4 = types.StringValue(value.String())
 	} else if data.SourceAddressIpv4.IsNull() {
 		data.SourceAddressIpv4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
+	if value := res.Get("description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "delay-measurement"); value.Exists() {
+	if value := res.Get("delay-measurement"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DelayMeasurement.IsNull() {
 			data.DelayMeasurement = types.BoolValue(true)
@@ -207,7 +207,7 @@ func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Conte
 			data.DelayMeasurement = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "delay-measurement.delay-profile.name"); value.Exists() && !data.DelayMeasurementProfileName.IsNull() {
+	if value := res.Get("delay-measurement.delay-profile.name"); value.Exists() && !data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
 	} else if data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringNull()
@@ -217,7 +217,7 @@ func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Conte
 		keyValues := [...]string{data.SegmentListNames[i].ListName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "segment-list.names.name").ForEach(
+		res.Get("segment-list.names.name").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -241,7 +241,7 @@ func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Conte
 			data.SegmentListNames[i].ListName = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "liveness-detection"); value.Exists() {
+	if value := res.Get("liveness-detection"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LivenessDetection.IsNull() {
 			data.LivenessDetection = types.BoolValue(true)
@@ -252,12 +252,12 @@ func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Conte
 			data.LivenessDetection = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "liveness-detection.liveness-profile.name"); value.Exists() && !data.LivenessDetectionProfileName.IsNull() {
+	if value := res.Get("liveness-detection.liveness-profile.name"); value.Exists() && !data.LivenessDetectionProfileName.IsNull() {
 		data.LivenessDetectionProfileName = types.StringValue(value.String())
 	} else if data.LivenessDetectionProfileName.IsNull() {
 		data.LivenessDetectionProfileName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "liveness-detection.collect-hbh"); value.Exists() {
+	if value := res.Get("liveness-detection.collect-hbh"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LivenessDetectionCollectHbh.IsNull() {
 			data.LivenessDetectionCollectHbh = types.BoolValue(true)
@@ -268,7 +268,7 @@ func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Conte
 			data.LivenessDetectionCollectHbh = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing"); value.Exists() {
+	if value := res.Get("segment-routing"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SegmentRouting.IsNull() {
 			data.SegmentRouting = types.BoolValue(true)
@@ -284,7 +284,7 @@ func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Conte
 		keyValues := [...]string{data.SegmentRoutingTeExplicitSegmentLists[i].ListName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "segment-routing.traffic-eng.explicit.segment-list.names.name").ForEach(
+		res.Get("segment-routing.traffic-eng.explicit.segment-list.names.name").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -325,7 +325,7 @@ func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Conte
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.explicit.reverse-path.segment-list.name"); value.Exists() && !data.SegmentRoutingTeExplicitReversePathList.IsNull() {
+	if value := res.Get("segment-routing.traffic-eng.explicit.reverse-path.segment-list.name"); value.Exists() && !data.SegmentRoutingTeExplicitReversePathList.IsNull() {
 		data.SegmentRoutingTeExplicitReversePathList = types.StringValue(value.String())
 	} else if data.SegmentRoutingTeExplicitReversePathList.IsNull() {
 		data.SegmentRoutingTeExplicitReversePathList = types.StringNull()
@@ -335,7 +335,11 @@ func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Conte
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data PerformanceMeasurementEndpointIPv4) toBodyXML(ctx context.Context) string {
+func (data PerformanceMeasurementEndpointIPv4) toBodyXML(ctx context.Context, stateArg ...*PerformanceMeasurementEndpointIPv4) string {
+	var state *PerformanceMeasurementEndpointIPv4
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.SourceAddressIpv4.IsNull() && !data.SourceAddressIpv4.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/source-address/ipv4", data.SourceAddressIpv4.ValueString())
@@ -353,7 +357,7 @@ func (data PerformanceMeasurementEndpointIPv4) toBodyXML(ctx context.Context) st
 	}
 	if len(data.SegmentListNames) > 0 {
 		for _, item := range data.SegmentListNames {
-			basePath := data.getXPath() + "/segment-list/names/name"
+			basePath := data.getXPath() + "/segment-list/names/name[list-name='" + item.ListName.ValueString() + "']"
 			if !item.ListName.IsNull() && !item.ListName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.ListName.ValueString())
 			}
@@ -379,7 +383,7 @@ func (data PerformanceMeasurementEndpointIPv4) toBodyXML(ctx context.Context) st
 	}
 	if len(data.SegmentRoutingTeExplicitSegmentLists) > 0 {
 		for _, item := range data.SegmentRoutingTeExplicitSegmentLists {
-			basePath := data.getXPath() + "/segment-routing/traffic-eng/explicit/segment-list/names/name"
+			basePath := data.getXPath() + "/segment-routing/traffic-eng/explicit/segment-list/names/name[list-name='" + item.ListName.ValueString() + "']"
 			if !item.ListName.IsNull() && !item.ListName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.ListName.ValueString())
 			}
@@ -404,6 +408,11 @@ func (data PerformanceMeasurementEndpointIPv4) toBodyXML(ctx context.Context) st
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

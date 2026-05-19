@@ -172,8 +172,8 @@ func (data PerformanceMeasurementInterface) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "delay-measurement"); value.Exists() {
+func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("delay-measurement"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DelayMeasurement.IsNull() {
 			data.DelayMeasurement = types.BoolValue(true)
@@ -184,7 +184,7 @@ func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context,
 			data.DelayMeasurement = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "delay-measurement.fallback"); value.Exists() {
+	if value := res.Get("delay-measurement.fallback"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DelayMeasurementFallback.IsNull() {
 			data.DelayMeasurementFallback = types.BoolValue(true)
@@ -195,32 +195,32 @@ func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context,
 			data.DelayMeasurementFallback = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "delay-measurement.advertise-delay"); value.Exists() && !data.DelayMeasurementAdvertiseDelay.IsNull() {
+	if value := res.Get("delay-measurement.advertise-delay"); value.Exists() && !data.DelayMeasurementAdvertiseDelay.IsNull() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
 	} else if data.DelayMeasurementAdvertiseDelay.IsNull() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "delay-measurement.delay-profile.name"); value.Exists() && !data.DelayMeasurementProfileName.IsNull() {
+	if value := res.Get("delay-measurement.delay-profile.name"); value.Exists() && !data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
 	} else if data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "delay-measurement.static-delay"); value.Exists() && !data.DelayMeasurementStaticDelay.IsNull() {
+	if value := res.Get("delay-measurement.static-delay"); value.Exists() && !data.DelayMeasurementStaticDelay.IsNull() {
 		data.DelayMeasurementStaticDelay = types.Int64Value(value.Int())
 	} else if data.DelayMeasurementStaticDelay.IsNull() {
 		data.DelayMeasurementStaticDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "next-hop.ipv4"); value.Exists() && !data.NextHopIpv4.IsNull() {
+	if value := res.Get("next-hop.ipv4"); value.Exists() && !data.NextHopIpv4.IsNull() {
 		data.NextHopIpv4 = types.StringValue(value.String())
 	} else if data.NextHopIpv4.IsNull() {
 		data.NextHopIpv4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "next-hop.ipv6"); value.Exists() && !data.NextHopIpv6.IsNull() {
+	if value := res.Get("next-hop.ipv6"); value.Exists() && !data.NextHopIpv6.IsNull() {
 		data.NextHopIpv6 = types.StringValue(value.String())
 	} else if data.NextHopIpv6.IsNull() {
 		data.NextHopIpv6 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "path-tracing"); value.Exists() {
+	if value := res.Get("path-tracing"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracing.IsNull() {
 			data.PathTracing = types.BoolValue(true)
@@ -231,12 +231,12 @@ func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context,
 			data.PathTracing = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "path-tracing.interface-id"); value.Exists() && !data.PathTracingInterfaceId.IsNull() {
+	if value := res.Get("path-tracing.interface-id"); value.Exists() && !data.PathTracingInterfaceId.IsNull() {
 		data.PathTracingInterfaceId = types.Int64Value(value.Int())
 	} else if data.PathTracingInterfaceId.IsNull() {
 		data.PathTracingInterfaceId = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st0"); value.Exists() {
+	if value := res.Get("path-tracing.timestamp.template.st0"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracingTimestampTemplateSt0.IsNull() {
 			data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
@@ -247,7 +247,7 @@ func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context,
 			data.PathTracingTimestampTemplateSt0 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st1"); value.Exists() {
+	if value := res.Get("path-tracing.timestamp.template.st1"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracingTimestampTemplateSt1.IsNull() {
 			data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
@@ -258,7 +258,7 @@ func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context,
 			data.PathTracingTimestampTemplateSt1 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st2"); value.Exists() {
+	if value := res.Get("path-tracing.timestamp.template.st2"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracingTimestampTemplateSt2.IsNull() {
 			data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
@@ -269,7 +269,7 @@ func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context,
 			data.PathTracingTimestampTemplateSt2 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st3"); value.Exists() {
+	if value := res.Get("path-tracing.timestamp.template.st3"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PathTracingTimestampTemplateSt3.IsNull() {
 			data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
@@ -285,7 +285,11 @@ func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context,
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data PerformanceMeasurementInterface) toBodyXML(ctx context.Context) string {
+func (data PerformanceMeasurementInterface) toBodyXML(ctx context.Context, stateArg ...*PerformanceMeasurementInterface) string {
+	var state *PerformanceMeasurementInterface
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.DelayMeasurement.IsNull() && !data.DelayMeasurement.IsUnknown() {
 		if data.DelayMeasurement.ValueBool() {
@@ -348,6 +352,11 @@ func (data PerformanceMeasurementInterface) toBodyXML(ctx context.Context) strin
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

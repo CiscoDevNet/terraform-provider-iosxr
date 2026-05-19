@@ -136,11 +136,15 @@ func (data CLIAlias) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data CLIAlias) toBodyXML(ctx context.Context) string {
+func (data CLIAlias) toBodyXML(ctx context.Context, stateArg ...*CLIAlias) string {
+	var state *CLIAlias
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Aliases) > 0 {
 		for _, item := range data.Aliases {
-			basePath := data.getXPath() + "/aliases/alias"
+			basePath := data.getXPath() + "/aliases/alias[alias-name='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/alias-name", item.Name.ValueString())
 			}
@@ -151,7 +155,7 @@ func (data CLIAlias) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ExecAliases) > 0 {
 		for _, item := range data.ExecAliases {
-			basePath := data.getXPath() + "/exec/alias"
+			basePath := data.getXPath() + "/exec/alias[exec-alias-name='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/exec-alias-name", item.Name.ValueString())
 			}
@@ -162,7 +166,7 @@ func (data CLIAlias) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ConfigAliases) > 0 {
 		for _, item := range data.ConfigAliases {
-			basePath := data.getXPath() + "/config/alias"
+			basePath := data.getXPath() + "/config/alias[config-alias-name='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/config-alias-name", item.Name.ValueString())
 			}
@@ -179,6 +183,11 @@ func (data CLIAlias) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -186,13 +195,13 @@ func (data CLIAlias) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *CLIAlias) updateFromBody(ctx context.Context, res []byte) {
+func (data *CLIAlias) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Aliases {
 		keys := [...]string{"alias-name"}
 		keyValues := [...]string{data.Aliases[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "aliases.alias").ForEach(
+		res.Get("aliases.alias").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -226,7 +235,7 @@ func (data *CLIAlias) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ExecAliases[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "exec.alias").ForEach(
+		res.Get("exec.alias").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -260,7 +269,7 @@ func (data *CLIAlias) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ConfigAliases[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "config.alias").ForEach(
+		res.Get("config.alias").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

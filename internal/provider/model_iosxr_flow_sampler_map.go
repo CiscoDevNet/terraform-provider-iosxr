@@ -101,7 +101,11 @@ func (data FlowSamplerMap) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data FlowSamplerMap) toBodyXML(ctx context.Context) string {
+func (data FlowSamplerMap) toBodyXML(ctx context.Context, stateArg ...*FlowSamplerMap) string {
+	var state *FlowSamplerMap
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Random.IsNull() && !data.Random.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/random", strconv.FormatInt(data.Random.ValueInt64(), 10))
@@ -117,6 +121,11 @@ func (data FlowSamplerMap) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -124,13 +133,13 @@ func (data FlowSamplerMap) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *FlowSamplerMap) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "random"); value.Exists() && !data.Random.IsNull() {
+func (data *FlowSamplerMap) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("random"); value.Exists() && !data.Random.IsNull() {
 		data.Random = types.Int64Value(value.Int())
 	} else if data.Random.IsNull() {
 		data.Random = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "out-of"); value.Exists() && !data.OutOf.IsNull() {
+	if value := res.Get("out-of"); value.Exists() && !data.OutOf.IsNull() {
 		data.OutOf = types.Int64Value(value.Int())
 	} else if data.OutOf.IsNull() {
 		data.OutOf = types.Int64Null()

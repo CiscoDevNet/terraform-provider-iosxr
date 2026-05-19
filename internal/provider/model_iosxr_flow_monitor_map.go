@@ -482,11 +482,15 @@ func (data FlowMonitorMap) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data FlowMonitorMap) toBodyXML(ctx context.Context) string {
+func (data FlowMonitorMap) toBodyXML(ctx context.Context, stateArg ...*FlowMonitorMap) string {
+	var state *FlowMonitorMap
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Exporters) > 0 {
 		for _, item := range data.Exporters {
-			basePath := data.getXPath() + "/exporters/exporter"
+			basePath := data.getXPath() + "/exporters/exporter[exporter-name='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/exporter-name", item.Name.ValueString())
 			}
@@ -763,6 +767,11 @@ func (data FlowMonitorMap) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -770,13 +779,13 @@ func (data FlowMonitorMap) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
+func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Exporters {
 		keys := [...]string{"exporter-name"}
 		keyValues := [...]string{data.Exporters[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "exporters.exporter").ForEach(
+		res.Get("exporters.exporter").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -800,7 +809,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.Exporters[i].Name = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "option.outphysint"); value.Exists() {
+	if value := res.Get("option.outphysint"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OptionOutphysint.IsNull() {
 			data.OptionOutphysint = types.BoolValue(true)
@@ -811,7 +820,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.OptionOutphysint = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "option.filtered"); value.Exists() {
+	if value := res.Get("option.filtered"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OptionFiltered.IsNull() {
 			data.OptionFiltered = types.BoolValue(true)
@@ -822,7 +831,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.OptionFiltered = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "option.bgpattr"); value.Exists() {
+	if value := res.Get("option.bgpattr"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OptionBgpattr.IsNull() {
 			data.OptionBgpattr = types.BoolValue(true)
@@ -833,7 +842,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.OptionBgpattr = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "option.outbundlemember"); value.Exists() {
+	if value := res.Get("option.outbundlemember"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OptionOutbundlemember.IsNull() {
 			data.OptionOutbundlemember = types.BoolValue(true)
@@ -844,7 +853,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.OptionOutbundlemember = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4"); value.Exists() {
+	if value := res.Get("record.ipv4"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4.IsNull() {
 			data.RecordIpv4 = types.BoolValue(true)
@@ -855,7 +864,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.destination"); value.Exists() {
+	if value := res.Get("record.ipv4.destination"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4Destination.IsNull() {
 			data.RecordIpv4Destination = types.BoolValue(true)
@@ -866,7 +875,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4Destination = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.destination-tos"); value.Exists() {
+	if value := res.Get("record.ipv4.destination-tos"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4DestinationTos.IsNull() {
 			data.RecordIpv4DestinationTos = types.BoolValue(true)
@@ -877,7 +886,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4DestinationTos = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.as"); value.Exists() {
+	if value := res.Get("record.ipv4.as"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4As.IsNull() {
 			data.RecordIpv4As = types.BoolValue(true)
@@ -888,7 +897,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4As = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.protocol-port"); value.Exists() {
+	if value := res.Get("record.ipv4.protocol-port"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4ProtocolPort.IsNull() {
 			data.RecordIpv4ProtocolPort = types.BoolValue(true)
@@ -899,7 +908,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4ProtocolPort = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.prefix"); value.Exists() {
+	if value := res.Get("record.ipv4.prefix"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4Prefix.IsNull() {
 			data.RecordIpv4Prefix = types.BoolValue(true)
@@ -910,7 +919,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4Prefix = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.source-prefix"); value.Exists() {
+	if value := res.Get("record.ipv4.source-prefix"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4SourcePrefix.IsNull() {
 			data.RecordIpv4SourcePrefix = types.BoolValue(true)
@@ -921,7 +930,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4SourcePrefix = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.destination-prefix"); value.Exists() {
+	if value := res.Get("record.ipv4.destination-prefix"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4DestinationPrefix.IsNull() {
 			data.RecordIpv4DestinationPrefix = types.BoolValue(true)
@@ -932,7 +941,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4DestinationPrefix = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.as-tos"); value.Exists() {
+	if value := res.Get("record.ipv4.as-tos"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4AsTos.IsNull() {
 			data.RecordIpv4AsTos = types.BoolValue(true)
@@ -943,7 +952,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4AsTos = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.protocol-port-tos"); value.Exists() {
+	if value := res.Get("record.ipv4.protocol-port-tos"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4ProtocolPortTos.IsNull() {
 			data.RecordIpv4ProtocolPortTos = types.BoolValue(true)
@@ -954,7 +963,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4ProtocolPortTos = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.prefix-tos"); value.Exists() {
+	if value := res.Get("record.ipv4.prefix-tos"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4PrefixTos.IsNull() {
 			data.RecordIpv4PrefixTos = types.BoolValue(true)
@@ -965,7 +974,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4PrefixTos = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.source-prefix-tos"); value.Exists() {
+	if value := res.Get("record.ipv4.source-prefix-tos"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4SourcePrefixTos.IsNull() {
 			data.RecordIpv4SourcePrefixTos = types.BoolValue(true)
@@ -976,7 +985,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4SourcePrefixTos = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.destination-prefix-tos"); value.Exists() {
+	if value := res.Get("record.ipv4.destination-prefix-tos"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4DestinationPrefixTos.IsNull() {
 			data.RecordIpv4DestinationPrefixTos = types.BoolValue(true)
@@ -987,7 +996,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4DestinationPrefixTos = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.prefix-port"); value.Exists() {
+	if value := res.Get("record.ipv4.prefix-port"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4PrefixPort.IsNull() {
 			data.RecordIpv4PrefixPort = types.BoolValue(true)
@@ -998,7 +1007,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4PrefixPort = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.bgp-nexthop-tos"); value.Exists() {
+	if value := res.Get("record.ipv4.bgp-nexthop-tos"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4BgpNexthopTos.IsNull() {
 			data.RecordIpv4BgpNexthopTos = types.BoolValue(true)
@@ -1009,7 +1018,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4BgpNexthopTos = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.peer-as"); value.Exists() {
+	if value := res.Get("record.ipv4.peer-as"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4PeerAs.IsNull() {
 			data.RecordIpv4PeerAs = types.BoolValue(true)
@@ -1020,7 +1029,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4PeerAs = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.gtp"); value.Exists() {
+	if value := res.Get("record.ipv4.gtp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4Gtp.IsNull() {
 			data.RecordIpv4Gtp = types.BoolValue(true)
@@ -1031,7 +1040,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4Gtp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.l2-l3"); value.Exists() {
+	if value := res.Get("record.ipv4.l2-l3"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4L2L3.IsNull() {
 			data.RecordIpv4L2L3 = types.BoolValue(true)
@@ -1042,7 +1051,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4L2L3 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.extended"); value.Exists() {
+	if value := res.Get("record.ipv4.extended"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv4Extended.IsNull() {
 			data.RecordIpv4Extended = types.BoolValue(true)
@@ -1053,7 +1062,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv4Extended = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv6"); value.Exists() {
+	if value := res.Get("record.ipv6"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv6.IsNull() {
 			data.RecordIpv6 = types.BoolValue(true)
@@ -1064,7 +1073,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv6 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv6.destination"); value.Exists() {
+	if value := res.Get("record.ipv6.destination"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv6Destination.IsNull() {
 			data.RecordIpv6Destination = types.BoolValue(true)
@@ -1075,7 +1084,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv6Destination = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv6.peer-as"); value.Exists() {
+	if value := res.Get("record.ipv6.peer-as"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv6PeerAs.IsNull() {
 			data.RecordIpv6PeerAs = types.BoolValue(true)
@@ -1086,7 +1095,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv6PeerAs = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv6.gtp"); value.Exists() {
+	if value := res.Get("record.ipv6.gtp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv6Gtp.IsNull() {
 			data.RecordIpv6Gtp = types.BoolValue(true)
@@ -1097,7 +1106,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv6Gtp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv6.srv6"); value.Exists() {
+	if value := res.Get("record.ipv6.srv6"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv6Srv6.IsNull() {
 			data.RecordIpv6Srv6 = types.BoolValue(true)
@@ -1108,7 +1117,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv6Srv6 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv6.l2-l3"); value.Exists() {
+	if value := res.Get("record.ipv6.l2-l3"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv6L2L3.IsNull() {
 			data.RecordIpv6L2L3 = types.BoolValue(true)
@@ -1119,7 +1128,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv6L2L3 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.ipv6.extended"); value.Exists() {
+	if value := res.Get("record.ipv6.extended"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordIpv6Extended.IsNull() {
 			data.RecordIpv6Extended = types.BoolValue(true)
@@ -1130,7 +1139,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordIpv6Extended = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.mpls"); value.Exists() {
+	if value := res.Get("record.mpls"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordMpls.IsNull() {
 			data.RecordMpls = types.BoolValue(true)
@@ -1141,7 +1150,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordMpls = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.mpls.ipv4-fields"); value.Exists() {
+	if value := res.Get("record.mpls.ipv4-fields"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordMplsIpv4Fields.IsNull() {
 			data.RecordMplsIpv4Fields = types.BoolValue(true)
@@ -1152,7 +1161,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordMplsIpv4Fields = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.mpls.ipv6-fields"); value.Exists() {
+	if value := res.Get("record.mpls.ipv6-fields"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordMplsIpv6Fields.IsNull() {
 			data.RecordMplsIpv6Fields = types.BoolValue(true)
@@ -1163,7 +1172,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordMplsIpv6Fields = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.mpls.ipv4-ipv6-fields"); value.Exists() {
+	if value := res.Get("record.mpls.ipv4-ipv6-fields"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordMplsIpv4Ipv6Fields.IsNull() {
 			data.RecordMplsIpv4Ipv6Fields = types.BoolValue(true)
@@ -1174,12 +1183,12 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordMplsIpv4Ipv6Fields = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.mpls.labels"); value.Exists() && !data.RecordMplsLabels.IsNull() {
+	if value := res.Get("record.mpls.labels"); value.Exists() && !data.RecordMplsLabels.IsNull() {
 		data.RecordMplsLabels = types.Int64Value(value.Int())
 	} else if data.RecordMplsLabels.IsNull() {
 		data.RecordMplsLabels = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "record.map-t"); value.Exists() {
+	if value := res.Get("record.map-t"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordMapT.IsNull() {
 			data.RecordMapT = types.BoolValue(true)
@@ -1190,7 +1199,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordMapT = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.sflow"); value.Exists() {
+	if value := res.Get("record.sflow"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordSflow.IsNull() {
 			data.RecordSflow = types.BoolValue(true)
@@ -1201,7 +1210,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordSflow = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.datalink-record"); value.Exists() {
+	if value := res.Get("record.datalink-record"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordDatalinkRecord.IsNull() {
 			data.RecordDatalinkRecord = types.BoolValue(true)
@@ -1212,7 +1221,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordDatalinkRecord = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.default-rtp"); value.Exists() {
+	if value := res.Get("record.default-rtp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordDefaultRtp.IsNull() {
 			data.RecordDefaultRtp = types.BoolValue(true)
@@ -1223,7 +1232,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordDefaultRtp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "record.default-mdi"); value.Exists() {
+	if value := res.Get("record.default-mdi"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RecordDefaultMdi.IsNull() {
 			data.RecordDefaultMdi = types.BoolValue(true)
@@ -1234,32 +1243,32 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.RecordDefaultMdi = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "cache.entries"); value.Exists() && !data.CacheEntries.IsNull() {
+	if value := res.Get("cache.entries"); value.Exists() && !data.CacheEntries.IsNull() {
 		data.CacheEntries = types.Int64Value(value.Int())
 	} else if data.CacheEntries.IsNull() {
 		data.CacheEntries = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cache.timeout.active"); value.Exists() && !data.CacheTimeoutActive.IsNull() {
+	if value := res.Get("cache.timeout.active"); value.Exists() && !data.CacheTimeoutActive.IsNull() {
 		data.CacheTimeoutActive = types.Int64Value(value.Int())
 	} else if data.CacheTimeoutActive.IsNull() {
 		data.CacheTimeoutActive = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cache.timeout.inactive"); value.Exists() && !data.CacheTimeoutInactive.IsNull() {
+	if value := res.Get("cache.timeout.inactive"); value.Exists() && !data.CacheTimeoutInactive.IsNull() {
 		data.CacheTimeoutInactive = types.Int64Value(value.Int())
 	} else if data.CacheTimeoutInactive.IsNull() {
 		data.CacheTimeoutInactive = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cache.timeout.update"); value.Exists() && !data.CacheTimeoutUpdate.IsNull() {
+	if value := res.Get("cache.timeout.update"); value.Exists() && !data.CacheTimeoutUpdate.IsNull() {
 		data.CacheTimeoutUpdate = types.Int64Value(value.Int())
 	} else if data.CacheTimeoutUpdate.IsNull() {
 		data.CacheTimeoutUpdate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cache.timeout.rate-limit"); value.Exists() && !data.CacheTimeoutRateLimit.IsNull() {
+	if value := res.Get("cache.timeout.rate-limit"); value.Exists() && !data.CacheTimeoutRateLimit.IsNull() {
 		data.CacheTimeoutRateLimit = types.Int64Value(value.Int())
 	} else if data.CacheTimeoutRateLimit.IsNull() {
 		data.CacheTimeoutRateLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cache.permanent"); value.Exists() {
+	if value := res.Get("cache.permanent"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CachePermanent.IsNull() {
 			data.CachePermanent = types.BoolValue(true)
@@ -1270,7 +1279,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.CachePermanent = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "cache.immediate"); value.Exists() {
+	if value := res.Get("cache.immediate"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CacheImmediate.IsNull() {
 			data.CacheImmediate = types.BoolValue(true)
@@ -1281,12 +1290,12 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.CacheImmediate = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "hw-cache.timeout.inactive"); value.Exists() && !data.HwCacheTimeoutInactive.IsNull() {
+	if value := res.Get("hw-cache.timeout.inactive"); value.Exists() && !data.HwCacheTimeoutInactive.IsNull() {
 		data.HwCacheTimeoutInactive = types.Int64Value(value.Int())
 	} else if data.HwCacheTimeoutInactive.IsNull() {
 		data.HwCacheTimeoutInactive = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "sflow.options"); value.Exists() {
+	if value := res.Get("sflow.options"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SflowOptions.IsNull() {
 			data.SflowOptions = types.BoolValue(true)
@@ -1297,7 +1306,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.SflowOptions = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "sflow.options.extended-router"); value.Exists() {
+	if value := res.Get("sflow.options.extended-router"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SflowOptionsExtendedRouter.IsNull() {
 			data.SflowOptionsExtendedRouter = types.BoolValue(true)
@@ -1308,7 +1317,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.SflowOptionsExtendedRouter = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "sflow.options.extended-gateway"); value.Exists() {
+	if value := res.Get("sflow.options.extended-gateway"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SflowOptionsExtendedGateway.IsNull() {
 			data.SflowOptionsExtendedGateway = types.BoolValue(true)
@@ -1319,7 +1328,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.SflowOptionsExtendedGateway = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "sflow.options.extended-ipv4-tunnel-egress"); value.Exists() {
+	if value := res.Get("sflow.options.extended-ipv4-tunnel-egress"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SflowOptionsExtendedIpv4TunnelEgress.IsNull() {
 			data.SflowOptionsExtendedIpv4TunnelEgress = types.BoolValue(true)
@@ -1330,7 +1339,7 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.SflowOptionsExtendedIpv4TunnelEgress = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "sflow.options.extended-ipv6-tunnel-egress"); value.Exists() {
+	if value := res.Get("sflow.options.extended-ipv6-tunnel-egress"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SflowOptionsExtendedIpv6TunnelEgress.IsNull() {
 			data.SflowOptionsExtendedIpv6TunnelEgress = types.BoolValue(true)
@@ -1341,22 +1350,22 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 			data.SflowOptionsExtendedIpv6TunnelEgress = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "sflow.options.if-counters.polling-interval"); value.Exists() && !data.SflowOptionsIfCountersPollingInterval.IsNull() {
+	if value := res.Get("sflow.options.if-counters.polling-interval"); value.Exists() && !data.SflowOptionsIfCountersPollingInterval.IsNull() {
 		data.SflowOptionsIfCountersPollingInterval = types.Int64Value(value.Int())
 	} else if data.SflowOptionsIfCountersPollingInterval.IsNull() {
 		data.SflowOptionsIfCountersPollingInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "sflow.options.sample-header.size"); value.Exists() && !data.SflowOptionsSampleHeaderSize.IsNull() {
+	if value := res.Get("sflow.options.sample-header.size"); value.Exists() && !data.SflowOptionsSampleHeaderSize.IsNull() {
 		data.SflowOptionsSampleHeaderSize = types.Int64Value(value.Int())
 	} else if data.SflowOptionsSampleHeaderSize.IsNull() {
 		data.SflowOptionsSampleHeaderSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "sflow.options.input.ifindex"); value.Exists() && !data.SflowOptionsInputIfindex.IsNull() {
+	if value := res.Get("sflow.options.input.ifindex"); value.Exists() && !data.SflowOptionsInputIfindex.IsNull() {
 		data.SflowOptionsInputIfindex = types.StringValue(value.String())
 	} else if data.SflowOptionsInputIfindex.IsNull() {
 		data.SflowOptionsInputIfindex = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "sflow.options.output.ifindex"); value.Exists() && !data.SflowOptionsOutputIfindex.IsNull() {
+	if value := res.Get("sflow.options.output.ifindex"); value.Exists() && !data.SflowOptionsOutputIfindex.IsNull() {
 		data.SflowOptionsOutputIfindex = types.StringValue(value.String())
 	} else if data.SflowOptionsOutputIfindex.IsNull() {
 		data.SflowOptionsOutputIfindex = types.StringNull()

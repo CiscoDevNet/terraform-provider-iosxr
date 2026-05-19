@@ -191,13 +191,13 @@ func (data LoggingVRF) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
+func (data *LoggingVRF) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Hostnames {
 		keys := [...]string{"name"}
 		keyValues := [...]string{data.Hostnames[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "host-names.host-name").ForEach(
+		res.Get("host-names.host-name").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -251,7 +251,7 @@ func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.HostIpv4Addresses[i].Ipv4Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "host-ipv4-addresses.host-ipv4-address").ForEach(
+		res.Get("host-ipv4-addresses.host-ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -305,7 +305,7 @@ func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.HostIpv6Addresses[i].Ipv6Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "host-ipv6-addresses.host-ipv6-address").ForEach(
+		res.Get("host-ipv6-addresses.host-ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -359,11 +359,15 @@ func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data LoggingVRF) toBodyXML(ctx context.Context) string {
+func (data LoggingVRF) toBodyXML(ctx context.Context, stateArg ...*LoggingVRF) string {
+	var state *LoggingVRF
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Hostnames) > 0 {
 		for _, item := range data.Hostnames {
-			basePath := data.getXPath() + "/host-names/host-name"
+			basePath := data.getXPath() + "/host-names/host-name[name='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/name", item.Name.ValueString())
 			}
@@ -386,7 +390,7 @@ func (data LoggingVRF) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HostIpv4Addresses) > 0 {
 		for _, item := range data.HostIpv4Addresses {
-			basePath := data.getXPath() + "/host-ipv4-addresses/host-ipv4-address"
+			basePath := data.getXPath() + "/host-ipv4-addresses/host-ipv4-address[ipv4-address='" + item.Ipv4Address.ValueString() + "']"
 			if !item.Ipv4Address.IsNull() && !item.Ipv4Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/ipv4-address", item.Ipv4Address.ValueString())
 			}
@@ -409,7 +413,7 @@ func (data LoggingVRF) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HostIpv6Addresses) > 0 {
 		for _, item := range data.HostIpv6Addresses {
-			basePath := data.getXPath() + "/host-ipv6-addresses/host-ipv6-address"
+			basePath := data.getXPath() + "/host-ipv6-addresses/host-ipv6-address[ipv6-address='" + item.Ipv6Address.ValueString() + "']"
 			if !item.Ipv6Address.IsNull() && !item.Ipv6Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/ipv6-address", item.Ipv6Address.ValueString())
 			}
@@ -438,6 +442,11 @@ func (data LoggingVRF) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

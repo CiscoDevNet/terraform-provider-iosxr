@@ -1395,48 +1395,48 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "location"); value.Exists() && !data.Location.IsNull() {
+func (data *SNMPServer) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("location"); value.Exists() && !data.Location.IsNull() {
 		data.Location = types.StringValue(value.String())
 	} else if data.Location.IsNull() {
 		data.Location = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "contact"); value.Exists() && !data.Contact.IsNull() {
+	if value := res.Get("contact"); value.Exists() && !data.Contact.IsNull() {
 		data.Contact = types.StringValue(value.String())
 	} else if data.Contact.IsNull() {
 		data.Contact = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "chassis-id"); value.Exists() && !data.ChassisId.IsNull() {
+	if value := res.Get("chassis-id"); value.Exists() && !data.ChassisId.IsNull() {
 		data.ChassisId = types.StringValue(value.String())
 	} else if data.ChassisId.IsNull() {
 		data.ChassisId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "packetsize"); value.Exists() && !data.Packetsize.IsNull() {
+	if value := res.Get("packetsize"); value.Exists() && !data.Packetsize.IsNull() {
 		data.Packetsize = types.Int64Value(value.Int())
 	} else if data.Packetsize.IsNull() {
 		data.Packetsize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "trap-timeout"); value.Exists() && !data.TrapTimeout.IsNull() {
+	if value := res.Get("trap-timeout"); value.Exists() && !data.TrapTimeout.IsNull() {
 		data.TrapTimeout = types.Int64Value(value.Int())
 	} else if data.TrapTimeout.IsNull() {
 		data.TrapTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "queue-length"); value.Exists() && !data.QueueLength.IsNull() {
+	if value := res.Get("queue-length"); value.Exists() && !data.QueueLength.IsNull() {
 		data.QueueLength = types.Int64Value(value.Int())
 	} else if data.QueueLength.IsNull() {
 		data.QueueLength = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "throttle-time"); value.Exists() && !data.ThrottleTime.IsNull() {
+	if value := res.Get("throttle-time"); value.Exists() && !data.ThrottleTime.IsNull() {
 		data.ThrottleTime = types.Int64Value(value.Int())
 	} else if data.ThrottleTime.IsNull() {
 		data.ThrottleTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "overload-control"); value.Exists() && !data.OverloadControl.IsNull() {
+	if value := res.Get("overload-control"); value.Exists() && !data.OverloadControl.IsNull() {
 		data.OverloadControl = types.Int64Value(value.Int())
 	} else if data.OverloadControl.IsNull() {
 		data.OverloadControl = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "overload-throttle-rate"); value.Exists() && !data.OverloadThrottleRate.IsNull() {
+	if value := res.Get("overload-throttle-rate"); value.Exists() && !data.OverloadThrottleRate.IsNull() {
 		data.OverloadThrottleRate = types.Int64Value(value.Int())
 	} else if data.OverloadThrottleRate.IsNull() {
 		data.OverloadThrottleRate = types.Int64Null()
@@ -1446,7 +1446,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Communities[i].Community.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "community.unencrypted.unencrypted-string").ForEach(
+		res.Get("community.unencrypted.unencrypted-string").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1528,7 +1528,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Communities[i].Ipv6 = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.snmp.authentication"); value.Exists() {
+	if value := res.Get("traps.snmp.authentication"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsSnmpAuthentication.IsNull() {
 			data.TrapsSnmpAuthentication = types.BoolValue(true)
@@ -1539,7 +1539,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsSnmpAuthentication = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.snmp.coldstart"); value.Exists() {
+	if value := res.Get("traps.snmp.coldstart"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsSnmpColdstart.IsNull() {
 			data.TrapsSnmpColdstart = types.BoolValue(true)
@@ -1550,7 +1550,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsSnmpColdstart = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.snmp.warmstart"); value.Exists() {
+	if value := res.Get("traps.snmp.warmstart"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsSnmpWarmstart.IsNull() {
 			data.TrapsSnmpWarmstart = types.BoolValue(true)
@@ -1561,7 +1561,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsSnmpWarmstart = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.snmp.linkup"); value.Exists() {
+	if value := res.Get("traps.snmp.linkup"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsSnmpLinkup.IsNull() {
 			data.TrapsSnmpLinkup = types.BoolValue(true)
@@ -1572,7 +1572,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsSnmpLinkup = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.snmp.linkdown"); value.Exists() {
+	if value := res.Get("traps.snmp.linkdown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsSnmpLinkdown.IsNull() {
 			data.TrapsSnmpLinkdown = types.BoolValue(true)
@@ -1583,7 +1583,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsSnmpLinkdown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.snmp.all"); value.Exists() {
+	if value := res.Get("traps.snmp.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsSnmpAll.IsNull() {
 			data.TrapsSnmpAll = types.BoolValue(true)
@@ -1594,7 +1594,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsSnmpAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.all"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsL2vpnAll.IsNull() {
 			data.TrapsL2vpnAll = types.BoolValue(true)
@@ -1605,7 +1605,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsL2vpnAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-up"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-up"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsL2vpnVcUp.IsNull() {
 			data.TrapsL2vpnVcUp = types.BoolValue(true)
@@ -1616,7 +1616,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsL2vpnVcUp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-down"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-down"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsL2vpnVcDown.IsNull() {
 			data.TrapsL2vpnVcDown = types.BoolValue(true)
@@ -1627,7 +1627,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsL2vpnVcDown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.cisco"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.cisco"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsL2vpnCisco.IsNull() {
 			data.TrapsL2vpnCisco = types.BoolValue(true)
@@ -1638,7 +1638,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsL2vpnCisco = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:vpls.all"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-l2vpn-cfg:vpls.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsVplsAll.IsNull() {
 			data.TrapsVplsAll = types.BoolValue(true)
@@ -1649,7 +1649,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsVplsAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:vpls.status"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-l2vpn-cfg:vpls.status"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsVplsStatus.IsNull() {
 			data.TrapsVplsStatus = types.BoolValue(true)
@@ -1660,7 +1660,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsVplsStatus = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:vpls.full-raise"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-l2vpn-cfg:vpls.full-raise"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsVplsFullRaise.IsNull() {
 			data.TrapsVplsFullRaise = types.BoolValue(true)
@@ -1671,7 +1671,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsVplsFullRaise = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:vpls.full-clear"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-l2vpn-cfg:vpls.full-clear"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsVplsFullClear.IsNull() {
 			data.TrapsVplsFullClear = types.BoolValue(true)
@@ -1682,7 +1682,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsVplsFullClear = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsBfd.IsNull() {
 			data.TrapsBfd = types.BoolValue(true)
@@ -1693,7 +1693,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsBfd = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-cfg-mibs-cfg:config"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-cfg-mibs-cfg:config"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsConfig.IsNull() {
 			data.TrapsConfig = types.BoolValue(true)
@@ -1704,7 +1704,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsConfig = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-ethernet-cfm-cfg:cfm"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsCfm.IsNull() {
 			data.TrapsCfm = types.BoolValue(true)
@@ -1715,7 +1715,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsCfm = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-ethernet-oam-cfg:ethernet.oam.events"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-ethernet-oam-cfg:ethernet.oam.events"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsEthernetOamEvents.IsNull() {
 			data.TrapsEthernetOamEvents = types.BoolValue(true)
@@ -1726,7 +1726,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsEthernetOamEvents = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mibs-rfmib-cfg:rf"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mibs-rfmib-cfg:rf"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsRf.IsNull() {
 			data.TrapsRf = types.BoolValue(true)
@@ -1737,7 +1737,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsRf = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mibs-sensormib-cfg:sensor"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mibs-sensormib-cfg:sensor"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsSensor.IsNull() {
 			data.TrapsSensor = types.BoolValue(true)
@@ -1748,7 +1748,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsSensor = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.all"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsL3vpnAll.IsNull() {
 			data.TrapsMplsL3vpnAll = types.BoolValue(true)
@@ -1759,7 +1759,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsL3vpnAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.vrf-up"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.vrf-up"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsL3vpnVrfUp.IsNull() {
 			data.TrapsMplsL3vpnVrfUp = types.BoolValue(true)
@@ -1770,7 +1770,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsL3vpnVrfUp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.vrf-down"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.vrf-down"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsL3vpnVrfDown.IsNull() {
 			data.TrapsMplsL3vpnVrfDown = types.BoolValue(true)
@@ -1781,7 +1781,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsL3vpnVrfDown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.mid-threshold-exceeded"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.mid-threshold-exceeded"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsL3vpnMidThresholdExceeded.IsNull() {
 			data.TrapsMplsL3vpnMidThresholdExceeded = types.BoolValue(true)
@@ -1792,7 +1792,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsL3vpnMidThresholdExceeded = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.max-threshold-exceeded"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.max-threshold-exceeded"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsL3vpnMaxThresholdExceeded.IsNull() {
 			data.TrapsMplsL3vpnMaxThresholdExceeded = types.BoolValue(true)
@@ -1803,7 +1803,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsL3vpnMaxThresholdExceeded = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.max-threshold-cleared"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.max-threshold-cleared"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsL3vpnMaxThresholdCleared.IsNull() {
 			data.TrapsMplsL3vpnMaxThresholdCleared = types.BoolValue(true)
@@ -1814,12 +1814,12 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsL3vpnMaxThresholdCleared = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.max-threshold-reissue-notif-time"); value.Exists() && !data.TrapsMplsL3vpnMaxThresholdReissueNotifTime.IsNull() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls.l3vpn.max-threshold-reissue-notif-time"); value.Exists() && !data.TrapsMplsL3vpnMaxThresholdReissueNotifTime.IsNull() {
 		data.TrapsMplsL3vpnMaxThresholdReissueNotifTime = types.Int64Value(value.Int())
 	} else if data.TrapsMplsL3vpnMaxThresholdReissueNotifTime.IsNull() {
 		data.TrapsMplsL3vpnMaxThresholdReissueNotifTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngCisco.IsNull() {
 			data.TrapsMplsTrafficEngCisco = types.BoolValue(true)
@@ -1830,7 +1830,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngCisco = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.bringup-fail"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.bringup-fail"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngCiscoExtBringupFail.IsNull() {
 			data.TrapsMplsTrafficEngCiscoExtBringupFail = types.BoolValue(true)
@@ -1841,7 +1841,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngCiscoExtBringupFail = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.insuff-bw"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.insuff-bw"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngCiscoExtInsuffBw.IsNull() {
 			data.TrapsMplsTrafficEngCiscoExtInsuffBw = types.BoolValue(true)
@@ -1852,7 +1852,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngCiscoExtInsuffBw = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.preempt"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.preempt"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngCiscoExtPreempt.IsNull() {
 			data.TrapsMplsTrafficEngCiscoExtPreempt = types.BoolValue(true)
@@ -1863,7 +1863,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngCiscoExtPreempt = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.reroute-pending"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.reroute-pending"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngCiscoExtReroutePending.IsNull() {
 			data.TrapsMplsTrafficEngCiscoExtReroutePending = types.BoolValue(true)
@@ -1874,7 +1874,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngCiscoExtReroutePending = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.reroute-pending-clear"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.cisco-ext.reroute-pending-clear"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngCiscoExtReroutePendingClear.IsNull() {
 			data.TrapsMplsTrafficEngCiscoExtReroutePendingClear = types.BoolValue(true)
@@ -1885,7 +1885,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngCiscoExtReroutePendingClear = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.down"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.down"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngDown.IsNull() {
 			data.TrapsMplsTrafficEngDown = types.BoolValue(true)
@@ -1896,7 +1896,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngDown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.p2mp.down"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.p2mp.down"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngP2mpDown.IsNull() {
 			data.TrapsMplsTrafficEngP2mpDown = types.BoolValue(true)
@@ -1907,7 +1907,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngP2mpDown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.p2mp.up"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.p2mp.up"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngP2mpUp.IsNull() {
 			data.TrapsMplsTrafficEngP2mpUp = types.BoolValue(true)
@@ -1918,7 +1918,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngP2mpUp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.reoptimize"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.reoptimize"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngReoptimize.IsNull() {
 			data.TrapsMplsTrafficEngReoptimize = types.BoolValue(true)
@@ -1929,7 +1929,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngReoptimize = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.reroute"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.reroute"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngReroute.IsNull() {
 			data.TrapsMplsTrafficEngReroute = types.BoolValue(true)
@@ -1940,7 +1940,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngReroute = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.up"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-mpls-te-cfg:mpls.traffic-eng.up"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsTrafficEngUp.IsNull() {
 			data.TrapsMplsTrafficEngUp = types.BoolValue(true)
@@ -1951,7 +1951,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsTrafficEngUp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-ntp-cfg:ntp"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-ntp-cfg:ntp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsNtp.IsNull() {
 			data.TrapsNtp = types.BoolValue(true)
@@ -1962,7 +1962,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsNtp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.enable"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsBgpCbgpTwoEnable.IsNull() {
 			data.TrapsBgpCbgpTwoEnable = types.BoolValue(true)
@@ -1973,7 +1973,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsBgpCbgpTwoEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsBgpCbgpTwoUpdown.IsNull() {
 			data.TrapsBgpCbgpTwoUpdown = types.BoolValue(true)
@@ -1984,7 +1984,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsBgpCbgpTwoUpdown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
 			data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(true)
@@ -1995,7 +1995,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsBgpEnableCiscoBgp4Mib = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsBgpEnableUpdown.IsNull() {
 			data.TrapsBgpEnableUpdown = types.BoolValue(true)
@@ -2006,7 +2006,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsBgpEnableUpdown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-hsrp-cfg:hsrp"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-hsrp-cfg:hsrp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsHsrp.IsNull() {
 			data.TrapsHsrp = types.BoolValue(true)
@@ -2017,7 +2017,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsHsrp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.all"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisAll.IsNull() {
 			data.TrapsIsisAll = types.BoolValue(true)
@@ -2028,7 +2028,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.database-overload"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.database-overload"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisDatabaseOverload.IsNull() {
 			data.TrapsIsisDatabaseOverload = types.BoolValue(true)
@@ -2039,7 +2039,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisDatabaseOverload = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.manual-address-drops"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.manual-address-drops"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisManualAddressDrops.IsNull() {
 			data.TrapsIsisManualAddressDrops = types.BoolValue(true)
@@ -2050,7 +2050,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisManualAddressDrops = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.corrupted-lsp-detected"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.corrupted-lsp-detected"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisCorruptedLspDetected.IsNull() {
 			data.TrapsIsisCorruptedLspDetected = types.BoolValue(true)
@@ -2061,7 +2061,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisCorruptedLspDetected = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.attempt-to-exceed-max-sequence"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.attempt-to-exceed-max-sequence"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisAttemptToExceedMaxSequence.IsNull() {
 			data.TrapsIsisAttemptToExceedMaxSequence = types.BoolValue(true)
@@ -2072,7 +2072,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisAttemptToExceedMaxSequence = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.id-len-mismatch"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.id-len-mismatch"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisIdLenMismatch.IsNull() {
 			data.TrapsIsisIdLenMismatch = types.BoolValue(true)
@@ -2083,7 +2083,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisIdLenMismatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.max-area-addresses-mismatch"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.max-area-addresses-mismatch"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisMaxAreaAddressesMismatch.IsNull() {
 			data.TrapsIsisMaxAreaAddressesMismatch = types.BoolValue(true)
@@ -2094,7 +2094,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisMaxAreaAddressesMismatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.own-lsp-purge"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.own-lsp-purge"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisOwnLspPurge.IsNull() {
 			data.TrapsIsisOwnLspPurge = types.BoolValue(true)
@@ -2105,7 +2105,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisOwnLspPurge = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.sequence-number-skip"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.sequence-number-skip"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisSequenceNumberSkip.IsNull() {
 			data.TrapsIsisSequenceNumberSkip = types.BoolValue(true)
@@ -2116,7 +2116,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisSequenceNumberSkip = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-type-failure"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-type-failure"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisAuthenticationTypeFailure.IsNull() {
 			data.TrapsIsisAuthenticationTypeFailure = types.BoolValue(true)
@@ -2127,7 +2127,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisAuthenticationTypeFailure = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-failure"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-failure"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisAuthenticationFailure.IsNull() {
 			data.TrapsIsisAuthenticationFailure = types.BoolValue(true)
@@ -2138,7 +2138,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisAuthenticationFailure = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.version-skew"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.version-skew"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisVersionSkew.IsNull() {
 			data.TrapsIsisVersionSkew = types.BoolValue(true)
@@ -2149,7 +2149,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisVersionSkew = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.area-mismatch"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.area-mismatch"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisAreaMismatch.IsNull() {
 			data.TrapsIsisAreaMismatch = types.BoolValue(true)
@@ -2160,7 +2160,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisAreaMismatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.rejected-adjacency"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.rejected-adjacency"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisRejectedAdjacency.IsNull() {
 			data.TrapsIsisRejectedAdjacency = types.BoolValue(true)
@@ -2171,7 +2171,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisRejectedAdjacency = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-too-large-to-propagate"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-too-large-to-propagate"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisLspTooLargeToPropagate.IsNull() {
 			data.TrapsIsisLspTooLargeToPropagate = types.BoolValue(true)
@@ -2182,7 +2182,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisLspTooLargeToPropagate = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.orig-lsp-buff-size-mismatch"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.orig-lsp-buff-size-mismatch"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisOrigLspBuffSizeMismatch.IsNull() {
 			data.TrapsIsisOrigLspBuffSizeMismatch = types.BoolValue(true)
@@ -2193,7 +2193,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisOrigLspBuffSizeMismatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.protocols-supported-mismatch"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.protocols-supported-mismatch"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisProtocolsSupportedMismatch.IsNull() {
 			data.TrapsIsisProtocolsSupportedMismatch = types.BoolValue(true)
@@ -2204,7 +2204,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisProtocolsSupportedMismatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.adjacency-change"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.adjacency-change"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisAdjacencyChange.IsNull() {
 			data.TrapsIsisAdjacencyChange = types.BoolValue(true)
@@ -2215,7 +2215,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisAdjacencyChange = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-error-detected"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-error-detected"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIsisLspErrorDetected.IsNull() {
 			data.TrapsIsisLspErrorDetected = types.BoolValue(true)
@@ -2226,7 +2226,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIsisLspErrorDetected = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-vrrp-cfg:vrrp.events"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-router-vrrp-cfg:vrrp.events"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsVrrpEvents.IsNull() {
 			data.TrapsVrrpEvents = types.BoolValue(true)
@@ -2237,7 +2237,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsVrrpEvents = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-alarm-cfg:alarm"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-alarm-cfg:alarm"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsAlarm.IsNull() {
 			data.TrapsAlarm = types.BoolValue(true)
@@ -2248,7 +2248,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsAlarm = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-bridgemib-cfg:bridgemib"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-bridgemib-cfg:bridgemib"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsBridgemib.IsNull() {
 			data.TrapsBridgemib = types.BoolValue(true)
@@ -2259,7 +2259,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsBridgemib = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-config-copy-cfg:copy-complete"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-config-copy-cfg:copy-complete"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsCopyComplete.IsNull() {
 			data.TrapsCopyComplete = types.BoolValue(true)
@@ -2270,7 +2270,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsCopyComplete = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-cfg:entity"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-entity-cfg:entity"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsEntity.IsNull() {
 			data.TrapsEntity = types.BoolValue(true)
@@ -2281,7 +2281,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsEntity = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-cfg:cisco-entity-ext"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-entity-cfg:cisco-entity-ext"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsCiscoEntityExt.IsNull() {
 			data.TrapsCiscoEntityExt = types.BoolValue(true)
@@ -2292,7 +2292,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsCiscoEntityExt = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy.all"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsEntityRedundancyAll.IsNull() {
 			data.TrapsEntityRedundancyAll = types.BoolValue(true)
@@ -2303,7 +2303,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsEntityRedundancyAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy.switchover"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy.switchover"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsEntityRedundancySwitchover.IsNull() {
 			data.TrapsEntityRedundancySwitchover = types.BoolValue(true)
@@ -2314,7 +2314,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsEntityRedundancySwitchover = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy.status"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy.status"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsEntityRedundancyStatus.IsNull() {
 			data.TrapsEntityRedundancyStatus = types.BoolValue(true)
@@ -2325,7 +2325,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsEntityRedundancyStatus = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state.switchover"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state.switchover"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsEntityStateSwitchover.IsNull() {
 			data.TrapsEntityStateSwitchover = types.BoolValue(true)
@@ -2336,7 +2336,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsEntityStateSwitchover = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state.operstatus"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state.operstatus"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsEntityStateOperstatus.IsNull() {
 			data.TrapsEntityStateOperstatus = types.BoolValue(true)
@@ -2347,7 +2347,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsEntityStateOperstatus = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-flash-cfg:flash.insertion"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-flash-cfg:flash.insertion"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsFlashInsertion.IsNull() {
 			data.TrapsFlashInsertion = types.BoolValue(true)
@@ -2358,7 +2358,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsFlashInsertion = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-flash-cfg:flash.removal"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-flash-cfg:flash.removal"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsFlashRemoval.IsNull() {
 			data.TrapsFlashRemoval = types.BoolValue(true)
@@ -2369,7 +2369,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsFlashRemoval = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsFruCtrl.IsNull() {
 			data.TrapsFruCtrl = types.BoolValue(true)
@@ -2380,7 +2380,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsFruCtrl = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-ipsla-cfg:ipsla"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-ipsla-cfg:ipsla"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsIpsla.IsNull() {
 			data.TrapsIpsla = types.BoolValue(true)
@@ -2391,7 +2391,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsIpsla = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls.ldp.down"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls.ldp.down"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsLdpDown.IsNull() {
 			data.TrapsMplsLdpDown = types.BoolValue(true)
@@ -2402,7 +2402,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsLdpDown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls.ldp.up"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls.ldp.up"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsLdpUp.IsNull() {
 			data.TrapsMplsLdpUp = types.BoolValue(true)
@@ -2413,7 +2413,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsLdpUp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls.ldp.threshold"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls.ldp.threshold"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsMplsLdpThreshold.IsNull() {
 			data.TrapsMplsLdpThreshold = types.BoolValue(true)
@@ -2424,7 +2424,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsMplsLdpThreshold = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-pim-cfg:pim.neighbor-change"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-pim-cfg:pim.neighbor-change"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsPimNeighborChange.IsNull() {
 			data.TrapsPimNeighborChange = types.BoolValue(true)
@@ -2435,7 +2435,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsPimNeighborChange = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-pim-cfg:pim.interface-state-change"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-pim-cfg:pim.interface-state-change"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsPimInterfaceStateChange.IsNull() {
 			data.TrapsPimInterfaceStateChange = types.BoolValue(true)
@@ -2446,7 +2446,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsPimInterfaceStateChange = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-pim-cfg:pim.invalid-message-received"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-pim-cfg:pim.invalid-message-received"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsPimInvalidMessageReceived.IsNull() {
 			data.TrapsPimInvalidMessageReceived = types.BoolValue(true)
@@ -2457,7 +2457,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsPimInvalidMessageReceived = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-pim-cfg:pim.rp-mapping-change"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-pim-cfg:pim.rp-mapping-change"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsPimRpMappingChange.IsNull() {
 			data.TrapsPimRpMappingChange = types.BoolValue(true)
@@ -2468,7 +2468,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsPimRpMappingChange = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-power-cfg:power"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-power-cfg:power"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsPower.IsNull() {
 			data.TrapsPower = types.BoolValue(true)
@@ -2479,7 +2479,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsPower = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-syslog-cfg:syslog"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-syslog-cfg:syslog"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsSyslog.IsNull() {
 			data.TrapsSyslog = types.BoolValue(true)
@@ -2490,7 +2490,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapsSyslog = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-system-cfg:system"); value.Exists() {
+	if value := res.Get("traps.Cisco-IOS-XR-um-traps-system-cfg:system"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapsSystem.IsNull() {
 			data.TrapsSystem = types.BoolValue(true)
@@ -2506,7 +2506,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hosts.host").ForEach(
+		res.Get("hosts.host").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2799,7 +2799,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Views[i].ViewName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "views.view").ForEach(
+		res.Get("views.view").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2872,32 +2872,32 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "trap-source.both"); value.Exists() && !data.TrapSource.IsNull() {
+	if value := res.Get("trap-source.both"); value.Exists() && !data.TrapSource.IsNull() {
 		data.TrapSource = types.StringValue(value.String())
 	} else if data.TrapSource.IsNull() {
 		data.TrapSource = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "trap-source.ipv4"); value.Exists() && !data.TrapSourceIpv4.IsNull() {
+	if value := res.Get("trap-source.ipv4"); value.Exists() && !data.TrapSourceIpv4.IsNull() {
 		data.TrapSourceIpv4 = types.StringValue(value.String())
 	} else if data.TrapSourceIpv4.IsNull() {
 		data.TrapSourceIpv4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "trap-source.ipv6"); value.Exists() && !data.TrapSourceIpv6.IsNull() {
+	if value := res.Get("trap-source.ipv6"); value.Exists() && !data.TrapSourceIpv6.IsNull() {
 		data.TrapSourceIpv6 = types.StringValue(value.String())
 	} else if data.TrapSourceIpv6.IsNull() {
 		data.TrapSourceIpv6 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "trap-source.port"); value.Exists() && !data.TrapSourcePort.IsNull() {
+	if value := res.Get("trap-source.port"); value.Exists() && !data.TrapSourcePort.IsNull() {
 		data.TrapSourcePort = types.Int64Value(value.Int())
 	} else if data.TrapSourcePort.IsNull() {
 		data.TrapSourcePort = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "trap.throttle-time"); value.Exists() && !data.TrapThrottleTime.IsNull() {
+	if value := res.Get("trap.throttle-time"); value.Exists() && !data.TrapThrottleTime.IsNull() {
 		data.TrapThrottleTime = types.Int64Value(value.Int())
 	} else if data.TrapThrottleTime.IsNull() {
 		data.TrapThrottleTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "trap.authentication.vrf.disable"); value.Exists() {
+	if value := res.Get("trap.authentication.vrf.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapAuthenticationVrfDisable.IsNull() {
 			data.TrapAuthenticationVrfDisable = types.BoolValue(true)
@@ -2908,22 +2908,22 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapAuthenticationVrfDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "trap.delay-timer"); value.Exists() && !data.TrapDelayTimer.IsNull() {
+	if value := res.Get("trap.delay-timer"); value.Exists() && !data.TrapDelayTimer.IsNull() {
 		data.TrapDelayTimer = types.Int64Value(value.Int())
 	} else if data.TrapDelayTimer.IsNull() {
 		data.TrapDelayTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
+	if value := res.Get("ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
+	if value := res.Get("ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "drop.unknown-user"); value.Exists() {
+	if value := res.Get("drop.unknown-user"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DropUnknownUser.IsNull() {
 			data.DropUnknownUser = types.BoolValue(true)
@@ -2934,12 +2934,12 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.DropUnknownUser = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "drop.report.acl.ipv4"); value.Exists() && !data.DropReportAclIpv4.IsNull() {
+	if value := res.Get("drop.report.acl.ipv4"); value.Exists() && !data.DropReportAclIpv4.IsNull() {
 		data.DropReportAclIpv4 = types.StringValue(value.String())
 	} else if data.DropReportAclIpv4.IsNull() {
 		data.DropReportAclIpv4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "drop.report.acl.ipv6"); value.Exists() && !data.DropReportAclIpv6.IsNull() {
+	if value := res.Get("drop.report.acl.ipv6"); value.Exists() && !data.DropReportAclIpv6.IsNull() {
 		data.DropReportAclIpv6 = types.StringValue(value.String())
 	} else if data.DropReportAclIpv6.IsNull() {
 		data.DropReportAclIpv6 = types.StringNull()
@@ -2949,7 +2949,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "groups.group").ForEach(
+		res.Get("groups.group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3123,7 +3123,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Groups[i].V3Ipv6 = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "engine-id.local"); value.Exists() && !data.EngineIdLocal.IsNull() {
+	if value := res.Get("engine-id.local"); value.Exists() && !data.EngineIdLocal.IsNull() {
 		data.EngineIdLocal = types.StringValue(value.String())
 	} else if data.EngineIdLocal.IsNull() {
 		data.EngineIdLocal = types.StringNull()
@@ -3133,7 +3133,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.EngineIdRemotes[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "engine-id.remotes.remote").ForEach(
+		res.Get("engine-id.remotes.remote").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3172,7 +3172,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Users[i].UserName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "users.user").ForEach(
+		res.Get("users.user").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3303,7 +3303,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "oid-poll-stats"); value.Exists() {
+	if value := res.Get("oid-poll-stats"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OidPollStats.IsNull() {
 			data.OidPollStats = types.BoolValue(true)
@@ -3314,52 +3314,52 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.OidPollStats = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "timeouts.subagent"); value.Exists() && !data.TimeoutsSubagent.IsNull() {
+	if value := res.Get("timeouts.subagent"); value.Exists() && !data.TimeoutsSubagent.IsNull() {
 		data.TimeoutsSubagent = types.Int64Value(value.Int())
 	} else if data.TimeoutsSubagent.IsNull() {
 		data.TimeoutsSubagent = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timeouts.duplicate"); value.Exists() && !data.TimeoutsDuplicate.IsNull() {
+	if value := res.Get("timeouts.duplicate"); value.Exists() && !data.TimeoutsDuplicate.IsNull() {
 		data.TimeoutsDuplicate = types.Int64Value(value.Int())
 	} else if data.TimeoutsDuplicate.IsNull() {
 		data.TimeoutsDuplicate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timeouts.in-qdrop"); value.Exists() && !data.TimeoutsInQdrop.IsNull() {
+	if value := res.Get("timeouts.in-qdrop"); value.Exists() && !data.TimeoutsInQdrop.IsNull() {
 		data.TimeoutsInQdrop = types.Int64Value(value.Int())
 	} else if data.TimeoutsInQdrop.IsNull() {
 		data.TimeoutsInQdrop = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timeouts.threshold"); value.Exists() && !data.TimeoutsThreshold.IsNull() {
+	if value := res.Get("timeouts.threshold"); value.Exists() && !data.TimeoutsThreshold.IsNull() {
 		data.TimeoutsThreshold = types.Int64Value(value.Int())
 	} else if data.TimeoutsThreshold.IsNull() {
 		data.TimeoutsThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timeouts.pdu.stats"); value.Exists() && !data.TimeoutsPduStats.IsNull() {
+	if value := res.Get("timeouts.pdu.stats"); value.Exists() && !data.TimeoutsPduStats.IsNull() {
 		data.TimeoutsPduStats = types.Int64Value(value.Int())
 	} else if data.TimeoutsPduStats.IsNull() {
 		data.TimeoutsPduStats = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "logging.threshold.oid-processing"); value.Exists() && !data.LoggingThresholdOidProcessing.IsNull() {
+	if value := res.Get("logging.threshold.oid-processing"); value.Exists() && !data.LoggingThresholdOidProcessing.IsNull() {
 		data.LoggingThresholdOidProcessing = types.Int64Value(value.Int())
 	} else if data.LoggingThresholdOidProcessing.IsNull() {
 		data.LoggingThresholdOidProcessing = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "logging.threshold.pdu-processing"); value.Exists() && !data.LoggingThresholdPduProcessing.IsNull() {
+	if value := res.Get("logging.threshold.pdu-processing"); value.Exists() && !data.LoggingThresholdPduProcessing.IsNull() {
 		data.LoggingThresholdPduProcessing = types.Int64Value(value.Int())
 	} else if data.LoggingThresholdPduProcessing.IsNull() {
 		data.LoggingThresholdPduProcessing = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "inform.retries"); value.Exists() && !data.InformRetries.IsNull() {
+	if value := res.Get("inform.retries"); value.Exists() && !data.InformRetries.IsNull() {
 		data.InformRetries = types.Int64Value(value.Int())
 	} else if data.InformRetries.IsNull() {
 		data.InformRetries = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "inform.timeout"); value.Exists() && !data.InformTimeout.IsNull() {
+	if value := res.Get("inform.timeout"); value.Exists() && !data.InformTimeout.IsNull() {
 		data.InformTimeout = types.Int64Value(value.Int())
 	} else if data.InformTimeout.IsNull() {
 		data.InformTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "inform.pending"); value.Exists() && !data.InformPending.IsNull() {
+	if value := res.Get("inform.pending"); value.Exists() && !data.InformPending.IsNull() {
 		data.InformPending = types.Int64Value(value.Int())
 	} else if data.InformPending.IsNull() {
 		data.InformPending = types.Int64Null()
@@ -3369,7 +3369,11 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data SNMPServer) toBodyXML(ctx context.Context) string {
+func (data SNMPServer) toBodyXML(ctx context.Context, stateArg ...*SNMPServer) string {
+	var state *SNMPServer
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Location.IsNull() && !data.Location.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/location", data.Location.ValueString())
@@ -3400,7 +3404,7 @@ func (data SNMPServer) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Communities) > 0 {
 		for _, item := range data.Communities {
-			basePath := data.getXPath() + "/community/unencrypted/unencrypted-string"
+			basePath := data.getXPath() + "/community/unencrypted/unencrypted-string[community-string='" + item.Community.ValueString() + "']"
 			if !item.Community.IsNull() && !item.Community.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/community-string", item.Community.ValueString())
 			}
@@ -3467,7 +3471,7 @@ func (data SNMPServer) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Hosts) > 0 {
 		for _, item := range data.Hosts {
-			basePath := data.getXPath() + "/hosts/host"
+			basePath := data.getXPath() + "/hosts/host[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3589,7 +3593,7 @@ func (data SNMPServer) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Views) > 0 {
 		for _, item := range data.Views {
-			basePath := data.getXPath() + "/views/view"
+			basePath := data.getXPath() + "/views/view[view-name='" + item.ViewName.ValueString() + "']"
 			if !item.ViewName.IsNull() && !item.ViewName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/view-name", item.ViewName.ValueString())
 			}
@@ -3655,7 +3659,7 @@ func (data SNMPServer) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Groups) > 0 {
 		for _, item := range data.Groups {
-			basePath := data.getXPath() + "/groups/group"
+			basePath := data.getXPath() + "/groups/group[group-name='" + item.GroupName.ValueString() + "']"
 			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/group-name", item.GroupName.ValueString())
 			}
@@ -3745,7 +3749,7 @@ func (data SNMPServer) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.EngineIdRemotes) > 0 {
 		for _, item := range data.EngineIdRemotes {
-			basePath := data.getXPath() + "/engine-id/remotes/remote"
+			basePath := data.getXPath() + "/engine-id/remotes/remote[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3759,7 +3763,7 @@ func (data SNMPServer) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Users) > 0 {
 		for _, item := range data.Users {
-			basePath := data.getXPath() + "/users/user"
+			basePath := data.getXPath() + "/users/user[user-name='" + item.UserName.ValueString() + "']"
 			if !item.UserName.IsNull() && !item.UserName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/user-name", item.UserName.ValueString())
 			}
@@ -4333,6 +4337,11 @@ func (data SNMPServer) toBodyXML(ctx context.Context) string {
 		}
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

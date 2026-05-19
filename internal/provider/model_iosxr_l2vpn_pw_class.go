@@ -320,8 +320,8 @@ func (data L2VPNPWClass) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "encapsulation.mpls"); value.Exists() {
+func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("encapsulation.mpls"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMpls.IsNull() {
 			data.EncapsulationMpls = types.BoolValue(true)
@@ -332,7 +332,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMpls = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.protocol.ldp"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.protocol.ldp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsProtocolLdp.IsNull() {
 			data.EncapsulationMplsProtocolLdp = types.BoolValue(true)
@@ -343,7 +343,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsProtocolLdp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.control-word"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.control-word"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsControlWord.IsNull() {
 			data.EncapsulationMplsControlWord = types.BoolValue(true)
@@ -354,7 +354,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsControlWord = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.ethernet"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.transport-mode.ethernet"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsTransportModeEthernet.IsNull() {
 			data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
@@ -365,7 +365,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsTransportModeEthernet = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.vlan"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.transport-mode.vlan"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsTransportModeVlan.IsNull() {
 			data.EncapsulationMplsTransportModeVlan = types.BoolValue(true)
@@ -376,7 +376,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsTransportModeVlan = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.passthrough"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.transport-mode.passthrough"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() {
 			data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolValue(true)
@@ -387,7 +387,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsTransportModeVlanPassthrough = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.vccv.verification-type.none"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.vccv.verification-type.none"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsVccvVerificationTypeNone.IsNull() {
 			data.EncapsulationMplsVccvVerificationTypeNone = types.BoolValue(true)
@@ -398,7 +398,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsVccvVerificationTypeNone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.sequencing.transmit"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsSequencingTransmit.IsNull() {
 			data.EncapsulationMplsSequencingTransmit = types.BoolValue(true)
@@ -409,12 +409,12 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsSequencingTransmit = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.transmit.resync"); value.Exists() && !data.EncapsulationMplsSequencingTransmitResync.IsNull() {
+	if value := res.Get("encapsulation.mpls.sequencing.transmit.resync"); value.Exists() && !data.EncapsulationMplsSequencingTransmitResync.IsNull() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsSequencingTransmitResync.IsNull() {
 		data.EncapsulationMplsSequencingTransmitResync = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.sequencing.receive"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsSequencingReceive.IsNull() {
 			data.EncapsulationMplsSequencingReceive = types.BoolValue(true)
@@ -425,12 +425,12 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsSequencingReceive = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.receive.resync"); value.Exists() && !data.EncapsulationMplsSequencingReceiveResync.IsNull() {
+	if value := res.Get("encapsulation.mpls.sequencing.receive.resync"); value.Exists() && !data.EncapsulationMplsSequencingReceiveResync.IsNull() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsSequencingReceiveResync.IsNull() {
 		data.EncapsulationMplsSequencingReceiveResync = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.sequencing.both"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsSequencingBoth.IsNull() {
 			data.EncapsulationMplsSequencingBoth = types.BoolValue(true)
@@ -441,37 +441,37 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsSequencingBoth = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.sequencing.both.resync"); value.Exists() && !data.EncapsulationMplsSequencingBothResync.IsNull() {
+	if value := res.Get("encapsulation.mpls.sequencing.both.resync"); value.Exists() && !data.EncapsulationMplsSequencingBothResync.IsNull() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsSequencingBothResync.IsNull() {
 		data.EncapsulationMplsSequencingBothResync = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-number"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() {
+	if value := res.Get("encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-number"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-name"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() {
+	if value := res.Get("encapsulation.mpls.preferred-path.interface.tunnel-te.tunnel-name"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringValue(value.String())
 	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTeTunnelName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-ip"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() {
+	if value := res.Get("encapsulation.mpls.preferred-path.interface.tunnel-ip"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelIp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelIp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.interface.tunnel-tp"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() {
+	if value := res.Get("encapsulation.mpls.preferred-path.interface.tunnel-tp"); value.Exists() && !data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsPreferredPathInterfaceTunnelTp.IsNull() {
 		data.EncapsulationMplsPreferredPathInterfaceTunnelTp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.sr-te.policy"); value.Exists() && !data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() {
+	if value := res.Get("encapsulation.mpls.preferred-path.sr-te.policy"); value.Exists() && !data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() {
 		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringValue(value.String())
 	} else if data.EncapsulationMplsPreferredPathSrTePolicy.IsNull() {
 		data.EncapsulationMplsPreferredPathSrTePolicy = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.preferred-path.fallback.disable"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.preferred-path.fallback.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() {
 			data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolValue(true)
@@ -482,7 +482,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsPreferredPathFallbackDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.switching-tlv.hide"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.switching-tlv.hide"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsSwitchingTlvHide.IsNull() {
 			data.EncapsulationMplsSwitchingTlvHide = types.BoolValue(true)
@@ -493,12 +493,12 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsSwitchingTlvHide = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.tag-rewrite.ingress.vlan"); value.Exists() && !data.EncapsulationMplsTagRewriteIngressVlan.IsNull() {
+	if value := res.Get("encapsulation.mpls.tag-rewrite.ingress.vlan"); value.Exists() && !data.EncapsulationMplsTagRewriteIngressVlan.IsNull() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsTagRewriteIngressVlan.IsNull() {
 		data.EncapsulationMplsTagRewriteIngressVlan = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.one-way"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.redundancy.one-way"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsRedundancyOneWay.IsNull() {
 			data.EncapsulationMplsRedundancyOneWay = types.BoolValue(true)
@@ -509,12 +509,12 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsRedundancyOneWay = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.redundancy.initial-delay"); value.Exists() && !data.EncapsulationMplsRedundancyInitialDelay.IsNull() {
+	if value := res.Get("encapsulation.mpls.redundancy.initial-delay"); value.Exists() && !data.EncapsulationMplsRedundancyInitialDelay.IsNull() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Value(value.Int())
 	} else if data.EncapsulationMplsRedundancyInitialDelay.IsNull() {
 		data.EncapsulationMplsRedundancyInitialDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.pw-label"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.load-balancing.pw-label"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
 			data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
@@ -525,7 +525,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsLoadBalancingPwLabel = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.transmit"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.load-balancing.flow-label.transmit"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(true)
@@ -536,7 +536,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.transmit.static"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.load-balancing.flow-label.transmit.static"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(true)
@@ -547,7 +547,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.receive"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.load-balancing.flow-label.receive"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(true)
@@ -558,7 +558,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.receive.static"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.load-balancing.flow-label.receive.static"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(true)
@@ -569,7 +569,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.both"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.load-balancing.flow-label.both"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(true)
@@ -580,7 +580,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.both.static"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.load-balancing.flow-label.both.static"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(true)
@@ -591,7 +591,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.load-balancing.flow-label.code.one7"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolValue(true)
@@ -602,7 +602,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); value.Exists() {
+	if value := res.Get("encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolValue(true)
@@ -613,17 +613,17 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.mpls.ipv4.source"); value.Exists() && !data.EncapsulationMplsIpv4Source.IsNull() {
+	if value := res.Get("encapsulation.mpls.ipv4.source"); value.Exists() && !data.EncapsulationMplsIpv4Source.IsNull() {
 		data.EncapsulationMplsIpv4Source = types.StringValue(value.String())
 	} else if data.EncapsulationMplsIpv4Source.IsNull() {
 		data.EncapsulationMplsIpv4Source = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "backup.disable.delay"); value.Exists() && !data.BackupDisableDelay.IsNull() {
+	if value := res.Get("backup.disable.delay"); value.Exists() && !data.BackupDisableDelay.IsNull() {
 		data.BackupDisableDelay = types.Int64Value(value.Int())
 	} else if data.BackupDisableDelay.IsNull() {
 		data.BackupDisableDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "backup.disable.never"); value.Exists() {
+	if value := res.Get("backup.disable.never"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.BackupDisableNever.IsNull() {
 			data.BackupDisableNever = types.BoolValue(true)
@@ -634,7 +634,7 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 			data.BackupDisableNever = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac-withdraw"); value.Exists() {
+	if value := res.Get("mac-withdraw"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MacWithdraw.IsNull() {
 			data.MacWithdraw = types.BoolValue(true)
@@ -650,7 +650,11 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data L2VPNPWClass) toBodyXML(ctx context.Context) string {
+func (data L2VPNPWClass) toBodyXML(ctx context.Context, stateArg ...*L2VPNPWClass) string {
+	var state *L2VPNPWClass
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.EncapsulationMpls.IsNull() && !data.EncapsulationMpls.IsUnknown() {
 		if data.EncapsulationMpls.ValueBool() {
@@ -816,6 +820,11 @@ func (data L2VPNPWClass) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

@@ -213,8 +213,8 @@ func (data MPLSLDPMLDP) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "logging.notifications"); value.Exists() {
+func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("logging.notifications"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingNotifications.IsNull() {
 			data.LoggingNotifications = types.BoolValue(true)
@@ -225,7 +225,7 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingNotifications = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "logging.internal"); value.Exists() {
+	if value := res.Get("logging.internal"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingInternal.IsNull() {
 			data.LoggingInternal = types.BoolValue(true)
@@ -241,7 +241,7 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.AddressFamily[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "address-families.address-family").ForEach(
+		res.Get("address-families.address-family").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -448,7 +448,11 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data MPLSLDPMLDP) toBodyXML(ctx context.Context) string {
+func (data MPLSLDPMLDP) toBodyXML(ctx context.Context, stateArg ...*MPLSLDPMLDP) string {
+	var state *MPLSLDPMLDP
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.LoggingNotifications.IsNull() && !data.LoggingNotifications.IsUnknown() {
 		if data.LoggingNotifications.ValueBool() {
@@ -462,7 +466,7 @@ func (data MPLSLDPMLDP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.AddressFamily) > 0 {
 		for _, item := range data.AddressFamily {
-			basePath := data.getXPath() + "/address-families/address-family"
+			basePath := data.getXPath() + "/address-families/address-family[af-name='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/af-name", item.Name.ValueString())
 			}
@@ -553,6 +557,11 @@ func (data MPLSLDPMLDP) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

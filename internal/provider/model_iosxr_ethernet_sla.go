@@ -346,7 +346,11 @@ func (data EthernetSLA) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data EthernetSLA) toBodyXML(ctx context.Context) string {
+func (data EthernetSLA) toBodyXML(ctx context.Context, stateArg ...*EthernetSLA) string {
+	var state *EthernetSLA
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Type.IsNull() && !data.Type.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/type", data.Type.ValueString())
@@ -425,7 +429,7 @@ func (data EthernetSLA) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.StatisticsMeasure) > 0 {
 		for _, item := range data.StatisticsMeasure {
-			basePath := data.getXPath() + "/statistics/measures/measure"
+			basePath := data.getXPath() + "/statistics/measures/measure[type='" + item.Type.ValueString() + "']"
 			if !item.Type.IsNull() && !item.Type.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/type", item.Type.ValueString())
 			}
@@ -531,6 +535,11 @@ func (data EthernetSLA) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -538,13 +547,13 @@ func (data EthernetSLA) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "type"); value.Exists() && !data.Type.IsNull() {
+func (data *EthernetSLA) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("type"); value.Exists() && !data.Type.IsNull() {
 		data.Type = types.StringValue(value.String())
 	} else if data.Type.IsNull() {
 		data.Type = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "probe.send.packet.once"); value.Exists() {
+	if value := res.Get("probe.send.packet.once"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProbeSendPacketOnce.IsNull() {
 			data.ProbeSendPacketOnce = types.BoolValue(true)
@@ -555,12 +564,12 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ProbeSendPacketOnce = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "probe.send.packet.every.interval"); value.Exists() && !data.ProbeSendPacketEveryInterval.IsNull() {
+	if value := res.Get("probe.send.packet.every.interval"); value.Exists() && !data.ProbeSendPacketEveryInterval.IsNull() {
 		data.ProbeSendPacketEveryInterval = types.Int64Value(value.Int())
 	} else if data.ProbeSendPacketEveryInterval.IsNull() {
 		data.ProbeSendPacketEveryInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "probe.send.packet.every.milliseconds"); value.Exists() {
+	if value := res.Get("probe.send.packet.every.milliseconds"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProbeSendPacketEveryMilliseconds.IsNull() {
 			data.ProbeSendPacketEveryMilliseconds = types.BoolValue(true)
@@ -571,7 +580,7 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ProbeSendPacketEveryMilliseconds = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "probe.send.packet.every.seconds"); value.Exists() {
+	if value := res.Get("probe.send.packet.every.seconds"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProbeSendPacketEverySeconds.IsNull() {
 			data.ProbeSendPacketEverySeconds = types.BoolValue(true)
@@ -582,7 +591,7 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ProbeSendPacketEverySeconds = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "probe.send.packet.every.minutes"); value.Exists() {
+	if value := res.Get("probe.send.packet.every.minutes"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProbeSendPacketEveryMinutes.IsNull() {
 			data.ProbeSendPacketEveryMinutes = types.BoolValue(true)
@@ -593,7 +602,7 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ProbeSendPacketEveryMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "probe.send.packet.every.hours"); value.Exists() {
+	if value := res.Get("probe.send.packet.every.hours"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProbeSendPacketEveryHours.IsNull() {
 			data.ProbeSendPacketEveryHours = types.BoolValue(true)
@@ -604,7 +613,7 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ProbeSendPacketEveryHours = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "probe.send.burst.once"); value.Exists() {
+	if value := res.Get("probe.send.burst.once"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProbeSendBurstOnce.IsNull() {
 			data.ProbeSendBurstOnce = types.BoolValue(true)
@@ -615,12 +624,12 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ProbeSendBurstOnce = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "probe.send.burst.every.interval"); value.Exists() && !data.ProbeSendBurstEveryInterval.IsNull() {
+	if value := res.Get("probe.send.burst.every.interval"); value.Exists() && !data.ProbeSendBurstEveryInterval.IsNull() {
 		data.ProbeSendBurstEveryInterval = types.Int64Value(value.Int())
 	} else if data.ProbeSendBurstEveryInterval.IsNull() {
 		data.ProbeSendBurstEveryInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "probe.send.burst.every.seconds"); value.Exists() {
+	if value := res.Get("probe.send.burst.every.seconds"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProbeSendBurstEverySeconds.IsNull() {
 			data.ProbeSendBurstEverySeconds = types.BoolValue(true)
@@ -631,7 +640,7 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ProbeSendBurstEverySeconds = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "probe.send.burst.every.minutes"); value.Exists() {
+	if value := res.Get("probe.send.burst.every.minutes"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProbeSendBurstEveryMinutes.IsNull() {
 			data.ProbeSendBurstEveryMinutes = types.BoolValue(true)
@@ -642,7 +651,7 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ProbeSendBurstEveryMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "probe.send.burst.every.hours"); value.Exists() {
+	if value := res.Get("probe.send.burst.every.hours"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProbeSendBurstEveryHours.IsNull() {
 			data.ProbeSendBurstEveryHours = types.BoolValue(true)
@@ -653,37 +662,37 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ProbeSendBurstEveryHours = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "probe.send.burst.packet.count"); value.Exists() && !data.ProbeSendBurstPacketCount.IsNull() {
+	if value := res.Get("probe.send.burst.packet.count"); value.Exists() && !data.ProbeSendBurstPacketCount.IsNull() {
 		data.ProbeSendBurstPacketCount = types.Int64Value(value.Int())
 	} else if data.ProbeSendBurstPacketCount.IsNull() {
 		data.ProbeSendBurstPacketCount = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "probe.send.burst.packet.interval-in-seconds"); value.Exists() && !data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
+	if value := res.Get("probe.send.burst.packet.interval-in-seconds"); value.Exists() && !data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
 		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Value(value.Int())
 	} else if data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
 		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "probe.send.burst.packet.interval-in-milliseconds"); value.Exists() && !data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
+	if value := res.Get("probe.send.burst.packet.interval-in-milliseconds"); value.Exists() && !data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
 		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Value(value.Int())
 	} else if data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
 		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "probe.packet.size"); value.Exists() && !data.ProbePacketSize.IsNull() {
+	if value := res.Get("probe.packet.size"); value.Exists() && !data.ProbePacketSize.IsNull() {
 		data.ProbePacketSize = types.Int64Value(value.Int())
 	} else if data.ProbePacketSize.IsNull() {
 		data.ProbePacketSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "probe.packet.test.pattern.hex"); value.Exists() && !data.ProbePacketTestPatternHex.IsNull() {
+	if value := res.Get("probe.packet.test.pattern.hex"); value.Exists() && !data.ProbePacketTestPatternHex.IsNull() {
 		data.ProbePacketTestPatternHex = types.Int64Value(value.Int())
 	} else if data.ProbePacketTestPatternHex.IsNull() {
 		data.ProbePacketTestPatternHex = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "probe.priority"); value.Exists() && !data.ProbePriority.IsNull() {
+	if value := res.Get("probe.priority"); value.Exists() && !data.ProbePriority.IsNull() {
 		data.ProbePriority = types.Int64Value(value.Int())
 	} else if data.ProbePriority.IsNull() {
 		data.ProbePriority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "probe.synthetic.loss.calculation.packets"); value.Exists() && !data.ProbeSyntheticLossCalculationPackets.IsNull() {
+	if value := res.Get("probe.synthetic.loss.calculation.packets"); value.Exists() && !data.ProbeSyntheticLossCalculationPackets.IsNull() {
 		data.ProbeSyntheticLossCalculationPackets = types.Int64Value(value.Int())
 	} else if data.ProbeSyntheticLossCalculationPackets.IsNull() {
 		data.ProbeSyntheticLossCalculationPackets = types.Int64Null()
@@ -693,7 +702,7 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.StatisticsMeasure[i].Type.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "statistics.measures.measure").ForEach(
+		res.Get("statistics.measures.measure").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -838,12 +847,12 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "schedule.every.week.on"); value.Exists() && !data.ScheduleEveryWeekOn.IsNull() {
+	if value := res.Get("schedule.every.week.on"); value.Exists() && !data.ScheduleEveryWeekOn.IsNull() {
 		data.ScheduleEveryWeekOn = types.StringValue(value.String())
 	} else if data.ScheduleEveryWeekOn.IsNull() {
 		data.ScheduleEveryWeekOn = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "schedule.every.day"); value.Exists() {
+	if value := res.Get("schedule.every.day"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ScheduleEveryDay.IsNull() {
 			data.ScheduleEveryDay = types.BoolValue(true)
@@ -854,32 +863,32 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ScheduleEveryDay = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "schedule.every.interval-in-minutes"); value.Exists() && !data.ScheduleEveryMinutes.IsNull() {
+	if value := res.Get("schedule.every.interval-in-minutes"); value.Exists() && !data.ScheduleEveryMinutes.IsNull() {
 		data.ScheduleEveryMinutes = types.Int64Value(value.Int())
 	} else if data.ScheduleEveryMinutes.IsNull() {
 		data.ScheduleEveryMinutes = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "schedule.every.interval-in-hours"); value.Exists() && !data.ScheduleEveryHours.IsNull() {
+	if value := res.Get("schedule.every.interval-in-hours"); value.Exists() && !data.ScheduleEveryHours.IsNull() {
 		data.ScheduleEveryHours = types.Int64Value(value.Int())
 	} else if data.ScheduleEveryHours.IsNull() {
 		data.ScheduleEveryHours = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "schedule.every.at.hours"); value.Exists() && !data.ScheduleEveryAtHours.IsNull() {
+	if value := res.Get("schedule.every.at.hours"); value.Exists() && !data.ScheduleEveryAtHours.IsNull() {
 		data.ScheduleEveryAtHours = types.Int64Value(value.Int())
 	} else if data.ScheduleEveryAtHours.IsNull() {
 		data.ScheduleEveryAtHours = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "schedule.every.at.minutes"); value.Exists() && !data.ScheduleEveryAtMinutes.IsNull() {
+	if value := res.Get("schedule.every.at.minutes"); value.Exists() && !data.ScheduleEveryAtMinutes.IsNull() {
 		data.ScheduleEveryAtMinutes = types.Int64Value(value.Int())
 	} else if data.ScheduleEveryAtMinutes.IsNull() {
 		data.ScheduleEveryAtMinutes = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "schedule.every.for.time"); value.Exists() && !data.ScheduleEveryForTime.IsNull() {
+	if value := res.Get("schedule.every.for.time"); value.Exists() && !data.ScheduleEveryForTime.IsNull() {
 		data.ScheduleEveryForTime = types.Int64Value(value.Int())
 	} else if data.ScheduleEveryForTime.IsNull() {
 		data.ScheduleEveryForTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "schedule.every.for.unit"); value.Exists() && !data.ScheduleEveryForUnit.IsNull() {
+	if value := res.Get("schedule.every.for.unit"); value.Exists() && !data.ScheduleEveryForUnit.IsNull() {
 		data.ScheduleEveryForUnit = types.StringValue(value.String())
 	} else if data.ScheduleEveryForUnit.IsNull() {
 		data.ScheduleEveryForUnit = types.StringNull()

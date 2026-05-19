@@ -390,23 +390,23 @@ func (data TelemetryModelDriven) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "max-containers-per-path"); value.Exists() && !data.MaxContainersPerPath.IsNull() {
+func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("max-containers-per-path"); value.Exists() && !data.MaxContainersPerPath.IsNull() {
 		data.MaxContainersPerPath = types.Int64Value(value.Int())
 	} else if data.MaxContainersPerPath.IsNull() {
 		data.MaxContainersPerPath = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "max-sensor-paths"); value.Exists() && !data.MaxSensorPaths.IsNull() {
+	if value := res.Get("max-sensor-paths"); value.Exists() && !data.MaxSensorPaths.IsNull() {
 		data.MaxSensorPaths = types.Int64Value(value.Int())
 	} else if data.MaxSensorPaths.IsNull() {
 		data.MaxSensorPaths = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "tcp-send-timeout"); value.Exists() && !data.TcpSendTimeout.IsNull() {
+	if value := res.Get("tcp-send-timeout"); value.Exists() && !data.TcpSendTimeout.IsNull() {
 		data.TcpSendTimeout = types.Int64Value(value.Int())
 	} else if data.TcpSendTimeout.IsNull() {
 		data.TcpSendTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "strict-timer"); value.Exists() {
+	if value := res.Get("strict-timer"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StrictTimer.IsNull() {
 			data.StrictTimer = types.BoolValue(true)
@@ -417,17 +417,17 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 			data.StrictTimer = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "gnmi-target-defined.cadence-factor"); value.Exists() && !data.GnmiTargetDefinedCadenceFactor.IsNull() {
+	if value := res.Get("gnmi-target-defined.cadence-factor"); value.Exists() && !data.GnmiTargetDefinedCadenceFactor.IsNull() {
 		data.GnmiTargetDefinedCadenceFactor = types.Int64Value(value.Int())
 	} else if data.GnmiTargetDefinedCadenceFactor.IsNull() {
 		data.GnmiTargetDefinedCadenceFactor = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "gnmi-target-defined.minimum-cadence"); value.Exists() && !data.GnmiTargetDefinedMinimumCadence.IsNull() {
+	if value := res.Get("gnmi-target-defined.minimum-cadence"); value.Exists() && !data.GnmiTargetDefinedMinimumCadence.IsNull() {
 		data.GnmiTargetDefinedMinimumCadence = types.Int64Value(value.Int())
 	} else if data.GnmiTargetDefinedMinimumCadence.IsNull() {
 		data.GnmiTargetDefinedMinimumCadence = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "include.select-leaves-on-events"); value.Exists() {
+	if value := res.Get("include.select-leaves-on-events"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IncludeSelectLeavesOnEvents.IsNull() {
 			data.IncludeSelectLeavesOnEvents = types.BoolValue(true)
@@ -438,7 +438,7 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 			data.IncludeSelectLeavesOnEvents = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "include.empty.values"); value.Exists() {
+	if value := res.Get("include.empty.values"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IncludeEmptyValues.IsNull() {
 			data.IncludeEmptyValues = types.BoolValue(true)
@@ -449,7 +449,7 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 			data.IncludeEmptyValues = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "gnmi.heartbeat.always"); value.Exists() {
+	if value := res.Get("gnmi.heartbeat.always"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.GnmiHeartbeatAlways.IsNull() {
 			data.GnmiHeartbeatAlways = types.BoolValue(true)
@@ -460,7 +460,7 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 			data.GnmiHeartbeatAlways = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "gnmi.bundling"); value.Exists() {
+	if value := res.Get("gnmi.bundling"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.GnmiBundling.IsNull() {
 			data.GnmiBundling = types.BoolValue(true)
@@ -471,7 +471,7 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 			data.GnmiBundling = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "gnmi.bundling.size"); value.Exists() && !data.GnmiBundlingSize.IsNull() {
+	if value := res.Get("gnmi.bundling.size"); value.Exists() && !data.GnmiBundlingSize.IsNull() {
 		data.GnmiBundlingSize = types.Int64Value(value.Int())
 	} else if data.GnmiBundlingSize.IsNull() {
 		data.GnmiBundlingSize = types.Int64Null()
@@ -481,7 +481,7 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.DestinationGroups[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "destination-groups.destination-group").ForEach(
+		res.Get("destination-groups.destination-group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -723,7 +723,7 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.Subscriptions[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "subscriptions.subscription").ForEach(
+		res.Get("subscriptions.subscription").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -865,7 +865,7 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.SensorGroups[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "sensor-groups.sensor-group").ForEach(
+		res.Get("sensor-groups.sensor-group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -923,7 +923,11 @@ func (data *TelemetryModelDriven) updateFromBody(ctx context.Context, res []byte
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data TelemetryModelDriven) toBodyXML(ctx context.Context) string {
+func (data TelemetryModelDriven) toBodyXML(ctx context.Context, stateArg ...*TelemetryModelDriven) string {
+	var state *TelemetryModelDriven
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.MaxContainersPerPath.IsNull() && !data.MaxContainersPerPath.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/max-containers-per-path", strconv.FormatInt(data.MaxContainersPerPath.ValueInt64(), 10))
@@ -970,7 +974,7 @@ func (data TelemetryModelDriven) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.DestinationGroups) > 0 {
 		for _, item := range data.DestinationGroups {
-			basePath := data.getXPath() + "/destination-groups/destination-group"
+			basePath := data.getXPath() + "/destination-groups/destination-group[destination-group-string='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/destination-group-string", item.Name.ValueString())
 			}
@@ -1077,7 +1081,7 @@ func (data TelemetryModelDriven) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Subscriptions) > 0 {
 		for _, item := range data.Subscriptions {
-			basePath := data.getXPath() + "/subscriptions/subscription"
+			basePath := data.getXPath() + "/subscriptions/subscription[subscription-string='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/subscription-string", item.Name.ValueString())
 			}
@@ -1132,7 +1136,7 @@ func (data TelemetryModelDriven) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.SensorGroups) > 0 {
 		for _, item := range data.SensorGroups {
-			basePath := data.getXPath() + "/sensor-groups/sensor-group"
+			basePath := data.getXPath() + "/sensor-groups/sensor-group[sensor-group-string='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/sensor-group-string", item.Name.ValueString())
 			}
@@ -1154,6 +1158,11 @@ func (data TelemetryModelDriven) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

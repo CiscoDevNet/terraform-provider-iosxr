@@ -234,38 +234,38 @@ func (data LLDP) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "holdtime"); value.Exists() && !data.Holdtime.IsNull() {
+func (data *LLDP) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("holdtime"); value.Exists() && !data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Value(value.Int())
 	} else if data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timer"); value.Exists() && !data.Timer.IsNull() {
+	if value := res.Get("timer"); value.Exists() && !data.Timer.IsNull() {
 		data.Timer = types.Int64Value(value.Int())
 	} else if data.Timer.IsNull() {
 		data.Timer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "reinit"); value.Exists() && !data.Reinit.IsNull() {
+	if value := res.Get("reinit"); value.Exists() && !data.Reinit.IsNull() {
 		data.Reinit = types.Int64Value(value.Int())
 	} else if data.Reinit.IsNull() {
 		data.Reinit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "system-name"); value.Exists() && !data.SystemName.IsNull() {
+	if value := res.Get("system-name"); value.Exists() && !data.SystemName.IsNull() {
 		data.SystemName = types.StringValue(value.String())
 	} else if data.SystemName.IsNull() {
 		data.SystemName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "system-description"); value.Exists() && !data.SystemDescription.IsNull() {
+	if value := res.Get("system-description"); value.Exists() && !data.SystemDescription.IsNull() {
 		data.SystemDescription = types.StringValue(value.String())
 	} else if data.SystemDescription.IsNull() {
 		data.SystemDescription = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "chassis-id"); value.Exists() && !data.ChassisId.IsNull() {
+	if value := res.Get("chassis-id"); value.Exists() && !data.ChassisId.IsNull() {
 		data.ChassisId = types.StringValue(value.String())
 	} else if data.ChassisId.IsNull() {
 		data.ChassisId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.chassis-component"); value.Exists() {
+	if value := res.Get("chassis-id-type.chassis-component"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ChassisIdTypeChassisComponent.IsNull() {
 			data.ChassisIdTypeChassisComponent = types.BoolValue(true)
@@ -276,7 +276,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.ChassisIdTypeChassisComponent = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.interface-alias"); value.Exists() {
+	if value := res.Get("chassis-id-type.interface-alias"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ChassisIdTypeInterfaceAlias.IsNull() {
 			data.ChassisIdTypeInterfaceAlias = types.BoolValue(true)
@@ -287,7 +287,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.ChassisIdTypeInterfaceAlias = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.port-component"); value.Exists() {
+	if value := res.Get("chassis-id-type.port-component"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ChassisIdTypePortComponent.IsNull() {
 			data.ChassisIdTypePortComponent = types.BoolValue(true)
@@ -298,7 +298,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.ChassisIdTypePortComponent = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.mac-address"); value.Exists() {
+	if value := res.Get("chassis-id-type.mac-address"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ChassisIdTypeMacAddress.IsNull() {
 			data.ChassisIdTypeMacAddress = types.BoolValue(true)
@@ -309,7 +309,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.ChassisIdTypeMacAddress = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.network-address"); value.Exists() {
+	if value := res.Get("chassis-id-type.network-address"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ChassisIdTypeNetworkAddress.IsNull() {
 			data.ChassisIdTypeNetworkAddress = types.BoolValue(true)
@@ -320,7 +320,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.ChassisIdTypeNetworkAddress = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.interface-name"); value.Exists() {
+	if value := res.Get("chassis-id-type.interface-name"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ChassisIdTypeInterfaceName.IsNull() {
 			data.ChassisIdTypeInterfaceName = types.BoolValue(true)
@@ -331,7 +331,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.ChassisIdTypeInterfaceName = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "chassis-id-type.local"); value.Exists() {
+	if value := res.Get("chassis-id-type.local"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ChassisIdTypeLocal.IsNull() {
 			data.ChassisIdTypeLocal = types.BoolValue(true)
@@ -342,7 +342,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.ChassisIdTypeLocal = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "subinterfaces.enable"); value.Exists() {
+	if value := res.Get("subinterfaces.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SubinterfacesEnable.IsNull() {
 			data.SubinterfacesEnable = types.BoolValue(true)
@@ -353,7 +353,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.SubinterfacesEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "subinterfaces-tagged"); value.Exists() {
+	if value := res.Get("subinterfaces-tagged"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SubinterfacesTagged.IsNull() {
 			data.SubinterfacesTagged = types.BoolValue(true)
@@ -364,7 +364,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.SubinterfacesTagged = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management.enable"); value.Exists() {
+	if value := res.Get("management.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ManagementEnable.IsNull() {
 			data.ManagementEnable = types.BoolValue(true)
@@ -375,7 +375,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.ManagementEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "priorityaddr.enable"); value.Exists() {
+	if value := res.Get("priorityaddr.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PriorityaddrEnable.IsNull() {
 			data.PriorityaddrEnable = types.BoolValue(true)
@@ -386,7 +386,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.PriorityaddrEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "extended-show-width.enable"); value.Exists() {
+	if value := res.Get("extended-show-width.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ExtendedShowWidthEnable.IsNull() {
 			data.ExtendedShowWidthEnable = types.BoolValue(true)
@@ -397,7 +397,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.ExtendedShowWidthEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.management-address.disable"); value.Exists() {
+	if value := res.Get("tlv-select.management-address.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TlvSelectManagementAddressDisable.IsNull() {
 			data.TlvSelectManagementAddressDisable = types.BoolValue(true)
@@ -408,7 +408,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.TlvSelectManagementAddressDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.port-description.disable"); value.Exists() {
+	if value := res.Get("tlv-select.port-description.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TlvSelectPortDescriptionDisable.IsNull() {
 			data.TlvSelectPortDescriptionDisable = types.BoolValue(true)
@@ -419,7 +419,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.TlvSelectPortDescriptionDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.system-capabilities.disable"); value.Exists() {
+	if value := res.Get("tlv-select.system-capabilities.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TlvSelectSystemCapabilitiesDisable.IsNull() {
 			data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(true)
@@ -430,7 +430,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.TlvSelectSystemCapabilitiesDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.system-description.disable"); value.Exists() {
+	if value := res.Get("tlv-select.system-description.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TlvSelectSystemDescriptionDisable.IsNull() {
 			data.TlvSelectSystemDescriptionDisable = types.BoolValue(true)
@@ -441,7 +441,7 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.TlvSelectSystemDescriptionDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tlv-select.system-name.disable"); value.Exists() {
+	if value := res.Get("tlv-select.system-name.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TlvSelectSystemNameDisable.IsNull() {
 			data.TlvSelectSystemNameDisable = types.BoolValue(true)
@@ -457,7 +457,11 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data LLDP) toBodyXML(ctx context.Context) string {
+func (data LLDP) toBodyXML(ctx context.Context, stateArg ...*LLDP) string {
+	var state *LLDP
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Holdtime.IsNull() && !data.Holdtime.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/holdtime", strconv.FormatInt(data.Holdtime.ValueInt64(), 10))
@@ -570,6 +574,11 @@ func (data LLDP) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

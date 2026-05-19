@@ -257,6 +257,39 @@ func TestSetFromXPath(t *testing.T) {
 	}
 }
 
+// TestSetFromXPathMultipleListEntries verifies that calling SetFromXPath with
+// different key predicates on the same list element creates separate XML elements
+// instead of overwriting the first one.
+func TestSetFromXPathMultipleListEntries(t *testing.T) {
+	body := netconf.NewBody("")
+
+	base := "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name='PM-QOS-POLICY']"
+	bp1 := base + "/class[name='CM-HIGH-PRIORITY' and type='qos']"
+	body = SetFromXPath(body, bp1+"/name", "CM-HIGH-PRIORITY")
+	body = SetFromXPath(body, bp1+"/type", "qos")
+	body = SetFromXPath(body, bp1+"/priority/level", "2")
+
+	bp2 := base + "/class[name='CM-REAL-TIME' and type='qos']"
+	body = SetFromXPath(body, bp2+"/name", "CM-REAL-TIME")
+	body = SetFromXPath(body, bp2+"/type", "qos")
+	body = SetFromXPath(body, bp2+"/priority/level", "3")
+
+	xml := body.Res()
+
+	if !strings.Contains(xml, "CM-HIGH-PRIORITY") {
+		t.Errorf("Expected CM-HIGH-PRIORITY in XML, got: %s", xml)
+	}
+	if !strings.Contains(xml, "CM-REAL-TIME") {
+		t.Errorf("Expected CM-REAL-TIME in XML, got: %s", xml)
+	}
+	if !strings.Contains(xml, ">2<") {
+		t.Errorf("Expected priority level 2 in XML, got: %s", xml)
+	}
+	if !strings.Contains(xml, ">3<") {
+		t.Errorf("Expected priority level 3 in XML, got: %s", xml)
+	}
+}
+
 func TestRemoveFromXPath(t *testing.T) {
 	tests := []struct {
 		name     string

@@ -376,13 +376,13 @@ func (data L2VPN) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
+func (data *L2VPN) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "router-id"); value.Exists() && !data.RouterId.IsNull() {
+	if value := res.Get("router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.StringValue(value.String())
 	} else if data.RouterId.IsNull() {
 		data.RouterId = types.StringNull()
@@ -392,7 +392,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "redundancy.iccp.groups.group").ForEach(
+		res.Get("redundancy.iccp.groups.group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -480,7 +480,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "flexible-xconnect-service.vlan-unawares.vlan-unaware").ForEach(
+		res.Get("flexible-xconnect-service.vlan-unawares.vlan-unaware").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -572,7 +572,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "flexible-xconnect-service.vlan-aware.evis.evi").ForEach(
+		res.Get("flexible-xconnect-service.vlan-aware.evis.evi").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -625,7 +625,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
+	if value := res.Get("ignore-mtu-mismatch"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IgnoreMtuMismatch.IsNull() {
 			data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -636,7 +636,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.IgnoreMtuMismatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ignore-mtu-mismatch-ad"); value.Exists() {
+	if value := res.Get("ignore-mtu-mismatch-ad"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IgnoreMtuMismatchAd.IsNull() {
 			data.IgnoreMtuMismatchAd = types.BoolValue(true)
@@ -647,7 +647,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.IgnoreMtuMismatchAd = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "pw-status.disable"); value.Exists() {
+	if value := res.Get("pw-status.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PwStatusDisable.IsNull() {
 			data.PwStatusDisable = types.BoolValue(true)
@@ -658,7 +658,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.PwStatusDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); value.Exists() {
+	if value := res.Get("load-balancing.flow.src-dst-mac"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoadBalancingFlowSrcDstMac.IsNull() {
 			data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
@@ -669,7 +669,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.LoadBalancingFlowSrcDstMac = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); value.Exists() {
+	if value := res.Get("load-balancing.flow.src-dst-ip"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoadBalancingFlowSrcDstIp.IsNull() {
 			data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
@@ -680,7 +680,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.LoadBalancingFlowSrcDstIp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.single-mode"); value.Exists() {
+	if value := res.Get("capability.single-mode"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilitySingleMode.IsNull() {
 			data.CapabilitySingleMode = types.BoolValue(true)
@@ -691,7 +691,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.CapabilitySingleMode = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.high-mode"); value.Exists() {
+	if value := res.Get("capability.high-mode"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilityHighMode.IsNull() {
 			data.CapabilityHighMode = types.BoolValue(true)
@@ -702,12 +702,12 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.CapabilityHighMode = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); value.Exists() && !data.PwOamRefreshTransmit.IsNull() {
+	if value := res.Get("pw-oam.refresh.transmit"); value.Exists() && !data.PwOamRefreshTransmit.IsNull() {
 		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
 	} else if data.PwOamRefreshTransmit.IsNull() {
 		data.PwOamRefreshTransmit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "tcn-propagation"); value.Exists() {
+	if value := res.Get("tcn-propagation"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TcnPropagation.IsNull() {
 			data.TcnPropagation = types.BoolValue(true)
@@ -718,7 +718,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.TcnPropagation = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "pw-grouping"); value.Exists() {
+	if value := res.Get("pw-grouping"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PwGrouping.IsNull() {
 			data.PwGrouping = types.BoolValue(true)
@@ -729,7 +729,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.PwGrouping = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "neighbors.all.ldp.flap"); value.Exists() {
+	if value := res.Get("neighbors.all.ldp.flap"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NeighborsAllLdpFlap.IsNull() {
 			data.NeighborsAllLdpFlap = types.BoolValue(true)
@@ -740,12 +740,12 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.NeighborsAllLdpFlap = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mac.limit.threshold"); value.Exists() && !data.MacLimitThreshold.IsNull() {
+	if value := res.Get("mac.limit.threshold"); value.Exists() && !data.MacLimitThreshold.IsNull() {
 		data.MacLimitThreshold = types.Int64Value(value.Int())
 	} else if data.MacLimitThreshold.IsNull() {
 		data.MacLimitThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "logging.pseudowire"); value.Exists() {
+	if value := res.Get("logging.pseudowire"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingPseudowire.IsNull() {
 			data.LoggingPseudowire = types.BoolValue(true)
@@ -756,7 +756,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingPseudowire = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "logging.bridge-domain"); value.Exists() {
+	if value := res.Get("logging.bridge-domain"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingBridgeDomain.IsNull() {
 			data.LoggingBridgeDomain = types.BoolValue(true)
@@ -767,7 +767,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingBridgeDomain = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "logging.vfi"); value.Exists() {
+	if value := res.Get("logging.vfi"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingVfi.IsNull() {
 			data.LoggingVfi = types.BoolValue(true)
@@ -778,7 +778,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingVfi = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "logging.nsr"); value.Exists() {
+	if value := res.Get("logging.nsr"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingNsr.IsNull() {
 			data.LoggingNsr = types.BoolValue(true)
@@ -789,7 +789,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingNsr = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "logging.pwhe-replication.disable"); value.Exists() {
+	if value := res.Get("logging.pwhe-replication.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingPwheReplicationDisable.IsNull() {
 			data.LoggingPwheReplicationDisable = types.BoolValue(true)
@@ -800,7 +800,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingPwheReplicationDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
+	if value := res.Get("autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
 			data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
@@ -811,42 +811,42 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "pw-routing.global-id"); value.Exists() && !data.PwRoutingGlobalId.IsNull() {
+	if value := res.Get("pw-routing.global-id"); value.Exists() && !data.PwRoutingGlobalId.IsNull() {
 		data.PwRoutingGlobalId = types.Int64Value(value.Int())
 	} else if data.PwRoutingGlobalId.IsNull() {
 		data.PwRoutingGlobalId = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.two-byte-as-number"); value.Exists() && !data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
+	if value := res.Get("pw-routing.bgp.rd.two-byte-as-number"); value.Exists() && !data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
+	if value := res.Get("pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.four-byte-as-number"); value.Exists() && !data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
+	if value := res.Get("pw-routing.bgp.rd.four-byte-as-number"); value.Exists() && !data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
+	if value := res.Get("pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.ipv4-address"); value.Exists() && !data.PwRoutingBgpRdIpv4Address.IsNull() {
+	if value := res.Get("pw-routing.bgp.rd.ipv4-address"); value.Exists() && !data.PwRoutingBgpRdIpv4Address.IsNull() {
 		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
 	} else if data.PwRoutingBgpRdIpv4Address.IsNull() {
 		data.PwRoutingBgpRdIpv4Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
+	if value := res.Get("pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "snmp.mib.interface.format.external"); value.Exists() {
+	if value := res.Get("snmp.mib.interface.format.external"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SnmpMibInterfaceFormatExternal.IsNull() {
 			data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
@@ -857,7 +857,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 			data.SnmpMibInterfaceFormatExternal = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "snmp.mib.pseudowire.statistics"); value.Exists() {
+	if value := res.Get("snmp.mib.pseudowire.statistics"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SnmpMibPseudowireStatistics.IsNull() {
 			data.SnmpMibPseudowireStatistics = types.BoolValue(true)
@@ -873,7 +873,11 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data L2VPN) toBodyXML(ctx context.Context) string {
+func (data L2VPN) toBodyXML(ctx context.Context, stateArg ...*L2VPN) string {
+	var state *L2VPN
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/description", data.Description.ValueString())
@@ -883,7 +887,7 @@ func (data L2VPN) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.RedundancyIccpGroups) > 0 {
 		for _, item := range data.RedundancyIccpGroups {
-			basePath := data.getXPath() + "/redundancy/iccp/groups/group"
+			basePath := data.getXPath() + "/redundancy/iccp/groups/group[group-number='" + strconv.FormatInt(item.GroupNumber.ValueInt64(), 10) + "']"
 			if !item.GroupNumber.IsNull() && !item.GroupNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/group-number", strconv.FormatInt(item.GroupNumber.ValueInt64(), 10))
 			}
@@ -916,7 +920,7 @@ func (data L2VPN) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.FlexibleXconnectServiceVlanUnaware) > 0 {
 		for _, item := range data.FlexibleXconnectServiceVlanUnaware {
-			basePath := data.getXPath() + "/flexible-xconnect-service/vlan-unawares/vlan-unaware"
+			basePath := data.getXPath() + "/flexible-xconnect-service/vlan-unawares/vlan-unaware[service-name='" + item.ServiceName.ValueString() + "']"
 			if !item.ServiceName.IsNull() && !item.ServiceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/service-name", item.ServiceName.ValueString())
 			}
@@ -943,7 +947,7 @@ func (data L2VPN) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.FlexibleXconnectServiceVlanAwareEvis) > 0 {
 		for _, item := range data.FlexibleXconnectServiceVlanAwareEvis {
-			basePath := data.getXPath() + "/flexible-xconnect-service/vlan-aware/evis/evi"
+			basePath := data.getXPath() + "/flexible-xconnect-service/vlan-aware/evis/evi[vpn-id='" + strconv.FormatInt(item.VpnId.ValueInt64(), 10) + "']"
 			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
 			}
@@ -1082,6 +1086,11 @@ func (data L2VPN) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

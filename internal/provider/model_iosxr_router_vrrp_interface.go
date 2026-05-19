@@ -117,7 +117,11 @@ func (data RouterVRRPInterface) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterVRRPInterface) toBodyXML(ctx context.Context) string {
+func (data RouterVRRPInterface) toBodyXML(ctx context.Context, stateArg ...*RouterVRRPInterface) string {
+	var state *RouterVRRPInterface
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.MacRefresh.IsNull() && !data.MacRefresh.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/mac-refresh", strconv.FormatInt(data.MacRefresh.ValueInt64(), 10))
@@ -142,6 +146,11 @@ func (data RouterVRRPInterface) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -149,28 +158,28 @@ func (data RouterVRRPInterface) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterVRRPInterface) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mac-refresh"); value.Exists() && !data.MacRefresh.IsNull() {
+func (data *RouterVRRPInterface) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("mac-refresh"); value.Exists() && !data.MacRefresh.IsNull() {
 		data.MacRefresh = types.Int64Value(value.Int())
 	} else if data.MacRefresh.IsNull() {
 		data.MacRefresh = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "delay.minimum"); value.Exists() && !data.DelayMinimum.IsNull() {
+	if value := res.Get("delay.minimum"); value.Exists() && !data.DelayMinimum.IsNull() {
 		data.DelayMinimum = types.Int64Value(value.Int())
 	} else if data.DelayMinimum.IsNull() {
 		data.DelayMinimum = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "delay.reload"); value.Exists() && !data.DelayReload.IsNull() {
+	if value := res.Get("delay.reload"); value.Exists() && !data.DelayReload.IsNull() {
 		data.DelayReload = types.Int64Value(value.Int())
 	} else if data.DelayReload.IsNull() {
 		data.DelayReload = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
+	if value := res.Get("bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
+	if value := res.Get("bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()

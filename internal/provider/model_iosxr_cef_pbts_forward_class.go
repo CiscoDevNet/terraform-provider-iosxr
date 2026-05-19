@@ -111,7 +111,11 @@ func (data CEFPBTSForwardClass) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data CEFPBTSForwardClass) toBodyXML(ctx context.Context) string {
+func (data CEFPBTSForwardClass) toBodyXML(ctx context.Context, stateArg ...*CEFPBTSForwardClass) string {
+	var state *CEFPBTSForwardClass
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.FallbackToClass.IsNull() && !data.FallbackToClass.IsUnknown() {
 		var values []int
@@ -138,6 +142,11 @@ func (data CEFPBTSForwardClass) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -145,13 +154,13 @@ func (data CEFPBTSForwardClass) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *CEFPBTSForwardClass) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "fallback-to.fallback-class-number"); value.Exists() && !data.FallbackToClass.IsNull() {
+func (data *CEFPBTSForwardClass) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("fallback-to.fallback-class-number"); value.Exists() && !data.FallbackToClass.IsNull() {
 		data.FallbackToClass = helpers.GetInt64List(value.Array())
 	} else if data.FallbackToClass.IsNull() {
 		data.FallbackToClass = types.ListNull(types.Int64Type)
 	}
-	if value := gjson.GetBytes(res, "fallback-to.any"); value.Exists() {
+	if value := res.Get("fallback-to.any"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.FallbackToAny.IsNull() {
 			data.FallbackToAny = types.BoolValue(true)
@@ -162,7 +171,7 @@ func (data *CEFPBTSForwardClass) updateFromBody(ctx context.Context, res []byte)
 			data.FallbackToAny = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "fallback-to.drop"); value.Exists() {
+	if value := res.Get("fallback-to.drop"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.FallbackToDrop.IsNull() {
 			data.FallbackToDrop = types.BoolValue(true)

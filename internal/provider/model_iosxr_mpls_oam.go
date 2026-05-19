@@ -151,8 +151,8 @@ func (data MPLSOAM) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "oam"); value.Exists() {
+func (data *MPLSOAM) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("oam"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Oam.IsNull() {
 			data.Oam = types.BoolValue(true)
@@ -163,7 +163,7 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 			data.Oam = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "oam.echo.disable-vendor-extension"); value.Exists() {
+	if value := res.Get("oam.echo.disable-vendor-extension"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoDisableVendorExtension.IsNull() {
 			data.OamEchoDisableVendorExtension = types.BoolValue(true)
@@ -174,7 +174,7 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 			data.OamEchoDisableVendorExtension = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
+	if value := res.Get("oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
 			data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
@@ -185,7 +185,7 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 			data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "oam.echo.revision.one"); value.Exists() {
+	if value := res.Get("oam.echo.revision.one"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoRevisionOne.IsNull() {
 			data.OamEchoRevisionOne = types.BoolValue(true)
@@ -196,7 +196,7 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 			data.OamEchoRevisionOne = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "oam.echo.revision.two"); value.Exists() {
+	if value := res.Get("oam.echo.revision.two"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoRevisionTwo.IsNull() {
 			data.OamEchoRevisionTwo = types.BoolValue(true)
@@ -207,7 +207,7 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 			data.OamEchoRevisionTwo = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "oam.echo.revision.three"); value.Exists() {
+	if value := res.Get("oam.echo.revision.three"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoRevisionThree.IsNull() {
 			data.OamEchoRevisionThree = types.BoolValue(true)
@@ -218,7 +218,7 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 			data.OamEchoRevisionThree = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "oam.echo.revision.four"); value.Exists() {
+	if value := res.Get("oam.echo.revision.four"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OamEchoRevisionFour.IsNull() {
 			data.OamEchoRevisionFour = types.BoolValue(true)
@@ -229,17 +229,17 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 			data.OamEchoRevisionFour = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "oam.dpm.pps"); value.Exists() && !data.OamDpmPps.IsNull() {
+	if value := res.Get("oam.dpm.pps"); value.Exists() && !data.OamDpmPps.IsNull() {
 		data.OamDpmPps = types.Int64Value(value.Int())
 	} else if data.OamDpmPps.IsNull() {
 		data.OamDpmPps = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "oam.dpm.interval"); value.Exists() && !data.OamDpmInterval.IsNull() {
+	if value := res.Get("oam.dpm.interval"); value.Exists() && !data.OamDpmInterval.IsNull() {
 		data.OamDpmInterval = types.Int64Value(value.Int())
 	} else if data.OamDpmInterval.IsNull() {
 		data.OamDpmInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "oam.dpm.downstream-ecmp-faults"); value.Exists() {
+	if value := res.Get("oam.dpm.downstream-ecmp-faults"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OamDpmDownstreamEcmpFaults.IsNull() {
 			data.OamDpmDownstreamEcmpFaults = types.BoolValue(true)
@@ -255,7 +255,11 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data MPLSOAM) toBodyXML(ctx context.Context) string {
+func (data MPLSOAM) toBodyXML(ctx context.Context, stateArg ...*MPLSOAM) string {
+	var state *MPLSOAM
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Oam.IsNull() && !data.Oam.IsUnknown() {
 		if data.Oam.ValueBool() {
@@ -311,6 +315,11 @@ func (data MPLSOAM) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

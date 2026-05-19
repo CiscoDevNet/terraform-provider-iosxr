@@ -268,13 +268,13 @@ func (data SNMPServerVRF) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
+func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Hosts {
 		keys := [...]string{"address"}
 		keyValues := [...]string{data.Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hosts.host").ForEach(
+		res.Get("hosts.host").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -567,7 +567,7 @@ func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "contexts.context").ForEach(
+		res.Get("contexts.context").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1364,11 +1364,15 @@ func (data *SNMPServerVRF) getDeletePaths(ctx context.Context) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data SNMPServerVRF) toBodyXML(ctx context.Context) string {
+func (data SNMPServerVRF) toBodyXML(ctx context.Context, stateArg ...*SNMPServerVRF) string {
+	var state *SNMPServerVRF
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Hosts) > 0 {
 		for _, item := range data.Hosts {
-			basePath := data.getXPath() + "/hosts/host"
+			basePath := data.getXPath() + "/hosts/host[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -1490,7 +1494,7 @@ func (data SNMPServerVRF) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Contexts) > 0 {
 		for _, item := range data.Contexts {
-			basePath := data.getXPath() + "/contexts/context"
+			basePath := data.getXPath() + "/contexts/context[context-name='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/context-name", item.Name.ValueString())
 			}
@@ -1504,6 +1508,11 @@ func (data SNMPServerVRF) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

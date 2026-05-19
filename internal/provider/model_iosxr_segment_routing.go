@@ -113,28 +113,28 @@ func (data SegmentRouting) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() && !data.LocalBlockLowerBound.IsNull() {
+func (data *SegmentRouting) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("local-block.lower-bound"); value.Exists() && !data.LocalBlockLowerBound.IsNull() {
 		data.LocalBlockLowerBound = types.Int64Value(value.Int())
 	} else if data.LocalBlockLowerBound.IsNull() {
 		data.LocalBlockLowerBound = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() && !data.LocalBlockUpperBound.IsNull() {
+	if value := res.Get("local-block.upper-bound"); value.Exists() && !data.LocalBlockUpperBound.IsNull() {
 		data.LocalBlockUpperBound = types.Int64Value(value.Int())
 	} else if data.LocalBlockUpperBound.IsNull() {
 		data.LocalBlockUpperBound = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() && !data.GlobalBlockLowerBound.IsNull() {
+	if value := res.Get("global-block.lower-bound"); value.Exists() && !data.GlobalBlockLowerBound.IsNull() {
 		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
 	} else if data.GlobalBlockLowerBound.IsNull() {
 		data.GlobalBlockLowerBound = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() && !data.GlobalBlockUpperBound.IsNull() {
+	if value := res.Get("global-block.upper-bound"); value.Exists() && !data.GlobalBlockUpperBound.IsNull() {
 		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
 	} else if data.GlobalBlockUpperBound.IsNull() {
 		data.GlobalBlockUpperBound = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+	if value := res.Get("enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Enable.IsNull() {
 			data.Enable = types.BoolValue(true)
@@ -150,7 +150,11 @@ func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data SegmentRouting) toBodyXML(ctx context.Context) string {
+func (data SegmentRouting) toBodyXML(ctx context.Context, stateArg ...*SegmentRouting) string {
+	var state *SegmentRouting
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.LocalBlockLowerBound.IsNull() && !data.LocalBlockLowerBound.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/local-block/lower-bound", strconv.FormatInt(data.LocalBlockLowerBound.ValueInt64(), 10))
@@ -177,6 +181,11 @@ func (data SegmentRouting) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

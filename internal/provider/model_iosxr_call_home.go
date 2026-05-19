@@ -327,7 +327,11 @@ func (data CallHome) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data CallHome) toBodyXML(ctx context.Context) string {
+func (data CallHome) toBodyXML(ctx context.Context, stateArg ...*CallHome) string {
+	var state *CallHome
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.ServiceActive.IsNull() && !data.ServiceActive.IsUnknown() {
 		if data.ServiceActive.ValueBool() {
@@ -336,7 +340,7 @@ func (data CallHome) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MailServers) > 0 {
 		for _, item := range data.MailServers {
-			basePath := data.getXPath() + "/mail-servers/mail-server"
+			basePath := data.getXPath() + "/mail-servers/mail-server[mail-server-name='" + item.MailServerName.ValueString() + "']"
 			if !item.MailServerName.IsNull() && !item.MailServerName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/mail-server-name", item.MailServerName.ValueString())
 			}
@@ -419,7 +423,7 @@ func (data CallHome) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Profiles) > 0 {
 		for _, item := range data.Profiles {
-			basePath := data.getXPath() + "/profiles/profile"
+			basePath := data.getXPath() + "/profiles/profile[profile-name='" + item.ProfileName.ValueString() + "']"
 			if !item.ProfileName.IsNull() && !item.ProfileName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/profile-name", item.ProfileName.ValueString())
 			}
@@ -507,6 +511,11 @@ func (data CallHome) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -514,8 +523,8 @@ func (data CallHome) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "service.active"); value.Exists() {
+func (data *CallHome) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("service.active"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServiceActive.IsNull() {
 			data.ServiceActive = types.BoolValue(true)
@@ -531,7 +540,7 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MailServers[i].MailServerName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "mail-servers.mail-server").ForEach(
+		res.Get("mail-servers.mail-server").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -560,22 +569,22 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.MailServers[i].Priority = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "sender.from"); value.Exists() && !data.SenderFrom.IsNull() {
+	if value := res.Get("sender.from"); value.Exists() && !data.SenderFrom.IsNull() {
 		data.SenderFrom = types.StringValue(value.String())
 	} else if data.SenderFrom.IsNull() {
 		data.SenderFrom = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "sender.reply-to"); value.Exists() && !data.SenderReplyTo.IsNull() {
+	if value := res.Get("sender.reply-to"); value.Exists() && !data.SenderReplyTo.IsNull() {
 		data.SenderReplyTo = types.StringValue(value.String())
 	} else if data.SenderReplyTo.IsNull() {
 		data.SenderReplyTo = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "contact-email-addr"); value.Exists() && !data.ContactEmail.IsNull() {
+	if value := res.Get("contact-email-addr"); value.Exists() && !data.ContactEmail.IsNull() {
 		data.ContactEmail = types.StringValue(value.String())
 	} else if data.ContactEmail.IsNull() {
 		data.ContactEmail = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "contact.smart-licensing"); value.Exists() {
+	if value := res.Get("contact.smart-licensing"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ContactSmartLicensing.IsNull() {
 			data.ContactSmartLicensing = types.BoolValue(true)
@@ -586,37 +595,37 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.ContactSmartLicensing = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "phone-number"); value.Exists() && !data.PhoneNumber.IsNull() {
+	if value := res.Get("phone-number"); value.Exists() && !data.PhoneNumber.IsNull() {
 		data.PhoneNumber = types.StringValue(value.String())
 	} else if data.PhoneNumber.IsNull() {
 		data.PhoneNumber = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "street-address"); value.Exists() && !data.StreetAddress.IsNull() {
+	if value := res.Get("street-address"); value.Exists() && !data.StreetAddress.IsNull() {
 		data.StreetAddress = types.StringValue(value.String())
 	} else if data.StreetAddress.IsNull() {
 		data.StreetAddress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "customer-id"); value.Exists() && !data.CustomerId.IsNull() {
+	if value := res.Get("customer-id"); value.Exists() && !data.CustomerId.IsNull() {
 		data.CustomerId = types.StringValue(value.String())
 	} else if data.CustomerId.IsNull() {
 		data.CustomerId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "contract-id"); value.Exists() && !data.ContractId.IsNull() {
+	if value := res.Get("contract-id"); value.Exists() && !data.ContractId.IsNull() {
 		data.ContractId = types.StringValue(value.String())
 	} else if data.ContractId.IsNull() {
 		data.ContractId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "site-id"); value.Exists() && !data.SiteId.IsNull() {
+	if value := res.Get("site-id"); value.Exists() && !data.SiteId.IsNull() {
 		data.SiteId = types.StringValue(value.String())
 	} else if data.SiteId.IsNull() {
 		data.SiteId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "rate-limit"); value.Exists() && !data.RateLimit.IsNull() {
+	if value := res.Get("rate-limit"); value.Exists() && !data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Value(value.Int())
 	} else if data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "data-privacy.hostname"); value.Exists() {
+	if value := res.Get("data-privacy.hostname"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DataPrivacyHostname.IsNull() {
 			data.DataPrivacyHostname = types.BoolValue(true)
@@ -627,7 +636,7 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.DataPrivacyHostname = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "data-privacy.level.normal"); value.Exists() {
+	if value := res.Get("data-privacy.level.normal"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DataPrivacyLevelNormal.IsNull() {
 			data.DataPrivacyLevelNormal = types.BoolValue(true)
@@ -638,7 +647,7 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.DataPrivacyLevelNormal = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "data-privacy.level.high"); value.Exists() {
+	if value := res.Get("data-privacy.level.high"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DataPrivacyLevelHigh.IsNull() {
 			data.DataPrivacyLevelHigh = types.BoolValue(true)
@@ -649,22 +658,22 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.DataPrivacyLevelHigh = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "http-proxy.server-name"); value.Exists() && !data.HttpProxyName.IsNull() {
+	if value := res.Get("http-proxy.server-name"); value.Exists() && !data.HttpProxyName.IsNull() {
 		data.HttpProxyName = types.StringValue(value.String())
 	} else if data.HttpProxyName.IsNull() {
 		data.HttpProxyName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "http-proxy.port"); value.Exists() && !data.HttpProxyPort.IsNull() {
+	if value := res.Get("http-proxy.port"); value.Exists() && !data.HttpProxyPort.IsNull() {
 		data.HttpProxyPort = types.Int64Value(value.Int())
 	} else if data.HttpProxyPort.IsNull() {
 		data.HttpProxyPort = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
+	if value := res.Get("source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
 	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "syslog-throttling"); value.Exists() {
+	if value := res.Get("syslog-throttling"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SyslogThrottling.IsNull() {
 			data.SyslogThrottling = types.BoolValue(true)
@@ -675,12 +684,12 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.SyslogThrottling = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "vrf"); value.Exists() && !data.Vrf.IsNull() {
+	if value := res.Get("vrf"); value.Exists() && !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(value.String())
 	} else if data.Vrf.IsNull() {
 		data.Vrf = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "aaa-authorization.active"); value.Exists() {
+	if value := res.Get("aaa-authorization.active"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AaaAuthorization.IsNull() {
 			data.AaaAuthorization = types.BoolValue(true)
@@ -691,7 +700,7 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 			data.AaaAuthorization = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aaa-authorization.username"); value.Exists() && !data.AaaAuthorizationUsername.IsNull() {
+	if value := res.Get("aaa-authorization.username"); value.Exists() && !data.AaaAuthorizationUsername.IsNull() {
 		data.AaaAuthorizationUsername = types.StringValue(value.String())
 	} else if data.AaaAuthorizationUsername.IsNull() {
 		data.AaaAuthorizationUsername = types.StringNull()
@@ -701,7 +710,7 @@ func (data *CallHome) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "profiles.profile").ForEach(
+		res.Get("profiles.profile").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

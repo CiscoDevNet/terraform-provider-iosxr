@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"net"
 	"os"
 	"slices"
 	"strconv"
@@ -40,7 +41,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
 )
@@ -72,6 +72,7 @@ type providerData struct {
 	Retries            types.Int64          `tfsdk:"retries"`
 	LockReleaseTimeout types.Int64          `tfsdk:"lock_release_timeout"`
 	ReuseConnection    types.Bool           `tfsdk:"reuse_connection"`
+	ClientCache        types.Bool           `tfsdk:"client_cache"`
 	SelectedDevices    types.List           `tfsdk:"selected_devices"`
 	Devices            []providerDataDevice `tfsdk:"devices"`
 }
@@ -188,6 +189,10 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 			},
 			"reuse_connection": schema.BoolAttribute{
 				MarkdownDescription: "Keep connections open between operations for better performance. When disabled, connections are closed and reopened for each operation. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
+			"client_cache": schema.BoolAttribute{
+				MarkdownDescription: "Enable or disable client-side caching of device connections. This can improve performance by reusing existing connections. Defaults to `true`.",
 				Optional:            true,
 			},
 			"selected_devices": schema.ListAttribute{
@@ -514,6 +519,31 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		reuseConnection = config.ReuseConnection.ValueBool()
 	}
 
+	var clientCache bool
+	if config.ClientCache.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as client_cache",
+		)
+		return
+	}
+	if config.ClientCache.IsNull() {
+		clientCacheStr := os.Getenv("IOSXR_CLIENT_CACHE")
+		if clientCacheStr != "" {
+			var err error
+			clientCache, err = strconv.ParseBool(clientCacheStr)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid client_cache value",
+					"IOSXR_CLIENT_CACHE must be a valid boolean (true/false/1/0), got: "+clientCacheStr,
+				)
+				return
+			}
+		}
+		// default is false
+	} else {
+		clientCache = config.ClientCache.ValueBool()
+	}
 
 	var selectedDevices []string
 	if config.SelectedDevices.IsUnknown() {
@@ -580,7 +610,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		cachedDevice, cacheHit := p.clientCache[cacheKey]
 		p.clientCacheMu.Unlock()
 
-		if cacheHit && reuseConnection {
+		if cacheHit && reuseConnection && clientCache {
 			// Reuse both the client AND the mutex for proper serialization
 			data.Devices[""] = &IosxrProviderDataDevice{
 				GnmiClient:      cachedDevice.GnmiClient,
@@ -633,7 +663,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 			}
 			data.Devices[""] = deviceData
-			if reuseConnection {
+			if reuseConnection && clientCache {
 				p.clientCacheMu.Lock()
 				p.clientCache[cacheKey] = deviceData
 				p.clientCacheMu.Unlock()
@@ -649,7 +679,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		cachedDevice, cacheHit := p.clientCache[cacheKey]
 		p.clientCacheMu.Unlock()
 
-		if cacheHit && reuseConnection {
+		if cacheHit && reuseConnection && clientCache {
 			// Reuse both the client AND the mutex for proper serialization
 			data.Devices[""] = &IosxrProviderDataDevice{
 				NetconfClient:   cachedDevice.NetconfClient,
@@ -689,7 +719,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 			}
 			data.Devices[""] = deviceData
-			if reuseConnection {
+			if reuseConnection && clientCache {
 				p.clientCacheMu.Lock()
 				p.clientCache[cacheKey] = deviceData
 				p.clientCacheMu.Unlock()
@@ -724,7 +754,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			cachedDevice, cacheHit := p.clientCache[cacheKey]
 			p.clientCacheMu.Unlock()
 
-			if cacheHit && reuseConnection {
+			if cacheHit && reuseConnection && clientCache {
 				// Reuse both the client AND the mutex for proper serialization
 				data.Devices[deviceName] = &IosxrProviderDataDevice{
 					GnmiClient:      cachedDevice.GnmiClient,
@@ -776,7 +806,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 				}
 				data.Devices[deviceName] = deviceData
-				if reuseConnection && managed {
+				if reuseConnection && managed && clientCache {
 					p.clientCacheMu.Lock()
 					p.clientCache[cacheKey] = deviceData
 					p.clientCacheMu.Unlock()
@@ -791,7 +821,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			cachedDevice, cacheHit := p.clientCache[cacheKey]
 			p.clientCacheMu.Unlock()
 
-			if cacheHit && reuseConnection {
+			if cacheHit && reuseConnection && clientCache {
 				// Reuse both the client AND the mutex for proper serialization
 				data.Devices[deviceName] = &IosxrProviderDataDevice{
 					NetconfClient:   cachedDevice.NetconfClient,
@@ -837,7 +867,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 				}
 				data.Devices[deviceName] = deviceData
-				if reuseConnection && managed {
+				if reuseConnection && managed && clientCache {
 					p.clientCacheMu.Lock()
 					p.clientCache[cacheKey] = deviceData
 					p.clientCacheMu.Unlock()
@@ -873,15 +903,14 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 
 // parseHostPort splits "host" or "host:port" and returns (host, port).
 // If no port is present in the string, defaultPort is returned.
-func parseHostPort(hostStr string, defaultPort int) (string, int) {
-	if strings.Contains(hostStr, ":") {
-		parts := strings.SplitN(hostStr, ":", 2)
-		if len(parts) == 2 {
-			if p, err := strconv.Atoi(parts[1]); err == nil {
-				return parts[0], p
-			}
-		}
-		return parts[0], defaultPort
+func parseHostPort(host string, defaultPort int) (string, int) {
+	h, p, err := net.SplitHostPort(host)
+	if err != nil {
+		return host, defaultPort
 	}
-	return hostStr, defaultPort
+	port, err := strconv.Atoi(p)
+	if err != nil {
+		return host, defaultPort
+	}
+	return h, port
 }

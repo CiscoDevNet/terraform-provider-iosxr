@@ -238,13 +238,13 @@ func (data SRLG) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
+func (data *SRLG) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Names {
 		keys := [...]string{"srlg-name"}
 		keyValues := [...]string{data.Names[i].SrlgName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "names.name").ForEach(
+		res.Get("names.name").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -283,7 +283,7 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "interfaces.interface").ForEach(
+		res.Get("interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -431,7 +431,7 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "groups.group").ForEach(
+		res.Get("groups.group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -499,7 +499,7 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.InheritLocations[i].LocationName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "inherit-locations.inherit-location").ForEach(
+		res.Get("inherit-locations.inherit-location").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -567,11 +567,15 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data SRLG) toBodyXML(ctx context.Context) string {
+func (data SRLG) toBodyXML(ctx context.Context, stateArg ...*SRLG) string {
+	var state *SRLG
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Names) > 0 {
 		for _, item := range data.Names {
-			basePath := data.getXPath() + "/names/name"
+			basePath := data.getXPath() + "/names/name[srlg-name='" + item.SrlgName.ValueString() + "']"
 			if !item.SrlgName.IsNull() && !item.SrlgName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/srlg-name", item.SrlgName.ValueString())
 			}
@@ -585,7 +589,7 @@ func (data SRLG) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Interfaces) > 0 {
 		for _, item := range data.Interfaces {
-			basePath := data.getXPath() + "/interfaces/interface"
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -634,7 +638,7 @@ func (data SRLG) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Groups) > 0 {
 		for _, item := range data.Groups {
-			basePath := data.getXPath() + "/groups/group"
+			basePath := data.getXPath() + "/groups/group[group-name='" + item.GroupName.ValueString() + "']"
 			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/group-name", item.GroupName.ValueString())
 			}
@@ -656,7 +660,7 @@ func (data SRLG) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.InheritLocations) > 0 {
 		for _, item := range data.InheritLocations {
-			basePath := data.getXPath() + "/inherit-locations/inherit-location"
+			basePath := data.getXPath() + "/inherit-locations/inherit-location[location-name='" + item.LocationName.ValueString() + "']"
 			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
 			}
@@ -684,6 +688,11 @@ func (data SRLG) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

@@ -109,18 +109,18 @@ func (data IPv6AccessListOptions) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *IPv6AccessListOptions) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() && !data.LogUpdateThreshold.IsNull() {
+func (data *IPv6AccessListOptions) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("log-update.threshold"); value.Exists() && !data.LogUpdateThreshold.IsNull() {
 		data.LogUpdateThreshold = types.Int64Value(value.Int())
 	} else if data.LogUpdateThreshold.IsNull() {
 		data.LogUpdateThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() && !data.LogUpdateRate.IsNull() {
+	if value := res.Get("log-update.rate"); value.Exists() && !data.LogUpdateRate.IsNull() {
 		data.LogUpdateRate = types.Int64Value(value.Int())
 	} else if data.LogUpdateRate.IsNull() {
 		data.LogUpdateRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "log-update.disable"); value.Exists() {
+	if value := res.Get("log-update.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogUpdateDisable.IsNull() {
 			data.LogUpdateDisable = types.BoolValue(true)
@@ -131,7 +131,7 @@ func (data *IPv6AccessListOptions) updateFromBody(ctx context.Context, res []byt
 			data.LogUpdateDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
+	if value := res.Get("icmp-off"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IcmpOff.IsNull() {
 			data.IcmpOff = types.BoolValue(true)
@@ -147,7 +147,11 @@ func (data *IPv6AccessListOptions) updateFromBody(ctx context.Context, res []byt
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data IPv6AccessListOptions) toBodyXML(ctx context.Context) string {
+func (data IPv6AccessListOptions) toBodyXML(ctx context.Context, stateArg ...*IPv6AccessListOptions) string {
+	var state *IPv6AccessListOptions
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.LogUpdateThreshold.IsNull() && !data.LogUpdateThreshold.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/log-update/threshold", strconv.FormatInt(data.LogUpdateThreshold.ValueInt64(), 10))
@@ -173,6 +177,11 @@ func (data IPv6AccessListOptions) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

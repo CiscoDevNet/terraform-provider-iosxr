@@ -105,11 +105,15 @@ func (data GenericInterfaceList) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data GenericInterfaceList) toBodyXML(ctx context.Context) string {
+func (data GenericInterfaceList) toBodyXML(ctx context.Context, stateArg ...*GenericInterfaceList) string {
+	var state *GenericInterfaceList
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Interfaces) > 0 {
 		for _, item := range data.Interfaces {
-			basePath := data.getXPath() + "/interfaces/interface"
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -123,6 +127,11 @@ func (data GenericInterfaceList) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -130,13 +139,13 @@ func (data GenericInterfaceList) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *GenericInterfaceList) updateFromBody(ctx context.Context, res []byte) {
+func (data *GenericInterfaceList) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "interfaces.interface").ForEach(
+		res.Get("interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

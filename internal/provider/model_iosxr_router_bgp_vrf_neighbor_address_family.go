@@ -694,18 +694,18 @@ func (data RouterBGPVRFNeighborAddressFamily) toBody(ctx context.Context) string
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "encapsulation-type"); value.Exists() && !data.EncapsulationType.IsNull() {
+func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("encapsulation-type"); value.Exists() && !data.EncapsulationType.IsNull() {
 		data.EncapsulationType = types.StringValue(value.String())
 	} else if data.EncapsulationType.IsNull() {
 		data.EncapsulationType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "weight"); value.Exists() && !data.Weight.IsNull() {
+	if value := res.Get("weight"); value.Exists() && !data.Weight.IsNull() {
 		data.Weight = types.Int64Value(value.Int())
 	} else if data.Weight.IsNull() {
 		data.Weight = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "multipath"); value.Exists() {
+	if value := res.Get("multipath"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Multipath.IsNull() {
 			data.Multipath = types.BoolValue(true)
@@ -716,17 +716,17 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.Multipath = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "use.af-group"); value.Exists() && !data.UseAfGroup.IsNull() {
+	if value := res.Get("use.af-group"); value.Exists() && !data.UseAfGroup.IsNull() {
 		data.UseAfGroup = types.StringValue(value.String())
 	} else if data.UseAfGroup.IsNull() {
 		data.UseAfGroup = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "capability.orf.prefix.capability-receive-orf-neighbor"); value.Exists() && !data.CapabilityOrfPrefix.IsNull() {
+	if value := res.Get("capability.orf.prefix.capability-receive-orf-neighbor"); value.Exists() && !data.CapabilityOrfPrefix.IsNull() {
 		data.CapabilityOrfPrefix = types.StringValue(value.String())
 	} else if data.CapabilityOrfPrefix.IsNull() {
 		data.CapabilityOrfPrefix = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "additional-paths.send"); value.Exists() {
+	if value := res.Get("additional-paths.send"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdditionalPathsSend.IsNull() {
 			data.AdditionalPathsSend = types.BoolValue(true)
@@ -737,7 +737,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdditionalPathsSend = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "additional-paths.send.disable"); value.Exists() {
+	if value := res.Get("additional-paths.send.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdditionalPathsSendDisable.IsNull() {
 			data.AdditionalPathsSendDisable = types.BoolValue(true)
@@ -748,7 +748,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdditionalPathsSendDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "additional-paths.receive"); value.Exists() {
+	if value := res.Get("additional-paths.receive"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdditionalPathsReceive.IsNull() {
 			data.AdditionalPathsReceive = types.BoolValue(true)
@@ -759,7 +759,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdditionalPathsReceive = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "additional-paths.receive.disable"); value.Exists() {
+	if value := res.Get("additional-paths.receive.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdditionalPathsReceiveDisable.IsNull() {
 			data.AdditionalPathsReceiveDisable = types.BoolValue(true)
@@ -770,7 +770,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdditionalPathsReceiveDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "default-originate"); value.Exists() {
+	if value := res.Get("default-originate"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DefaultOriginate.IsNull() {
 			data.DefaultOriginate = types.BoolValue(true)
@@ -781,12 +781,12 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.DefaultOriginate = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() && !data.DefaultOriginateRoutePolicy.IsNull() {
+	if value := res.Get("default-originate.route-policy"); value.Exists() && !data.DefaultOriginateRoutePolicy.IsNull() {
 		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
 	} else if data.DefaultOriginateRoutePolicy.IsNull() {
 		data.DefaultOriginateRoutePolicy = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
+	if value := res.Get("default-originate.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DefaultOriginateInheritanceDisable.IsNull() {
 			data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
@@ -797,22 +797,22 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.DefaultOriginateInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "maximum-prefix.maximum-prefix-number"); value.Exists() && !data.MaximumPrefixLimit.IsNull() {
+	if value := res.Get("maximum-prefix.maximum-prefix-number"); value.Exists() && !data.MaximumPrefixLimit.IsNull() {
 		data.MaximumPrefixLimit = types.Int64Value(value.Int())
 	} else if data.MaximumPrefixLimit.IsNull() {
 		data.MaximumPrefixLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum-prefix.threshold-value"); value.Exists() && !data.MaximumPrefixThreshold.IsNull() {
+	if value := res.Get("maximum-prefix.threshold-value"); value.Exists() && !data.MaximumPrefixThreshold.IsNull() {
 		data.MaximumPrefixThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumPrefixThreshold.IsNull() {
 		data.MaximumPrefixThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum-prefix.restart"); value.Exists() && !data.MaximumPrefixRestart.IsNull() {
+	if value := res.Get("maximum-prefix.restart"); value.Exists() && !data.MaximumPrefixRestart.IsNull() {
 		data.MaximumPrefixRestart = types.Int64Value(value.Int())
 	} else if data.MaximumPrefixRestart.IsNull() {
 		data.MaximumPrefixRestart = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum-prefix.discard-extra-paths"); value.Exists() {
+	if value := res.Get("maximum-prefix.discard-extra-paths"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MaximumPrefixDiscardExtraPaths.IsNull() {
 			data.MaximumPrefixDiscardExtraPaths = types.BoolValue(true)
@@ -823,7 +823,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.MaximumPrefixDiscardExtraPaths = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "maximum-prefix.warning-only"); value.Exists() {
+	if value := res.Get("maximum-prefix.warning-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MaximumPrefixWarningOnly.IsNull() {
 			data.MaximumPrefixWarningOnly = types.BoolValue(true)
@@ -834,7 +834,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.MaximumPrefixWarningOnly = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
+	if value := res.Get("next-hop-self"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NextHopSelf.IsNull() {
 			data.NextHopSelf = types.BoolValue(true)
@@ -845,7 +845,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.NextHopSelf = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
+	if value := res.Get("next-hop-self.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NextHopSelfInheritanceDisable.IsNull() {
 			data.NextHopSelfInheritanceDisable = types.BoolValue(true)
@@ -856,7 +856,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.NextHopSelfInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "next-hop-unchanged.next-hop-unchanged-enable"); value.Exists() {
+	if value := res.Get("next-hop-unchanged.next-hop-unchanged-enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NextHopUnchanged.IsNull() {
 			data.NextHopUnchanged = types.BoolValue(true)
@@ -867,7 +867,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.NextHopUnchanged = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "next-hop-unchanged.multipath"); value.Exists() {
+	if value := res.Get("next-hop-unchanged.multipath"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NextHopUnchangedMultipath.IsNull() {
 			data.NextHopUnchangedMultipath = types.BoolValue(true)
@@ -878,7 +878,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.NextHopUnchangedMultipath = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "next-hop-unchanged.next-hop-unchanged-enable.inheritance-disable"); value.Exists() {
+	if value := res.Get("next-hop-unchanged.next-hop-unchanged-enable.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NextHopUnchangedInheritanceDisable.IsNull() {
 			data.NextHopUnchangedInheritanceDisable = types.BoolValue(true)
@@ -889,22 +889,22 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.NextHopUnchangedInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() && !data.RoutePolicyIn.IsNull() {
+	if value := res.Get("route-policy.in"); value.Exists() && !data.RoutePolicyIn.IsNull() {
 		data.RoutePolicyIn = types.StringValue(value.String())
 	} else if data.RoutePolicyIn.IsNull() {
 		data.RoutePolicyIn = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() && !data.RoutePolicyOut.IsNull() {
+	if value := res.Get("route-policy.out"); value.Exists() && !data.RoutePolicyOut.IsNull() {
 		data.RoutePolicyOut = types.StringValue(value.String())
 	} else if data.RoutePolicyOut.IsNull() {
 		data.RoutePolicyOut = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "orf.route-policy"); value.Exists() && !data.OrfRoutePolicy.IsNull() {
+	if value := res.Get("orf.route-policy"); value.Exists() && !data.OrfRoutePolicy.IsNull() {
 		data.OrfRoutePolicy = types.StringValue(value.String())
 	} else if data.OrfRoutePolicy.IsNull() {
 		data.OrfRoutePolicy = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "cluster-id.allow-equal"); value.Exists() {
+	if value := res.Get("cluster-id.allow-equal"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClusterIdAllowEqual.IsNull() {
 			data.ClusterIdAllowEqual = types.BoolValue(true)
@@ -915,7 +915,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.ClusterIdAllowEqual = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "cluster-id.allow-equal.disable"); value.Exists() {
+	if value := res.Get("cluster-id.allow-equal.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClusterIdAllowEqualDisable.IsNull() {
 			data.ClusterIdAllowEqualDisable = types.BoolValue(true)
@@ -926,7 +926,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.ClusterIdAllowEqualDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "replace-private-as"); value.Exists() {
+	if value := res.Get("replace-private-as"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ReplacePrivateAs.IsNull() {
 			data.ReplacePrivateAs = types.BoolValue(true)
@@ -937,7 +937,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.ReplacePrivateAs = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "replace-private-as.internal"); value.Exists() {
+	if value := res.Get("replace-private-as.internal"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ReplacePrivateAsInternal.IsNull() {
 			data.ReplacePrivateAsInternal = types.BoolValue(true)
@@ -948,7 +948,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.ReplacePrivateAsInternal = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound"); value.Exists() {
+	if value := res.Get("remove-private-as.inbound"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RemovePrivateAsInbound.IsNull() {
 			data.RemovePrivateAsInbound = types.BoolValue(true)
@@ -959,7 +959,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.RemovePrivateAsInbound = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound.inheritance-disable"); value.Exists() {
+	if value := res.Get("remove-private-as.inbound.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RemovePrivateAsInboundInheritanceDisable.IsNull() {
 			data.RemovePrivateAsInboundInheritanceDisable = types.BoolValue(true)
@@ -970,7 +970,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.RemovePrivateAsInboundInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.inbound.entire-aspath"); value.Exists() {
+	if value := res.Get("remove-private-as.inbound.entire-aspath"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RemovePrivateAsInboundEntireAspath.IsNull() {
 			data.RemovePrivateAsInboundEntireAspath = types.BoolValue(true)
@@ -981,7 +981,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.RemovePrivateAsInboundEntireAspath = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); value.Exists() {
+	if value := res.Get("remove-private-as.remove-private-as-outbound"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RemovePrivateAs.IsNull() {
 			data.RemovePrivateAs = types.BoolValue(true)
@@ -992,7 +992,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.RemovePrivateAs = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+	if value := res.Get("remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RemovePrivateAsEntireAspath.IsNull() {
 			data.RemovePrivateAsEntireAspath = types.BoolValue(true)
@@ -1003,7 +1003,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.RemovePrivateAsEntireAspath = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.inheritance-disable"); value.Exists() {
+	if value := res.Get("remove-private-as.remove-private-as-outbound.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RemovePrivateAsInheritanceDisable.IsNull() {
 			data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
@@ -1014,7 +1014,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.RemovePrivateAsInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
+	if value := res.Get("remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RemovePrivateAsInternal.IsNull() {
 			data.RemovePrivateAsInternal = types.BoolValue(true)
@@ -1025,7 +1025,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.RemovePrivateAsInternal = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "route-reflector-client"); value.Exists() {
+	if value := res.Get("route-reflector-client"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RouteReflectorClient.IsNull() {
 			data.RouteReflectorClient = types.BoolValue(true)
@@ -1036,7 +1036,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.RouteReflectorClient = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); value.Exists() {
+	if value := res.Get("route-reflector-client.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RouteReflectorClientInheritanceDisable.IsNull() {
 			data.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
@@ -1047,7 +1047,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.RouteReflectorClientInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp"); value.Exists() {
+	if value := res.Get("send-community-ebgp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendCommunityEbgp.IsNull() {
 			data.SendCommunityEbgp = types.BoolValue(true)
@@ -1058,7 +1058,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SendCommunityEbgp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+	if value := res.Get("send-community-ebgp.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
 			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
@@ -1069,7 +1069,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SendCommunityEbgpInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-community-gshut-ebgp"); value.Exists() {
+	if value := res.Get("send-community-gshut-ebgp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendCommunityGshutEbgp.IsNull() {
 			data.SendCommunityGshutEbgp = types.BoolValue(true)
@@ -1080,7 +1080,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SendCommunityGshutEbgp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-community-gshut-ebgp.inheritance-disable"); value.Exists() {
+	if value := res.Get("send-community-gshut-ebgp.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendCommunityGshutEbgpInheritanceDisable.IsNull() {
 			data.SendCommunityGshutEbgpInheritanceDisable = types.BoolValue(true)
@@ -1091,7 +1091,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SendCommunityGshutEbgpInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-extended-community-ebgp"); value.Exists() {
+	if value := res.Get("send-extended-community-ebgp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendExtendedCommunityEbgp.IsNull() {
 			data.SendExtendedCommunityEbgp = types.BoolValue(true)
@@ -1102,7 +1102,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SendExtendedCommunityEbgp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-extended-community-ebgp.inheritance-disable"); value.Exists() {
+	if value := res.Get("send-extended-community-ebgp.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
 			data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
@@ -1113,7 +1113,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); value.Exists() {
+	if value := res.Get("soft-reconfiguration.inbound"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SoftReconfigurationInbound.IsNull() {
 			data.SoftReconfigurationInbound = types.BoolValue(true)
@@ -1124,7 +1124,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SoftReconfigurationInbound = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
+	if value := res.Get("soft-reconfiguration.inbound.always"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SoftReconfigurationInboundAlways.IsNull() {
 			data.SoftReconfigurationInboundAlways = types.BoolValue(true)
@@ -1135,7 +1135,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SoftReconfigurationInboundAlways = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "update.out.originator-loopcheck"); value.Exists() {
+	if value := res.Get("update.out.originator-loopcheck"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.UpdateOutOriginatorLoopcheck.IsNull() {
 			data.UpdateOutOriginatorLoopcheck = types.BoolValue(true)
@@ -1146,7 +1146,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.UpdateOutOriginatorLoopcheck = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "update.out.originator-loopcheck.disable"); value.Exists() {
+	if value := res.Get("update.out.originator-loopcheck.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.UpdateOutOriginatorLoopcheckDisable.IsNull() {
 			data.UpdateOutOriginatorLoopcheckDisable = types.BoolValue(true)
@@ -1157,7 +1157,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.UpdateOutOriginatorLoopcheckDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); value.Exists() {
+	if value := res.Get("advertise.vpnv4.unicast.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseVpnv4Unicast.IsNull() {
 			data.AdvertiseVpnv4Unicast = types.BoolValue(true)
@@ -1168,7 +1168,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdvertiseVpnv4Unicast = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); value.Exists() {
+	if value := res.Get("advertise.vpnv4.unicast.enable.re-originated"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
 			data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
@@ -1179,7 +1179,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdvertiseVpnv4UnicastReOriginated = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
+	if value := res.Get("advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
 			data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
@@ -1190,7 +1190,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable"); value.Exists() {
+	if value := res.Get("advertise.vpnv6.unicast.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseVpnv6Unicast.IsNull() {
 			data.AdvertiseVpnv6Unicast = types.BoolValue(true)
@@ -1201,7 +1201,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdvertiseVpnv6Unicast = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable.re-originated"); value.Exists() {
+	if value := res.Get("advertise.vpnv6.unicast.enable.re-originated"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseVpnv6UnicastReOriginated.IsNull() {
 			data.AdvertiseVpnv6UnicastReOriginated = types.BoolValue(true)
@@ -1212,7 +1212,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdvertiseVpnv6UnicastReOriginated = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "advertise.vpnv6.unicast.enable.re-originated.stitching-rt"); value.Exists() {
+	if value := res.Get("advertise.vpnv6.unicast.enable.re-originated.stitching-rt"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseVpnv6UnicastReOriginatedStitchingRt.IsNull() {
 			data.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolValue(true)
@@ -1223,7 +1223,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdvertiseVpnv6UnicastReOriginatedStitchingRt = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "advertise.l2vpn.evpn.re-originated"); value.Exists() {
+	if value := res.Get("advertise.l2vpn.evpn.re-originated"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseL2vpnEvpnReOriginated.IsNull() {
 			data.AdvertiseL2vpnEvpnReOriginated = types.BoolValue(true)
@@ -1234,7 +1234,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdvertiseL2vpnEvpnReOriginated = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "advertise.l2vpn.evpn.re-originated.stitching-rt"); value.Exists() {
+	if value := res.Get("advertise.l2vpn.evpn.re-originated.stitching-rt"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseL2vpnEvpnReOriginatedStitchingRt.IsNull() {
 			data.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolValue(true)
@@ -1245,7 +1245,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AdvertiseL2vpnEvpnReOriginatedStitchingRt = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.prefix-sid-type4"); value.Exists() {
+	if value := res.Get("segment-routing.srv6.prefix-sid-type4"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SegmentRoutingSrv6PrefixSidType4.IsNull() {
 			data.SegmentRoutingSrv6PrefixSidType4 = types.BoolValue(true)
@@ -1256,7 +1256,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SegmentRoutingSrv6PrefixSidType4 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "import.stitching-rt"); value.Exists() {
+	if value := res.Get("import.stitching-rt"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ImportStitchingRt.IsNull() {
 			data.ImportStitchingRt = types.BoolValue(true)
@@ -1267,7 +1267,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.ImportStitchingRt = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate"); value.Exists() {
+	if value := res.Get("import.stitching-rt.re-originate"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ImportStitchingRtReOriginate.IsNull() {
 			data.ImportStitchingRtReOriginate = types.BoolValue(true)
@@ -1278,7 +1278,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.ImportStitchingRtReOriginate = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
+	if value := res.Get("import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
 			data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
@@ -1289,7 +1289,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.ImportStitchingRtReOriginateStitchingRt = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "import.re-originate"); value.Exists() {
+	if value := res.Get("import.re-originate"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ImportReOriginate.IsNull() {
 			data.ImportReOriginate = types.BoolValue(true)
@@ -1300,47 +1300,47 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.ImportReOriginate = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "allowas-in.number-of-occurrences-of-as-number"); value.Exists() && !data.AllowasIn.IsNull() {
+	if value := res.Get("allowas-in.number-of-occurrences-of-as-number"); value.Exists() && !data.AllowasIn.IsNull() {
 		data.AllowasIn = types.Int64Value(value.Int())
 	} else if data.AllowasIn.IsNull() {
 		data.AllowasIn = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "allowconfedas-in.number-of-occurrences-of-confederation-number"); value.Exists() && !data.AllowconfedasIn.IsNull() {
+	if value := res.Get("allowconfedas-in.number-of-occurrences-of-confederation-number"); value.Exists() && !data.AllowconfedasIn.IsNull() {
 		data.AllowconfedasIn = types.Int64Value(value.Int())
 	} else if data.AllowconfedasIn.IsNull() {
 		data.AllowconfedasIn = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "site-of-origin.two-byte-as.two-byte-as-number"); value.Exists() && !data.SiteOfOriginTwoByteAsNumber.IsNull() {
+	if value := res.Get("site-of-origin.two-byte-as.two-byte-as-number"); value.Exists() && !data.SiteOfOriginTwoByteAsNumber.IsNull() {
 		data.SiteOfOriginTwoByteAsNumber = types.StringValue(value.String())
 	} else if data.SiteOfOriginTwoByteAsNumber.IsNull() {
 		data.SiteOfOriginTwoByteAsNumber = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "site-of-origin.two-byte-as.asn2-index"); value.Exists() && !data.SiteOfOriginTwoByteAsIndex.IsNull() {
+	if value := res.Get("site-of-origin.two-byte-as.asn2-index"); value.Exists() && !data.SiteOfOriginTwoByteAsIndex.IsNull() {
 		data.SiteOfOriginTwoByteAsIndex = types.Int64Value(value.Int())
 	} else if data.SiteOfOriginTwoByteAsIndex.IsNull() {
 		data.SiteOfOriginTwoByteAsIndex = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "site-of-origin.four-byte-as.four-byte-as-number"); value.Exists() && !data.SiteOfOriginFourByteAsNumber.IsNull() {
+	if value := res.Get("site-of-origin.four-byte-as.four-byte-as-number"); value.Exists() && !data.SiteOfOriginFourByteAsNumber.IsNull() {
 		data.SiteOfOriginFourByteAsNumber = types.StringValue(value.String())
 	} else if data.SiteOfOriginFourByteAsNumber.IsNull() {
 		data.SiteOfOriginFourByteAsNumber = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "site-of-origin.four-byte-as.asn4-index"); value.Exists() && !data.SiteOfOriginFourByteAsIndex.IsNull() {
+	if value := res.Get("site-of-origin.four-byte-as.asn4-index"); value.Exists() && !data.SiteOfOriginFourByteAsIndex.IsNull() {
 		data.SiteOfOriginFourByteAsIndex = types.Int64Value(value.Int())
 	} else if data.SiteOfOriginFourByteAsIndex.IsNull() {
 		data.SiteOfOriginFourByteAsIndex = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "site-of-origin.ipv4-address.address"); value.Exists() && !data.SiteOfOriginIpv4Address.IsNull() {
+	if value := res.Get("site-of-origin.ipv4-address.address"); value.Exists() && !data.SiteOfOriginIpv4Address.IsNull() {
 		data.SiteOfOriginIpv4Address = types.StringValue(value.String())
 	} else if data.SiteOfOriginIpv4Address.IsNull() {
 		data.SiteOfOriginIpv4Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "site-of-origin.ipv4-address.ipv4address-index"); value.Exists() && !data.SiteOfOriginIpv4AddressIndex.IsNull() {
+	if value := res.Get("site-of-origin.ipv4-address.ipv4address-index"); value.Exists() && !data.SiteOfOriginIpv4AddressIndex.IsNull() {
 		data.SiteOfOriginIpv4AddressIndex = types.Int64Value(value.Int())
 	} else if data.SiteOfOriginIpv4AddressIndex.IsNull() {
 		data.SiteOfOriginIpv4AddressIndex = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "as-override"); value.Exists() {
+	if value := res.Get("as-override"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AsOverride.IsNull() {
 			data.AsOverride = types.BoolValue(true)
@@ -1351,7 +1351,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AsOverride = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "as-override.inheritance-disable"); value.Exists() {
+	if value := res.Get("as-override.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AsOverrideInheritanceDisable.IsNull() {
 			data.AsOverrideInheritanceDisable = types.BoolValue(true)
@@ -1362,7 +1362,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AsOverrideInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aigp.enable"); value.Exists() {
+	if value := res.Get("aigp.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Aigp.IsNull() {
 			data.Aigp = types.BoolValue(true)
@@ -1373,7 +1373,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.Aigp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aigp.enable.disable"); value.Exists() {
+	if value := res.Get("aigp.enable.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AigpDisable.IsNull() {
 			data.AigpDisable = types.BoolValue(true)
@@ -1384,7 +1384,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AigpDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aigp.send.med"); value.Exists() {
+	if value := res.Get("aigp.send.med"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AigpSendMed.IsNull() {
 			data.AigpSendMed = types.BoolValue(true)
@@ -1395,7 +1395,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AigpSendMed = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aigp.send.med.disable"); value.Exists() {
+	if value := res.Get("aigp.send.med.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AigpSendMedDisable.IsNull() {
 			data.AigpSendMedDisable = types.BoolValue(true)
@@ -1406,7 +1406,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AigpSendMedDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aigp.send.cost-community.disable"); value.Exists() {
+	if value := res.Get("aigp.send.cost-community.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AigpSendCostCommunityDisable.IsNull() {
 			data.AigpSendCostCommunityDisable = types.BoolValue(true)
@@ -1417,12 +1417,12 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AigpSendCostCommunityDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.cost-community-id-number"); value.Exists() && !data.AigpSendCostCommunityId.IsNull() {
+	if value := res.Get("aigp.send.cost-community.cost-community-id.cost-community-id-number"); value.Exists() && !data.AigpSendCostCommunityId.IsNull() {
 		data.AigpSendCostCommunityId = types.Int64Value(value.Int())
 	} else if data.AigpSendCostCommunityId.IsNull() {
 		data.AigpSendCostCommunityId = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.igp-cost"); value.Exists() {
+	if value := res.Get("aigp.send.cost-community.cost-community-id.poi.igp-cost"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AigpSendCostCommunityIdPoiIgpCost.IsNull() {
 			data.AigpSendCostCommunityIdPoiIgpCost = types.BoolValue(true)
@@ -1433,7 +1433,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AigpSendCostCommunityIdPoiIgpCost = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.igp-cost.transitive"); value.Exists() {
+	if value := res.Get("aigp.send.cost-community.cost-community-id.poi.igp-cost.transitive"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AigpSendCostCommunityIdPoiIgpCostTransitive.IsNull() {
 			data.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolValue(true)
@@ -1444,7 +1444,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AigpSendCostCommunityIdPoiIgpCostTransitive = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath"); value.Exists() {
+	if value := res.Get("aigp.send.cost-community.cost-community-id.poi.pre-bestpath"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AigpSendCostCommunityIdPoiPreBestpath.IsNull() {
 			data.AigpSendCostCommunityIdPoiPreBestpath = types.BoolValue(true)
@@ -1455,7 +1455,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AigpSendCostCommunityIdPoiPreBestpath = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "aigp.send.cost-community.cost-community-id.poi.pre-bestpath.transitive"); value.Exists() {
+	if value := res.Get("aigp.send.cost-community.cost-community-id.poi.pre-bestpath.transitive"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AigpSendCostCommunityIdPoiPreBestpathTransitive.IsNull() {
 			data.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolValue(true)
@@ -1466,7 +1466,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AigpSendCostCommunityIdPoiPreBestpathTransitive = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-multicast-attributes"); value.Exists() {
+	if value := res.Get("send-multicast-attributes"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendMulticastAttributes.IsNull() {
 			data.SendMulticastAttributes = types.BoolValue(true)
@@ -1477,7 +1477,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SendMulticastAttributes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-multicast-attributes.disable"); value.Exists() {
+	if value := res.Get("send-multicast-attributes.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendMulticastAttributesDisable.IsNull() {
 			data.SendMulticastAttributesDisable = types.BoolValue(true)
@@ -1488,7 +1488,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SendMulticastAttributesDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "accept-own"); value.Exists() {
+	if value := res.Get("accept-own"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AcceptOwn.IsNull() {
 			data.AcceptOwn = types.BoolValue(true)
@@ -1499,7 +1499,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AcceptOwn = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "accept-own.inheritance-disable"); value.Exists() {
+	if value := res.Get("accept-own.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AcceptOwnInheritanceDisable.IsNull() {
 			data.AcceptOwnInheritanceDisable = types.BoolValue(true)
@@ -1510,7 +1510,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.AcceptOwnInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "slow-peer.dynamic"); value.Exists() {
+	if value := res.Get("slow-peer.dynamic"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SlowPeerDynamic.IsNull() {
 			data.SlowPeerDynamic = types.BoolValue(true)
@@ -1521,12 +1521,12 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SlowPeerDynamic = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "slow-peer.dynamic.threshold"); value.Exists() && !data.SlowPeerDynamicThreshold.IsNull() {
+	if value := res.Get("slow-peer.dynamic.threshold"); value.Exists() && !data.SlowPeerDynamicThreshold.IsNull() {
 		data.SlowPeerDynamicThreshold = types.Int64Value(value.Int())
 	} else if data.SlowPeerDynamicThreshold.IsNull() {
 		data.SlowPeerDynamicThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "slow-peer.dynamic.disable"); value.Exists() {
+	if value := res.Get("slow-peer.dynamic.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SlowPeerDynamicDisable.IsNull() {
 			data.SlowPeerDynamicDisable = types.BoolValue(true)
@@ -1537,7 +1537,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SlowPeerDynamicDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "slow-peer.static"); value.Exists() {
+	if value := res.Get("slow-peer.static"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SlowPeerStatic.IsNull() {
 			data.SlowPeerStatic = types.BoolValue(true)
@@ -1548,7 +1548,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.SlowPeerStatic = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "origin-as.validation.disable"); value.Exists() {
+	if value := res.Get("origin-as.validation.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OriginAsValidationDisable.IsNull() {
 			data.OriginAsValidationDisable = types.BoolValue(true)
@@ -1559,7 +1559,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 			data.OriginAsValidationDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bestpath.origin-as.allow.invalid"); value.Exists() {
+	if value := res.Get("bestpath.origin-as.allow.invalid"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.BestpathOriginAsAllowInvalid.IsNull() {
 			data.BestpathOriginAsAllowInvalid = types.BoolValue(true)
@@ -3497,7 +3497,11 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletePaths(ctx context.Contex
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterBGPVRFNeighborAddressFamily) toBodyXML(ctx context.Context) string {
+func (data RouterBGPVRFNeighborAddressFamily) toBodyXML(ctx context.Context, stateArg ...*RouterBGPVRFNeighborAddressFamily) string {
+	var state *RouterBGPVRFNeighborAddressFamily
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.EncapsulationType.IsNull() && !data.EncapsulationType.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/encapsulation-type", data.EncapsulationType.ValueString())
@@ -3920,6 +3924,11 @@ func (data RouterBGPVRFNeighborAddressFamily) toBodyXML(ctx context.Context) str
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

@@ -487,7 +487,11 @@ func (data EVPN) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data EVPN) toBodyXML(ctx context.Context) string {
+func (data EVPN) toBodyXML(ctx context.Context, stateArg ...*EVPN) string {
+	var state *EVPN
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.BgpRdTwoByteAsNumber.IsNull() && !data.BgpRdTwoByteAsNumber.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/rd/two-byte-as-number", strconv.FormatInt(data.BgpRdTwoByteAsNumber.ValueInt64(), 10))
@@ -556,7 +560,7 @@ func (data EVPN) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Groups) > 0 {
 		for _, item := range data.Groups {
-			basePath := data.getXPath() + "/groups/group"
+			basePath := data.getXPath() + "/groups/group[group-name='" + strconv.FormatInt(item.GroupId.ValueInt64(), 10) + "']"
 			if !item.GroupId.IsNull() && !item.GroupId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/group-name", strconv.FormatInt(item.GroupId.ValueInt64(), 10))
 			}
@@ -577,7 +581,7 @@ func (data EVPN) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Srv6Locators) > 0 {
 		for _, item := range data.Srv6Locators {
-			basePath := data.getXPath() + "/segment-routing/srv6/locators/locator"
+			basePath := data.getXPath() + "/segment-routing/srv6/locators/locator[locator-name='" + item.LocatorName.ValueString() + "']"
 			if !item.LocatorName.IsNull() && !item.LocatorName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/locator-name", item.LocatorName.ValueString())
 			}
@@ -615,7 +619,7 @@ func (data EVPN) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.VirtualNeighbors) > 0 {
 		for _, item := range data.VirtualNeighbors {
-			basePath := data.getXPath() + "/virtual/neighbor/neighbor"
+			basePath := data.getXPath() + "/virtual/neighbor/neighbor[address='" + item.Address.ValueString() + "' and pw-id='" + strconv.FormatInt(item.PwId.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -673,7 +677,7 @@ func (data EVPN) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.VirtualVfis) > 0 {
 		for _, item := range data.VirtualVfis {
-			basePath := data.getXPath() + "/virtual/vfis/vfi"
+			basePath := data.getXPath() + "/virtual/vfis/vfi[vfi-name='" + item.VfiName.ValueString() + "']"
 			if !item.VfiName.IsNull() && !item.VfiName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vfi-name", item.VfiName.ValueString())
 			}
@@ -789,6 +793,11 @@ func (data EVPN) toBodyXML(ctx context.Context) string {
 		}
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -796,68 +805,68 @@ func (data EVPN) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() && !data.BgpRdTwoByteAsNumber.IsNull() {
+func (data *EVPN) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("bgp.rd.two-byte-as-number"); value.Exists() && !data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else if data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.BgpRdTwoByteAsIndex.IsNull() {
+	if value := res.Get("bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdTwoByteAsIndex.IsNull() {
 		data.BgpRdTwoByteAsIndex = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-number"); value.Exists() && !data.BgpRdFourByteAsNumber.IsNull() {
+	if value := res.Get("bgp.rd.four-byte-as-number"); value.Exists() && !data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	} else if data.BgpRdFourByteAsNumber.IsNull() {
 		data.BgpRdFourByteAsNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.BgpRdFourByteAsIndex.IsNull() {
+	if value := res.Get("bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdFourByteAsIndex.IsNull() {
 		data.BgpRdFourByteAsIndex = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address"); value.Exists() && !data.BgpRdIpv4Address.IsNull() {
+	if value := res.Get("bgp.rd.ipv4-address"); value.Exists() && !data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringValue(value.String())
 	} else if data.BgpRdIpv4Address.IsNull() {
 		data.BgpRdIpv4Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.BgpRdIpv4AddressIndex.IsNull() {
+	if value := res.Get("bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Value(value.Int())
 	} else if data.BgpRdIpv4AddressIndex.IsNull() {
 		data.BgpRdIpv4AddressIndex = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.recovery"); value.Exists() && !data.TimersRecovery.IsNull() {
+	if value := res.Get("timers.recovery"); value.Exists() && !data.TimersRecovery.IsNull() {
 		data.TimersRecovery = types.Int64Value(value.Int())
 	} else if data.TimersRecovery.IsNull() {
 		data.TimersRecovery = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.peering"); value.Exists() && !data.TimersPeering.IsNull() {
+	if value := res.Get("timers.peering"); value.Exists() && !data.TimersPeering.IsNull() {
 		data.TimersPeering = types.Int64Value(value.Int())
 	} else if data.TimersPeering.IsNull() {
 		data.TimersPeering = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.carving"); value.Exists() && !data.TimersCarving.IsNull() {
+	if value := res.Get("timers.carving"); value.Exists() && !data.TimersCarving.IsNull() {
 		data.TimersCarving = types.Int64Value(value.Int())
 	} else if data.TimersCarving.IsNull() {
 		data.TimersCarving = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.ac-debounce"); value.Exists() && !data.TimersAcDebounce.IsNull() {
+	if value := res.Get("timers.ac-debounce"); value.Exists() && !data.TimersAcDebounce.IsNull() {
 		data.TimersAcDebounce = types.Int64Value(value.Int())
 	} else if data.TimersAcDebounce.IsNull() {
 		data.TimersAcDebounce = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.backup-replacement-delay"); value.Exists() && !data.TimersBackupReplacementDelay.IsNull() {
+	if value := res.Get("timers.backup-replacement-delay"); value.Exists() && !data.TimersBackupReplacementDelay.IsNull() {
 		data.TimersBackupReplacementDelay = types.Int64Value(value.Int())
 	} else if data.TimersBackupReplacementDelay.IsNull() {
 		data.TimersBackupReplacementDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.mac-postpone"); value.Exists() && !data.TimersMacPostpone.IsNull() {
+	if value := res.Get("timers.mac-postpone"); value.Exists() && !data.TimersMacPostpone.IsNull() {
 		data.TimersMacPostpone = types.Int64Value(value.Int())
 	} else if data.TimersMacPostpone.IsNull() {
 		data.TimersMacPostpone = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); value.Exists() {
+	if value := res.Get("load-balancing.flow-label.static"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoadBalancingFlowLabelStatic.IsNull() {
 			data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
@@ -868,12 +877,12 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.LoadBalancingFlowLabelStatic = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "source.interface"); value.Exists() && !data.SourceInterface.IsNull() {
+	if value := res.Get("source.interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
 	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "cost-out"); value.Exists() {
+	if value := res.Get("cost-out"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CostOut.IsNull() {
 			data.CostOut = types.BoolValue(true)
@@ -884,17 +893,17 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.CostOut = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "startup-cost-in"); value.Exists() && !data.StartupCostIn.IsNull() {
+	if value := res.Get("startup-cost-in"); value.Exists() && !data.StartupCostIn.IsNull() {
 		data.StartupCostIn = types.Int64Value(value.Int())
 	} else if data.StartupCostIn.IsNull() {
 		data.StartupCostIn = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "staggered-bringup-timer"); value.Exists() && !data.StaggeredBringupTimer.IsNull() {
+	if value := res.Get("staggered-bringup-timer"); value.Exists() && !data.StaggeredBringupTimer.IsNull() {
 		data.StaggeredBringupTimer = types.Int64Value(value.Int())
 	} else if data.StaggeredBringupTimer.IsNull() {
 		data.StaggeredBringupTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "logging.df-election"); value.Exists() {
+	if value := res.Get("logging.df-election"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingDfElection.IsNull() {
 			data.LoggingDfElection = types.BoolValue(true)
@@ -905,7 +914,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingDfElection = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.type.one.auto-generation-disable"); value.Exists() {
+	if value := res.Get("ethernet-segment.type.one.auto-generation-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EthernetSegmentTypeOneAutoGenerationDisable.IsNull() {
 			data.EthernetSegmentTypeOneAutoGenerationDisable = types.BoolValue(true)
@@ -921,7 +930,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.Groups[i].GroupId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "groups.group").ForEach(
+		res.Get("groups.group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -974,7 +983,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6"); value.Exists() {
+	if value := res.Get("segment-routing.srv6"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Srv6.IsNull() {
 			data.Srv6 = types.BoolValue(true)
@@ -990,7 +999,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "segment-routing.srv6.locators.locator").ForEach(
+		res.Get("segment-routing.srv6.locators.locator").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1026,7 +1035,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+	if value := res.Get("segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
 			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
@@ -1037,7 +1046,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
+	if value := res.Get("ignore-mtu-mismatch"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IgnoreMtuMismatch.IsNull() {
 			data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -1048,7 +1057,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.IgnoreMtuMismatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "enforce-mtu-match"); value.Exists() {
+	if value := res.Get("enforce-mtu-match"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EnforceMtuMatch.IsNull() {
 			data.EnforceMtuMatch = types.BoolValue(true)
@@ -1059,7 +1068,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.EnforceMtuMatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transmit-mtu-zero"); value.Exists() {
+	if value := res.Get("transmit-mtu-zero"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransmitMtuZero.IsNull() {
 			data.TransmitMtuZero = types.BoolValue(true)
@@ -1070,7 +1079,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.TransmitMtuZero = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transmit-l2-mtu"); value.Exists() {
+	if value := res.Get("transmit-l2-mtu"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransmitL2Mtu.IsNull() {
 			data.TransmitL2Mtu = types.BoolValue(true)
@@ -1081,27 +1090,27 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.TransmitL2Mtu = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.move-count"); value.Exists() && !data.HostIpv4DuplicateDetectionMoveCount.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.move-count"); value.Exists() && !data.HostIpv4DuplicateDetectionMoveCount.IsNull() {
 		data.HostIpv4DuplicateDetectionMoveCount = types.Int64Value(value.Int())
 	} else if data.HostIpv4DuplicateDetectionMoveCount.IsNull() {
 		data.HostIpv4DuplicateDetectionMoveCount = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.move-interval"); value.Exists() && !data.HostIpv4DuplicateDetectionMoveInterval.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.move-interval"); value.Exists() && !data.HostIpv4DuplicateDetectionMoveInterval.IsNull() {
 		data.HostIpv4DuplicateDetectionMoveInterval = types.Int64Value(value.Int())
 	} else if data.HostIpv4DuplicateDetectionMoveInterval.IsNull() {
 		data.HostIpv4DuplicateDetectionMoveInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.freeze-time"); value.Exists() && !data.HostIpv4DuplicateDetectionFreezeTime.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.freeze-time"); value.Exists() && !data.HostIpv4DuplicateDetectionFreezeTime.IsNull() {
 		data.HostIpv4DuplicateDetectionFreezeTime = types.Int64Value(value.Int())
 	} else if data.HostIpv4DuplicateDetectionFreezeTime.IsNull() {
 		data.HostIpv4DuplicateDetectionFreezeTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.retry-count"); value.Exists() && !data.HostIpv4DuplicateDetectionRetryCount.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.retry-count"); value.Exists() && !data.HostIpv4DuplicateDetectionRetryCount.IsNull() {
 		data.HostIpv4DuplicateDetectionRetryCount = types.StringValue(value.String())
 	} else if data.HostIpv4DuplicateDetectionRetryCount.IsNull() {
 		data.HostIpv4DuplicateDetectionRetryCount = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.disable"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.HostIpv4DuplicateDetectionDisable.IsNull() {
 			data.HostIpv4DuplicateDetectionDisable = types.BoolValue(true)
@@ -1112,32 +1121,32 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.HostIpv4DuplicateDetectionDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.reset-freeze-count-interval"); value.Exists() && !data.HostIpv4DuplicateDetectionResetFreezeCountInterval.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv4-address.duplicate-detection.reset-freeze-count-interval"); value.Exists() && !data.HostIpv4DuplicateDetectionResetFreezeCountInterval.IsNull() {
 		data.HostIpv4DuplicateDetectionResetFreezeCountInterval = types.Int64Value(value.Int())
 	} else if data.HostIpv4DuplicateDetectionResetFreezeCountInterval.IsNull() {
 		data.HostIpv4DuplicateDetectionResetFreezeCountInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.move-count"); value.Exists() && !data.HostIpv6DuplicateDetectionMoveCount.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.move-count"); value.Exists() && !data.HostIpv6DuplicateDetectionMoveCount.IsNull() {
 		data.HostIpv6DuplicateDetectionMoveCount = types.Int64Value(value.Int())
 	} else if data.HostIpv6DuplicateDetectionMoveCount.IsNull() {
 		data.HostIpv6DuplicateDetectionMoveCount = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.move-interval"); value.Exists() && !data.HostIpv6DuplicateDetectionMoveInterval.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.move-interval"); value.Exists() && !data.HostIpv6DuplicateDetectionMoveInterval.IsNull() {
 		data.HostIpv6DuplicateDetectionMoveInterval = types.Int64Value(value.Int())
 	} else if data.HostIpv6DuplicateDetectionMoveInterval.IsNull() {
 		data.HostIpv6DuplicateDetectionMoveInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.freeze-time"); value.Exists() && !data.HostIpv6DuplicateDetectionFreezeTime.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.freeze-time"); value.Exists() && !data.HostIpv6DuplicateDetectionFreezeTime.IsNull() {
 		data.HostIpv6DuplicateDetectionFreezeTime = types.Int64Value(value.Int())
 	} else if data.HostIpv6DuplicateDetectionFreezeTime.IsNull() {
 		data.HostIpv6DuplicateDetectionFreezeTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.retry-count"); value.Exists() && !data.HostIpv6DuplicateDetectionRetryCount.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.retry-count"); value.Exists() && !data.HostIpv6DuplicateDetectionRetryCount.IsNull() {
 		data.HostIpv6DuplicateDetectionRetryCount = types.StringValue(value.String())
 	} else if data.HostIpv6DuplicateDetectionRetryCount.IsNull() {
 		data.HostIpv6DuplicateDetectionRetryCount = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.disable"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.HostIpv6DuplicateDetectionDisable.IsNull() {
 			data.HostIpv6DuplicateDetectionDisable = types.BoolValue(true)
@@ -1148,7 +1157,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.HostIpv6DuplicateDetectionDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.reset-freeze-count-interval"); value.Exists() && !data.HostIpv6DuplicateDetectionResetFreezeCountInterval.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-evpn-host-cfg:host.ipv6-address.duplicate-detection.reset-freeze-count-interval"); value.Exists() && !data.HostIpv6DuplicateDetectionResetFreezeCountInterval.IsNull() {
 		data.HostIpv6DuplicateDetectionResetFreezeCountInterval = types.Int64Value(value.Int())
 	} else if data.HostIpv6DuplicateDetectionResetFreezeCountInterval.IsNull() {
 		data.HostIpv6DuplicateDetectionResetFreezeCountInterval = types.Int64Null()
@@ -1158,7 +1167,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.VirtualNeighbors[i].Address.ValueString(), strconv.FormatInt(data.VirtualNeighbors[i].PwId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "virtual.neighbor.neighbor").ForEach(
+		res.Get("virtual.neighbor.neighbor").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1285,7 +1294,7 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.VirtualVfis[i].VfiName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "virtual.vfis.vfi").ForEach(
+		res.Get("virtual.vfis.vfi").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1378,12 +1387,12 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 			data.VirtualVfis[i].EthernetSegmentBgpRt = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "virtual.access-evi.ethernet-segment.identifier.type.zero.esi"); value.Exists() && !data.VirtualAccessEviEthernetSegmentEsiZero.IsNull() {
+	if value := res.Get("virtual.access-evi.ethernet-segment.identifier.type.zero.esi"); value.Exists() && !data.VirtualAccessEviEthernetSegmentEsiZero.IsNull() {
 		data.VirtualAccessEviEthernetSegmentEsiZero = types.StringValue(value.String())
 	} else if data.VirtualAccessEviEthernetSegmentEsiZero.IsNull() {
 		data.VirtualAccessEviEthernetSegmentEsiZero = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "virtual.access-evi.ethernet-segment.bgp.route-target"); value.Exists() && !data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() {
+	if value := res.Get("virtual.access-evi.ethernet-segment.bgp.route-target"); value.Exists() && !data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() {
 		data.VirtualAccessEviEthernetSegmentBgpRt = types.StringValue(value.String())
 	} else if data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() {
 		data.VirtualAccessEviEthernetSegmentBgpRt = types.StringNull()

@@ -162,23 +162,23 @@ func (data MPLSLDPInterface) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "discovery.hello.holdtime"); value.Exists() && !data.DiscoveryHelloHoldtime.IsNull() {
+func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("discovery.hello.holdtime"); value.Exists() && !data.DiscoveryHelloHoldtime.IsNull() {
 		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
 	} else if data.DiscoveryHelloHoldtime.IsNull() {
 		data.DiscoveryHelloHoldtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "discovery.hello.interval"); value.Exists() && !data.DiscoveryHelloInterval.IsNull() {
+	if value := res.Get("discovery.hello.interval"); value.Exists() && !data.DiscoveryHelloInterval.IsNull() {
 		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
 	} else if data.DiscoveryHelloInterval.IsNull() {
 		data.DiscoveryHelloInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "discovery.hello.dual-stack-tlv"); value.Exists() && !data.DiscoveryHelloDualStackTlv.IsNull() {
+	if value := res.Get("discovery.hello.dual-stack-tlv"); value.Exists() && !data.DiscoveryHelloDualStackTlv.IsNull() {
 		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
 	} else if data.DiscoveryHelloDualStackTlv.IsNull() {
 		data.DiscoveryHelloDualStackTlv = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "discovery.quick-start.disable"); value.Exists() {
+	if value := res.Get("discovery.quick-start.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DiscoveryQuickStartDisable.IsNull() {
 			data.DiscoveryQuickStartDisable = types.BoolValue(true)
@@ -189,12 +189,12 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 			data.DiscoveryQuickStartDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() && !data.IgpSyncDelayOnSessionUp.IsNull() {
+	if value := res.Get("igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() && !data.IgpSyncDelayOnSessionUp.IsNull() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
 	} else if data.IgpSyncDelayOnSessionUp.IsNull() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.disable"); value.Exists() {
+	if value := res.Get("igp.sync.delay.on-session-up.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IgpSyncDelayOnSessionUpDisable.IsNull() {
 			data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
@@ -210,7 +210,7 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "address-families.address-family").ForEach(
+		res.Get("address-families.address-family").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -280,7 +280,11 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data MPLSLDPInterface) toBodyXML(ctx context.Context) string {
+func (data MPLSLDPInterface) toBodyXML(ctx context.Context, stateArg ...*MPLSLDPInterface) string {
+	var state *MPLSLDPInterface
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.DiscoveryHelloHoldtime.IsNull() && !data.DiscoveryHelloHoldtime.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/hello/holdtime", strconv.FormatInt(data.DiscoveryHelloHoldtime.ValueInt64(), 10))
@@ -306,7 +310,7 @@ func (data MPLSLDPInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.AddressFamily) > 0 {
 		for _, item := range data.AddressFamily {
-			basePath := data.getXPath() + "/address-families/address-family"
+			basePath := data.getXPath() + "/address-families/address-family[af-name='" + item.AfName.ValueString() + "']"
 			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/af-name", item.AfName.ValueString())
 			}
@@ -338,6 +342,11 @@ func (data MPLSLDPInterface) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

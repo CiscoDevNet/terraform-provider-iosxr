@@ -204,43 +204,43 @@ func (data LPTSPuntPolice) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *LPTSPuntPolice) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mcast.rate"); value.Exists() && !data.McastRate.IsNull() {
+func (data *LPTSPuntPolice) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("mcast.rate"); value.Exists() && !data.McastRate.IsNull() {
 		data.McastRate = types.Int64Value(value.Int())
 	} else if data.McastRate.IsNull() {
 		data.McastRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bcast.rate"); value.Exists() && !data.BcastRate.IsNull() {
+	if value := res.Get("bcast.rate"); value.Exists() && !data.BcastRate.IsNull() {
 		data.BcastRate = types.Int64Value(value.Int())
 	} else if data.BcastRate.IsNull() {
 		data.BcastRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "protocol.arp.rate"); value.Exists() && !data.ProtocolArpRate.IsNull() {
+	if value := res.Get("protocol.arp.rate"); value.Exists() && !data.ProtocolArpRate.IsNull() {
 		data.ProtocolArpRate = types.Int64Value(value.Int())
 	} else if data.ProtocolArpRate.IsNull() {
 		data.ProtocolArpRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "protocol.cdp.rate"); value.Exists() && !data.ProtocolCdpRate.IsNull() {
+	if value := res.Get("protocol.cdp.rate"); value.Exists() && !data.ProtocolCdpRate.IsNull() {
 		data.ProtocolCdpRate = types.Int64Value(value.Int())
 	} else if data.ProtocolCdpRate.IsNull() {
 		data.ProtocolCdpRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "protocol.lacp.rate"); value.Exists() && !data.ProtocolLacpRate.IsNull() {
+	if value := res.Get("protocol.lacp.rate"); value.Exists() && !data.ProtocolLacpRate.IsNull() {
 		data.ProtocolLacpRate = types.Int64Value(value.Int())
 	} else if data.ProtocolLacpRate.IsNull() {
 		data.ProtocolLacpRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "protocol.lldp.rate"); value.Exists() && !data.ProtocolLldpRate.IsNull() {
+	if value := res.Get("protocol.lldp.rate"); value.Exists() && !data.ProtocolLldpRate.IsNull() {
 		data.ProtocolLldpRate = types.Int64Value(value.Int())
 	} else if data.ProtocolLldpRate.IsNull() {
 		data.ProtocolLldpRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "protocol.ssfp.rate"); value.Exists() && !data.ProtocolSsfpRate.IsNull() {
+	if value := res.Get("protocol.ssfp.rate"); value.Exists() && !data.ProtocolSsfpRate.IsNull() {
 		data.ProtocolSsfpRate = types.Int64Value(value.Int())
 	} else if data.ProtocolSsfpRate.IsNull() {
 		data.ProtocolSsfpRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "protocol.ipv6-nd-proxy.rate"); value.Exists() && !data.ProtocolIpv6NdProxyRate.IsNull() {
+	if value := res.Get("protocol.ipv6-nd-proxy.rate"); value.Exists() && !data.ProtocolIpv6NdProxyRate.IsNull() {
 		data.ProtocolIpv6NdProxyRate = types.Int64Value(value.Int())
 	} else if data.ProtocolIpv6NdProxyRate.IsNull() {
 		data.ProtocolIpv6NdProxyRate = types.Int64Null()
@@ -250,7 +250,7 @@ func (data *LPTSPuntPolice) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "domains.domain").ForEach(
+		res.Get("domains.domain").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -319,7 +319,7 @@ func (data *LPTSPuntPolice) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "interfaces.interface").ForEach(
+		res.Get("interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -382,7 +382,11 @@ func (data *LPTSPuntPolice) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data LPTSPuntPolice) toBodyXML(ctx context.Context) string {
+func (data LPTSPuntPolice) toBodyXML(ctx context.Context, stateArg ...*LPTSPuntPolice) string {
+	var state *LPTSPuntPolice
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.McastRate.IsNull() && !data.McastRate.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/mcast/rate", strconv.FormatInt(data.McastRate.ValueInt64(), 10))
@@ -410,7 +414,7 @@ func (data LPTSPuntPolice) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Domains) > 0 {
 		for _, item := range data.Domains {
-			basePath := data.getXPath() + "/domains/domain"
+			basePath := data.getXPath() + "/domains/domain[domain-name='" + item.DomainName.ValueString() + "']"
 			if !item.DomainName.IsNull() && !item.DomainName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/domain-name", item.DomainName.ValueString())
 			}
@@ -442,7 +446,7 @@ func (data LPTSPuntPolice) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Interfaces) > 0 {
 		for _, item := range data.Interfaces {
-			basePath := data.getXPath() + "/interfaces/interface"
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -472,6 +476,11 @@ func (data LPTSPuntPolice) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

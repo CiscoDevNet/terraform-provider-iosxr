@@ -724,8 +724,8 @@ func (data SegmentRoutingTE) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "te-latency"); value.Exists() {
+func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("te-latency"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TeLatency.IsNull() {
 			data.TeLatency = types.BoolValue(true)
@@ -736,17 +736,17 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.TeLatency = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "global-policy-max-install-standby-c-paths"); value.Exists() && !data.MaxInstallStandbyPaths.IsNull() {
+	if value := res.Get("global-policy-max-install-standby-c-paths"); value.Exists() && !data.MaxInstallStandbyPaths.IsNull() {
 		data.MaxInstallStandbyPaths = types.Int64Value(value.Int())
 	} else if data.MaxInstallStandbyPaths.IsNull() {
 		data.MaxInstallStandbyPaths = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "kshortest-paths"); value.Exists() && !data.KshortestPaths.IsNull() {
+	if value := res.Get("kshortest-paths"); value.Exists() && !data.KshortestPaths.IsNull() {
 		data.KshortestPaths = types.Int64Value(value.Int())
 	} else if data.KshortestPaths.IsNull() {
 		data.KshortestPaths = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "separate-next-hop"); value.Exists() {
+	if value := res.Get("separate-next-hop"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SeparateNextHop.IsNull() {
 			data.SeparateNextHop = types.BoolValue(true)
@@ -757,7 +757,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.SeparateNextHop = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "maximum-sid-depth"); value.Exists() && !data.MaximumSidDepth.IsNull() {
+	if value := res.Get("maximum-sid-depth"); value.Exists() && !data.MaximumSidDepth.IsNull() {
 		data.MaximumSidDepth = types.Int64Value(value.Int())
 	} else if data.MaximumSidDepth.IsNull() {
 		data.MaximumSidDepth = types.Int64Null()
@@ -767,7 +767,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.EffectiveMetricAdminDistanceMetricTypes[i].MetricType.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "effective-metric-global.effective-metric-admin-distance.effective-metric-admin-distance-metric-types.effective-metric-admin-distance-metric-type").ForEach(
+		res.Get("effective-metric-global.effective-metric-admin-distance.effective-metric-admin-distance-metric-types.effective-metric-admin-distance-metric-type").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -801,7 +801,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.EffectiveMetricAdminDistanceFlexAlgoMetricTypes[i].MetricType.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "effective-metric-global.effective-metric-admin-distance.flex-algo-metric-types.flex-algo-metric-type").ForEach(
+		res.Get("effective-metric-global.effective-metric-admin-distance.flex-algo-metric-types.flex-algo-metric-type").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -830,7 +830,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.EffectiveMetricAdminDistanceFlexAlgoMetricTypes[i].AdminDistance = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "steering.labeled-services.disable-on-demand-policies"); value.Exists() {
+	if value := res.Get("steering.labeled-services.disable-on-demand-policies"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SteeringLabeledServicesDisableOnDemandPolicies.IsNull() {
 			data.SteeringLabeledServicesDisableOnDemandPolicies = types.BoolValue(true)
@@ -841,7 +841,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.SteeringLabeledServicesDisableOnDemandPolicies = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "steering.labeled-services.disable-all-policies"); value.Exists() {
+	if value := res.Get("steering.labeled-services.disable-all-policies"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SteeringLabeledServicesDisableAllPolicies.IsNull() {
 			data.SteeringLabeledServicesDisableAllPolicies = types.BoolValue(true)
@@ -852,7 +852,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.SteeringLabeledServicesDisableAllPolicies = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "steering.labeled-services.disable-pcep-policies"); value.Exists() {
+	if value := res.Get("steering.labeled-services.disable-pcep-policies"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SteeringLabeledServicesDisablePcepPolicies.IsNull() {
 			data.SteeringLabeledServicesDisablePcepPolicies = types.BoolValue(true)
@@ -863,7 +863,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.SteeringLabeledServicesDisablePcepPolicies = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "steering.labeled-services.disable-local-policies"); value.Exists() {
+	if value := res.Get("steering.labeled-services.disable-local-policies"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SteeringLabeledServicesDisableLocalPolicies.IsNull() {
 			data.SteeringLabeledServicesDisableLocalPolicies = types.BoolValue(true)
@@ -874,7 +874,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.SteeringLabeledServicesDisableLocalPolicies = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "steering.labeled-services.disable-bgp-sr-te-policies"); value.Exists() {
+	if value := res.Get("steering.labeled-services.disable-bgp-sr-te-policies"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SteeringLabeledServicesDisableBgpSrTePolicies.IsNull() {
 			data.SteeringLabeledServicesDisableBgpSrTePolicies = types.BoolValue(true)
@@ -885,7 +885,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.SteeringLabeledServicesDisableBgpSrTePolicies = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-lists.segment-lists-srv6.segment-lists-srv6-topology-check"); value.Exists() {
+	if value := res.Get("segment-lists.segment-lists-srv6.segment-lists-srv6-topology-check"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SegmentListsSrv6TopologyCheck.IsNull() {
 			data.SegmentListsSrv6TopologyCheck = types.BoolValue(true)
@@ -896,7 +896,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.SegmentListsSrv6TopologyCheck = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-lists.segment-lists-srv6.segment-lists-srv6-format-type"); value.Exists() && !data.SegmentListsSrv6SidFormat.IsNull() {
+	if value := res.Get("segment-lists.segment-lists-srv6.segment-lists-srv6-format-type"); value.Exists() && !data.SegmentListsSrv6SidFormat.IsNull() {
 		data.SegmentListsSrv6SidFormat = types.StringValue(value.String())
 	} else if data.SegmentListsSrv6SidFormat.IsNull() {
 		data.SegmentListsSrv6SidFormat = types.StringNull()
@@ -906,7 +906,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.SegmentListsSrv6ExplicitSegments[i].PathName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "segment-lists.explicit-segments.explicit-segment").ForEach(
+		res.Get("segment-lists.explicit-segments.explicit-segment").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -986,7 +986,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.SegmentListsSrMplsExplicitSegments[i].PathName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "segments.segment").ForEach(
+		res.Get("segments.segment").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1079,7 +1079,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "logging.pcep-peer-status"); value.Exists() {
+	if value := res.Get("logging.pcep-peer-status"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingPcepPeerStatus.IsNull() {
 			data.LoggingPcepPeerStatus = types.BoolValue(true)
@@ -1090,7 +1090,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingPcepPeerStatus = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "logging.policy-status"); value.Exists() {
+	if value := res.Get("logging.policy-status"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingPolicyStatus.IsNull() {
 			data.LoggingPolicyStatus = types.BoolValue(true)
@@ -1101,47 +1101,47 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingPolicyStatus = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "cspf-global.cspf-cache-size"); value.Exists() && !data.CspfCacheSize.IsNull() {
+	if value := res.Get("cspf-global.cspf-cache-size"); value.Exists() && !data.CspfCacheSize.IsNull() {
 		data.CspfCacheSize = types.Int64Value(value.Int())
 	} else if data.CspfCacheSize.IsNull() {
 		data.CspfCacheSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.candidate-path-cleanup-delay"); value.Exists() && !data.TimersCandidatePathCleanupDelay.IsNull() {
+	if value := res.Get("timers.candidate-path-cleanup-delay"); value.Exists() && !data.TimersCandidatePathCleanupDelay.IsNull() {
 		data.TimersCandidatePathCleanupDelay = types.Int64Value(value.Int())
 	} else if data.TimersCandidatePathCleanupDelay.IsNull() {
 		data.TimersCandidatePathCleanupDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.initial-verify-restart"); value.Exists() && !data.TimersInitialVerifyRestart.IsNull() {
+	if value := res.Get("timers.initial-verify-restart"); value.Exists() && !data.TimersInitialVerifyRestart.IsNull() {
 		data.TimersInitialVerifyRestart = types.Int64Value(value.Int())
 	} else if data.TimersInitialVerifyRestart.IsNull() {
 		data.TimersInitialVerifyRestart = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.initial-verify-switchover"); value.Exists() && !data.TimersInitialVerifySwitchover.IsNull() {
+	if value := res.Get("timers.initial-verify-switchover"); value.Exists() && !data.TimersInitialVerifySwitchover.IsNull() {
 		data.TimersInitialVerifySwitchover = types.Int64Value(value.Int())
 	} else if data.TimersInitialVerifySwitchover.IsNull() {
 		data.TimersInitialVerifySwitchover = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.initial-verify-startup"); value.Exists() && !data.TimersInitialVerifyStartup.IsNull() {
+	if value := res.Get("timers.initial-verify-startup"); value.Exists() && !data.TimersInitialVerifyStartup.IsNull() {
 		data.TimersInitialVerifyStartup = types.Int64Value(value.Int())
 	} else if data.TimersInitialVerifyStartup.IsNull() {
 		data.TimersInitialVerifyStartup = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.delete-delay"); value.Exists() && !data.TimersDeleteDelay.IsNull() {
+	if value := res.Get("timers.delete-delay"); value.Exists() && !data.TimersDeleteDelay.IsNull() {
 		data.TimersDeleteDelay = types.Int64Value(value.Int())
 	} else if data.TimersDeleteDelay.IsNull() {
 		data.TimersDeleteDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.cleanup-delay"); value.Exists() && !data.TimersCleanupDelay.IsNull() {
+	if value := res.Get("timers.cleanup-delay"); value.Exists() && !data.TimersCleanupDelay.IsNull() {
 		data.TimersCleanupDelay = types.Int64Value(value.Int())
 	} else if data.TimersCleanupDelay.IsNull() {
 		data.TimersCleanupDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.install-delay"); value.Exists() && !data.TimersInstallDelay.IsNull() {
+	if value := res.Get("timers.install-delay"); value.Exists() && !data.TimersInstallDelay.IsNull() {
 		data.TimersInstallDelay = types.Int64Value(value.Int())
 	} else if data.TimersInstallDelay.IsNull() {
 		data.TimersInstallDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.periodic-reoptimization"); value.Exists() && !data.TimersPeriodicReoptimization.IsNull() {
+	if value := res.Get("timers.periodic-reoptimization"); value.Exists() && !data.TimersPeriodicReoptimization.IsNull() {
 		data.TimersPeriodicReoptimization = types.Int64Value(value.Int())
 	} else if data.TimersPeriodicReoptimization.IsNull() {
 		data.TimersPeriodicReoptimization = types.Int64Null()
@@ -1151,7 +1151,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ResourceLists[i].PathName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "resources.resource").ForEach(
+		res.Get("resources.resource").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1214,7 +1214,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "distribute-link-state"); value.Exists() {
+	if value := res.Get("distribute-link-state"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DistributeLinkState.IsNull() {
 			data.DistributeLinkState = types.BoolValue(true)
@@ -1225,12 +1225,12 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.DistributeLinkState = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "distribute-link-state.throttle"); value.Exists() && !data.DistributeLinkStateThrottle.IsNull() {
+	if value := res.Get("distribute-link-state.throttle"); value.Exists() && !data.DistributeLinkStateThrottle.IsNull() {
 		data.DistributeLinkStateThrottle = types.Int64Value(value.Int())
 	} else if data.DistributeLinkStateThrottle.IsNull() {
 		data.DistributeLinkStateThrottle = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "distribute-link-state.report-candidate-path-inactive"); value.Exists() {
+	if value := res.Get("distribute-link-state.report-candidate-path-inactive"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DistributeLinkStateReportCandidatePathInactive.IsNull() {
 			data.DistributeLinkStateReportCandidatePathInactive = types.BoolValue(true)
@@ -1241,17 +1241,17 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.DistributeLinkStateReportCandidatePathInactive = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bfd-global.bfd-timers.bringup-timer"); value.Exists() && !data.BfdTimersSessionBringup.IsNull() {
+	if value := res.Get("bfd-global.bfd-timers.bringup-timer"); value.Exists() && !data.BfdTimersSessionBringup.IsNull() {
 		data.BfdTimersSessionBringup = types.Int64Value(value.Int())
 	} else if data.BfdTimersSessionBringup.IsNull() {
 		data.BfdTimersSessionBringup = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "binding-sid-rules.explicit.rule"); value.Exists() && !data.BindingSidRulesExplicit.IsNull() {
+	if value := res.Get("binding-sid-rules.explicit.rule"); value.Exists() && !data.BindingSidRulesExplicit.IsNull() {
 		data.BindingSidRulesExplicit = types.StringValue(value.String())
 	} else if data.BindingSidRulesExplicit.IsNull() {
 		data.BindingSidRulesExplicit = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "binding-sid-rules.dynamic-binding-sid-rules.dynamic-binding-sid-rule"); value.Exists() && !data.BindingSidRulesDynamic.IsNull() {
+	if value := res.Get("binding-sid-rules.dynamic-binding-sid-rules.dynamic-binding-sid-rule"); value.Exists() && !data.BindingSidRulesDynamic.IsNull() {
 		data.BindingSidRulesDynamic = types.StringValue(value.String())
 	} else if data.BindingSidRulesDynamic.IsNull() {
 		data.BindingSidRulesDynamic = types.StringNull()
@@ -1261,7 +1261,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "srte-interfaces.srte-interface").ForEach(
+		res.Get("srte-interfaces.srte-interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1324,7 +1324,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.PcePeersIpv4[i].PceAddress.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "pcc.pce-peers.pce-peer").ForEach(
+		res.Get("pcc.pce-peers.pce-peer").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1377,7 +1377,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.PcePeersIpv6[i].PceAddress.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "pcc.pce-peer-v6s.pce-peer-v6").ForEach(
+		res.Get("pcc.pce-peer-v6s.pce-peer-v6").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1430,7 +1430,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.PccProfiles[i].ProfileId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "pcc.profiles.profile").ForEach(
+		res.Get("pcc.profiles.profile").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1522,7 +1522,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PccProfiles[i].AutoRouteMetricConstantValue = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "pcc.pcc-centric"); value.Exists() {
+	if value := res.Get("pcc.pcc-centric"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PccRedundancyPccCentric.IsNull() {
 			data.PccRedundancyPccCentric = types.BoolValue(true)
@@ -1533,7 +1533,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PccRedundancyPccCentric = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "pcc.pce-centric"); value.Exists() {
+	if value := res.Get("pcc.pce-centric"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PccRedundancyPceCentric.IsNull() {
 			data.PccRedundancyPceCentric = types.BoolValue(true)
@@ -1544,32 +1544,32 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PccRedundancyPceCentric = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "pcc.dead-timer-interval"); value.Exists() && !data.PccDeadTimer.IsNull() {
+	if value := res.Get("pcc.dead-timer-interval"); value.Exists() && !data.PccDeadTimer.IsNull() {
 		data.PccDeadTimer = types.Int64Value(value.Int())
 	} else if data.PccDeadTimer.IsNull() {
 		data.PccDeadTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pcc.keepalive-timer-interval"); value.Exists() && !data.PccKeepaliveTimer.IsNull() {
+	if value := res.Get("pcc.keepalive-timer-interval"); value.Exists() && !data.PccKeepaliveTimer.IsNull() {
 		data.PccKeepaliveTimer = types.Int64Value(value.Int())
 	} else if data.PccKeepaliveTimer.IsNull() {
 		data.PccKeepaliveTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pcc.initiated-state-interval"); value.Exists() && !data.PccInitiatedState.IsNull() {
+	if value := res.Get("pcc.initiated-state-interval"); value.Exists() && !data.PccInitiatedState.IsNull() {
 		data.PccInitiatedState = types.Int64Value(value.Int())
 	} else if data.PccInitiatedState.IsNull() {
 		data.PccInitiatedState = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pcc.initiated-orphan-interval"); value.Exists() && !data.PccInitiatedOrphan.IsNull() {
+	if value := res.Get("pcc.initiated-orphan-interval"); value.Exists() && !data.PccInitiatedOrphan.IsNull() {
 		data.PccInitiatedOrphan = types.Int64Value(value.Int())
 	} else if data.PccInitiatedOrphan.IsNull() {
 		data.PccInitiatedOrphan = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pcc.delegation-timeout"); value.Exists() && !data.PccDelegationTimeout.IsNull() {
+	if value := res.Get("pcc.delegation-timeout"); value.Exists() && !data.PccDelegationTimeout.IsNull() {
 		data.PccDelegationTimeout = types.Int64Value(value.Int())
 	} else if data.PccDelegationTimeout.IsNull() {
 		data.PccDelegationTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pcc.report-all"); value.Exists() {
+	if value := res.Get("pcc.report-all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PccReportAll.IsNull() {
 			data.PccReportAll = types.BoolValue(true)
@@ -1580,12 +1580,12 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PccReportAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "pcc.source-address"); value.Exists() && !data.PccSourceAddressIpv4.IsNull() {
+	if value := res.Get("pcc.source-address"); value.Exists() && !data.PccSourceAddressIpv4.IsNull() {
 		data.PccSourceAddressIpv4 = types.StringValue(value.String())
 	} else if data.PccSourceAddressIpv4.IsNull() {
 		data.PccSourceAddressIpv4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "pcc.ipv6-source-address"); value.Exists() && !data.PccSourceAddressIpv6.IsNull() {
+	if value := res.Get("pcc.ipv6-source-address"); value.Exists() && !data.PccSourceAddressIpv6.IsNull() {
 		data.PccSourceAddressIpv6 = types.StringValue(value.String())
 	} else if data.PccSourceAddressIpv6.IsNull() {
 		data.PccSourceAddressIpv6 = types.StringNull()
@@ -1595,7 +1595,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Traces[i].BufferName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "trace-counts.trace-count").ForEach(
+		res.Get("trace-counts.trace-count").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1629,7 +1629,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.PathDisableAlgoChecksStrictSpfAreas[i].AreaId.ValueInt64(), 10), data.PathDisableAlgoChecksStrictSpfAreas[i].Protocol.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "path.disable-algorithm-check.strict-spf.areas.area").ForEach(
+		res.Get("path.disable-algorithm-check.strict-spf.areas.area").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1658,7 +1658,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.PathDisableAlgoChecksStrictSpfAreas[i].Protocol = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "path.disable-algorithm-check.strict-spf.all"); value.Exists() {
+	if value := res.Get("path.disable-algorithm-check.strict-spf.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PathDisableAlgoChecksStrictSpfAllAreas.IsNull() {
 			data.PathDisableAlgoChecksStrictSpfAllAreas = types.BoolValue(true)
@@ -1674,7 +1674,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.AffinityMaps[i].AffinityName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "affinity-maps.affinity-map").ForEach(
+		res.Get("affinity-maps.affinity-map").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1708,7 +1708,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.CandidatePaths[i].PathType.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "candidate-path-types.candidate-path-type").ForEach(
+		res.Get("candidate-path-types.candidate-path-type").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1754,22 +1754,22 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 			data.CandidatePaths[i].SourceAddress = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "srv6.locator.locator-name"); value.Exists() && !data.Srv6Locator.IsNull() {
+	if value := res.Get("srv6.locator.locator-name"); value.Exists() && !data.Srv6Locator.IsNull() {
 		data.Srv6Locator = types.StringValue(value.String())
 	} else if data.Srv6Locator.IsNull() {
 		data.Srv6Locator = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "srv6.locator.binding-sid-type"); value.Exists() && !data.Srv6LocatorBindingSidType.IsNull() {
+	if value := res.Get("srv6.locator.binding-sid-type"); value.Exists() && !data.Srv6LocatorBindingSidType.IsNull() {
 		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	} else if data.Srv6LocatorBindingSidType.IsNull() {
 		data.Srv6LocatorBindingSidType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "srv6.locator.behavior"); value.Exists() && !data.Srv6LocatorBehavior.IsNull() {
+	if value := res.Get("srv6.locator.behavior"); value.Exists() && !data.Srv6LocatorBehavior.IsNull() {
 		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	} else if data.Srv6LocatorBehavior.IsNull() {
 		data.Srv6LocatorBehavior = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "srv6.maximum-sid-depth"); value.Exists() && !data.Srv6MaximumSidDepth.IsNull() {
+	if value := res.Get("srv6.maximum-sid-depth"); value.Exists() && !data.Srv6MaximumSidDepth.IsNull() {
 		data.Srv6MaximumSidDepth = types.Int64Value(value.Int())
 	} else if data.Srv6MaximumSidDepth.IsNull() {
 		data.Srv6MaximumSidDepth = types.Int64Null()
@@ -4081,7 +4081,11 @@ func (data *SegmentRoutingTE) getDeletePaths(ctx context.Context) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
+func (data SegmentRoutingTE) toBodyXML(ctx context.Context, stateArg ...*SegmentRoutingTE) string {
+	var state *SegmentRoutingTE
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.TeLatency.IsNull() && !data.TeLatency.IsUnknown() {
 		if data.TeLatency.ValueBool() {
@@ -4104,7 +4108,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.EffectiveMetricAdminDistanceMetricTypes) > 0 {
 		for _, item := range data.EffectiveMetricAdminDistanceMetricTypes {
-			basePath := data.getXPath() + "/effective-metric-global/effective-metric-admin-distance/effective-metric-admin-distance-metric-types/effective-metric-admin-distance-metric-type"
+			basePath := data.getXPath() + "/effective-metric-global/effective-metric-admin-distance/effective-metric-admin-distance-metric-types/effective-metric-admin-distance-metric-type[metric-type='" + item.MetricType.ValueString() + "']"
 			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/metric-type", item.MetricType.ValueString())
 			}
@@ -4115,7 +4119,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.EffectiveMetricAdminDistanceFlexAlgoMetricTypes) > 0 {
 		for _, item := range data.EffectiveMetricAdminDistanceFlexAlgoMetricTypes {
-			basePath := data.getXPath() + "/effective-metric-global/effective-metric-admin-distance/flex-algo-metric-types/flex-algo-metric-type"
+			basePath := data.getXPath() + "/effective-metric-global/effective-metric-admin-distance/flex-algo-metric-types/flex-algo-metric-type[flex-algo-metric-type='" + strconv.FormatInt(item.MetricType.ValueInt64(), 10) + "']"
 			if !item.MetricType.IsNull() && !item.MetricType.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/flex-algo-metric-type", strconv.FormatInt(item.MetricType.ValueInt64(), 10))
 			}
@@ -4159,7 +4163,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.SegmentListsSrv6ExplicitSegments) > 0 {
 		for _, item := range data.SegmentListsSrv6ExplicitSegments {
-			basePath := data.getXPath() + "/segment-lists/explicit-segments/explicit-segment"
+			basePath := data.getXPath() + "/segment-lists/explicit-segments/explicit-segment[path-name='" + item.PathName.ValueString() + "']"
 			if !item.PathName.IsNull() && !item.PathName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/path-name", item.PathName.ValueString())
 			}
@@ -4186,7 +4190,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.SegmentListsSrMplsExplicitSegments) > 0 {
 		for _, item := range data.SegmentListsSrMplsExplicitSegments {
-			basePath := data.getXPath() + "/segments/segment"
+			basePath := data.getXPath() + "/segments/segment[path-name='" + item.PathName.ValueString() + "']"
 			if !item.PathName.IsNull() && !item.PathName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/path-name", item.PathName.ValueString())
 			}
@@ -4263,7 +4267,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ResourceLists) > 0 {
 		for _, item := range data.ResourceLists {
-			basePath := data.getXPath() + "/resources/resource"
+			basePath := data.getXPath() + "/resources/resource[path-name='" + item.PathName.ValueString() + "']"
 			if !item.PathName.IsNull() && !item.PathName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/path-name", item.PathName.ValueString())
 			}
@@ -4307,7 +4311,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Interfaces) > 0 {
 		for _, item := range data.Interfaces {
-			basePath := data.getXPath() + "/srte-interfaces/srte-interface"
+			basePath := data.getXPath() + "/srte-interfaces/srte-interface[srte-interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/srte-interface-name", item.InterfaceName.ValueString())
 			}
@@ -4326,7 +4330,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PcePeersIpv4) > 0 {
 		for _, item := range data.PcePeersIpv4 {
-			basePath := data.getXPath() + "/pcc/pce-peers/pce-peer"
+			basePath := data.getXPath() + "/pcc/pce-peers/pce-peer[pce-address='" + item.PceAddress.ValueString() + "']"
 			if !item.PceAddress.IsNull() && !item.PceAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/pce-address", item.PceAddress.ValueString())
 			}
@@ -4349,7 +4353,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PcePeersIpv6) > 0 {
 		for _, item := range data.PcePeersIpv6 {
-			basePath := data.getXPath() + "/pcc/pce-peer-v6s/pce-peer-v6"
+			basePath := data.getXPath() + "/pcc/pce-peer-v6s/pce-peer-v6[pce-address='" + item.PceAddress.ValueString() + "']"
 			if !item.PceAddress.IsNull() && !item.PceAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/pce-address", item.PceAddress.ValueString())
 			}
@@ -4372,7 +4376,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PccProfiles) > 0 {
 		for _, item := range data.PccProfiles {
-			basePath := data.getXPath() + "/pcc/profiles/profile"
+			basePath := data.getXPath() + "/pcc/profiles/profile[profile-id='" + strconv.FormatInt(item.ProfileId.ValueInt64(), 10) + "']"
 			if !item.ProfileId.IsNull() && !item.ProfileId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/profile-id", strconv.FormatInt(item.ProfileId.ValueInt64(), 10))
 			}
@@ -4448,7 +4452,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Traces) > 0 {
 		for _, item := range data.Traces {
-			basePath := data.getXPath() + "/trace-counts/trace-count"
+			basePath := data.getXPath() + "/trace-counts/trace-count[buffer-name='" + item.BufferName.ValueString() + "']"
 			if !item.BufferName.IsNull() && !item.BufferName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/buffer-name", item.BufferName.ValueString())
 			}
@@ -4459,7 +4463,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PathDisableAlgoChecksStrictSpfAreas) > 0 {
 		for _, item := range data.PathDisableAlgoChecksStrictSpfAreas {
-			basePath := data.getXPath() + "/path/disable-algorithm-check/strict-spf/areas/area"
+			basePath := data.getXPath() + "/path/disable-algorithm-check/strict-spf/areas/area[area-id='" + strconv.FormatInt(item.AreaId.ValueInt64(), 10) + "' and protocol='" + item.Protocol.ValueString() + "']"
 			if !item.AreaId.IsNull() && !item.AreaId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/area-id", strconv.FormatInt(item.AreaId.ValueInt64(), 10))
 			}
@@ -4475,7 +4479,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.AffinityMaps) > 0 {
 		for _, item := range data.AffinityMaps {
-			basePath := data.getXPath() + "/affinity-maps/affinity-map"
+			basePath := data.getXPath() + "/affinity-maps/affinity-map[affinity-name='" + item.AffinityName.ValueString() + "']"
 			if !item.AffinityName.IsNull() && !item.AffinityName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/affinity-name", item.AffinityName.ValueString())
 			}
@@ -4486,7 +4490,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.CandidatePaths) > 0 {
 		for _, item := range data.CandidatePaths {
-			basePath := data.getXPath() + "/candidate-path-types/candidate-path-type"
+			basePath := data.getXPath() + "/candidate-path-types/candidate-path-type[candidate-path-type='" + item.PathType.ValueString() + "']"
 			if !item.PathType.IsNull() && !item.PathType.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/candidate-path-type", item.PathType.ValueString())
 			}
@@ -4523,6 +4527,11 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

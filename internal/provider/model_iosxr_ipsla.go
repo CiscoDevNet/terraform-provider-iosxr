@@ -752,18 +752,18 @@ func (data IPSLA) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "low-memory"); value.Exists() && !data.LowMemory.IsNull() {
+func (data *IPSLA) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("low-memory"); value.Exists() && !data.LowMemory.IsNull() {
 		data.LowMemory = types.Int64Value(value.Int())
 	} else if data.LowMemory.IsNull() {
 		data.LowMemory = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "key-chain"); value.Exists() && !data.KeyChain.IsNull() {
+	if value := res.Get("key-chain"); value.Exists() && !data.KeyChain.IsNull() {
 		data.KeyChain = types.StringValue(value.String())
 	} else if data.KeyChain.IsNull() {
 		data.KeyChain = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "hw-timestamp.disable"); value.Exists() {
+	if value := res.Get("hw-timestamp.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.HwTimestampDisable.IsNull() {
 			data.HwTimestampDisable = types.BoolValue(true)
@@ -779,7 +779,7 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.Operations[i].OperationNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "operations.operation").ForEach(
+		res.Get("operations.operation").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1618,7 +1618,7 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.Schedules[i].OperationNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "schedule.operations.operation").ForEach(
+		res.Get("schedule.operations.operation").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1745,7 +1745,7 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.Schedules[i].Ageout = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.twamp"); value.Exists() {
+	if value := res.Get("server.twamp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerTwamp.IsNull() {
 			data.ServerTwamp = types.BoolValue(true)
@@ -1756,12 +1756,12 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerTwamp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.twamp.port"); value.Exists() && !data.ServerTwampPort.IsNull() {
+	if value := res.Get("server.twamp.port"); value.Exists() && !data.ServerTwampPort.IsNull() {
 		data.ServerTwampPort = types.Int64Value(value.Int())
 	} else if data.ServerTwampPort.IsNull() {
 		data.ServerTwampPort = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.twamp.timer.inactivity"); value.Exists() && !data.ServerTwampTimerInactivity.IsNull() {
+	if value := res.Get("server.twamp.timer.inactivity"); value.Exists() && !data.ServerTwampTimerInactivity.IsNull() {
 		data.ServerTwampTimerInactivity = types.Int64Value(value.Int())
 	} else if data.ServerTwampTimerInactivity.IsNull() {
 		data.ServerTwampTimerInactivity = types.Int64Null()
@@ -1771,7 +1771,11 @@ func (data *IPSLA) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data IPSLA) toBodyXML(ctx context.Context) string {
+func (data IPSLA) toBodyXML(ctx context.Context, stateArg ...*IPSLA) string {
+	var state *IPSLA
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.LowMemory.IsNull() && !data.LowMemory.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/low-memory", strconv.FormatInt(data.LowMemory.ValueInt64(), 10))
@@ -1786,7 +1790,7 @@ func (data IPSLA) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Operations) > 0 {
 		for _, item := range data.Operations {
-			basePath := data.getXPath() + "/operations/operation"
+			basePath := data.getXPath() + "/operations/operation[operation-number='" + strconv.FormatInt(item.OperationNumber.ValueInt64(), 10) + "']"
 			if !item.OperationNumber.IsNull() && !item.OperationNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/operation-number", strconv.FormatInt(item.OperationNumber.ValueInt64(), 10))
 			}
@@ -2205,7 +2209,7 @@ func (data IPSLA) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Schedules) > 0 {
 		for _, item := range data.Schedules {
-			basePath := data.getXPath() + "/schedule/operations/operation"
+			basePath := data.getXPath() + "/schedule/operations/operation[operation-number='" + strconv.FormatInt(item.OperationNumber.ValueInt64(), 10) + "']"
 			if !item.OperationNumber.IsNull() && !item.OperationNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/operation-number", strconv.FormatInt(item.OperationNumber.ValueInt64(), 10))
 			}
@@ -2283,6 +2287,11 @@ func (data IPSLA) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

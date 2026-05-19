@@ -202,8 +202,8 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Enable.IsNull() {
 			data.Enable = types.BoolValue(true)
@@ -214,12 +214,12 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			data.Enable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "sid-holdtime"); value.Exists() && !data.SidHoldtime.IsNull() {
+	if value := res.Get("sid-holdtime"); value.Exists() && !data.SidHoldtime.IsNull() {
 		data.SidHoldtime = types.Int64Value(value.Int())
 	} else if data.SidHoldtime.IsNull() {
 		data.SidHoldtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "logging.locator-status"); value.Exists() {
+	if value := res.Get("logging.locator-status"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingLocatorStatus.IsNull() {
 			data.LoggingLocatorStatus = types.BoolValue(true)
@@ -235,7 +235,7 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Formats[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "formats.formats.format").ForEach(
+		res.Get("formats.formats.format").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -291,7 +291,7 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Locators[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "locators.locators.locator").ForEach(
+		res.Get("locators.locators.locator").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -359,27 +359,27 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			data.Locators[i].Algorithm = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "encapsulation.traffic-class.option"); value.Exists() && !data.EncapsulationTrafficClassOption.IsNull() {
+	if value := res.Get("encapsulation.traffic-class.option"); value.Exists() && !data.EncapsulationTrafficClassOption.IsNull() {
 		data.EncapsulationTrafficClassOption = types.StringValue(value.String())
 	} else if data.EncapsulationTrafficClassOption.IsNull() {
 		data.EncapsulationTrafficClassOption = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.traffic-class.value"); value.Exists() && !data.EncapsulationTrafficClassValue.IsNull() {
+	if value := res.Get("encapsulation.traffic-class.value"); value.Exists() && !data.EncapsulationTrafficClassValue.IsNull() {
 		data.EncapsulationTrafficClassValue = types.Int64Value(value.Int())
 	} else if data.EncapsulationTrafficClassValue.IsNull() {
 		data.EncapsulationTrafficClassValue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.hop-limit.option"); value.Exists() && !data.EncapsulationHopLimitOption.IsNull() {
+	if value := res.Get("encapsulation.hop-limit.option"); value.Exists() && !data.EncapsulationHopLimitOption.IsNull() {
 		data.EncapsulationHopLimitOption = types.StringValue(value.String())
 	} else if data.EncapsulationHopLimitOption.IsNull() {
 		data.EncapsulationHopLimitOption = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.hop-limit.value"); value.Exists() && !data.EncapsulationHopLimitValue.IsNull() {
+	if value := res.Get("encapsulation.hop-limit.value"); value.Exists() && !data.EncapsulationHopLimitValue.IsNull() {
 		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
 	} else if data.EncapsulationHopLimitValue.IsNull() {
 		data.EncapsulationHopLimitValue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() && !data.EncapsulationSourceAddress.IsNull() {
+	if value := res.Get("encapsulation.source-address"); value.Exists() && !data.EncapsulationSourceAddress.IsNull() {
 		data.EncapsulationSourceAddress = types.StringValue(value.String())
 	} else if data.EncapsulationSourceAddress.IsNull() {
 		data.EncapsulationSourceAddress = types.StringNull()
@@ -389,7 +389,11 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data SegmentRoutingV6) toBodyXML(ctx context.Context) string {
+func (data SegmentRoutingV6) toBodyXML(ctx context.Context, stateArg ...*SegmentRoutingV6) string {
+	var state *SegmentRoutingV6
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
 		if data.Enable.ValueBool() {
@@ -406,7 +410,7 @@ func (data SegmentRoutingV6) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Formats) > 0 {
 		for _, item := range data.Formats {
-			basePath := data.getXPath() + "/formats/formats/format"
+			basePath := data.getXPath() + "/formats/formats/format[name='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/name", item.Name.ValueString())
 			}
@@ -428,7 +432,7 @@ func (data SegmentRoutingV6) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Locators) > 0 {
 		for _, item := range data.Locators {
-			basePath := data.getXPath() + "/locators/locators/locator"
+			basePath := data.getXPath() + "/locators/locators/locator[name='" + item.Name.ValueString() + "']"
 			if !item.LocatorEnable.IsNull() && !item.LocatorEnable.IsUnknown() {
 				if item.LocatorEnable.ValueBool() {
 					body = helpers.SetFromXPath(body, basePath+"/locator-enable", "")
@@ -479,6 +483,11 @@ func (data SegmentRoutingV6) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

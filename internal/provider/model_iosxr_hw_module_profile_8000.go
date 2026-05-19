@@ -776,8 +776,8 @@ func (data HWModuleProfile8000) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "multicast.route-scale"); value.Exists() {
+func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("multicast.route-scale"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MulticastRouteScale.IsNull() {
 			data.MulticastRouteScale = types.BoolValue(true)
@@ -788,17 +788,17 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.MulticastRouteScale = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() && !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
+	if value := res.Get("profile.tcam.fib.ipv4.unicast.percent"); value.Exists() && !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
 	} else if data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() && !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
+	if value := res.Get("profile.tcam.fib.ipv6.unicast.percent"); value.Exists() && !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
 	} else if data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-addr"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.src-addr"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(true)
@@ -809,7 +809,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-addr"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.dst-addr"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(true)
@@ -820,7 +820,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-port"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.src-port"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(true)
@@ -831,7 +831,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-port"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.dst-port"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(true)
@@ -842,7 +842,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.proto"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.proto"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(true)
@@ -853,7 +853,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4Proto = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.precedence"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.precedence"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(true)
@@ -864,7 +864,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.ttl-match"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.ttl-match"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(true)
@@ -875,7 +875,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.tcp-flags"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.tcp-flags"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(true)
@@ -886,7 +886,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.frag-bit"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.frag-bit"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(true)
@@ -897,7 +897,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-object-group"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.src-object-group"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(true)
@@ -908,7 +908,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-object-group"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.dst-object-group"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(true)
@@ -919,7 +919,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.packet-len"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.packet-len"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(true)
@@ -930,7 +930,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.fragment-offset"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.fragment-offset"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
 			data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(true)
@@ -941,47 +941,47 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf1"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.udf1"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf1 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf1 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf2"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.udf2"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf2 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf2 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf3"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.udf3"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf3 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf3 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf4"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.udf4"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf4 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf5"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.udf5"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf5 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf5 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf6"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.udf6"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf6 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf6 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf7"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.udf7"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf7 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf7 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf8"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv4.udf8"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf8 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf8 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.src-addr"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.src-addr"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(true)
@@ -992,7 +992,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-addr"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.dst-addr"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(true)
@@ -1003,7 +1003,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-port"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.dst-port"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(true)
@@ -1014,7 +1014,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.next-hdr"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.next-hdr"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(true)
@@ -1025,7 +1025,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.traffic-class"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.traffic-class"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(true)
@@ -1036,7 +1036,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.frag-bit"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.frag-bit"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(true)
@@ -1047,7 +1047,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.tcp-flags"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.tcp-flags"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(true)
@@ -1058,7 +1058,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.src-object-group"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.src-object-group"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(true)
@@ -1069,7 +1069,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-object-group"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.dst-object-group"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(true)
@@ -1080,7 +1080,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.packet-len"); value.Exists() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.packet-len"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
 			data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(true)
@@ -1091,47 +1091,47 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf1"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.udf1"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf1 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf1 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf2"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.udf2"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf2 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf2 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf3"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.udf3"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf3 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf3 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf4"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.udf4"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf4 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf5"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.udf5"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf5 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf5 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf6"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.udf6"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf6 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf6 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf7"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.udf7"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf7 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf7 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf8"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
+	if value := res.Get("profile.tcam.format.access-list.ipv6.udf8"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf8 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf8 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.qos.voq-mode.four"); value.Exists() {
+	if value := res.Get("profile.qos.voq-mode.four"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileQosVoqModeFour.IsNull() {
 			data.ProfileQosVoqModeFour = types.BoolValue(true)
@@ -1142,7 +1142,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileQosVoqModeFour = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.qos.voq-mode.eight"); value.Exists() {
+	if value := res.Get("profile.qos.voq-mode.eight"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileQosVoqModeEight.IsNull() {
 			data.ProfileQosVoqModeEight = types.BoolValue(true)
@@ -1153,7 +1153,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileQosVoqModeEight = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.qos.voq-mode.fair-four"); value.Exists() {
+	if value := res.Get("profile.qos.voq-mode.fair-four"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileQosVoqModeFairFour.IsNull() {
 			data.ProfileQosVoqModeFairFour = types.BoolValue(true)
@@ -1164,7 +1164,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileQosVoqModeFairFour = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.qos.voq-mode.fair-eight"); value.Exists() {
+	if value := res.Get("profile.qos.voq-mode.fair-eight"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileQosVoqModeFairEight.IsNull() {
 			data.ProfileQosVoqModeFairEight = types.BoolValue(true)
@@ -1175,22 +1175,22 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileQosVoqModeFairEight = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.qos.l2-mode"); value.Exists() && !data.ProfileQosL2Mode.IsNull() {
+	if value := res.Get("profile.qos.l2-mode"); value.Exists() && !data.ProfileQosL2Mode.IsNull() {
 		data.ProfileQosL2Mode = types.StringValue(value.String())
 	} else if data.ProfileQosL2Mode.IsNull() {
 		data.ProfileQosL2Mode = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.qos.low-latency-mode"); value.Exists() && !data.ProfileQosLowLatencyMode.IsNull() {
+	if value := res.Get("profile.qos.low-latency-mode"); value.Exists() && !data.ProfileQosLowLatencyMode.IsNull() {
 		data.ProfileQosLowLatencyMode = types.StringValue(value.String())
 	} else if data.ProfileQosLowLatencyMode.IsNull() {
 		data.ProfileQosLowLatencyMode = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.qos.intra-npu-over-fabric"); value.Exists() && !data.ProfileQosIntraNpuOverFabric.IsNull() {
+	if value := res.Get("profile.qos.intra-npu-over-fabric"); value.Exists() && !data.ProfileQosIntraNpuOverFabric.IsNull() {
 		data.ProfileQosIntraNpuOverFabric = types.StringValue(value.String())
 	} else if data.ProfileQosIntraNpuOverFabric.IsNull() {
 		data.ProfileQosIntraNpuOverFabric = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.qos.qos-stats-push-collection"); value.Exists() {
+	if value := res.Get("profile.qos.qos-stats-push-collection"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileQosQosStatsPushCollection.IsNull() {
 			data.ProfileQosQosStatsPushCollection = types.BoolValue(true)
@@ -1201,7 +1201,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileQosQosStatsPushCollection = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.qos.high-water-marks"); value.Exists() {
+	if value := res.Get("profile.qos.high-water-marks"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileQosHighWaterMarks.IsNull() {
 			data.ProfileQosHighWaterMarks = types.BoolValue(true)
@@ -1212,42 +1212,42 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileQosHighWaterMarks = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.cef.dark-bw"); value.Exists() && !data.ProfileCefDarkBw.IsNull() {
+	if value := res.Get("profile.cef.dark-bw"); value.Exists() && !data.ProfileCefDarkBw.IsNull() {
 		data.ProfileCefDarkBw = types.StringValue(value.String())
 	} else if data.ProfileCefDarkBw.IsNull() {
 		data.ProfileCefDarkBw = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.sropt"); value.Exists() && !data.ProfileCefSropt.IsNull() {
+	if value := res.Get("profile.cef.sropt"); value.Exists() && !data.ProfileCefSropt.IsNull() {
 		data.ProfileCefSropt = types.StringValue(value.String())
 	} else if data.ProfileCefSropt.IsNull() {
 		data.ProfileCefSropt = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.bgplu"); value.Exists() && !data.ProfileCefBgplu.IsNull() {
+	if value := res.Get("profile.cef.bgplu"); value.Exists() && !data.ProfileCefBgplu.IsNull() {
 		data.ProfileCefBgplu = types.StringValue(value.String())
 	} else if data.ProfileCefBgplu.IsNull() {
 		data.ProfileCefBgplu = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.bgplu-over-rsvpte"); value.Exists() && !data.ProfileCefBgpluOverRsvpte.IsNull() {
+	if value := res.Get("profile.cef.bgplu-over-rsvpte"); value.Exists() && !data.ProfileCefBgpluOverRsvpte.IsNull() {
 		data.ProfileCefBgpluOverRsvpte = types.StringValue(value.String())
 	} else if data.ProfileCefBgpluOverRsvpte.IsNull() {
 		data.ProfileCefBgpluOverRsvpte = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.cbf"); value.Exists() && !data.ProfileCefCbf.IsNull() {
+	if value := res.Get("profile.cef.cbf"); value.Exists() && !data.ProfileCefCbf.IsNull() {
 		data.ProfileCefCbf = types.StringValue(value.String())
 	} else if data.ProfileCefCbf.IsNull() {
 		data.ProfileCefCbf = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.forward-class-lists.forward-class-list"); value.Exists() && !data.ProfileCefCbfForwardClassList.IsNull() {
+	if value := res.Get("profile.cef.forward-class-lists.forward-class-list"); value.Exists() && !data.ProfileCefCbfForwardClassList.IsNull() {
 		data.ProfileCefCbfForwardClassList = helpers.GetInt64List(value.Array())
 	} else if data.ProfileCefCbfForwardClassList.IsNull() {
 		data.ProfileCefCbfForwardClassList = types.ListNull(types.Int64Type)
 	}
-	if value := gjson.GetBytes(res, "profile.cef.ipv6.hop-limit"); value.Exists() && !data.ProfileCefIpv6HopLimit.IsNull() {
+	if value := res.Get("profile.cef.ipv6.hop-limit"); value.Exists() && !data.ProfileCefIpv6HopLimit.IsNull() {
 		data.ProfileCefIpv6HopLimit = types.StringValue(value.String())
 	} else if data.ProfileCefIpv6HopLimit.IsNull() {
 		data.ProfileCefIpv6HopLimit = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.lpts.acl"); value.Exists() {
+	if value := res.Get("profile.cef.lpts.acl"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileCefLptsAcl.IsNull() {
 			data.ProfileCefLptsAcl = types.BoolValue(true)
@@ -1258,12 +1258,12 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileCefLptsAcl = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.cef.lpts.pifib-entry-counters"); value.Exists() && !data.ProfileCefLptsPifibEntryCounters.IsNull() {
+	if value := res.Get("profile.cef.lpts.pifib-entry-counters"); value.Exists() && !data.ProfileCefLptsPifibEntryCounters.IsNull() {
 		data.ProfileCefLptsPifibEntryCounters = types.Int64Value(value.Int())
 	} else if data.ProfileCefLptsPifibEntryCounters.IsNull() {
 		data.ProfileCefLptsPifibEntryCounters = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.vxlan.ipv6-tnl-scale"); value.Exists() {
+	if value := res.Get("profile.cef.vxlan.ipv6-tnl-scale"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileCefVxlanIpv6TnlScale.IsNull() {
 			data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(true)
@@ -1274,7 +1274,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileCefVxlanIpv6TnlScale = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); value.Exists() {
+	if value := res.Get("profile.cef.mplsoudp.scale"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileCefMplsoudpScale.IsNull() {
 			data.ProfileCefMplsoudpScale = types.BoolValue(true)
@@ -1285,17 +1285,17 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileCefMplsoudpScale = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.cef.stats.label.app-default"); value.Exists() && !data.ProfileCefStatsLabelAppDefault.IsNull() {
+	if value := res.Get("profile.cef.stats.label.app-default"); value.Exists() && !data.ProfileCefStatsLabelAppDefault.IsNull() {
 		data.ProfileCefStatsLabelAppDefault = types.StringValue(value.String())
 	} else if data.ProfileCefStatsLabelAppDefault.IsNull() {
 		data.ProfileCefStatsLabelAppDefault = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.ttl.tunnel-ip.decrement"); value.Exists() && !data.ProfileCefTtlTunnelIpDecrement.IsNull() {
+	if value := res.Get("profile.cef.ttl.tunnel-ip.decrement"); value.Exists() && !data.ProfileCefTtlTunnelIpDecrement.IsNull() {
 		data.ProfileCefTtlTunnelIpDecrement = types.StringValue(value.String())
 	} else if data.ProfileCefTtlTunnelIpDecrement.IsNull() {
 		data.ProfileCefTtlTunnelIpDecrement = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.highscale-no-ldp-over-te"); value.Exists() {
+	if value := res.Get("profile.cef.te-tunnel.highscale-no-ldp-over-te"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
 			data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(true)
@@ -1306,7 +1306,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.highscale-ldp-over-te-no-sr-over-srte"); value.Exists() {
+	if value := res.Get("profile.cef.te-tunnel.highscale-ldp-over-te-no-sr-over-srte"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
 			data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(true)
@@ -1317,7 +1317,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.label-over-te-counters"); value.Exists() {
+	if value := res.Get("profile.cef.te-tunnel.label-over-te-counters"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
 			data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(true)
@@ -1328,12 +1328,12 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.cef.ip-redirect"); value.Exists() && !data.ProfileCefIpRedirect.IsNull() {
+	if value := res.Get("profile.cef.ip-redirect"); value.Exists() && !data.ProfileCefIpRedirect.IsNull() {
 		data.ProfileCefIpRedirect = types.StringValue(value.String())
 	} else if data.ProfileCefIpRedirect.IsNull() {
 		data.ProfileCefIpRedirect = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.unipath-surpf.enable"); value.Exists() {
+	if value := res.Get("profile.cef.unipath-surpf.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileCefUnipathSurpfEnable.IsNull() {
 			data.ProfileCefUnipathSurpfEnable = types.BoolValue(true)
@@ -1344,7 +1344,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileCefUnipathSurpfEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.cef.source-rtbh.enable"); value.Exists() {
+	if value := res.Get("profile.cef.source-rtbh.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileCefSourceRtbhEnable.IsNull() {
 			data.ProfileCefSourceRtbhEnable = types.BoolValue(true)
@@ -1360,7 +1360,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{data.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "profile.encap-exact.interfaces.interface").ForEach(
+		res.Get("profile.encap-exact.interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1389,7 +1389,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{data.ProfileEncapExactLocations[i].LocationName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "profile.encap-exact.locations.location").ForEach(
+		res.Get("profile.encap-exact.locations.location").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1413,7 +1413,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileEncapExactLocations[i].LocationName = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.encap-exact.locations.all"); value.Exists() {
+	if value := res.Get("profile.encap-exact.locations.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileEncapExactLocationsAll.IsNull() {
 			data.ProfileEncapExactLocationsAll = types.BoolValue(true)
@@ -1424,7 +1424,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileEncapExactLocationsAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.encap-exact.locations.all-virtual"); value.Exists() {
+	if value := res.Get("profile.encap-exact.locations.all-virtual"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileEncapExactLocationsAllVirtual.IsNull() {
 			data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(true)
@@ -1435,12 +1435,12 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileEncapExactLocationsAllVirtual = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.stats.voqs-sharing-counters"); value.Exists() && !data.ProfileStatsVoqsSharingCounters.IsNull() {
+	if value := res.Get("profile.stats.voqs-sharing-counters"); value.Exists() && !data.ProfileStatsVoqsSharingCounters.IsNull() {
 		data.ProfileStatsVoqsSharingCounters = types.StringValue(value.String())
 	} else if data.ProfileStatsVoqsSharingCounters.IsNull() {
 		data.ProfileStatsVoqsSharingCounters = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.stats.no-bvi-ingress"); value.Exists() {
+	if value := res.Get("profile.stats.no-bvi-ingress"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileStatsNoBviIngress.IsNull() {
 			data.ProfileStatsNoBviIngress = types.BoolValue(true)
@@ -1451,7 +1451,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileStatsNoBviIngress = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.stats.acl-permit"); value.Exists() {
+	if value := res.Get("profile.stats.acl-permit"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileStatsAclPermit.IsNull() {
 			data.ProfileStatsAclPermit = types.BoolValue(true)
@@ -1462,7 +1462,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileStatsAclPermit = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.bw-threshold"); value.Exists() && !data.ProfileBwThreshold.IsNull() {
+	if value := res.Get("profile.bw-threshold"); value.Exists() && !data.ProfileBwThreshold.IsNull() {
 		data.ProfileBwThreshold = types.StringValue(value.String())
 	} else if data.ProfileBwThreshold.IsNull() {
 		data.ProfileBwThreshold = types.StringNull()
@@ -1472,7 +1472,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{data.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "profile.priority-flow-control.locations.location").ForEach(
+		res.Get("profile.priority-flow-control.locations.location").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1649,17 +1649,17 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); value.Exists() && !data.ProfileGueUdpDestPortIpv4.IsNull() {
+	if value := res.Get("profile.gue.udp-dest-port.ipv4"); value.Exists() && !data.ProfileGueUdpDestPortIpv4.IsNull() {
 		data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
 	} else if data.ProfileGueUdpDestPortIpv4.IsNull() {
 		data.ProfileGueUdpDestPortIpv4 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); value.Exists() && !data.ProfileGueUdpDestPortIpv6.IsNull() {
+	if value := res.Get("profile.gue.udp-dest-port.ipv6"); value.Exists() && !data.ProfileGueUdpDestPortIpv6.IsNull() {
 		data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
 	} else if data.ProfileGueUdpDestPortIpv6.IsNull() {
 		data.ProfileGueUdpDestPortIpv6 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); value.Exists() && !data.ProfileGueUdpDestPortMpls.IsNull() {
+	if value := res.Get("profile.gue.udp-dest-port.mpls"); value.Exists() && !data.ProfileGueUdpDestPortMpls.IsNull() {
 		data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
 	} else if data.ProfileGueUdpDestPortMpls.IsNull() {
 		data.ProfileGueUdpDestPortMpls = types.Int64Null()
@@ -1669,7 +1669,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{data.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "profile.npu.buffer-extended.locations.location").ForEach(
+		res.Get("profile.npu.buffer-extended.locations.location").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1717,7 +1717,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.l2fib.pw-stats"); value.Exists() {
+	if value := res.Get("profile.l2fib.pw-stats"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileL2fibPwStats.IsNull() {
 			data.ProfileL2fibPwStats = types.BoolValue(true)
@@ -1728,7 +1728,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileL2fibPwStats = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.l2fib.bridge-flush-convergence"); value.Exists() {
+	if value := res.Get("profile.l2fib.bridge-flush-convergence"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileL2fibBridgeFlushConvergence.IsNull() {
 			data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(true)
@@ -1739,7 +1739,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileL2fibBridgeFlushConvergence = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.l2fib.L2-high-scale"); value.Exists() {
+	if value := res.Get("profile.l2fib.L2-high-scale"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileL2fibHigherScale.IsNull() {
 			data.ProfileL2fibHigherScale = types.BoolValue(true)
@@ -1750,7 +1750,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileL2fibHigherScale = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.l2fib.vxlan-dc-leaf"); value.Exists() {
+	if value := res.Get("profile.l2fib.vxlan-dc-leaf"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileL2fibVxlanDcLeaf.IsNull() {
 			data.ProfileL2fibVxlanDcLeaf = types.BoolValue(true)
@@ -1761,12 +1761,12 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileL2fibVxlanDcLeaf = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.npu-compatibility"); value.Exists() && !data.ProfileNpuCompatibility.IsNull() {
+	if value := res.Get("profile.npu-compatibility"); value.Exists() && !data.ProfileNpuCompatibility.IsNull() {
 		data.ProfileNpuCompatibility = types.StringValue(value.String())
 	} else if data.ProfileNpuCompatibility.IsNull() {
 		data.ProfileNpuCompatibility = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "profile.route.scale.ipv6-unicast.connected-prefix.high"); value.Exists() {
+	if value := res.Get("profile.route.scale.ipv6-unicast.connected-prefix.high"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
 			data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(true)
@@ -1777,7 +1777,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.flowspec.ipv6-packet-len-enable"); value.Exists() {
+	if value := res.Get("profile.flowspec.ipv6-packet-len-enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
 			data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(true)
@@ -1788,7 +1788,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 			data.ProfileFlowspecIpv6PacketLenEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.irb.throughput-optimized"); value.Exists() {
+	if value := res.Get("profile.irb.throughput-optimized"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProfileIrbThroughputOptimized.IsNull() {
 			data.ProfileIrbThroughputOptimized = types.BoolValue(true)
@@ -1804,7 +1804,11 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte)
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data HWModuleProfile8000) toBodyXML(ctx context.Context) string {
+func (data HWModuleProfile8000) toBodyXML(ctx context.Context, stateArg ...*HWModuleProfile8000) string {
+	var state *HWModuleProfile8000
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.MulticastRouteScale.IsNull() && !data.MulticastRouteScale.IsUnknown() {
 		if data.MulticastRouteScale.ValueBool() {
@@ -2098,7 +2102,7 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ProfileEncapExactInterfaces) > 0 {
 		for _, item := range data.ProfileEncapExactInterfaces {
-			basePath := data.getXPath() + "/profile/encap-exact/interfaces/interface"
+			basePath := data.getXPath() + "/profile/encap-exact/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -2106,7 +2110,7 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ProfileEncapExactLocations) > 0 {
 		for _, item := range data.ProfileEncapExactLocations {
-			basePath := data.getXPath() + "/profile/encap-exact/locations/location"
+			basePath := data.getXPath() + "/profile/encap-exact/locations/location[location-name='" + item.LocationName.ValueString() + "']"
 			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
 			}
@@ -2140,7 +2144,7 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ProfilePriorityFlowControlLocations) > 0 {
 		for _, item := range data.ProfilePriorityFlowControlLocations {
-			basePath := data.getXPath() + "/profile/priority-flow-control/locations/location"
+			basePath := data.getXPath() + "/profile/priority-flow-control/locations/location[location-name='" + item.LocationName.ValueString() + "']"
 			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
 			}
@@ -2226,7 +2230,7 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ProfileNpuBufferExtendedLocations) > 0 {
 		for _, item := range data.ProfileNpuBufferExtendedLocations {
-			basePath := data.getXPath() + "/profile/npu/buffer-extended/locations/location"
+			basePath := data.getXPath() + "/profile/npu/buffer-extended/locations/location[location-name='" + item.LocationName.ValueString() + "']"
 			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
 			}
@@ -2288,6 +2292,11 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

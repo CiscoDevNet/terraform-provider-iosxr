@@ -87,7 +87,11 @@ func (data BGPASFormat) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data BGPASFormat) toBodyXML(ctx context.Context) string {
+func (data BGPASFormat) toBodyXML(ctx context.Context, stateArg ...*BGPASFormat) string {
+	var state *BGPASFormat
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	// Special case: value goes directly into root element text content
 	body := netconf.Body{}
 	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
@@ -97,6 +101,10 @@ func (data BGPASFormat) toBodyXML(ctx context.Context) string {
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
 	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
 	return bodyString
 }
 
@@ -104,10 +112,10 @@ func (data BGPASFormat) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
+func (data *BGPASFormat) updateFromBody(ctx context.Context, res gjson.Result) {
 	// For root element, value is at the element name in the response
 	lastElement := helpers.LastElement(data.getPath())
-	if value := gjson.GetBytes(res, lastElement); value.Exists() {
+	if value := res.Get(lastElement); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	} else if !data.AsFormat.IsNull() {
 		data.AsFormat = types.StringValue(data.AsFormat.ValueString())

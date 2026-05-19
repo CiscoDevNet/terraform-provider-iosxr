@@ -138,8 +138,8 @@ func (data ICMP) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *ICMP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ipv4.source.vrf"); value.Exists() {
+func (data *ICMP) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("ipv4.source.vrf"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4SourceVrf.IsNull() {
 			data.Ipv4SourceVrf = types.BoolValue(true)
@@ -150,7 +150,7 @@ func (data *ICMP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv4SourceVrf = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ipv4.source.rfc"); value.Exists() {
+	if value := res.Get("ipv4.source.rfc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4SourceRfc.IsNull() {
 			data.Ipv4SourceRfc = types.BoolValue(true)
@@ -161,12 +161,12 @@ func (data *ICMP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv4SourceRfc = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableRate.IsNull() {
+	if value := res.Get("ipv4.rate-limit.unreachable.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableRate.IsNull() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
 	} else if data.Ipv4RateLimitUnreachableRate.IsNull() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.disable"); value.Exists() {
+	if value := res.Get("ipv4.rate-limit.unreachable.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
@@ -177,12 +177,12 @@ func (data *ICMP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableDfRate.IsNull() {
+	if value := res.Get("ipv4.rate-limit.unreachable.df.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableDfRate.IsNull() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
 	} else if data.Ipv4RateLimitUnreachableDfRate.IsNull() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
+	if value := res.Get("ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
 			data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
@@ -193,7 +193,7 @@ func (data *ICMP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ipv6.source.vrf"); value.Exists() {
+	if value := res.Get("ipv6.source.vrf"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6SourceVrf.IsNull() {
 			data.Ipv6SourceVrf = types.BoolValue(true)
@@ -204,7 +204,7 @@ func (data *ICMP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv6SourceVrf = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ipv6.source.rfc"); value.Exists() {
+	if value := res.Get("ipv6.source.rfc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6SourceRfc.IsNull() {
 			data.Ipv6SourceRfc = types.BoolValue(true)
@@ -220,7 +220,11 @@ func (data *ICMP) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data ICMP) toBodyXML(ctx context.Context) string {
+func (data ICMP) toBodyXML(ctx context.Context, stateArg ...*ICMP) string {
+	var state *ICMP
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Ipv4SourceVrf.IsNull() && !data.Ipv4SourceVrf.IsUnknown() {
 		if data.Ipv4SourceVrf.ValueBool() {
@@ -266,6 +270,11 @@ func (data ICMP) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

@@ -478,7 +478,11 @@ func (data Crypto) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data Crypto) toBodyXML(ctx context.Context) string {
+func (data Crypto) toBodyXML(ctx context.Context, stateArg ...*Crypto) string {
+	var state *Crypto
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.CaTrustpointSystemDescription.IsNull() && !data.CaTrustpointSystemDescription.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/ca/trustpoint/system-trustpoint/description", data.CaTrustpointSystemDescription.ValueString())
@@ -614,7 +618,7 @@ func (data Crypto) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.CaTrustpoints) > 0 {
 		for _, item := range data.CaTrustpoints {
-			basePath := data.getXPath() + "/ca/trustpoint/trustpoints/trustpoint"
+			basePath := data.getXPath() + "/ca/trustpoint/trustpoints/trustpoint[trustpoint-name='" + item.TrustpointName.ValueString() + "']"
 			if !item.TrustpointName.IsNull() && !item.TrustpointName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/trustpoint-name", item.TrustpointName.ValueString())
 			}
@@ -707,7 +711,7 @@ func (data Crypto) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.CaOpensshTrustpoints) > 0 {
 		for _, item := range data.CaOpensshTrustpoints {
-			basePath := data.getXPath() + "/ca/openssh/trustpoints/trustpoint"
+			basePath := data.getXPath() + "/ca/openssh/trustpoints/trustpoint[trustpoint-name='" + item.TrustpointName.ValueString() + "']"
 			if !item.TrustpointName.IsNull() && !item.TrustpointName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/trustpoint-name", item.TrustpointName.ValueString())
 			}
@@ -754,6 +758,11 @@ func (data Crypto) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -761,28 +770,28 @@ func (data Crypto) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.description"); value.Exists() && !data.CaTrustpointSystemDescription.IsNull() {
+func (data *Crypto) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("ca.trustpoint.system-trustpoint.description"); value.Exists() && !data.CaTrustpointSystemDescription.IsNull() {
 		data.CaTrustpointSystemDescription = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemDescription.IsNull() {
 		data.CaTrustpointSystemDescription = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.retry.count"); value.Exists() && !data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.retry.count"); value.Exists() && !data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
 		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Value(value.Int())
 	} else if data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
 		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.retry.period"); value.Exists() && !data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.retry.period"); value.Exists() && !data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
 		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Value(value.Int())
 	} else if data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
 		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.url"); value.Exists() && !data.CaTrustpointSystemEnrollmentUrl.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.url"); value.Exists() && !data.CaTrustpointSystemEnrollmentUrl.IsNull() {
 		data.CaTrustpointSystemEnrollmentUrl = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemEnrollmentUrl.IsNull() {
 		data.CaTrustpointSystemEnrollmentUrl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.terminal"); value.Exists() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.terminal"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
 			data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(true)
@@ -793,7 +802,7 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpointSystemEnrollmentTerminal = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.self"); value.Exists() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.self"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaTrustpointSystemEnrollmentSelf.IsNull() {
 			data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(true)
@@ -804,22 +813,22 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpointSystemEnrollmentSelf = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.sftp-username"); value.Exists() && !data.CaTrustpointSystemSftpUsername.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.sftp-username"); value.Exists() && !data.CaTrustpointSystemSftpUsername.IsNull() {
 		data.CaTrustpointSystemSftpUsername = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemSftpUsername.IsNull() {
 		data.CaTrustpointSystemSftpUsername = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.sftp-password.password"); value.Exists() && !data.CaTrustpointSystemSftpPassword.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.sftp-password.password"); value.Exists() && !data.CaTrustpointSystemSftpPassword.IsNull() {
 		data.CaTrustpointSystemSftpPassword = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemSftpPassword.IsNull() {
 		data.CaTrustpointSystemSftpPassword = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.auto-enroll"); value.Exists() && !data.CaTrustpointSystemAutoEnroll.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.auto-enroll"); value.Exists() && !data.CaTrustpointSystemAutoEnroll.IsNull() {
 		data.CaTrustpointSystemAutoEnroll = types.Int64Value(value.Int())
 	} else if data.CaTrustpointSystemAutoEnroll.IsNull() {
 		data.CaTrustpointSystemAutoEnroll = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.renewal-message-type.pkcsreq"); value.Exists() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.renewal-message-type.pkcsreq"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
 			data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(true)
@@ -830,7 +839,7 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.renewal-message-type.renewalreq"); value.Exists() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.renewal-message-type.renewalreq"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
 			data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(true)
@@ -841,7 +850,7 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.skip-challenge-password"); value.Exists() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.skip-challenge-password"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaTrustpointSystemSkipChallengePassword.IsNull() {
 			data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(true)
@@ -852,72 +861,72 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpointSystemSkipChallengePassword = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.rsakeypair"); value.Exists() && !data.CaTrustpointSystemRsaKeypair.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.rsakeypair"); value.Exists() && !data.CaTrustpointSystemRsaKeypair.IsNull() {
 		data.CaTrustpointSystemRsaKeypair = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemRsaKeypair.IsNull() {
 		data.CaTrustpointSystemRsaKeypair = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.rsa"); value.Exists() && !data.CaTrustpointSystemCaKeypairRsa.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.rsa"); value.Exists() && !data.CaTrustpointSystemCaKeypairRsa.IsNull() {
 		data.CaTrustpointSystemCaKeypairRsa = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemCaKeypairRsa.IsNull() {
 		data.CaTrustpointSystemCaKeypairRsa = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp256"); value.Exists() && !data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp256"); value.Exists() && !data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
 		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
 		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp384"); value.Exists() && !data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp384"); value.Exists() && !data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
 		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
 		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp521"); value.Exists() && !data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp521"); value.Exists() && !data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
 		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
 		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.dsa"); value.Exists() && !data.CaTrustpointSystemCaKeypairDsa.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.dsa"); value.Exists() && !data.CaTrustpointSystemCaKeypairDsa.IsNull() {
 		data.CaTrustpointSystemCaKeypairDsa = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemCaKeypairDsa.IsNull() {
 		data.CaTrustpointSystemCaKeypairDsa = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ed25519"); value.Exists() && !data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.ed25519"); value.Exists() && !data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
 		data.CaTrustpointSystemCaKeypairEd25519 = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
 		data.CaTrustpointSystemCaKeypairEd25519 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.rsa"); value.Exists() && !data.CaTrustpointSystemKeypairRsa.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.rsa"); value.Exists() && !data.CaTrustpointSystemKeypairRsa.IsNull() {
 		data.CaTrustpointSystemKeypairRsa = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemKeypairRsa.IsNull() {
 		data.CaTrustpointSystemKeypairRsa = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp256"); value.Exists() && !data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.ecdsanistp256"); value.Exists() && !data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
 		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
 		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp384"); value.Exists() && !data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.ecdsanistp384"); value.Exists() && !data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
 		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
 		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp521"); value.Exists() && !data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.ecdsanistp521"); value.Exists() && !data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
 		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
 		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.dsa"); value.Exists() && !data.CaTrustpointSystemKeypairDsa.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.dsa"); value.Exists() && !data.CaTrustpointSystemKeypairDsa.IsNull() {
 		data.CaTrustpointSystemKeypairDsa = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemKeypairDsa.IsNull() {
 		data.CaTrustpointSystemKeypairDsa = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ed25519"); value.Exists() && !data.CaTrustpointSystemKeypairEd25519.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.ed25519"); value.Exists() && !data.CaTrustpointSystemKeypairEd25519.IsNull() {
 		data.CaTrustpointSystemKeypairEd25519 = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemKeypairEd25519.IsNull() {
 		data.CaTrustpointSystemKeypairEd25519 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.crl.optional"); value.Exists() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.crl.optional"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaTrustpointSystemCrlOptional.IsNull() {
 			data.CaTrustpointSystemCrlOptional = types.BoolValue(true)
@@ -928,17 +937,17 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpointSystemCrlOptional = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.query.url"); value.Exists() && !data.CaTrustpointSystemQueryUrl.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.query.url"); value.Exists() && !data.CaTrustpointSystemQueryUrl.IsNull() {
 		data.CaTrustpointSystemQueryUrl = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemQueryUrl.IsNull() {
 		data.CaTrustpointSystemQueryUrl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ip-address.ipv4-address"); value.Exists() && !data.CaTrustpointSystemIpAddress.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.ip-address.ipv4-address"); value.Exists() && !data.CaTrustpointSystemIpAddress.IsNull() {
 		data.CaTrustpointSystemIpAddress = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemIpAddress.IsNull() {
 		data.CaTrustpointSystemIpAddress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ip-address.none"); value.Exists() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.ip-address.none"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaTrustpointSystemIpAddressNone.IsNull() {
 			data.CaTrustpointSystemIpAddressNone = types.BoolValue(true)
@@ -949,22 +958,22 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpointSystemIpAddressNone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-name"); value.Exists() && !data.CaTrustpointSystemSubjectName.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.subject-name"); value.Exists() && !data.CaTrustpointSystemSubjectName.IsNull() {
 		data.CaTrustpointSystemSubjectName = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemSubjectName.IsNull() {
 		data.CaTrustpointSystemSubjectName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-name-ca-certificate"); value.Exists() && !data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.subject-name-ca-certificate"); value.Exists() && !data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
 		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
 		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-alternative-name"); value.Exists() && !data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.subject-alternative-name"); value.Exists() && !data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
 		data.CaTrustpointSystemSubjectAlternativeName = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
 		data.CaTrustpointSystemSubjectAlternativeName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.serial-number"); value.Exists() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.serial-number"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaTrustpointSystemSerialNumber.IsNull() {
 			data.CaTrustpointSystemSerialNumber = types.BoolValue(true)
@@ -975,7 +984,7 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpointSystemSerialNumber = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.serial-number.none"); value.Exists() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.serial-number.none"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaTrustpointSystemSerialNumberNone.IsNull() {
 			data.CaTrustpointSystemSerialNumberNone = types.BoolValue(true)
@@ -986,22 +995,22 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaTrustpointSystemSerialNumberNone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.vrf"); value.Exists() && !data.CaTrustpointSystemVrf.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.vrf"); value.Exists() && !data.CaTrustpointSystemVrf.IsNull() {
 		data.CaTrustpointSystemVrf = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemVrf.IsNull() {
 		data.CaTrustpointSystemVrf = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.lifetime.ca-certificate"); value.Exists() && !data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.lifetime.ca-certificate"); value.Exists() && !data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
 		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Value(value.Int())
 	} else if data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
 		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.lifetime.certificate"); value.Exists() && !data.CaTrustpointSystemLifetimeCertificate.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.lifetime.certificate"); value.Exists() && !data.CaTrustpointSystemLifetimeCertificate.IsNull() {
 		data.CaTrustpointSystemLifetimeCertificate = types.Int64Value(value.Int())
 	} else if data.CaTrustpointSystemLifetimeCertificate.IsNull() {
 		data.CaTrustpointSystemLifetimeCertificate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.message-digest"); value.Exists() && !data.CaTrustpointSystemMessageDigest.IsNull() {
+	if value := res.Get("ca.trustpoint.system-trustpoint.message-digest"); value.Exists() && !data.CaTrustpointSystemMessageDigest.IsNull() {
 		data.CaTrustpointSystemMessageDigest = types.StringValue(value.String())
 	} else if data.CaTrustpointSystemMessageDigest.IsNull() {
 		data.CaTrustpointSystemMessageDigest = types.StringNull()
@@ -1011,7 +1020,7 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.CaTrustpoints[i].TrustpointName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "ca.trustpoint.trustpoints.trustpoint").ForEach(
+		res.Get("ca.trustpoint.trustpoints.trustpoint").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1211,7 +1220,7 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.CaOpensshTrustpoints[i].TrustpointName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "ca.openssh.trustpoints.trustpoint").ForEach(
+		res.Get("ca.openssh.trustpoints.trustpoint").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1240,27 +1249,27 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaOpensshTrustpoints[i].Rsakeypair = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.http-proxy"); value.Exists() && !data.CaHttpProxy.IsNull() {
+	if value := res.Get("ca.http-proxy"); value.Exists() && !data.CaHttpProxy.IsNull() {
 		data.CaHttpProxy = types.StringValue(value.String())
 	} else if data.CaHttpProxy.IsNull() {
 		data.CaHttpProxy = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.port"); value.Exists() && !data.CaHttpProxyPort.IsNull() {
+	if value := res.Get("ca.port"); value.Exists() && !data.CaHttpProxyPort.IsNull() {
 		data.CaHttpProxyPort = types.Int64Value(value.Int())
 	} else if data.CaHttpProxyPort.IsNull() {
 		data.CaHttpProxyPort = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ca.source-interface.ipv4"); value.Exists() && !data.CaSourceInterfaceIpv4.IsNull() {
+	if value := res.Get("ca.source-interface.ipv4"); value.Exists() && !data.CaSourceInterfaceIpv4.IsNull() {
 		data.CaSourceInterfaceIpv4 = types.StringValue(value.String())
 	} else if data.CaSourceInterfaceIpv4.IsNull() {
 		data.CaSourceInterfaceIpv4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.source-interface.ipv6"); value.Exists() && !data.CaSourceInterfaceIpv6.IsNull() {
+	if value := res.Get("ca.source-interface.ipv6"); value.Exists() && !data.CaSourceInterfaceIpv6.IsNull() {
 		data.CaSourceInterfaceIpv6 = types.StringValue(value.String())
 	} else if data.CaSourceInterfaceIpv6.IsNull() {
 		data.CaSourceInterfaceIpv6 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ca.rsa.one-thousand-twenty-four.disable"); value.Exists() {
+	if value := res.Get("ca.rsa.one-thousand-twenty-four.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaRsa1024Disable.IsNull() {
 			data.CaRsa1024Disable = types.BoolValue(true)
@@ -1271,7 +1280,7 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaRsa1024Disable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.fqdn-check.ip-address.allow"); value.Exists() {
+	if value := res.Get("ca.fqdn-check.ip-address.allow"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CaFqdnCheckIpAddressAllow.IsNull() {
 			data.CaFqdnCheckIpAddressAllow = types.BoolValue(true)
@@ -1282,12 +1291,12 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 			data.CaFqdnCheckIpAddressAllow = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ca.crl.curl-timeout"); value.Exists() && !data.CaCrlCurlTimeout.IsNull() {
+	if value := res.Get("ca.crl.curl-timeout"); value.Exists() && !data.CaCrlCurlTimeout.IsNull() {
 		data.CaCrlCurlTimeout = types.Int64Value(value.Int())
 	} else if data.CaCrlCurlTimeout.IsNull() {
 		data.CaCrlCurlTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "fips-mode"); value.Exists() {
+	if value := res.Get("fips-mode"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.FipsMode.IsNull() {
 			data.FipsMode = types.BoolValue(true)

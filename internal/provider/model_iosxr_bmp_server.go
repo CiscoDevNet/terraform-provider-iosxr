@@ -200,11 +200,15 @@ func (data BMPServer) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data BMPServer) toBodyXML(ctx context.Context) string {
+func (data BMPServer) toBodyXML(ctx context.Context, stateArg ...*BMPServer) string {
+	var state *BMPServer
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.AllRouteMonitorings) > 0 {
 		for _, item := range data.AllRouteMonitorings {
-			basePath := data.getXPath() + "/all/route-monitorings/route-monitoring"
+			basePath := data.getXPath() + "/all/route-monitorings/route-monitoring[route-mon='" + item.RouteMon.ValueString() + "']"
 			if !item.RouteMon.IsNull() && !item.RouteMon.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/route-mon", item.RouteMon.ValueString())
 			}
@@ -226,7 +230,7 @@ func (data BMPServer) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Servers) > 0 {
 		for _, item := range data.Servers {
-			basePath := data.getXPath() + "/server"
+			basePath := data.getXPath() + "/server[server-number='" + strconv.FormatInt(item.Number.ValueInt64(), 10) + "']"
 			if !item.Number.IsNull() && !item.Number.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/server-number", strconv.FormatInt(item.Number.ValueInt64(), 10))
 			}
@@ -292,6 +296,11 @@ func (data BMPServer) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -299,13 +308,13 @@ func (data BMPServer) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *BMPServer) updateFromBody(ctx context.Context, res []byte) {
+func (data *BMPServer) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.AllRouteMonitorings {
 		keys := [...]string{"route-mon"}
 		keyValues := [...]string{data.AllRouteMonitorings[i].RouteMon.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "all.route-monitorings.route-monitoring").ForEach(
+		res.Get("all.route-monitorings.route-monitoring").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -339,7 +348,7 @@ func (data *BMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.AllRouteMonitorings[i].ScanTime = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "all.route-mirroring.inbound.pre-policy"); value.Exists() {
+	if value := res.Get("all.route-mirroring.inbound.pre-policy"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AllRouteMirroringInboundPrePolicy.IsNull() {
 			data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
@@ -350,7 +359,7 @@ func (data *BMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.AllRouteMirroringInboundPrePolicy = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "all.max-buffer-size"); value.Exists() && !data.AllMaxBufferSize.IsNull() {
+	if value := res.Get("all.max-buffer-size"); value.Exists() && !data.AllMaxBufferSize.IsNull() {
 		data.AllMaxBufferSize = types.Int64Value(value.Int())
 	} else if data.AllMaxBufferSize.IsNull() {
 		data.AllMaxBufferSize = types.Int64Null()
@@ -360,7 +369,7 @@ func (data *BMPServer) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "server").ForEach(
+		res.Get("server").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

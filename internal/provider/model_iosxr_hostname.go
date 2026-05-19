@@ -88,7 +88,11 @@ func (data Hostname) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data Hostname) toBodyXML(ctx context.Context) string {
+func (data Hostname) toBodyXML(ctx context.Context, stateArg ...*Hostname) string {
+	var state *Hostname
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.SystemNetworkName.IsNull() && !data.SystemNetworkName.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/system-network-name", data.SystemNetworkName.ValueString())
@@ -101,6 +105,11 @@ func (data Hostname) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -108,8 +117,8 @@ func (data Hostname) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *Hostname) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() && !data.SystemNetworkName.IsNull() {
+func (data *Hostname) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("system-network-name"); value.Exists() && !data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	} else if data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringNull()

@@ -104,8 +104,8 @@ func (data HWModuleShutdown) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *HWModuleShutdown) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "shut"); value.Exists() {
+func (data *HWModuleShutdown) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("shut"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Shut.IsNull() {
 			data.Shut = types.BoolValue(true)
@@ -116,7 +116,7 @@ func (data *HWModuleShutdown) updateFromBody(ctx context.Context, res []byte) {
 			data.Shut = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "unshut"); value.Exists() {
+	if value := res.Get("unshut"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Unshut.IsNull() {
 			data.Unshut = types.BoolValue(true)
@@ -132,7 +132,11 @@ func (data *HWModuleShutdown) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data HWModuleShutdown) toBodyXML(ctx context.Context) string {
+func (data HWModuleShutdown) toBodyXML(ctx context.Context, stateArg ...*HWModuleShutdown) string {
+	var state *HWModuleShutdown
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Shut.IsNull() && !data.Shut.IsUnknown() {
 		if data.Shut.ValueBool() {
@@ -152,6 +156,11 @@ func (data HWModuleShutdown) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

@@ -127,13 +127,13 @@ func (data SegmentRoutingMappingServer) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res []byte) {
+func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.MappingPrefixSidAddressFamily {
 		keys := [...]string{"af-name"}
 		keyValues := [...]string{data.MappingPrefixSidAddressFamily[i].AfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "prefix-sid-map.address-families.address-family").ForEach(
+		res.Get("prefix-sid-map.address-families.address-family").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -216,11 +216,15 @@ func (data *SegmentRoutingMappingServer) updateFromBody(ctx context.Context, res
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data SegmentRoutingMappingServer) toBodyXML(ctx context.Context) string {
+func (data SegmentRoutingMappingServer) toBodyXML(ctx context.Context, stateArg ...*SegmentRoutingMappingServer) string {
+	var state *SegmentRoutingMappingServer
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.MappingPrefixSidAddressFamily) > 0 {
 		for _, item := range data.MappingPrefixSidAddressFamily {
-			basePath := data.getXPath() + "/prefix-sid-map/address-families/address-family"
+			basePath := data.getXPath() + "/prefix-sid-map/address-families/address-family[af-name='" + item.AfName.ValueString() + "']"
 			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/af-name", item.AfName.ValueString())
 			}
@@ -256,6 +260,11 @@ func (data SegmentRoutingMappingServer) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

@@ -98,8 +98,8 @@ func (data MACSec) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *MACSec) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+func (data *MACSec) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("shutdown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolValue(true)
@@ -110,7 +110,7 @@ func (data *MACSec) updateFromBody(ctx context.Context, res []byte) {
 			data.Shutdown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "fips"); value.Exists() {
+	if value := res.Get("fips"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Fips.IsNull() {
 			data.Fips = types.BoolValue(true)
@@ -126,7 +126,11 @@ func (data *MACSec) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data MACSec) toBodyXML(ctx context.Context) string {
+func (data MACSec) toBodyXML(ctx context.Context, stateArg ...*MACSec) string {
+	var state *MACSec
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Shutdown.IsNull() && !data.Shutdown.IsUnknown() {
 		if data.Shutdown.ValueBool() {
@@ -146,6 +150,11 @@ func (data MACSec) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

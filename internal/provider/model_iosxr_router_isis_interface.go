@@ -479,13 +479,13 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "mesh-group.mesh-group-number"); value.Exists() && !data.MeshGroup.IsNull() {
+func (data *RouterISISInterface) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("mesh-group.mesh-group-number"); value.Exists() && !data.MeshGroup.IsNull() {
 		data.MeshGroup = types.Int64Value(value.Int())
 	} else if data.MeshGroup.IsNull() {
 		data.MeshGroup = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mesh-group.blocked"); value.Exists() {
+	if value := res.Get("mesh-group.blocked"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MeshGroupBlocked.IsNull() {
 			data.MeshGroupBlocked = types.BoolValue(true)
@@ -496,17 +496,17 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.MeshGroupBlocked = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "state"); value.Exists() && !data.State.IsNull() {
+	if value := res.Get("state"); value.Exists() && !data.State.IsNull() {
 		data.State = types.StringValue(value.String())
 	} else if data.State.IsNull() {
 		data.State = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() && !data.CircuitType.IsNull() {
+	if value := res.Get("circuit-type"); value.Exists() && !data.CircuitType.IsNull() {
 		data.CircuitType = types.StringValue(value.String())
 	} else if data.CircuitType.IsNull() {
 		data.CircuitType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "csnp-interval"); value.Exists() && !data.CsnpInterval.IsNull() {
+	if value := res.Get("csnp-interval"); value.Exists() && !data.CsnpInterval.IsNull() {
 		data.CsnpInterval = types.Int64Value(value.Int())
 	} else if data.CsnpInterval.IsNull() {
 		data.CsnpInterval = types.Int64Null()
@@ -516,7 +516,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.CsnpIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "csnp-interval-levels.csnp-interval-level").ForEach(
+		res.Get("csnp-interval-levels.csnp-interval-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -545,7 +545,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.CsnpIntervalLevels[i].CsnpInterval = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "hello-padding"); value.Exists() && !data.HelloPadding.IsNull() {
+	if value := res.Get("hello-padding"); value.Exists() && !data.HelloPadding.IsNull() {
 		data.HelloPadding = types.StringValue(value.String())
 	} else if data.HelloPadding.IsNull() {
 		data.HelloPadding = types.StringNull()
@@ -555,7 +555,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.HelloPaddingLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hello-padding-levels.hello-padding-level").ForEach(
+		res.Get("hello-padding-levels.hello-padding-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -584,7 +584,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloPaddingLevels[i].HelloPadding = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() && !data.HelloInterval.IsNull() {
+	if value := res.Get("hello-interval"); value.Exists() && !data.HelloInterval.IsNull() {
 		data.HelloInterval = types.Int64Value(value.Int())
 	} else if data.HelloInterval.IsNull() {
 		data.HelloInterval = types.Int64Null()
@@ -594,7 +594,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.HelloIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hello-interval-levels.hello-interval-level").ForEach(
+		res.Get("hello-interval-levels.hello-interval-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -623,7 +623,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloIntervalLevels[i].HelloInterval = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "hello-multiplier"); value.Exists() && !data.HelloMultiplier.IsNull() {
+	if value := res.Get("hello-multiplier"); value.Exists() && !data.HelloMultiplier.IsNull() {
 		data.HelloMultiplier = types.Int64Value(value.Int())
 	} else if data.HelloMultiplier.IsNull() {
 		data.HelloMultiplier = types.Int64Null()
@@ -633,7 +633,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.HelloMultiplierLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hello-multiplier-levels.hello-multiplier-level").ForEach(
+		res.Get("hello-multiplier-levels.hello-multiplier-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -662,7 +662,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloMultiplierLevels[i].HelloMultiplier = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "lsp-interval"); value.Exists() && !data.LspInterval.IsNull() {
+	if value := res.Get("lsp-interval"); value.Exists() && !data.LspInterval.IsNull() {
 		data.LspInterval = types.Int64Value(value.Int())
 	} else if data.LspInterval.IsNull() {
 		data.LspInterval = types.Int64Null()
@@ -672,7 +672,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.LspIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "lsp-interval-levels.lsp-interval-level").ForEach(
+		res.Get("lsp-interval-levels.lsp-interval-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -706,7 +706,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordAcceptsLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hello-password.accepts-levels.accepts-level").ForEach(
+		res.Get("hello-password.accepts-levels.accepts-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -730,7 +730,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloPasswordAcceptsLevels[i].LevelNumber = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
+	if value := res.Get("hello-password.hello-password-options.text.hello-password-options.send-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.HelloPasswordTextSendOnly.IsNull() {
 			data.HelloPasswordTextSendOnly = types.BoolValue(true)
@@ -741,7 +741,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloPasswordTextSendOnly = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
+	if value := res.Get("hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.HelloPasswordHmacMd5SendOnly.IsNull() {
 			data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
@@ -752,12 +752,12 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloPasswordHmacMd5SendOnly = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() && !data.HelloPasswordKeychainName.IsNull() {
+	if value := res.Get("hello-password.hello-password-options.keychain.keychain-name"); value.Exists() && !data.HelloPasswordKeychainName.IsNull() {
 		data.HelloPasswordKeychainName = types.StringValue(value.String())
 	} else if data.HelloPasswordKeychainName.IsNull() {
 		data.HelloPasswordKeychainName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
+	if value := res.Get("hello-password.hello-password-options.keychain.send-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.HelloPasswordKeychainSendOnly.IsNull() {
 			data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
@@ -773,7 +773,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.HelloPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hello-password-levels.hello-password-level").ForEach(
+		res.Get("hello-password-levels.hello-password-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -838,12 +838,12 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "remote-psnp-delay"); value.Exists() && !data.RemotePsnpDelay.IsNull() {
+	if value := res.Get("remote-psnp-delay"); value.Exists() && !data.RemotePsnpDelay.IsNull() {
 		data.RemotePsnpDelay = types.Int64Value(value.Int())
 	} else if data.RemotePsnpDelay.IsNull() {
 		data.RemotePsnpDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
+	if value := res.Get("priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
 	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
@@ -853,7 +853,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.PriorityLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "priority-levels.priority-level").ForEach(
+		res.Get("priority-levels.priority-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -882,7 +882,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.PriorityLevels[i].Priority = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "point-to-point"); value.Exists() {
+	if value := res.Get("point-to-point"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PointToPoint.IsNull() {
 			data.PointToPoint = types.BoolValue(true)
@@ -893,7 +893,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.PointToPoint = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "retransmit-interval"); value.Exists() && !data.RetransmitInterval.IsNull() {
+	if value := res.Get("retransmit-interval"); value.Exists() && !data.RetransmitInterval.IsNull() {
 		data.RetransmitInterval = types.Int64Value(value.Int())
 	} else if data.RetransmitInterval.IsNull() {
 		data.RetransmitInterval = types.Int64Null()
@@ -903,7 +903,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.RetransmitIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "retransmit-interval-levels.retransmit-interval-level").ForEach(
+		res.Get("retransmit-interval-levels.retransmit-interval-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -932,7 +932,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.RetransmitIntervalLevels[i].RetransmitInterval = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "retransmit-throttle-interval"); value.Exists() && !data.RetransmitThrottleInterval.IsNull() {
+	if value := res.Get("retransmit-throttle-interval"); value.Exists() && !data.RetransmitThrottleInterval.IsNull() {
 		data.RetransmitThrottleInterval = types.Int64Value(value.Int())
 	} else if data.RetransmitThrottleInterval.IsNull() {
 		data.RetransmitThrottleInterval = types.Int64Null()
@@ -942,7 +942,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{strconv.FormatInt(data.RetransmitThrottleIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "retransmit-throttle-interval-levels.retransmit-throttle-interval-level").ForEach(
+		res.Get("retransmit-throttle-interval-levels.retransmit-throttle-interval-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -971,7 +971,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.RetransmitThrottleIntervalLevels[i].RetransmitThrottleInterval = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "link-down.fast-detect"); value.Exists() {
+	if value := res.Get("link-down.fast-detect"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LinkDownFastDetect.IsNull() {
 			data.LinkDownFastDetect = types.BoolValue(true)
@@ -982,32 +982,32 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.LinkDownFastDetect = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "affinity.flex-algo.flex-algo-argument"); value.Exists() && !data.AffinityFlexAlgos.IsNull() {
+	if value := res.Get("affinity.flex-algo.flex-algo-argument"); value.Exists() && !data.AffinityFlexAlgos.IsNull() {
 		data.AffinityFlexAlgos = helpers.GetStringList(value.Array())
 	} else if data.AffinityFlexAlgos.IsNull() {
 		data.AffinityFlexAlgos = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "affinity.flex-algo.anomaly"); value.Exists() && !data.AffinityFlexAlgosAnomalies.IsNull() {
+	if value := res.Get("affinity.flex-algo.anomaly"); value.Exists() && !data.AffinityFlexAlgosAnomalies.IsNull() {
 		data.AffinityFlexAlgosAnomalies = helpers.GetStringList(value.Array())
 	} else if data.AffinityFlexAlgosAnomalies.IsNull() {
 		data.AffinityFlexAlgosAnomalies = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "override.metrics"); value.Exists() && !data.OverrideMetrics.IsNull() {
+	if value := res.Get("override.metrics"); value.Exists() && !data.OverrideMetrics.IsNull() {
 		data.OverrideMetrics = types.StringValue(value.String())
 	} else if data.OverrideMetrics.IsNull() {
 		data.OverrideMetrics = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "delay.normalize.interval.interval-number"); value.Exists() && !data.DelayNormalizeInterval.IsNull() {
+	if value := res.Get("delay.normalize.interval.interval-number"); value.Exists() && !data.DelayNormalizeInterval.IsNull() {
 		data.DelayNormalizeInterval = types.Int64Value(value.Int())
 	} else if data.DelayNormalizeInterval.IsNull() {
 		data.DelayNormalizeInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "delay.normalize.interval.offset"); value.Exists() && !data.DelayNormalizeOffset.IsNull() {
+	if value := res.Get("delay.normalize.interval.offset"); value.Exists() && !data.DelayNormalizeOffset.IsNull() {
 		data.DelayNormalizeOffset = types.Int64Value(value.Int())
 	} else if data.DelayNormalizeOffset.IsNull() {
 		data.DelayNormalizeOffset = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
+	if value := res.Get("mpls.ldp.sync"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MplsLdpSync.IsNull() {
 			data.MplsLdpSync = types.BoolValue(true)
@@ -1018,12 +1018,12 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.MplsLdpSync = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mpls.ldp.sync.level"); value.Exists() && !data.MplsLdpSyncLevel.IsNull() {
+	if value := res.Get("mpls.ldp.sync.level"); value.Exists() && !data.MplsLdpSyncLevel.IsNull() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	} else if data.MplsLdpSyncLevel.IsNull() {
 		data.MplsLdpSyncLevel = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv4"); value.Exists() {
+	if value := res.Get("bfd.fast-detect.ipv4"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.BfdFastDetectIpv4.IsNull() {
 			data.BfdFastDetectIpv4 = types.BoolValue(true)
@@ -1034,7 +1034,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.BfdFastDetectIpv4 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv6"); value.Exists() {
+	if value := res.Get("bfd.fast-detect.ipv6"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.BfdFastDetectIpv6.IsNull() {
 			data.BfdFastDetectIpv6 = types.BoolValue(true)
@@ -1045,12 +1045,12 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.BfdFastDetectIpv6 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
+	if value := res.Get("bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
+	if value := res.Get("bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
@@ -2436,7 +2436,11 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
+func (data RouterISISInterface) toBodyXML(ctx context.Context, stateArg ...*RouterISISInterface) string {
+	var state *RouterISISInterface
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.MeshGroup.IsNull() && !data.MeshGroup.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/mesh-group/mesh-group-number", strconv.FormatInt(data.MeshGroup.ValueInt64(), 10))
@@ -2457,7 +2461,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.CsnpIntervalLevels) > 0 {
 		for _, item := range data.CsnpIntervalLevels {
-			basePath := data.getXPath() + "/csnp-interval-levels/csnp-interval-level"
+			basePath := data.getXPath() + "/csnp-interval-levels/csnp-interval-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2471,7 +2475,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HelloPaddingLevels) > 0 {
 		for _, item := range data.HelloPaddingLevels {
-			basePath := data.getXPath() + "/hello-padding-levels/hello-padding-level"
+			basePath := data.getXPath() + "/hello-padding-levels/hello-padding-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2485,7 +2489,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HelloIntervalLevels) > 0 {
 		for _, item := range data.HelloIntervalLevels {
-			basePath := data.getXPath() + "/hello-interval-levels/hello-interval-level"
+			basePath := data.getXPath() + "/hello-interval-levels/hello-interval-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2499,7 +2503,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HelloMultiplierLevels) > 0 {
 		for _, item := range data.HelloMultiplierLevels {
-			basePath := data.getXPath() + "/hello-multiplier-levels/hello-multiplier-level"
+			basePath := data.getXPath() + "/hello-multiplier-levels/hello-multiplier-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2513,7 +2517,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.LspIntervalLevels) > 0 {
 		for _, item := range data.LspIntervalLevels {
-			basePath := data.getXPath() + "/lsp-interval-levels/lsp-interval-level"
+			basePath := data.getXPath() + "/lsp-interval-levels/lsp-interval-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2527,7 +2531,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HelloPasswordAcceptsLevels) > 0 {
 		for _, item := range data.HelloPasswordAcceptsLevels {
-			basePath := data.getXPath() + "/hello-password/accepts-levels/accepts-level"
+			basePath := data.getXPath() + "/hello-password/accepts-levels/accepts-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2562,7 +2566,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HelloPasswordLevels) > 0 {
 		for _, item := range data.HelloPasswordLevels {
-			basePath := data.getXPath() + "/hello-password-levels/hello-password-level"
+			basePath := data.getXPath() + "/hello-password-levels/hello-password-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2600,7 +2604,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PriorityLevels) > 0 {
 		for _, item := range data.PriorityLevels {
-			basePath := data.getXPath() + "/priority-levels/priority-level"
+			basePath := data.getXPath() + "/priority-levels/priority-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2619,7 +2623,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.RetransmitIntervalLevels) > 0 {
 		for _, item := range data.RetransmitIntervalLevels {
-			basePath := data.getXPath() + "/retransmit-interval-levels/retransmit-interval-level"
+			basePath := data.getXPath() + "/retransmit-interval-levels/retransmit-interval-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2633,7 +2637,7 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.RetransmitThrottleIntervalLevels) > 0 {
 		for _, item := range data.RetransmitThrottleIntervalLevels {
-			basePath := data.getXPath() + "/retransmit-throttle-interval-levels/retransmit-throttle-interval-level"
+			basePath := data.getXPath() + "/retransmit-throttle-interval-levels/retransmit-throttle-interval-level[level-number='" + strconv.FormatInt(item.LevelNumber.ValueInt64(), 10) + "']"
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -2702,6 +2706,11 @@ func (data RouterISISInterface) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

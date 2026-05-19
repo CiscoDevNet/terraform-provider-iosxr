@@ -268,13 +268,13 @@ func (data MonitorSession) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
+func (data *MonitorSession) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.MonitorSessions {
 		keys := [...]string{"session-name"}
 		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "monitor-session").ForEach(
+		res.Get("monitor-session").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -517,12 +517,12 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.MonitorSessions[i].RateLimitTx = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "router-id"); value.Exists() && !data.RouterId.IsNull() {
+	if value := res.Get("router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.Int64Value(value.Int())
 	} else if data.RouterId.IsNull() {
 		data.RouterId = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "default-capture-disable"); value.Exists() {
+	if value := res.Get("default-capture-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DefaultCaptureDisable.IsNull() {
 			data.DefaultCaptureDisable = types.BoolValue(true)
@@ -533,12 +533,12 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.DefaultCaptureDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "local-capture-capacity"); value.Exists() && !data.LocalCaptureCapacitySize.IsNull() {
+	if value := res.Get("local-capture-capacity"); value.Exists() && !data.LocalCaptureCapacitySize.IsNull() {
 		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
 	} else if data.LocalCaptureCapacitySize.IsNull() {
 		data.LocalCaptureCapacitySize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "kb"); value.Exists() {
+	if value := res.Get("kb"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LocalCaptureUnitKb.IsNull() {
 			data.LocalCaptureUnitKb = types.BoolValue(true)
@@ -549,7 +549,7 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.LocalCaptureUnitKb = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mb"); value.Exists() {
+	if value := res.Get("mb"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LocalCaptureUnitMb.IsNull() {
 			data.LocalCaptureUnitMb = types.BoolValue(true)
@@ -560,7 +560,7 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 			data.LocalCaptureUnitMb = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "gb"); value.Exists() {
+	if value := res.Get("gb"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LocalCaptureUnitGb.IsNull() {
 			data.LocalCaptureUnitGb = types.BoolValue(true)
@@ -576,11 +576,15 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data MonitorSession) toBodyXML(ctx context.Context) string {
+func (data MonitorSession) toBodyXML(ctx context.Context, stateArg ...*MonitorSession) string {
+	var state *MonitorSession
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.MonitorSessions) > 0 {
 		for _, item := range data.MonitorSessions {
-			basePath := data.getXPath() + "/monitor-session"
+			basePath := data.getXPath() + "/monitor-session[session-name='" + item.SessionName.ValueString() + "']"
 			if !item.SessionName.IsNull() && !item.SessionName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/session-name", item.SessionName.ValueString())
 			}
@@ -725,6 +729,11 @@ func (data MonitorSession) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

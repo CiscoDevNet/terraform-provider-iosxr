@@ -193,7 +193,11 @@ func (data FlowExporterMap) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data FlowExporterMap) toBodyXML(ctx context.Context) string {
+func (data FlowExporterMap) toBodyXML(ctx context.Context, stateArg ...*FlowExporterMap) string {
+	var state *FlowExporterMap
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.DestinationIpv4Address.IsNull() && !data.DestinationIpv4Address.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/destination/ipv4-address", data.DestinationIpv4Address.ValueString())
@@ -265,6 +269,11 @@ func (data FlowExporterMap) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -272,63 +281,63 @@ func (data FlowExporterMap) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "destination.ipv4-address"); value.Exists() && !data.DestinationIpv4Address.IsNull() {
+func (data *FlowExporterMap) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("destination.ipv4-address"); value.Exists() && !data.DestinationIpv4Address.IsNull() {
 		data.DestinationIpv4Address = types.StringValue(value.String())
 	} else if data.DestinationIpv4Address.IsNull() {
 		data.DestinationIpv4Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "destination.ipv6-address"); value.Exists() && !data.DestinationIpv6Address.IsNull() {
+	if value := res.Get("destination.ipv6-address"); value.Exists() && !data.DestinationIpv6Address.IsNull() {
 		data.DestinationIpv6Address = types.StringValue(value.String())
 	} else if data.DestinationIpv6Address.IsNull() {
 		data.DestinationIpv6Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "destination.vrf"); value.Exists() && !data.DestinationVrf.IsNull() {
+	if value := res.Get("destination.vrf"); value.Exists() && !data.DestinationVrf.IsNull() {
 		data.DestinationVrf = types.StringValue(value.String())
 	} else if data.DestinationVrf.IsNull() {
 		data.DestinationVrf = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "source"); value.Exists() && !data.Source.IsNull() {
+	if value := res.Get("source"); value.Exists() && !data.Source.IsNull() {
 		data.Source = types.StringValue(value.String())
 	} else if data.Source.IsNull() {
 		data.Source = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "source-address.ipv4-address"); value.Exists() && !data.SourceAddressIpv4Address.IsNull() {
+	if value := res.Get("source-address.ipv4-address"); value.Exists() && !data.SourceAddressIpv4Address.IsNull() {
 		data.SourceAddressIpv4Address = types.StringValue(value.String())
 	} else if data.SourceAddressIpv4Address.IsNull() {
 		data.SourceAddressIpv4Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "source-address.ipv6-address"); value.Exists() && !data.SourceAddressIpv6Address.IsNull() {
+	if value := res.Get("source-address.ipv6-address"); value.Exists() && !data.SourceAddressIpv6Address.IsNull() {
 		data.SourceAddressIpv6Address = types.StringValue(value.String())
 	} else if data.SourceAddressIpv6Address.IsNull() {
 		data.SourceAddressIpv6Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv4-address"); value.Exists() && !data.RouterIdIpv4Address.IsNull() {
+	if value := res.Get("router-id.router-id-address.ipv4-address"); value.Exists() && !data.RouterIdIpv4Address.IsNull() {
 		data.RouterIdIpv4Address = types.StringValue(value.String())
 	} else if data.RouterIdIpv4Address.IsNull() {
 		data.RouterIdIpv4Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "router-id.router-id-address.ipv6-address"); value.Exists() && !data.RouterIdIpv6Address.IsNull() {
+	if value := res.Get("router-id.router-id-address.ipv6-address"); value.Exists() && !data.RouterIdIpv6Address.IsNull() {
 		data.RouterIdIpv6Address = types.StringValue(value.String())
 	} else if data.RouterIdIpv6Address.IsNull() {
 		data.RouterIdIpv6Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "dscp"); value.Exists() && !data.Dscp.IsNull() {
+	if value := res.Get("dscp"); value.Exists() && !data.Dscp.IsNull() {
 		data.Dscp = types.Int64Value(value.Int())
 	} else if data.Dscp.IsNull() {
 		data.Dscp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "transport.udp"); value.Exists() && !data.TransportUdp.IsNull() {
+	if value := res.Get("transport.udp"); value.Exists() && !data.TransportUdp.IsNull() {
 		data.TransportUdp = types.Int64Value(value.Int())
 	} else if data.TransportUdp.IsNull() {
 		data.TransportUdp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "packet-length"); value.Exists() && !data.PacketLength.IsNull() {
+	if value := res.Get("packet-length"); value.Exists() && !data.PacketLength.IsNull() {
 		data.PacketLength = types.Int64Value(value.Int())
 	} else if data.PacketLength.IsNull() {
 		data.PacketLength = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dfbit.set"); value.Exists() {
+	if value := res.Get("dfbit.set"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DfbitSet.IsNull() {
 			data.DfbitSet = types.BoolValue(true)
@@ -339,42 +348,42 @@ func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
 			data.DfbitSet = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "version.export-format"); value.Exists() && !data.VersionExportFormat.IsNull() {
+	if value := res.Get("version.export-format"); value.Exists() && !data.VersionExportFormat.IsNull() {
 		data.VersionExportFormat = types.StringValue(value.String())
 	} else if data.VersionExportFormat.IsNull() {
 		data.VersionExportFormat = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "version.template.data.timeout"); value.Exists() && !data.VersionTemplateDataTimeout.IsNull() {
+	if value := res.Get("version.template.data.timeout"); value.Exists() && !data.VersionTemplateDataTimeout.IsNull() {
 		data.VersionTemplateDataTimeout = types.Int64Value(value.Int())
 	} else if data.VersionTemplateDataTimeout.IsNull() {
 		data.VersionTemplateDataTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "version.template.options.timeout"); value.Exists() && !data.VersionTemplateOptionsTimeout.IsNull() {
+	if value := res.Get("version.template.options.timeout"); value.Exists() && !data.VersionTemplateOptionsTimeout.IsNull() {
 		data.VersionTemplateOptionsTimeout = types.Int64Value(value.Int())
 	} else if data.VersionTemplateOptionsTimeout.IsNull() {
 		data.VersionTemplateOptionsTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "version.template.timeout"); value.Exists() && !data.VersionTemplateTimeout.IsNull() {
+	if value := res.Get("version.template.timeout"); value.Exists() && !data.VersionTemplateTimeout.IsNull() {
 		data.VersionTemplateTimeout = types.Int64Value(value.Int())
 	} else if data.VersionTemplateTimeout.IsNull() {
 		data.VersionTemplateTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "version.options.interface-table.timeout"); value.Exists() && !data.VersionOptionsInterfaceTableTimeout.IsNull() {
+	if value := res.Get("version.options.interface-table.timeout"); value.Exists() && !data.VersionOptionsInterfaceTableTimeout.IsNull() {
 		data.VersionOptionsInterfaceTableTimeout = types.Int64Value(value.Int())
 	} else if data.VersionOptionsInterfaceTableTimeout.IsNull() {
 		data.VersionOptionsInterfaceTableTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "version.options.sampler-table.timeout"); value.Exists() && !data.VersionOptionsSamplerTableTimeout.IsNull() {
+	if value := res.Get("version.options.sampler-table.timeout"); value.Exists() && !data.VersionOptionsSamplerTableTimeout.IsNull() {
 		data.VersionOptionsSamplerTableTimeout = types.Int64Value(value.Int())
 	} else if data.VersionOptionsSamplerTableTimeout.IsNull() {
 		data.VersionOptionsSamplerTableTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "version.options.class-table.timeout"); value.Exists() && !data.VersionOptionsClassTableTimeout.IsNull() {
+	if value := res.Get("version.options.class-table.timeout"); value.Exists() && !data.VersionOptionsClassTableTimeout.IsNull() {
 		data.VersionOptionsClassTableTimeout = types.Int64Value(value.Int())
 	} else if data.VersionOptionsClassTableTimeout.IsNull() {
 		data.VersionOptionsClassTableTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "version.options.vrf-table.timeout"); value.Exists() && !data.VersionOptionsVrfTableTimeout.IsNull() {
+	if value := res.Get("version.options.vrf-table.timeout"); value.Exists() && !data.VersionOptionsVrfTableTimeout.IsNull() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
 	} else if data.VersionOptionsVrfTableTimeout.IsNull() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Null()

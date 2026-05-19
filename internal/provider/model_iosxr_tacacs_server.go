@@ -163,13 +163,13 @@ func (data TACACSServer) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte) {
+func (data *TACACSServer) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Hosts {
 		keys := [...]string{"ordering-index", "address", "port"}
 		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hosts.host").ForEach(
+		res.Get("hosts.host").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -230,22 +230,22 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "timeout"); value.Exists() && !data.Timeout.IsNull() {
+	if value := res.Get("timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
 	} else if data.Timeout.IsNull() {
 		data.Timeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "holddown-time"); value.Exists() && !data.HolddownTime.IsNull() {
+	if value := res.Get("holddown-time"); value.Exists() && !data.HolddownTime.IsNull() {
 		data.HolddownTime = types.Int64Value(value.Int())
 	} else if data.HolddownTime.IsNull() {
 		data.HolddownTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
+	if value := res.Get("ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
+	if value := res.Get("ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
@@ -255,11 +255,15 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data TACACSServer) toBodyXML(ctx context.Context) string {
+func (data TACACSServer) toBodyXML(ctx context.Context, stateArg ...*TACACSServer) string {
+	var state *TACACSServer
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Hosts) > 0 {
 		for _, item := range data.Hosts {
-			basePath := data.getXPath() + "/hosts/host"
+			basePath := data.getXPath() + "/hosts/host[ordering-index='" + strconv.FormatInt(item.OrderingIndex.ValueInt64(), 10) + "' and address='" + item.Address.ValueString() + "' and port='" + strconv.FormatInt(item.Port.ValueInt64(), 10) + "']"
 			if !item.OrderingIndex.IsNull() && !item.OrderingIndex.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/ordering-index", strconv.FormatInt(item.OrderingIndex.ValueInt64(), 10))
 			}
@@ -317,6 +321,11 @@ func (data TACACSServer) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

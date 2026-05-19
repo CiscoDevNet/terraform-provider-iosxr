@@ -210,13 +210,13 @@ func (data RouterVRRPInterfaceIPv6) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []byte) {
+func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.GlobalAddresses {
 		keys := [...]string{"address"}
 		keyValues := [...]string{data.GlobalAddresses[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "address.global.global-address").ForEach(
+		res.Get("address.global.global-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -240,12 +240,12 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 			data.GlobalAddresses[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "address.linklocal.linklocal-address"); value.Exists() && !data.AddressLinklocal.IsNull() {
+	if value := res.Get("address.linklocal.linklocal-address"); value.Exists() && !data.AddressLinklocal.IsNull() {
 		data.AddressLinklocal = types.StringValue(value.String())
 	} else if data.AddressLinklocal.IsNull() {
 		data.AddressLinklocal = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "address.linklocal.autoconfig"); value.Exists() {
+	if value := res.Get("address.linklocal.autoconfig"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AddressLinklocalAutoconfig.IsNull() {
 			data.AddressLinklocalAutoconfig = types.BoolValue(true)
@@ -256,32 +256,32 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 			data.AddressLinklocalAutoconfig = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
+	if value := res.Get("priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
 	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "name"); value.Exists() && !data.Name.IsNull() {
+	if value := res.Get("name"); value.Exists() && !data.Name.IsNull() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "unicast-peer"); value.Exists() && !data.UnicastPeer.IsNull() {
+	if value := res.Get("unicast-peer"); value.Exists() && !data.UnicastPeer.IsNull() {
 		data.UnicastPeer = types.StringValue(value.String())
 	} else if data.UnicastPeer.IsNull() {
 		data.UnicastPeer = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "timer.advertisement-time-in-seconds"); value.Exists() && !data.TimerAdvertisementSeconds.IsNull() {
+	if value := res.Get("timer.advertisement-time-in-seconds"); value.Exists() && !data.TimerAdvertisementSeconds.IsNull() {
 		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
 	} else if data.TimerAdvertisementSeconds.IsNull() {
 		data.TimerAdvertisementSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timer.advertisement-time-in-milliseconds"); value.Exists() && !data.TimerAdvertisementMilliseconds.IsNull() {
+	if value := res.Get("timer.advertisement-time-in-milliseconds"); value.Exists() && !data.TimerAdvertisementMilliseconds.IsNull() {
 		data.TimerAdvertisementMilliseconds = types.Int64Value(value.Int())
 	} else if data.TimerAdvertisementMilliseconds.IsNull() {
 		data.TimerAdvertisementMilliseconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timer.force"); value.Exists() {
+	if value := res.Get("timer.force"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TimerForce.IsNull() {
 			data.TimerForce = types.BoolValue(true)
@@ -292,7 +292,7 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 			data.TimerForce = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "preempt.disable"); value.Exists() {
+	if value := res.Get("preempt.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PreemptDisable.IsNull() {
 			data.PreemptDisable = types.BoolValue(true)
@@ -303,12 +303,12 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 			data.PreemptDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "preempt.delay"); value.Exists() && !data.PreemptDelay.IsNull() {
+	if value := res.Get("preempt.delay"); value.Exists() && !data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	} else if data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "accept-mode.disable"); value.Exists() {
+	if value := res.Get("accept-mode.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AcceptModeDisable.IsNull() {
 			data.AcceptModeDisable = types.BoolValue(true)
@@ -324,7 +324,7 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 		keyValues := [...]string{data.TrackInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "track.interfaces.interface").ForEach(
+		res.Get("track.interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -358,7 +358,7 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "track.objects.object").ForEach(
+		res.Get("track.objects.object").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -387,7 +387,7 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 			data.TrackObjects[i].PriorityDecrement = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.ipv6"); value.Exists() && !data.BfdFastDetectPeerIpv6.IsNull() {
+	if value := res.Get("bfd.fast-detect.peer.ipv6"); value.Exists() && !data.BfdFastDetectPeerIpv6.IsNull() {
 		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
 	} else if data.BfdFastDetectPeerIpv6.IsNull() {
 		data.BfdFastDetectPeerIpv6 = types.StringNull()
@@ -397,11 +397,15 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterVRRPInterfaceIPv6) toBodyXML(ctx context.Context) string {
+func (data RouterVRRPInterfaceIPv6) toBodyXML(ctx context.Context, stateArg ...*RouterVRRPInterfaceIPv6) string {
+	var state *RouterVRRPInterfaceIPv6
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.GlobalAddresses) > 0 {
 		for _, item := range data.GlobalAddresses {
-			basePath := data.getXPath() + "/address/global/global-address"
+			basePath := data.getXPath() + "/address/global/global-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -450,7 +454,7 @@ func (data RouterVRRPInterfaceIPv6) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.TrackInterfaces) > 0 {
 		for _, item := range data.TrackInterfaces {
-			basePath := data.getXPath() + "/track/interfaces/interface"
+			basePath := data.getXPath() + "/track/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -461,7 +465,7 @@ func (data RouterVRRPInterfaceIPv6) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.TrackObjects) > 0 {
 		for _, item := range data.TrackObjects {
-			basePath := data.getXPath() + "/track/objects/object"
+			basePath := data.getXPath() + "/track/objects/object[object-name='" + item.ObjectName.ValueString() + "']"
 			if !item.ObjectName.IsNull() && !item.ObjectName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/object-name", item.ObjectName.ValueString())
 			}
@@ -481,6 +485,11 @@ func (data RouterVRRPInterfaceIPv6) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

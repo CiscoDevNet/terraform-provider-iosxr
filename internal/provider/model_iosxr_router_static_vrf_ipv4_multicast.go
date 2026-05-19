@@ -456,13 +456,13 @@ func (data RouterStaticVRFIPv4Multicast) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterStaticVRFIPv4Multicast) updateFromBody(ctx context.Context, res []byte) {
+func (data *RouterStaticVRFIPv4Multicast) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.NexthopInterfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.NexthopInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface").ForEach(
+		res.Get("nexthop-interfaces.nexthop-interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -528,7 +528,7 @@ func (data *RouterStaticVRFIPv4Multicast) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{data.NexthopInterfaceAddresses[i].InterfaceName.ValueString(), data.NexthopInterfaceAddresses[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "nexthop-interface-addresses.nexthop-interface-address").ForEach(
+		res.Get("nexthop-interface-addresses.nexthop-interface-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -609,7 +609,7 @@ func (data *RouterStaticVRFIPv4Multicast) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{data.NexthopAddresses[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "nexthop-addresses.nexthop-address").ForEach(
+		res.Get("nexthop-addresses.nexthop-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -685,7 +685,7 @@ func (data *RouterStaticVRFIPv4Multicast) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{data.SrPolicies[i].SrPolicyName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "sr-policies.sr-policy").ForEach(
+		res.Get("sr-policies.sr-policy").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -751,7 +751,7 @@ func (data *RouterStaticVRFIPv4Multicast) updateFromBody(ctx context.Context, re
 		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "vrfs.vrf").ForEach(
+		res.Get("vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1061,11 +1061,15 @@ func (data *RouterStaticVRFIPv4Multicast) updateFromBody(ctx context.Context, re
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
+func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context, stateArg ...*RouterStaticVRFIPv4Multicast) string {
+	var state *RouterStaticVRFIPv4Multicast
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.NexthopInterfaces) > 0 {
 		for _, item := range data.NexthopInterfaces {
-			basePath := data.getXPath() + "/nexthop-interfaces/nexthop-interface"
+			basePath := data.getXPath() + "/nexthop-interfaces/nexthop-interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -1093,7 +1097,7 @@ func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.NexthopInterfaceAddresses) > 0 {
 		for _, item := range data.NexthopInterfaceAddresses {
-			basePath := data.getXPath() + "/nexthop-interface-addresses/nexthop-interface-address"
+			basePath := data.getXPath() + "/nexthop-interface-addresses/nexthop-interface-address[interface-name='" + item.InterfaceName.ValueString() + "' and address='" + item.Address.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -1130,7 +1134,7 @@ func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.NexthopAddresses) > 0 {
 		for _, item := range data.NexthopAddresses {
-			basePath := data.getXPath() + "/nexthop-addresses/nexthop-address"
+			basePath := data.getXPath() + "/nexthop-addresses/nexthop-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -1164,7 +1168,7 @@ func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.SrPolicies) > 0 {
 		for _, item := range data.SrPolicies {
-			basePath := data.getXPath() + "/sr-policies/sr-policy"
+			basePath := data.getXPath() + "/sr-policies/sr-policy[sr-policy-name='" + item.SrPolicyName.ValueString() + "']"
 			if !item.SrPolicyName.IsNull() && !item.SrPolicyName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/sr-policy-name", item.SrPolicyName.ValueString())
 			}
@@ -1192,7 +1196,7 @@ func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Vrfs) > 0 {
 		for _, item := range data.Vrfs {
-			basePath := data.getXPath() + "/vrfs/vrf"
+			basePath := data.getXPath() + "/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -1333,6 +1337,11 @@ func (data RouterStaticVRFIPv4Multicast) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

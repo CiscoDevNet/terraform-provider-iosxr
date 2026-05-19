@@ -212,13 +212,13 @@ func (data TPA) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "statistics.update-frequency"); value.Exists() && !data.StatisticsUpdateFrequency.IsNull() {
+func (data *TPA) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("statistics.update-frequency"); value.Exists() && !data.StatisticsUpdateFrequency.IsNull() {
 		data.StatisticsUpdateFrequency = types.Int64Value(value.Int())
 	} else if data.StatisticsUpdateFrequency.IsNull() {
 		data.StatisticsUpdateFrequency = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "statistics.disable"); value.Exists() {
+	if value := res.Get("statistics.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsDisable.IsNull() {
 			data.StatisticsDisable = types.BoolValue(true)
@@ -229,22 +229,22 @@ func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics.max-lpts-events"); value.Exists() && !data.StatisticsMaxLptsEvents.IsNull() {
+	if value := res.Get("statistics.max-lpts-events"); value.Exists() && !data.StatisticsMaxLptsEvents.IsNull() {
 		data.StatisticsMaxLptsEvents = types.Int64Value(value.Int())
 	} else if data.StatisticsMaxLptsEvents.IsNull() {
 		data.StatisticsMaxLptsEvents = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "statistics.max-intf-events"); value.Exists() && !data.StatisticsMaxIntfEvents.IsNull() {
+	if value := res.Get("statistics.max-intf-events"); value.Exists() && !data.StatisticsMaxIntfEvents.IsNull() {
 		data.StatisticsMaxIntfEvents = types.Int64Value(value.Int())
 	} else if data.StatisticsMaxIntfEvents.IsNull() {
 		data.StatisticsMaxIntfEvents = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "logging.kim.file-max-size-kb"); value.Exists() && !data.LoggingFileMaxSizeKb.IsNull() {
+	if value := res.Get("logging.kim.file-max-size-kb"); value.Exists() && !data.LoggingFileMaxSizeKb.IsNull() {
 		data.LoggingFileMaxSizeKb = types.Int64Value(value.Int())
 	} else if data.LoggingFileMaxSizeKb.IsNull() {
 		data.LoggingFileMaxSizeKb = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "logging.kim.rotation-max"); value.Exists() && !data.LoggingRotationMaxFiles.IsNull() {
+	if value := res.Get("logging.kim.rotation-max"); value.Exists() && !data.LoggingRotationMaxFiles.IsNull() {
 		data.LoggingRotationMaxFiles = types.Int64Value(value.Int())
 	} else if data.LoggingRotationMaxFiles.IsNull() {
 		data.LoggingRotationMaxFiles = types.Int64Null()
@@ -254,7 +254,7 @@ func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "vrfs.vrf").ForEach(
+		res.Get("vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -448,7 +448,11 @@ func (data *TPA) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data TPA) toBodyXML(ctx context.Context) string {
+func (data TPA) toBodyXML(ctx context.Context, stateArg ...*TPA) string {
+	var state *TPA
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.StatisticsUpdateFrequency.IsNull() && !data.StatisticsUpdateFrequency.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/statistics/update-frequency", strconv.FormatInt(data.StatisticsUpdateFrequency.ValueInt64(), 10))
@@ -472,7 +476,7 @@ func (data TPA) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Vrfs) > 0 {
 		for _, item := range data.Vrfs {
-			basePath := data.getXPath() + "/vrfs/vrf"
+			basePath := data.getXPath() + "/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -548,6 +552,11 @@ func (data TPA) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

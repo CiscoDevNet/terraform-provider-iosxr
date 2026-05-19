@@ -210,11 +210,15 @@ func (data AAAAuthentication) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data AAAAuthentication) toBodyXML(ctx context.Context) string {
+func (data AAAAuthentication) toBodyXML(ctx context.Context, stateArg ...*AAAAuthentication) string {
+	var state *AAAAuthentication
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Login) > 0 {
 		for _, item := range data.Login {
-			basePath := data.getXPath() + "/login/authentication-list"
+			basePath := data.getXPath() + "/login/authentication-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
@@ -320,6 +324,11 @@ func (data AAAAuthentication) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -327,13 +336,13 @@ func (data AAAAuthentication) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *AAAAuthentication) updateFromBody(ctx context.Context, res []byte) {
+func (data *AAAAuthentication) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Login {
 		keys := [...]string{"list-name"}
 		keyValues := [...]string{data.Login[i].List.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "login.authentication-list").ForEach(
+		res.Get("login.authentication-list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

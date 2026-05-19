@@ -219,13 +219,13 @@ func (data IPSLAResponder) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *IPSLAResponder) updateFromBody(ctx context.Context, res []byte) {
+func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.TypeUdpIpv4 {
 		keys := [...]string{"address"}
 		keyValues := [...]string{data.TypeUdpIpv4[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "type.udp.ipv4.address").ForEach(
+		res.Get("type.udp.ipv4.address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -278,7 +278,7 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "twamp"); value.Exists() {
+	if value := res.Get("twamp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Twamp.IsNull() {
 			data.Twamp = types.BoolValue(true)
@@ -289,7 +289,7 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res []byte) {
 			data.Twamp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "twamp.timeout"); value.Exists() && !data.TwampTimeout.IsNull() {
+	if value := res.Get("twamp.timeout"); value.Exists() && !data.TwampTimeout.IsNull() {
 		data.TwampTimeout = types.Int64Value(value.Int())
 	} else if data.TwampTimeout.IsNull() {
 		data.TwampTimeout = types.Int64Null()
@@ -299,7 +299,7 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.TwampLightSessions[i].SessionId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "twamp-light.test-session.session").ForEach(
+		res.Get("twamp-light.test-session.session").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -503,11 +503,15 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data IPSLAResponder) toBodyXML(ctx context.Context) string {
+func (data IPSLAResponder) toBodyXML(ctx context.Context, stateArg ...*IPSLAResponder) string {
+	var state *IPSLAResponder
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.TypeUdpIpv4) > 0 {
 		for _, item := range data.TypeUdpIpv4 {
-			basePath := data.getXPath() + "/type/udp/ipv4/address"
+			basePath := data.getXPath() + "/type/udp/ipv4/address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -531,7 +535,7 @@ func (data IPSLAResponder) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.TwampLightSessions) > 0 {
 		for _, item := range data.TwampLightSessions {
-			basePath := data.getXPath() + "/twamp-light/test-session/session"
+			basePath := data.getXPath() + "/twamp-light/test-session/session[session-id='" + strconv.FormatInt(item.SessionId.ValueInt64(), 10) + "']"
 			if !item.SessionId.IsNull() && !item.SessionId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/session-id", strconv.FormatInt(item.SessionId.ValueInt64(), 10))
 			}
@@ -608,6 +612,11 @@ func (data IPSLAResponder) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

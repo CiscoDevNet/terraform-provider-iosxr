@@ -460,18 +460,18 @@ func (data PTP) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "frequency.priority"); value.Exists() && !data.FrequencyPriority.IsNull() {
+func (data *PTP) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("frequency.priority"); value.Exists() && !data.FrequencyPriority.IsNull() {
 		data.FrequencyPriority = types.Int64Value(value.Int())
 	} else if data.FrequencyPriority.IsNull() {
 		data.FrequencyPriority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "time-of-day.priority"); value.Exists() && !data.TimeOfDayPriority.IsNull() {
+	if value := res.Get("time-of-day.priority"); value.Exists() && !data.TimeOfDayPriority.IsNull() {
 		data.TimeOfDayPriority = types.Int64Value(value.Int())
 	} else if data.TimeOfDayPriority.IsNull() {
 		data.TimeOfDayPriority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ipv6-verify-checksum"); value.Exists() {
+	if value := res.Get("ipv6-verify-checksum"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6VerifyChecksum.IsNull() {
 			data.Ipv6VerifyChecksum = types.BoolValue(true)
@@ -482,12 +482,12 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv6VerifyChecksum = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "min-clock-class"); value.Exists() && !data.MinClockClass.IsNull() {
+	if value := res.Get("min-clock-class"); value.Exists() && !data.MinClockClass.IsNull() {
 		data.MinClockClass = types.Int64Value(value.Int())
 	} else if data.MinClockClass.IsNull() {
 		data.MinClockClass = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "utc-offset.baseline"); value.Exists() && !data.UtcOffsetBaseline.IsNull() {
+	if value := res.Get("utc-offset.baseline"); value.Exists() && !data.UtcOffsetBaseline.IsNull() {
 		data.UtcOffsetBaseline = types.Int64Value(value.Int())
 	} else if data.UtcOffsetBaseline.IsNull() {
 		data.UtcOffsetBaseline = types.Int64Null()
@@ -497,7 +497,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.UtcOffsets[i].Date.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "utc-offset.offsets.offset").ForEach(
+		res.Get("utc-offset.offsets.offset").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -526,12 +526,12 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.UtcOffsets[i].OffsetValue = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "uncalibrated-clock-class.clock-class"); value.Exists() && !data.UncalibratedClockClassClockClass.IsNull() {
+	if value := res.Get("uncalibrated-clock-class.clock-class"); value.Exists() && !data.UncalibratedClockClassClockClass.IsNull() {
 		data.UncalibratedClockClassClockClass = types.Int64Value(value.Int())
 	} else if data.UncalibratedClockClassClockClass.IsNull() {
 		data.UncalibratedClockClassClockClass = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "uncalibrated-clock-class.unless-from-holdover"); value.Exists() {
+	if value := res.Get("uncalibrated-clock-class.unless-from-holdover"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.UncalibratedClockClassUnlessFromHoldover.IsNull() {
 			data.UncalibratedClockClassUnlessFromHoldover = types.BoolValue(true)
@@ -542,7 +542,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.UncalibratedClockClassUnlessFromHoldover = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "uncalibrated-traceable-override"); value.Exists() {
+	if value := res.Get("uncalibrated-traceable-override"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.UncalibratedTraceableOverride.IsNull() {
 			data.UncalibratedTraceableOverride = types.BoolValue(true)
@@ -553,22 +553,22 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.UncalibratedTraceableOverride = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "startup-clock-class"); value.Exists() && !data.StartupClockClass.IsNull() {
+	if value := res.Get("startup-clock-class"); value.Exists() && !data.StartupClockClass.IsNull() {
 		data.StartupClockClass = types.Int64Value(value.Int())
 	} else if data.StartupClockClass.IsNull() {
 		data.StartupClockClass = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "freerun-clock-class"); value.Exists() && !data.FreerunClockClass.IsNull() {
+	if value := res.Get("freerun-clock-class"); value.Exists() && !data.FreerunClockClass.IsNull() {
 		data.FreerunClockClass = types.Int64Value(value.Int())
 	} else if data.FreerunClockClass.IsNull() {
 		data.FreerunClockClass = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "double-failure-clock-class"); value.Exists() && !data.DoubleFailureClockClass.IsNull() {
+	if value := res.Get("double-failure-clock-class"); value.Exists() && !data.DoubleFailureClockClass.IsNull() {
 		data.DoubleFailureClockClass = types.Int64Value(value.Int())
 	} else if data.DoubleFailureClockClass.IsNull() {
 		data.DoubleFailureClockClass = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "transparent-clock.domain.all"); value.Exists() {
+	if value := res.Get("transparent-clock.domain.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransparentClockDomainAll.IsNull() {
 			data.TransparentClockDomainAll = types.BoolValue(true)
@@ -579,7 +579,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.TransparentClockDomainAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "physical-layer-frequency"); value.Exists() {
+	if value := res.Get("physical-layer-frequency"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PhysicalLayerFrequency.IsNull() {
 			data.PhysicalLayerFrequency = types.BoolValue(true)
@@ -590,7 +590,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.PhysicalLayerFrequency = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "network-type.high-pdv"); value.Exists() {
+	if value := res.Get("network-type.high-pdv"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NetworkTypeHighPdv.IsNull() {
 			data.NetworkTypeHighPdv = types.BoolValue(true)
@@ -601,22 +601,22 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.NetworkTypeHighPdv = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "servo-slow-tracking"); value.Exists() && !data.ServoSlowTracking.IsNull() {
+	if value := res.Get("servo-slow-tracking"); value.Exists() && !data.ServoSlowTracking.IsNull() {
 		data.ServoSlowTracking = types.Int64Value(value.Int())
 	} else if data.ServoSlowTracking.IsNull() {
 		data.ServoSlowTracking = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "holdover-spec-clock-class"); value.Exists() && !data.HoldoverSpecClockClass.IsNull() {
+	if value := res.Get("holdover-spec-clock-class"); value.Exists() && !data.HoldoverSpecClockClass.IsNull() {
 		data.HoldoverSpecClockClass = types.Int64Value(value.Int())
 	} else if data.HoldoverSpecClockClass.IsNull() {
 		data.HoldoverSpecClockClass = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "holdover-spec-duration"); value.Exists() && !data.HoldoverSpecDuration.IsNull() {
+	if value := res.Get("holdover-spec-duration"); value.Exists() && !data.HoldoverSpecDuration.IsNull() {
 		data.HoldoverSpecDuration = types.Int64Value(value.Int())
 	} else if data.HoldoverSpecDuration.IsNull() {
 		data.HoldoverSpecDuration = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "holdover-spec-traceable-override"); value.Exists() {
+	if value := res.Get("holdover-spec-traceable-override"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.HoldoverSpecTraceableOverride.IsNull() {
 			data.HoldoverSpecTraceableOverride = types.BoolValue(true)
@@ -627,7 +627,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.HoldoverSpecTraceableOverride = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "apts"); value.Exists() {
+	if value := res.Get("apts"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Apts.IsNull() {
 			data.Apts = types.BoolValue(true)
@@ -638,12 +638,12 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Apts = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "phase-difference-threshold-breach"); value.Exists() && !data.PhaseDifferenceThresholdBreach.IsNull() {
+	if value := res.Get("phase-difference-threshold-breach"); value.Exists() && !data.PhaseDifferenceThresholdBreach.IsNull() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Value(value.Int())
 	} else if data.PhaseDifferenceThresholdBreach.IsNull() {
 		data.PhaseDifferenceThresholdBreach = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "detect-ptsf-unusable"); value.Exists() {
+	if value := res.Get("detect-ptsf-unusable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DetectPtsfUnusable.IsNull() {
 			data.DetectPtsfUnusable = types.BoolValue(true)
@@ -654,7 +654,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.DetectPtsfUnusable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "performance-monitoring"); value.Exists() {
+	if value := res.Get("performance-monitoring"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PerformanceMonitoring.IsNull() {
 			data.PerformanceMonitoring = types.BoolValue(true)
@@ -665,7 +665,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.PerformanceMonitoring = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.best-primary-clock.changes"); value.Exists() {
+	if value := res.Get("log.best-primary-clock.changes"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogBestPrimaryClockChanges.IsNull() {
 			data.LogBestPrimaryClockChanges = types.BoolValue(true)
@@ -676,7 +676,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.LogBestPrimaryClockChanges = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.Cisco-IOS-XR-um-ptp-log-servo-cfg:servo.events"); value.Exists() {
+	if value := res.Get("log.Cisco-IOS-XR-um-ptp-log-servo-cfg:servo.events"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogServoEvents.IsNull() {
 			data.LogServoEvents = types.BoolValue(true)
@@ -687,7 +687,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.LogServoEvents = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "virtual-port"); value.Exists() {
+	if value := res.Get("virtual-port"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.VirtualPort.IsNull() {
 			data.VirtualPort = types.BoolValue(true)
@@ -698,47 +698,47 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.VirtualPort = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "virtual-port.priority1"); value.Exists() && !data.VirtualPortPriority1.IsNull() {
+	if value := res.Get("virtual-port.priority1"); value.Exists() && !data.VirtualPortPriority1.IsNull() {
 		data.VirtualPortPriority1 = types.Int64Value(value.Int())
 	} else if data.VirtualPortPriority1.IsNull() {
 		data.VirtualPortPriority1 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "virtual-port.priority2"); value.Exists() && !data.VirtualPortPriority2.IsNull() {
+	if value := res.Get("virtual-port.priority2"); value.Exists() && !data.VirtualPortPriority2.IsNull() {
 		data.VirtualPortPriority2 = types.Int64Value(value.Int())
 	} else if data.VirtualPortPriority2.IsNull() {
 		data.VirtualPortPriority2 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "virtual-port.clock-class"); value.Exists() && !data.VirtualPortClockClass.IsNull() {
+	if value := res.Get("virtual-port.clock-class"); value.Exists() && !data.VirtualPortClockClass.IsNull() {
 		data.VirtualPortClockClass = types.Int64Value(value.Int())
 	} else if data.VirtualPortClockClass.IsNull() {
 		data.VirtualPortClockClass = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "virtual-port.clock-accuracy"); value.Exists() && !data.VirtualPortClockAccuracy.IsNull() {
+	if value := res.Get("virtual-port.clock-accuracy"); value.Exists() && !data.VirtualPortClockAccuracy.IsNull() {
 		data.VirtualPortClockAccuracy = types.Int64Value(value.Int())
 	} else if data.VirtualPortClockAccuracy.IsNull() {
 		data.VirtualPortClockAccuracy = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "virtual-port.offset-scaled-log-variance"); value.Exists() && !data.VirtualPortOffsetScaledLogVariance.IsNull() {
+	if value := res.Get("virtual-port.offset-scaled-log-variance"); value.Exists() && !data.VirtualPortOffsetScaledLogVariance.IsNull() {
 		data.VirtualPortOffsetScaledLogVariance = types.Int64Value(value.Int())
 	} else if data.VirtualPortOffsetScaledLogVariance.IsNull() {
 		data.VirtualPortOffsetScaledLogVariance = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "virtual-port.local-priority"); value.Exists() && !data.VirtualPortLocalPriority.IsNull() {
+	if value := res.Get("virtual-port.local-priority"); value.Exists() && !data.VirtualPortLocalPriority.IsNull() {
 		data.VirtualPortLocalPriority = types.Int64Value(value.Int())
 	} else if data.VirtualPortLocalPriority.IsNull() {
 		data.VirtualPortLocalPriority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "virtual-port.gm-threshold-breach"); value.Exists() && !data.VirtualPortGmThresholdBreach.IsNull() {
+	if value := res.Get("virtual-port.gm-threshold-breach"); value.Exists() && !data.VirtualPortGmThresholdBreach.IsNull() {
 		data.VirtualPortGmThresholdBreach = types.Int64Value(value.Int())
 	} else if data.VirtualPortGmThresholdBreach.IsNull() {
 		data.VirtualPortGmThresholdBreach = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "clock.identity.mac-address.custom"); value.Exists() && !data.ClockIdentityMacAddressCustom.IsNull() {
+	if value := res.Get("clock.identity.mac-address.custom"); value.Exists() && !data.ClockIdentityMacAddressCustom.IsNull() {
 		data.ClockIdentityMacAddressCustom = types.StringValue(value.String())
 	} else if data.ClockIdentityMacAddressCustom.IsNull() {
 		data.ClockIdentityMacAddressCustom = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "clock.identity.mac-address.router"); value.Exists() {
+	if value := res.Get("clock.identity.mac-address.router"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockIdentityMacAddressRouter.IsNull() {
 			data.ClockIdentityMacAddressRouter = types.BoolValue(true)
@@ -749,32 +749,32 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockIdentityMacAddressRouter = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.identity.eui-64"); value.Exists() && !data.ClockIdentityEui64.IsNull() {
+	if value := res.Get("clock.identity.eui-64"); value.Exists() && !data.ClockIdentityEui64.IsNull() {
 		data.ClockIdentityEui64 = types.StringValue(value.String())
 	} else if data.ClockIdentityEui64.IsNull() {
 		data.ClockIdentityEui64 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "clock.domain"); value.Exists() && !data.ClockDomain.IsNull() {
+	if value := res.Get("clock.domain"); value.Exists() && !data.ClockDomain.IsNull() {
 		data.ClockDomain = types.Int64Value(value.Int())
 	} else if data.ClockDomain.IsNull() {
 		data.ClockDomain = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "clock.priority1"); value.Exists() && !data.ClockPriority1.IsNull() {
+	if value := res.Get("clock.priority1"); value.Exists() && !data.ClockPriority1.IsNull() {
 		data.ClockPriority1 = types.Int64Value(value.Int())
 	} else if data.ClockPriority1.IsNull() {
 		data.ClockPriority1 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "clock.priority2"); value.Exists() && !data.ClockPriority2.IsNull() {
+	if value := res.Get("clock.priority2"); value.Exists() && !data.ClockPriority2.IsNull() {
 		data.ClockPriority2 = types.Int64Value(value.Int())
 	} else if data.ClockPriority2.IsNull() {
 		data.ClockPriority2 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "clock.clock-class"); value.Exists() && !data.ClockClockClass.IsNull() {
+	if value := res.Get("clock.clock-class"); value.Exists() && !data.ClockClockClass.IsNull() {
 		data.ClockClockClass = types.Int64Value(value.Int())
 	} else if data.ClockClockClass.IsNull() {
 		data.ClockClockClass = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "clock.timescale.ptp"); value.Exists() {
+	if value := res.Get("clock.timescale.ptp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimescalePtp.IsNull() {
 			data.ClockTimescalePtp = types.BoolValue(true)
@@ -785,7 +785,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimescalePtp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.timescale.arb"); value.Exists() {
+	if value := res.Get("clock.timescale.arb"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimescaleArb.IsNull() {
 			data.ClockTimescaleArb = types.BoolValue(true)
@@ -796,7 +796,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimescaleArb = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.time-source.atomic-clock"); value.Exists() {
+	if value := res.Get("clock.time-source.atomic-clock"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceAtomicClock.IsNull() {
 			data.ClockTimeSourceAtomicClock = types.BoolValue(true)
@@ -807,7 +807,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimeSourceAtomicClock = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.time-source.gps"); value.Exists() {
+	if value := res.Get("clock.time-source.gps"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceGps.IsNull() {
 			data.ClockTimeSourceGps = types.BoolValue(true)
@@ -818,7 +818,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimeSourceGps = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.time-source.terrestrial-radio"); value.Exists() {
+	if value := res.Get("clock.time-source.terrestrial-radio"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceTerrestrialRadio.IsNull() {
 			data.ClockTimeSourceTerrestrialRadio = types.BoolValue(true)
@@ -829,7 +829,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimeSourceTerrestrialRadio = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.time-source.ptp"); value.Exists() {
+	if value := res.Get("clock.time-source.ptp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourcePtp.IsNull() {
 			data.ClockTimeSourcePtp = types.BoolValue(true)
@@ -840,7 +840,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimeSourcePtp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.time-source.ntp"); value.Exists() {
+	if value := res.Get("clock.time-source.ntp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceNtp.IsNull() {
 			data.ClockTimeSourceNtp = types.BoolValue(true)
@@ -851,7 +851,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimeSourceNtp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.time-source.hand-set"); value.Exists() {
+	if value := res.Get("clock.time-source.hand-set"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceHandSet.IsNull() {
 			data.ClockTimeSourceHandSet = types.BoolValue(true)
@@ -862,7 +862,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimeSourceHandSet = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.time-source.other"); value.Exists() {
+	if value := res.Get("clock.time-source.other"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceOther.IsNull() {
 			data.ClockTimeSourceOther = types.BoolValue(true)
@@ -873,7 +873,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimeSourceOther = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.time-source.internal-oscillator"); value.Exists() {
+	if value := res.Get("clock.time-source.internal-oscillator"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockTimeSourceInternalOscillator.IsNull() {
 			data.ClockTimeSourceInternalOscillator = types.BoolValue(true)
@@ -884,7 +884,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockTimeSourceInternalOscillator = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.profile.g-8265-1"); value.Exists() {
+	if value := res.Get("clock.profile.g-8265-1"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82651.IsNull() {
 			data.ClockProfileG82651 = types.BoolValue(true)
@@ -895,7 +895,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockProfileG82651 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.profile.g-8265-1.clock-type.primary"); value.Exists() {
+	if value := res.Get("clock.profile.g-8265-1.clock-type.primary"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82651ClockTypeMaster.IsNull() {
 			data.ClockProfileG82651ClockTypeMaster = types.BoolValue(true)
@@ -906,7 +906,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockProfileG82651ClockTypeMaster = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.profile.g-8265-1.clock-type.subordinate"); value.Exists() {
+	if value := res.Get("clock.profile.g-8265-1.clock-type.subordinate"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82651ClockTypeSlave.IsNull() {
 			data.ClockProfileG82651ClockTypeSlave = types.BoolValue(true)
@@ -917,7 +917,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockProfileG82651ClockTypeSlave = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.profile.g-8275-1.clock-type.t-bc"); value.Exists() {
+	if value := res.Get("clock.profile.g-8275-1.clock-type.t-bc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82751ClockTypeTBc.IsNull() {
 			data.ClockProfileG82751ClockTypeTBc = types.BoolValue(true)
@@ -928,7 +928,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockProfileG82751ClockTypeTBc = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.profile.g-8275-1.clock-type.t-gm"); value.Exists() {
+	if value := res.Get("clock.profile.g-8275-1.clock-type.t-gm"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82751ClockTypeTGm.IsNull() {
 			data.ClockProfileG82751ClockTypeTGm = types.BoolValue(true)
@@ -939,7 +939,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockProfileG82751ClockTypeTGm = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.profile.g-8275-1.clock-type.t-tsc"); value.Exists() {
+	if value := res.Get("clock.profile.g-8275-1.clock-type.t-tsc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82751ClockTypeTTsc.IsNull() {
 			data.ClockProfileG82751ClockTypeTTsc = types.BoolValue(true)
@@ -950,7 +950,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockProfileG82751ClockTypeTTsc = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.profile.g-8275-2.clock-type.t-bc"); value.Exists() {
+	if value := res.Get("clock.profile.g-8275-2.clock-type.t-bc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82752ClockTypeTBc.IsNull() {
 			data.ClockProfileG82752ClockTypeTBc = types.BoolValue(true)
@@ -961,7 +961,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockProfileG82752ClockTypeTBc = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.profile.g-8275-2.clock-type.t-gm"); value.Exists() {
+	if value := res.Get("clock.profile.g-8275-2.clock-type.t-gm"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82752ClockTypeTGm.IsNull() {
 			data.ClockProfileG82752ClockTypeTGm = types.BoolValue(true)
@@ -972,7 +972,7 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 			data.ClockProfileG82752ClockTypeTGm = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "clock.profile.g-8275-2.clock-type.t-tsc"); value.Exists() {
+	if value := res.Get("clock.profile.g-8275-2.clock-type.t-tsc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClockProfileG82752ClockTypeTTsc.IsNull() {
 			data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(true)
@@ -988,7 +988,11 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data PTP) toBodyXML(ctx context.Context) string {
+func (data PTP) toBodyXML(ctx context.Context, stateArg ...*PTP) string {
+	var state *PTP
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.FrequencyPriority.IsNull() && !data.FrequencyPriority.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/frequency/priority", strconv.FormatInt(data.FrequencyPriority.ValueInt64(), 10))
@@ -1009,7 +1013,7 @@ func (data PTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.UtcOffsets) > 0 {
 		for _, item := range data.UtcOffsets {
-			basePath := data.getXPath() + "/utc-offset/offsets/offset"
+			basePath := data.getXPath() + "/utc-offset/offsets/offset[date='" + item.Date.ValueString() + "']"
 			if !item.Date.IsNull() && !item.Date.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/date", item.Date.ValueString())
 			}
@@ -1268,6 +1272,11 @@ func (data PTP) toBodyXML(ctx context.Context) string {
 		}
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

@@ -819,23 +819,23 @@ func (data RouterBGPSessionGroup) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "remote-as"); value.Exists() && !data.RemoteAs.IsNull() {
+func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("remote-as"); value.Exists() && !data.RemoteAs.IsNull() {
 		data.RemoteAs = types.StringValue(value.String())
 	} else if data.RemoteAs.IsNull() {
 		data.RemoteAs = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "remote-as-list"); value.Exists() && !data.RemoteAsList.IsNull() {
+	if value := res.Get("remote-as-list"); value.Exists() && !data.RemoteAsList.IsNull() {
 		data.RemoteAsList = types.StringValue(value.String())
 	} else if data.RemoteAsList.IsNull() {
 		data.RemoteAsList = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "maximum-peers"); value.Exists() && !data.MaximumPeers.IsNull() {
+	if value := res.Get("maximum-peers"); value.Exists() && !data.MaximumPeers.IsNull() {
 		data.MaximumPeers = types.Int64Value(value.Int())
 	} else if data.MaximumPeers.IsNull() {
 		data.MaximumPeers = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp"); value.Exists() {
+	if value := res.Get("send-community-ebgp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendCommunityEbgp.IsNull() {
 			data.SendCommunityEbgp = types.BoolValue(true)
@@ -846,7 +846,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.SendCommunityEbgp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+	if value := res.Get("send-community-ebgp.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
 			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
@@ -857,7 +857,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.SendCommunityEbgpInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-extended-community-ebgp"); value.Exists() {
+	if value := res.Get("send-extended-community-ebgp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendExtendedCommunityEbgp.IsNull() {
 			data.SendExtendedCommunityEbgp = types.BoolValue(true)
@@ -868,7 +868,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.SendExtendedCommunityEbgp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "send-extended-community-ebgp.inheritance-disable"); value.Exists() {
+	if value := res.Get("send-extended-community-ebgp.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SendExtendedCommunityEbgpInheritanceDisable.IsNull() {
 			data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolValue(true)
@@ -879,42 +879,42 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.SendExtendedCommunityEbgpInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "as-path-loopcheck.out"); value.Exists() && !data.AsPathLoopcheckOut.IsNull() {
+	if value := res.Get("as-path-loopcheck.out"); value.Exists() && !data.AsPathLoopcheckOut.IsNull() {
 		data.AsPathLoopcheckOut = types.StringValue(value.String())
 	} else if data.AsPathLoopcheckOut.IsNull() {
 		data.AsPathLoopcheckOut = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "dampening"); value.Exists() && !data.Dampening.IsNull() {
+	if value := res.Get("dampening"); value.Exists() && !data.Dampening.IsNull() {
 		data.Dampening = types.StringValue(value.String())
 	} else if data.Dampening.IsNull() {
 		data.Dampening = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "as-override"); value.Exists() && !data.AsOverride.IsNull() {
+	if value := res.Get("as-override"); value.Exists() && !data.AsOverride.IsNull() {
 		data.AsOverride = types.StringValue(value.String())
 	} else if data.AsOverride.IsNull() {
 		data.AsOverride = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "use.session-group"); value.Exists() && !data.UseSessionGroup.IsNull() {
+	if value := res.Get("use.session-group"); value.Exists() && !data.UseSessionGroup.IsNull() {
 		data.UseSessionGroup = types.StringValue(value.String())
 	} else if data.UseSessionGroup.IsNull() {
 		data.UseSessionGroup = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-seconds"); value.Exists() && !data.AdvertisementIntervalSeconds.IsNull() {
+	if value := res.Get("advertisement-interval.advertisement-interval-time-in-seconds"); value.Exists() && !data.AdvertisementIntervalSeconds.IsNull() {
 		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
 	} else if data.AdvertisementIntervalSeconds.IsNull() {
 		data.AdvertisementIntervalSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-milliseconds"); value.Exists() && !data.AdvertisementIntervalMilliseconds.IsNull() {
+	if value := res.Get("advertisement-interval.advertisement-interval-time-in-milliseconds"); value.Exists() && !data.AdvertisementIntervalMilliseconds.IsNull() {
 		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
 	} else if data.AdvertisementIntervalMilliseconds.IsNull() {
 		data.AdvertisementIntervalMilliseconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
+	if value := res.Get("description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ignore-connected-check"); value.Exists() {
+	if value := res.Get("ignore-connected-check"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IgnoreConnectedCheck.IsNull() {
 			data.IgnoreConnectedCheck = types.BoolValue(true)
@@ -925,7 +925,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.IgnoreConnectedCheck = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ignore-connected-check.inheritance-disable"); value.Exists() {
+	if value := res.Get("ignore-connected-check.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IgnoreConnectedCheckInheritanceDisable.IsNull() {
 			data.IgnoreConnectedCheckInheritanceDisable = types.BoolValue(true)
@@ -936,7 +936,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.IgnoreConnectedCheckInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "internal-vpn-client"); value.Exists() {
+	if value := res.Get("internal-vpn-client"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.InternalVpnClient.IsNull() {
 			data.InternalVpnClient = types.BoolValue(true)
@@ -947,12 +947,12 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.InternalVpnClient = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ebgp-multihop.maximum-hop-count"); value.Exists() && !data.EbgpMultihopMaximumHopCount.IsNull() {
+	if value := res.Get("ebgp-multihop.maximum-hop-count"); value.Exists() && !data.EbgpMultihopMaximumHopCount.IsNull() {
 		data.EbgpMultihopMaximumHopCount = types.Int64Value(value.Int())
 	} else if data.EbgpMultihopMaximumHopCount.IsNull() {
 		data.EbgpMultihopMaximumHopCount = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ebgp-multihop.mpls"); value.Exists() {
+	if value := res.Get("ebgp-multihop.mpls"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EbgpMultihopMpls.IsNull() {
 			data.EbgpMultihopMpls = types.BoolValue(true)
@@ -963,12 +963,12 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.EbgpMultihopMpls = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tcp.mss.tcp-initial-maximum-segment-size"); value.Exists() && !data.TcpMssValue.IsNull() {
+	if value := res.Get("tcp.mss.tcp-initial-maximum-segment-size"); value.Exists() && !data.TcpMssValue.IsNull() {
 		data.TcpMssValue = types.Int64Value(value.Int())
 	} else if data.TcpMssValue.IsNull() {
 		data.TcpMssValue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "tcp.mss.inheritance-disable"); value.Exists() {
+	if value := res.Get("tcp.mss.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TcpMssInheritanceDisable.IsNull() {
 			data.TcpMssInheritanceDisable = types.BoolValue(true)
@@ -979,7 +979,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.TcpMssInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tcp.mtu-discovery"); value.Exists() {
+	if value := res.Get("tcp.mtu-discovery"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TcpMtuDiscovery.IsNull() {
 			data.TcpMtuDiscovery = types.BoolValue(true)
@@ -990,7 +990,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.TcpMtuDiscovery = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tcp.mtu-discovery.inheritance-disable"); value.Exists() {
+	if value := res.Get("tcp.mtu-discovery.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TcpMtuDiscoveryInheritanceDisable.IsNull() {
 			data.TcpMtuDiscoveryInheritanceDisable = types.BoolValue(true)
@@ -1001,7 +1001,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.TcpMtuDiscoveryInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tcp.ip-only-preferred"); value.Exists() {
+	if value := res.Get("tcp.ip-only-preferred"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TcpIpOnlyPreferred.IsNull() {
 			data.TcpIpOnlyPreferred = types.BoolValue(true)
@@ -1012,7 +1012,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.TcpIpOnlyPreferred = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tcp.ip-only-preferred.inheritance-disable"); value.Exists() {
+	if value := res.Get("tcp.ip-only-preferred.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TcpIpOnlyPreferredInheritanceDisable.IsNull() {
 			data.TcpIpOnlyPreferredInheritanceDisable = types.BoolValue(true)
@@ -1028,7 +1028,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 		keyValues := [...]string{strconv.FormatInt(data.BmpActivateServers[i].ServerNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "bmp-activate.servers.server").ForEach(
+		res.Get("bmp-activate.servers.server").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1052,17 +1052,17 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.BmpActivateServers[i].ServerNumber = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
+	if value := res.Get("bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
+	if value := res.Get("bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+	if value := res.Get("bfd.fast-detect"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.BfdFastDetect.IsNull() {
 			data.BfdFastDetect = types.BoolValue(true)
@@ -1073,7 +1073,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.BfdFastDetect = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode"); value.Exists() {
+	if value := res.Get("bfd.fast-detect.strict-mode"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.BfdFastDetectStrictMode.IsNull() {
 			data.BfdFastDetectStrictMode = types.BoolValue(true)
@@ -1084,7 +1084,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.BfdFastDetectStrictMode = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.disable"); value.Exists() {
+	if value := res.Get("bfd.fast-detect.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.BfdFastDetectDisable.IsNull() {
 			data.BfdFastDetectDisable = types.BoolValue(true)
@@ -1095,7 +1095,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.BfdFastDetectDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode-negotiate"); value.Exists() {
+	if value := res.Get("bfd.fast-detect.strict-mode-negotiate"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.BfdFastDetectStrictModeNegotiate.IsNull() {
 			data.BfdFastDetectStrictModeNegotiate = types.BoolValue(true)
@@ -1106,7 +1106,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.BfdFastDetectStrictModeNegotiate = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode-negotiate.override"); value.Exists() {
+	if value := res.Get("bfd.fast-detect.strict-mode-negotiate.override"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.BfdFastDetectStrictModeNegotiateOverride.IsNull() {
 			data.BfdFastDetectStrictModeNegotiateOverride = types.BoolValue(true)
@@ -1117,12 +1117,12 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.BfdFastDetectStrictModeNegotiateOverride = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "keychain.keychain-name"); value.Exists() && !data.KeychainName.IsNull() {
+	if value := res.Get("keychain.keychain-name"); value.Exists() && !data.KeychainName.IsNull() {
 		data.KeychainName = types.StringValue(value.String())
 	} else if data.KeychainName.IsNull() {
 		data.KeychainName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "keychain.inheritance-disable"); value.Exists() {
+	if value := res.Get("keychain.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.KeychainInheritanceDisable.IsNull() {
 			data.KeychainInheritanceDisable = types.BoolValue(true)
@@ -1133,7 +1133,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.KeychainInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "local-as.inheritance-disable"); value.Exists() {
+	if value := res.Get("local-as.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LocalAsInheritanceDisable.IsNull() {
 			data.LocalAsInheritanceDisable = types.BoolValue(true)
@@ -1144,12 +1144,12 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LocalAsInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "local-as.as.as-number"); value.Exists() && !data.LocalAs.IsNull() {
+	if value := res.Get("local-as.as.as-number"); value.Exists() && !data.LocalAs.IsNull() {
 		data.LocalAs = types.StringValue(value.String())
 	} else if data.LocalAs.IsNull() {
 		data.LocalAs = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend"); value.Exists() {
+	if value := res.Get("local-as.as.no-prepend"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LocalAsNoPrepend.IsNull() {
 			data.LocalAsNoPrepend = types.BoolValue(true)
@@ -1160,7 +1160,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LocalAsNoPrepend = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as"); value.Exists() {
+	if value := res.Get("local-as.as.no-prepend.replace-as"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LocalAsNoPrependReplaceAs.IsNull() {
 			data.LocalAsNoPrependReplaceAs = types.BoolValue(true)
@@ -1171,7 +1171,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LocalAsNoPrependReplaceAs = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
+	if value := res.Get("local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LocalAsNoPrependReplaceAsDualAs.IsNull() {
 			data.LocalAsNoPrependReplaceAsDualAs = types.BoolValue(true)
@@ -1182,7 +1182,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LocalAsNoPrependReplaceAsDualAs = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "password.inheritance-disable"); value.Exists() {
+	if value := res.Get("password.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PasswordInheritanceDisable.IsNull() {
 			data.PasswordInheritanceDisable = types.BoolValue(true)
@@ -1193,27 +1193,27 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.PasswordInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "receive-buffer-size.receive-buffer-size-number"); value.Exists() && !data.ReceiveBufferSize.IsNull() {
+	if value := res.Get("receive-buffer-size.receive-buffer-size-number"); value.Exists() && !data.ReceiveBufferSize.IsNull() {
 		data.ReceiveBufferSize = types.Int64Value(value.Int())
 	} else if data.ReceiveBufferSize.IsNull() {
 		data.ReceiveBufferSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "receive-buffer-size.bgp-read-buffer-size-byte"); value.Exists() && !data.ReceiveBufferSizeRead.IsNull() {
+	if value := res.Get("receive-buffer-size.bgp-read-buffer-size-byte"); value.Exists() && !data.ReceiveBufferSizeRead.IsNull() {
 		data.ReceiveBufferSizeRead = types.Int64Value(value.Int())
 	} else if data.ReceiveBufferSizeRead.IsNull() {
 		data.ReceiveBufferSizeRead = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "send-buffer-size.send-buffer-size-number"); value.Exists() && !data.SendBufferSize.IsNull() {
+	if value := res.Get("send-buffer-size.send-buffer-size-number"); value.Exists() && !data.SendBufferSize.IsNull() {
 		data.SendBufferSize = types.Int64Value(value.Int())
 	} else if data.SendBufferSize.IsNull() {
 		data.SendBufferSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "send-buffer-size.bgp-write-buffer-size-byte"); value.Exists() && !data.SendBufferSizeWrite.IsNull() {
+	if value := res.Get("send-buffer-size.bgp-write-buffer-size-byte"); value.Exists() && !data.SendBufferSizeWrite.IsNull() {
 		data.SendBufferSizeWrite = types.Int64Value(value.Int())
 	} else if data.SendBufferSizeWrite.IsNull() {
 		data.SendBufferSizeWrite = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+	if value := res.Get("shutdown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolValue(true)
@@ -1224,12 +1224,12 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.Shutdown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() && !data.TimersKeepaliveInterval.IsNull() {
+	if value := res.Get("timers.keepalive-interval"); value.Exists() && !data.TimersKeepaliveInterval.IsNull() {
 		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
 	} else if data.TimersKeepaliveInterval.IsNull() {
 		data.TimersKeepaliveInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.zero"); value.Exists() {
+	if value := res.Get("timers.zero"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TimersHolddownZero.IsNull() {
 			data.TimersHolddownZero = types.BoolValue(true)
@@ -1240,7 +1240,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.TimersHolddownZero = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "timers.zero.zero"); value.Exists() {
+	if value := res.Get("timers.zero.zero"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TimersHolddownZeroMinimumAcceptableZero.IsNull() {
 			data.TimersHolddownZeroMinimumAcceptableZero = types.BoolValue(true)
@@ -1251,27 +1251,27 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.TimersHolddownZeroMinimumAcceptableZero = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "timers.zero.minimum-acceptable-holdtime"); value.Exists() && !data.TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
+	if value := res.Get("timers.zero.minimum-acceptable-holdtime"); value.Exists() && !data.TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 		data.TimersHolddownZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersHolddownZeroMinimumAcceptableHoldtime.IsNull() {
 		data.TimersHolddownZeroMinimumAcceptableHoldtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.holdtime.holdtime-number"); value.Exists() && !data.TimersHoldtime.IsNull() {
+	if value := res.Get("timers.holdtime.holdtime-number"); value.Exists() && !data.TimersHoldtime.IsNull() {
 		data.TimersHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersHoldtime.IsNull() {
 		data.TimersHoldtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.holdtime.minimum-acceptable-holdtime"); value.Exists() && !data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+	if value := res.Get("timers.holdtime.minimum-acceptable-holdtime"); value.Exists() && !data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
 		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
 		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "local.address.ip-address"); value.Exists() && !data.LocalAddress.IsNull() {
+	if value := res.Get("local.address.ip-address"); value.Exists() && !data.LocalAddress.IsNull() {
 		data.LocalAddress = types.StringValue(value.String())
 	} else if data.LocalAddress.IsNull() {
 		data.LocalAddress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "local.address.inheritance-disable"); value.Exists() {
+	if value := res.Get("local.address.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LocalAddressInheritanceDisable.IsNull() {
 			data.LocalAddressInheritanceDisable = types.BoolValue(true)
@@ -1282,7 +1282,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LocalAddressInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.neighbor.changes.detail"); value.Exists() {
+	if value := res.Get("log.neighbor.changes.detail"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogNeighborChangesDetail.IsNull() {
 			data.LogNeighborChangesDetail = types.BoolValue(true)
@@ -1293,7 +1293,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LogNeighborChangesDetail = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.neighbor.changes.disable"); value.Exists() {
+	if value := res.Get("log.neighbor.changes.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogNeighborChangesDisable.IsNull() {
 			data.LogNeighborChangesDisable = types.BoolValue(true)
@@ -1304,7 +1304,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LogNeighborChangesDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.neighbor.changes.inheritance-disable"); value.Exists() {
+	if value := res.Get("log.neighbor.changes.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogNeighborChangesInheritanceDisable.IsNull() {
 			data.LogNeighborChangesInheritanceDisable = types.BoolValue(true)
@@ -1315,12 +1315,12 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LogNeighborChangesInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.message.in.log-buffer-size"); value.Exists() && !data.LogMessageInSize.IsNull() {
+	if value := res.Get("log.message.in.log-buffer-size"); value.Exists() && !data.LogMessageInSize.IsNull() {
 		data.LogMessageInSize = types.Int64Value(value.Int())
 	} else if data.LogMessageInSize.IsNull() {
 		data.LogMessageInSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "log.message.in.disable"); value.Exists() {
+	if value := res.Get("log.message.in.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogMessageInDisable.IsNull() {
 			data.LogMessageInDisable = types.BoolValue(true)
@@ -1331,7 +1331,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LogMessageInDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.message.in.inheritance-disable"); value.Exists() {
+	if value := res.Get("log.message.in.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogMessageInInheritanceDisable.IsNull() {
 			data.LogMessageInInheritanceDisable = types.BoolValue(true)
@@ -1342,12 +1342,12 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LogMessageInInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.message.out.log-buffer-size"); value.Exists() && !data.LogMessageOutSize.IsNull() {
+	if value := res.Get("log.message.out.log-buffer-size"); value.Exists() && !data.LogMessageOutSize.IsNull() {
 		data.LogMessageOutSize = types.Int64Value(value.Int())
 	} else if data.LogMessageOutSize.IsNull() {
 		data.LogMessageOutSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "log.message.out.disable"); value.Exists() {
+	if value := res.Get("log.message.out.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogMessageOutDisable.IsNull() {
 			data.LogMessageOutDisable = types.BoolValue(true)
@@ -1358,7 +1358,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LogMessageOutDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.message.out.inheritance-disable"); value.Exists() {
+	if value := res.Get("log.message.out.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogMessageOutInheritanceDisable.IsNull() {
 			data.LogMessageOutInheritanceDisable = types.BoolValue(true)
@@ -1369,22 +1369,22 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.LogMessageOutInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "update-source"); value.Exists() && !data.UpdateSource.IsNull() {
+	if value := res.Get("update-source"); value.Exists() && !data.UpdateSource.IsNull() {
 		data.UpdateSource = types.StringValue(value.String())
 	} else if data.UpdateSource.IsNull() {
 		data.UpdateSource = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "local-address-subnet.address"); value.Exists() && !data.LocalAddressSubnetPrefix.IsNull() {
+	if value := res.Get("local-address-subnet.address"); value.Exists() && !data.LocalAddressSubnetPrefix.IsNull() {
 		data.LocalAddressSubnetPrefix = types.StringValue(value.String())
 	} else if data.LocalAddressSubnetPrefix.IsNull() {
 		data.LocalAddressSubnetPrefix = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "local-address-subnet.address-prefix"); value.Exists() && !data.LocalAddressSubnetMask.IsNull() {
+	if value := res.Get("local-address-subnet.address-prefix"); value.Exists() && !data.LocalAddressSubnetMask.IsNull() {
 		data.LocalAddressSubnetMask = types.Int64Value(value.Int())
 	} else if data.LocalAddressSubnetMask.IsNull() {
 		data.LocalAddressSubnetMask = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dmz-link-bandwidth"); value.Exists() {
+	if value := res.Get("dmz-link-bandwidth"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DmzLinkBandwidth.IsNull() {
 			data.DmzLinkBandwidth = types.BoolValue(true)
@@ -1395,7 +1395,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.DmzLinkBandwidth = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "dmz-link-bandwidth.inheritance-disable"); value.Exists() {
+	if value := res.Get("dmz-link-bandwidth.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DmzLinkBandwidthInheritanceDisable.IsNull() {
 			data.DmzLinkBandwidthInheritanceDisable = types.BoolValue(true)
@@ -1406,7 +1406,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.DmzLinkBandwidthInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ebgp-recv-extcommunity-dmz"); value.Exists() {
+	if value := res.Get("ebgp-recv-extcommunity-dmz"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EbgpRecvExtcommunityDmz.IsNull() {
 			data.EbgpRecvExtcommunityDmz = types.BoolValue(true)
@@ -1417,7 +1417,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.EbgpRecvExtcommunityDmz = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ebgp-recv-extcommunity-dmz.inheritance-disable"); value.Exists() {
+	if value := res.Get("ebgp-recv-extcommunity-dmz.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EbgpRecvExtcommunityDmzInheritanceDisable.IsNull() {
 			data.EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolValue(true)
@@ -1428,7 +1428,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.EbgpRecvExtcommunityDmzInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ebgp-send-extcommunity-dmz"); value.Exists() {
+	if value := res.Get("ebgp-send-extcommunity-dmz"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EbgpSendExtcommunityDmz.IsNull() {
 			data.EbgpSendExtcommunityDmz = types.BoolValue(true)
@@ -1439,7 +1439,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.EbgpSendExtcommunityDmz = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ebgp-send-extcommunity-dmz.cumulative"); value.Exists() {
+	if value := res.Get("ebgp-send-extcommunity-dmz.cumulative"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EbgpSendExtcommunityDmzCumulative.IsNull() {
 			data.EbgpSendExtcommunityDmzCumulative = types.BoolValue(true)
@@ -1450,7 +1450,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.EbgpSendExtcommunityDmzCumulative = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ebgp-send-extcommunity-dmz.inheritance-disable"); value.Exists() {
+	if value := res.Get("ebgp-send-extcommunity-dmz.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EbgpSendExtcommunityDmzInheritanceDisable.IsNull() {
 			data.EbgpSendExtcommunityDmzInheritanceDisable = types.BoolValue(true)
@@ -1461,7 +1461,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.EbgpSendExtcommunityDmzInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ttl-security"); value.Exists() {
+	if value := res.Get("ttl-security"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TtlSecurity.IsNull() {
 			data.TtlSecurity = types.BoolValue(true)
@@ -1472,7 +1472,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.TtlSecurity = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ttl-security.inheritance-disable"); value.Exists() {
+	if value := res.Get("ttl-security.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TtlSecurityInheritanceDisable.IsNull() {
 			data.TtlSecurityInheritanceDisable = types.BoolValue(true)
@@ -1483,22 +1483,22 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.TtlSecurityInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "session-open-mode"); value.Exists() && !data.SessionOpenMode.IsNull() {
+	if value := res.Get("session-open-mode"); value.Exists() && !data.SessionOpenMode.IsNull() {
 		data.SessionOpenMode = types.StringValue(value.String())
 	} else if data.SessionOpenMode.IsNull() {
 		data.SessionOpenMode = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "dscp"); value.Exists() && !data.Dscp.IsNull() {
+	if value := res.Get("dscp"); value.Exists() && !data.Dscp.IsNull() {
 		data.Dscp = types.StringValue(value.String())
 	} else if data.Dscp.IsNull() {
 		data.Dscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "precedence"); value.Exists() && !data.Precedence.IsNull() {
+	if value := res.Get("precedence"); value.Exists() && !data.Precedence.IsNull() {
 		data.Precedence = types.StringValue(value.String())
 	} else if data.Precedence.IsNull() {
 		data.Precedence = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "capability.additional-paths.send"); value.Exists() {
+	if value := res.Get("capability.additional-paths.send"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilityAdditionalPathsSend.IsNull() {
 			data.CapabilityAdditionalPathsSend = types.BoolValue(true)
@@ -1509,7 +1509,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilityAdditionalPathsSend = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.additional-paths.send.disable"); value.Exists() {
+	if value := res.Get("capability.additional-paths.send.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilityAdditionalPathsSendDisable.IsNull() {
 			data.CapabilityAdditionalPathsSendDisable = types.BoolValue(true)
@@ -1520,7 +1520,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilityAdditionalPathsSendDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.additional-paths.receive"); value.Exists() {
+	if value := res.Get("capability.additional-paths.receive"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilityAdditionalPathsReceive.IsNull() {
 			data.CapabilityAdditionalPathsReceive = types.BoolValue(true)
@@ -1531,7 +1531,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilityAdditionalPathsReceive = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.additional-paths.receive.disable"); value.Exists() {
+	if value := res.Get("capability.additional-paths.receive.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilityAdditionalPathsReceiveDisable.IsNull() {
 			data.CapabilityAdditionalPathsReceiveDisable = types.BoolValue(true)
@@ -1542,7 +1542,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilityAdditionalPathsReceiveDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.suppress.all"); value.Exists() {
+	if value := res.Get("capability.suppress.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilitySuppressAll.IsNull() {
 			data.CapabilitySuppressAll = types.BoolValue(true)
@@ -1553,7 +1553,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilitySuppressAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.suppress.all.inheritance-disable"); value.Exists() {
+	if value := res.Get("capability.suppress.all.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilitySuppressAllInheritanceDisable.IsNull() {
 			data.CapabilitySuppressAllInheritanceDisable = types.BoolValue(true)
@@ -1564,7 +1564,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilitySuppressAllInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.suppress.extended-nexthop-encoding"); value.Exists() {
+	if value := res.Get("capability.suppress.extended-nexthop-encoding"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilitySuppressExtendedNexthopEncoding.IsNull() {
 			data.CapabilitySuppressExtendedNexthopEncoding = types.BoolValue(true)
@@ -1575,7 +1575,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilitySuppressExtendedNexthopEncoding = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.suppress.extended-nexthop-encoding.inheritance-disable"); value.Exists() {
+	if value := res.Get("capability.suppress.extended-nexthop-encoding.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable.IsNull() {
 			data.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolValue(true)
@@ -1586,7 +1586,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilitySuppressExtendedNexthopEncodingInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.suppress.four-byte-as"); value.Exists() {
+	if value := res.Get("capability.suppress.four-byte-as"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilitySuppressFourByteAs.IsNull() {
 			data.CapabilitySuppressFourByteAs = types.BoolValue(true)
@@ -1597,7 +1597,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilitySuppressFourByteAs = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "capability.suppress.four-byte-as.inheritance-disable"); value.Exists() {
+	if value := res.Get("capability.suppress.four-byte-as.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CapabilitySuppressFourByteAsInheritanceDisable.IsNull() {
 			data.CapabilitySuppressFourByteAsInheritanceDisable = types.BoolValue(true)
@@ -1608,7 +1608,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.CapabilitySuppressFourByteAsInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "graceful-restart.graceful-restart-enable"); value.Exists() {
+	if value := res.Get("graceful-restart.graceful-restart-enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.GracefulRestart.IsNull() {
 			data.GracefulRestart = types.BoolValue(true)
@@ -1619,7 +1619,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.GracefulRestart = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "graceful-restart.graceful-restart-enable.disable"); value.Exists() {
+	if value := res.Get("graceful-restart.graceful-restart-enable.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.GracefulRestartDisable.IsNull() {
 			data.GracefulRestartDisable = types.BoolValue(true)
@@ -1630,7 +1630,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.GracefulRestartDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "graceful-restart.helper-only"); value.Exists() {
+	if value := res.Get("graceful-restart.helper-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.GracefulRestartHelperOnly.IsNull() {
 			data.GracefulRestartHelperOnly = types.BoolValue(true)
@@ -1641,7 +1641,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.GracefulRestartHelperOnly = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "graceful-restart.helper-only.inheritance-disable"); value.Exists() {
+	if value := res.Get("graceful-restart.helper-only.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.GracefulRestartHelperOnlyInheritanceDisable.IsNull() {
 			data.GracefulRestartHelperOnlyInheritanceDisable = types.BoolValue(true)
@@ -1652,42 +1652,42 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.GracefulRestartHelperOnlyInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "graceful-restart.restart-time"); value.Exists() && !data.GracefulRestartRestartTime.IsNull() {
+	if value := res.Get("graceful-restart.restart-time"); value.Exists() && !data.GracefulRestartRestartTime.IsNull() {
 		data.GracefulRestartRestartTime = types.Int64Value(value.Int())
 	} else if data.GracefulRestartRestartTime.IsNull() {
 		data.GracefulRestartRestartTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "graceful-restart.stalepath-time"); value.Exists() && !data.GracefulRestartStalepathTime.IsNull() {
+	if value := res.Get("graceful-restart.stalepath-time"); value.Exists() && !data.GracefulRestartStalepathTime.IsNull() {
 		data.GracefulRestartStalepathTime = types.Int64Value(value.Int())
 	} else if data.GracefulRestartStalepathTime.IsNull() {
 		data.GracefulRestartStalepathTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "enforce-first-as"); value.Exists() && !data.EnforceFirstAs.IsNull() {
+	if value := res.Get("enforce-first-as"); value.Exists() && !data.EnforceFirstAs.IsNull() {
 		data.EnforceFirstAs = types.StringValue(value.String())
 	} else if data.EnforceFirstAs.IsNull() {
 		data.EnforceFirstAs = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "cluster-id.route-reflector-number"); value.Exists() && !data.ClusterId32bitFormat.IsNull() {
+	if value := res.Get("cluster-id.route-reflector-number"); value.Exists() && !data.ClusterId32bitFormat.IsNull() {
 		data.ClusterId32bitFormat = types.Int64Value(value.Int())
 	} else if data.ClusterId32bitFormat.IsNull() {
 		data.ClusterId32bitFormat = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cluster-id.route-reflector-ip-address"); value.Exists() && !data.ClusterIdIpFormat.IsNull() {
+	if value := res.Get("cluster-id.route-reflector-ip-address"); value.Exists() && !data.ClusterIdIpFormat.IsNull() {
 		data.ClusterIdIpFormat = types.StringValue(value.String())
 	} else if data.ClusterIdIpFormat.IsNull() {
 		data.ClusterIdIpFormat = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "idle-watch-time"); value.Exists() && !data.IdleWatchTime.IsNull() {
+	if value := res.Get("idle-watch-time"); value.Exists() && !data.IdleWatchTime.IsNull() {
 		data.IdleWatchTime = types.Int64Value(value.Int())
 	} else if data.IdleWatchTime.IsNull() {
 		data.IdleWatchTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "allowas-in.number-of-occurrences-of-as-number"); value.Exists() && !data.AllowasIn.IsNull() {
+	if value := res.Get("allowas-in.number-of-occurrences-of-as-number"); value.Exists() && !data.AllowasIn.IsNull() {
 		data.AllowasIn = types.Int64Value(value.Int())
 	} else if data.AllowasIn.IsNull() {
 		data.AllowasIn = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "egress-engineering"); value.Exists() {
+	if value := res.Get("egress-engineering"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EgressEngineering.IsNull() {
 			data.EgressEngineering = types.BoolValue(true)
@@ -1698,7 +1698,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.EgressEngineering = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "egress-engineering.inheritance-disable"); value.Exists() {
+	if value := res.Get("egress-engineering.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EgressEngineeringInheritanceDisable.IsNull() {
 			data.EgressEngineeringInheritanceDisable = types.BoolValue(true)
@@ -1714,7 +1714,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 		keyValues := [...]string{strconv.FormatInt(data.PeerSets[i].Peer.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "peer-set.peer-sets").ForEach(
+		res.Get("peer-set.peer-sets").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1738,17 +1738,17 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.PeerSets[i].Peer = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.key-chain-name"); value.Exists() && !data.AoKeyChainName.IsNull() {
+	if value := res.Get("ao.key-chain-name.key-chain-name"); value.Exists() && !data.AoKeyChainName.IsNull() {
 		data.AoKeyChainName = types.StringValue(value.String())
 	} else if data.AoKeyChainName.IsNull() {
 		data.AoKeyChainName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.include-tcp-options"); value.Exists() && !data.AoKeyChainIncludeTcpOptions.IsNull() {
+	if value := res.Get("ao.key-chain-name.include-tcp-options"); value.Exists() && !data.AoKeyChainIncludeTcpOptions.IsNull() {
 		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
 	} else if data.AoKeyChainIncludeTcpOptions.IsNull() {
 		data.AoKeyChainIncludeTcpOptions = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
+	if value := res.Get("ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AoKeyChainAcceptMismatch.IsNull() {
 			data.AoKeyChainAcceptMismatch = types.BoolValue(true)
@@ -1759,7 +1759,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.AoKeyChainAcceptMismatch = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ao.inheritance-disable"); value.Exists() {
+	if value := res.Get("ao.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AoInheritanceDisable.IsNull() {
 			data.AoInheritanceDisable = types.BoolValue(true)
@@ -1770,17 +1770,17 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.AoInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "default-policy-action.in"); value.Exists() && !data.DefaultPolicyActionIn.IsNull() {
+	if value := res.Get("default-policy-action.in"); value.Exists() && !data.DefaultPolicyActionIn.IsNull() {
 		data.DefaultPolicyActionIn = types.StringValue(value.String())
 	} else if data.DefaultPolicyActionIn.IsNull() {
 		data.DefaultPolicyActionIn = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "default-policy-action.out"); value.Exists() && !data.DefaultPolicyActionOut.IsNull() {
+	if value := res.Get("default-policy-action.out"); value.Exists() && !data.DefaultPolicyActionOut.IsNull() {
 		data.DefaultPolicyActionOut = types.StringValue(value.String())
 	} else if data.DefaultPolicyActionOut.IsNull() {
 		data.DefaultPolicyActionOut = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "fast-fallover"); value.Exists() {
+	if value := res.Get("fast-fallover"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.FastFallover.IsNull() {
 			data.FastFallover = types.BoolValue(true)
@@ -1791,7 +1791,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.FastFallover = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "fast-fallover.inheritance-disable"); value.Exists() {
+	if value := res.Get("fast-fallover.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.FastFalloverInheritanceDisable.IsNull() {
 			data.FastFalloverInheritanceDisable = types.BoolValue(true)
@@ -1802,7 +1802,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.FastFalloverInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "update.in.labeled-unicast.equivalent"); value.Exists() {
+	if value := res.Get("update.in.labeled-unicast.equivalent"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.UpdateInLabeledUnicastEquivalent.IsNull() {
 			data.UpdateInLabeledUnicastEquivalent = types.BoolValue(true)
@@ -1813,7 +1813,7 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.UpdateInLabeledUnicastEquivalent = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "update.in.labeled-unicast.equivalent.inheritance-disable"); value.Exists() {
+	if value := res.Get("update.in.labeled-unicast.equivalent.inheritance-disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.UpdateInLabeledUnicastEquivalentInheritanceDisable.IsNull() {
 			data.UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolValue(true)
@@ -1824,12 +1824,12 @@ func (data *RouterBGPSessionGroup) updateFromBody(ctx context.Context, res []byt
 			data.UpdateInLabeledUnicastEquivalentInheritanceDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "update.in.error-handling.avoid-reset"); value.Exists() && !data.UpdateInErrorHandlingAvoidReset.IsNull() {
+	if value := res.Get("update.in.error-handling.avoid-reset"); value.Exists() && !data.UpdateInErrorHandlingAvoidReset.IsNull() {
 		data.UpdateInErrorHandlingAvoidReset = types.StringValue(value.String())
 	} else if data.UpdateInErrorHandlingAvoidReset.IsNull() {
 		data.UpdateInErrorHandlingAvoidReset = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "update.in.error-handling.treat-as-withdraw"); value.Exists() && !data.UpdateInErrorHandlingTreatAsWithdraw.IsNull() {
+	if value := res.Get("update.in.error-handling.treat-as-withdraw"); value.Exists() && !data.UpdateInErrorHandlingTreatAsWithdraw.IsNull() {
 		data.UpdateInErrorHandlingTreatAsWithdraw = types.StringValue(value.String())
 	} else if data.UpdateInErrorHandlingTreatAsWithdraw.IsNull() {
 		data.UpdateInErrorHandlingTreatAsWithdraw = types.StringNull()
@@ -3566,7 +3566,11 @@ func (data *RouterBGPSessionGroup) getDeletePaths(ctx context.Context) []string 
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterBGPSessionGroup) toBodyXML(ctx context.Context) string {
+func (data RouterBGPSessionGroup) toBodyXML(ctx context.Context, stateArg ...*RouterBGPSessionGroup) string {
+	var state *RouterBGPSessionGroup
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.RemoteAs.IsNull() && !data.RemoteAs.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/remote-as", data.RemoteAs.ValueString())
@@ -3671,7 +3675,7 @@ func (data RouterBGPSessionGroup) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.BmpActivateServers) > 0 {
 		for _, item := range data.BmpActivateServers {
-			basePath := data.getXPath() + "/bmp-activate/servers/server"
+			basePath := data.getXPath() + "/bmp-activate/servers/server[server-number='" + strconv.FormatInt(item.ServerNumber.ValueInt64(), 10) + "']"
 			if !item.ServerNumber.IsNull() && !item.ServerNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/server-number", strconv.FormatInt(item.ServerNumber.ValueInt64(), 10))
 			}
@@ -4001,7 +4005,7 @@ func (data RouterBGPSessionGroup) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PeerSets) > 0 {
 		for _, item := range data.PeerSets {
-			basePath := data.getXPath() + "/peer-set/peer-sets"
+			basePath := data.getXPath() + "/peer-set/peer-sets[peer='" + strconv.FormatInt(item.Peer.ValueInt64(), 10) + "']"
 			if !item.Peer.IsNull() && !item.Peer.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/peer", strconv.FormatInt(item.Peer.ValueInt64(), 10))
 			}
@@ -4063,6 +4067,11 @@ func (data RouterBGPSessionGroup) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

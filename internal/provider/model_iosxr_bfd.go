@@ -287,7 +287,11 @@ func (data BFD) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data BFD) toBodyXML(ctx context.Context) string {
+func (data BFD) toBodyXML(ctx context.Context, stateArg ...*BFD) string {
+	var state *BFD
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.EchoDisable.IsNull() && !data.EchoDisable.IsUnknown() {
 		if data.EchoDisable.ValueBool() {
@@ -323,7 +327,7 @@ func (data BFD) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MultipathLocations) > 0 {
 		for _, item := range data.MultipathLocations {
-			basePath := data.getXPath() + "/multipath/include/locations/location"
+			basePath := data.getXPath() + "/multipath/include/locations/location[location-id='" + item.LocationId.ValueString() + "']"
 			if !item.LocationId.IsNull() && !item.LocationId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-id", item.LocationId.ValueString())
 			}
@@ -331,7 +335,7 @@ func (data BFD) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MultipathDestinations) > 0 {
 		for _, item := range data.MultipathDestinations {
-			basePath := data.getXPath() + "/multipath/destinations/destination"
+			basePath := data.getXPath() + "/multipath/destinations/destination[destination-ip-address='" + item.DestinationAddress.ValueString() + "']"
 			if !item.DestinationAddress.IsNull() && !item.DestinationAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/destination-ip-address", item.DestinationAddress.ValueString())
 			}
@@ -389,7 +393,7 @@ func (data BFD) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Interfaces) > 0 {
 		for _, item := range data.Interfaces {
-			basePath := data.getXPath() + "/interfaces/interface"
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -431,6 +435,11 @@ func (data BFD) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -438,8 +447,8 @@ func (data BFD) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "echo.disable"); value.Exists() {
+func (data *BFD) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("echo.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EchoDisable.IsNull() {
 			data.EchoDisable = types.BoolValue(true)
@@ -450,7 +459,7 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.EchoDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "echo.latency.detect"); value.Exists() {
+	if value := res.Get("echo.latency.detect"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EchoLatencyDetect.IsNull() {
 			data.EchoLatencyDetect = types.BoolValue(true)
@@ -461,17 +470,17 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.EchoLatencyDetect = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "echo.latency.detect.percentage"); value.Exists() && !data.EchoLatencyDetectPercentage.IsNull() {
+	if value := res.Get("echo.latency.detect.percentage"); value.Exists() && !data.EchoLatencyDetectPercentage.IsNull() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
 	} else if data.EchoLatencyDetectPercentage.IsNull() {
 		data.EchoLatencyDetectPercentage = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "echo.latency.detect.count"); value.Exists() && !data.EchoLatencyDetectCount.IsNull() {
+	if value := res.Get("echo.latency.detect.count"); value.Exists() && !data.EchoLatencyDetectCount.IsNull() {
 		data.EchoLatencyDetectCount = types.Int64Value(value.Int())
 	} else if data.EchoLatencyDetectCount.IsNull() {
 		data.EchoLatencyDetectCount = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "echo.startup.validate.force"); value.Exists() {
+	if value := res.Get("echo.startup.validate.force"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EchoStartupValidateForce.IsNull() {
 			data.EchoStartupValidateForce = types.BoolValue(true)
@@ -482,17 +491,17 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.EchoStartupValidateForce = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "echo.ipv4.source.ipv4-address"); value.Exists() && !data.EchoIpv4Source.IsNull() {
+	if value := res.Get("echo.ipv4.source.ipv4-address"); value.Exists() && !data.EchoIpv4Source.IsNull() {
 		data.EchoIpv4Source = types.StringValue(value.String())
 	} else if data.EchoIpv4Source.IsNull() {
 		data.EchoIpv4Source = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval"); value.Exists() && !data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() {
+	if value := res.Get("echo.ipv4.bundle-per-member.minimum-interval"); value.Exists() && !data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() {
 		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Value(value.Int())
 	} else if data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() {
 		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "trap.singlehop.pre-mapped"); value.Exists() {
+	if value := res.Get("trap.singlehop.pre-mapped"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapSinglehopPreMapped.IsNull() {
 			data.TrapSinglehopPreMapped = types.BoolValue(true)
@@ -508,7 +517,7 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MultipathLocations[i].LocationId.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "multipath.include.locations.location").ForEach(
+		res.Get("multipath.include.locations.location").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -537,7 +546,7 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MultipathDestinations[i].DestinationAddress.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "multipath.destinations.destination").ForEach(
+		res.Get("multipath.destinations.destination").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -566,32 +575,32 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.MultipathDestinations[i].LocationId = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "multihop.ttl-drop-threshold"); value.Exists() && !data.MultihopTtlDropThreshold.IsNull() {
+	if value := res.Get("multihop.ttl-drop-threshold"); value.Exists() && !data.MultihopTtlDropThreshold.IsNull() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
 	} else if data.MultihopTtlDropThreshold.IsNull() {
 		data.MultihopTtlDropThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dampening.initial-wait"); value.Exists() && !data.DampeningInitialWait.IsNull() {
+	if value := res.Get("dampening.initial-wait"); value.Exists() && !data.DampeningInitialWait.IsNull() {
 		data.DampeningInitialWait = types.Int64Value(value.Int())
 	} else if data.DampeningInitialWait.IsNull() {
 		data.DampeningInitialWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dampening.secondary-wait"); value.Exists() && !data.DampeningSecondaryWait.IsNull() {
+	if value := res.Get("dampening.secondary-wait"); value.Exists() && !data.DampeningSecondaryWait.IsNull() {
 		data.DampeningSecondaryWait = types.Int64Value(value.Int())
 	} else if data.DampeningSecondaryWait.IsNull() {
 		data.DampeningSecondaryWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dampening.maximum-wait"); value.Exists() && !data.DampeningMaximumWait.IsNull() {
+	if value := res.Get("dampening.maximum-wait"); value.Exists() && !data.DampeningMaximumWait.IsNull() {
 		data.DampeningMaximumWait = types.Int64Value(value.Int())
 	} else if data.DampeningMaximumWait.IsNull() {
 		data.DampeningMaximumWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dampening.threshold"); value.Exists() && !data.DampeningThreshold.IsNull() {
+	if value := res.Get("dampening.threshold"); value.Exists() && !data.DampeningThreshold.IsNull() {
 		data.DampeningThreshold = types.Int64Value(value.Int())
 	} else if data.DampeningThreshold.IsNull() {
 		data.DampeningThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dampening.extensions.down-monitoring"); value.Exists() {
+	if value := res.Get("dampening.extensions.down-monitoring"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DampeningExtensionsDownMonitoring.IsNull() {
 			data.DampeningExtensionsDownMonitoring = types.BoolValue(true)
@@ -602,7 +611,7 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.DampeningExtensionsDownMonitoring = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "dampening.disable"); value.Exists() {
+	if value := res.Get("dampening.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DampeningDisable.IsNull() {
 			data.DampeningDisable = types.BoolValue(true)
@@ -613,7 +622,7 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.DampeningDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "dampening.bundle-member.l3-only-mode"); value.Exists() {
+	if value := res.Get("dampening.bundle-member.l3-only-mode"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DampeningBundleMemberL3OnlyMode.IsNull() {
 			data.DampeningBundleMemberL3OnlyMode = types.BoolValue(true)
@@ -624,27 +633,27 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 			data.DampeningBundleMemberL3OnlyMode = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "dampening.bundle-member.initial-wait"); value.Exists() && !data.DampeningBundleMemberInitialWait.IsNull() {
+	if value := res.Get("dampening.bundle-member.initial-wait"); value.Exists() && !data.DampeningBundleMemberInitialWait.IsNull() {
 		data.DampeningBundleMemberInitialWait = types.Int64Value(value.Int())
 	} else if data.DampeningBundleMemberInitialWait.IsNull() {
 		data.DampeningBundleMemberInitialWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dampening.bundle-member.secondary-wait"); value.Exists() && !data.DampeningBundleMemberSecondaryWait.IsNull() {
+	if value := res.Get("dampening.bundle-member.secondary-wait"); value.Exists() && !data.DampeningBundleMemberSecondaryWait.IsNull() {
 		data.DampeningBundleMemberSecondaryWait = types.Int64Value(value.Int())
 	} else if data.DampeningBundleMemberSecondaryWait.IsNull() {
 		data.DampeningBundleMemberSecondaryWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dampening.bundle-member.maximum-wait"); value.Exists() && !data.DampeningBundleMemberMaximumWait.IsNull() {
+	if value := res.Get("dampening.bundle-member.maximum-wait"); value.Exists() && !data.DampeningBundleMemberMaximumWait.IsNull() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Value(value.Int())
 	} else if data.DampeningBundleMemberMaximumWait.IsNull() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb"); value.Exists() && !data.BundleCoexistenceBobBlb.IsNull() {
+	if value := res.Get("bundle.coexistence.bob-blb"); value.Exists() && !data.BundleCoexistenceBobBlb.IsNull() {
 		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
 	} else if data.BundleCoexistenceBobBlb.IsNull() {
 		data.BundleCoexistenceBobBlb = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.checksum.disable"); value.Exists() {
+	if value := res.Get("ipv6.checksum.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6ChecksumDisable.IsNull() {
 			data.Ipv6ChecksumDisable = types.BoolValue(true)
@@ -660,7 +669,7 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "interfaces.interface").ForEach(
+		res.Get("interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

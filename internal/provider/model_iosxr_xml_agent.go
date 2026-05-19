@@ -246,8 +246,8 @@ func (data XMLAgent) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+func (data *XMLAgent) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Enable.IsNull() {
 			data.Enable = types.BoolValue(true)
@@ -258,7 +258,7 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.Enable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tty"); value.Exists() {
+	if value := res.Get("tty"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TtyEnable.IsNull() {
 			data.TtyEnable = types.BoolValue(true)
@@ -269,32 +269,32 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.TtyEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "tty.streaming.on.size"); value.Exists() && !data.TtyStreamingSize.IsNull() {
+	if value := res.Get("tty.streaming.on.size"); value.Exists() && !data.TtyStreamingSize.IsNull() {
 		data.TtyStreamingSize = types.Int64Value(value.Int())
 	} else if data.TtyStreamingSize.IsNull() {
 		data.TtyStreamingSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "tty.iteration.size"); value.Exists() && !data.TtyIterationSize.IsNull() {
+	if value := res.Get("tty.iteration.size"); value.Exists() && !data.TtyIterationSize.IsNull() {
 		data.TtyIterationSize = types.StringValue(value.String())
 	} else if data.TtyIterationSize.IsNull() {
 		data.TtyIterationSize = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "tty.throttle.process-rate"); value.Exists() && !data.TtyThrottleProcessRate.IsNull() {
+	if value := res.Get("tty.throttle.process-rate"); value.Exists() && !data.TtyThrottleProcessRate.IsNull() {
 		data.TtyThrottleProcessRate = types.Int64Value(value.Int())
 	} else if data.TtyThrottleProcessRate.IsNull() {
 		data.TtyThrottleProcessRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "tty.throttle.memory"); value.Exists() && !data.TtyThrottleMemory.IsNull() {
+	if value := res.Get("tty.throttle.memory"); value.Exists() && !data.TtyThrottleMemory.IsNull() {
 		data.TtyThrottleMemory = types.Int64Value(value.Int())
 	} else if data.TtyThrottleMemory.IsNull() {
 		data.TtyThrottleMemory = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "tty.session.timeout"); value.Exists() && !data.TtySessionTimeout.IsNull() {
+	if value := res.Get("tty.session.timeout"); value.Exists() && !data.TtySessionTimeout.IsNull() {
 		data.TtySessionTimeout = types.Int64Value(value.Int())
 	} else if data.TtySessionTimeout.IsNull() {
 		data.TtySessionTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ssl"); value.Exists() {
+	if value := res.Get("ssl"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SslEnable.IsNull() {
 			data.SslEnable = types.BoolValue(true)
@@ -305,27 +305,27 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.SslEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ssl.streaming.on.size"); value.Exists() && !data.SslStreamingSize.IsNull() {
+	if value := res.Get("ssl.streaming.on.size"); value.Exists() && !data.SslStreamingSize.IsNull() {
 		data.SslStreamingSize = types.Int64Value(value.Int())
 	} else if data.SslStreamingSize.IsNull() {
 		data.SslStreamingSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ssl.iteration.size"); value.Exists() && !data.SslIterationSize.IsNull() {
+	if value := res.Get("ssl.iteration.size"); value.Exists() && !data.SslIterationSize.IsNull() {
 		data.SslIterationSize = types.StringValue(value.String())
 	} else if data.SslIterationSize.IsNull() {
 		data.SslIterationSize = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ssl.throttle.process-rate"); value.Exists() && !data.SslThrottleProcessRate.IsNull() {
+	if value := res.Get("ssl.throttle.process-rate"); value.Exists() && !data.SslThrottleProcessRate.IsNull() {
 		data.SslThrottleProcessRate = types.Int64Value(value.Int())
 	} else if data.SslThrottleProcessRate.IsNull() {
 		data.SslThrottleProcessRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ssl.throttle.memory"); value.Exists() && !data.SslThrottleMemory.IsNull() {
+	if value := res.Get("ssl.throttle.memory"); value.Exists() && !data.SslThrottleMemory.IsNull() {
 		data.SslThrottleMemory = types.Int64Value(value.Int())
 	} else if data.SslThrottleMemory.IsNull() {
 		data.SslThrottleMemory = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ssl.session.timeout"); value.Exists() && !data.SslSessionTimeout.IsNull() {
+	if value := res.Get("ssl.session.timeout"); value.Exists() && !data.SslSessionTimeout.IsNull() {
 		data.SslSessionTimeout = types.Int64Value(value.Int())
 	} else if data.SslSessionTimeout.IsNull() {
 		data.SslSessionTimeout = types.Int64Null()
@@ -335,7 +335,7 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.SslVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "ssl.vrfs.vrf").ForEach(
+		res.Get("ssl.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -376,7 +376,7 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.SslVrfs[i].Ipv4AccessList = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ipv6.enable"); value.Exists() {
+	if value := res.Get("ipv6.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv6Enable.IsNull() {
 			data.Ipv6Enable = types.BoolValue(true)
@@ -387,7 +387,7 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv6Enable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ipv4.disable"); value.Exists() {
+	if value := res.Get("ipv4.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ipv4Disable.IsNull() {
 			data.Ipv4Disable = types.BoolValue(true)
@@ -398,27 +398,27 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv4Disable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "streaming.on.size"); value.Exists() && !data.StreamingSize.IsNull() {
+	if value := res.Get("streaming.on.size"); value.Exists() && !data.StreamingSize.IsNull() {
 		data.StreamingSize = types.Int64Value(value.Int())
 	} else if data.StreamingSize.IsNull() {
 		data.StreamingSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "iteration.size"); value.Exists() && !data.IterationSize.IsNull() {
+	if value := res.Get("iteration.size"); value.Exists() && !data.IterationSize.IsNull() {
 		data.IterationSize = types.StringValue(value.String())
 	} else if data.IterationSize.IsNull() {
 		data.IterationSize = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "throttle.process-rate"); value.Exists() && !data.ThrottleProcessRate.IsNull() {
+	if value := res.Get("throttle.process-rate"); value.Exists() && !data.ThrottleProcessRate.IsNull() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
 	} else if data.ThrottleProcessRate.IsNull() {
 		data.ThrottleProcessRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "throttle.memory"); value.Exists() && !data.ThrottleMemory.IsNull() {
+	if value := res.Get("throttle.memory"); value.Exists() && !data.ThrottleMemory.IsNull() {
 		data.ThrottleMemory = types.Int64Value(value.Int())
 	} else if data.ThrottleMemory.IsNull() {
 		data.ThrottleMemory = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "session.timeout"); value.Exists() && !data.SessionTimeout.IsNull() {
+	if value := res.Get("session.timeout"); value.Exists() && !data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	} else if data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Null()
@@ -428,7 +428,7 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "vrfs.vrf").ForEach(
+		res.Get("vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -479,7 +479,11 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data XMLAgent) toBodyXML(ctx context.Context) string {
+func (data XMLAgent) toBodyXML(ctx context.Context, stateArg ...*XMLAgent) string {
+	var state *XMLAgent
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
 		if data.Enable.ValueBool() {
@@ -528,7 +532,7 @@ func (data XMLAgent) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.SslVrfs) > 0 {
 		for _, item := range data.SslVrfs {
-			basePath := data.getXPath() + "/ssl/vrfs/vrf"
+			basePath := data.getXPath() + "/ssl/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -569,7 +573,7 @@ func (data XMLAgent) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Vrfs) > 0 {
 		for _, item := range data.Vrfs {
-			basePath := data.getXPath() + "/vrfs/vrf"
+			basePath := data.getXPath() + "/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -594,6 +598,11 @@ func (data XMLAgent) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

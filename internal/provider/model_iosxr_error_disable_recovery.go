@@ -185,7 +185,11 @@ func (data ErrorDisableRecovery) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data ErrorDisableRecovery) toBodyXML(ctx context.Context) string {
+func (data ErrorDisableRecovery) toBodyXML(ctx context.Context, stateArg ...*ErrorDisableRecovery) string {
+	var state *ErrorDisableRecovery
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.LinkOamSessionDownInterval.IsNull() && !data.LinkOamSessionDownInterval.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/link-oam-session-down/interval", strconv.FormatInt(data.LinkOamSessionDownInterval.ValueInt64(), 10))
@@ -255,6 +259,11 @@ func (data ErrorDisableRecovery) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -262,103 +271,103 @@ func (data ErrorDisableRecovery) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *ErrorDisableRecovery) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "link-oam-session-down.interval"); value.Exists() && !data.LinkOamSessionDownInterval.IsNull() {
+func (data *ErrorDisableRecovery) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("link-oam-session-down.interval"); value.Exists() && !data.LinkOamSessionDownInterval.IsNull() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamSessionDownInterval.IsNull() {
 		data.LinkOamSessionDownInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "link-oam-discovery-timeout.interval"); value.Exists() && !data.LinkOamDiscoveryTimeoutInterval.IsNull() {
+	if value := res.Get("link-oam-discovery-timeout.interval"); value.Exists() && !data.LinkOamDiscoveryTimeoutInterval.IsNull() {
 		data.LinkOamDiscoveryTimeoutInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamDiscoveryTimeoutInterval.IsNull() {
 		data.LinkOamDiscoveryTimeoutInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "link-oam-capabilities-conflict.interval"); value.Exists() && !data.LinkOamCapabilitiesConflictInterval.IsNull() {
+	if value := res.Get("link-oam-capabilities-conflict.interval"); value.Exists() && !data.LinkOamCapabilitiesConflictInterval.IsNull() {
 		data.LinkOamCapabilitiesConflictInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamCapabilitiesConflictInterval.IsNull() {
 		data.LinkOamCapabilitiesConflictInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "link-oam-miswired.interval"); value.Exists() && !data.LinkOamMiswiredInterval.IsNull() {
+	if value := res.Get("link-oam-miswired.interval"); value.Exists() && !data.LinkOamMiswiredInterval.IsNull() {
 		data.LinkOamMiswiredInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamMiswiredInterval.IsNull() {
 		data.LinkOamMiswiredInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "link-oam-link-fault.interval"); value.Exists() && !data.LinkOamLinkFaultInterval.IsNull() {
+	if value := res.Get("link-oam-link-fault.interval"); value.Exists() && !data.LinkOamLinkFaultInterval.IsNull() {
 		data.LinkOamLinkFaultInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamLinkFaultInterval.IsNull() {
 		data.LinkOamLinkFaultInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "link-oam-dying-gasp.interval"); value.Exists() && !data.LinkOamDyingGaspInterval.IsNull() {
+	if value := res.Get("link-oam-dying-gasp.interval"); value.Exists() && !data.LinkOamDyingGaspInterval.IsNull() {
 		data.LinkOamDyingGaspInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamDyingGaspInterval.IsNull() {
 		data.LinkOamDyingGaspInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "link-oam-critical-event.interval"); value.Exists() && !data.LinkOamCriticalEventInterval.IsNull() {
+	if value := res.Get("link-oam-critical-event.interval"); value.Exists() && !data.LinkOamCriticalEventInterval.IsNull() {
 		data.LinkOamCriticalEventInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamCriticalEventInterval.IsNull() {
 		data.LinkOamCriticalEventInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "link-oam-threshold-breached.interval"); value.Exists() && !data.LinkOamThresholdBreachedInterval.IsNull() {
+	if value := res.Get("link-oam-threshold-breached.interval"); value.Exists() && !data.LinkOamThresholdBreachedInterval.IsNull() {
 		data.LinkOamThresholdBreachedInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamThresholdBreachedInterval.IsNull() {
 		data.LinkOamThresholdBreachedInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "stp-bpdu-guard.interval"); value.Exists() && !data.StpBpduGuardInterval.IsNull() {
+	if value := res.Get("stp-bpdu-guard.interval"); value.Exists() && !data.StpBpduGuardInterval.IsNull() {
 		data.StpBpduGuardInterval = types.Int64Value(value.Int())
 	} else if data.StpBpduGuardInterval.IsNull() {
 		data.StpBpduGuardInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "stp-legacy-bpdu.interval"); value.Exists() && !data.StpLegacyBpduInterval.IsNull() {
+	if value := res.Get("stp-legacy-bpdu.interval"); value.Exists() && !data.StpLegacyBpduInterval.IsNull() {
 		data.StpLegacyBpduInterval = types.Int64Value(value.Int())
 	} else if data.StpLegacyBpduInterval.IsNull() {
 		data.StpLegacyBpduInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cluster-udld.interval"); value.Exists() && !data.ClusterUdldInterval.IsNull() {
+	if value := res.Get("cluster-udld.interval"); value.Exists() && !data.ClusterUdldInterval.IsNull() {
 		data.ClusterUdldInterval = types.Int64Value(value.Int())
 	} else if data.ClusterUdldInterval.IsNull() {
 		data.ClusterUdldInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cluster-minlinks.interval"); value.Exists() && !data.ClusterMinlinksInterval.IsNull() {
+	if value := res.Get("cluster-minlinks.interval"); value.Exists() && !data.ClusterMinlinksInterval.IsNull() {
 		data.ClusterMinlinksInterval = types.Int64Value(value.Int())
 	} else if data.ClusterMinlinksInterval.IsNull() {
 		data.ClusterMinlinksInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "udld-unidirectional.interval"); value.Exists() && !data.UdldUnidirectionalInterval.IsNull() {
+	if value := res.Get("udld-unidirectional.interval"); value.Exists() && !data.UdldUnidirectionalInterval.IsNull() {
 		data.UdldUnidirectionalInterval = types.Int64Value(value.Int())
 	} else if data.UdldUnidirectionalInterval.IsNull() {
 		data.UdldUnidirectionalInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "udld-neighbor-mismatch.interval"); value.Exists() && !data.UdldNeighborMismatchInterval.IsNull() {
+	if value := res.Get("udld-neighbor-mismatch.interval"); value.Exists() && !data.UdldNeighborMismatchInterval.IsNull() {
 		data.UdldNeighborMismatchInterval = types.Int64Value(value.Int())
 	} else if data.UdldNeighborMismatchInterval.IsNull() {
 		data.UdldNeighborMismatchInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "udld-timeout.interval"); value.Exists() && !data.UdldTimeoutInterval.IsNull() {
+	if value := res.Get("udld-timeout.interval"); value.Exists() && !data.UdldTimeoutInterval.IsNull() {
 		data.UdldTimeoutInterval = types.Int64Value(value.Int())
 	} else if data.UdldTimeoutInterval.IsNull() {
 		data.UdldTimeoutInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "udld-loopback.interval"); value.Exists() && !data.UdldLoopbackInterval.IsNull() {
+	if value := res.Get("udld-loopback.interval"); value.Exists() && !data.UdldLoopbackInterval.IsNull() {
 		data.UdldLoopbackInterval = types.Int64Value(value.Int())
 	} else if data.UdldLoopbackInterval.IsNull() {
 		data.UdldLoopbackInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pvrst-pvid-mismatch.interval"); value.Exists() && !data.PvrstPvidMismatchInterval.IsNull() {
+	if value := res.Get("pvrst-pvid-mismatch.interval"); value.Exists() && !data.PvrstPvidMismatchInterval.IsNull() {
 		data.PvrstPvidMismatchInterval = types.Int64Value(value.Int())
 	} else if data.PvrstPvidMismatchInterval.IsNull() {
 		data.PvrstPvidMismatchInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "l2vpn-bport-mac-move.interval"); value.Exists() && !data.L2vpnBportMacMoveInterval.IsNull() {
+	if value := res.Get("l2vpn-bport-mac-move.interval"); value.Exists() && !data.L2vpnBportMacMoveInterval.IsNull() {
 		data.L2vpnBportMacMoveInterval = types.Int64Value(value.Int())
 	} else if data.L2vpnBportMacMoveInterval.IsNull() {
 		data.L2vpnBportMacMoveInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ot-track-state-change.interval"); value.Exists() && !data.OtTrackStateChangeInterval.IsNull() {
+	if value := res.Get("ot-track-state-change.interval"); value.Exists() && !data.OtTrackStateChangeInterval.IsNull() {
 		data.OtTrackStateChangeInterval = types.Int64Value(value.Int())
 	} else if data.OtTrackStateChangeInterval.IsNull() {
 		data.OtTrackStateChangeInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "link-oam-dampening.interval"); value.Exists() && !data.LinkOamDampeningInterval.IsNull() {
+	if value := res.Get("link-oam-dampening.interval"); value.Exists() && !data.LinkOamDampeningInterval.IsNull() {
 		data.LinkOamDampeningInterval = types.Int64Value(value.Int())
 	} else if data.LinkOamDampeningInterval.IsNull() {
 		data.LinkOamDampeningInterval = types.Int64Null()

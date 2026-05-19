@@ -95,7 +95,11 @@ func (data Banner) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data Banner) toBodyXML(ctx context.Context) string {
+func (data Banner) toBodyXML(ctx context.Context, stateArg ...*Banner) string {
+	var state *Banner
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Line.IsNull() && !data.Line.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/line", data.Line.ValueString())
@@ -108,6 +112,11 @@ func (data Banner) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -115,8 +124,8 @@ func (data Banner) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *Banner) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "line"); value.Exists() && !data.Line.IsNull() {
+func (data *Banner) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("line"); value.Exists() && !data.Line.IsNull() {
 		data.Line = types.StringValue(value.String())
 	} else if data.Line.IsNull() {
 		data.Line = types.StringNull()

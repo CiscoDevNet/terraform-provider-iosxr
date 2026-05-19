@@ -481,11 +481,15 @@ func (data AAAAuthorization) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data AAAAuthorization) toBodyXML(ctx context.Context) string {
+func (data AAAAuthorization) toBodyXML(ctx context.Context, stateArg ...*AAAAuthorization) string {
+	var state *AAAAuthorization
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Exec) > 0 {
 		for _, item := range data.Exec {
-			basePath := data.getXPath() + "/exec/authorization-list"
+			basePath := data.getXPath() + "/exec/authorization-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
@@ -585,7 +589,7 @@ func (data AAAAuthorization) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Eventmanager) > 0 {
 		for _, item := range data.Eventmanager {
-			basePath := data.getXPath() + "/eventmanager/authorization-list"
+			basePath := data.getXPath() + "/eventmanager/authorization-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
@@ -619,7 +623,7 @@ func (data AAAAuthorization) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Commands) > 0 {
 		for _, item := range data.Commands {
-			basePath := data.getXPath() + "/commands/authorization-list"
+			basePath := data.getXPath() + "/commands/authorization-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
@@ -699,7 +703,7 @@ func (data AAAAuthorization) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Network) > 0 {
 		for _, item := range data.Network {
-			basePath := data.getXPath() + "/network/authorization-list"
+			basePath := data.getXPath() + "/network/authorization-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
@@ -805,6 +809,11 @@ func (data AAAAuthorization) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -812,13 +821,13 @@ func (data AAAAuthorization) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
+func (data *AAAAuthorization) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Exec {
 		keys := [...]string{"list-name"}
 		keyValues := [...]string{data.Exec[i].List.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "exec.authorization-list").ForEach(
+		res.Get("exec.authorization-list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1059,7 +1068,7 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Eventmanager[i].List.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "eventmanager.authorization-list").ForEach(
+		res.Get("eventmanager.authorization-list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1146,7 +1155,7 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Commands[i].List.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "commands.authorization-list").ForEach(
+		res.Get("commands.authorization-list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1339,7 +1348,7 @@ func (data *AAAAuthorization) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Network[i].List.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "network.authorization-list").ForEach(
+		res.Get("network.authorization-list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

@@ -204,13 +204,13 @@ func (data RouterHSRPInterfaceIPv4GroupV1) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "address.ipv4-address"); value.Exists() && !data.Address.IsNull() {
+func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("address.ipv4-address"); value.Exists() && !data.Address.IsNull() {
 		data.Address = types.StringValue(value.String())
 	} else if data.Address.IsNull() {
 		data.Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "address.learn"); value.Exists() {
+	if value := res.Get("address.learn"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AddressLearn.IsNull() {
 			data.AddressLearn = types.BoolValue(true)
@@ -226,7 +226,7 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, 
 		keyValues := [...]string{data.SecondaryIpv4Addresses[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "address.secondary-ipv4-addresses.secondary-ipv4-address").ForEach(
+		res.Get("address.secondary-ipv4-addresses.secondary-ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -250,12 +250,12 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, 
 			data.SecondaryIpv4Addresses[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
+	if value := res.Get("priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
 	} else if data.Priority.IsNull() {
 		data.Priority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "preempt.delay"); value.Exists() && !data.PreemptDelay.IsNull() {
+	if value := res.Get("preempt.delay"); value.Exists() && !data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Value(value.Int())
 	} else if data.PreemptDelay.IsNull() {
 		data.PreemptDelay = types.Int64Null()
@@ -265,7 +265,7 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, 
 		keyValues := [...]string{data.TrackInterfaces[i].TrackName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "track-interfaces.track-interface").ForEach(
+		res.Get("track-interfaces.track-interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -299,7 +299,7 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, 
 		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "track-objects.track-object").ForEach(
+		res.Get("track-objects.track-object").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -328,42 +328,42 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, 
 			data.TrackObjects[i].PriorityDecrement = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "timers.msec"); value.Exists() && !data.TimersMsec.IsNull() {
+	if value := res.Get("timers.msec"); value.Exists() && !data.TimersMsec.IsNull() {
 		data.TimersMsec = types.Int64Value(value.Int())
 	} else if data.TimersMsec.IsNull() {
 		data.TimersMsec = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.msec2"); value.Exists() && !data.TimersMsecHoldtime.IsNull() {
+	if value := res.Get("timers.msec2"); value.Exists() && !data.TimersMsecHoldtime.IsNull() {
 		data.TimersMsecHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersMsecHoldtime.IsNull() {
 		data.TimersMsecHoldtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.hold-time"); value.Exists() && !data.TimersSeconds.IsNull() {
+	if value := res.Get("timers.hold-time"); value.Exists() && !data.TimersSeconds.IsNull() {
 		data.TimersSeconds = types.Int64Value(value.Int())
 	} else if data.TimersSeconds.IsNull() {
 		data.TimersSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.hold-time2"); value.Exists() && !data.TimersSecondsHoldtime.IsNull() {
+	if value := res.Get("timers.hold-time2"); value.Exists() && !data.TimersSecondsHoldtime.IsNull() {
 		data.TimersSecondsHoldtime = types.Int64Value(value.Int())
 	} else if data.TimersSecondsHoldtime.IsNull() {
 		data.TimersSecondsHoldtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mac-address"); value.Exists() && !data.MacAddress.IsNull() {
+	if value := res.Get("mac-address"); value.Exists() && !data.MacAddress.IsNull() {
 		data.MacAddress = types.StringValue(value.String())
 	} else if data.MacAddress.IsNull() {
 		data.MacAddress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "name"); value.Exists() && !data.Name.IsNull() {
+	if value := res.Get("name"); value.Exists() && !data.Name.IsNull() {
 		data.Name = types.StringValue(value.String())
 	} else if data.Name.IsNull() {
 		data.Name = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.ipv4"); value.Exists() && !data.BfdFastDetectPeerIpv4.IsNull() {
+	if value := res.Get("bfd.fast-detect.peer.ipv4"); value.Exists() && !data.BfdFastDetectPeerIpv4.IsNull() {
 		data.BfdFastDetectPeerIpv4 = types.StringValue(value.String())
 	} else if data.BfdFastDetectPeerIpv4.IsNull() {
 		data.BfdFastDetectPeerIpv4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.interface"); value.Exists() && !data.BfdFastDetectPeerInterface.IsNull() {
+	if value := res.Get("bfd.fast-detect.peer.interface"); value.Exists() && !data.BfdFastDetectPeerInterface.IsNull() {
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
 	} else if data.BfdFastDetectPeerInterface.IsNull() {
 		data.BfdFastDetectPeerInterface = types.StringNull()
@@ -373,7 +373,11 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, 
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterHSRPInterfaceIPv4GroupV1) toBodyXML(ctx context.Context) string {
+func (data RouterHSRPInterfaceIPv4GroupV1) toBodyXML(ctx context.Context, stateArg ...*RouterHSRPInterfaceIPv4GroupV1) string {
+	var state *RouterHSRPInterfaceIPv4GroupV1
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Address.IsNull() && !data.Address.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/address/ipv4-address", data.Address.ValueString())
@@ -385,7 +389,7 @@ func (data RouterHSRPInterfaceIPv4GroupV1) toBodyXML(ctx context.Context) string
 	}
 	if len(data.SecondaryIpv4Addresses) > 0 {
 		for _, item := range data.SecondaryIpv4Addresses {
-			basePath := data.getXPath() + "/address/secondary-ipv4-addresses/secondary-ipv4-address"
+			basePath := data.getXPath() + "/address/secondary-ipv4-addresses/secondary-ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -399,7 +403,7 @@ func (data RouterHSRPInterfaceIPv4GroupV1) toBodyXML(ctx context.Context) string
 	}
 	if len(data.TrackInterfaces) > 0 {
 		for _, item := range data.TrackInterfaces {
-			basePath := data.getXPath() + "/track-interfaces/track-interface"
+			basePath := data.getXPath() + "/track-interfaces/track-interface[track-name='" + item.TrackName.ValueString() + "']"
 			if !item.TrackName.IsNull() && !item.TrackName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/track-name", item.TrackName.ValueString())
 			}
@@ -410,7 +414,7 @@ func (data RouterHSRPInterfaceIPv4GroupV1) toBodyXML(ctx context.Context) string
 	}
 	if len(data.TrackObjects) > 0 {
 		for _, item := range data.TrackObjects {
-			basePath := data.getXPath() + "/track-objects/track-object"
+			basePath := data.getXPath() + "/track-objects/track-object[object-name='" + item.ObjectName.ValueString() + "']"
 			if !item.ObjectName.IsNull() && !item.ObjectName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/object-name", item.ObjectName.ValueString())
 			}
@@ -451,6 +455,11 @@ func (data RouterHSRPInterfaceIPv4GroupV1) toBodyXML(ctx context.Context) string
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

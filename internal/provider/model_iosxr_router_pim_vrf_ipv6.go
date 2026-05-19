@@ -627,13 +627,13 @@ func (data RouterPIMVRFIPv6) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
+func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.RpAddresses {
 		keys := [...]string{"address"}
 		keyValues := [...]string{data.RpAddresses[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "rp-addresses.rp-address").ForEach(
+		res.Get("rp-addresses.rp-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -679,7 +679,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.RpAddressesBidir[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "rp-addresses.bidir.rp-address").ForEach(
+		res.Get("rp-addresses.bidir.rp-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -720,17 +720,17 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "rp-static-deny"); value.Exists() && !data.RpStaticDeny.IsNull() {
+	if value := res.Get("rp-static-deny"); value.Exists() && !data.RpStaticDeny.IsNull() {
 		data.RpStaticDeny = types.StringValue(value.String())
 	} else if data.RpStaticDeny.IsNull() {
 		data.RpStaticDeny = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "accept-register"); value.Exists() && !data.AcceptRegister.IsNull() {
+	if value := res.Get("accept-register"); value.Exists() && !data.AcceptRegister.IsNull() {
 		data.AcceptRegister = types.StringValue(value.String())
 	} else if data.AcceptRegister.IsNull() {
 		data.AcceptRegister = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "suppress-data-registers"); value.Exists() {
+	if value := res.Get("suppress-data-registers"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SuppressDataRegisters.IsNull() {
 			data.SuppressDataRegisters = types.BoolValue(true)
@@ -741,12 +741,12 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.SuppressDataRegisters = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "register-source"); value.Exists() && !data.RegisterSource.IsNull() {
+	if value := res.Get("register-source"); value.Exists() && !data.RegisterSource.IsNull() {
 		data.RegisterSource = types.StringValue(value.String())
 	} else if data.RegisterSource.IsNull() {
 		data.RegisterSource = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "suppress-rpf-change-prunes"); value.Exists() {
+	if value := res.Get("suppress-rpf-change-prunes"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SuppressRpfChangePrunes.IsNull() {
 			data.SuppressRpfChangePrunes = types.BoolValue(true)
@@ -757,22 +757,22 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.SuppressRpfChangePrunes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "neighbor-filter"); value.Exists() && !data.NeighborFilter.IsNull() {
+	if value := res.Get("neighbor-filter"); value.Exists() && !data.NeighborFilter.IsNull() {
 		data.NeighborFilter = types.StringValue(value.String())
 	} else if data.NeighborFilter.IsNull() {
 		data.NeighborFilter = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "convergence.rpf-conflict-join-delay"); value.Exists() && !data.ConvergenceRpfConflictJoinDelay.IsNull() {
+	if value := res.Get("convergence.rpf-conflict-join-delay"); value.Exists() && !data.ConvergenceRpfConflictJoinDelay.IsNull() {
 		data.ConvergenceRpfConflictJoinDelay = types.Int64Value(value.Int())
 	} else if data.ConvergenceRpfConflictJoinDelay.IsNull() {
 		data.ConvergenceRpfConflictJoinDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "convergence.link-down-prune-delay"); value.Exists() && !data.ConvergenceLinkDownPruneDelay.IsNull() {
+	if value := res.Get("convergence.link-down-prune-delay"); value.Exists() && !data.ConvergenceLinkDownPruneDelay.IsNull() {
 		data.ConvergenceLinkDownPruneDelay = types.Int64Value(value.Int())
 	} else if data.ConvergenceLinkDownPruneDelay.IsNull() {
 		data.ConvergenceLinkDownPruneDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "spt-threshold.infinity"); value.Exists() {
+	if value := res.Get("spt-threshold.infinity"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SptThresholdInfinity.IsNull() {
 			data.SptThresholdInfinity = types.BoolValue(true)
@@ -783,12 +783,12 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.SptThresholdInfinity = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "spt-threshold.infinity.group-list"); value.Exists() && !data.SptThresholdInfinityGroupList.IsNull() {
+	if value := res.Get("spt-threshold.infinity.group-list"); value.Exists() && !data.SptThresholdInfinityGroupList.IsNull() {
 		data.SptThresholdInfinityGroupList = types.StringValue(value.String())
 	} else if data.SptThresholdInfinityGroupList.IsNull() {
 		data.SptThresholdInfinityGroupList = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "old-register-checksum"); value.Exists() {
+	if value := res.Get("old-register-checksum"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OldRegisterChecksum.IsNull() {
 			data.OldRegisterChecksum = types.BoolValue(true)
@@ -799,7 +799,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.OldRegisterChecksum = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "neighbor-check-on-send.enable"); value.Exists() {
+	if value := res.Get("neighbor-check-on-send.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NeighborCheckOnSend.IsNull() {
 			data.NeighborCheckOnSend = types.BoolValue(true)
@@ -810,7 +810,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.NeighborCheckOnSend = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "neighbor-check-on-recv.enable"); value.Exists() {
+	if value := res.Get("neighbor-check-on-recv.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NeighborCheckOnRecv.IsNull() {
 			data.NeighborCheckOnRecv = types.BoolValue(true)
@@ -821,87 +821,87 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.NeighborCheckOnRecv = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() && !data.HelloInterval.IsNull() {
+	if value := res.Get("hello-interval"); value.Exists() && !data.HelloInterval.IsNull() {
 		data.HelloInterval = types.Int64Value(value.Int())
 	} else if data.HelloInterval.IsNull() {
 		data.HelloInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dr-priority"); value.Exists() && !data.DrPriority.IsNull() {
+	if value := res.Get("dr-priority"); value.Exists() && !data.DrPriority.IsNull() {
 		data.DrPriority = types.Int64Value(value.Int())
 	} else if data.DrPriority.IsNull() {
 		data.DrPriority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "join-prune-interval"); value.Exists() && !data.JoinPruneInterval.IsNull() {
+	if value := res.Get("join-prune-interval"); value.Exists() && !data.JoinPruneInterval.IsNull() {
 		data.JoinPruneInterval = types.Int64Value(value.Int())
 	} else if data.JoinPruneInterval.IsNull() {
 		data.JoinPruneInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "join-prune-mtu"); value.Exists() && !data.JoinPruneMtu.IsNull() {
+	if value := res.Get("join-prune-mtu"); value.Exists() && !data.JoinPruneMtu.IsNull() {
 		data.JoinPruneMtu = types.Int64Value(value.Int())
 	} else if data.JoinPruneMtu.IsNull() {
 		data.JoinPruneMtu = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "propagation-delay"); value.Exists() && !data.PropagationDelay.IsNull() {
+	if value := res.Get("propagation-delay"); value.Exists() && !data.PropagationDelay.IsNull() {
 		data.PropagationDelay = types.Int64Value(value.Int())
 	} else if data.PropagationDelay.IsNull() {
 		data.PropagationDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "override-interval"); value.Exists() && !data.OverrideInterval.IsNull() {
+	if value := res.Get("override-interval"); value.Exists() && !data.OverrideInterval.IsNull() {
 		data.OverrideInterval = types.Int64Value(value.Int())
 	} else if data.OverrideInterval.IsNull() {
 		data.OverrideInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.routes.maximum-routes"); value.Exists() && !data.MaximumRoutes.IsNull() {
+	if value := res.Get("maximum.routes.maximum-routes"); value.Exists() && !data.MaximumRoutes.IsNull() {
 		data.MaximumRoutes = types.Int64Value(value.Int())
 	} else if data.MaximumRoutes.IsNull() {
 		data.MaximumRoutes = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.routes.threshold"); value.Exists() && !data.MaximumRoutesThreshold.IsNull() {
+	if value := res.Get("maximum.routes.threshold"); value.Exists() && !data.MaximumRoutesThreshold.IsNull() {
 		data.MaximumRoutesThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumRoutesThreshold.IsNull() {
 		data.MaximumRoutesThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.route-interfaces.maximum-route-interfaces"); value.Exists() && !data.MaximumRouteInterfaces.IsNull() {
+	if value := res.Get("maximum.route-interfaces.maximum-route-interfaces"); value.Exists() && !data.MaximumRouteInterfaces.IsNull() {
 		data.MaximumRouteInterfaces = types.Int64Value(value.Int())
 	} else if data.MaximumRouteInterfaces.IsNull() {
 		data.MaximumRouteInterfaces = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.route-interfaces.threshold"); value.Exists() && !data.MaximumRouteInterfacesThreshold.IsNull() {
+	if value := res.Get("maximum.route-interfaces.threshold"); value.Exists() && !data.MaximumRouteInterfacesThreshold.IsNull() {
 		data.MaximumRouteInterfacesThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumRouteInterfacesThreshold.IsNull() {
 		data.MaximumRouteInterfacesThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.register-states.maximum-register-states"); value.Exists() && !data.MaximumRegisterStates.IsNull() {
+	if value := res.Get("maximum.register-states.maximum-register-states"); value.Exists() && !data.MaximumRegisterStates.IsNull() {
 		data.MaximumRegisterStates = types.Int64Value(value.Int())
 	} else if data.MaximumRegisterStates.IsNull() {
 		data.MaximumRegisterStates = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.register-states.threshold"); value.Exists() && !data.MaximumRegisterStatesThreshold.IsNull() {
+	if value := res.Get("maximum.register-states.threshold"); value.Exists() && !data.MaximumRegisterStatesThreshold.IsNull() {
 		data.MaximumRegisterStatesThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumRegisterStatesThreshold.IsNull() {
 		data.MaximumRegisterStatesThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.group-mappings.bsr.maximum-bsr"); value.Exists() && !data.MaximumGroupMappingsBsr.IsNull() {
+	if value := res.Get("maximum.group-mappings.bsr.maximum-bsr"); value.Exists() && !data.MaximumGroupMappingsBsr.IsNull() {
 		data.MaximumGroupMappingsBsr = types.Int64Value(value.Int())
 	} else if data.MaximumGroupMappingsBsr.IsNull() {
 		data.MaximumGroupMappingsBsr = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.group-mappings.bsr.threshold"); value.Exists() && !data.MaximumGroupMappingsBsrThreshold.IsNull() {
+	if value := res.Get("maximum.group-mappings.bsr.threshold"); value.Exists() && !data.MaximumGroupMappingsBsrThreshold.IsNull() {
 		data.MaximumGroupMappingsBsrThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumGroupMappingsBsrThreshold.IsNull() {
 		data.MaximumGroupMappingsBsrThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.bsr.crp-cache.maximum-crp-cache"); value.Exists() && !data.MaximumBsrCrpCache.IsNull() {
+	if value := res.Get("maximum.bsr.crp-cache.maximum-crp-cache"); value.Exists() && !data.MaximumBsrCrpCache.IsNull() {
 		data.MaximumBsrCrpCache = types.Int64Value(value.Int())
 	} else if data.MaximumBsrCrpCache.IsNull() {
 		data.MaximumBsrCrpCache = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.bsr.crp-cache.threshold"); value.Exists() && !data.MaximumBsrCrpCacheThreshold.IsNull() {
+	if value := res.Get("maximum.bsr.crp-cache.threshold"); value.Exists() && !data.MaximumBsrCrpCacheThreshold.IsNull() {
 		data.MaximumBsrCrpCacheThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumBsrCrpCacheThreshold.IsNull() {
 		data.MaximumBsrCrpCacheThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "log.neighbor.changes"); value.Exists() {
+	if value := res.Get("log.neighbor.changes"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogNeighborChanges.IsNull() {
 			data.LogNeighborChanges = types.BoolValue(true)
@@ -912,7 +912,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.LogNeighborChanges = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "rpf-vector.allow-ebgp"); value.Exists() {
+	if value := res.Get("rpf-vector.allow-ebgp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RpfVectorAllowEbgp.IsNull() {
 			data.RpfVectorAllowEbgp = types.BoolValue(true)
@@ -923,7 +923,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.RpfVectorAllowEbgp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "rpf-vector.disable-ibgp"); value.Exists() {
+	if value := res.Get("rpf-vector.disable-ibgp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RpfVectorDisableIbgp.IsNull() {
 			data.RpfVectorDisableIbgp = types.BoolValue(true)
@@ -934,7 +934,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.RpfVectorDisableIbgp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "rpf-vector.use-standard-encoding"); value.Exists() {
+	if value := res.Get("rpf-vector.use-standard-encoding"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RpfVectorStandardEncoding.IsNull() {
 			data.RpfVectorStandardEncoding = types.BoolValue(true)
@@ -945,32 +945,32 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.RpfVectorStandardEncoding = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "rpf.topology.route-policy"); value.Exists() && !data.RpfTopologyRoutePolicy.IsNull() {
+	if value := res.Get("rpf.topology.route-policy"); value.Exists() && !data.RpfTopologyRoutePolicy.IsNull() {
 		data.RpfTopologyRoutePolicy = types.StringValue(value.String())
 	} else if data.RpfTopologyRoutePolicy.IsNull() {
 		data.RpfTopologyRoutePolicy = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "mdt.neighbor-filter"); value.Exists() && !data.MdtNeighborFilter.IsNull() {
+	if value := res.Get("mdt.neighbor-filter"); value.Exists() && !data.MdtNeighborFilter.IsNull() {
 		data.MdtNeighborFilter = types.StringValue(value.String())
 	} else if data.MdtNeighborFilter.IsNull() {
 		data.MdtNeighborFilter = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "mdt.data.switchover-interval"); value.Exists() && !data.MdtDataSwitchoverInterval.IsNull() {
+	if value := res.Get("mdt.data.switchover-interval"); value.Exists() && !data.MdtDataSwitchoverInterval.IsNull() {
 		data.MdtDataSwitchoverInterval = types.Int64Value(value.Int())
 	} else if data.MdtDataSwitchoverInterval.IsNull() {
 		data.MdtDataSwitchoverInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mdt.data.announce-interval"); value.Exists() && !data.MdtDataAnnounceInterval.IsNull() {
+	if value := res.Get("mdt.data.announce-interval"); value.Exists() && !data.MdtDataAnnounceInterval.IsNull() {
 		data.MdtDataAnnounceInterval = types.Int64Value(value.Int())
 	} else if data.MdtDataAnnounceInterval.IsNull() {
 		data.MdtDataAnnounceInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mdt.c-multicast-routing.type"); value.Exists() && !data.MdtCMulticastType.IsNull() {
+	if value := res.Get("mdt.c-multicast-routing.type"); value.Exists() && !data.MdtCMulticastType.IsNull() {
 		data.MdtCMulticastType = types.StringValue(value.String())
 	} else if data.MdtCMulticastType.IsNull() {
 		data.MdtCMulticastType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "mdt.c-multicast-routing.announce-pim-join-tlv"); value.Exists() {
+	if value := res.Get("mdt.c-multicast-routing.announce-pim-join-tlv"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MdtCMulticastAnnouncePimJoinTlv.IsNull() {
 			data.MdtCMulticastAnnouncePimJoinTlv = types.BoolValue(true)
@@ -981,7 +981,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.MdtCMulticastAnnouncePimJoinTlv = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mdt.c-multicast-routing.shared-tree-prune"); value.Exists() {
+	if value := res.Get("mdt.c-multicast-routing.shared-tree-prune"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MdtCMulticastSharedTreePrune.IsNull() {
 			data.MdtCMulticastSharedTreePrune = types.BoolValue(true)
@@ -992,7 +992,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.MdtCMulticastSharedTreePrune = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mdt.c-multicast-routing.suppress-shared-tree-join"); value.Exists() {
+	if value := res.Get("mdt.c-multicast-routing.suppress-shared-tree-join"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MdtCMulticastSuppressSharedTreeJoin.IsNull() {
 			data.MdtCMulticastSuppressSharedTreeJoin = types.BoolValue(true)
@@ -1003,7 +1003,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.MdtCMulticastSuppressSharedTreeJoin = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mdt.c-multicast-routing.suppress-pim-data-signaling"); value.Exists() {
+	if value := res.Get("mdt.c-multicast-routing.suppress-pim-data-signaling"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MdtCMulticastSuppressPimDataSignaling.IsNull() {
 			data.MdtCMulticastSuppressPimDataSignaling = types.BoolValue(true)
@@ -1014,7 +1014,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.MdtCMulticastSuppressPimDataSignaling = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mdt.c-multicast-routing.mdt-hello.enable"); value.Exists() {
+	if value := res.Get("mdt.c-multicast-routing.mdt-hello.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MdtCMulticastHelloEnable.IsNull() {
 			data.MdtCMulticastHelloEnable = types.BoolValue(true)
@@ -1025,22 +1025,22 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.MdtCMulticastHelloEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mdt.c-multicast-routing.shared-tree-prune-delay"); value.Exists() && !data.MdtCMulticastSharedTreePruneDelay.IsNull() {
+	if value := res.Get("mdt.c-multicast-routing.shared-tree-prune-delay"); value.Exists() && !data.MdtCMulticastSharedTreePruneDelay.IsNull() {
 		data.MdtCMulticastSharedTreePruneDelay = types.Int64Value(value.Int())
 	} else if data.MdtCMulticastSharedTreePruneDelay.IsNull() {
 		data.MdtCMulticastSharedTreePruneDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mdt.c-multicast-routing.source-tree-prune-delay"); value.Exists() && !data.MdtCMulticastSourceTreePruneDelay.IsNull() {
+	if value := res.Get("mdt.c-multicast-routing.source-tree-prune-delay"); value.Exists() && !data.MdtCMulticastSourceTreePruneDelay.IsNull() {
 		data.MdtCMulticastSourceTreePruneDelay = types.Int64Value(value.Int())
 	} else if data.MdtCMulticastSourceTreePruneDelay.IsNull() {
 		data.MdtCMulticastSourceTreePruneDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mdt.c-multicast-routing.migration.route-policy"); value.Exists() && !data.MdtCMulticastMigrationRoutePolicy.IsNull() {
+	if value := res.Get("mdt.c-multicast-routing.migration.route-policy"); value.Exists() && !data.MdtCMulticastMigrationRoutePolicy.IsNull() {
 		data.MdtCMulticastMigrationRoutePolicy = types.StringValue(value.String())
 	} else if data.MdtCMulticastMigrationRoutePolicy.IsNull() {
 		data.MdtCMulticastMigrationRoutePolicy = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "allow-rp"); value.Exists() {
+	if value := res.Get("allow-rp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AllowRp.IsNull() {
 			data.AllowRp = types.BoolValue(true)
@@ -1051,32 +1051,32 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.AllowRp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "allow-rp.rp-list"); value.Exists() && !data.AllowRpList.IsNull() {
+	if value := res.Get("allow-rp.rp-list"); value.Exists() && !data.AllowRpList.IsNull() {
 		data.AllowRpList = types.StringValue(value.String())
 	} else if data.AllowRpList.IsNull() {
 		data.AllowRpList = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "allow-rp.group-list"); value.Exists() && !data.AllowRpGroupList.IsNull() {
+	if value := res.Get("allow-rp.group-list"); value.Exists() && !data.AllowRpGroupList.IsNull() {
 		data.AllowRpGroupList = types.StringValue(value.String())
 	} else if data.AllowRpGroupList.IsNull() {
 		data.AllowRpGroupList = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "sg-expiry-timer.sg-expiry-timer-value"); value.Exists() && !data.SgExpiryTimer.IsNull() {
+	if value := res.Get("sg-expiry-timer.sg-expiry-timer-value"); value.Exists() && !data.SgExpiryTimer.IsNull() {
 		data.SgExpiryTimer = types.Int64Value(value.Int())
 	} else if data.SgExpiryTimer.IsNull() {
 		data.SgExpiryTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "sg-expiry-timer.sg-list"); value.Exists() && !data.SgList.IsNull() {
+	if value := res.Get("sg-expiry-timer.sg-list"); value.Exists() && !data.SgList.IsNull() {
 		data.SgList = types.StringValue(value.String())
 	} else if data.SgList.IsNull() {
 		data.SgList = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ssm.range"); value.Exists() && !data.SsmRange.IsNull() {
+	if value := res.Get("ssm.range"); value.Exists() && !data.SsmRange.IsNull() {
 		data.SsmRange = types.StringValue(value.String())
 	} else if data.SsmRange.IsNull() {
 		data.SsmRange = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ssm.disable"); value.Exists() {
+	if value := res.Get("ssm.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SsmDisable.IsNull() {
 			data.SsmDisable = types.BoolValue(true)
@@ -1087,7 +1087,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.SsmDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ssm.allow-override"); value.Exists() {
+	if value := res.Get("ssm.allow-override"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SsmAllowOverride.IsNull() {
 			data.SsmAllowOverride = types.BoolValue(true)
@@ -1098,7 +1098,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.SsmAllowOverride = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "multipath"); value.Exists() {
+	if value := res.Get("multipath"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Multipath.IsNull() {
 			data.Multipath = types.BoolValue(true)
@@ -1109,7 +1109,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.Multipath = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "multipath.hash.interface-extended"); value.Exists() {
+	if value := res.Get("multipath.hash.interface-extended"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MultipathHashInterfaceExtended.IsNull() {
 			data.MultipathHashInterfaceExtended = types.BoolValue(true)
@@ -1120,7 +1120,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.MultipathHashInterfaceExtended = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "multipath.hash.source-nexthop"); value.Exists() {
+	if value := res.Get("multipath.hash.source-nexthop"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MultipathHashSourceNexthop.IsNull() {
 			data.MultipathHashSourceNexthop = types.BoolValue(true)
@@ -1131,7 +1131,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.MultipathHashSourceNexthop = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "multipath.hash.source-group"); value.Exists() {
+	if value := res.Get("multipath.hash.source-group"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MultipathHashSourceGroup.IsNull() {
 			data.MultipathHashSourceGroup = types.BoolValue(true)
@@ -1142,17 +1142,17 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.MultipathHashSourceGroup = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "bsr.candidate-bsr.address"); value.Exists() && !data.BsrCandidateBsrAddress.IsNull() {
+	if value := res.Get("bsr.candidate-bsr.address"); value.Exists() && !data.BsrCandidateBsrAddress.IsNull() {
 		data.BsrCandidateBsrAddress = types.StringValue(value.String())
 	} else if data.BsrCandidateBsrAddress.IsNull() {
 		data.BsrCandidateBsrAddress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bsr.candidate-bsr.hash-mask-len"); value.Exists() && !data.BsrCandidateBsrHashMaskLen.IsNull() {
+	if value := res.Get("bsr.candidate-bsr.hash-mask-len"); value.Exists() && !data.BsrCandidateBsrHashMaskLen.IsNull() {
 		data.BsrCandidateBsrHashMaskLen = types.Int64Value(value.Int())
 	} else if data.BsrCandidateBsrHashMaskLen.IsNull() {
 		data.BsrCandidateBsrHashMaskLen = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bsr.candidate-bsr.priority"); value.Exists() && !data.BsrCandidateBsrPriority.IsNull() {
+	if value := res.Get("bsr.candidate-bsr.priority"); value.Exists() && !data.BsrCandidateBsrPriority.IsNull() {
 		data.BsrCandidateBsrPriority = types.Int64Value(value.Int())
 	} else if data.BsrCandidateBsrPriority.IsNull() {
 		data.BsrCandidateBsrPriority = types.Int64Null()
@@ -1162,7 +1162,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.BsrCandidateRps[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "bsr.candidate-rps.candidate-rp").ForEach(
+		res.Get("bsr.candidate-rps.candidate-rp").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1221,7 +1221,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.BsrRelayVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "bsr.relay.vrfs.vrf").ForEach(
+		res.Get("bsr.relay.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1262,7 +1262,7 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "interfaces.interface").ForEach(
+		res.Get("interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1399,11 +1399,15 @@ func (data *RouterPIMVRFIPv6) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterPIMVRFIPv6) toBodyXML(ctx context.Context) string {
+func (data RouterPIMVRFIPv6) toBodyXML(ctx context.Context, stateArg ...*RouterPIMVRFIPv6) string {
+	var state *RouterPIMVRFIPv6
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.RpAddresses) > 0 {
 		for _, item := range data.RpAddresses {
-			basePath := data.getXPath() + "/rp-addresses/rp-address"
+			basePath := data.getXPath() + "/rp-addresses/rp-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -1419,7 +1423,7 @@ func (data RouterPIMVRFIPv6) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.RpAddressesBidir) > 0 {
 		for _, item := range data.RpAddressesBidir {
-			basePath := data.getXPath() + "/rp-addresses/bidir/rp-address"
+			basePath := data.getXPath() + "/rp-addresses/bidir/rp-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -1662,7 +1666,7 @@ func (data RouterPIMVRFIPv6) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.BsrCandidateRps) > 0 {
 		for _, item := range data.BsrCandidateRps {
-			basePath := data.getXPath() + "/bsr/candidate-rps/candidate-rp"
+			basePath := data.getXPath() + "/bsr/candidate-rps/candidate-rp[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -1688,7 +1692,7 @@ func (data RouterPIMVRFIPv6) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.BsrRelayVrfs) > 0 {
 		for _, item := range data.BsrRelayVrfs {
-			basePath := data.getXPath() + "/bsr/relay/vrfs/vrf"
+			basePath := data.getXPath() + "/bsr/relay/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -1701,7 +1705,7 @@ func (data RouterPIMVRFIPv6) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Interfaces) > 0 {
 		for _, item := range data.Interfaces {
-			basePath := data.getXPath() + "/interfaces/interface"
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -1771,6 +1775,11 @@ func (data RouterPIMVRFIPv6) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

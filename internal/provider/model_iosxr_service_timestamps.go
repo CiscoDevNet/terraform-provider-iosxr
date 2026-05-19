@@ -181,7 +181,11 @@ func (data ServiceTimestamps) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data ServiceTimestamps) toBodyXML(ctx context.Context) string {
+func (data ServiceTimestamps) toBodyXML(ctx context.Context, stateArg ...*ServiceTimestamps) string {
+	var state *ServiceTimestamps
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.DebugDatetimeLocaltimeOnly.IsNull() && !data.DebugDatetimeLocaltimeOnly.IsUnknown() {
 		if data.DebugDatetimeLocaltimeOnly.ValueBool() {
@@ -261,6 +265,11 @@ func (data ServiceTimestamps) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -268,8 +277,8 @@ func (data ServiceTimestamps) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "debug.datetime.localtime-only"); value.Exists() {
+func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("debug.datetime.localtime-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DebugDatetimeLocaltimeOnly.IsNull() {
 			data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)
@@ -280,7 +289,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.DebugDatetimeLocaltimeOnly = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "debug.datetime.localtime"); value.Exists() {
+	if value := res.Get("debug.datetime.localtime"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DebugDatetimeLocaltime.IsNull() {
 			data.DebugDatetimeLocaltime = types.BoolValue(true)
@@ -291,7 +300,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.DebugDatetimeLocaltime = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "debug.datetime.msec"); value.Exists() {
+	if value := res.Get("debug.datetime.msec"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DebugDatetimeMsec.IsNull() {
 			data.DebugDatetimeMsec = types.BoolValue(true)
@@ -302,7 +311,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.DebugDatetimeMsec = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "debug.datetime.show-timezone"); value.Exists() {
+	if value := res.Get("debug.datetime.show-timezone"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DebugDatetimeShowTimezone.IsNull() {
 			data.DebugDatetimeShowTimezone = types.BoolValue(true)
@@ -313,7 +322,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.DebugDatetimeShowTimezone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "debug.datetime.year"); value.Exists() {
+	if value := res.Get("debug.datetime.year"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DebugDatetimeYear.IsNull() {
 			data.DebugDatetimeYear = types.BoolValue(true)
@@ -324,7 +333,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.DebugDatetimeYear = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "debug.uptime"); value.Exists() {
+	if value := res.Get("debug.uptime"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DebugUptime.IsNull() {
 			data.DebugUptime = types.BoolValue(true)
@@ -335,7 +344,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.DebugUptime = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "debug.disable"); value.Exists() {
+	if value := res.Get("debug.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DebugDisable.IsNull() {
 			data.DebugDisable = types.BoolValue(true)
@@ -346,7 +355,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.DebugDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.datetime.localtime-only"); value.Exists() {
+	if value := res.Get("log.datetime.localtime-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogDatetimeLocaltimeOnly.IsNull() {
 			data.LogDatetimeLocaltimeOnly = types.BoolValue(true)
@@ -357,7 +366,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.LogDatetimeLocaltimeOnly = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.datetime.localtime"); value.Exists() {
+	if value := res.Get("log.datetime.localtime"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogDatetimeLocaltime.IsNull() {
 			data.LogDatetimeLocaltime = types.BoolValue(true)
@@ -368,7 +377,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.LogDatetimeLocaltime = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.datetime.msec"); value.Exists() {
+	if value := res.Get("log.datetime.msec"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogDatetimeMsec.IsNull() {
 			data.LogDatetimeMsec = types.BoolValue(true)
@@ -379,7 +388,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.LogDatetimeMsec = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.datetime.show-timezone"); value.Exists() {
+	if value := res.Get("log.datetime.show-timezone"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogDatetimeShowTimezone.IsNull() {
 			data.LogDatetimeShowTimezone = types.BoolValue(true)
@@ -390,7 +399,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.LogDatetimeShowTimezone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.datetime.year"); value.Exists() {
+	if value := res.Get("log.datetime.year"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogDatetimeYear.IsNull() {
 			data.LogDatetimeYear = types.BoolValue(true)
@@ -401,7 +410,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.LogDatetimeYear = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.uptime"); value.Exists() {
+	if value := res.Get("log.uptime"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogUptime.IsNull() {
 			data.LogUptime = types.BoolValue(true)
@@ -412,7 +421,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 			data.LogUptime = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.disable"); value.Exists() {
+	if value := res.Get("log.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogDisable.IsNull() {
 			data.LogDisable = types.BoolValue(true)

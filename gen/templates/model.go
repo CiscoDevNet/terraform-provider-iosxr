@@ -519,7 +519,7 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte) {
+func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res gjson.Result) {
 	{{- $noAugmentCount := 0}}
 	{{- range .Attributes}}{{if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}{{$noAugmentCount = add $noAugmentCount 1}}{{end}}{{end}}
 	{{- $totalConfigCount := 0}}
@@ -529,7 +529,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	lastElement := helpers.LastElement(data.getPath())
 	{{- range .Attributes}}
 	{{- if and .NoAugmentConfig (eq .Type "String") (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}
-	if value := gjson.GetBytes(res, lastElement); value.Exists() {
+	if value := res.Get(lastElement); value.Exists() {
 		data.{{toGoName .TfName}} = types.StringValue(value.String())
 	} else if !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.StringValue(data.{{toGoName .TfName}}.ValueString())
@@ -542,26 +542,26 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	{{- range .Attributes}}
 	{{- if and (not .Reference) (not .Id) (not .WriteOnly)}}
 	{{- if eq .Type "Int64"}}
-	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
+	if value := res.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Int64Null()
 	}
 	{{- else if eq .Type "Float64"}}
-	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
+	if value := res.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Float64Value(value.Float())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Float64Null()
 	}
 	{{- else if eq .Type "Bool"}}
 	{{- if eq .TypeYangBool "boolean"}}
-	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() {
+	if value := res.Get("{{toDotPath .XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.BoolValue(value.Bool())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.BoolNull()
 	}
 	{{- else}}
-	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() {
+	if value := res.Get("{{toDotPath .XPath}}"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.{{toGoName .TfName}}.IsNull() {
 			data.{{toGoName .TfName}} = types.BoolValue(true)
@@ -574,31 +574,31 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	}
 	{{- end}}
 	{{- else if eq .Type "String"}}
-	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
+	if value := res.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.StringValue(value.String())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.StringNull()
 	}
 	{{- else if eq .Type "StringList"}}
-	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
+	if value := res.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = helpers.GetStringList(value.Array())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.ListNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64List"}}
-	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
+	if value := res.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = helpers.GetInt64List(value.Array())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.ListNull(types.Int64Type)
 	}
 	{{- else if eq .Type "StringSet"}}
-	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
+	if value := res.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = helpers.GetStringSet(value.Array())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.SetNull(types.StringType)
 	}
 	{{- else if eq .Type "Int64Set"}}
-	if value := gjson.GetBytes(res, "{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
+	if value := res.Get("{{toDotPath .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = helpers.GetInt64Set(value.Array())
 	} else if data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.SetNull(types.Int64Type)
@@ -611,7 +611,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 		keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 
 		var r gjson.Result
-		gjson.GetBytes(res, "{{$listPath}}").ForEach(
+		res.Get("{{$listPath}}").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1918,7 +1918,11 @@ func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
+func (data {{camelCase .Name}}) toBodyXML(ctx context.Context, stateArg ...*{{camelCase .Name}}) string {
+	var state *{{camelCase .Name}}
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	{{- $noAugmentCount := 0}}
 	{{- range .Attributes}}{{if and .NoAugmentConfig (not .Id) (not .Reference) (ne .Type "List") (ne .Type "Set")}}{{$noAugmentCount = add $noAugmentCount 1}}{{end}}{{end}}
 	{{- $totalConfigCount := 0}}
@@ -1946,6 +1950,10 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
 	bodyString, err := body.String()
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	return bodyString
 	{{- end}}
@@ -1988,7 +1996,12 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
 	{{- else if and (or (eq .Type "List") (eq .Type "Set")) (not (isXmlNamespaceSibling . $.Attributes))}}
 	if len(data.{{toGoName .TfName}}) > 0 {
 		for _, item := range data.{{toGoName .TfName}} {
+		{{- $idAttrs := getIdAttributes .Attributes}}
+		{{- if gt (len $idAttrs) 0}}
+		basePath := data.getXPath() + "/{{.XPath}}[{{range $i, $attr := $idAttrs}}{{if $i}} and {{end}}{{$attr.XPath}}='" + {{if eq $attr.Type "Int64"}}strconv.FormatInt(item.{{toGoName $attr.TfName}}.ValueInt64(), 10){{else}}item.{{toGoName $attr.TfName}}.ValueString(){{end}} + "'{{end}}]"
+		{{- else}}
 		basePath := data.getXPath() + "/{{.XPath}}"
+		{{- end}}
 		{{- range .Attributes}}
 		{{- if and (ne .Type "List") (ne .Type "Set")}}
 		if !item.{{toGoName .TfName}}.IsNull() && !item.{{toGoName .TfName}}.IsUnknown() {
@@ -2226,7 +2239,12 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
 		{{- else if or (eq .Type "List") (eq .Type "Set")}}
 		if len(data.{{toGoName .TfName}}) > 0 {
 			for _, item := range data.{{toGoName .TfName}} {
+				{{- $idAttrs := getIdAttributes .Attributes}}
+				{{- if gt (len $idAttrs) 0}}
+				basePath := data.getXPath() + "/{{.XPath}}[{{range $i, $attr := $idAttrs}}{{if $i}} and {{end}}{{$attr.XPath}}='" + {{if eq $attr.Type "Int64"}}strconv.FormatInt(item.{{toGoName $attr.TfName}}.ValueInt64(), 10){{else}}item.{{toGoName $attr.TfName}}.ValueString(){{end}} + "'{{end}}]"
+				{{- else}}
 				basePath := data.getXPath() + "/{{.XPath}}"
+				{{- end}}
 				{{- range .Attributes}}
 				{{- if and (ne .Type "List") (ne .Type "Set")}}
 				if !item.{{toGoName .TfName}}.IsNull() && !item.{{toGoName .TfName}}.IsUnknown() {
@@ -2320,6 +2338,11 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context) string {
 	{{- end}}
 	{{- end}}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 	{{- end}}
 }

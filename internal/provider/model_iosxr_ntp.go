@@ -875,63 +875,63 @@ func (data NTP) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
+func (data *NTP) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv4.precedence"); value.Exists() && !data.Ipv4Precedence.IsNull() {
+	if value := res.Get("ipv4.precedence"); value.Exists() && !data.Ipv4Precedence.IsNull() {
 		data.Ipv4Precedence = types.StringValue(value.String())
 	} else if data.Ipv4Precedence.IsNull() {
 		data.Ipv4Precedence = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
+	if value := res.Get("ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.precedence"); value.Exists() && !data.Ipv6Precedence.IsNull() {
+	if value := res.Get("ipv6.precedence"); value.Exists() && !data.Ipv6Precedence.IsNull() {
 		data.Ipv6Precedence = types.StringValue(value.String())
 	} else if data.Ipv6Precedence.IsNull() {
 		data.Ipv6Precedence = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-group.ipv6.peer"); value.Exists() && !data.AccessGroupIpv6Peer.IsNull() {
+	if value := res.Get("access-group.ipv6.peer"); value.Exists() && !data.AccessGroupIpv6Peer.IsNull() {
 		data.AccessGroupIpv6Peer = types.StringValue(value.String())
 	} else if data.AccessGroupIpv6Peer.IsNull() {
 		data.AccessGroupIpv6Peer = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-group.ipv6.query-only"); value.Exists() && !data.AccessGroupIpv6QueryOnly.IsNull() {
+	if value := res.Get("access-group.ipv6.query-only"); value.Exists() && !data.AccessGroupIpv6QueryOnly.IsNull() {
 		data.AccessGroupIpv6QueryOnly = types.StringValue(value.String())
 	} else if data.AccessGroupIpv6QueryOnly.IsNull() {
 		data.AccessGroupIpv6QueryOnly = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-group.ipv6.serve"); value.Exists() && !data.AccessGroupIpv6Serve.IsNull() {
+	if value := res.Get("access-group.ipv6.serve"); value.Exists() && !data.AccessGroupIpv6Serve.IsNull() {
 		data.AccessGroupIpv6Serve = types.StringValue(value.String())
 	} else if data.AccessGroupIpv6Serve.IsNull() {
 		data.AccessGroupIpv6Serve = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-group.ipv6.serve-only"); value.Exists() && !data.AccessGroupIpv6ServeOnly.IsNull() {
+	if value := res.Get("access-group.ipv6.serve-only"); value.Exists() && !data.AccessGroupIpv6ServeOnly.IsNull() {
 		data.AccessGroupIpv6ServeOnly = types.StringValue(value.String())
 	} else if data.AccessGroupIpv6ServeOnly.IsNull() {
 		data.AccessGroupIpv6ServeOnly = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-group.ipv4.peer"); value.Exists() && !data.AccessGroupIpv4Peer.IsNull() {
+	if value := res.Get("access-group.ipv4.peer"); value.Exists() && !data.AccessGroupIpv4Peer.IsNull() {
 		data.AccessGroupIpv4Peer = types.StringValue(value.String())
 	} else if data.AccessGroupIpv4Peer.IsNull() {
 		data.AccessGroupIpv4Peer = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-group.ipv4.query-only"); value.Exists() && !data.AccessGroupIpv4QueryOnly.IsNull() {
+	if value := res.Get("access-group.ipv4.query-only"); value.Exists() && !data.AccessGroupIpv4QueryOnly.IsNull() {
 		data.AccessGroupIpv4QueryOnly = types.StringValue(value.String())
 	} else if data.AccessGroupIpv4QueryOnly.IsNull() {
 		data.AccessGroupIpv4QueryOnly = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-group.ipv4.serve"); value.Exists() && !data.AccessGroupIpv4Serve.IsNull() {
+	if value := res.Get("access-group.ipv4.serve"); value.Exists() && !data.AccessGroupIpv4Serve.IsNull() {
 		data.AccessGroupIpv4Serve = types.StringValue(value.String())
 	} else if data.AccessGroupIpv4Serve.IsNull() {
 		data.AccessGroupIpv4Serve = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-group.ipv4.serve-only"); value.Exists() && !data.AccessGroupIpv4ServeOnly.IsNull() {
+	if value := res.Get("access-group.ipv4.serve-only"); value.Exists() && !data.AccessGroupIpv4ServeOnly.IsNull() {
 		data.AccessGroupIpv4ServeOnly = types.StringValue(value.String())
 	} else if data.AccessGroupIpv4ServeOnly.IsNull() {
 		data.AccessGroupIpv4ServeOnly = types.StringNull()
@@ -941,7 +941,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.AccessGroupVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "access-group.vrfs.vrf").ForEach(
+		res.Get("access-group.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1005,7 +1005,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.AccessGroupVrfs[i].Ipv4ServeOnly = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "authenticate"); value.Exists() {
+	if value := res.Get("authenticate"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Authenticate.IsNull() {
 			data.Authenticate = types.BoolValue(true)
@@ -1021,7 +1021,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.AuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "authentication-keys.authentication-key").ForEach(
+		res.Get("authentication-keys.authentication-key").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1050,7 +1050,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.CmacAuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "cmac-authentication-keys.cmac-authentication-key").ForEach(
+		res.Get("cmac-authentication-keys.cmac-authentication-key").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1079,7 +1079,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.HmacSha1AuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hmac-sha1-authentication-keys.hmac-sha1-authentication-key").ForEach(
+		res.Get("hmac-sha1-authentication-keys.hmac-sha1-authentication-key").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1108,7 +1108,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.HmacSha2AuthenticationKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hmac-sha2-authentication-keys.hmac-sha2-authentication-key").ForEach(
+		res.Get("hmac-sha2-authentication-keys.hmac-sha2-authentication-key").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1132,17 +1132,17 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.HmacSha2AuthenticationKeys[i].KeyNumber = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "broadcastdelay"); value.Exists() && !data.Broadcastdelay.IsNull() {
+	if value := res.Get("broadcastdelay"); value.Exists() && !data.Broadcastdelay.IsNull() {
 		data.Broadcastdelay = types.Int64Value(value.Int())
 	} else if data.Broadcastdelay.IsNull() {
 		data.Broadcastdelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "drift.aging.time"); value.Exists() && !data.DriftAgingTime.IsNull() {
+	if value := res.Get("drift.aging.time"); value.Exists() && !data.DriftAgingTime.IsNull() {
 		data.DriftAgingTime = types.Int64Value(value.Int())
 	} else if data.DriftAgingTime.IsNull() {
 		data.DriftAgingTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "drift.file.bootflash"); value.Exists() {
+	if value := res.Get("drift.file.bootflash"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileBootflash.IsNull() {
 			data.DriftFileBootflash = types.BoolValue(true)
@@ -1153,7 +1153,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.DriftFileBootflash = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "drift.file.compactflash"); value.Exists() {
+	if value := res.Get("drift.file.compactflash"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileCompactflash.IsNull() {
 			data.DriftFileCompactflash = types.BoolValue(true)
@@ -1164,7 +1164,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.DriftFileCompactflash = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "drift.file.usb"); value.Exists() {
+	if value := res.Get("drift.file.usb"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileUsb.IsNull() {
 			data.DriftFileUsb = types.BoolValue(true)
@@ -1175,7 +1175,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.DriftFileUsb = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "drift.file.disk0"); value.Exists() {
+	if value := res.Get("drift.file.disk0"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileDisk0.IsNull() {
 			data.DriftFileDisk0 = types.BoolValue(true)
@@ -1186,7 +1186,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.DriftFileDisk0 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "drift.file.disk1"); value.Exists() {
+	if value := res.Get("drift.file.disk1"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileDisk1.IsNull() {
 			data.DriftFileDisk1 = types.BoolValue(true)
@@ -1197,7 +1197,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.DriftFileDisk1 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "drift.file.disk2"); value.Exists() {
+	if value := res.Get("drift.file.disk2"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileDisk2.IsNull() {
 			data.DriftFileDisk2 = types.BoolValue(true)
@@ -1208,7 +1208,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.DriftFileDisk2 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "drift.file.harddisk"); value.Exists() {
+	if value := res.Get("drift.file.harddisk"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DriftFileHarddisk.IsNull() {
 			data.DriftFileHarddisk = types.BoolValue(true)
@@ -1219,7 +1219,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.DriftFileHarddisk = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "drift.file.file-name"); value.Exists() && !data.DriftFilename.IsNull() {
+	if value := res.Get("drift.file.file-name"); value.Exists() && !data.DriftFilename.IsNull() {
 		data.DriftFilename = types.StringValue(value.String())
 	} else if data.DriftFilename.IsNull() {
 		data.DriftFilename = types.StringNull()
@@ -1229,7 +1229,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "interfaces.interface").ForEach(
+		res.Get("interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1297,7 +1297,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.InterfaceVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "interfaces.vrfs.vrf").ForEach(
+		res.Get("interfaces.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1385,12 +1385,12 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "primary.stratum-number"); value.Exists() && !data.PrimaryStratumNumber.IsNull() {
+	if value := res.Get("primary.stratum-number"); value.Exists() && !data.PrimaryStratumNumber.IsNull() {
 		data.PrimaryStratumNumber = types.Int64Value(value.Int())
 	} else if data.PrimaryStratumNumber.IsNull() {
 		data.PrimaryStratumNumber = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "primary.primary-reference-clock"); value.Exists() {
+	if value := res.Get("primary.primary-reference-clock"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PrimaryReferenceClock.IsNull() {
 			data.PrimaryReferenceClock = types.BoolValue(true)
@@ -1401,7 +1401,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.PrimaryReferenceClock = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "max-associations"); value.Exists() && !data.MaxAssociations.IsNull() {
+	if value := res.Get("max-associations"); value.Exists() && !data.MaxAssociations.IsNull() {
 		data.MaxAssociations = types.Int64Value(value.Int())
 	} else if data.MaxAssociations.IsNull() {
 		data.MaxAssociations = types.Int64Null()
@@ -1411,7 +1411,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Ipv4PeersServers[i].Address.ValueString(), data.Ipv4PeersServers[i].Type.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "peer-server.ipv4.ipv4-peer-server").ForEach(
+		res.Get("peer-server.ipv4.ipv4-peer-server").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1506,7 +1506,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Ipv6PeersServers[i].Address.ValueString(), data.Ipv6PeersServers[i].Type.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "peer-server.ipv6.ipv6-peer-server").ForEach(
+		res.Get("peer-server.ipv6.ipv6-peer-server").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1606,7 +1606,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.HostnamePeersServers[i].FqdnHostname.ValueString(), data.HostnamePeersServers[i].Type.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "peer-server.hostname.hostname-peer-server").ForEach(
+		res.Get("peer-server.hostname.hostname-peer-server").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1701,7 +1701,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.PeersServersVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "peer-server.vrfs.vrf").ForEach(
+		res.Get("peer-server.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2002,7 +2002,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.TrustedKeys[i].KeyNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "trusted-keys.trusted-key").ForEach(
+		res.Get("trusted-keys.trusted-key").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2026,7 +2026,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.TrustedKeys[i].KeyNumber = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "update-calendar"); value.Exists() {
+	if value := res.Get("update-calendar"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.UpdateCalendar.IsNull() {
 			data.UpdateCalendar = types.BoolValue(true)
@@ -2037,7 +2037,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.UpdateCalendar = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log-internal-sync"); value.Exists() {
+	if value := res.Get("log-internal-sync"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogInternalSync.IsNull() {
 			data.LogInternalSync = types.BoolValue(true)
@@ -2048,7 +2048,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.LogInternalSync = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "passive"); value.Exists() {
+	if value := res.Get("passive"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Passive.IsNull() {
 			data.Passive = types.BoolValue(true)
@@ -2059,7 +2059,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.Passive = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "source.interface-name"); value.Exists() && !data.SourceInterfaceName.IsNull() {
+	if value := res.Get("source.interface-name"); value.Exists() && !data.SourceInterfaceName.IsNull() {
 		data.SourceInterfaceName = types.StringValue(value.String())
 	} else if data.SourceInterfaceName.IsNull() {
 		data.SourceInterfaceName = types.StringNull()
@@ -2069,7 +2069,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.SourceVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "source.vrfs.vrf").ForEach(
+		res.Get("source.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2098,27 +2098,27 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.SourceVrfs[i].InterfaceName = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "admin-plane.version"); value.Exists() && !data.AdminPlaneVersion.IsNull() {
+	if value := res.Get("admin-plane.version"); value.Exists() && !data.AdminPlaneVersion.IsNull() {
 		data.AdminPlaneVersion = types.Int64Value(value.Int())
 	} else if data.AdminPlaneVersion.IsNull() {
 		data.AdminPlaneVersion = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "admin-plane.key"); value.Exists() && !data.AdminPlaneKey.IsNull() {
+	if value := res.Get("admin-plane.key"); value.Exists() && !data.AdminPlaneKey.IsNull() {
 		data.AdminPlaneKey = types.Int64Value(value.Int())
 	} else if data.AdminPlaneKey.IsNull() {
 		data.AdminPlaneKey = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "admin-plane.minpoll"); value.Exists() && !data.AdminPlaneMinpoll.IsNull() {
+	if value := res.Get("admin-plane.minpoll"); value.Exists() && !data.AdminPlaneMinpoll.IsNull() {
 		data.AdminPlaneMinpoll = types.Int64Value(value.Int())
 	} else if data.AdminPlaneMinpoll.IsNull() {
 		data.AdminPlaneMinpoll = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "admin-plane.maxpoll"); value.Exists() && !data.AdminPlaneMaxpoll.IsNull() {
+	if value := res.Get("admin-plane.maxpoll"); value.Exists() && !data.AdminPlaneMaxpoll.IsNull() {
 		data.AdminPlaneMaxpoll = types.Int64Value(value.Int())
 	} else if data.AdminPlaneMaxpoll.IsNull() {
 		data.AdminPlaneMaxpoll = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "admin-plane.prefer"); value.Exists() {
+	if value := res.Get("admin-plane.prefer"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdminPlanePrefer.IsNull() {
 			data.AdminPlanePrefer = types.BoolValue(true)
@@ -2129,7 +2129,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.AdminPlanePrefer = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "admin-plane.burst"); value.Exists() {
+	if value := res.Get("admin-plane.burst"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdminPlaneBurst.IsNull() {
 			data.AdminPlaneBurst = types.BoolValue(true)
@@ -2140,7 +2140,7 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 			data.AdminPlaneBurst = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "admin-plane.iburst"); value.Exists() {
+	if value := res.Get("admin-plane.iburst"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdminPlaneIburst.IsNull() {
 			data.AdminPlaneIburst = types.BoolValue(true)
@@ -2156,7 +2156,11 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data NTP) toBodyXML(ctx context.Context) string {
+func (data NTP) toBodyXML(ctx context.Context, stateArg ...*NTP) string {
+	var state *NTP
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Ipv4Dscp.IsNull() && !data.Ipv4Dscp.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/dscp", data.Ipv4Dscp.ValueString())
@@ -2196,7 +2200,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.AccessGroupVrfs) > 0 {
 		for _, item := range data.AccessGroupVrfs {
-			basePath := data.getXPath() + "/access-group/vrfs/vrf"
+			basePath := data.getXPath() + "/access-group/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -2233,7 +2237,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.AuthenticationKeys) > 0 {
 		for _, item := range data.AuthenticationKeys {
-			basePath := data.getXPath() + "/authentication-keys/authentication-key"
+			basePath := data.getXPath() + "/authentication-keys/authentication-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
@@ -2244,7 +2248,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.CmacAuthenticationKeys) > 0 {
 		for _, item := range data.CmacAuthenticationKeys {
-			basePath := data.getXPath() + "/cmac-authentication-keys/cmac-authentication-key"
+			basePath := data.getXPath() + "/cmac-authentication-keys/cmac-authentication-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
@@ -2255,7 +2259,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HmacSha1AuthenticationKeys) > 0 {
 		for _, item := range data.HmacSha1AuthenticationKeys {
-			basePath := data.getXPath() + "/hmac-sha1-authentication-keys/hmac-sha1-authentication-key"
+			basePath := data.getXPath() + "/hmac-sha1-authentication-keys/hmac-sha1-authentication-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
@@ -2266,7 +2270,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HmacSha2AuthenticationKeys) > 0 {
 		for _, item := range data.HmacSha2AuthenticationKeys {
-			basePath := data.getXPath() + "/hmac-sha2-authentication-keys/hmac-sha2-authentication-key"
+			basePath := data.getXPath() + "/hmac-sha2-authentication-keys/hmac-sha2-authentication-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
@@ -2321,7 +2325,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Interfaces) > 0 {
 		for _, item := range data.Interfaces {
-			basePath := data.getXPath() + "/interfaces/interface"
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -2348,7 +2352,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.InterfaceVrfs) > 0 {
 		for _, item := range data.InterfaceVrfs {
-			basePath := data.getXPath() + "/interfaces/vrfs/vrf"
+			basePath := data.getXPath() + "/interfaces/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -2394,7 +2398,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Ipv4PeersServers) > 0 {
 		for _, item := range data.Ipv4PeersServers {
-			basePath := data.getXPath() + "/peer-server/ipv4/ipv4-peer-server"
+			basePath := data.getXPath() + "/peer-server/ipv4/ipv4-peer-server[address='" + item.Address.ValueString() + "' and type='" + item.Type.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2435,7 +2439,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Ipv6PeersServers) > 0 {
 		for _, item := range data.Ipv6PeersServers {
-			basePath := data.getXPath() + "/peer-server/ipv6/ipv6-peer-server"
+			basePath := data.getXPath() + "/peer-server/ipv6/ipv6-peer-server[address='" + item.Address.ValueString() + "' and type='" + item.Type.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2479,7 +2483,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.HostnamePeersServers) > 0 {
 		for _, item := range data.HostnamePeersServers {
-			basePath := data.getXPath() + "/peer-server/hostname/hostname-peer-server"
+			basePath := data.getXPath() + "/peer-server/hostname/hostname-peer-server[fqdn-hostname='" + item.FqdnHostname.ValueString() + "' and type='" + item.Type.ValueString() + "']"
 			if !item.FqdnHostname.IsNull() && !item.FqdnHostname.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/fqdn-hostname", item.FqdnHostname.ValueString())
 			}
@@ -2520,7 +2524,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PeersServersVrfs) > 0 {
 		for _, item := range data.PeersServersVrfs {
-			basePath := data.getXPath() + "/peer-server/vrfs/vrf"
+			basePath := data.getXPath() + "/peer-server/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -2654,7 +2658,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.TrustedKeys) > 0 {
 		for _, item := range data.TrustedKeys {
-			basePath := data.getXPath() + "/trusted-keys/trusted-key"
+			basePath := data.getXPath() + "/trusted-keys/trusted-key[key-number='" + strconv.FormatInt(item.KeyNumber.ValueInt64(), 10) + "']"
 			if !item.KeyNumber.IsNull() && !item.KeyNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/key-number", strconv.FormatInt(item.KeyNumber.ValueInt64(), 10))
 			}
@@ -2680,7 +2684,7 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.SourceVrfs) > 0 {
 		for _, item := range data.SourceVrfs {
-			basePath := data.getXPath() + "/source/vrfs/vrf"
+			basePath := data.getXPath() + "/source/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -2724,6 +2728,11 @@ func (data NTP) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

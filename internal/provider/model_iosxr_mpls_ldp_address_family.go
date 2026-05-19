@@ -316,18 +316,18 @@ func (data MPLSLDPAddressFamily) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "discovery.transport-address.ipv4-address"); value.Exists() && !data.DiscoveryTransportAddressIpv4.IsNull() {
+func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("discovery.transport-address.ipv4-address"); value.Exists() && !data.DiscoveryTransportAddressIpv4.IsNull() {
 		data.DiscoveryTransportAddressIpv4 = types.StringValue(value.String())
 	} else if data.DiscoveryTransportAddressIpv4.IsNull() {
 		data.DiscoveryTransportAddressIpv4 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "discovery.transport-address.ipv6-address"); value.Exists() && !data.DiscoveryTransportAddressIpv6.IsNull() {
+	if value := res.Get("discovery.transport-address.ipv6-address"); value.Exists() && !data.DiscoveryTransportAddressIpv6.IsNull() {
 		data.DiscoveryTransportAddressIpv6 = types.StringValue(value.String())
 	} else if data.DiscoveryTransportAddressIpv6.IsNull() {
 		data.DiscoveryTransportAddressIpv6 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "discovery.targeted-hello.accept"); value.Exists() {
+	if value := res.Get("discovery.targeted-hello.accept"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DiscoveryTargetedHelloAccept.IsNull() {
 			data.DiscoveryTargetedHelloAccept = types.BoolValue(true)
@@ -338,7 +338,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.DiscoveryTargetedHelloAccept = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "discovery.targeted-hello.accept.from"); value.Exists() && !data.DiscoveryTargetedHelloAcceptFrom.IsNull() {
+	if value := res.Get("discovery.targeted-hello.accept.from"); value.Exists() && !data.DiscoveryTargetedHelloAcceptFrom.IsNull() {
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringValue(value.String())
 	} else if data.DiscoveryTargetedHelloAcceptFrom.IsNull() {
 		data.DiscoveryTargetedHelloAcceptFrom = types.StringNull()
@@ -348,7 +348,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.NeighborIpv4Targeted[i].NeighborAddress.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "neighbor.ipv4-addresses.targeted").ForEach(
+		res.Get("neighbor.ipv4-addresses.targeted").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -377,7 +377,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.NeighborIpv6Targeted[i].NeighborAddress.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "neighbor.ipv6-addresses.targeted").ForEach(
+		res.Get("neighbor.ipv6-addresses.targeted").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -406,7 +406,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.NeighborSrPolicies[i].PolicyName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "neighbor.sr-policies.sr-policy").ForEach(
+		res.Get("neighbor.sr-policies.sr-policy").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -447,7 +447,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{strconv.FormatInt(data.TrafficEngAutoTunnelMeshGroups[i].GroupId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "traffic-eng.auto-tunnel.mesh.groups.group").ForEach(
+		res.Get("traffic-eng.auto-tunnel.mesh.groups.group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -471,7 +471,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.TrafficEngAutoTunnelMeshGroups[i].GroupId = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "traffic-eng.auto-tunnel.mesh.groups.all"); value.Exists() {
+	if value := res.Get("traffic-eng.auto-tunnel.mesh.groups.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrafficEngAutoTunnelMeshGroupsAll.IsNull() {
 			data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolValue(true)
@@ -482,22 +482,22 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.TrafficEngAutoTunnelMeshGroupsAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "redistribute.bgp.as"); value.Exists() && !data.RedistributeBgpAs.IsNull() {
+	if value := res.Get("redistribute.bgp.as"); value.Exists() && !data.RedistributeBgpAs.IsNull() {
 		data.RedistributeBgpAs = types.StringValue(value.String())
 	} else if data.RedistributeBgpAs.IsNull() {
 		data.RedistributeBgpAs = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "redistribute.bgp.advertise-to"); value.Exists() && !data.RedistributeBgpAdvertiseTo.IsNull() {
+	if value := res.Get("redistribute.bgp.advertise-to"); value.Exists() && !data.RedistributeBgpAdvertiseTo.IsNull() {
 		data.RedistributeBgpAdvertiseTo = types.StringValue(value.String())
 	} else if data.RedistributeBgpAdvertiseTo.IsNull() {
 		data.RedistributeBgpAdvertiseTo = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "label.local.allocate.for.access-list"); value.Exists() && !data.LabelLocalAllocateForAccessList.IsNull() {
+	if value := res.Get("label.local.allocate.for.access-list"); value.Exists() && !data.LabelLocalAllocateForAccessList.IsNull() {
 		data.LabelLocalAllocateForAccessList = types.StringValue(value.String())
 	} else if data.LabelLocalAllocateForAccessList.IsNull() {
 		data.LabelLocalAllocateForAccessList = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "label.local.allocate.for.host-routes"); value.Exists() {
+	if value := res.Get("label.local.allocate.for.host-routes"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LabelLocalAllocateForHostRoutes.IsNull() {
 			data.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
@@ -508,7 +508,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.LabelLocalAllocateForHostRoutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "label.local.default-route"); value.Exists() {
+	if value := res.Get("label.local.default-route"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LabelLocalDefaultRoute.IsNull() {
 			data.LabelLocalDefaultRoute = types.BoolValue(true)
@@ -519,12 +519,12 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.LabelLocalDefaultRoute = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "label.local.implicit-null-override.for"); value.Exists() && !data.LabelLocalImplicitNullOverrideFor.IsNull() {
+	if value := res.Get("label.local.implicit-null-override.for"); value.Exists() && !data.LabelLocalImplicitNullOverrideFor.IsNull() {
 		data.LabelLocalImplicitNullOverrideFor = types.StringValue(value.String())
 	} else if data.LabelLocalImplicitNullOverrideFor.IsNull() {
 		data.LabelLocalImplicitNullOverrideFor = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "label.local.advertise.explicit-null"); value.Exists() {
+	if value := res.Get("label.local.advertise.explicit-null"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LabelLocalAdvertiseExplicitNull.IsNull() {
 			data.LabelLocalAdvertiseExplicitNull = types.BoolValue(true)
@@ -535,17 +535,17 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.LabelLocalAdvertiseExplicitNull = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "label.local.advertise.explicit-null.for.access-list"); value.Exists() && !data.LabelLocalAdvertiseExplicitNullForAcl.IsNull() {
+	if value := res.Get("label.local.advertise.explicit-null.for.access-list"); value.Exists() && !data.LabelLocalAdvertiseExplicitNullForAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullForAcl = types.StringValue(value.String())
 	} else if data.LabelLocalAdvertiseExplicitNullForAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullForAcl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "label.local.advertise.explicit-null.for.to.access-list"); value.Exists() && !data.LabelLocalAdvertiseExplicitNullForAclToAcl.IsNull() {
+	if value := res.Get("label.local.advertise.explicit-null.for.to.access-list"); value.Exists() && !data.LabelLocalAdvertiseExplicitNullForAclToAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullForAclToAcl = types.StringValue(value.String())
 	} else if data.LabelLocalAdvertiseExplicitNullForAclToAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullForAclToAcl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "label.local.advertise.explicit-null.to.access-list"); value.Exists() && !data.LabelLocalAdvertiseExplicitNullToAcl.IsNull() {
+	if value := res.Get("label.local.advertise.explicit-null.to.access-list"); value.Exists() && !data.LabelLocalAdvertiseExplicitNullToAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullToAcl = types.StringValue(value.String())
 	} else if data.LabelLocalAdvertiseExplicitNullToAcl.IsNull() {
 		data.LabelLocalAdvertiseExplicitNullToAcl = types.StringNull()
@@ -555,7 +555,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.LabelLocalAdvertiseToNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelLocalAdvertiseToNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "label.local.advertise.to.neighbor").ForEach(
+		res.Get("label.local.advertise.to.neighbor").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -594,7 +594,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.LabelLocalAdvertiseInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "label.local.advertise.interfaces.interface").ForEach(
+		res.Get("label.local.advertise.interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -618,7 +618,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 			data.LabelLocalAdvertiseInterfaces[i].InterfaceName = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "label.local.advertise.disable"); value.Exists() {
+	if value := res.Get("label.local.advertise.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LabelLocalAdvertiseDisable.IsNull() {
 			data.LabelLocalAdvertiseDisable = types.BoolValue(true)
@@ -634,7 +634,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.LabelLocalAdvertiseForAccessLists[i].AccessListName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "label.local.advertise.for.access-lists").ForEach(
+		res.Get("label.local.advertise.for.access-lists").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -668,7 +668,7 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.LabelRemoteAcceptFromNeighbors[i].NeighborAddress.ValueString(), strconv.FormatInt(data.LabelRemoteAcceptFromNeighbors[i].LabelSpaceId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "label.remote.accept.from.neighbor").ForEach(
+		res.Get("label.remote.accept.from.neighbor").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -707,7 +707,11 @@ func (data *MPLSLDPAddressFamily) updateFromBody(ctx context.Context, res []byte
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
+func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context, stateArg ...*MPLSLDPAddressFamily) string {
+	var state *MPLSLDPAddressFamily
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.DiscoveryTransportAddressIpv4.IsNull() && !data.DiscoveryTransportAddressIpv4.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/discovery/transport-address/ipv4-address", data.DiscoveryTransportAddressIpv4.ValueString())
@@ -725,7 +729,7 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.NeighborIpv4Targeted) > 0 {
 		for _, item := range data.NeighborIpv4Targeted {
-			basePath := data.getXPath() + "/neighbor/ipv4-addresses/targeted"
+			basePath := data.getXPath() + "/neighbor/ipv4-addresses/targeted[neighbor-address='" + item.NeighborAddress.ValueString() + "']"
 			if !item.NeighborAddress.IsNull() && !item.NeighborAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/neighbor-address", item.NeighborAddress.ValueString())
 			}
@@ -733,7 +737,7 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.NeighborIpv6Targeted) > 0 {
 		for _, item := range data.NeighborIpv6Targeted {
-			basePath := data.getXPath() + "/neighbor/ipv6-addresses/targeted"
+			basePath := data.getXPath() + "/neighbor/ipv6-addresses/targeted[neighbor-address='" + item.NeighborAddress.ValueString() + "']"
 			if !item.NeighborAddress.IsNull() && !item.NeighborAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/neighbor-address", item.NeighborAddress.ValueString())
 			}
@@ -741,7 +745,7 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.NeighborSrPolicies) > 0 {
 		for _, item := range data.NeighborSrPolicies {
-			basePath := data.getXPath() + "/neighbor/sr-policies/sr-policy"
+			basePath := data.getXPath() + "/neighbor/sr-policies/sr-policy[policy-name='" + item.PolicyName.ValueString() + "']"
 			if !item.PolicyName.IsNull() && !item.PolicyName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/policy-name", item.PolicyName.ValueString())
 			}
@@ -754,7 +758,7 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.TrafficEngAutoTunnelMeshGroups) > 0 {
 		for _, item := range data.TrafficEngAutoTunnelMeshGroups {
-			basePath := data.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/group"
+			basePath := data.getXPath() + "/traffic-eng/auto-tunnel/mesh/groups/group[group-id='" + strconv.FormatInt(item.GroupId.ValueInt64(), 10) + "']"
 			if !item.GroupId.IsNull() && !item.GroupId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/group-id", strconv.FormatInt(item.GroupId.ValueInt64(), 10))
 			}
@@ -803,7 +807,7 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.LabelLocalAdvertiseToNeighbors) > 0 {
 		for _, item := range data.LabelLocalAdvertiseToNeighbors {
-			basePath := data.getXPath() + "/label/local/advertise/to/neighbor"
+			basePath := data.getXPath() + "/label/local/advertise/to/neighbor[neighbor-address='" + item.NeighborAddress.ValueString() + "' and label-space-id='" + strconv.FormatInt(item.LabelSpaceId.ValueInt64(), 10) + "']"
 			if !item.NeighborAddress.IsNull() && !item.NeighborAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/neighbor-address", item.NeighborAddress.ValueString())
 			}
@@ -817,7 +821,7 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.LabelLocalAdvertiseInterfaces) > 0 {
 		for _, item := range data.LabelLocalAdvertiseInterfaces {
-			basePath := data.getXPath() + "/label/local/advertise/interfaces/interface"
+			basePath := data.getXPath() + "/label/local/advertise/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -830,7 +834,7 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.LabelLocalAdvertiseForAccessLists) > 0 {
 		for _, item := range data.LabelLocalAdvertiseForAccessLists {
-			basePath := data.getXPath() + "/label/local/advertise/for/access-lists"
+			basePath := data.getXPath() + "/label/local/advertise/for/access-lists[access-list-name='" + item.AccessListName.ValueString() + "']"
 			if !item.AccessListName.IsNull() && !item.AccessListName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/access-list-name", item.AccessListName.ValueString())
 			}
@@ -841,7 +845,7 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.LabelRemoteAcceptFromNeighbors) > 0 {
 		for _, item := range data.LabelRemoteAcceptFromNeighbors {
-			basePath := data.getXPath() + "/label/remote/accept/from/neighbor"
+			basePath := data.getXPath() + "/label/remote/accept/from/neighbor[neighbor-address='" + item.NeighborAddress.ValueString() + "' and label-space-id='" + strconv.FormatInt(item.LabelSpaceId.ValueInt64(), 10) + "']"
 			if !item.NeighborAddress.IsNull() && !item.NeighborAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/neighbor-address", item.NeighborAddress.ValueString())
 			}
@@ -861,6 +865,11 @@ func (data MPLSLDPAddressFamily) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

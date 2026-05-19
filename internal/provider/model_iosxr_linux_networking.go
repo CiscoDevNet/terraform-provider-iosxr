@@ -280,8 +280,8 @@ func (data LinuxNetworking) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.thirty-seconds"); value.Exists() {
+func (data *LinuxNetworking) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("statistics-synchronization.from-xr.every.thirty-seconds"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationThirtySeconds.IsNull() {
 			data.StatisticsSynchronizationThirtySeconds = types.BoolValue(true)
@@ -292,7 +292,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationThirtySeconds = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.sixty-seconds"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.sixty-seconds"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationSixtySeconds.IsNull() {
 			data.StatisticsSynchronizationSixtySeconds = types.BoolValue(true)
@@ -303,7 +303,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationSixtySeconds = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.twom"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.twom"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationTwoMinutes.IsNull() {
 			data.StatisticsSynchronizationTwoMinutes = types.BoolValue(true)
@@ -314,7 +314,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationTwoMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.threem"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.threem"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationThreeMinutes.IsNull() {
 			data.StatisticsSynchronizationThreeMinutes = types.BoolValue(true)
@@ -325,7 +325,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationThreeMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.fourm"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.fourm"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationFourMinutes.IsNull() {
 			data.StatisticsSynchronizationFourMinutes = types.BoolValue(true)
@@ -336,7 +336,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationFourMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.fivem"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.fivem"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationFiveMinutes.IsNull() {
 			data.StatisticsSynchronizationFiveMinutes = types.BoolValue(true)
@@ -347,7 +347,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationFiveMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.sixm"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.sixm"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationSixMinutes.IsNull() {
 			data.StatisticsSynchronizationSixMinutes = types.BoolValue(true)
@@ -358,7 +358,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationSixMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.sevenm"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.sevenm"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationSevenMinutes.IsNull() {
 			data.StatisticsSynchronizationSevenMinutes = types.BoolValue(true)
@@ -369,7 +369,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationSevenMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.eightm"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.eightm"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationEightMinutes.IsNull() {
 			data.StatisticsSynchronizationEightMinutes = types.BoolValue(true)
@@ -380,7 +380,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationEightMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.ninem"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.ninem"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationNineMinutes.IsNull() {
 			data.StatisticsSynchronizationNineMinutes = types.BoolValue(true)
@@ -391,7 +391,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationNineMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "statistics-synchronization.from-xr.every.ten-m"); value.Exists() {
+	if value := res.Get("statistics-synchronization.from-xr.every.ten-m"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.StatisticsSynchronizationTenMinutes.IsNull() {
 			data.StatisticsSynchronizationTenMinutes = types.BoolValue(true)
@@ -402,7 +402,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 			data.StatisticsSynchronizationTenMinutes = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "linux-owned-vrf"); value.Exists() && !data.LinuxOwnedVrf.IsNull() {
+	if value := res.Get("linux-owned-vrf"); value.Exists() && !data.LinuxOwnedVrf.IsNull() {
 		data.LinuxOwnedVrf = types.StringValue(value.String())
 	} else if data.LinuxOwnedVrf.IsNull() {
 		data.LinuxOwnedVrf = types.StringNull()
@@ -412,7 +412,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ExposedInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "exposed-interfaces.interfaces.interface").ForEach(
+		res.Get("exposed-interfaces.interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -494,7 +494,7 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "vrfs.vrf").ForEach(
+		res.Get("vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -632,7 +632,11 @@ func (data *LinuxNetworking) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data LinuxNetworking) toBodyXML(ctx context.Context) string {
+func (data LinuxNetworking) toBodyXML(ctx context.Context, stateArg ...*LinuxNetworking) string {
+	var state *LinuxNetworking
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.StatisticsSynchronizationThirtySeconds.IsNull() && !data.StatisticsSynchronizationThirtySeconds.IsUnknown() {
 		if data.StatisticsSynchronizationThirtySeconds.ValueBool() {
@@ -694,7 +698,7 @@ func (data LinuxNetworking) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ExposedInterfaces) > 0 {
 		for _, item := range data.ExposedInterfaces {
-			basePath := data.getXPath() + "/exposed-interfaces/interfaces/interface"
+			basePath := data.getXPath() + "/exposed-interfaces/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -725,7 +729,7 @@ func (data LinuxNetworking) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Vrfs) > 0 {
 		for _, item := range data.Vrfs {
-			basePath := data.getXPath() + "/vrfs/vrf"
+			basePath := data.getXPath() + "/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -784,6 +788,11 @@ func (data LinuxNetworking) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

@@ -38,16 +38,9 @@ const (
 	// openTimeout is the maximum time to wait for a NETCONF connection to open
 	openTimeout = 30 * time.Second
 
-	// candidateCapabilityURI is the IETF URN for the candidate datastore capability
-	candidateCapabilityURI = "urn:ietf:params:netconf:capability:candidate:1.0"
-
 	// namespaceBaseURL is the base URL for Cisco YANG models
 	namespaceBaseURL = "http://cisco.com/ns/yang/"
 )
-
-// capabilityCache caches per-client capability check results
-// Key: "<pointer>:<uri>", Value: bool
-var capabilityCache sync.Map
 
 // ============================================================================
 // NETCONF Connection Management
@@ -71,9 +64,16 @@ func CloseNetconfConnection(ctx context.Context, client *netconf.Client, reuseCo
 	}
 }
 
-// EnsureNetconfConnection checks if the NETCONF connection is open and reconnects if needed.
-// When reuseConnection=true, it keeps the connection alive for better performance.
-// When reuseConnection=false, it ensures a fresh connection for each operation.
+// EnsureNetconfConnection ensures the NETCONF connection is ready for the requested mode.
+//
+// When reuseConnection=false, it forces a fresh TCP+SSH session (Close+Open) before each
+// operation. The go-netconf library handles lazy-connect and auto-reconnect on transport
+// errors internally, but it never proactively closes and reopens the socket — that is
+// deliberate provider-level behaviour for the no-reuse mode.
+//
+// When reuseConnection=true, this is a no-op: the library's ensureConnected() is called
+// inside every RPC (Get, GetConfig, EditConfig, …) and sendRPC() automatically retries
+// with reconnect on EOF/transport errors, so no external connection management is needed.
 func EnsureNetconfConnection(ctx context.Context, client *netconf.Client, reuseConnection bool, maxRetries int) error {
 	if client == nil {
 		return fmt.Errorf("NETCONF client is nil")
@@ -84,52 +84,15 @@ func EnsureNetconfConnection(ctx context.Context, client *netconf.Client, reuseC
 	}
 
 	if !reuseConnection {
-		// No reuse: ensure connection is open before every operation
+		// No reuse: force a fresh TCP+SSH connection before every operation.
+		// The library does NOT proactively close+reopen — that is provider-specific behaviour.
 		return ensureOpenWithRetries(ctx, client, maxRetries)
 	}
 
-	// Fast path for reuse: if connection is already open, don't reconnect
-	if !client.IsClosed() {
-		return nil
-	}
-
-	// Connection is closed, need to reconnect
-	tflog.Warn(ctx, "NETCONF session closed, reconnecting")
-	return reconnectWithRetries(ctx, client, maxRetries)
-}
-
-// reconnectWithRetries attempts to reconnect a closed NETCONF session with exponential back-off
-func reconnectWithRetries(ctx context.Context, client *netconf.Client, maxRetries int) error {
-	retryDelay := 500 * time.Millisecond
-	var lastErr error
-
-	for attempt := 1; attempt <= maxRetries; attempt++ {
-		_ = client.Close()
-		InvalidateCapabilityCache(client)
-
-		if attempt > 1 {
-			delay := retryDelay * time.Duration(attempt)
-			tflog.Debug(ctx, fmt.Sprintf("Reconnect attempt %d/%d, waiting %v", attempt, maxRetries, delay))
-			time.Sleep(delay)
-		}
-
-		if err := openWithTimeout(ctx, client, openTimeout); err != nil {
-			lastErr = err
-			tflog.Warn(ctx, fmt.Sprintf("Reconnect attempt %d/%d failed: %s", attempt, maxRetries, err))
-			continue
-		}
-
-		// Run health-check to confirm transport is working
-		if err := netconfHealthCheck(ctx, client); err != nil {
-			lastErr = err
-			tflog.Warn(ctx, fmt.Sprintf("Reconnect attempt %d/%d health check failed: %s", attempt, maxRetries, err))
-			continue
-		}
-
-		tflog.Info(ctx, fmt.Sprintf("NETCONF connected on attempt %d", attempt))
-		return nil
-	}
-	return fmt.Errorf("failed to connect NETCONF after %d attempts: %w", maxRetries, lastErr)
+	// reuseConnection=true: the go-netconf library calls ensureConnected() internally
+	// before every RPC and reconnects automatically on EOF/transport errors via its own
+	// retry loop in sendRPC(). No explicit action is needed here.
+	return nil
 }
 
 // AcquireNetconfLock acquires the appropriate lock for a NETCONF operation.
@@ -175,7 +138,6 @@ func ensureOpenWithRetries(ctx context.Context, client *netconf.Client, maxRetri
 	retryDelay := 50 * time.Millisecond
 	for attempt := 1; attempt <= maxRetries; attempt++ {
 		_ = client.Close()
-		InvalidateCapabilityCache(client)
 		if attempt > 1 {
 			time.Sleep(retryDelay * time.Duration(attempt))
 		}
@@ -215,27 +177,6 @@ func openWithTimeout(ctx context.Context, client *netconf.Client, timeout time.D
 	}
 }
 
-func netconfHealthCheck(ctx context.Context, client *netconf.Client) error {
-	hctx, cancel := context.WithTimeout(ctx, 3*time.Second)
-	defer cancel()
-
-	filter := GetSubtreeFilter("Cisco-IOS-XR-um-hostname-cfg:/hostname")
-	_, err := client.GetConfig(hctx, "running", filter)
-	if err == nil {
-		return nil
-	}
-
-	errStr := strings.ToLower(err.Error())
-	for _, token := range []string{"connection", "closed", "broken pipe", "eof", "timeout", "deadline exceeded"} {
-		if strings.Contains(errStr, token) {
-			return fmt.Errorf("transport error during health check: %w", err)
-		}
-	}
-	// Non-transport NETCONF errors mean the session is alive.
-	tflog.Debug(ctx, fmt.Sprintf("NETCONF health check got non-transport error (session OK): %s", err))
-	return nil
-}
-
 // formatNetconfError extracts detailed error information from a NETCONF error.
 func formatNetconfError(err error) string {
 	if netconfErr, ok := err.(*netconf.NetconfError); ok {
@@ -262,16 +203,6 @@ func formatNetconfError(err error) string {
 		return b.String()
 	}
 	return err.Error()
-}
-
-func cacheKey(client *netconf.Client, uri string) string {
-	return fmt.Sprintf("%p:%s", client, uri)
-}
-
-// InvalidateCapabilityCache removes all cached capability entries for the given client.
-// Call this whenever the client reconnects so the next operation re-queries the server.
-func InvalidateCapabilityCache(client *netconf.Client) {
-	capabilityCache.Delete(cacheKey(client, candidateCapabilityURI))
 }
 
 // EditConfig edits the configuration on the device
@@ -434,23 +365,17 @@ func GetConfigWithTimeout(ctx context.Context, client *netconf.Client, source st
 
 // IsGetConfigResponseEmpty checks if a GetConfig response has an empty <data> element.
 func IsGetConfigResponseEmpty(res *netconf.Res) bool {
-	if res == nil {
+	dataResult := res.Res.Get("data")
+	if !dataResult.Exists() {
 		return true
 	}
-	rawXML := strings.TrimSpace(res.Res.Raw)
-	if rawXML == "" {
-		return true
+	children := dataResult.Map()
+	for key := range children {
+		if key != "%" {
+			return false
+		}
 	}
-	if strings.Contains(rawXML, "<data/>") || strings.Contains(rawXML, "<data></data>") {
-		return true
-	}
-	start := strings.Index(rawXML, "<data>")
-	end := strings.Index(rawXML, "</data>")
-	if start == -1 || end == -1 || start >= end {
-		return true
-	}
-	content := strings.TrimSpace(rawXML[start+6 : end])
-	return content == "" || !strings.Contains(content, "<")
+	return true
 }
 
 // GetSubtreeFilter creates a NETCONF subtree filter from an XPath expression.
@@ -809,6 +734,48 @@ func findOrCreateNamespacedSibling(body netconf.Body, tentativePath, cleanElemen
 	return body, siblingIdx
 }
 
+// findOrCreateListEntryByKeys finds an existing list entry whose key values all match,
+// or creates a new sibling element when no match is found.
+// Returns the updated body and the path segment string to use (e.g. "class" or "class.1").
+func findOrCreateListEntryByKeys(body netconf.Body, tentativePath, escapedElementName, cleanElementName string, keys []KeyValue) (netconf.Body, string) {
+	// If no element exists at base path yet, it will be created normally.
+	baseElement := xmldot.Get(body.Res(), tentativePath)
+	if !baseElement.Exists() {
+		return body, escapedElementName
+	}
+
+	// Check if the base element already has matching keys (first item or update).
+	if CheckKeysMatch(baseElement, keys) {
+		return body, escapedElementName
+	}
+
+	// Base element has different keys – scan indexed siblings for a match.
+	const maxSiblings = 64
+	for n := 1; n <= maxSiblings; n++ {
+		idxPath := fmt.Sprintf("%s.%d", tentativePath, n)
+		sibling := xmldot.Get(body.Res(), idxPath)
+		if !sibling.Exists() {
+			// No matching sibling found – insert a new one after the last closing tag.
+			currentXML := body.Res()
+			siblingXML := fmt.Sprintf(`<%s></%s>`, cleanElementName, cleanElementName)
+			insertAfter := fmt.Sprintf("</%s>", cleanElementName)
+			lastIdx := strings.LastIndex(currentXML, insertAfter)
+			if lastIdx >= 0 {
+				insertPos := lastIdx + len(insertAfter)
+				newXML := currentXML[:insertPos] + siblingXML + currentXML[insertPos:]
+				body = netconf.NewBody(newXML)
+			}
+			return body, fmt.Sprintf("%s.%d", escapedElementName, n)
+		}
+		if CheckKeysMatch(sibling, keys) {
+			return body, fmt.Sprintf("%s.%d", escapedElementName, n)
+		}
+	}
+
+	// Fallback: return base path (should not normally be reached).
+	return body, escapedElementName
+}
+
 // findOrCreatePlainSibling finds or creates a sibling without namespace
 func findOrCreatePlainSibling(body netconf.Body, tentativePath, cleanElementName string) (netconf.Body, int) {
 	siblingIdx := -1
@@ -943,6 +910,13 @@ func buildXPathStructure(body netconf.Body, xPath string, ensureStructure bool) 
 		// Check if this is an augmented child
 		if checkIfAugmentedChild(body, keys, nsPrefix, pathSegments, tentativePath) {
 			pathSegments = append(pathSegments, escapedElementName)
+		} else if len(keys) > 0 {
+			// For list entries with predicates, find or create the element that
+			// has matching key values so that multiple list items don't overwrite
+			// each other.
+			var segName string
+			body, segName = findOrCreateListEntryByKeys(body, tentativePath, escapedElementName, cleanElementName, keys)
+			pathSegments = append(pathSegments, segName)
 		} else if nsPrefix != "" {
 			// Process namespace-aware element
 			pathSegments, body = processSegmentNamespace(body, nsPrefix, tentativePath, escapedElementName, cleanElementName, pathSegments)

@@ -117,7 +117,11 @@ func (data CDP) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data CDP) toBodyXML(ctx context.Context) string {
+func (data CDP) toBodyXML(ctx context.Context, stateArg ...*CDP) string {
+	var state *CDP
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
 		if data.Enable.ValueBool() {
@@ -148,6 +152,11 @@ func (data CDP) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -155,8 +164,8 @@ func (data CDP) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+func (data *CDP) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Enable.IsNull() {
 			data.Enable = types.BoolValue(true)
@@ -167,17 +176,17 @@ func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
 			data.Enable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "holdtime"); value.Exists() && !data.Holdtime.IsNull() {
+	if value := res.Get("holdtime"); value.Exists() && !data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Value(value.Int())
 	} else if data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timer"); value.Exists() && !data.Timer.IsNull() {
+	if value := res.Get("timer"); value.Exists() && !data.Timer.IsNull() {
 		data.Timer = types.Int64Value(value.Int())
 	} else if data.Timer.IsNull() {
 		data.Timer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "advertise.v1"); value.Exists() {
+	if value := res.Get("advertise.v1"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdvertiseV1.IsNull() {
 			data.AdvertiseV1 = types.BoolValue(true)
@@ -188,7 +197,7 @@ func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
 			data.AdvertiseV1 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "log.adjacency.changes"); value.Exists() {
+	if value := res.Get("log.adjacency.changes"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LogAdjacencyChanges.IsNull() {
 			data.LogAdjacencyChanges = types.BoolValue(true)

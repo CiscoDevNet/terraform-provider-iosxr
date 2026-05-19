@@ -95,8 +95,8 @@ func (data TagSet) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *TagSet) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() && !data.Rpl.IsNull() {
+func (data *TagSet) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("rpl-tag-set"); value.Exists() && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
 	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
@@ -106,7 +106,11 @@ func (data *TagSet) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data TagSet) toBodyXML(ctx context.Context) string {
+func (data TagSet) toBodyXML(ctx context.Context, stateArg ...*TagSet) string {
+	var state *TagSet
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/rpl-tag-set", data.Rpl.ValueString())
@@ -119,6 +123,11 @@ func (data TagSet) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

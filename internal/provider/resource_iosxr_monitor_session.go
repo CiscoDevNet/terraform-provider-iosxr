@@ -39,6 +39,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -352,20 +353,6 @@ func (r *MonitorSessionResource) Create(ctx context.Context, req resource.Create
 			}
 
 			bodyStr := plan.toBodyXML(ctx)
-			tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Initial body length: %d", len(bodyStr)))
-
-			// Handle empty leafs (boolean false values) that need to be deleted
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
-			tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Empty leafs to delete: %+v", emptyLeafsDelete))
-
-			if len(emptyLeafsDelete) > 0 {
-				for _, deletePath := range emptyLeafsDelete {
-					tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Adding delete for path: %s", deletePath))
-					deleteXml := helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
-					bodyStr += deleteXml
-				}
-				tflog.Info(ctx, fmt.Sprintf("NETCONF CREATE: Final body with deletes: %s", bodyStr))
-			}
 
 			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
 				resp.Diagnostics.AddError("Client Error", err.Error())
@@ -406,6 +393,15 @@ func (r *MonitorSessionResource) Read(ctx context.Context, req resource.ReadRequ
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
+	// Check if we are being called after `terraform import`.
+	// During import we use fromBody/fromBodyXML (full overwrite from device).
+	// During normal reads we use updateFromBody/updateFromBodyXML (preserve config-only fields).
+	imp, impDiags := helpers.IsFlagImporting(ctx, req)
+	resp.Diagnostics.Append(impDiags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	if device.Managed {
 		_ = diags // Avoid unused variable error
 		if device.Protocol == "gnmi" {
@@ -444,10 +440,16 @@ func (r *MonitorSessionResource) Read(ctx context.Context, req resource.ReadRequ
 				return
 			}
 
-			// Use updateFromBody to preserve config values for fields not on device
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
 			tflog.Debug(ctx, fmt.Sprintf("respBody : %s", respBody))
-			state.updateFromBody(ctx, respBody)
+			if imp {
+				// After `terraform import` we switch to a full read so all device
+				// attributes are populated in state (fromBody overwrites everything).
+				state.fromBody(ctx, gjson.ParseBytes(respBody))
+			} else {
+				// Normal read: preserve config-only fields not returned by the device.
+				state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+			}
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)
@@ -472,21 +474,17 @@ func (r *MonitorSessionResource) Read(ctx context.Context, req resource.ReadRequ
 			}
 
 			if isEmpty {
-				if helpers.IsListPath(state.getXPath()) {
-					// NETCONF returned empty response for a list resource after retries
-					// This can happen on IOS-XR for certain resources even when they exist
-					// Instead of removing the resource, log a warning and preserve the current state
-					tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response for list path after retries, preserving state as-is", state.Id.ValueString()))
-					// Don't call updateFromBodyXML - keep state unchanged
-				} else {
-					// For non-list resources, also preserve state if empty after retries
-					// This handles the case where device hasn't fully synced yet
-					tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response after retries, preserving state as-is", state.Id.ValueString()))
-					// Don't call updateFromBodyXML - keep state unchanged
-				}
+				// NETCONF returned empty response after retries — preserve state as-is.
+				tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response after retries, preserving state as-is", state.Id.ValueString()))
 			} else {
-				// Use updateFromBodyXML to preserve config values for fields not on device
-				state.updateFromBodyXML(ctx, res.Res)
+				if imp {
+					// After `terraform import` we switch to a full read so all device
+					// attributes are populated in state (fromBodyXML overwrites everything).
+					state.fromBodyXML(ctx, res.Res)
+				} else {
+					// Normal read: preserve config-only fields not returned by the device.
+					state.updateFromBodyXML(ctx, res.Res)
+				}
 			}
 		}
 	}
@@ -579,15 +577,8 @@ func (r *MonitorSessionResource) Update(ctx context.Context, req resource.Update
 				return
 			}
 
-			body := plan.toBodyXML(ctx)
+			body := plan.toBodyXML(ctx, &state)
 			deleteBody := plan.addDeletedItemsXML(ctx, state, body)
-
-			// Also handle empty leaf deletes (for boolean false values)
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
-			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
-			for _, deletePath := range emptyLeafsDelete {
-				deleteBody += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
-			}
 
 			// Combine update and delete operations into a single transaction
 			combinedBody := body + deleteBody

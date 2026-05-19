@@ -239,48 +239,48 @@ func (data MACSecPolicy) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "key-server-priority"); value.Exists() && !data.KeyServerPriority.IsNull() {
+func (data *MACSecPolicy) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("key-server-priority"); value.Exists() && !data.KeyServerPriority.IsNull() {
 		data.KeyServerPriority = types.Int64Value(value.Int())
 	} else if data.KeyServerPriority.IsNull() {
 		data.KeyServerPriority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cipher-suite"); value.Exists() && !data.CipherSuite.IsNull() {
+	if value := res.Get("cipher-suite"); value.Exists() && !data.CipherSuite.IsNull() {
 		data.CipherSuite = types.StringValue(value.String())
 	} else if data.CipherSuite.IsNull() {
 		data.CipherSuite = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "window-size"); value.Exists() && !data.WindowSize.IsNull() {
+	if value := res.Get("window-size"); value.Exists() && !data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Value(value.Int())
 	} else if data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "conf-offset"); value.Exists() && !data.ConfOffset.IsNull() {
+	if value := res.Get("conf-offset"); value.Exists() && !data.ConfOffset.IsNull() {
 		data.ConfOffset = types.StringValue(value.String())
 	} else if data.ConfOffset.IsNull() {
 		data.ConfOffset = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "security-policy"); value.Exists() && !data.SecurityPolicy.IsNull() {
+	if value := res.Get("security-policy"); value.Exists() && !data.SecurityPolicy.IsNull() {
 		data.SecurityPolicy = types.StringValue(value.String())
 	} else if data.SecurityPolicy.IsNull() {
 		data.SecurityPolicy = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "vlan-tags-in-clear"); value.Exists() && !data.VlanTagsInClear.IsNull() {
+	if value := res.Get("vlan-tags-in-clear"); value.Exists() && !data.VlanTagsInClear.IsNull() {
 		data.VlanTagsInClear = types.Int64Value(value.Int())
 	} else if data.VlanTagsInClear.IsNull() {
 		data.VlanTagsInClear = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "policy-exception"); value.Exists() && !data.PolicyException.IsNull() {
+	if value := res.Get("policy-exception"); value.Exists() && !data.PolicyException.IsNull() {
 		data.PolicyException = types.StringValue(value.String())
 	} else if data.PolicyException.IsNull() {
 		data.PolicyException = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() && !data.SakRekeyIntervalSeconds.IsNull() {
+	if value := res.Get("sak-rekey-interval.seconds"); value.Exists() && !data.SakRekeyIntervalSeconds.IsNull() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
 	} else if data.SakRekeyIntervalSeconds.IsNull() {
 		data.SakRekeyIntervalSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "include-icv-indicator"); value.Exists() {
+	if value := res.Get("include-icv-indicator"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IncludeIcvIndicator.IsNull() {
 			data.IncludeIcvIndicator = types.BoolValue(true)
@@ -291,7 +291,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.IncludeIcvIndicator = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "delay-protection"); value.Exists() {
+	if value := res.Get("delay-protection"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DelayProtection.IsNull() {
 			data.DelayProtection = types.BoolValue(true)
@@ -302,7 +302,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.DelayProtection = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "use-eapol-pae-in-icv"); value.Exists() {
+	if value := res.Get("use-eapol-pae-in-icv"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.UseEapolPaeInIcv.IsNull() {
 			data.UseEapolPaeInIcv = types.BoolValue(true)
@@ -313,7 +313,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.UseEapolPaeInIcv = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "suspend-on-request.disable"); value.Exists() {
+	if value := res.Get("suspend-on-request.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SuspendOnRequestDisable.IsNull() {
 			data.SuspendOnRequestDisable = types.BoolValue(true)
@@ -324,7 +324,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.SuspendOnRequestDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "suspend-for.disable"); value.Exists() {
+	if value := res.Get("suspend-for.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SuspendForDisable.IsNull() {
 			data.SuspendForDisable = types.BoolValue(true)
@@ -335,7 +335,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.SuspendForDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "enable-legacy-fallback"); value.Exists() {
+	if value := res.Get("enable-legacy-fallback"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EnableLegacyFallback.IsNull() {
 			data.EnableLegacyFallback = types.BoolValue(true)
@@ -346,7 +346,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.EnableLegacyFallback = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "enable-legacy-sak-write"); value.Exists() {
+	if value := res.Get("enable-legacy-sak-write"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EnableLegacySakWrite.IsNull() {
 			data.EnableLegacySakWrite = types.BoolValue(true)
@@ -357,7 +357,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.EnableLegacySakWrite = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "impose-overhead-on-bundle"); value.Exists() {
+	if value := res.Get("impose-overhead-on-bundle"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ImposeOverheadOnBundle.IsNull() {
 			data.ImposeOverheadOnBundle = types.BoolValue(true)
@@ -368,12 +368,12 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.ImposeOverheadOnBundle = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "max-an"); value.Exists() && !data.MaxAn.IsNull() {
+	if value := res.Get("max-an"); value.Exists() && !data.MaxAn.IsNull() {
 		data.MaxAn = types.StringValue(value.String())
 	} else if data.MaxAn.IsNull() {
 		data.MaxAn = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "allow.lacp-in-clear"); value.Exists() {
+	if value := res.Get("allow.lacp-in-clear"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AllowLacpInClear.IsNull() {
 			data.AllowLacpInClear = types.BoolValue(true)
@@ -384,7 +384,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.AllowLacpInClear = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "allow.pause-frame-in-clear"); value.Exists() {
+	if value := res.Get("allow.pause-frame-in-clear"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AllowPauseFrameInClear.IsNull() {
 			data.AllowPauseFrameInClear = types.BoolValue(true)
@@ -395,7 +395,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.AllowPauseFrameInClear = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "allow.lldp-in-clear"); value.Exists() {
+	if value := res.Get("allow.lldp-in-clear"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AllowLldpInClear.IsNull() {
 			data.AllowLldpInClear = types.BoolValue(true)
@@ -406,7 +406,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.AllowLldpInClear = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ppk"); value.Exists() {
+	if value := res.Get("ppk"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ppk.IsNull() {
 			data.Ppk = types.BoolValue(true)
@@ -417,12 +417,12 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.Ppk = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ppk.sks-profile"); value.Exists() && !data.PpkSksProfile.IsNull() {
+	if value := res.Get("ppk.sks-profile"); value.Exists() && !data.PpkSksProfile.IsNull() {
 		data.PpkSksProfile = types.StringValue(value.String())
 	} else if data.PpkSksProfile.IsNull() {
 		data.PpkSksProfile = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "logging.sak-rekey.disable"); value.Exists() {
+	if value := res.Get("logging.sak-rekey.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoggingSakRekeyDisable.IsNull() {
 			data.LoggingSakRekeyDisable = types.BoolValue(true)
@@ -433,7 +433,7 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 			data.LoggingSakRekeyDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "logging.sak-rekey.summary-interval"); value.Exists() && !data.LoggingSakRekeySummaryInterval.IsNull() {
+	if value := res.Get("logging.sak-rekey.summary-interval"); value.Exists() && !data.LoggingSakRekeySummaryInterval.IsNull() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
 	} else if data.LoggingSakRekeySummaryInterval.IsNull() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Null()
@@ -443,7 +443,11 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data MACSecPolicy) toBodyXML(ctx context.Context) string {
+func (data MACSecPolicy) toBodyXML(ctx context.Context, stateArg ...*MACSecPolicy) string {
+	var state *MACSecPolicy
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.KeyServerPriority.IsNull() && !data.KeyServerPriority.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/key-server-priority", strconv.FormatInt(data.KeyServerPriority.ValueInt64(), 10))
@@ -551,6 +555,11 @@ func (data MACSecPolicy) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

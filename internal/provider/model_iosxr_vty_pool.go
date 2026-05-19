@@ -141,33 +141,33 @@ func (data VTYPool) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *VTYPool) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "default.first-vty-number"); value.Exists() && !data.DefaultFirstVty.IsNull() {
+func (data *VTYPool) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("default.first-vty-number"); value.Exists() && !data.DefaultFirstVty.IsNull() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	} else if data.DefaultFirstVty.IsNull() {
 		data.DefaultFirstVty = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "default.last-vty-number"); value.Exists() && !data.DefaultLastVty.IsNull() {
+	if value := res.Get("default.last-vty-number"); value.Exists() && !data.DefaultLastVty.IsNull() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	} else if data.DefaultLastVty.IsNull() {
 		data.DefaultLastVty = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "default.line-template"); value.Exists() && !data.DefaultLineTemplate.IsNull() {
+	if value := res.Get("default.line-template"); value.Exists() && !data.DefaultLineTemplate.IsNull() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	} else if data.DefaultLineTemplate.IsNull() {
 		data.DefaultLineTemplate = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "eem.first-vty-number"); value.Exists() && !data.EemFirstVty.IsNull() {
+	if value := res.Get("eem.first-vty-number"); value.Exists() && !data.EemFirstVty.IsNull() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	} else if data.EemFirstVty.IsNull() {
 		data.EemFirstVty = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "eem.last-vty-number"); value.Exists() && !data.EemLastVty.IsNull() {
+	if value := res.Get("eem.last-vty-number"); value.Exists() && !data.EemLastVty.IsNull() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	} else if data.EemLastVty.IsNull() {
 		data.EemLastVty = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "eem.line-template"); value.Exists() && !data.EemLineTemplate.IsNull() {
+	if value := res.Get("eem.line-template"); value.Exists() && !data.EemLineTemplate.IsNull() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	} else if data.EemLineTemplate.IsNull() {
 		data.EemLineTemplate = types.StringNull()
@@ -177,7 +177,7 @@ func (data *VTYPool) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "pools.pool").ForEach(
+		res.Get("pools.pool").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -221,7 +221,11 @@ func (data *VTYPool) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data VTYPool) toBodyXML(ctx context.Context) string {
+func (data VTYPool) toBodyXML(ctx context.Context, stateArg ...*VTYPool) string {
+	var state *VTYPool
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.DefaultFirstVty.IsNull() && !data.DefaultFirstVty.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/default/first-vty-number", strconv.FormatInt(data.DefaultFirstVty.ValueInt64(), 10))
@@ -243,7 +247,7 @@ func (data VTYPool) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Pools) > 0 {
 		for _, item := range data.Pools {
-			basePath := data.getXPath() + "/pools/pool"
+			basePath := data.getXPath() + "/pools/pool[pool-name='" + item.PoolName.ValueString() + "']"
 			if !item.PoolName.IsNull() && !item.PoolName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/pool-name", item.PoolName.ValueString())
 			}
@@ -266,6 +270,11 @@ func (data VTYPool) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

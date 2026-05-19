@@ -186,18 +186,18 @@ func (data TCP) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "window-size"); value.Exists() && !data.WindowSize.IsNull() {
+func (data *TCP) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("window-size"); value.Exists() && !data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Value(value.Int())
 	} else if data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "synwait-time"); value.Exists() && !data.SynwaitTime.IsNull() {
+	if value := res.Get("synwait-time"); value.Exists() && !data.SynwaitTime.IsNull() {
 		data.SynwaitTime = types.Int64Value(value.Int())
 	} else if data.SynwaitTime.IsNull() {
 		data.SynwaitTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "path-mtu-discovery"); value.Exists() {
+	if value := res.Get("path-mtu-discovery"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PathMtuDiscovery.IsNull() {
 			data.PathMtuDiscovery = types.BoolValue(true)
@@ -208,17 +208,17 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 			data.PathMtuDiscovery = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "path-mtu-discovery.age-timer"); value.Exists() && !data.PathMtuDiscoveryAgeTimer.IsNull() {
+	if value := res.Get("path-mtu-discovery.age-timer"); value.Exists() && !data.PathMtuDiscoveryAgeTimer.IsNull() {
 		data.PathMtuDiscoveryAgeTimer = types.StringValue(value.String())
 	} else if data.PathMtuDiscoveryAgeTimer.IsNull() {
 		data.PathMtuDiscoveryAgeTimer = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "receive-queue"); value.Exists() && !data.ReceiveQueue.IsNull() {
+	if value := res.Get("receive-queue"); value.Exists() && !data.ReceiveQueue.IsNull() {
 		data.ReceiveQueue = types.Int64Value(value.Int())
 	} else if data.ReceiveQueue.IsNull() {
 		data.ReceiveQueue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timestamp"); value.Exists() {
+	if value := res.Get("timestamp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Timestamp.IsNull() {
 			data.Timestamp = types.BoolValue(true)
@@ -229,17 +229,17 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 			data.Timestamp = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "throttle"); value.Exists() && !data.Throttle.IsNull() {
+	if value := res.Get("throttle"); value.Exists() && !data.Throttle.IsNull() {
 		data.Throttle = types.Int64Value(value.Int())
 	} else if data.Throttle.IsNull() {
 		data.Throttle = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "high-water-mark-throttling"); value.Exists() && !data.ThrottleHighWaterMark.IsNull() {
+	if value := res.Get("high-water-mark-throttling"); value.Exists() && !data.ThrottleHighWaterMark.IsNull() {
 		data.ThrottleHighWaterMark = types.Int64Value(value.Int())
 	} else if data.ThrottleHighWaterMark.IsNull() {
 		data.ThrottleHighWaterMark = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "selective-ack"); value.Exists() {
+	if value := res.Get("selective-ack"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SelectiveAck.IsNull() {
 			data.SelectiveAck = types.BoolValue(true)
@@ -250,17 +250,17 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 			data.SelectiveAck = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "mss"); value.Exists() && !data.Mss.IsNull() {
+	if value := res.Get("mss"); value.Exists() && !data.Mss.IsNull() {
 		data.Mss = types.Int64Value(value.Int())
 	} else if data.Mss.IsNull() {
 		data.Mss = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "accept-rate"); value.Exists() && !data.AcceptRate.IsNull() {
+	if value := res.Get("accept-rate"); value.Exists() && !data.AcceptRate.IsNull() {
 		data.AcceptRate = types.Int64Value(value.Int())
 	} else if data.AcceptRate.IsNull() {
 		data.AcceptRate = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ao"); value.Exists() {
+	if value := res.Get("ao"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Ao.IsNull() {
 			data.Ao = types.BoolValue(true)
@@ -276,7 +276,7 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.AoKeychains[i].KeychainName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "ao.keychains.keychain").ForEach(
+		res.Get("ao.keychains.keychain").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -344,7 +344,11 @@ func (data *TCP) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data TCP) toBodyXML(ctx context.Context) string {
+func (data TCP) toBodyXML(ctx context.Context, stateArg ...*TCP) string {
+	var state *TCP
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.WindowSize.IsNull() && !data.WindowSize.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/window-size", strconv.FormatInt(data.WindowSize.ValueInt64(), 10))
@@ -392,7 +396,7 @@ func (data TCP) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.AoKeychains) > 0 {
 		for _, item := range data.AoKeychains {
-			basePath := data.getXPath() + "/ao/keychains/keychain"
+			basePath := data.getXPath() + "/ao/keychains/keychain[keychain-name='" + item.KeychainName.ValueString() + "']"
 			if !item.KeychainName.IsNull() && !item.KeychainName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/keychain-name", item.KeychainName.ValueString())
 			}
@@ -420,6 +424,11 @@ func (data TCP) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

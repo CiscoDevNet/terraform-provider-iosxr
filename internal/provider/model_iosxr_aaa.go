@@ -2750,7 +2750,11 @@ func (data AAA) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data AAA) toBodyXML(ctx context.Context) string {
+func (data AAA) toBodyXML(ctx context.Context, stateArg ...*AAA) string {
+	var state *AAA
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.DefaultTaskgroup.IsNull() && !data.DefaultTaskgroup.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-aaa-task-user-cfg:default-taskgroup", data.DefaultTaskgroup.ValueString())
@@ -2760,7 +2764,7 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Usernames) > 0 {
 		for _, item := range data.Usernames {
-			basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username"
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username[ordering-index='" + strconv.FormatInt(item.Order.ValueInt64(), 10) + "' and name='" + item.Name.ValueString() + "']"
 			if !item.Order.IsNull() && !item.Order.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/ordering-index", strconv.FormatInt(item.Order.ValueInt64(), 10))
 			}
@@ -2857,7 +2861,7 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Taskgroups) > 0 {
 		for _, item := range data.Taskgroups {
-			basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup"
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup[taskgroup-name='" + item.GroupName.ValueString() + "']"
 			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/taskgroup-name", item.GroupName.ValueString())
 			}
@@ -4606,7 +4610,7 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Usergroups) > 0 {
 		for _, item := range data.Usergroups {
-			basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup"
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup[usergroup-name='" + item.GroupName.ValueString() + "']"
 			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/usergroup-name", item.GroupName.ValueString())
 			}
@@ -4696,7 +4700,7 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 		nsBody := netconf.Body{}
 		if len(data.RadiusServerGroups) > 0 {
 			for _, item := range data.RadiusServerGroups {
-				basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group"
+				basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group[server-group-name='" + item.GroupName.ValueString() + "']"
 				if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
 					nsBody = helpers.SetFromXPath(nsBody, basePath+"/server-group-name", item.GroupName.ValueString())
 				}
@@ -4878,7 +4882,7 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 		}
 		if len(data.ServerRadiusDynamicAuthorClients) > 0 {
 			for _, item := range data.ServerRadiusDynamicAuthorClients {
-				basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client"
+				basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client[address='" + item.Address.ValueString() + "' and vrf='" + item.Vrf.ValueString() + "']"
 				if !item.Address.IsNull() && !item.Address.IsUnknown() {
 					nsBody = helpers.SetFromXPath(nsBody, basePath+"/address", item.Address.ValueString())
 				}
@@ -4910,7 +4914,7 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 		nsBody := netconf.Body{}
 		if len(data.TacacsServerGroups) > 0 {
 			for _, item := range data.TacacsServerGroups {
-				basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group"
+				basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group[server-group-name='" + item.GroupName.ValueString() + "']"
 				if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
 					nsBody = helpers.SetFromXPath(nsBody, basePath+"/server-group-name", item.GroupName.ValueString())
 				}
@@ -4981,6 +4985,11 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 		}
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -4988,13 +4997,13 @@ func (data AAA) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:default-taskgroup"); value.Exists() && !data.DefaultTaskgroup.IsNull() {
+func (data *AAA) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:default-taskgroup"); value.Exists() && !data.DefaultTaskgroup.IsNull() {
 		data.DefaultTaskgroup = types.StringValue(value.String())
 	} else if data.DefaultTaskgroup.IsNull() {
 		data.DefaultTaskgroup = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "banner.login"); value.Exists() && !data.BannerLogin.IsNull() {
+	if value := res.Get("banner.login"); value.Exists() && !data.BannerLogin.IsNull() {
 		data.BannerLogin = types.StringValue(value.String())
 	} else if data.BannerLogin.IsNull() {
 		data.BannerLogin = types.StringNull()
@@ -5004,7 +5013,7 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.RadiusServerGroups[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group").ForEach(
+		res.Get("Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5331,12 +5340,12 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 			data.RadiusServerGroups[i].AccountingReplyRadiusAttributeList = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.port"); value.Exists() && !data.ServerRadiusDynamicAuthorPort.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.port"); value.Exists() && !data.ServerRadiusDynamicAuthorPort.IsNull() {
 		data.ServerRadiusDynamicAuthorPort = types.Int64Value(value.Int())
 	} else if data.ServerRadiusDynamicAuthorPort.IsNull() {
 		data.ServerRadiusDynamicAuthorPort = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.ignore.server-key"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.ignore.server-key"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerRadiusDynamicAuthorIgnoreServerKey.IsNull() {
 			data.ServerRadiusDynamicAuthorIgnoreServerKey = types.BoolValue(true)
@@ -5352,7 +5361,7 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ServerRadiusDynamicAuthorClients[i].Address.ValueString(), data.ServerRadiusDynamicAuthorClients[i].Vrf.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.clients.client").ForEach(
+		res.Get("Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.clients.client").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5386,7 +5395,7 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.TacacsServerGroups[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group").ForEach(
+		res.Get("Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5523,7 +5532,7 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{strconv.FormatInt(data.Usernames[i].Order.ValueInt64(), 10), data.Usernames[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames.username").ForEach(
+		res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:usernames.username").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5745,7 +5754,7 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Taskgroups[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups.taskgroup").ForEach(
+		res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups.taskgroup").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -9960,7 +9969,7 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Usergroups[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup").ForEach(
+		res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups.usergroup").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

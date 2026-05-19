@@ -2012,11 +2012,15 @@ func (data ControlPlane) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data ControlPlane) toBodyXML(ctx context.Context) string {
+func (data ControlPlane) toBodyXML(ctx context.Context, stateArg ...*ControlPlane) string {
+	var state *ControlPlane
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.MgmtInbandInterfaces) > 0 {
 		for _, item := range data.MgmtInbandInterfaces {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/interface"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -2354,7 +2358,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllSshIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllSshIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2365,7 +2369,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllSshIpv4Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllSshIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2373,7 +2377,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllSshIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllSshIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2384,7 +2388,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllSshIpv6Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllSshIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2397,7 +2401,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllTelnetIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllTelnetIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2408,7 +2412,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllTelnetIpv4Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllTelnetIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2416,7 +2420,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllTelnetIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllTelnetIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2427,7 +2431,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllTelnetIpv6Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllTelnetIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2440,7 +2444,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllSnmpIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllSnmpIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2451,7 +2455,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllSnmpIpv4Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllSnmpIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2459,7 +2463,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllSnmpIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllSnmpIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2470,7 +2474,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllSnmpIpv6Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllSnmpIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2483,7 +2487,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllTftpIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllTftpIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2494,7 +2498,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllTftpIpv4Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllTftpIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2502,7 +2506,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllTftpIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllTftpIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2513,7 +2517,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllTftpIpv6Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllTftpIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2526,7 +2530,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllHttpIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllHttpIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2537,7 +2541,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllHttpIpv4Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllHttpIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2550,7 +2554,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllXmlIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllXmlIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2561,7 +2565,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllXmlIpv4Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllXmlIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2569,7 +2573,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllXmlIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllXmlIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2580,7 +2584,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllXmlIpv6Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllXmlIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2593,7 +2597,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllNetconfIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllNetconfIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2604,7 +2608,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllNetconfIpv4Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllNetconfIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2612,7 +2616,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllNetconfIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllNetconfIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2623,7 +2627,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllNetconfIpv6Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllNetconfIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2636,7 +2640,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllAllowAllIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllAllowAllIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2647,7 +2651,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllAllowAllIpv4Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllAllowAllIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2655,7 +2659,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllAllowAllIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtInbandAllAllowAllIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2666,7 +2670,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtInbandAllAllowAllIpv6Hosts) > 0 {
 		for _, item := range data.MgmtInbandAllAllowAllIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/inband/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -2674,7 +2678,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobInterfaces) > 0 {
 		for _, item := range data.MgmtOobInterfaces {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/interface"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -3020,7 +3024,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllSshIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllSshIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3031,7 +3035,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllSshIpv4Hosts) > 0 {
 		for _, item := range data.MgmtOobAllSshIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3039,7 +3043,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllSshIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllSshIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3050,7 +3054,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllSshIpv6Hosts) > 0 {
 		for _, item := range data.MgmtOobAllSshIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/ssh-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3063,7 +3067,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllTelnetIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllTelnetIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3074,7 +3078,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllTelnetIpv4Hosts) > 0 {
 		for _, item := range data.MgmtOobAllTelnetIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3082,7 +3086,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllTelnetIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllTelnetIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3093,7 +3097,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllTelnetIpv6Hosts) > 0 {
 		for _, item := range data.MgmtOobAllTelnetIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/telnet-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3106,7 +3110,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllSnmpIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllSnmpIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3117,7 +3121,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllSnmpIpv4Hosts) > 0 {
 		for _, item := range data.MgmtOobAllSnmpIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3125,7 +3129,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllSnmpIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllSnmpIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3136,7 +3140,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllSnmpIpv6Hosts) > 0 {
 		for _, item := range data.MgmtOobAllSnmpIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/snmp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3149,7 +3153,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllTftpIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllTftpIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3160,7 +3164,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllTftpIpv4Hosts) > 0 {
 		for _, item := range data.MgmtOobAllTftpIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3168,7 +3172,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllTftpIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllTftpIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3179,7 +3183,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllTftpIpv6Hosts) > 0 {
 		for _, item := range data.MgmtOobAllTftpIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/tftp-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3192,7 +3196,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllHttpIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllHttpIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3203,7 +3207,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllHttpIpv4Hosts) > 0 {
 		for _, item := range data.MgmtOobAllHttpIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/http-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3216,7 +3220,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllXmlIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllXmlIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3227,7 +3231,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllXmlIpv4Hosts) > 0 {
 		for _, item := range data.MgmtOobAllXmlIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3235,7 +3239,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllXmlIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllXmlIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3246,7 +3250,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllXmlIpv6Hosts) > 0 {
 		for _, item := range data.MgmtOobAllXmlIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/xr-xml-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3259,7 +3263,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllNetconfIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllNetconfIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3270,7 +3274,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllNetconfIpv4Hosts) > 0 {
 		for _, item := range data.MgmtOobAllNetconfIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3278,7 +3282,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllNetconfIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllNetconfIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3289,7 +3293,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllNetconfIpv6Hosts) > 0 {
 		for _, item := range data.MgmtOobAllNetconfIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/netconf-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3302,7 +3306,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllAllowAllIpv4Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllAllowAllIpv4Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-address-prefixes/ipv4-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3313,7 +3317,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllAllowAllIpv4Hosts) > 0 {
 		for _, item := range data.MgmtOobAllAllowAllIpv4Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv4/ipv4-addresses/ipv4-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3321,7 +3325,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllAllowAllIpv6Prefixes) > 0 {
 		for _, item := range data.MgmtOobAllAllowAllIpv6Prefixes {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-address-prefixes/ipv6-address-prefix[address='" + item.Address.ValueString() + "' and length='" + strconv.FormatInt(item.Length.ValueInt64(), 10) + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3332,7 +3336,7 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MgmtOobAllAllowAllIpv6Hosts) > 0 {
 		for _, item := range data.MgmtOobAllAllowAllIpv6Hosts {
-			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address"
+			basePath := data.getXPath() + "/management-plane/out-of-band/interfaces/all/allow/all-peer/address/ipv6/ipv6-addresses/ipv6-address[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -3346,6 +3350,11 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -3353,13 +3362,13 @@ func (data ControlPlane) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
+func (data *ControlPlane) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.MgmtInbandInterfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.MgmtInbandInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.interface").ForEach(
+		res.Get("management-plane.inband.interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4424,7 +4433,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh"); value.Exists() {
+	if value := res.Get("management-plane.inband.interfaces.all.allow.ssh"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtInbandAllSsh.IsNull() {
 			data.MgmtInbandAllSsh = types.BoolValue(true)
@@ -4440,7 +4449,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4474,7 +4483,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllSshIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4503,7 +4512,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4537,7 +4546,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllSshIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4561,7 +4570,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllSshIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet"); value.Exists() {
+	if value := res.Get("management-plane.inband.interfaces.all.allow.telnet"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtInbandAllTelnet.IsNull() {
 			data.MgmtInbandAllTelnet = types.BoolValue(true)
@@ -4577,7 +4586,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4611,7 +4620,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllTelnetIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4640,7 +4649,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4674,7 +4683,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllTelnetIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4698,7 +4707,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllTelnetIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp"); value.Exists() {
+	if value := res.Get("management-plane.inband.interfaces.all.allow.snmp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtInbandAllSnmp.IsNull() {
 			data.MgmtInbandAllSnmp = types.BoolValue(true)
@@ -4714,7 +4723,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4748,7 +4757,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllSnmpIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4777,7 +4786,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4811,7 +4820,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllSnmpIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4835,7 +4844,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllSnmpIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp"); value.Exists() {
+	if value := res.Get("management-plane.inband.interfaces.all.allow.tftp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtInbandAllTftp.IsNull() {
 			data.MgmtInbandAllTftp = types.BoolValue(true)
@@ -4851,7 +4860,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4885,7 +4894,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllTftpIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4914,7 +4923,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4948,7 +4957,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllTftpIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -4972,7 +4981,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllTftpIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http"); value.Exists() {
+	if value := res.Get("management-plane.inband.interfaces.all.allow.http"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtInbandAllHttp.IsNull() {
 			data.MgmtInbandAllHttp = types.BoolValue(true)
@@ -4988,7 +4997,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5022,7 +5031,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllHttpIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5046,7 +5055,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllHttpIpv4Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml"); value.Exists() {
+	if value := res.Get("management-plane.inband.interfaces.all.allow.xr-xml"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtInbandAllXml.IsNull() {
 			data.MgmtInbandAllXml = types.BoolValue(true)
@@ -5062,7 +5071,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5096,7 +5105,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllXmlIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5125,7 +5134,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5159,7 +5168,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllXmlIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5183,7 +5192,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllXmlIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf"); value.Exists() {
+	if value := res.Get("management-plane.inband.interfaces.all.allow.netconf"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtInbandAllNetconf.IsNull() {
 			data.MgmtInbandAllNetconf = types.BoolValue(true)
@@ -5199,7 +5208,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5233,7 +5242,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllNetconfIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5262,7 +5271,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5296,7 +5305,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllNetconfIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5320,7 +5329,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtInbandAllNetconfIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all"); value.Exists() {
+	if value := res.Get("management-plane.inband.interfaces.all.allow.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtInbandAllAllowAll.IsNull() {
 			data.MgmtInbandAllAllowAll = types.BoolValue(true)
@@ -5336,7 +5345,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5370,7 +5379,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5399,7 +5408,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtInbandAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5433,7 +5442,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtInbandAllAllowAllIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.inband.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -5462,7 +5471,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.interface").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6527,12 +6536,12 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.vrf"); value.Exists() && !data.MgmtOobVrf.IsNull() {
+	if value := res.Get("management-plane.out-of-band.vrf"); value.Exists() && !data.MgmtOobVrf.IsNull() {
 		data.MgmtOobVrf = types.StringValue(value.String())
 	} else if data.MgmtOobVrf.IsNull() {
 		data.MgmtOobVrf = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.enable-inband-behavior"); value.Exists() {
+	if value := res.Get("management-plane.out-of-band.enable-inband-behavior"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtOobInbandBehavior.IsNull() {
 			data.MgmtOobInbandBehavior = types.BoolValue(true)
@@ -6543,7 +6552,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobInbandBehavior = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh"); value.Exists() {
+	if value := res.Get("management-plane.out-of-band.interfaces.all.allow.ssh"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtOobAllSsh.IsNull() {
 			data.MgmtOobAllSsh = types.BoolValue(true)
@@ -6559,7 +6568,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllSshIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSshIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6593,7 +6602,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllSshIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6622,7 +6631,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllSshIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSshIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6656,7 +6665,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllSshIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.ssh-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6680,7 +6689,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllSshIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet"); value.Exists() {
+	if value := res.Get("management-plane.out-of-band.interfaces.all.allow.telnet"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtOobAllTelnet.IsNull() {
 			data.MgmtOobAllTelnet = types.BoolValue(true)
@@ -6696,7 +6705,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllTelnetIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTelnetIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6730,7 +6739,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllTelnetIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6759,7 +6768,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllTelnetIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTelnetIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6793,7 +6802,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllTelnetIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.telnet-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6817,7 +6826,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllTelnetIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp"); value.Exists() {
+	if value := res.Get("management-plane.out-of-band.interfaces.all.allow.snmp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtOobAllSnmp.IsNull() {
 			data.MgmtOobAllSnmp = types.BoolValue(true)
@@ -6833,7 +6842,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllSnmpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSnmpIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6867,7 +6876,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllSnmpIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6896,7 +6905,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllSnmpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllSnmpIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6930,7 +6939,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllSnmpIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.snmp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6954,7 +6963,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllSnmpIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp"); value.Exists() {
+	if value := res.Get("management-plane.out-of-band.interfaces.all.allow.tftp"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtOobAllTftp.IsNull() {
 			data.MgmtOobAllTftp = types.BoolValue(true)
@@ -6970,7 +6979,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllTftpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTftpIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7004,7 +7013,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllTftpIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7033,7 +7042,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllTftpIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllTftpIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7067,7 +7076,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllTftpIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.tftp-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7091,7 +7100,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllTftpIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http"); value.Exists() {
+	if value := res.Get("management-plane.out-of-band.interfaces.all.allow.http"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtOobAllHttp.IsNull() {
 			data.MgmtOobAllHttp = types.BoolValue(true)
@@ -7107,7 +7116,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllHttpIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllHttpIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7141,7 +7150,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllHttpIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.http-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7165,7 +7174,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllHttpIpv4Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml"); value.Exists() {
+	if value := res.Get("management-plane.out-of-band.interfaces.all.allow.xr-xml"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtOobAllXml.IsNull() {
 			data.MgmtOobAllXml = types.BoolValue(true)
@@ -7181,7 +7190,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllXmlIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllXmlIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7215,7 +7224,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllXmlIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7244,7 +7253,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllXmlIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllXmlIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7278,7 +7287,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllXmlIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.xr-xml-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7302,7 +7311,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllXmlIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf"); value.Exists() {
+	if value := res.Get("management-plane.out-of-band.interfaces.all.allow.netconf"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtOobAllNetconf.IsNull() {
 			data.MgmtOobAllNetconf = types.BoolValue(true)
@@ -7318,7 +7327,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllNetconfIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllNetconfIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7352,7 +7361,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllNetconfIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7381,7 +7390,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllNetconfIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllNetconfIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7415,7 +7424,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllNetconfIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.netconf-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7439,7 +7448,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 			data.MgmtOobAllNetconfIpv6Hosts[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all"); value.Exists() {
+	if value := res.Get("management-plane.out-of-band.interfaces.all.allow.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MgmtOobAllAllowAll.IsNull() {
 			data.MgmtOobAllAllowAll = types.BoolValue(true)
@@ -7455,7 +7464,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllAllowAllIpv4Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllAllowAllIpv4Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-address-prefixes.ipv4-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7489,7 +7498,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllAllowAllIpv4Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv4.ipv4-addresses.ipv4-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7518,7 +7527,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllAllowAllIpv6Prefixes[i].Address.ValueString(), strconv.FormatInt(data.MgmtOobAllAllowAllIpv6Prefixes[i].Length.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-address-prefixes.ipv6-address-prefix").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -7552,7 +7561,7 @@ func (data *ControlPlane) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MgmtOobAllAllowAllIpv6Hosts[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
+		res.Get("management-plane.out-of-band.interfaces.all.allow.all-peer.address.ipv6.ipv6-addresses.ipv6-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

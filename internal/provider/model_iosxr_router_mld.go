@@ -205,58 +205,58 @@ func (data RouterMLD) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterMLD) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "nsf.lifetime"); value.Exists() && !data.NsfLifetime.IsNull() {
+func (data *RouterMLD) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("nsf.lifetime"); value.Exists() && !data.NsfLifetime.IsNull() {
 		data.NsfLifetime = types.Int64Value(value.Int())
 	} else if data.NsfLifetime.IsNull() {
 		data.NsfLifetime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "robustness-variable"); value.Exists() && !data.RobustnessVariable.IsNull() {
+	if value := res.Get("robustness-variable"); value.Exists() && !data.RobustnessVariable.IsNull() {
 		data.RobustnessVariable = types.Int64Value(value.Int())
 	} else if data.RobustnessVariable.IsNull() {
 		data.RobustnessVariable = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.groups"); value.Exists() && !data.MaximumGroups.IsNull() {
+	if value := res.Get("maximum.groups"); value.Exists() && !data.MaximumGroups.IsNull() {
 		data.MaximumGroups = types.Int64Value(value.Int())
 	} else if data.MaximumGroups.IsNull() {
 		data.MaximumGroups = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.groups-per-interface.maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
+	if value := res.Get("maximum.groups-per-interface.maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.groups-per-interface.threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
+	if value := res.Get("maximum.groups-per-interface.threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.groups-per-interface.access-list"); value.Exists() && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
+	if value := res.Get("maximum.groups-per-interface.access-list"); value.Exists() && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
 	} else if data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "version"); value.Exists() && !data.Version.IsNull() {
+	if value := res.Get("version"); value.Exists() && !data.Version.IsNull() {
 		data.Version = types.Int64Value(value.Int())
 	} else if data.Version.IsNull() {
 		data.Version = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
+	if value := res.Get("query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Value(value.Int())
 	} else if data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
+	if value := res.Get("query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Value(value.Int())
 	} else if data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
+	if value := res.Get("query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
 	} else if data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "explicit-tracking"); value.Exists() {
+	if value := res.Get("explicit-tracking"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ExplicitTracking.IsNull() {
 			data.ExplicitTracking = types.BoolValue(true)
@@ -267,12 +267,12 @@ func (data *RouterMLD) updateFromBody(ctx context.Context, res []byte) {
 			data.ExplicitTracking = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "explicit-tracking.access-list"); value.Exists() && !data.ExplicitTrackingAcl.IsNull() {
+	if value := res.Get("explicit-tracking.access-list"); value.Exists() && !data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
 	} else if data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "explicit-tracking.disable"); value.Exists() {
+	if value := res.Get("explicit-tracking.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ExplicitTrackingDisable.IsNull() {
 			data.ExplicitTrackingDisable = types.BoolValue(true)
@@ -283,7 +283,7 @@ func (data *RouterMLD) updateFromBody(ctx context.Context, res []byte) {
 			data.ExplicitTrackingDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "access-group"); value.Exists() && !data.AccessGroup.IsNull() {
+	if value := res.Get("access-group"); value.Exists() && !data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringValue(value.String())
 	} else if data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringNull()
@@ -293,7 +293,7 @@ func (data *RouterMLD) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.SsmMapStatics[i].Address.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "ssm.map.statics.static").ForEach(
+		res.Get("ssm.map.statics.static").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -322,7 +322,7 @@ func (data *RouterMLD) updateFromBody(ctx context.Context, res []byte) {
 			data.SsmMapStatics[i].AccessList = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ssm.map.query.dns"); value.Exists() {
+	if value := res.Get("ssm.map.query.dns"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SsmMapQueryDns.IsNull() {
 			data.SsmMapQueryDns = types.BoolValue(true)
@@ -333,22 +333,22 @@ func (data *RouterMLD) updateFromBody(ctx context.Context, res []byte) {
 			data.SsmMapQueryDns = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "missed-packets.gen-query"); value.Exists() && !data.MissedPacketsGenQuery.IsNull() {
+	if value := res.Get("missed-packets.gen-query"); value.Exists() && !data.MissedPacketsGenQuery.IsNull() {
 		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
 	} else if data.MissedPacketsGenQuery.IsNull() {
 		data.MissedPacketsGenQuery = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "missed-packets.grp-spec-query"); value.Exists() && !data.MissedPacketsGrpSpecQuery.IsNull() {
+	if value := res.Get("missed-packets.grp-spec-query"); value.Exists() && !data.MissedPacketsGrpSpecQuery.IsNull() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
 	} else if data.MissedPacketsGrpSpecQuery.IsNull() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "missed-packets.ssm-query"); value.Exists() && !data.MissedPacketsSsmQuery.IsNull() {
+	if value := res.Get("missed-packets.ssm-query"); value.Exists() && !data.MissedPacketsSsmQuery.IsNull() {
 		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
 	} else if data.MissedPacketsSsmQuery.IsNull() {
 		data.MissedPacketsSsmQuery = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "missed-packets.member-report"); value.Exists() && !data.MissedPacketsMemberReport.IsNull() {
+	if value := res.Get("missed-packets.member-report"); value.Exists() && !data.MissedPacketsMemberReport.IsNull() {
 		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
 	} else if data.MissedPacketsMemberReport.IsNull() {
 		data.MissedPacketsMemberReport = types.Int64Null()
@@ -358,7 +358,11 @@ func (data *RouterMLD) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterMLD) toBodyXML(ctx context.Context) string {
+func (data RouterMLD) toBodyXML(ctx context.Context, stateArg ...*RouterMLD) string {
+	var state *RouterMLD
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.NsfLifetime.IsNull() && !data.NsfLifetime.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/nsf/lifetime", strconv.FormatInt(data.NsfLifetime.ValueInt64(), 10))
@@ -408,7 +412,7 @@ func (data RouterMLD) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.SsmMapStatics) > 0 {
 		for _, item := range data.SsmMapStatics {
-			basePath := data.getXPath() + "/ssm/map/statics/static"
+			basePath := data.getXPath() + "/ssm/map/statics/static[address='" + item.Address.ValueString() + "']"
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
 			}
@@ -442,6 +446,11 @@ func (data RouterMLD) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

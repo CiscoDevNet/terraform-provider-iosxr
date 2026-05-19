@@ -151,7 +151,11 @@ func (data IPv6) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data IPv6) toBodyXML(ctx context.Context) string {
+func (data IPv6) toBodyXML(ctx context.Context, stateArg ...*IPv6) string {
+	var state *IPv6
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.HopLimit.IsNull() && !data.HopLimit.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/hop-limit", strconv.FormatInt(data.HopLimit.ValueInt64(), 10))
@@ -204,6 +208,11 @@ func (data IPv6) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -211,23 +220,23 @@ func (data IPv6) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "hop-limit"); value.Exists() && !data.HopLimit.IsNull() {
+func (data *IPv6) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("hop-limit"); value.Exists() && !data.HopLimit.IsNull() {
 		data.HopLimit = types.Int64Value(value.Int())
 	} else if data.HopLimit.IsNull() {
 		data.HopLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "icmp.error-interval.interval-time"); value.Exists() && !data.IcmpErrorInterval.IsNull() {
+	if value := res.Get("icmp.error-interval.interval-time"); value.Exists() && !data.IcmpErrorInterval.IsNull() {
 		data.IcmpErrorInterval = types.Int64Value(value.Int())
 	} else if data.IcmpErrorInterval.IsNull() {
 		data.IcmpErrorInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "icmp.error-interval.bucket-size"); value.Exists() && !data.IcmpErrorIntervalBucketSize.IsNull() {
+	if value := res.Get("icmp.error-interval.bucket-size"); value.Exists() && !data.IcmpErrorIntervalBucketSize.IsNull() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Value(value.Int())
 	} else if data.IcmpErrorIntervalBucketSize.IsNull() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "source-route"); value.Exists() {
+	if value := res.Get("source-route"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SourceRoute.IsNull() {
 			data.SourceRoute = types.BoolValue(true)
@@ -238,17 +247,17 @@ func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.SourceRoute = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "assembler.timeout"); value.Exists() && !data.AssemblerTimeout.IsNull() {
+	if value := res.Get("assembler.timeout"); value.Exists() && !data.AssemblerTimeout.IsNull() {
 		data.AssemblerTimeout = types.Int64Value(value.Int())
 	} else if data.AssemblerTimeout.IsNull() {
 		data.AssemblerTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "assembler.max-packets"); value.Exists() && !data.AssemblerMaxPackets.IsNull() {
+	if value := res.Get("assembler.max-packets"); value.Exists() && !data.AssemblerMaxPackets.IsNull() {
 		data.AssemblerMaxPackets = types.Int64Value(value.Int())
 	} else if data.AssemblerMaxPackets.IsNull() {
 		data.AssemblerMaxPackets = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "assembler.reassembler-drop.enable"); value.Exists() {
+	if value := res.Get("assembler.reassembler-drop.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AssemblerReassemblerDropEnable.IsNull() {
 			data.AssemblerReassemblerDropEnable = types.BoolValue(true)
@@ -259,7 +268,7 @@ func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.AssemblerReassemblerDropEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "assembler.frag-hdr-incomplete.enable"); value.Exists() {
+	if value := res.Get("assembler.frag-hdr-incomplete.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AssemblerFragHdrIncompleteEnable.IsNull() {
 			data.AssemblerFragHdrIncompleteEnable = types.BoolValue(true)
@@ -270,7 +279,7 @@ func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.AssemblerFragHdrIncompleteEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "assembler.overlap-frag-drop.enable"); value.Exists() {
+	if value := res.Get("assembler.overlap-frag-drop.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AssemblerOverlapFragDropEnable.IsNull() {
 			data.AssemblerOverlapFragDropEnable = types.BoolValue(true)
@@ -281,7 +290,7 @@ func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.AssemblerOverlapFragDropEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "path-mtu.enable"); value.Exists() {
+	if value := res.Get("path-mtu.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PathMtuEnable.IsNull() {
 			data.PathMtuEnable = types.BoolValue(true)
@@ -292,7 +301,7 @@ func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 			data.PathMtuEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "path-mtu.timeout"); value.Exists() && !data.PathMtuTimeout.IsNull() {
+	if value := res.Get("path-mtu.timeout"); value.Exists() && !data.PathMtuTimeout.IsNull() {
 		data.PathMtuTimeout = types.Int64Value(value.Int())
 	} else if data.PathMtuTimeout.IsNull() {
 		data.PathMtuTimeout = types.Int64Null()

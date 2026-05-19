@@ -447,8 +447,8 @@ func (data SSH) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "timeout"); value.Exists() && !data.Timeout.IsNull() {
+func (data *SSH) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
 	} else if data.Timeout.IsNull() {
 		data.Timeout = types.Int64Null()
@@ -458,7 +458,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "server.vrfs.vrf").ForEach(
+		res.Get("server.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -492,7 +492,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerVrfs[i].Ipv6AccessList = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.v1"); value.Exists() {
+	if value := res.Get("server.v1"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerV1.IsNull() {
 			data.ServerV1 = types.BoolValue(true)
@@ -503,7 +503,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerV1 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.v2"); value.Exists() {
+	if value := res.Get("server.v2"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerV2.IsNull() {
 			data.ServerV2 = types.BoolValue(true)
@@ -514,12 +514,12 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerV2 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.rate-limit"); value.Exists() && !data.ServerRateLimit.IsNull() {
+	if value := res.Get("server.rate-limit"); value.Exists() && !data.ServerRateLimit.IsNull() {
 		data.ServerRateLimit = types.Int64Value(value.Int())
 	} else if data.ServerRateLimit.IsNull() {
 		data.ServerRateLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-512"); value.Exists() {
+	if value := res.Get("server.disable.hmac.hmac-sha2-512"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerDisableHmacSha2512.IsNull() {
 			data.ServerDisableHmacSha2512 = types.BoolValue(true)
@@ -530,7 +530,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerDisableHmacSha2512 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha1"); value.Exists() {
+	if value := res.Get("server.disable.hmac.hmac-sha1"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerDisableHmacSha1.IsNull() {
 			data.ServerDisableHmacSha1 = types.BoolValue(true)
@@ -541,7 +541,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerDisableHmacSha1 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.disable.hmac.hmac-sha2-256"); value.Exists() {
+	if value := res.Get("server.disable.hmac.hmac-sha2-256"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerDisableHmacSha2256.IsNull() {
 			data.ServerDisableHmacSha2256 = types.BoolValue(true)
@@ -552,7 +552,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerDisableHmacSha2256 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.enable.cipher.aes-cbc"); value.Exists() {
+	if value := res.Get("server.enable.cipher.aes-cbc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerEnableCipherAesCbc.IsNull() {
 			data.ServerEnableCipherAesCbc = types.BoolValue(true)
@@ -563,7 +563,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerEnableCipherAesCbc = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.enable.cipher.threedes-cbc"); value.Exists() {
+	if value := res.Get("server.enable.cipher.threedes-cbc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerEnableCipher3desCbc.IsNull() {
 			data.ServerEnableCipher3desCbc = types.BoolValue(true)
@@ -574,12 +574,12 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerEnableCipher3desCbc = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.session-limit"); value.Exists() && !data.ServerSessionLimit.IsNull() {
+	if value := res.Get("server.session-limit"); value.Exists() && !data.ServerSessionLimit.IsNull() {
 		data.ServerSessionLimit = types.Int64Value(value.Int())
 	} else if data.ServerSessionLimit.IsNull() {
 		data.ServerSessionLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.logging"); value.Exists() {
+	if value := res.Get("server.logging"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerLogging.IsNull() {
 			data.ServerLogging = types.BoolValue(true)
@@ -590,12 +590,12 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerLogging = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() && !data.ServerDscp.IsNull() {
+	if value := res.Get("server.dscp"); value.Exists() && !data.ServerDscp.IsNull() {
 		data.ServerDscp = types.Int64Value(value.Int())
 	} else if data.ServerDscp.IsNull() {
 		data.ServerDscp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.netconf.port"); value.Exists() && !data.ServerNetconfPort.IsNull() {
+	if value := res.Get("server.netconf.port"); value.Exists() && !data.ServerNetconfPort.IsNull() {
 		data.ServerNetconfPort = types.Int64Value(value.Int())
 	} else if data.ServerNetconfPort.IsNull() {
 		data.ServerNetconfPort = types.Int64Null()
@@ -605,7 +605,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ServerNetconfVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "server.netconf.vrfs.vrf").ForEach(
+		res.Get("server.netconf.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -639,7 +639,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerNetconfVrfs[i].Ipv6AccessList = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.capability.netconf-xml"); value.Exists() {
+	if value := res.Get("server.capability.netconf-xml"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerNetconfXml.IsNull() {
 			data.ServerNetconfXml = types.BoolValue(true)
@@ -650,22 +650,22 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerNetconfXml = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.rekey-time"); value.Exists() && !data.ServerRekeyTime.IsNull() {
+	if value := res.Get("server.rekey-time"); value.Exists() && !data.ServerRekeyTime.IsNull() {
 		data.ServerRekeyTime = types.Int64Value(value.Int())
 	} else if data.ServerRekeyTime.IsNull() {
 		data.ServerRekeyTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.rekey-volume"); value.Exists() && !data.ServerRekeyVolume.IsNull() {
+	if value := res.Get("server.rekey-volume"); value.Exists() && !data.ServerRekeyVolume.IsNull() {
 		data.ServerRekeyVolume = types.Int64Value(value.Int())
 	} else if data.ServerRekeyVolume.IsNull() {
 		data.ServerRekeyVolume = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.key-exchanges.key-exchange"); value.Exists() && !data.ServerAlgorithmsKeyExchanges.IsNull() {
+	if value := res.Get("server.algorithms.key-exchanges.key-exchange"); value.Exists() && !data.ServerAlgorithmsKeyExchanges.IsNull() {
 		data.ServerAlgorithmsKeyExchanges = helpers.GetStringList(value.Array())
 	} else if data.ServerAlgorithmsKeyExchanges.IsNull() {
 		data.ServerAlgorithmsKeyExchanges = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp256"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.ecdsa-nistp256"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() {
 			data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolValue(true)
@@ -676,7 +676,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeyEcdsaNistp256 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp384"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.ecdsa-nistp384"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() {
 			data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolValue(true)
@@ -687,7 +687,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeyEcdsaNistp384 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ecdsa-nistp521"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.ecdsa-nistp521"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() {
 			data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolValue(true)
@@ -698,7 +698,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeyEcdsaNistp521 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.rsa"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeyRsa.IsNull() {
 			data.ServerAlgorithmsHostKeyRsa = types.BoolValue(true)
@@ -709,7 +709,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeyRsa = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.dsa"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.dsa"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeyDsa.IsNull() {
 			data.ServerAlgorithmsHostKeyDsa = types.BoolValue(true)
@@ -720,7 +720,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeyDsa = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.x509v3-ssh-rsa"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.x509v3-ssh-rsa"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() {
 			data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolValue(true)
@@ -731,7 +731,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeyX509v3SshRsa = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ed25519"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.ed25519"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeyEd25519.IsNull() {
 			data.ServerAlgorithmsHostKeyEd25519 = types.BoolValue(true)
@@ -742,7 +742,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeyEd25519 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha512"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.rsa-sha512"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeyRsaSha512.IsNull() {
 			data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolValue(true)
@@ -753,7 +753,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeyRsaSha512 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.rsa-sha256"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.rsa-sha256"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeyRsaSha256.IsNull() {
 			data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolValue(true)
@@ -764,7 +764,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeyRsaSha256 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.host-key.ssh-rsa"); value.Exists() {
+	if value := res.Get("server.algorithms.host-key.ssh-rsa"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerAlgorithmsHostKeySshRsa.IsNull() {
 			data.ServerAlgorithmsHostKeySshRsa = types.BoolValue(true)
@@ -775,22 +775,22 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerAlgorithmsHostKeySshRsa = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.algorithms.ciphers.cipher"); value.Exists() && !data.ServerAlgorithmsCiphers.IsNull() {
+	if value := res.Get("server.algorithms.ciphers.cipher"); value.Exists() && !data.ServerAlgorithmsCiphers.IsNull() {
 		data.ServerAlgorithmsCiphers = helpers.GetStringList(value.Array())
 	} else if data.ServerAlgorithmsCiphers.IsNull() {
 		data.ServerAlgorithmsCiphers = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "server.max-auth-limit"); value.Exists() && !data.ServerMaxAuthLimit.IsNull() {
+	if value := res.Get("server.max-auth-limit"); value.Exists() && !data.ServerMaxAuthLimit.IsNull() {
 		data.ServerMaxAuthLimit = types.Int64Value(value.Int())
 	} else if data.ServerMaxAuthLimit.IsNull() {
 		data.ServerMaxAuthLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.tcp-window-scale"); value.Exists() && !data.ServerTcpWindowScale.IsNull() {
+	if value := res.Get("server.tcp-window-scale"); value.Exists() && !data.ServerTcpWindowScale.IsNull() {
 		data.ServerTcpWindowScale = types.Int64Value(value.Int())
 	} else if data.ServerTcpWindowScale.IsNull() {
 		data.ServerTcpWindowScale = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "server.port-forwarding.local"); value.Exists() {
+	if value := res.Get("server.port-forwarding.local"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ServerPortForwardingLocal.IsNull() {
 			data.ServerPortForwardingLocal = types.BoolValue(true)
@@ -801,7 +801,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerPortForwardingLocal = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "server.port"); value.Exists() && !data.ServerPort.IsNull() {
+	if value := res.Get("server.port"); value.Exists() && !data.ServerPort.IsNull() {
 		data.ServerPort = types.Int64Value(value.Int())
 	} else if data.ServerPort.IsNull() {
 		data.ServerPort = types.Int64Null()
@@ -811,7 +811,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.ServerUsernames[i].Username.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "server.usernames.username").ForEach(
+		res.Get("server.usernames.username").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -835,37 +835,37 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ServerUsernames[i].Username = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "client.knownhost"); value.Exists() && !data.ClientKnownhost.IsNull() {
+	if value := res.Get("client.knownhost"); value.Exists() && !data.ClientKnownhost.IsNull() {
 		data.ClientKnownhost = types.StringValue(value.String())
 	} else if data.ClientKnownhost.IsNull() {
 		data.ClientKnownhost = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "client.source-interface"); value.Exists() && !data.ClientSourceInterface.IsNull() {
+	if value := res.Get("client.source-interface"); value.Exists() && !data.ClientSourceInterface.IsNull() {
 		data.ClientSourceInterface = types.StringValue(value.String())
 	} else if data.ClientSourceInterface.IsNull() {
 		data.ClientSourceInterface = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "client.vrf"); value.Exists() && !data.ClientVrf.IsNull() {
+	if value := res.Get("client.vrf"); value.Exists() && !data.ClientVrf.IsNull() {
 		data.ClientVrf = types.StringValue(value.String())
 	} else if data.ClientVrf.IsNull() {
 		data.ClientVrf = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "client.dscp"); value.Exists() && !data.ClientDscp.IsNull() {
+	if value := res.Get("client.dscp"); value.Exists() && !data.ClientDscp.IsNull() {
 		data.ClientDscp = types.Int64Value(value.Int())
 	} else if data.ClientDscp.IsNull() {
 		data.ClientDscp = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "client.rekey-time"); value.Exists() && !data.ClientRekeyTime.IsNull() {
+	if value := res.Get("client.rekey-time"); value.Exists() && !data.ClientRekeyTime.IsNull() {
 		data.ClientRekeyTime = types.Int64Value(value.Int())
 	} else if data.ClientRekeyTime.IsNull() {
 		data.ClientRekeyTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "client.rekey-volume"); value.Exists() && !data.ClientRekeyVolume.IsNull() {
+	if value := res.Get("client.rekey-volume"); value.Exists() && !data.ClientRekeyVolume.IsNull() {
 		data.ClientRekeyVolume = types.Int64Value(value.Int())
 	} else if data.ClientRekeyVolume.IsNull() {
 		data.ClientRekeyVolume = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha1"); value.Exists() {
+	if value := res.Get("client.disable.hmac.hmac-sha1"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClientDisableHmacSha1.IsNull() {
 			data.ClientDisableHmacSha1 = types.BoolValue(true)
@@ -876,7 +876,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ClientDisableHmacSha1 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-512"); value.Exists() {
+	if value := res.Get("client.disable.hmac.hmac-sha2-512"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClientDisableHmacSha2512.IsNull() {
 			data.ClientDisableHmacSha2512 = types.BoolValue(true)
@@ -887,7 +887,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ClientDisableHmacSha2512 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "client.disable.hmac.hmac-sha2-256"); value.Exists() {
+	if value := res.Get("client.disable.hmac.hmac-sha2-256"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClientDisableHmacSha2256.IsNull() {
 			data.ClientDisableHmacSha2256 = types.BoolValue(true)
@@ -898,7 +898,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ClientDisableHmacSha2256 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "client.enable.cipher.aes-cbc"); value.Exists() {
+	if value := res.Get("client.enable.cipher.aes-cbc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClientEnableCipherAesCbc.IsNull() {
 			data.ClientEnableCipherAesCbc = types.BoolValue(true)
@@ -909,7 +909,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ClientEnableCipherAesCbc = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "client.enable.cipher.threedes-cbc"); value.Exists() {
+	if value := res.Get("client.enable.cipher.threedes-cbc"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClientEnableCipher3desCbc.IsNull() {
 			data.ClientEnableCipher3desCbc = types.BoolValue(true)
@@ -920,22 +920,22 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ClientEnableCipher3desCbc = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "client.algorithms.key-exchanges.key-exchange"); value.Exists() && !data.ClientAlgorithmsKeyExchanges.IsNull() {
+	if value := res.Get("client.algorithms.key-exchanges.key-exchange"); value.Exists() && !data.ClientAlgorithmsKeyExchanges.IsNull() {
 		data.ClientAlgorithmsKeyExchanges = helpers.GetStringList(value.Array())
 	} else if data.ClientAlgorithmsKeyExchanges.IsNull() {
 		data.ClientAlgorithmsKeyExchanges = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "client.algorithms.ciphers.cipher"); value.Exists() && !data.ClientAlgorithmsCiphers.IsNull() {
+	if value := res.Get("client.algorithms.ciphers.cipher"); value.Exists() && !data.ClientAlgorithmsCiphers.IsNull() {
 		data.ClientAlgorithmsCiphers = helpers.GetStringList(value.Array())
 	} else if data.ClientAlgorithmsCiphers.IsNull() {
 		data.ClientAlgorithmsCiphers = types.ListNull(types.StringType)
 	}
-	if value := gjson.GetBytes(res, "client.tcp-window-scale"); value.Exists() && !data.ClientTcpWindowScale.IsNull() {
+	if value := res.Get("client.tcp-window-scale"); value.Exists() && !data.ClientTcpWindowScale.IsNull() {
 		data.ClientTcpWindowScale = types.Int64Value(value.Int())
 	} else if data.ClientTcpWindowScale.IsNull() {
 		data.ClientTcpWindowScale = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "client.v2"); value.Exists() {
+	if value := res.Get("client.v2"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClientV2.IsNull() {
 			data.ClientV2 = types.BoolValue(true)
@@ -946,7 +946,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 			data.ClientV2 = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "client.v1"); value.Exists() {
+	if value := res.Get("client.v1"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ClientV1.IsNull() {
 			data.ClientV1 = types.BoolValue(true)
@@ -962,14 +962,18 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data SSH) toBodyXML(ctx context.Context) string {
+func (data SSH) toBodyXML(ctx context.Context, stateArg ...*SSH) string {
+	var state *SSH
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Timeout.IsNull() && !data.Timeout.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/timeout", strconv.FormatInt(data.Timeout.ValueInt64(), 10))
 	}
 	if len(data.ServerVrfs) > 0 {
 		for _, item := range data.ServerVrfs {
-			basePath := data.getXPath() + "/server/vrfs/vrf"
+			basePath := data.getXPath() + "/server/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -1035,7 +1039,7 @@ func (data SSH) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ServerNetconfVrfs) > 0 {
 		for _, item := range data.ServerNetconfVrfs {
-			basePath := data.getXPath() + "/server/netconf/vrfs/vrf"
+			basePath := data.getXPath() + "/server/netconf/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -1138,7 +1142,7 @@ func (data SSH) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.ServerUsernames) > 0 {
 		for _, item := range data.ServerUsernames {
-			basePath := data.getXPath() + "/server/usernames/username"
+			basePath := data.getXPath() + "/server/usernames/username[username-name='" + item.Username.ValueString() + "']"
 			if !item.Username.IsNull() && !item.Username.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/username-name", item.Username.ValueString())
 			}
@@ -1225,6 +1229,11 @@ func (data SSH) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

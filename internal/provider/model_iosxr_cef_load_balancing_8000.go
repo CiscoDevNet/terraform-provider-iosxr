@@ -224,14 +224,18 @@ func (data CEFLoadBalancing8000) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
+func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context, stateArg ...*CEFLoadBalancing8000) string {
+	var state *CEFLoadBalancing8000
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.PlatformLoadBalanceHashRotate.IsNull() && !data.PlatformLoadBalanceHashRotate.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/platform/load-balance/hash/rotate", strconv.FormatInt(data.PlatformLoadBalanceHashRotate.ValueInt64(), 10))
 	}
 	if len(data.PlatformLoadBalanceFieldsUserdataIpv6Udp) > 0 {
 		for _, item := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp"
+			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp[location-string='" + item.LocationString.ValueString() + "']"
 			if !item.LocationString.IsNull() && !item.LocationString.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-string", item.LocationString.ValueString())
 			}
@@ -245,7 +249,7 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PlatformLoadBalanceFieldsUserdataIpv6Tcp) > 0 {
 		for _, item := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp"
+			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp[location-string='" + item.LocationString.ValueString() + "']"
 			if !item.LocationString.IsNull() && !item.LocationString.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-string", item.LocationString.ValueString())
 			}
@@ -259,7 +263,7 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp) > 0 {
 		for _, item := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp"
+			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp[location-string='" + item.LocationString.ValueString() + "']"
 			if !item.LocationString.IsNull() && !item.LocationString.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-string", item.LocationString.ValueString())
 			}
@@ -273,7 +277,7 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PlatformLoadBalanceFieldsUserdataIpv4Udp) > 0 {
 		for _, item := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp"
+			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp[location-string='" + item.LocationString.ValueString() + "']"
 			if !item.LocationString.IsNull() && !item.LocationString.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-string", item.LocationString.ValueString())
 			}
@@ -287,7 +291,7 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PlatformLoadBalanceFieldsUserdataIpv4Tcp) > 0 {
 		for _, item := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp"
+			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp[location-string='" + item.LocationString.ValueString() + "']"
 			if !item.LocationString.IsNull() && !item.LocationString.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-string", item.LocationString.ValueString())
 			}
@@ -301,7 +305,7 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp) > 0 {
 		for _, item := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp"
+			basePath := data.getXPath() + "/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp[location-string='" + item.LocationString.ValueString() + "']"
 			if !item.LocationString.IsNull() && !item.LocationString.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-string", item.LocationString.ValueString())
 			}
@@ -326,6 +330,11 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -333,8 +342,8 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "platform.load-balance.hash.rotate"); value.Exists() && !data.PlatformLoadBalanceHashRotate.IsNull() {
+func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("platform.load-balance.hash.rotate"); value.Exists() && !data.PlatformLoadBalanceHashRotate.IsNull() {
 		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
 	} else if data.PlatformLoadBalanceHashRotate.IsNull() {
 		data.PlatformLoadBalanceHashRotate = types.Int64Null()
@@ -344,7 +353,7 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp").ForEach(
+		res.Get("platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -383,7 +392,7 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp").ForEach(
+		res.Get("platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -422,7 +431,7 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp").ForEach(
+		res.Get("platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -461,7 +470,7 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp").ForEach(
+		res.Get("platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -500,7 +509,7 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp").ForEach(
+		res.Get("platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -539,7 +548,7 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp").ForEach(
+		res.Get("platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -573,7 +582,7 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
+	if value := res.Get("platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
 			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)

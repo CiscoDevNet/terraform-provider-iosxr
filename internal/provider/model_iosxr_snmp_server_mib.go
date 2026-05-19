@@ -275,8 +275,8 @@ func (data SNMPServerMIB) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache"); value.Exists() {
+func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CbqosmibCache.IsNull() {
 			data.CbqosmibCache = types.BoolValue(true)
@@ -287,17 +287,17 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.CbqosmibCache = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.refresh.time"); value.Exists() && !data.CbqosmibCacheRefreshTime.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.refresh.time"); value.Exists() && !data.CbqosmibCacheRefreshTime.IsNull() {
 		data.CbqosmibCacheRefreshTime = types.Int64Value(value.Int())
 	} else if data.CbqosmibCacheRefreshTime.IsNull() {
 		data.CbqosmibCacheRefreshTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.service-policy.count"); value.Exists() && !data.CbqosmibCacheServicePolicyCount.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.service-policy.count"); value.Exists() && !data.CbqosmibCacheServicePolicyCount.IsNull() {
 		data.CbqosmibCacheServicePolicyCount = types.Int64Value(value.Int())
 	} else if data.CbqosmibCacheServicePolicyCount.IsNull() {
 		data.CbqosmibCacheServicePolicyCount = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.persist"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.persist"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CbqosmibPersist.IsNull() {
 			data.CbqosmibPersist = types.BoolValue(true)
@@ -308,7 +308,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.CbqosmibPersist = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.member-stats"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.member-stats"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CbqosmibMemberStats.IsNull() {
 			data.CbqosmibMemberStats = types.BoolValue(true)
@@ -319,7 +319,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.CbqosmibMemberStats = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IfindexPersist.IsNull() {
 			data.IfindexPersist = types.BoolValue(true)
@@ -335,7 +335,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces.interface").ForEach(
+		res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -395,7 +395,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap.link.ietf"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:trap.link.ietf"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrapLinkIetf.IsNull() {
 			data.TrapLinkIetf = types.BoolValue(true)
@@ -406,7 +406,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.TrapLinkIetf = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IfmibIfaliasLong.IsNull() {
 			data.IfmibIfaliasLong = types.BoolValue(true)
@@ -417,7 +417,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.IfmibIfaliasLong = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.stats.cache"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.stats.cache"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IfmibStatsCache.IsNull() {
 			data.IfmibStatsCache = types.BoolValue(true)
@@ -428,7 +428,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.IfmibStatsCache = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ipsubscriber"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ipsubscriber"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.IfmibIpsubscriber.IsNull() {
 			data.IfmibIpsubscriber = types.BoolValue(true)
@@ -439,12 +439,12 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.IfmibIpsubscriber = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.internal.cache.max-duration"); value.Exists() && !data.IfmibInternalCacheMaxDuration.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.internal.cache.max-duration"); value.Exists() && !data.IfmibInternalCacheMaxDuration.IsNull() {
 		data.IfmibInternalCacheMaxDuration = types.Int64Value(value.Int())
 	} else if data.IfmibInternalCacheMaxDuration.IsNull() {
 		data.IfmibInternalCacheMaxDuration = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib.entphyindex"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib.entphyindex"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RfmibEntphyindex.IsNull() {
 			data.RfmibEntphyindex = types.BoolValue(true)
@@ -455,7 +455,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.RfmibEntphyindex = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib.cache"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib.cache"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SensormibCache.IsNull() {
 			data.SensormibCache = types.BoolValue(true)
@@ -466,37 +466,37 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.SensormibCache = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.garbage-collect"); value.Exists() && !data.MplstemibCacheTimersGarbageCollect.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.garbage-collect"); value.Exists() && !data.MplstemibCacheTimersGarbageCollect.IsNull() {
 		data.MplstemibCacheTimersGarbageCollect = types.Int64Value(value.Int())
 	} else if data.MplstemibCacheTimersGarbageCollect.IsNull() {
 		data.MplstemibCacheTimersGarbageCollect = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.refresh"); value.Exists() && !data.MplstemibCacheTimersRefresh.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.refresh"); value.Exists() && !data.MplstemibCacheTimersRefresh.IsNull() {
 		data.MplstemibCacheTimersRefresh = types.Int64Value(value.Int())
 	} else if data.MplstemibCacheTimersRefresh.IsNull() {
 		data.MplstemibCacheTimersRefresh = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib.cache.timer"); value.Exists() && !data.Mplsp2mpmibCacheTimer.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib.cache.timer"); value.Exists() && !data.Mplsp2mpmibCacheTimer.IsNull() {
 		data.Mplsp2mpmibCacheTimer = types.Int64Value(value.Int())
 	} else if data.Mplsp2mpmibCacheTimer.IsNull() {
 		data.Mplsp2mpmibCacheTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:frrmib.cache.timer"); value.Exists() && !data.FrrmibCacheTimer.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:frrmib.cache.timer"); value.Exists() && !data.FrrmibCacheTimer.IsNull() {
 		data.FrrmibCacheTimer = types.Int64Value(value.Int())
 	} else if data.FrrmibCacheTimer.IsNull() {
 		data.FrrmibCacheTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib.cache.timer"); value.Exists() && !data.CmplsteextmibCacheTimer.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib.cache.timer"); value.Exists() && !data.CmplsteextmibCacheTimer.IsNull() {
 		data.CmplsteextmibCacheTimer = types.Int64Value(value.Int())
 	} else if data.CmplsteextmibCacheTimer.IsNull() {
 		data.CmplsteextmibCacheTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib.cache.timer"); value.Exists() && !data.CmplsteextstdmibCacheTimer.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib.cache.timer"); value.Exists() && !data.CmplsteextstdmibCacheTimer.IsNull() {
 		data.CmplsteextstdmibCacheTimer = types.Int64Value(value.Int())
 	} else if data.CmplsteextstdmibCacheTimer.IsNull() {
 		data.CmplsteextstdmibCacheTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib.send-all-vrf"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib.send-all-vrf"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.MroutemibSendAllVrf.IsNull() {
 			data.MroutemibSendAllVrf = types.BoolValue(true)
@@ -507,7 +507,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.MroutemibSendAllVrf = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.default"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.default"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NotificationLogMibDefault.IsNull() {
 			data.NotificationLogMibDefault = types.BoolValue(true)
@@ -518,17 +518,17 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.NotificationLogMibDefault = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-age-out"); value.Exists() && !data.NotificationLogMibGlobalAgeOut.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-age-out"); value.Exists() && !data.NotificationLogMibGlobalAgeOut.IsNull() {
 		data.NotificationLogMibGlobalAgeOut = types.Int64Value(value.Int())
 	} else if data.NotificationLogMibGlobalAgeOut.IsNull() {
 		data.NotificationLogMibGlobalAgeOut = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-size"); value.Exists() && !data.NotificationLogMibGlobalSize.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-size"); value.Exists() && !data.NotificationLogMibGlobalSize.IsNull() {
 		data.NotificationLogMibGlobalSize = types.Int64Value(value.Int())
 	} else if data.NotificationLogMibGlobalSize.IsNull() {
 		data.NotificationLogMibGlobalSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.disable"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.NotificationLogMibDisable.IsNull() {
 			data.NotificationLogMibDisable = types.BoolValue(true)
@@ -539,12 +539,12 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 			data.NotificationLogMibDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.size"); value.Exists() && !data.NotificationLogMibSize.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.size"); value.Exists() && !data.NotificationLogMibSize.IsNull() {
 		data.NotificationLogMibSize = types.Int64Value(value.Int())
 	} else if data.NotificationLogMibSize.IsNull() {
 		data.NotificationLogMibSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-traps-entity-cfg:entityindex.persist"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-traps-entity-cfg:entityindex.persist"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EntityindexPersist.IsNull() {
 			data.EntityindexPersist = types.BoolValue(true)
@@ -560,7 +560,11 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data SNMPServerMIB) toBodyXML(ctx context.Context) string {
+func (data SNMPServerMIB) toBodyXML(ctx context.Context, stateArg ...*SNMPServerMIB) string {
+	var state *SNMPServerMIB
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.IfindexPersist.IsNull() && !data.IfindexPersist.IsUnknown() {
 		if data.IfindexPersist.ValueBool() {
@@ -569,7 +573,7 @@ func (data SNMPServerMIB) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Interfaces) > 0 {
 		for _, item := range data.Interfaces {
-			basePath := data.getXPath() + "/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface"
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
 			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
 			}
@@ -763,6 +767,11 @@ func (data SNMPServerMIB) toBodyXML(ctx context.Context) string {
 		}
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

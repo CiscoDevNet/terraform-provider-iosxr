@@ -95,8 +95,8 @@ func (data RadiusSourceInterface) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RadiusSourceInterface) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
+func (data *RadiusSourceInterface) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
 	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
@@ -106,7 +106,11 @@ func (data *RadiusSourceInterface) updateFromBody(ctx context.Context, res []byt
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RadiusSourceInterface) toBodyXML(ctx context.Context) string {
+func (data RadiusSourceInterface) toBodyXML(ctx context.Context, stateArg ...*RadiusSourceInterface) string {
+	var state *RadiusSourceInterface
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.SourceInterface.IsNull() && !data.SourceInterface.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/source-interface", data.SourceInterface.ValueString())
@@ -119,6 +123,11 @@ func (data RadiusSourceInterface) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

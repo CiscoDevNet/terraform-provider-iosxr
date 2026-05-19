@@ -91,7 +91,11 @@ func (data MPLSTrafficEng) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data MPLSTrafficEng) toBodyXML(ctx context.Context) string {
+func (data MPLSTrafficEng) toBodyXML(ctx context.Context, stateArg ...*MPLSTrafficEng) string {
+	var state *MPLSTrafficEng
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.TrafficEng.IsNull() && !data.TrafficEng.IsUnknown() {
 		if data.TrafficEng.ValueBool() {
@@ -106,6 +110,11 @@ func (data MPLSTrafficEng) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -113,8 +122,8 @@ func (data MPLSTrafficEng) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
+func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("traffic-eng"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TrafficEng.IsNull() {
 			data.TrafficEng = types.BoolValue(true)

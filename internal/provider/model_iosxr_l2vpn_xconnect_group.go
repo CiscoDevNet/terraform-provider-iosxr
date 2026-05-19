@@ -629,13 +629,13 @@ func (data L2VPNXconnectGroup) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) {
+func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.P2ps {
 		keys := [...]string{"p2p-xconnect-name"}
 		keyValues := [...]string{data.P2ps[i].P2pXconnectName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "p2ps.p2p").ForEach(
+		res.Get("p2ps.p2p").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1133,7 +1133,7 @@ func (data *L2VPNXconnectGroup) updateFromBody(ctx context.Context, res []byte) 
 		keyValues := [...]string{data.Mp2mps[i].InstanceName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "mp2mps.mp2mp").ForEach(
+		res.Get("mp2mps.mp2mp").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3956,11 +3956,15 @@ func (data *L2VPNXconnectGroup) getDeletePaths(ctx context.Context) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
+func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context, stateArg ...*L2VPNXconnectGroup) string {
+	var state *L2VPNXconnectGroup
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.P2ps) > 0 {
 		for _, item := range data.P2ps {
-			basePath := data.getXPath() + "/p2ps/p2p"
+			basePath := data.getXPath() + "/p2ps/p2p[p2p-xconnect-name='" + item.P2pXconnectName.ValueString() + "']"
 			if !item.P2pXconnectName.IsNull() && !item.P2pXconnectName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/p2p-xconnect-name", item.P2pXconnectName.ValueString())
 			}
@@ -4151,7 +4155,7 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Mp2mps) > 0 {
 		for _, item := range data.Mp2mps {
-			basePath := data.getXPath() + "/mp2mps/mp2mp"
+			basePath := data.getXPath() + "/mp2mps/mp2mp[instance-name='" + item.InstanceName.ValueString() + "']"
 			if !item.InstanceName.IsNull() && !item.InstanceName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/instance-name", item.InstanceName.ValueString())
 			}
@@ -4364,6 +4368,11 @@ func (data L2VPNXconnectGroup) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

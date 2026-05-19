@@ -112,7 +112,11 @@ func (data FPD) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data FPD) toBodyXML(ctx context.Context) string {
+func (data FPD) toBodyXML(ctx context.Context, stateArg ...*FPD) string {
+	var state *FPD
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.AutoUpgradeEnable.IsNull() && !data.AutoUpgradeEnable.IsUnknown() {
 		if data.AutoUpgradeEnable.ValueBool() {
@@ -142,6 +146,11 @@ func (data FPD) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -149,8 +158,8 @@ func (data FPD) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *FPD) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "auto-upgrade.enable"); value.Exists() {
+func (data *FPD) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("auto-upgrade.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AutoUpgradeEnable.IsNull() {
 			data.AutoUpgradeEnable = types.BoolValue(true)
@@ -161,7 +170,7 @@ func (data *FPD) updateFromBody(ctx context.Context, res []byte) {
 			data.AutoUpgradeEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "auto-upgrade.disable"); value.Exists() {
+	if value := res.Get("auto-upgrade.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AutoUpgradeDisable.IsNull() {
 			data.AutoUpgradeDisable = types.BoolValue(true)
@@ -172,7 +181,7 @@ func (data *FPD) updateFromBody(ctx context.Context, res []byte) {
 			data.AutoUpgradeDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "auto-reload.enable"); value.Exists() {
+	if value := res.Get("auto-reload.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AutoReloadEnable.IsNull() {
 			data.AutoReloadEnable = types.BoolValue(true)
@@ -183,7 +192,7 @@ func (data *FPD) updateFromBody(ctx context.Context, res []byte) {
 			data.AutoReloadEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "auto-reload.disable"); value.Exists() {
+	if value := res.Get("auto-reload.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AutoReloadDisable.IsNull() {
 			data.AutoReloadDisable = types.BoolValue(true)

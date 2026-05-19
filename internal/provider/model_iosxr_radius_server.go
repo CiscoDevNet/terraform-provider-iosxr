@@ -314,13 +314,13 @@ func (data RadiusServer) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
+func (data *RadiusServer) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Hosts {
 		keys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}
 		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].Order.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].AuthPort.ValueInt64(), 10), strconv.FormatInt(data.Hosts[i].AcctPort.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "hosts.host").ForEach(
+		res.Get("hosts.host").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -413,17 +413,17 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Hosts[i].RadsecServerTrustpoint = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "timeout"); value.Exists() && !data.Timeout.IsNull() {
+	if value := res.Get("timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
 	} else if data.Timeout.IsNull() {
 		data.Timeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "retransmit.retries"); value.Exists() && !data.RetransmitRetries.IsNull() {
+	if value := res.Get("retransmit.retries"); value.Exists() && !data.RetransmitRetries.IsNull() {
 		data.RetransmitRetries = types.Int64Value(value.Int())
 	} else if data.RetransmitRetries.IsNull() {
 		data.RetransmitRetries = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "retransmit.disable"); value.Exists() {
+	if value := res.Get("retransmit.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RetransmitDisable.IsNull() {
 			data.RetransmitDisable = types.BoolValue(true)
@@ -434,12 +434,12 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 			data.RetransmitDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "load-balance.method.least-outstanding.batch-size"); value.Exists() && !data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
+	if value := res.Get("load-balance.method.least-outstanding.batch-size"); value.Exists() && !data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
 		data.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(value.Int())
 	} else if data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
 		data.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "load-balance.method.least-outstanding.ignore-preferred-server"); value.Exists() {
+	if value := res.Get("load-balance.method.least-outstanding.ignore-preferred-server"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
 			data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
@@ -450,37 +450,37 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 			data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "throttle.access"); value.Exists() && !data.ThrottleAccess.IsNull() {
+	if value := res.Get("throttle.access"); value.Exists() && !data.ThrottleAccess.IsNull() {
 		data.ThrottleAccess = types.Int64Value(value.Int())
 	} else if data.ThrottleAccess.IsNull() {
 		data.ThrottleAccess = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "throttle.access-timeout"); value.Exists() && !data.ThrottleAccessTimeout.IsNull() {
+	if value := res.Get("throttle.access-timeout"); value.Exists() && !data.ThrottleAccessTimeout.IsNull() {
 		data.ThrottleAccessTimeout = types.Int64Value(value.Int())
 	} else if data.ThrottleAccessTimeout.IsNull() {
 		data.ThrottleAccessTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "throttle.accounting"); value.Exists() && !data.ThrottleAccounting.IsNull() {
+	if value := res.Get("throttle.accounting"); value.Exists() && !data.ThrottleAccounting.IsNull() {
 		data.ThrottleAccounting = types.Int64Value(value.Int())
 	} else if data.ThrottleAccounting.IsNull() {
 		data.ThrottleAccounting = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "deadtime"); value.Exists() && !data.Deadtime.IsNull() {
+	if value := res.Get("deadtime"); value.Exists() && !data.Deadtime.IsNull() {
 		data.Deadtime = types.Int64Value(value.Int())
 	} else if data.Deadtime.IsNull() {
 		data.Deadtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dead-criteria.time"); value.Exists() && !data.DeadCriteriaTime.IsNull() {
+	if value := res.Get("dead-criteria.time"); value.Exists() && !data.DeadCriteriaTime.IsNull() {
 		data.DeadCriteriaTime = types.Int64Value(value.Int())
 	} else if data.DeadCriteriaTime.IsNull() {
 		data.DeadCriteriaTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dead-criteria.tries"); value.Exists() && !data.DeadCriteriaTries.IsNull() {
+	if value := res.Get("dead-criteria.tries"); value.Exists() && !data.DeadCriteriaTries.IsNull() {
 		data.DeadCriteriaTries = types.Int64Value(value.Int())
 	} else if data.DeadCriteriaTries.IsNull() {
 		data.DeadCriteriaTries = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "source-port.extended"); value.Exists() {
+	if value := res.Get("source-port.extended"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SourcePortExtended.IsNull() {
 			data.SourcePortExtended = types.BoolValue(true)
@@ -491,17 +491,17 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 			data.SourcePortExtended = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
+	if value := res.Get("ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
+	if value := res.Get("ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "vsa.attribute.ignore.unknown"); value.Exists() {
+	if value := res.Get("vsa.attribute.ignore.unknown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.VsaAttributeIgnoreUnknown.IsNull() {
 			data.VsaAttributeIgnoreUnknown = types.BoolValue(true)
@@ -512,7 +512,7 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 			data.VsaAttributeIgnoreUnknown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "disallow.null-username"); value.Exists() {
+	if value := res.Get("disallow.null-username"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DisallowNullUsername.IsNull() {
 			data.DisallowNullUsername = types.BoolValue(true)
@@ -528,7 +528,7 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.AttributeLists[i].Name.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "attribute.list").ForEach(
+		res.Get("attribute.list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -615,7 +615,7 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "attribute.acct-session-id.prepend-nas-port-id"); value.Exists() {
+	if value := res.Get("attribute.acct-session-id.prepend-nas-port-id"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
 			data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(true)
@@ -626,7 +626,7 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 			data.AttributeAcctSessionIdPrependNasPortId = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "attribute.acct-multi-session-id.include-parent-session-id"); value.Exists() {
+	if value := res.Get("attribute.acct-multi-session-id.include-parent-session-id"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
 			data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(true)
@@ -637,7 +637,7 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 			data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "attribute.filter-id-11.default.direction"); value.Exists() && !data.AttributeFilterId11DefaultDirection.IsNull() {
+	if value := res.Get("attribute.filter-id-11.default.direction"); value.Exists() && !data.AttributeFilterId11DefaultDirection.IsNull() {
 		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
 	} else if data.AttributeFilterId11DefaultDirection.IsNull() {
 		data.AttributeFilterId11DefaultDirection = types.StringNull()
@@ -647,11 +647,15 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RadiusServer) toBodyXML(ctx context.Context) string {
+func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServer) string {
+	var state *RadiusServer
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Hosts) > 0 {
 		for _, item := range data.Hosts {
-			basePath := data.getXPath() + "/hosts/host"
+			basePath := data.getXPath() + "/hosts/host[ordering-index='" + strconv.FormatInt(item.Order.ValueInt64(), 10) + "' and address='" + item.Address.ValueString() + "' and auth-port='" + strconv.FormatInt(item.AuthPort.ValueInt64(), 10) + "' and acct-port='" + strconv.FormatInt(item.AcctPort.ValueInt64(), 10) + "']"
 			if !item.Order.IsNull() && !item.Order.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/ordering-index", strconv.FormatInt(item.Order.ValueInt64(), 10))
 			}
@@ -766,7 +770,7 @@ func (data RadiusServer) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.AttributeLists) > 0 {
 		for _, item := range data.AttributeLists {
-			basePath := data.getXPath() + "/attribute/list"
+			basePath := data.getXPath() + "/attribute/list[list-name='" + item.Name.ValueString() + "']"
 			if !item.Name.IsNull() && !item.Name.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.Name.ValueString())
 			}
@@ -812,6 +816,11 @@ func (data RadiusServer) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

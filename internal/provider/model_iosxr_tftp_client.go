@@ -114,13 +114,13 @@ func (data TFTPClient) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *TFTPClient) updateFromBody(ctx context.Context, res []byte) {
+func (data *TFTPClient) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.ClientVrfs {
 		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "client.vrfs.vrf").ForEach(
+		res.Get("client.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -169,11 +169,15 @@ func (data *TFTPClient) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data TFTPClient) toBodyXML(ctx context.Context) string {
+func (data TFTPClient) toBodyXML(ctx context.Context, stateArg ...*TFTPClient) string {
+	var state *TFTPClient
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.ClientVrfs) > 0 {
 		for _, item := range data.ClientVrfs {
-			basePath := data.getXPath() + "/client/vrfs/vrf"
+			basePath := data.getXPath() + "/client/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
 			}
@@ -199,6 +203,11 @@ func (data TFTPClient) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

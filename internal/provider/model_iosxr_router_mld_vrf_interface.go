@@ -306,13 +306,13 @@ func (data RouterMLDVRFInterface) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "version"); value.Exists() && !data.Version.IsNull() {
+func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("version"); value.Exists() && !data.Version.IsNull() {
 		data.Version = types.Int64Value(value.Int())
 	} else if data.Version.IsNull() {
 		data.Version = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "router.enable"); value.Exists() {
+	if value := res.Get("router.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RouterEnable.IsNull() {
 			data.RouterEnable = types.BoolValue(true)
@@ -323,7 +323,7 @@ func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res []byt
 			data.RouterEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "router.disable"); value.Exists() {
+	if value := res.Get("router.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.RouterDisable.IsNull() {
 			data.RouterDisable = types.BoolValue(true)
@@ -334,22 +334,22 @@ func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res []byt
 			data.RouterDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
+	if value := res.Get("query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Value(value.Int())
 	} else if data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
+	if value := res.Get("query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Value(value.Int())
 	} else if data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
+	if value := res.Get("query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
 	} else if data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "explicit-tracking.enable"); value.Exists() {
+	if value := res.Get("explicit-tracking.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ExplicitTrackingEnable.IsNull() {
 			data.ExplicitTrackingEnable = types.BoolValue(true)
@@ -360,7 +360,7 @@ func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res []byt
 			data.ExplicitTrackingEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "explicit-tracking.disable"); value.Exists() {
+	if value := res.Get("explicit-tracking.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ExplicitTrackingDisable.IsNull() {
 			data.ExplicitTrackingDisable = types.BoolValue(true)
@@ -371,27 +371,27 @@ func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res []byt
 			data.ExplicitTrackingDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "explicit-tracking.access-list"); value.Exists() && !data.ExplicitTrackingAcl.IsNull() {
+	if value := res.Get("explicit-tracking.access-list"); value.Exists() && !data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
 	} else if data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-group"); value.Exists() && !data.AccessGroup.IsNull() {
+	if value := res.Get("access-group"); value.Exists() && !data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringValue(value.String())
 	} else if data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "maximum.groups-per-interface.maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
+	if value := res.Get("maximum.groups-per-interface.maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.groups-per-interface.threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
+	if value := res.Get("maximum.groups-per-interface.threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "maximum.groups-per-interface.access-list"); value.Exists() && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
+	if value := res.Get("maximum.groups-per-interface.access-list"); value.Exists() && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
 	} else if data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringNull()
@@ -401,7 +401,7 @@ func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res []byt
 		keyValues := [...]string{data.StaticGroups[i].GroupAddress.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "static-group.group-address").ForEach(
+		res.Get("static-group.group-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -586,7 +586,7 @@ func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res []byt
 		keyValues := [...]string{data.JoinGroups[i].GroupAddress.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "join-groups.join-group").ForEach(
+		res.Get("join-groups.join-group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -671,7 +671,7 @@ func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res []byt
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "dvmrp-enable"); value.Exists() {
+	if value := res.Get("dvmrp-enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.DvmrpEnable.IsNull() {
 			data.DvmrpEnable = types.BoolValue(true)
@@ -687,7 +687,11 @@ func (data *RouterMLDVRFInterface) updateFromBody(ctx context.Context, res []byt
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RouterMLDVRFInterface) toBodyXML(ctx context.Context) string {
+func (data RouterMLDVRFInterface) toBodyXML(ctx context.Context, stateArg ...*RouterMLDVRFInterface) string {
+	var state *RouterMLDVRFInterface
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Version.IsNull() && !data.Version.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/version", strconv.FormatInt(data.Version.ValueInt64(), 10))
@@ -738,7 +742,7 @@ func (data RouterMLDVRFInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.StaticGroups) > 0 {
 		for _, item := range data.StaticGroups {
-			basePath := data.getXPath() + "/static-group/group-address"
+			basePath := data.getXPath() + "/static-group/group-address[group-address='" + item.GroupAddress.ValueString() + "']"
 			if !item.GroupAddress.IsNull() && !item.GroupAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/group-address", item.GroupAddress.ValueString())
 			}
@@ -804,7 +808,7 @@ func (data RouterMLDVRFInterface) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.JoinGroups) > 0 {
 		for _, item := range data.JoinGroups {
-			basePath := data.getXPath() + "/join-groups/join-group"
+			basePath := data.getXPath() + "/join-groups/join-group[group-address='" + item.GroupAddress.ValueString() + "']"
 			if !item.GroupAddress.IsNull() && !item.GroupAddress.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/group-address", item.GroupAddress.ValueString())
 			}
@@ -846,6 +850,11 @@ func (data RouterMLDVRFInterface) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

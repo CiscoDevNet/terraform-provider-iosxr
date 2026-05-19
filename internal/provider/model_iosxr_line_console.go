@@ -324,33 +324,33 @@ func (data LineConsole) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "access-class.ingress"); value.Exists() && !data.AccessClassIngress.IsNull() {
+func (data *LineConsole) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("access-class.ingress"); value.Exists() && !data.AccessClassIngress.IsNull() {
 		data.AccessClassIngress = types.StringValue(value.String())
 	} else if data.AccessClassIngress.IsNull() {
 		data.AccessClassIngress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "access-class.egress"); value.Exists() && !data.AccessClassEgress.IsNull() {
+	if value := res.Get("access-class.egress"); value.Exists() && !data.AccessClassEgress.IsNull() {
 		data.AccessClassEgress = types.StringValue(value.String())
 	} else if data.AccessClassEgress.IsNull() {
 		data.AccessClassEgress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "disconnect-character"); value.Exists() && !data.DisconnectCharacter.IsNull() {
+	if value := res.Get("disconnect-character"); value.Exists() && !data.DisconnectCharacter.IsNull() {
 		data.DisconnectCharacter = types.StringValue(value.String())
 	} else if data.DisconnectCharacter.IsNull() {
 		data.DisconnectCharacter = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "escape-character"); value.Exists() && !data.EscapeCharacter.IsNull() {
+	if value := res.Get("escape-character"); value.Exists() && !data.EscapeCharacter.IsNull() {
 		data.EscapeCharacter = types.StringValue(value.String())
 	} else if data.EscapeCharacter.IsNull() {
 		data.EscapeCharacter = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "session-timeout.timeout-interval"); value.Exists() && !data.SessionTimeout.IsNull() {
+	if value := res.Get("session-timeout.timeout-interval"); value.Exists() && !data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	} else if data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "session-timeout.output"); value.Exists() {
+	if value := res.Get("session-timeout.output"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.SessionTimeoutOutput.IsNull() {
 			data.SessionTimeoutOutput = types.BoolValue(true)
@@ -361,7 +361,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.SessionTimeoutOutput = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.none"); value.Exists() {
+	if value := res.Get("transport.input.none"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportInputNone.IsNull() {
 			data.TransportInputNone = types.BoolValue(true)
@@ -372,7 +372,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportInputNone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh"); value.Exists() {
+	if value := res.Get("transport.input.ssh"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportInputSsh.IsNull() {
 			data.TransportInputSsh = types.BoolValue(true)
@@ -383,7 +383,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportInputSsh = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); value.Exists() {
+	if value := res.Get("transport.input.ssh.telnet"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportInputSshTelnet.IsNull() {
 			data.TransportInputSshTelnet = types.BoolValue(true)
@@ -394,7 +394,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportInputSshTelnet = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.telnet"); value.Exists() {
+	if value := res.Get("transport.input.telnet"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportInputTelnet.IsNull() {
 			data.TransportInputTelnet = types.BoolValue(true)
@@ -405,7 +405,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportInputTelnet = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.input.all"); value.Exists() {
+	if value := res.Get("transport.input.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportInputAll.IsNull() {
 			data.TransportInputAll = types.BoolValue(true)
@@ -416,7 +416,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportInputAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.all"); value.Exists() {
+	if value := res.Get("transport.output.all"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportOutputAll.IsNull() {
 			data.TransportOutputAll = types.BoolValue(true)
@@ -427,7 +427,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportOutputAll = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.none"); value.Exists() {
+	if value := res.Get("transport.output.none"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportOutputNone.IsNull() {
 			data.TransportOutputNone = types.BoolValue(true)
@@ -438,7 +438,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportOutputNone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh"); value.Exists() {
+	if value := res.Get("transport.output.ssh"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportOutputSsh.IsNull() {
 			data.TransportOutputSsh = types.BoolValue(true)
@@ -449,7 +449,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportOutputSsh = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); value.Exists() {
+	if value := res.Get("transport.output.ssh.telnet"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportOutputSshTelnet.IsNull() {
 			data.TransportOutputSshTelnet = types.BoolValue(true)
@@ -460,7 +460,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportOutputSshTelnet = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.output.telnet"); value.Exists() {
+	if value := res.Get("transport.output.telnet"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportOutputTelnet.IsNull() {
 			data.TransportOutputTelnet = types.BoolValue(true)
@@ -471,7 +471,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportOutputTelnet = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.none"); value.Exists() {
+	if value := res.Get("transport.preferred.none"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportPreferredNone.IsNull() {
 			data.TransportPreferredNone = types.BoolValue(true)
@@ -482,7 +482,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportPreferredNone = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.telnet"); value.Exists() {
+	if value := res.Get("transport.preferred.telnet"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportPreferredTelnet.IsNull() {
 			data.TransportPreferredTelnet = types.BoolValue(true)
@@ -493,7 +493,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportPreferredTelnet = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "transport.preferred.ssh"); value.Exists() {
+	if value := res.Get("transport.preferred.ssh"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransportPreferredSsh.IsNull() {
 			data.TransportPreferredSsh = types.BoolValue(true)
@@ -504,12 +504,12 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TransportPreferredSsh = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "session-limit"); value.Exists() && !data.SessionLimit.IsNull() {
+	if value := res.Get("session-limit"); value.Exists() && !data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	} else if data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "cli.whitespace.completion"); value.Exists() {
+	if value := res.Get("cli.whitespace.completion"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.CliWhitespaceCompletion.IsNull() {
 			data.CliWhitespaceCompletion = types.BoolValue(true)
@@ -520,37 +520,37 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.CliWhitespaceCompletion = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() && !data.LoginAuthentication.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() && !data.LoginAuthentication.IsNull() {
 		data.LoginAuthentication = types.StringValue(value.String())
 	} else if data.LoginAuthentication.IsNull() {
 		data.LoginAuthentication = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() && !data.AuthorizationExec.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() && !data.AuthorizationExec.IsNull() {
 		data.AuthorizationExec = types.StringValue(value.String())
 	} else if data.AuthorizationExec.IsNull() {
 		data.AuthorizationExec = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() && !data.AuthorizationEventmanager.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() && !data.AuthorizationEventmanager.IsNull() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
 	} else if data.AuthorizationEventmanager.IsNull() {
 		data.AuthorizationEventmanager = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() && !data.AuthorizationCommands.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() && !data.AuthorizationCommands.IsNull() {
 		data.AuthorizationCommands = types.StringValue(value.String())
 	} else if data.AuthorizationCommands.IsNull() {
 		data.AuthorizationCommands = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() && !data.AccountingExec.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() && !data.AccountingExec.IsNull() {
 		data.AccountingExec = types.StringValue(value.String())
 	} else if data.AccountingExec.IsNull() {
 		data.AccountingExec = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() && !data.AccountingCommands.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() && !data.AccountingCommands.IsNull() {
 		data.AccountingCommands = types.StringValue(value.String())
 	} else if data.AccountingCommands.IsNull() {
 		data.AccountingCommands = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() && !data.TimeoutLoginResponse.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() && !data.TimeoutLoginResponse.IsNull() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
 	} else if data.TimeoutLoginResponse.IsNull() {
 		data.TimeoutLoginResponse = types.Int64Null()
@@ -560,7 +560,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group").ForEach(
+		res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:users.group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -584,32 +584,32 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.UsersGroup[i].GroupName = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() && !data.ExecTimeoutMinutes.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() && !data.ExecTimeoutMinutes.IsNull() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
 	} else if data.ExecTimeoutMinutes.IsNull() {
 		data.ExecTimeoutMinutes = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() && !data.ExecTimeoutSeconds.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() && !data.ExecTimeoutSeconds.IsNull() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
 	} else if data.ExecTimeoutSeconds.IsNull() {
 		data.ExecTimeoutSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() && !data.AbsoluteTimeout.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() && !data.AbsoluteTimeout.IsNull() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
 	} else if data.AbsoluteTimeout.IsNull() {
 		data.AbsoluteTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() && !data.Width.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() && !data.Width.IsNull() {
 		data.Width = types.Int64Value(value.Int())
 	} else if data.Width.IsNull() {
 		data.Width = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() && !data.Length.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() && !data.Length.IsNull() {
 		data.Length = types.Int64Value(value.Int())
 	} else if data.Length.IsNull() {
 		data.Length = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TimestampDisable.IsNull() {
 			data.TimestampDisable = types.BoolValue(true)
@@ -620,12 +620,12 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 			data.TimestampDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() && !data.Pager.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() && !data.Pager.IsNull() {
 		data.Pager = types.StringValue(value.String())
 	} else if data.Pager.IsNull() {
 		data.Pager = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TelnetTransparent.IsNull() {
 			data.TelnetTransparent = types.BoolValue(true)
@@ -641,7 +641,11 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data LineConsole) toBodyXML(ctx context.Context) string {
+func (data LineConsole) toBodyXML(ctx context.Context, stateArg ...*LineConsole) string {
+	var state *LineConsole
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.AccessClassIngress.IsNull() && !data.AccessClassIngress.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/access-class/ingress", data.AccessClassIngress.ValueString())
@@ -750,7 +754,7 @@ func (data LineConsole) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.UsersGroup) > 0 {
 		for _, item := range data.UsersGroup {
-			basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group"
+			basePath := data.getXPath() + "/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group[group-name='" + item.GroupName.ValueString() + "']"
 			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/group-name", item.GroupName.ValueString())
 			}
@@ -856,6 +860,11 @@ func (data LineConsole) toBodyXML(ctx context.Context) string {
 		}
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

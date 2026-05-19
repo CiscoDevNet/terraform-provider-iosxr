@@ -342,13 +342,13 @@ func (data KeyChain) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "accept-tolerance.tolerance-value"); value.Exists() && !data.AcceptToleranceValue.IsNull() {
+func (data *KeyChain) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("accept-tolerance.tolerance-value"); value.Exists() && !data.AcceptToleranceValue.IsNull() {
 		data.AcceptToleranceValue = types.Int64Value(value.Int())
 	} else if data.AcceptToleranceValue.IsNull() {
 		data.AcceptToleranceValue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "accept-tolerance.infinite"); value.Exists() {
+	if value := res.Get("accept-tolerance.infinite"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AcceptToleranceInfinite.IsNull() {
 			data.AcceptToleranceInfinite = types.BoolValue(true)
@@ -364,7 +364,7 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.MacsecKeys[i].Ckn.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "macsec.keys.key").ForEach(
+		res.Get("macsec.keys.key").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -475,7 +475,7 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "keys.key").ForEach(
+		res.Get("keys.key").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -658,7 +658,7 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "timezone.local"); value.Exists() {
+	if value := res.Get("timezone.local"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TimezoneLocal.IsNull() {
 			data.TimezoneLocal = types.BoolValue(true)
@@ -669,7 +669,7 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 			data.TimezoneLocal = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "timezone.gmt"); value.Exists() {
+	if value := res.Get("timezone.gmt"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TimezoneGmt.IsNull() {
 			data.TimezoneGmt = types.BoolValue(true)
@@ -685,7 +685,11 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data KeyChain) toBodyXML(ctx context.Context) string {
+func (data KeyChain) toBodyXML(ctx context.Context, stateArg ...*KeyChain) string {
+	var state *KeyChain
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.AcceptToleranceValue.IsNull() && !data.AcceptToleranceValue.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/accept-tolerance/tolerance-value", strconv.FormatInt(data.AcceptToleranceValue.ValueInt64(), 10))
@@ -697,7 +701,7 @@ func (data KeyChain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.MacsecKeys) > 0 {
 		for _, item := range data.MacsecKeys {
-			basePath := data.getXPath() + "/macsec/keys/key"
+			basePath := data.getXPath() + "/macsec/keys/key[ckn='" + item.Ckn.ValueString() + "']"
 			if !item.Ckn.IsNull() && !item.Ckn.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/ckn", item.Ckn.ValueString())
 			}
@@ -758,7 +762,7 @@ func (data KeyChain) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Keys) > 0 {
 		for _, item := range data.Keys {
-			basePath := data.getXPath() + "/keys/key"
+			basePath := data.getXPath() + "/keys/key[key-name='" + item.KeyName.ValueString() + "']"
 			if !item.KeyName.IsNull() && !item.KeyName.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/key-name", item.KeyName.ValueString())
 			}
@@ -879,6 +883,11 @@ func (data KeyChain) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

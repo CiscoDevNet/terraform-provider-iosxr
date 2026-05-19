@@ -142,7 +142,11 @@ func (data ControllerOptics) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data ControllerOptics) toBodyXML(ctx context.Context) string {
+func (data ControllerOptics) toBodyXML(ctx context.Context, stateArg ...*ControllerOptics) string {
+	var state *ControllerOptics
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Shutdown.IsNull() && !data.Shutdown.IsUnknown() {
 		if data.Shutdown.ValueBool() {
@@ -200,6 +204,11 @@ func (data ControllerOptics) toBodyXML(ctx context.Context) string {
 		}
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -207,8 +216,8 @@ func (data ControllerOptics) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *ControllerOptics) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+func (data *ControllerOptics) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("shutdown"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.Shutdown.IsNull() {
 			data.Shutdown = types.BoolValue(true)
@@ -219,7 +228,7 @@ func (data *ControllerOptics) updateFromBody(ctx context.Context, res []byte) {
 			data.Shutdown = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "link-status"); value.Exists() {
+	if value := res.Get("link-status"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LinkStatus.IsNull() {
 			data.LinkStatus = types.BoolValue(true)
@@ -230,17 +239,17 @@ func (data *ControllerOptics) updateFromBody(ctx context.Context, res []byte) {
 			data.LinkStatus = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
+	if value := res.Get("description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-controller-optics-cfg:optics.optics-performance-monitoring"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-controller-optics-cfg:optics.optics-performance-monitoring"); value.Exists() {
 		data.PerformanceMonitoring = types.BoolValue(value.Bool())
 	} else if data.PerformanceMonitoring.IsNull() {
 		data.PerformanceMonitoring = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-controller-optics-cfg:optics.transceiver.disable"); value.Exists() {
+	if value := res.Get("Cisco-IOS-XR-controller-optics-cfg:optics.transceiver.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.TransceiverDisable.IsNull() {
 			data.TransceiverDisable = types.BoolValue(true)
@@ -251,12 +260,12 @@ func (data *ControllerOptics) updateFromBody(ctx context.Context, res []byte) {
 			data.TransceiverDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() && !data.Speed.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-optics-speed-cfg:speed"); value.Exists() && !data.Speed.IsNull() {
 		data.Speed = types.StringValue(value.String())
 	} else if data.Speed.IsNull() {
 		data.Speed = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-optics-driver-cfg:breakout"); value.Exists() && !data.Breakout.IsNull() {
+	if value := res.Get("Cisco-IOS-XR-optics-driver-cfg:breakout"); value.Exists() && !data.Breakout.IsNull() {
 		data.Breakout = types.StringValue(value.String())
 	} else if data.Breakout.IsNull() {
 		data.Breakout = types.StringNull()

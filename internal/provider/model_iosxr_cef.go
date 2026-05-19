@@ -171,7 +171,11 @@ func (data CEF) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data CEF) toBodyXML(ctx context.Context) string {
+func (data CEF) toBodyXML(ctx context.Context, stateArg ...*CEF) string {
+	var state *CEF
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.AdjacencyRouteOverrideRib.IsNull() && !data.AdjacencyRouteOverrideRib.IsUnknown() {
 		if data.AdjacencyRouteOverrideRib.ValueBool() {
@@ -236,6 +240,11 @@ func (data CEF) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -243,8 +252,8 @@ func (data CEF) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *CEF) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "adjacency.route.override.rib"); value.Exists() {
+func (data *CEF) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("adjacency.route.override.rib"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.AdjacencyRouteOverrideRib.IsNull() {
 			data.AdjacencyRouteOverrideRib = types.BoolValue(true)
@@ -255,27 +264,27 @@ func (data *CEF) updateFromBody(ctx context.Context, res []byte) {
 			data.AdjacencyRouteOverrideRib = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "platform.lsm.frr-holdtime"); value.Exists() && !data.PlatformLsmFrrHoldtime.IsNull() {
+	if value := res.Get("platform.lsm.frr-holdtime"); value.Exists() && !data.PlatformLsmFrrHoldtime.IsNull() {
 		data.PlatformLsmFrrHoldtime = types.Int64Value(value.Int())
 	} else if data.PlatformLsmFrrHoldtime.IsNull() {
 		data.PlatformLsmFrrHoldtime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "retry.service-time"); value.Exists() && !data.RetryServiceTime.IsNull() {
+	if value := res.Get("retry.service-time"); value.Exists() && !data.RetryServiceTime.IsNull() {
 		data.RetryServiceTime = types.Int64Value(value.Int())
 	} else if data.RetryServiceTime.IsNull() {
 		data.RetryServiceTime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "retry.timeout"); value.Exists() && !data.RetryTimeout.IsNull() {
+	if value := res.Get("retry.timeout"); value.Exists() && !data.RetryTimeout.IsNull() {
 		data.RetryTimeout = types.Int64Value(value.Int())
 	} else if data.RetryTimeout.IsNull() {
 		data.RetryTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "retry.syslog-timer"); value.Exists() && !data.RetrySyslogTimer.IsNull() {
+	if value := res.Get("retry.syslog-timer"); value.Exists() && !data.RetrySyslogTimer.IsNull() {
 		data.RetrySyslogTimer = types.Int64Value(value.Int())
 	} else if data.RetrySyslogTimer.IsNull() {
 		data.RetrySyslogTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encap-sharing.disable"); value.Exists() {
+	if value := res.Get("encap-sharing.disable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.EncapSharingDisable.IsNull() {
 			data.EncapSharingDisable = types.BoolValue(true)
@@ -286,7 +295,7 @@ func (data *CEF) updateFromBody(ctx context.Context, res []byte) {
 			data.EncapSharingDisable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "consistent-hashing.auto-recovery"); value.Exists() {
+	if value := res.Get("consistent-hashing.auto-recovery"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ConsistentHashingAutoRecovery.IsNull() {
 			data.ConsistentHashingAutoRecovery = types.BoolValue(true)
@@ -297,7 +306,7 @@ func (data *CEF) updateFromBody(ctx context.Context, res []byte) {
 			data.ConsistentHashingAutoRecovery = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "proactive-arp-nd.enable"); value.Exists() {
+	if value := res.Get("proactive-arp-nd.enable"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.ProactiveArpNdEnable.IsNull() {
 			data.ProactiveArpNdEnable = types.BoolValue(true)
@@ -308,22 +317,22 @@ func (data *CEF) updateFromBody(ctx context.Context, res []byte) {
 			data.ProactiveArpNdEnable = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "ltrace-multiplier"); value.Exists() && !data.LtraceMultiplier.IsNull() {
+	if value := res.Get("ltrace-multiplier"); value.Exists() && !data.LtraceMultiplier.IsNull() {
 		data.LtraceMultiplier = types.Int64Value(value.Int())
 	} else if data.LtraceMultiplier.IsNull() {
 		data.LtraceMultiplier = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.mode.hierarchical.ecmp.min-paths"); value.Exists() && !data.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() {
+	if value := res.Get("load-balancing.mode.hierarchical.ecmp.min-paths"); value.Exists() && !data.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() {
 		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Value(value.Int())
 	} else if data.LoadBalancingModeHierarchicalEcmpMinPaths.IsNull() {
 		data.LoadBalancingModeHierarchicalEcmpMinPaths = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.mode.hierarchical.ucmp.group-size"); value.Exists() && !data.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() {
+	if value := res.Get("load-balancing.mode.hierarchical.ucmp.group-size"); value.Exists() && !data.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() {
 		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Value(value.Int())
 	} else if data.LoadBalancingModeHierarchicalUcmpGroupSize.IsNull() {
 		data.LoadBalancingModeHierarchicalUcmpGroupSize = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb"); value.Exists() {
+	if value := res.Get("load-balancing.recursive.oor.mode.dampening-and-dlb"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() {
 			data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolValue(true)
@@ -334,17 +343,17 @@ func (data *CEF) updateFromBody(ctx context.Context, res []byte) {
 			data.LoadBalancingRecursiveOorModeDampeningAndDlb = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.dampening.resource-threshold"); value.Exists() && !data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() {
+	if value := res.Get("load-balancing.recursive.oor.mode.dampening-and-dlb.dampening.resource-threshold"); value.Exists() && !data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() {
 		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Value(value.Int())
 	} else if data.LoadBalancingRecursiveOorModeDampeningResourceThreshold.IsNull() {
 		data.LoadBalancingRecursiveOorModeDampeningResourceThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.dlb.resource-threshold"); value.Exists() && !data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() {
+	if value := res.Get("load-balancing.recursive.oor.mode.dampening-and-dlb.dlb.resource-threshold"); value.Exists() && !data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() {
 		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Value(value.Int())
 	} else if data.LoadBalancingRecursiveOorModeDlbResourceThreshold.IsNull() {
 		data.LoadBalancingRecursiveOorModeDlbResourceThreshold = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "load-balancing.recursive.oor.mode.dampening-and-dlb.max-duration"); value.Exists() && !data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() {
+	if value := res.Get("load-balancing.recursive.oor.mode.dampening-and-dlb.max-duration"); value.Exists() && !data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() {
 		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Value(value.Int())
 	} else if data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration.IsNull() {
 		data.LoadBalancingRecursiveOorModeDampeningAndDlbMaxDuration = types.Int64Null()

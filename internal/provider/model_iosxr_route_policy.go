@@ -95,7 +95,11 @@ func (data RoutePolicy) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data RoutePolicy) toBodyXML(ctx context.Context) string {
+func (data RoutePolicy) toBodyXML(ctx context.Context, stateArg ...*RoutePolicy) string {
+	var state *RoutePolicy
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/rpl-route-policy", data.Rpl.ValueString())
@@ -108,6 +112,11 @@ func (data RoutePolicy) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -115,8 +124,8 @@ func (data RoutePolicy) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *RoutePolicy) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rpl-route-policy"); value.Exists() && !data.Rpl.IsNull() {
+func (data *RoutePolicy) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("rpl-route-policy"); value.Exists() && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
 	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()

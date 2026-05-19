@@ -574,7 +574,11 @@ func (data AAAAccounting) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data AAAAccounting) toBodyXML(ctx context.Context) string {
+func (data AAAAccounting) toBodyXML(ctx context.Context, stateArg ...*AAAAccounting) string {
+	var state *AAAAccounting
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if !data.UpdateNewinfo.IsNull() && !data.UpdateNewinfo.IsUnknown() {
 		if data.UpdateNewinfo.ValueBool() {
@@ -586,7 +590,7 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Exec) > 0 {
 		for _, item := range data.Exec {
-			basePath := data.getXPath() + "/exec/accounting-list"
+			basePath := data.getXPath() + "/exec/accounting-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
@@ -676,7 +680,7 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Commands) > 0 {
 		for _, item := range data.Commands {
-			basePath := data.getXPath() + "/commands/accounting-list"
+			basePath := data.getXPath() + "/commands/accounting-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
@@ -786,7 +790,7 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.System) > 0 {
 		for _, item := range data.System {
-			basePath := data.getXPath() + "/system/accounting-list"
+			basePath := data.getXPath() + "/system/accounting-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
@@ -876,7 +880,7 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 	}
 	if len(data.Network) > 0 {
 		for _, item := range data.Network {
-			basePath := data.getXPath() + "/network/accounting-list"
+			basePath := data.getXPath() + "/network/accounting-list[list-name='" + item.List.ValueString() + "']"
 			if !item.List.IsNull() && !item.List.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/list-name", item.List.ValueString())
 			}
@@ -972,6 +976,11 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 
@@ -979,8 +988,8 @@ func (data AAAAccounting) toBodyXML(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "update.newinfo"); value.Exists() {
+func (data *AAAAccounting) updateFromBody(ctx context.Context, res gjson.Result) {
+	if value := res.Get("update.newinfo"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.UpdateNewinfo.IsNull() {
 			data.UpdateNewinfo = types.BoolValue(true)
@@ -991,7 +1000,7 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 			data.UpdateNewinfo = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "update.periodic"); value.Exists() && !data.UpdatePeriodic.IsNull() {
+	if value := res.Get("update.periodic"); value.Exists() && !data.UpdatePeriodic.IsNull() {
 		data.UpdatePeriodic = types.Int64Value(value.Int())
 	} else if data.UpdatePeriodic.IsNull() {
 		data.UpdatePeriodic = types.Int64Null()
@@ -1001,7 +1010,7 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Exec[i].List.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "exec.accounting-list").ForEach(
+		res.Get("exec.accounting-list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1218,7 +1227,7 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Commands[i].List.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "commands.accounting-list").ForEach(
+		res.Get("commands.accounting-list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1483,7 +1492,7 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.System[i].List.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "system.accounting-list").ForEach(
+		res.Get("system.accounting-list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1700,7 +1709,7 @@ func (data *AAAAccounting) updateFromBody(ctx context.Context, res []byte) {
 		keyValues := [...]string{data.Network[i].List.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "network.accounting-list").ForEach(
+		res.Get("network.accounting-list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {

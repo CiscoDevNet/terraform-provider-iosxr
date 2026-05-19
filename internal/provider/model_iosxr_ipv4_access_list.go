@@ -820,13 +820,13 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
-func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
+func (data *IPv4AccessList) updateFromBody(ctx context.Context, res gjson.Result) {
 	for i := range data.Sequences {
 		keys := [...]string{"sequence-number"}
 		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "sequences.sequence").ForEach(
+		res.Get("sequences.sequence").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1822,11 +1822,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 // End of section. //template:end updateFromBody
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
-func (data IPv4AccessList) toBodyXML(ctx context.Context) string {
+func (data IPv4AccessList) toBodyXML(ctx context.Context, stateArg ...*IPv4AccessList) string {
+	var state *IPv4AccessList
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
 	body := netconf.Body{}
 	if len(data.Sequences) > 0 {
 		for _, item := range data.Sequences {
-			basePath := data.getXPath() + "/sequences/sequence"
+			basePath := data.getXPath() + "/sequences/sequence[sequence-number='" + strconv.FormatInt(item.SequenceNumber.ValueInt64(), 10) + "']"
 			if !item.SequenceNumber.IsNull() && !item.SequenceNumber.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/sequence-number", strconv.FormatInt(item.SequenceNumber.ValueInt64(), 10))
 			}
@@ -2385,6 +2389,11 @@ func (data IPv4AccessList) toBodyXML(ctx context.Context) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
 	return bodyString
 }
 

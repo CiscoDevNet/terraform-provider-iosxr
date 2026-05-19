@@ -9,16 +9,37 @@ description: |-
 
 # IOSXR Provider
 
-The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices. The provider supports the **gNMI** (HTTP/2-based) protocol for device communication by default.
+The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices. The provider supports the **gNMI** (HTTP/2-based) protocol for device communication by default and NETCONF as alternative protocol
 
 ## Device Configuration
+The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices using gNMI or NETCONF protocols.
+
+## Supported Protocols
+
+The provider supports two protocols for device communication:
+
+- **gNMI (gRPC Network Management Interface)** - Default protocol, recommended for production use
+- **NETCONF** Alternative protocol for network device configuration and management
 
 ### gNMI (Default)
 
 gNMI is the default protocol and requires the following device configuration:
+## Device Configuration Requirements
+
+### For gNMI (Default)
 
 ```
 grpc
+```
+
+### For NETCONF
+
+```
+netconf-yang agent
+ ssh
+!
+ssh server v2
+ssh server netconf vrf default
 ```
 
 All resources and data sources have been tested with the following releases.
@@ -42,6 +63,26 @@ The following guides are available to help you get started with the IOSXR provid
 
 ## Example Usage
 
-{{tffile "examples/provider/provider.tf"}}
+### Using gNMI (Default)
+
+```terraform
+provider "iosxr" {
+  username = "admin"
+  password = "password"
+  host     = "10.1.1.1"
+  protocol = "gnmi"  # Optional, gnmi is the default
+}
+```
+
+### Using NETCONF
+
+```terraform
+provider "iosxr" {
+  username = "admin"
+  password = "password"
+  host     = "10.1.1.1"  # Default NETCONF port is 830
+  protocol = "netconf"
+}
+```
 
 {{ .SchemaMarkdown | trimspace }}

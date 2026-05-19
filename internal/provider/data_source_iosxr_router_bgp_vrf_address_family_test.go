@@ -123,7 +123,7 @@ func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -131,32 +131,32 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]"
 	attributes = {
 		"vrf-name" = "VRF2"
 	}
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
 	attributes = {
 		"two-byte-as-number" = "65001"
 		"asn2-index" = "2"
 	}
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_yang.PreReq1, ]
 }
 
-resource "iosxr_gnmi" "PreReq3" {
+resource "iosxr_yang" "PreReq3" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
 		"bgp/router-id" = "22.22.22.22"
 	}
-	depends_on = [iosxr_gnmi.PreReq2, ]
+	depends_on = [iosxr_yang.PreReq2, ]
 }
 
-resource "iosxr_gnmi" "PreReq4" {
+resource "iosxr_yang" "PreReq4" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -172,10 +172,10 @@ resource "iosxr_gnmi" "PreReq4" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq3, ]
+	depends_on = [iosxr_yang.PreReq3, ]
 }
 
-resource "iosxr_gnmi" "PreReq5" {
+resource "iosxr_yang" "PreReq5" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -191,7 +191,7 @@ resource "iosxr_gnmi" "PreReq5" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq3, ]
+	depends_on = [iosxr_yang.PreReq3, ]
 }
 
 `
@@ -291,7 +291,7 @@ func testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig() string {
 	config += `	nexthop_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	as_path_loopcheck_out_disable = true` + "\n"
 	config += `	mvpn_single_forwarder_selection = "highest-ip-address"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -49,7 +49,7 @@ func TestAccDataSourceIosxrRoutePolicy(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRoutePolicyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]"
 	attributes = {
 		"set-name" = "PREFIX_SET_1"
@@ -67,7 +67,7 @@ func testAccDataSourceIosxrRoutePolicyConfig() string {
 	config := `resource "iosxr_route_policy" "test" {` + "\n"
 	config += `	route_policy_name = "ROUTE_POLICY_1"` + "\n"
 	config += `	rpl = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

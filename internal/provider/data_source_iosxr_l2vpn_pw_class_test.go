@@ -75,10 +75,8 @@ func TestAccDataSourceIosxrL2VPNPWClass(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
-	attributes = {
-	}
 }
 
 `
@@ -117,7 +115,7 @@ func testAccDataSourceIosxrL2VPNPWClassConfig() string {
 	config += `	encapsulation_mpls_ipv4_source = "1.2.3.4"` + "\n"
 	config += `	backup_disable_delay = 10` + "\n"
 	config += `	mac_withdraw = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

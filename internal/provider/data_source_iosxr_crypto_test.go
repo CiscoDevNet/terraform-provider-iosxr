@@ -99,7 +99,7 @@ func TestAccDataSourceIosxrCrypto(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrCryptoPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=proxy.example.com]"
 	attributes = {
 		"host-name" = "proxy.example.com"
@@ -107,9 +107,6 @@ resource "iosxr_gnmi" "PreReq0" {
 	lists = [
 		{
 			name = "ip-address"
-			key = ""
-			items = [
-			]
 			values = ["1.1.1.1", ]
 		},
 	]
@@ -179,7 +176,7 @@ func testAccDataSourceIosxrCryptoConfig() string {
 	config += `	ca_fqdn_check_ip_address_allow = true` + "\n"
 	config += `	ca_crl_curl_timeout = 10` + "\n"
 	config += `	fips_mode = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

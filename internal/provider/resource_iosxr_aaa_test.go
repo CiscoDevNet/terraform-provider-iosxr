@@ -490,14 +490,14 @@ func iosxrAAAImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrAAAPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
 		"vrf-name" = "VRF1"
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius-server/hosts/host[ordering-index=1][address=10.1.1.1][auth-port=1812][acct-port=1813]"
 	attributes = {
 		"ordering-index" = "1"
@@ -506,10 +506,10 @@ resource "iosxr_gnmi" "PreReq1" {
 		"acct-port" = "1813"
 		"key/seven" = "060506324F41584B"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/hosts/host[ordering-index=1][address=9.0.1.68][port=49]"
 	attributes = {
 		"ordering-index" = "1"
@@ -517,7 +517,7 @@ resource "iosxr_gnmi" "PreReq2" {
 		"port" = "49"
 		"key/seven" = "0235347225301B204F4F0A0A"
 	}
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_yang.PreReq1, ]
 }
 
 `
@@ -533,7 +533,7 @@ func testAccIosxrAAAConfig_minimum() string {
 	config += `		taskgroup_root_lr = true` + "\n"
 	config += `		taskgroup_cisco_support = true` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -986,7 +986,7 @@ func testAccIosxrAAAConfig_all() string {
 	config += `			group_name = "FULL-TGRP"` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

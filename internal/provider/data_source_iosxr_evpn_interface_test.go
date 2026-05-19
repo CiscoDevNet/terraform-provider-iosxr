@@ -65,10 +65,8 @@ func TestAccDataSourceIosxrEVPNInterface(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
-	attributes = {
-	}
 }
 
 `
@@ -98,7 +96,7 @@ func testAccDataSourceIosxrEVPNInterfaceConfig() string {
 	config += `	ethernet_segment_convergence_mac_mobility = true` + "\n"
 	config += `	ethernet_segment_convergence_nexthop_tracking = true` + "\n"
 	config += `	access_signal_bundle_down = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

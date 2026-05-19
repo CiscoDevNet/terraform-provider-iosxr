@@ -87,18 +87,18 @@ func iosxrPerformanceMeasurementEndpointIPv6ImportStateIdFunc(resourceName strin
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
 		"vrf-name" = "VRF1"
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
 	attributes = {
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
 `
@@ -111,7 +111,7 @@ func testAccIosxrPerformanceMeasurementEndpointIPv6Config_minimum() string {
 	config := `resource "iosxr_performance_measurement_endpoint_ipv6" "test" {` + "\n"
 	config += `	address = "2001:db8::1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -138,7 +138,7 @@ func testAccIosxrPerformanceMeasurementEndpointIPv6Config_all() string {
 	config += `		insert_srh_sl_zero = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	segment_routing_te_explicit_reverse_path_list = "SEG_LIST_GLOBAL_REVERSE"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

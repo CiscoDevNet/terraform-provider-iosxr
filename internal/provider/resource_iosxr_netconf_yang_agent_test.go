@@ -35,9 +35,7 @@ import (
 
 func TestAccIosxrNetconfYangAgent(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "ssh", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "with_defaults_support", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "rate_limit", "4096"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_limit", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_idle_timeout", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_absolute_timeout", "1440"))
@@ -97,9 +95,7 @@ func testAccIosxrNetconfYangAgentConfig_minimum() string {
 
 func testAccIosxrNetconfYangAgentConfig_all() string {
 	config := `resource "iosxr_netconf_yang_agent" "test" {` + "\n"
-	config += `	ssh = true` + "\n"
 	config += `	with_defaults_support = true` + "\n"
-	config += `	rate_limit = 4096` + "\n"
 	config += `	session_limit = 50` + "\n"
 	config += `	session_idle_timeout = 30` + "\n"
 	config += `	session_absolute_timeout = 1440` + "\n"

@@ -55,7 +55,7 @@ func TestAccDataSourceIosxrTACACSSourceInterface(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrTACACSSourceInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
 		"vrf-name" = "VRF1"
@@ -75,7 +75,7 @@ func testAccDataSourceIosxrTACACSSourceInterfaceConfig() string {
 	config += `		vrf = "VRF1"` + "\n"
 	config += `		interface = "MgmtEth0/RP0/CPU0/0"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

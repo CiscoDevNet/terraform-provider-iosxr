@@ -152,7 +152,7 @@ func iosxrPTPProfileImportStateIdFunc(resourceName string) resource.ImportStateI
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrPTPProfilePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-ptp-cfg:/ptp"
 	attributes = {
 	}
@@ -167,7 +167,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrPTPProfileConfig_minimum() string {
 	config := `resource "iosxr_ptp_profile" "test" {` + "\n"
 	config += `	profile_name = "Profile-1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -268,7 +268,7 @@ func testAccIosxrPTPProfileConfig_all() string {
 	config += `		clock_class_to_map_from = 13` + "\n"
 	config += `		clock_class_to_map_to = 6` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -229,7 +229,7 @@ func TestAccDataSourceIosxrPCE(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrPCEPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=KEY_CHAIN_1]"
 	attributes = {
 		"key-chain-name" = "KEY_CHAIN_1"
@@ -498,7 +498,7 @@ func testAccDataSourceIosxrPCEConfig() string {
 	config += `	}]` + "\n"
 	config += `	peer_filter_ipv4_access_list = "ACL_1"` + "\n"
 	config += `	hierarchical_underlay_enable_all = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

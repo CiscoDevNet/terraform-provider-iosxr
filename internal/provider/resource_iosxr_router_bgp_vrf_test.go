@@ -181,7 +181,7 @@ func iosxrRouterBGPVRFImportStateIdFunc(resourceName string) resource.ImportStat
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterBGPVRFPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -189,7 +189,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
 	attributes = {
 	}
@@ -218,7 +218,7 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_vrf" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -342,7 +342,7 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 	config += `		graceful_maintenance_bandwidth_aware_percentage_threshold = 75` + "\n"
 	config += `		graceful_maintenance_bandwidth_aware_percentage_threshold_high = 80` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -241,7 +241,7 @@ func iosxrRouterBGPImportStateIdFunc(resourceName string) resource.ImportStateId
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterBGPPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -278,7 +278,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
 	attributes = {
 	}
@@ -306,7 +306,7 @@ resource "iosxr_gnmi" "PreReq1" {
 func testAccIosxrRouterBGPConfig_minimum() string {
 	config := `resource "iosxr_router_bgp" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -511,7 +511,7 @@ func testAccIosxrRouterBGPConfig_all() string {
 	config += `		bind_source_interface = "Loopback0"` + "\n"
 	config += `		shutdown = false` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

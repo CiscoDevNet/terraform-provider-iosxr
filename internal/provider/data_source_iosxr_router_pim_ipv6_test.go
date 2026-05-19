@@ -156,10 +156,8 @@ func TestAccDataSourceIosxrRouterPIMIPv6(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterPIMIPv6PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
-	attributes = {
-	}
 	lists = [
 		{
 			name = "route-policy"
@@ -174,10 +172,8 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-pim-cfg:/router/pim"
-	attributes = {
-	}
 }
 
 `
@@ -306,7 +302,7 @@ func testAccDataSourceIosxrRouterPIMIPv6Config() string {
 	config += `		bfd_fast_detect = true` + "\n"
 	config += `		bsr_border = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

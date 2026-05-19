@@ -181,7 +181,7 @@ func iosxrRouterBGPAddressFamilyImportStateIdFunc(resourceName string) resource.
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
 	attributes = {
 	}
@@ -199,7 +199,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -216,7 +216,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_address_family" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	af_name = "ipv4-unicast"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -349,7 +349,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `		peer_id = 1` + "\n"
 	config += `		peer_sid_index = 101` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

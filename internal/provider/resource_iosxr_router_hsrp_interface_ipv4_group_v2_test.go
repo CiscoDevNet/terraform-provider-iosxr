@@ -92,7 +92,7 @@ func iosxrRouterHSRPInterfaceIPv4GroupV2ImportStateIdFunc(resourceName string) r
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterHSRPInterfaceIPv4GroupV2PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
 	attributes = {
 		"interface-name" = "GigabitEthernet0/0/0/1"
@@ -109,7 +109,7 @@ func testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_minimum() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv4_group_v2" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	group_id = 2345` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -143,7 +143,7 @@ func testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_all() string {
 	config += `	name = "NAME22"` + "\n"
 	config += `	bfd_fast_detect_peer_ipv4 = "45.45.45.4"` + "\n"
 	config += `	bfd_fast_detect_peer_interface = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

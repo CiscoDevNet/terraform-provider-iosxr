@@ -32,8 +32,3 @@ attributes:
           - yang_name: attached
             example: true
 
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing
-    attributes:
-      - name: enable
-        value: <NULL>

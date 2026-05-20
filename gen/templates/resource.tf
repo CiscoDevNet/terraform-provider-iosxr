@@ -1,10 +1,13 @@
 resource "iosxr_{{snakeCase .Name}}" "example" {
+{{- if ne .IntroducedInVersion ""}}
+  # NOTE: This resource is only supported from IOS-XR version {{formatVersionDisplay .IntroducedInVersion}} and above
+{{- end}}
 {{- if ne .RemovedInVersion ""}}
   # NOTE: This resource is not supported from IOS-XR version {{formatVersionDisplay .RemovedInVersion}} and above
   # Only use with versions earlier than {{formatVersionDisplay .RemovedInVersion}}
 {{- end}}
 {{- range  .Attributes}}
-{{- if and (not .ExcludeTest) (not .ExcludeExample) (or (not (len .TestTags)) .IncludeExample) (not .Legacy)}}
+{{- if and (not .ExcludeExample) (not .ExcludeTest) (or (not (len .TestTags)) .IncludeExample (ne .RemovedInVersion ""))}}
 {{- if eq .Type "List"}}
 {{- if ne .AddedInVersion ""}}
   # Supported from version {{formatVersionDisplay .AddedInVersion}}
@@ -15,7 +18,7 @@ resource "iosxr_{{snakeCase .Name}}" "example" {
   {{.TfName}} = [
     {
       {{- range  .Attributes}}
-      {{- if and (not .ExcludeTest) (not .ExcludeExample) (or (not (len .TestTags)) .IncludeExample) (not .Legacy) (or (eq .Type "List") (len .Example))}}
+      {{- if and (not .ExcludeExample) (not .ExcludeTest) (or (not (len .TestTags)) .IncludeExample) (or (eq .Type "List") (len .Example))}}
       {{- if ne .AddedInVersion ""}}
       # Supported from version {{formatVersionDisplay .AddedInVersion}}
       {{- end}}
@@ -26,7 +29,7 @@ resource "iosxr_{{snakeCase .Name}}" "example" {
         {{.TfName}} = [
           {
             {{- range  .Attributes}}
-            {{- if and (not .ExcludeTest) (not .ExcludeExample) (or (not (len .TestTags)) .IncludeExample) (not .Legacy) (or (eq .Type "List") (len .Example))}}
+            {{- if and (not .ExcludeExample) (not .ExcludeTest) (or (not (len .TestTags)) .IncludeExample) (or (eq .Type "List") (len .Example))}}
             {{- if ne .AddedInVersion ""}}
             # Supported from version {{formatVersionDisplay .AddedInVersion}}
             {{- end}}
@@ -37,7 +40,7 @@ resource "iosxr_{{snakeCase .Name}}" "example" {
               {{.TfName}} = [
                 {
                   {{- range  .Attributes}}
-                  {{- if and (not .ExcludeTest) (not .ExcludeExample) (or (not (len .TestTags)) .IncludeExample) (not .Legacy) (or (eq .Type "List") (len .Example))}}
+                  {{- if and (not .ExcludeExample) (not .ExcludeTest) (or (not (len .TestTags)) .IncludeExample) (or (eq .Type "List") (len .Example))}}
                   {{- if ne .AddedInVersion ""}}
                   # Supported from version {{formatVersionDisplay .AddedInVersion}}
                   {{- end}}
@@ -48,7 +51,7 @@ resource "iosxr_{{snakeCase .Name}}" "example" {
                     {{.TfName}} = [
                       {
                         {{- range  .Attributes}}
-                        {{- if and (not .ExcludeTest) (not .ExcludeExample) (or (not (len .TestTags)) .IncludeExample) (not .Legacy) (or (eq .Type "List") (len .Example))}}
+                        {{- if and (not .ExcludeExample) (not .ExcludeTest) (or (not (len .TestTags)) .IncludeExample) (or (eq .Type "List") (len .Example))}}
                         {{- if ne .AddedInVersion ""}}
                         # Supported from version {{formatVersionDisplay .AddedInVersion}}
                         {{- end}}

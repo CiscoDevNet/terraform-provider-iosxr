@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -34,57 +35,77 @@ import (
 // Key: deviceName, Value: normalized version string (e.g., "2442")
 var versionCache sync.Map
 
-// SupportedVersions is the single source of truth for all supported IOS-XR versions.
-// Key: dotted format (user-facing), Value: internal compact format used by validation logic.
-var SupportedVersions = map[string]string{
-	"24.4.2": "2442",
-	"25.2.2": "2522",
-}
+// NormalizeVersion converts any user-facing version string to the canonical
+// internal "MM.mm" (major.minor) dotted format. The patch component is always
+// stripped so that "25.2.1", "25.2.2", and "25.2" all map to the same key "25.2".
+//
+// Accepted inputs:
+//
+//	3-part dotted   "24.4.2" → "24.4"   (patch stripped)
+//	2-part dotted   "25.2"   → "25.2"   (already major.minor)
+//	4-digit compact "2442"   → "24.4"   (legacy format, backward-compat)
+//
+// Returns ("", false) when the input cannot be parsed.
+func NormalizeVersion(version string) (string, bool) {
+	version = strings.TrimSpace(version)
+	if version == "" {
+		return "", false
+	}
 
-// ParseVersion accepts either dotted format ("24.4.2") or compact format ("2442")
-// and returns the internal compact format. Returns ("", false) if unsupported.
-func ParseVersion(version string) (string, bool) {
-	// Already compact format (e.g., "2442")
-	for _, compact := range SupportedVersions {
-		if version == compact {
-			return compact, true
+	// Legacy 4-digit compact format (e.g. "2442", "2512") → convert to dotted major.minor.
+	// Format: first 2 chars = major, 3rd char = minor (patch digit is dropped).
+	if len(version) == 4 && !strings.Contains(version, ".") {
+		if _, err := strconv.Atoi(version); err == nil {
+			return version[0:2] + "." + string(version[2]), true
 		}
 	}
-	// Dotted format (e.g., "24.4.2")
-	if compact, ok := SupportedVersions[version]; ok {
-		return compact, true
+
+	parts := strings.Split(version, ".")
+	switch len(parts) {
+	case 2:
+		// Already "MM.mm" — validate both components are integers.
+		if _, err := strconv.Atoi(parts[0]); err != nil {
+			return "", false
+		}
+		if _, err := strconv.Atoi(parts[1]); err != nil {
+			return "", false
+		}
+		return version, true
+	case 3:
+		// "MM.mm.pp" → strip patch, return "MM.mm".
+		// All three parts must be valid integers (e.g. "24.4.3" → "24.4").
+		if _, err := strconv.Atoi(parts[0]); err != nil {
+			return "", false
+		}
+		if _, err := strconv.Atoi(parts[1]); err != nil {
+			return "", false
+		}
+		if _, err := strconv.Atoi(parts[2]); err != nil {
+			return "", false
+		}
+		return parts[0] + "." + parts[1], true
+	default:
+		return "", false
 	}
-	return "", false
 }
 
-// ValidateSupportedVersion checks if a version (compact or dotted) is supported
+// ParseVersion accepts any supported version format (dotted or compact) and returns
+// the 4-digit internal compact format.  Returns ("", false) if parsing fails.
+// Deprecated: prefer NormalizeVersion directly; ParseVersion is kept for compatibility.
+func ParseVersion(version string) (string, bool) {
+	return NormalizeVersion(version)
+}
+
+// ValidateSupportedVersion checks whether a version string can be successfully normalized.
+// Any well-formed version (e.g., "25.2", "25.2.1", "2521") is accepted.
 func ValidateSupportedVersion(version string) bool {
-	_, ok := ParseVersion(version)
+	_, ok := NormalizeVersion(version)
 	return ok
 }
 
-// SupportedVersionList returns a sorted comma-separated list of supported versions (dotted format)
+// SupportedVersionList returns a human-readable description of accepted version formats.
 func SupportedVersionList() string {
-	versions := make([]string, 0, len(SupportedVersions))
-	for dotted := range SupportedVersions {
-		versions = append(versions, dotted)
-	}
-	// Simple sort for consistent output
-	for i := 0; i < len(versions); i++ {
-		for j := i + 1; j < len(versions); j++ {
-			if versions[i] > versions[j] {
-				versions[i], versions[j] = versions[j], versions[i]
-			}
-		}
-	}
-	result := ""
-	for i, v := range versions {
-		if i > 0 {
-			result += ", "
-		}
-		result += v
-	}
-	return result
+	return "MM.mm.pp (e.g. 25.2.1) or MM.mm (e.g. 25.2) — patch component is ignored, only major.minor matters"
 }
 
 // DetectIosxrVersion queries a device via gNMI to detect its IOS-XR version
@@ -128,9 +149,9 @@ func DetectIosxrVersion(ctx context.Context, client *gnmi.Client, deviceName str
 		return "", fmt.Errorf("unable to auto-detect IOS-XR version from device: %w", err)
 	}
 
-	compact, ok := ParseVersion(version)
+	compact, ok := NormalizeVersion(version)
 	if !ok {
-		return "", fmt.Errorf("detected unsupported IOS-XR version '%s'. Supported versions: %s", version, SupportedVersionList())
+		return "", fmt.Errorf("detected IOS-XR version '%s' could not be parsed. Expected format: %s", version, SupportedVersionList())
 	}
 
 	tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for device '%s': %s", deviceName, version))

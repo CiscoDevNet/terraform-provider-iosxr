@@ -22,6 +22,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"flag"
 	"fmt"
 	"log"
 	"math"
@@ -111,6 +112,7 @@ type YamlConfig struct {
 	Version                 string                `yaml:"version"` // drives type-name suffix; empty for unified files
 	SupportedVersions       []string              // All versions this resource supports (for unified files)
 	BaseVersion             string                // The minimum/base version (first version in SupportedVersions)
+	IntroducedInVersion     string                // Set when this resource only exists from a higher version (not the global min)
 	HasVersionDifferences   bool                  // True if there are version-specific changes (added/removed fields or definitions)
 	Path                    string                `yaml:"path"`
 	AugmentPath             string                `yaml:"augment_path"`
@@ -373,12 +375,13 @@ func contains(s []string, str string) bool {
 	return false
 }
 
-// Templating helper function to generate version suffix for type names (e.g., "2522" -> "V2522")
+// Templating helper function to generate version suffix for type names.
+// Dotted format "24.4" → "V24_4" (dot replaced with underscore for valid Go identifier).
 func VersionSuffix(version string) string {
-	if version == "" {
-		return ""
-	}
-	return "V" + version
+        if version == "" {
+                return ""
+        }
+        return "V" + strings.ReplaceAll(version, ".", "_")
 }
 
 // CollectVersionConstraints recursively collects all attributes that have version constraints
@@ -456,12 +459,19 @@ func hasAttributeVersionDifferences(attributes []YamlConfigAttribute) bool {
 	return false
 }
 
-// FormatVersionDisplay formats a version string for display (e.g., "2442" -> "24.4.2")
+// FormatVersionDisplay formats a version string for display.
+// New dotted format ("25.2", "24.4") is returned as-is.
+// Legacy 4-digit compact format ("2512") is converted to "MM.mm" (patch dropped).
 func FormatVersionDisplay(version string) string {
-	if len(version) == 4 {
-		return fmt.Sprintf("%s.%s.%s", version[0:2], version[2:3], version[3:4])
-	}
-	return version
+        if strings.Contains(version, ".") {
+                return version // already dotted major.minor
+        }
+        if len(version) == 4 {
+                if _, err := strconv.Atoi(version); err == nil {
+                        return version[0:2] + "." + string(version[2])
+                }
+        }
+        return version
 }
 
 // FormatVersionRanges formats version-specific ranges for markdown description
@@ -609,6 +619,29 @@ func resolvePath(e *yang.Entry, path string) *yang.Entry {
 	}
 
 	return e
+}
+
+// safeResolvePath resolves a YANG path without panicking.
+// Returns (entry, true) on success, or (nil, false) if any path element is missing.
+// Used for attributes that may not exist in the target YANG version (e.g. removed nodes).
+func safeResolvePath(e *yang.Entry, path string) (*yang.Entry, bool) {
+	for _, pathElement := range strings.Split(path, "/") {
+		if pathElement == "" {
+			continue
+		}
+		if strings.Contains(pathElement, "[") {
+			pathElement = pathElement[:strings.Index(pathElement, "[")]
+		}
+		if strings.Contains(pathElement, ":") {
+			pathElement = pathElement[strings.Index(pathElement, ":")+1:]
+		}
+		next, ok := e.Dir[pathElement]
+		if !ok {
+			return nil, false
+		}
+		e = next
+	}
+	return e, true
 }
 
 func addKeys(e *yang.Entry, config *YamlConfig) {
@@ -769,25 +802,39 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 		if config.Attributes[ia].Id || config.Attributes[ia].Reference || config.Attributes[ia].NoAugmentConfig {
 			continue
 		}
+		// Use safeResolvePath to skip attributes whose YANG path no longer exists in
+		// this version's model (e.g. removed/legacy nodes in a newer version diff).
+		if _, ok := safeResolvePath(e, config.Attributes[ia].YangName); !ok {
+			continue
+		}
 		parseAttribute(e, &config.Attributes[ia])
 		if config.Attributes[ia].Type == "List" {
 			el := resolvePath(e, config.Attributes[ia].YangName)
 			for iaa := range config.Attributes[ia].Attributes {
-				if config.Attributes[ia].Attributes[iaa].NoAugmentConfig || config.Attributes[ia].Attributes[iaa].Legacy {
+				if config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
+					continue
+				}
+				if _, ok := safeResolvePath(el, config.Attributes[ia].Attributes[iaa].YangName); !ok {
 					continue
 				}
 				parseAttribute(el, &config.Attributes[ia].Attributes[iaa])
 				if config.Attributes[ia].Attributes[iaa].Type == "List" {
 					ell := resolvePath(el, config.Attributes[ia].Attributes[iaa].YangName)
 					for iaaa := range config.Attributes[ia].Attributes[iaa].Attributes {
-						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig || config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Legacy {
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							continue
+						}
+						if _, ok := safeResolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName); !ok {
 							continue
 						}
 						parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
 						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" {
 							elll := resolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName)
 							for iaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes {
-								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig || config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Legacy {
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									continue
+								}
+								if _, ok := safeResolvePath(elll, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].YangName); !ok {
 									continue
 								}
 								parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
@@ -1197,11 +1244,54 @@ func mergeConfigs(base, override YamlConfig) YamlConfig {
 	return merged
 }
 
-func main() {
-	resourceName := ""
+// globToRegex converts a glob-style pattern to a regular expression.
+// A bare '*' becomes '.*', '?' becomes '.', and everything else is
+// treated as a literal regex character so that full regex syntax also works.
+// Examples:
+//
+//	"router_bgp*"          → case-insensitive prefix match
+//	"router_(bgp|isis).*"  → full regex (mixed mode)
+func globToRegex(pattern string) string {
+	var b strings.Builder
+	// If the pattern already looks like a "real" regex (contains anchors, groups,
+	// character classes, alternation, or quantifiers other than *), pass it through
+	// as-is. We detect this by checking for characters that have no glob meaning.
+	isRegex := strings.ContainsAny(pattern, "()[]{}^$|+")
+	if isRegex {
+		return pattern
+	}
+	// Glob mode: escape everything except * and ?
+	for _, ch := range pattern {
+		switch ch {
+		case '*':
+			b.WriteString(".*")
+		case '?':
+			b.WriteString(".")
+		default:
+			b.WriteString(regexp.QuoteMeta(string(ch)))
+		}
+	}
+	return b.String()
+}
 
-	if len(os.Args) == 2 {
-		resourceName = os.Args[1]
+func main() {
+	filterFlag := flag.String("filter", "", `Regex/glob filter for definition names (e.g. --filter="router_bgp*" or --filter="router_(bgp|isis).*")`)
+	flag.Parse()
+
+	// Build the compiled filter regex (nil = no filter = generate all).
+	var filterRegex *regexp.Regexp
+	if *filterFlag != "" {
+		pattern := globToRegex(*filterFlag)
+		var err error
+		filterRegex, err = regexp.Compile("(?i)" + pattern)
+		if err != nil {
+			log.Fatalf("Invalid --filter pattern %q: %v", *filterFlag, err)
+		}
+		log.Printf("Filter active: %q  (compiled regex: %s)", *filterFlag, filterRegex)
+	} else if flag.NArg() == 1 {
+		// Legacy: positional argument treated as an exact (case-insensitive) name match.
+		filterRegex = regexp.MustCompile("(?i)^" + regexp.QuoteMeta(flag.Arg(0)) + "$")
+		log.Printf("Filter (legacy positional): exact match for %q", flag.Arg(0))
 	}
 
 	// Get all version directories and sort them (lowest to highest)
@@ -1289,8 +1379,13 @@ func main() {
 	// NEW UNIFIED APPROACH: Generate ONE file per resource with version metadata
 	// For each resource name, merge ALL versions into a single unified config
 	for defName, versionConfigs := range definitionsByNameAndVersion {
-		if resourceName != "" && !strings.EqualFold(defName, resourceName) {
-			continue
+		if filterRegex != nil {
+			// Match against both the raw name ("Router BGP AF Group") and the
+			// snake_case name ("router_bgp_af_group") so that either form works
+			// in the --filter flag.
+			if !filterRegex.MatchString(defName) && !filterRegex.MatchString(SnakeCase(defName)) {
+				continue
+			}
 		}
 
 		log.Printf("Generating unified '%s' (merging all versions)", defName)
@@ -1331,6 +1426,12 @@ func main() {
 		unifiedConfig.Version = "" // No version suffix in type names
 		unifiedConfig.SupportedVersions = resourceVersions
 		unifiedConfig.BaseVersion = resourceVersions[0] // First version is the base
+
+		// If this resource was introduced in a version above the global minimum,
+		// record it so templates can emit "# Supported from version X".
+		if len(versions) > 0 && resourceVersions[0] != versions[0] {
+			unifiedConfig.IntroducedInVersion = resourceVersions[0]
+		}
 
 		// Fix base version placeholders in VersionRanges
 		fixBaseVersionInRanges(&unifiedConfig, resourceVersions[0])

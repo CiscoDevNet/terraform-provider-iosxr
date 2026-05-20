@@ -29,15 +29,49 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+// versionToInt converts a version string to a comparable integer (major*10 + minor).
+// Handles both the new dotted format ("25.2" → 252) and legacy 4-digit compact
+// format ("2512" → 251, "2442" → 244) so old generated code continues to work.
+func versionToInt(v string) int {
+	if strings.Contains(v, ".") {
+		parts := strings.Split(v, ".")
+		if len(parts) >= 2 {
+			major, err1 := strconv.Atoi(parts[0])
+			minor, err2 := strconv.Atoi(parts[1])
+			if err1 != nil || err2 != nil {
+				return -1
+			}
+			return major*10 + minor
+		}
+		return -1
+	}
+	// Legacy 4-digit compact: "2512" → major=25, minor=1 (patch digit dropped)
+	if len(v) == 4 {
+		if _, err := strconv.Atoi(v); err == nil {
+			major, _ := strconv.Atoi(v[0:2])
+			minor, _ := strconv.Atoi(v[2:3])
+			return major*10 + minor
+		}
+	}
+	// Final fallback: plain integer
+	n, err := strconv.Atoi(v)
+	if err == nil {
+		return n
+	}
+	return -1
+}
+
 // VersionAtLeast checks if the current provider version is at least the required version.
-// Both versions should be in internal format (e.g., "2442", "2522").
+// Accepts the new dotted major.minor format ("25.2", "24.4") as well as legacy
+// 4-digit compact strings ("2512", "2442") for backward compatibility with existing
+// generated code that has not yet been regenerated.
 func VersionAtLeast(currentVersion, requiredVersion string) bool {
 	if currentVersion == "" || requiredVersion == "" {
 		return true // If version is not set, allow all features
 	}
-	current, err1 := strconv.Atoi(currentVersion)
-	required, err2 := strconv.Atoi(requiredVersion)
-	if err1 != nil || err2 != nil {
+	current := versionToInt(currentVersion)
+	required := versionToInt(requiredVersion)
+	if current < 0 || required < 0 {
 		return true // If conversion fails, allow the feature
 	}
 	return current >= required
@@ -438,12 +472,19 @@ func toCamelCase(s string) string {
 	return strings.Join(parts, "")
 }
 
-// FormatVersion converts internal version format to display format
-// e.g., "2442" -> "24.4.2", "2522" -> "25.2.2"
+// FormatVersion converts an internal version string to a user-friendly display string.
+// New dotted format ("25.2", "24.4") is returned as-is.
+// Legacy 4-digit compact format ("2512") is converted to "MM.mm" (patch dropped).
 func FormatVersion(version string) string {
+	// Already dotted (new format) — return as-is
+	if strings.Contains(version, ".") {
+		return version
+	}
+	// Legacy 4-digit compact: "2512" → "25.1"
 	if len(version) == 4 {
-		// Format: XYZZ -> X.Y.Z (e.g., 2442 -> 24.4.2)
-		return fmt.Sprintf("%s.%s.%s", version[0:2], version[2:3], version[3:4])
+		if _, err := strconv.Atoi(version); err == nil {
+			return version[0:2] + "." + string(version[2])
+		}
 	}
 	return version
 }

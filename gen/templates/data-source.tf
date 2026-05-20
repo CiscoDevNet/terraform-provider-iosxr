@@ -1,10 +1,13 @@
 data "iosxr_{{snakeCase .Name}}" "example" {
+{{- if ne .IntroducedInVersion ""}}
+  # NOTE: This data source is only supported from IOS-XR version {{formatVersionDisplay .IntroducedInVersion}} and above
+{{- end}}
 {{- if ne .RemovedInVersion ""}}
   # NOTE: This data source is not supported from IOS-XR version {{formatVersionDisplay .RemovedInVersion}} and above
   # Only use with versions earlier than {{formatVersionDisplay .RemovedInVersion}}
 {{- end}}
 {{- range  .Attributes}}
-{{- if and (or .Id .Reference) (not .Legacy) (len .Example)}}
+{{- if and (or .Id .Reference) (len .Example)}}
 {{- if ne .AddedInVersion ""}}
   # Supported from version {{formatVersionDisplay .AddedInVersion}}
 {{- end}}

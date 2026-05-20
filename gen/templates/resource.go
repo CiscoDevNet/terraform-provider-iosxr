@@ -65,9 +65,9 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Metadata(_ context.Conte
 }
 
 func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
-	resp.Schema = schema.Schema{
-		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "{{.ResDescription}}",
+        resp.Schema = schema.Schema{
+                // This description is used by the documentation generator and the language server.
+                MarkdownDescription: "{{.ResDescription}}{{if ne .IntroducedInVersion ""}}\n\n> **Note:** This resource is only supported from IOS-XR version {{formatVersionDisplay .IntroducedInVersion}} and above.{{end}}{{if ne .RemovedInVersion ""}}\n\n> **Warning:** This resource is not supported from IOS-XR version {{formatVersionDisplay .RemovedInVersion}} and above.{{end}}",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

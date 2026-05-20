@@ -29,12 +29,10 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
@@ -131,11 +129,8 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				Optional:            true,
 			},
 			"iosxr_version": schema.StringAttribute{
-				MarkdownDescription: "IOS-XR version. This determines which resource and data source versions to use. Supported versions: `24.4.2`. If not specified, the provider will attempt to auto-detect the version from each device. This can also be set as the IOSXR_VERSION environment variable.",
+				MarkdownDescription: "IOS-XR version (major.minor). Accepts formats like `24.4`, `24.4.2`, or `25.1` — the patch component is ignored. If not specified, the provider will attempt to auto-detect the version from each device. This can also be set as the IOSXR_VERSION environment variable.",
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("24.4.2"),
-				},
 			},
 			"selected_devices": schema.ListAttribute{
 				MarkdownDescription: "This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.",
@@ -494,8 +489,19 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		autoDetect = true
 		tflog.Info(ctx, "iosxr_version not specified - will auto-detect version from each device")
 	} else {
-		// Convert version to internal format (e.g., "25.2.2" -> "2522", "24.4.2" -> "2442")
-		versionInternal := strings.ReplaceAll(iosxrVersion, ".", "")
+		// Normalize to canonical "MM.mm" major.minor format (patch is stripped).
+		// "25.4.2" → "25.4", "25.4" → "25.4", "24.4.2" → "24.4"
+		versionInternal, ok := helpers.NormalizeVersion(iosxrVersion)
+		if !ok {
+			resp.Diagnostics.AddError(
+				"Invalid IOS-XR Version Format",
+				fmt.Sprintf(
+					"Cannot parse iosxr_version '%s'. Accepted formats: 'MM.mm.pp' (e.g. '25.4.2') or 'MM.mm' (e.g. '25.4').",
+					iosxrVersion,
+				),
+			)
+			return
+		}
 		data.Version = versionInternal
 		p.version = versionInternal
 		tflog.Info(ctx, fmt.Sprintf("Using explicitly configured IOS-XR version: %s (internal: %s)", iosxrVersion, versionInternal))

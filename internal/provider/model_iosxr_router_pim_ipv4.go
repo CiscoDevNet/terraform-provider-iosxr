@@ -394,7 +394,7 @@ func (data RouterPIMIPv4Data) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterPIMIPv4) toBody(ctx context.Context) string {
+func (data RouterPIMIPv4) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.RpStaticDeny.IsNull() && !data.RpStaticDeny.IsUnknown() {
 		body, _ = sjson.Set(body, "rp-static-deny", data.RpStaticDeny.ValueString())
@@ -1073,8 +1073,29 @@ func (data RouterPIMIPv4) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterPIMIPv4) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterPIMIPv4) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterPIMIPv4) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.RpAddresses {
 		keys := [...]string{"address"}
@@ -5503,7 +5524,6 @@ func (data *RouterPIMIPv4) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterPIMIPv4) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Interfaces {

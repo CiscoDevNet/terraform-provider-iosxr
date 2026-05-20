@@ -55,12 +55,33 @@ func SnakeCase(s string) string {
 }
 
 func main() {
-	items, _ := os.ReadDir(definitionsPath)
-	configs := make([]YamlConfig, len(items))
+	// Find the base version directory (lowest version = base)
+	versionDirs, err := os.ReadDir(definitionsPath)
+	if err != nil {
+		log.Fatalf("Error reading definitions directory: %v", err)
+	}
 
-	// Load configs
-	for i, filename := range items {
-		yamlFile, err := os.ReadFile(filepath.Join(definitionsPath, filename.Name()))
+	// Find first version directory (base version)
+	baseVersionPath := ""
+	for _, d := range versionDirs {
+		if d.IsDir() {
+			baseVersionPath = filepath.Join(definitionsPath, d.Name())
+			break
+		}
+	}
+	if baseVersionPath == "" {
+		log.Fatalf("No version directories found in %s", definitionsPath)
+	}
+
+	items, _ := os.ReadDir(baseVersionPath)
+	configs := make([]YamlConfig, 0)
+
+	// Load configs from base version only
+	for _, filename := range items {
+		if filepath.Ext(filename.Name()) != ".yaml" {
+			continue
+		}
+		yamlFile, err := os.ReadFile(filepath.Join(baseVersionPath, filename.Name()))
 		if err != nil {
 			log.Fatalf("Error reading file: %v", err)
 		}
@@ -70,7 +91,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error parsing yaml: %v", err)
 		}
-		configs[i] = config
+		configs = append(configs, config)
 	}
 
 	for i := range configs {

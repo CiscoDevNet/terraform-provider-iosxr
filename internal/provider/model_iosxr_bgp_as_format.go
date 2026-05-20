@@ -23,9 +23,11 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // End of section. //template:end imports
@@ -58,41 +60,82 @@ func (data BGPASFormatData) getPath() string {
 
 // End of section. //template:end getPath
 
-func (data BGPASFormat) toBody(ctx context.Context) string {
-	body := ""
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
+
+func (data BGPASFormat) toBody(ctx context.Context, providerVersion string) string {
+	body := "{}"
 	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
-		body = `"` + data.AsFormat.ValueString() + `"`
+		body, _ = sjson.Set(body, "as-format", data.AsFormat.ValueString())
 	}
 	return body
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data BGPASFormat) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data BGPASFormat) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
-	if value := strings.Trim(string(res), "\""); value != "" && !data.AsFormat.IsNull() {
-		data.AsFormat = types.StringValue(value)
+	if value := gjson.GetBytes(res, "as-format"); value.Exists() && !data.AsFormat.IsNull() {
+		data.AsFormat = types.StringValue(value.String())
 	} else {
 		data.AsFormat = types.StringNull()
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *BGPASFormat) fromBody(ctx context.Context, res []byte) {
-	if value := strings.Trim(string(res), "\""); value != "" {
-		data.AsFormat = types.StringValue(value)
+	if value := gjson.GetBytes(res, "as-format"); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *BGPASFormatData) fromBody(ctx context.Context, res []byte) {
-	if value := strings.Trim(string(res), "\""); value != "" {
-		data.AsFormat = types.StringValue(value)
+	if value := gjson.GetBytes(res, "as-format"); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *BGPASFormat) getDeletedItems(ctx context.Context, state BGPASFormat) []string {
 	deletedItems := make([]string, 0)
 	if !state.AsFormat.IsNull() && data.AsFormat.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/as-format", state.getPath()))
 	}
 	return deletedItems
 }
+
+// End of section. //template:end getDeletedItems
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
@@ -103,10 +146,13 @@ func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context) []string {
 
 // End of section. //template:end getEmptyLeafsDelete
 
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *BGPASFormat) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.AsFormat.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/as-format", data.getPath()))
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

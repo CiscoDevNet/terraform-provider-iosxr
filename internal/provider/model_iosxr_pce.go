@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -400,7 +401,7 @@ func (data PCEData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data PCE) toBody(ctx context.Context) string {
+func (data PCE) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AddressIpv4.IsNull() && !data.AddressIpv4.IsUnknown() {
 		body, _ = sjson.Set(body, "address.ipv4", data.AddressIpv4.ValueString())
@@ -1259,8 +1260,29 @@ func (data PCE) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data PCE) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data PCE) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *PCE) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address.ipv4"); value.Exists() && !data.AddressIpv4.IsNull() {
 		data.AddressIpv4 = types.StringValue(value.String())
@@ -6815,7 +6837,6 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *PCE) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.HierarchicalUnderlayEnableAll.IsNull() {

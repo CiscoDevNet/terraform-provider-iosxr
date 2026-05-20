@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -107,7 +108,7 @@ func (data CEFLoadBalancing8000Data) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data CEFLoadBalancing8000) toBody(ctx context.Context) string {
+func (data CEFLoadBalancing8000) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.PlatformLoadBalanceHashRotate.IsNull() && !data.PlatformLoadBalanceHashRotate.IsUnknown() {
 		body, _ = sjson.Set(body, "platform.load-balance.hash.rotate", strconv.FormatInt(data.PlatformLoadBalanceHashRotate.ValueInt64(), 10))
@@ -206,8 +207,29 @@ func (data CEFLoadBalancing8000) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data CEFLoadBalancing8000) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data CEFLoadBalancing8000) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "platform.load-balance.hash.rotate"); value.Exists() && !data.PlatformLoadBalanceHashRotate.IsNull() {
 		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
@@ -987,7 +1009,6 @@ func (data *CEFLoadBalancing8000) getEmptyLeafsDelete(ctx context.Context) []str
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *CEFLoadBalancing8000) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {

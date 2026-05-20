@@ -222,6 +222,36 @@ func (data LLDP) toBody(ctx context.Context, providerVersion string) string {
 // GetVersionConstraints returns the version constraints for all fields
 func (data LLDP) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:        "chassis_id_type_chassis_component",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "chassis_id_type_interface_alias",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "chassis_id_type_port_component",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "chassis_id_type_mac_address",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "chassis_id_type_network_address",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "chassis_id_type_interface_name",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "chassis_id_type_local",
+			RemovedInVersion: "25.1",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}

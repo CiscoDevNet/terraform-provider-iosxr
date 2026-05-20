@@ -58,7 +58,7 @@ func (r *HWModuleProfile8000Resource) Metadata(_ context.Context, req resource.M
 func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the HW Module Profile configuration on Cisco 8000 series routers.",
+		MarkdownDescription: "This resource can manage the HW Module Profile 8000 configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -666,6 +666,17 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 								},
 							},
 						},
+						"non_pfc_tcs": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("configure to allow lossy TCs to evict.").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+						},
+						"non_pfc_tcs_max_non_pfc_voqs": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("max lossy voqs to evict").AddIntegerRangeDescription(1, 3800).String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 3800),
+							},
+						},
 					},
 				},
 			},
@@ -777,6 +788,10 @@ func (r *HWModuleProfile8000Resource) Create(ctx context.Context, req resource.C
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -910,6 +925,10 @@ func (r *HWModuleProfile8000Resource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -961,6 +980,13 @@ func (r *HWModuleProfile8000Resource) Delete(ctx context.Context, req resource.D
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
+	}
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {

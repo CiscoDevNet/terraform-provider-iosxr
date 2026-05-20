@@ -321,6 +321,18 @@ func (d *CryptoDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							MarkdownDescription: "Certificate based authentication in TLS handshake during bootstrap",
 							Computed:            true,
 						},
+						"enrollment_authentication_profile": schema.StringAttribute{
+							MarkdownDescription: "Authentication profile used during certificate enrollment",
+							Computed:            true,
+						},
+						"re_enrollment_authentication_profile": schema.StringAttribute{
+							MarkdownDescription: "Authentication profile used during certificate re-enrollment",
+							Computed:            true,
+						},
+						"ssl_profile": schema.StringAttribute{
+							MarkdownDescription: "SSL profile parameters used during TLS/mTLS handshake",
+							Computed:            true,
+						},
 					},
 				},
 			},

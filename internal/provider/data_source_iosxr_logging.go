@@ -168,7 +168,7 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				Computed:            true,
 			},
 			"buffered_entries_count": schema.Int64Attribute{
-				MarkdownDescription: "Number of syslog entries in buffer",
+				MarkdownDescription: "Syslog in buffer",
 				Computed:            true,
 			},
 			"buffered_size": schema.Int64Attribute{
@@ -258,6 +258,30 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						},
 						"discriminator_nomatch3": schema.StringAttribute{
 							MarkdownDescription: "Set no-match discriminator 3",
+							Computed:            true,
+						},
+						"local_accounting": schema.BoolAttribute{
+							MarkdownDescription: "Store only the command accounting logs",
+							Computed:            true,
+						},
+						"send_to_remote": schema.BoolAttribute{
+							MarkdownDescription: "Send the command accounting logs to syslog server",
+							Computed:            true,
+						},
+						"send_to_remote_facility": schema.StringAttribute{
+							MarkdownDescription: "Modify message logging facilities",
+							Computed:            true,
+						},
+						"path_maxfilesize": schema.Int64Attribute{
+							MarkdownDescription: "Set max file size",
+							Computed:            true,
+						},
+						"path_path_name": schema.StringAttribute{
+							MarkdownDescription: "File path (e.g. /disk0: )",
+							Computed:            true,
+						},
+						"path_severity": schema.StringAttribute{
+							MarkdownDescription: "severity",
 							Computed:            true,
 						},
 					},
@@ -405,6 +429,54 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 			},
 			"events_precfg_suppression_timeout": schema.Int64Attribute{
 				MarkdownDescription: "Timeout (in minutes) for pre-config events suppression (default 15)",
+				Computed:            true,
+			},
+			"buffered_buffered_level": schema.StringAttribute{
+				MarkdownDescription: "buffered level",
+				Computed:            true,
+			},
+			"buffered_log_buffer_size": schema.Int64Attribute{
+				MarkdownDescription: "Logging buffer size",
+				Computed:            true,
+			},
+			"console_console_level": schema.StringAttribute{
+				MarkdownDescription: "console level",
+				Computed:            true,
+			},
+			"console_discriminator_match1": schema.StringAttribute{
+				MarkdownDescription: "Set match discriminator 1",
+				Computed:            true,
+			},
+			"console_discriminator_match2": schema.StringAttribute{
+				MarkdownDescription: "Set match discriminator 2",
+				Computed:            true,
+			},
+			"console_discriminator_match3": schema.StringAttribute{
+				MarkdownDescription: "Set match discriminator 3",
+				Computed:            true,
+			},
+			"console_discriminator_nomatch1": schema.StringAttribute{
+				MarkdownDescription: "Set no-match discriminator 1",
+				Computed:            true,
+			},
+			"console_discriminator_nomatch2": schema.StringAttribute{
+				MarkdownDescription: "Set no-match discriminator 2",
+				Computed:            true,
+			},
+			"console_discriminator_nomatch3": schema.StringAttribute{
+				MarkdownDescription: "Set no-match discriminator 3",
+				Computed:            true,
+			},
+			"facility_all": schema.StringAttribute{
+				MarkdownDescription: "All supported facilities",
+				Computed:            true,
+			},
+			"history_level": schema.StringAttribute{
+				MarkdownDescription: "history level",
+				Computed:            true,
+			},
+			"monitor_monitor_level": schema.StringAttribute{
+				MarkdownDescription: "Set monitor logging",
 				Computed:            true,
 			},
 		},

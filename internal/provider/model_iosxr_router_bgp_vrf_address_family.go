@@ -286,6 +286,7 @@ type RouterBGPVRFAddressFamilyRedistributeOspf struct {
 	Metric                              types.Int64  `tfsdk:"metric"`
 	Multipath                           types.Bool   `tfsdk:"multipath"`
 	RoutePolicy                         types.String `tfsdk:"route_policy"`
+	DefaultPolicyActionIn               types.String `tfsdk:"default_policy_action_in"`
 }
 type RouterBGPVRFAddressFamilyRedistributeOspfv3 struct {
 	RouterTag                           types.String `tfsdk:"router_tag"`
@@ -323,6 +324,7 @@ type RouterBGPVRFAddressFamilyRedistributeOspfv3 struct {
 	Metric                              types.Int64  `tfsdk:"metric"`
 	Multipath                           types.Bool   `tfsdk:"multipath"`
 	RoutePolicy                         types.String `tfsdk:"route_policy"`
+	DefaultPolicyActionIn               types.String `tfsdk:"default_policy_action_in"`
 }
 type RouterBGPVRFAddressFamilyRedistributeEigrp struct {
 	InstanceName          types.String `tfsdk:"instance_name"`
@@ -332,6 +334,7 @@ type RouterBGPVRFAddressFamilyRedistributeEigrp struct {
 	Metric                types.Int64  `tfsdk:"metric"`
 	Multipath             types.Bool   `tfsdk:"multipath"`
 	RoutePolicy           types.String `tfsdk:"route_policy"`
+	DefaultPolicyActionIn types.String `tfsdk:"default_policy_action_in"`
 }
 type RouterBGPVRFAddressFamilyRedistributeIsis struct {
 	InstanceName                types.String `tfsdk:"instance_name"`
@@ -345,6 +348,7 @@ type RouterBGPVRFAddressFamilyRedistributeIsis struct {
 	Metric                      types.Int64  `tfsdk:"metric"`
 	Multipath                   types.Bool   `tfsdk:"multipath"`
 	RoutePolicy                 types.String `tfsdk:"route_policy"`
+	DefaultPolicyActionIn       types.String `tfsdk:"default_policy_action_in"`
 }
 
 // End of section. //template:end types
@@ -954,6 +958,9 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context, providerVersio
 			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
 			}
+			if !item.DefaultPolicyActionIn.IsNull() && !item.DefaultPolicyActionIn.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"default-policy-action-in", item.DefaultPolicyActionIn.ValueString())
+			}
 		}
 	}
 	if len(data.RedistributeOspfv3) > 0 {
@@ -1128,6 +1135,9 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context, providerVersio
 			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
 			}
+			if !item.DefaultPolicyActionIn.IsNull() && !item.DefaultPolicyActionIn.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"default-policy-action-in", item.DefaultPolicyActionIn.ValueString())
+			}
 		}
 	}
 	if len(data.RedistributeEigrp) > 0 {
@@ -1161,6 +1171,9 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context, providerVersio
 			}
 			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.eigrps.eigrp"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
+			}
+			if !item.DefaultPolicyActionIn.IsNull() && !item.DefaultPolicyActionIn.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.eigrps.eigrp"+"."+strconv.Itoa(index)+"."+"default-policy-action-in", item.DefaultPolicyActionIn.ValueString())
 			}
 		}
 	}
@@ -1216,6 +1229,9 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context, providerVersio
 			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
 			}
+			if !item.DefaultPolicyActionIn.IsNull() && !item.DefaultPolicyActionIn.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"default-policy-action-in", item.DefaultPolicyActionIn.ValueString())
+			}
 		}
 	}
 	return body
@@ -1228,6 +1244,24 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context, providerVersio
 // GetVersionConstraints returns the version constraints for all fields
 func (data RouterBGPVRFAddressFamily) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "redistribute_ospf.default_policy_action_in",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "redistribute_ospfv3.default_policy_action_in",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "redistribute_eigrp.default_policy_action_in",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "redistribute_isis.default_policy_action_in",
+			AddedInVersion: "25.1",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -1998,6 +2032,11 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		} else {
 			data.RedistributeOspf[i].RoutePolicy = types.StringNull()
 		}
+		if value := r.Get("default-policy-action-in"); value.Exists() && !data.RedistributeOspf[i].DefaultPolicyActionIn.IsNull() {
+			data.RedistributeOspf[i].DefaultPolicyActionIn = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspf[i].DefaultPolicyActionIn = types.StringNull()
+		}
 	}
 	for i := range data.RedistributeOspfv3 {
 		keys := [...]string{"ospfv3-router-tag"}
@@ -2325,6 +2364,11 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		} else {
 			data.RedistributeOspfv3[i].RoutePolicy = types.StringNull()
 		}
+		if value := r.Get("default-policy-action-in"); value.Exists() && !data.RedistributeOspfv3[i].DefaultPolicyActionIn.IsNull() {
+			data.RedistributeOspfv3[i].DefaultPolicyActionIn = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspfv3[i].DefaultPolicyActionIn = types.StringNull()
+		}
 	}
 	for i := range data.RedistributeEigrp {
 		keys := [...]string{"eigrp-name"}
@@ -2399,6 +2443,11 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 			data.RedistributeEigrp[i].RoutePolicy = types.StringValue(value.String())
 		} else {
 			data.RedistributeEigrp[i].RoutePolicy = types.StringNull()
+		}
+		if value := r.Get("default-policy-action-in"); value.Exists() && !data.RedistributeEigrp[i].DefaultPolicyActionIn.IsNull() {
+			data.RedistributeEigrp[i].DefaultPolicyActionIn = types.StringValue(value.String())
+		} else {
+			data.RedistributeEigrp[i].DefaultPolicyActionIn = types.StringNull()
 		}
 	}
 	for i := range data.RedistributeIsis {
@@ -2510,6 +2559,11 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 			data.RedistributeIsis[i].RoutePolicy = types.StringValue(value.String())
 		} else {
 			data.RedistributeIsis[i].RoutePolicy = types.StringNull()
+		}
+		if value := r.Get("default-policy-action-in"); value.Exists() && !data.RedistributeIsis[i].DefaultPolicyActionIn.IsNull() {
+			data.RedistributeIsis[i].DefaultPolicyActionIn = types.StringValue(value.String())
+		} else {
+			data.RedistributeIsis[i].DefaultPolicyActionIn = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "redistribute.connected"); !data.RedistributeConnected.IsNull() {
@@ -3256,6 +3310,9 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("default-policy-action-in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
+			}
 			data.RedistributeOspf = append(data.RedistributeOspf, item)
 			return true
 		})
@@ -3433,6 +3490,9 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("default-policy-action-in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
+			}
 			data.RedistributeOspfv3 = append(data.RedistributeOspfv3, item)
 			return true
 		})
@@ -3469,6 +3529,9 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("default-policy-action-in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
 			}
 			data.RedistributeEigrp = append(data.RedistributeEigrp, item)
 			return true
@@ -3526,6 +3589,9 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("default-policy-action-in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
 			}
 			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
@@ -4131,6 +4197,9 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("default-policy-action-in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
+			}
 			data.RedistributeOspf = append(data.RedistributeOspf, item)
 			return true
 		})
@@ -4308,6 +4377,9 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("default-policy-action-in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
+			}
 			data.RedistributeOspfv3 = append(data.RedistributeOspfv3, item)
 			return true
 		})
@@ -4344,6 +4416,9 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("default-policy-action-in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
 			}
 			data.RedistributeEigrp = append(data.RedistributeEigrp, item)
 			return true
@@ -4401,6 +4476,9 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("default-policy-action-in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
 			}
 			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
@@ -4761,6 +4839,9 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 				found = false
 			}
 			if found {
+				if !state.RedistributeIsis[i].DefaultPolicyActionIn.IsNull() && data.RedistributeIsis[j].DefaultPolicyActionIn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/default-policy-action-in", state.getPath(), keyString))
+				}
 				if !state.RedistributeIsis[i].RoutePolicy.IsNull() && data.RedistributeIsis[j].RoutePolicy.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/route-policy", state.getPath(), keyString))
 				}
@@ -4821,6 +4902,9 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 				found = false
 			}
 			if found {
+				if !state.RedistributeEigrp[i].DefaultPolicyActionIn.IsNull() && data.RedistributeEigrp[j].DefaultPolicyActionIn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/eigrps/eigrp%v/default-policy-action-in", state.getPath(), keyString))
+				}
 				if !state.RedistributeEigrp[i].RoutePolicy.IsNull() && data.RedistributeEigrp[j].RoutePolicy.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/eigrps/eigrp%v/route-policy", state.getPath(), keyString))
 				}
@@ -4869,6 +4953,9 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 				found = false
 			}
 			if found {
+				if !state.RedistributeOspfv3[i].DefaultPolicyActionIn.IsNull() && data.RedistributeOspfv3[j].DefaultPolicyActionIn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/default-policy-action-in", state.getPath(), keyString))
+				}
 				if !state.RedistributeOspfv3[i].RoutePolicy.IsNull() && data.RedistributeOspfv3[j].RoutePolicy.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/route-policy", state.getPath(), keyString))
 				}
@@ -5001,6 +5088,9 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 				found = false
 			}
 			if found {
+				if !state.RedistributeOspf[i].DefaultPolicyActionIn.IsNull() && data.RedistributeOspf[j].DefaultPolicyActionIn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/default-policy-action-in", state.getPath(), keyString))
+				}
 				if !state.RedistributeOspf[i].RoutePolicy.IsNull() && data.RedistributeOspf[j].RoutePolicy.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/route-policy", state.getPath(), keyString))
 				}

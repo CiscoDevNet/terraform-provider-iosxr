@@ -1,0 +1,29 @@
+---
+name: Crypto
+path: Cisco-IOS-XR-um-crypto-cfg:/crypto
+doc_category: Crypto
+attributes:
+  - yang_name: ca/trustpoint/trustpoints/trustpoint
+    tf_name: ca_trustpoints
+    type: List
+    attributes:
+      - yang_name: enrollment/authentication-profile
+        tf_name: enrollment_authentication_profile
+        description: "Authentication profile used during certificate enrollment"
+        type: String
+        example: EAP_PROFILE
+
+      - yang_name: re-enrollment/authentication-profile
+        tf_name: re_enrollment_authentication_profile
+        description: "Authentication profile used during certificate re-enrollment"
+        type: String
+        example: EAP_PROFILE
+
+      - yang_name: ssl-profile
+        tf_name: ssl_profile
+        description: "SSL profile parameters used during TLS/mTLS handshake"
+        type: String
+        example: MTLS_PROFILE
+
+      - yang_name: method/est/credential
+        legacy: true

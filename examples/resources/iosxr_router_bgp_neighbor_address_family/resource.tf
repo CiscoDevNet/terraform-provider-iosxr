@@ -36,4 +36,8 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
   accept_own                                          = true
   slow_peer_dynamic                                   = true
   slow_peer_dynamic_threshold                         = 260
+  # Supported from version 25.1
+  default_policy_action_in = "accept"
+  # Supported from version 25.1
+  default_policy_action_out = "accept"
 }

@@ -1,0 +1,55 @@
+---
+name: Router BGP VRF Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: redistribute/eigrps/eigrp
+    tf_name: redistribute_eigrp
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        tf_name: default_policy_action_in
+        description: "Set a default action if a route does not satify the policy definition"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept
+  - yang_name: redistribute/isis-processes/isis-process
+    tf_name: redistribute_isis
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        tf_name: default_policy_action_in
+        description: "Set a default action if a route does not satify the policy definition"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept
+  - yang_name: redistribute/ospfs/ospf
+    tf_name: redistribute_ospf
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        tf_name: default_policy_action_in
+        description: "Set a default action if a route does not satify the policy definition"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept
+  - yang_name: redistribute/ospfv3s/ospfv3
+    tf_name: redistribute_ospfv3
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        tf_name: default_policy_action_in
+        description: "Set a default action if a route does not satify the policy definition"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept
+
+

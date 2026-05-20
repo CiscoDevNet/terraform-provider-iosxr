@@ -93,6 +93,18 @@ type Logging struct {
 	EventsThreshold                types.Int64               `tfsdk:"events_threshold"`
 	EventsPrecfgSuppression        types.String              `tfsdk:"events_precfg_suppression"`
 	EventsPrecfgSuppressionTimeout types.Int64               `tfsdk:"events_precfg_suppression_timeout"`
+	BufferedBufferedLevel          types.String              `tfsdk:"buffered_buffered_level"`
+	BufferedLogBufferSize          types.Int64               `tfsdk:"buffered_log_buffer_size"`
+	ConsoleConsoleLevel            types.String              `tfsdk:"console_console_level"`
+	ConsoleDiscriminatorMatch1     types.String              `tfsdk:"console_discriminator_match1"`
+	ConsoleDiscriminatorMatch2     types.String              `tfsdk:"console_discriminator_match2"`
+	ConsoleDiscriminatorMatch3     types.String              `tfsdk:"console_discriminator_match3"`
+	ConsoleDiscriminatorNomatch1   types.String              `tfsdk:"console_discriminator_nomatch1"`
+	ConsoleDiscriminatorNomatch2   types.String              `tfsdk:"console_discriminator_nomatch2"`
+	ConsoleDiscriminatorNomatch3   types.String              `tfsdk:"console_discriminator_nomatch3"`
+	FacilityAll                    types.String              `tfsdk:"facility_all"`
+	HistoryLevel                   types.String              `tfsdk:"history_level"`
+	MonitorMonitorLevel            types.String              `tfsdk:"monitor_monitor_level"`
 }
 
 type LoggingData struct {
@@ -152,6 +164,18 @@ type LoggingData struct {
 	EventsThreshold                types.Int64               `tfsdk:"events_threshold"`
 	EventsPrecfgSuppression        types.String              `tfsdk:"events_precfg_suppression"`
 	EventsPrecfgSuppressionTimeout types.Int64               `tfsdk:"events_precfg_suppression_timeout"`
+	BufferedBufferedLevel          types.String              `tfsdk:"buffered_buffered_level"`
+	BufferedLogBufferSize          types.Int64               `tfsdk:"buffered_log_buffer_size"`
+	ConsoleConsoleLevel            types.String              `tfsdk:"console_console_level"`
+	ConsoleDiscriminatorMatch1     types.String              `tfsdk:"console_discriminator_match1"`
+	ConsoleDiscriminatorMatch2     types.String              `tfsdk:"console_discriminator_match2"`
+	ConsoleDiscriminatorMatch3     types.String              `tfsdk:"console_discriminator_match3"`
+	ConsoleDiscriminatorNomatch1   types.String              `tfsdk:"console_discriminator_nomatch1"`
+	ConsoleDiscriminatorNomatch2   types.String              `tfsdk:"console_discriminator_nomatch2"`
+	ConsoleDiscriminatorNomatch3   types.String              `tfsdk:"console_discriminator_nomatch3"`
+	FacilityAll                    types.String              `tfsdk:"facility_all"`
+	HistoryLevel                   types.String              `tfsdk:"history_level"`
+	MonitorMonitorLevel            types.String              `tfsdk:"monitor_monitor_level"`
 }
 type LoggingFile struct {
 	FileName                                 types.String `tfsdk:"file_name"`
@@ -165,6 +189,12 @@ type LoggingFile struct {
 	DiscriminatorNomatch1                    types.String `tfsdk:"discriminator_nomatch1"`
 	DiscriminatorNomatch2                    types.String `tfsdk:"discriminator_nomatch2"`
 	DiscriminatorNomatch3                    types.String `tfsdk:"discriminator_nomatch3"`
+	LocalAccounting                          types.Bool   `tfsdk:"local_accounting"`
+	SendToRemote                             types.Bool   `tfsdk:"send_to_remote"`
+	SendToRemoteFacility                     types.String `tfsdk:"send_to_remote_facility"`
+	PathMaxfilesize                          types.Int64  `tfsdk:"path_maxfilesize"`
+	PathPathName                             types.String `tfsdk:"path_path_name"`
+	PathSeverity                             types.String `tfsdk:"path_severity"`
 }
 type LoggingSourceInterfaces struct {
 	Name types.String                  `tfsdk:"name"`
@@ -223,22 +253,22 @@ func (data Logging) toBody(ctx context.Context, providerVersion string) string {
 		body, _ = sjson.Set(body, "console-logging.console-log-facility.console-facility-level", data.ConsoleFacility.ValueString())
 	}
 	if !data.MonitorDiscriminatorMatch1.IsNull() && !data.MonitorDiscriminatorMatch1.IsUnknown() {
-		body, _ = sjson.Set(body, "monitor-discriminator.match1", data.MonitorDiscriminatorMatch1.ValueString())
+		body, _ = sjson.Set(body, "monitor.discriminator.match1", data.MonitorDiscriminatorMatch1.ValueString())
 	}
 	if !data.MonitorDiscriminatorMatch2.IsNull() && !data.MonitorDiscriminatorMatch2.IsUnknown() {
-		body, _ = sjson.Set(body, "monitor-discriminator.match2", data.MonitorDiscriminatorMatch2.ValueString())
+		body, _ = sjson.Set(body, "monitor.discriminator.match2", data.MonitorDiscriminatorMatch2.ValueString())
 	}
 	if !data.MonitorDiscriminatorMatch3.IsNull() && !data.MonitorDiscriminatorMatch3.IsUnknown() {
-		body, _ = sjson.Set(body, "monitor-discriminator.match3", data.MonitorDiscriminatorMatch3.ValueString())
+		body, _ = sjson.Set(body, "monitor.discriminator.match3", data.MonitorDiscriminatorMatch3.ValueString())
 	}
 	if !data.MonitorDiscriminatorNomatch1.IsNull() && !data.MonitorDiscriminatorNomatch1.IsUnknown() {
-		body, _ = sjson.Set(body, "monitor-discriminator.nomatch1", data.MonitorDiscriminatorNomatch1.ValueString())
+		body, _ = sjson.Set(body, "monitor.discriminator.nomatch1", data.MonitorDiscriminatorNomatch1.ValueString())
 	}
 	if !data.MonitorDiscriminatorNomatch2.IsNull() && !data.MonitorDiscriminatorNomatch2.IsUnknown() {
-		body, _ = sjson.Set(body, "monitor-discriminator.nomatch2", data.MonitorDiscriminatorNomatch2.ValueString())
+		body, _ = sjson.Set(body, "monitor.discriminator.nomatch2", data.MonitorDiscriminatorNomatch2.ValueString())
 	}
 	if !data.MonitorDiscriminatorNomatch3.IsNull() && !data.MonitorDiscriminatorNomatch3.IsUnknown() {
-		body, _ = sjson.Set(body, "monitor-discriminator.nomatch3", data.MonitorDiscriminatorNomatch3.ValueString())
+		body, _ = sjson.Set(body, "monitor.discriminator.nomatch3", data.MonitorDiscriminatorNomatch3.ValueString())
 	}
 	if !data.ArchiveDisk0.IsNull() && !data.ArchiveDisk0.IsUnknown() {
 		if data.ArchiveDisk0.ValueBool() {
@@ -296,7 +326,7 @@ func (data Logging) toBody(ctx context.Context, providerVersion string) string {
 		body, _ = sjson.Set(body, "facility.level", data.FacilityLevel.ValueString())
 	}
 	if !data.BufferedEntriesCount.IsNull() && !data.BufferedEntriesCount.IsUnknown() {
-		body, _ = sjson.Set(body, "buffered.buffered-entries.count", strconv.FormatInt(data.BufferedEntriesCount.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "buffered.entries-count", strconv.FormatInt(data.BufferedEntriesCount.ValueInt64(), 10))
 	}
 	if !data.BufferedSize.IsNull() && !data.BufferedSize.IsUnknown() {
 		body, _ = sjson.Set(body, "buffered.logging-buffer-size", strconv.FormatInt(data.BufferedSize.ValueInt64(), 10))
@@ -336,7 +366,7 @@ func (data Logging) toBody(ctx context.Context, providerVersion string) string {
 		body, _ = sjson.Set(body, "history", data.History.ValueString())
 	}
 	if !data.HistorySize.IsNull() && !data.HistorySize.IsUnknown() {
-		body, _ = sjson.Set(body, "history-size", strconv.FormatInt(data.HistorySize.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "history.size", strconv.FormatInt(data.HistorySize.ValueInt64(), 10))
 	}
 	if !data.Hostnameprefix.IsNull() && !data.Hostnameprefix.IsUnknown() {
 		body, _ = sjson.Set(body, "hostnameprefix", data.Hostnameprefix.ValueString())
@@ -382,6 +412,78 @@ func (data Logging) toBody(ctx context.Context, providerVersion string) string {
 	if !data.EventsPrecfgSuppressionTimeout.IsNull() && !data.EventsPrecfgSuppressionTimeout.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout", strconv.FormatInt(data.EventsPrecfgSuppressionTimeout.ValueInt64(), 10))
 	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.BufferedBufferedLevel.IsNull() && !data.BufferedBufferedLevel.IsUnknown() {
+			body, _ = sjson.Set(body, "buffered.buffered-level", data.BufferedBufferedLevel.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.BufferedLogBufferSize.IsNull() && !data.BufferedLogBufferSize.IsUnknown() {
+			body, _ = sjson.Set(body, "buffered.log-buffer-size", strconv.FormatInt(data.BufferedLogBufferSize.ValueInt64(), 10))
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.ConsoleConsoleLevel.IsNull() && !data.ConsoleConsoleLevel.IsUnknown() {
+			body, _ = sjson.Set(body, "console.console-level", data.ConsoleConsoleLevel.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.ConsoleDiscriminatorMatch1.IsNull() && !data.ConsoleDiscriminatorMatch1.IsUnknown() {
+			body, _ = sjson.Set(body, "console.discriminator.match1", data.ConsoleDiscriminatorMatch1.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.ConsoleDiscriminatorMatch2.IsNull() && !data.ConsoleDiscriminatorMatch2.IsUnknown() {
+			body, _ = sjson.Set(body, "console.discriminator.match2", data.ConsoleDiscriminatorMatch2.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.ConsoleDiscriminatorMatch3.IsNull() && !data.ConsoleDiscriminatorMatch3.IsUnknown() {
+			body, _ = sjson.Set(body, "console.discriminator.match3", data.ConsoleDiscriminatorMatch3.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.ConsoleDiscriminatorNomatch1.IsNull() && !data.ConsoleDiscriminatorNomatch1.IsUnknown() {
+			body, _ = sjson.Set(body, "console.discriminator.nomatch1", data.ConsoleDiscriminatorNomatch1.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.ConsoleDiscriminatorNomatch2.IsNull() && !data.ConsoleDiscriminatorNomatch2.IsUnknown() {
+			body, _ = sjson.Set(body, "console.discriminator.nomatch2", data.ConsoleDiscriminatorNomatch2.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.ConsoleDiscriminatorNomatch3.IsNull() && !data.ConsoleDiscriminatorNomatch3.IsUnknown() {
+			body, _ = sjson.Set(body, "console.discriminator.nomatch3", data.ConsoleDiscriminatorNomatch3.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.FacilityAll.IsNull() && !data.FacilityAll.IsUnknown() {
+			body, _ = sjson.Set(body, "console.facility.all", data.FacilityAll.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.HistoryLevel.IsNull() && !data.HistoryLevel.IsUnknown() {
+			body, _ = sjson.Set(body, "history.level", data.HistoryLevel.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.MonitorMonitorLevel.IsNull() && !data.MonitorMonitorLevel.IsUnknown() {
+			body, _ = sjson.Set(body, "monitor.monitor-level", data.MonitorMonitorLevel.ValueString())
+		}
+	}
 	if len(data.File) > 0 {
 		body, _ = sjson.Set(body, "files.file", []interface{}{})
 		for index, item := range data.File {
@@ -417,6 +519,28 @@ func (data Logging) toBody(ctx context.Context, providerVersion string) string {
 			}
 			if !item.DiscriminatorNomatch3.IsNull() && !item.DiscriminatorNomatch3.IsUnknown() {
 				body, _ = sjson.Set(body, "files.file"+"."+strconv.Itoa(index)+"."+"discriminator.nomatch3", item.DiscriminatorNomatch3.ValueString())
+			}
+			if !item.LocalAccounting.IsNull() && !item.LocalAccounting.IsUnknown() {
+				if item.LocalAccounting.ValueBool() {
+					body, _ = sjson.Set(body, "files.file"+"."+strconv.Itoa(index)+"."+"path.local-accounting", map[string]string{})
+				}
+			}
+			if !item.SendToRemote.IsNull() && !item.SendToRemote.IsUnknown() {
+				if item.SendToRemote.ValueBool() {
+					body, _ = sjson.Set(body, "files.file"+"."+strconv.Itoa(index)+"."+"path.local-accounting.send-to-remote", map[string]string{})
+				}
+			}
+			if !item.SendToRemoteFacility.IsNull() && !item.SendToRemoteFacility.IsUnknown() {
+				body, _ = sjson.Set(body, "files.file"+"."+strconv.Itoa(index)+"."+"path.local-accounting.send-to-remote.facility", item.SendToRemoteFacility.ValueString())
+			}
+			if !item.PathMaxfilesize.IsNull() && !item.PathMaxfilesize.IsUnknown() {
+				body, _ = sjson.Set(body, "files.file"+"."+strconv.Itoa(index)+"."+"path.maxfilesize", strconv.FormatInt(item.PathMaxfilesize.ValueInt64(), 10))
+			}
+			if !item.PathPathName.IsNull() && !item.PathPathName.IsUnknown() {
+				body, _ = sjson.Set(body, "files.file"+"."+strconv.Itoa(index)+"."+"path.path-name", item.PathPathName.ValueString())
+			}
+			if !item.PathSeverity.IsNull() && !item.PathSeverity.IsUnknown() {
+				body, _ = sjson.Set(body, "files.file"+"."+strconv.Itoa(index)+"."+"path.severity", item.PathSeverity.ValueString())
 			}
 		}
 	}
@@ -494,6 +618,188 @@ func (data Logging) toBody(ctx context.Context, providerVersion string) string {
 // GetVersionConstraints returns the version constraints for all fields
 func (data Logging) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:        "console_facility",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "monitor_discriminator_match1",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "monitor_discriminator_match2",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "monitor_discriminator_match3",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "monitor_discriminator_nomatch1",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "monitor_discriminator_nomatch2",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "monitor_discriminator_nomatch3",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "archive_disk0",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "archive_disk1",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "archive_harddisk",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "archive_frequency_daily",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "archive_frequency_weekly",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "ipv4_dscp",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "ipv4_precedence",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "ipv6_dscp",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "ipv6_precedence",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "facility_level",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "buffered_size",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "buffered_level",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "file.path",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "file.maxfilesize",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "file.severity",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "file.local_accounting_send_to_remote_facility_level",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "file.local_accounting",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "file.send_to_remote",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "file.send_to_remote_facility",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "file.path_maxfilesize",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "file.path_path_name",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "file.path_severity",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "history_size",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "source_interfaces",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "format_rfc5424",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:        "format_bsd",
+			RemovedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "buffered_buffered_level",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "buffered_log_buffer_size",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "console_console_level",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "console_discriminator_match1",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "console_discriminator_match2",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "console_discriminator_match3",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "console_discriminator_nomatch1",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "console_discriminator_nomatch2",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "console_discriminator_nomatch3",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "facility_all",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "history_level",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "monitor_monitor_level",
+			AddedInVersion: "25.1",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -533,32 +839,32 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.ConsoleFacility = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match1"); value.Exists() && !data.MonitorDiscriminatorMatch1.IsNull() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.match1"); value.Exists() && !data.MonitorDiscriminatorMatch1.IsNull() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
 	} else {
 		data.MonitorDiscriminatorMatch1 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match2"); value.Exists() && !data.MonitorDiscriminatorMatch2.IsNull() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.match2"); value.Exists() && !data.MonitorDiscriminatorMatch2.IsNull() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
 	} else {
 		data.MonitorDiscriminatorMatch2 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match3"); value.Exists() && !data.MonitorDiscriminatorMatch3.IsNull() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.match3"); value.Exists() && !data.MonitorDiscriminatorMatch3.IsNull() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
 	} else {
 		data.MonitorDiscriminatorMatch3 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch1"); value.Exists() && !data.MonitorDiscriminatorNomatch1.IsNull() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.nomatch1"); value.Exists() && !data.MonitorDiscriminatorNomatch1.IsNull() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
 	} else {
 		data.MonitorDiscriminatorNomatch1 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch2"); value.Exists() && !data.MonitorDiscriminatorNomatch2.IsNull() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.nomatch2"); value.Exists() && !data.MonitorDiscriminatorNomatch2.IsNull() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
 	} else {
 		data.MonitorDiscriminatorNomatch2 = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch3"); value.Exists() && !data.MonitorDiscriminatorNomatch3.IsNull() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.nomatch3"); value.Exists() && !data.MonitorDiscriminatorNomatch3.IsNull() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
 	} else {
 		data.MonitorDiscriminatorNomatch3 = types.StringNull()
@@ -658,7 +964,7 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.FacilityLevel = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "buffered.buffered-entries.count"); value.Exists() && !data.BufferedEntriesCount.IsNull() {
+	if value := gjson.GetBytes(res, "buffered.entries-count"); value.Exists() && !data.BufferedEntriesCount.IsNull() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
 	} else {
 		data.BufferedEntriesCount = types.Int64Null()
@@ -799,13 +1105,51 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.File[i].DiscriminatorNomatch3 = types.StringNull()
 		}
+		if value := r.Get("path.local-accounting"); !data.File[i].LocalAccounting.IsNull() {
+			if value.Exists() {
+				data.File[i].LocalAccounting = types.BoolValue(true)
+			} else {
+				data.File[i].LocalAccounting = types.BoolValue(false)
+			}
+		} else {
+			data.File[i].LocalAccounting = types.BoolNull()
+		}
+		if value := r.Get("path.local-accounting.send-to-remote"); !data.File[i].SendToRemote.IsNull() {
+			if value.Exists() {
+				data.File[i].SendToRemote = types.BoolValue(true)
+			} else {
+				data.File[i].SendToRemote = types.BoolValue(false)
+			}
+		} else {
+			data.File[i].SendToRemote = types.BoolNull()
+		}
+		if value := r.Get("path.local-accounting.send-to-remote.facility"); value.Exists() && !data.File[i].SendToRemoteFacility.IsNull() {
+			data.File[i].SendToRemoteFacility = types.StringValue(value.String())
+		} else {
+			data.File[i].SendToRemoteFacility = types.StringNull()
+		}
+		if value := r.Get("path.maxfilesize"); value.Exists() && !data.File[i].PathMaxfilesize.IsNull() {
+			data.File[i].PathMaxfilesize = types.Int64Value(value.Int())
+		} else {
+			data.File[i].PathMaxfilesize = types.Int64Null()
+		}
+		if value := r.Get("path.path-name"); value.Exists() && !data.File[i].PathPathName.IsNull() {
+			data.File[i].PathPathName = types.StringValue(value.String())
+		} else {
+			data.File[i].PathPathName = types.StringNull()
+		}
+		if value := r.Get("path.severity"); value.Exists() && !data.File[i].PathSeverity.IsNull() {
+			data.File[i].PathSeverity = types.StringValue(value.String())
+		} else {
+			data.File[i].PathSeverity = types.StringNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "history"); value.Exists() && !data.History.IsNull() {
 		data.History = types.StringValue(value.String())
 	} else {
 		data.History = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "history-size"); value.Exists() && !data.HistorySize.IsNull() {
+	if value := gjson.GetBytes(res, "history.size"); value.Exists() && !data.HistorySize.IsNull() {
 		data.HistorySize = types.Int64Value(value.Int())
 	} else {
 		data.HistorySize = types.Int64Null()
@@ -1088,6 +1432,66 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "buffered.buffered-level"); value.Exists() && !data.BufferedBufferedLevel.IsNull() {
+		data.BufferedBufferedLevel = types.StringValue(value.String())
+	} else {
+		data.BufferedBufferedLevel = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "buffered.log-buffer-size"); value.Exists() && !data.BufferedLogBufferSize.IsNull() {
+		data.BufferedLogBufferSize = types.Int64Value(value.Int())
+	} else {
+		data.BufferedLogBufferSize = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "console.console-level"); value.Exists() && !data.ConsoleConsoleLevel.IsNull() {
+		data.ConsoleConsoleLevel = types.StringValue(value.String())
+	} else {
+		data.ConsoleConsoleLevel = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.match1"); value.Exists() && !data.ConsoleDiscriminatorMatch1.IsNull() {
+		data.ConsoleDiscriminatorMatch1 = types.StringValue(value.String())
+	} else {
+		data.ConsoleDiscriminatorMatch1 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.match2"); value.Exists() && !data.ConsoleDiscriminatorMatch2.IsNull() {
+		data.ConsoleDiscriminatorMatch2 = types.StringValue(value.String())
+	} else {
+		data.ConsoleDiscriminatorMatch2 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.match3"); value.Exists() && !data.ConsoleDiscriminatorMatch3.IsNull() {
+		data.ConsoleDiscriminatorMatch3 = types.StringValue(value.String())
+	} else {
+		data.ConsoleDiscriminatorMatch3 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.nomatch1"); value.Exists() && !data.ConsoleDiscriminatorNomatch1.IsNull() {
+		data.ConsoleDiscriminatorNomatch1 = types.StringValue(value.String())
+	} else {
+		data.ConsoleDiscriminatorNomatch1 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.nomatch2"); value.Exists() && !data.ConsoleDiscriminatorNomatch2.IsNull() {
+		data.ConsoleDiscriminatorNomatch2 = types.StringValue(value.String())
+	} else {
+		data.ConsoleDiscriminatorNomatch2 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.nomatch3"); value.Exists() && !data.ConsoleDiscriminatorNomatch3.IsNull() {
+		data.ConsoleDiscriminatorNomatch3 = types.StringValue(value.String())
+	} else {
+		data.ConsoleDiscriminatorNomatch3 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "console.facility.all"); value.Exists() && !data.FacilityAll.IsNull() {
+		data.FacilityAll = types.StringValue(value.String())
+	} else {
+		data.FacilityAll = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "history.level"); value.Exists() && !data.HistoryLevel.IsNull() {
+		data.HistoryLevel = types.StringValue(value.String())
+	} else {
+		data.HistoryLevel = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "monitor.monitor-level"); value.Exists() && !data.MonitorMonitorLevel.IsNull() {
+		data.MonitorMonitorLevel = types.StringValue(value.String())
+	} else {
+		data.MonitorMonitorLevel = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1107,22 +1511,22 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "console-logging.console-log-facility.console-facility-level"); value.Exists() {
 		data.ConsoleFacility = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match1"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.match1"); value.Exists() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match2"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.match2"); value.Exists() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match3"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.match3"); value.Exists() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch1"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.nomatch1"); value.Exists() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch2"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.nomatch2"); value.Exists() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch3"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.nomatch3"); value.Exists() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "archive.device.disk0"); value.Exists() {
@@ -1180,7 +1584,7 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "facility.level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.buffered-entries.count"); value.Exists() {
+	if value := gjson.GetBytes(res, "buffered.entries-count"); value.Exists() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "buffered.logging-buffer-size"); value.Exists() {
@@ -1254,6 +1658,28 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("discriminator.nomatch3"); cValue.Exists() {
 				item.DiscriminatorNomatch3 = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("path.local-accounting"); cValue.Exists() {
+				item.LocalAccounting = types.BoolValue(true)
+			} else {
+				item.LocalAccounting = types.BoolValue(false)
+			}
+			if cValue := v.Get("path.local-accounting.send-to-remote"); cValue.Exists() {
+				item.SendToRemote = types.BoolValue(true)
+			} else {
+				item.SendToRemote = types.BoolValue(false)
+			}
+			if cValue := v.Get("path.local-accounting.send-to-remote.facility"); cValue.Exists() {
+				item.SendToRemoteFacility = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("path.maxfilesize"); cValue.Exists() {
+				item.PathMaxfilesize = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("path.path-name"); cValue.Exists() {
+				item.PathPathName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("path.severity"); cValue.Exists() {
+				item.PathSeverity = types.StringValue(cValue.String())
+			}
 			data.File = append(data.File, item)
 			return true
 		})
@@ -1261,7 +1687,7 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "history"); value.Exists() {
 		data.History = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "history-size"); value.Exists() {
+	if value := gjson.GetBytes(res, "history.size"); value.Exists() {
 		data.HistorySize = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "hostnameprefix"); value.Exists() {
@@ -1389,6 +1815,42 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "buffered.buffered-level"); value.Exists() {
+		data.BufferedBufferedLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "buffered.log-buffer-size"); value.Exists() {
+		data.BufferedLogBufferSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "console.console-level"); value.Exists() {
+		data.ConsoleConsoleLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.match1"); value.Exists() {
+		data.ConsoleDiscriminatorMatch1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.match2"); value.Exists() {
+		data.ConsoleDiscriminatorMatch2 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.match3"); value.Exists() {
+		data.ConsoleDiscriminatorMatch3 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.nomatch1"); value.Exists() {
+		data.ConsoleDiscriminatorNomatch1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.nomatch2"); value.Exists() {
+		data.ConsoleDiscriminatorNomatch2 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.nomatch3"); value.Exists() {
+		data.ConsoleDiscriminatorNomatch3 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.facility.all"); value.Exists() {
+		data.FacilityAll = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "history.level"); value.Exists() {
+		data.HistoryLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "monitor.monitor-level"); value.Exists() {
+		data.MonitorMonitorLevel = types.StringValue(value.String())
 	}
 }
 
@@ -1409,22 +1871,22 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "console-logging.console-log-facility.console-facility-level"); value.Exists() {
 		data.ConsoleFacility = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match1"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.match1"); value.Exists() {
 		data.MonitorDiscriminatorMatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match2"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.match2"); value.Exists() {
 		data.MonitorDiscriminatorMatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.match3"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.match3"); value.Exists() {
 		data.MonitorDiscriminatorMatch3 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch1"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.nomatch1"); value.Exists() {
 		data.MonitorDiscriminatorNomatch1 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch2"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.nomatch2"); value.Exists() {
 		data.MonitorDiscriminatorNomatch2 = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "monitor-discriminator.nomatch3"); value.Exists() {
+	if value := gjson.GetBytes(res, "monitor.discriminator.nomatch3"); value.Exists() {
 		data.MonitorDiscriminatorNomatch3 = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "archive.device.disk0"); value.Exists() {
@@ -1482,7 +1944,7 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "facility.level"); value.Exists() {
 		data.FacilityLevel = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "buffered.buffered-entries.count"); value.Exists() {
+	if value := gjson.GetBytes(res, "buffered.entries-count"); value.Exists() {
 		data.BufferedEntriesCount = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "buffered.logging-buffer-size"); value.Exists() {
@@ -1556,6 +2018,28 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("discriminator.nomatch3"); cValue.Exists() {
 				item.DiscriminatorNomatch3 = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("path.local-accounting"); cValue.Exists() {
+				item.LocalAccounting = types.BoolValue(true)
+			} else {
+				item.LocalAccounting = types.BoolValue(false)
+			}
+			if cValue := v.Get("path.local-accounting.send-to-remote"); cValue.Exists() {
+				item.SendToRemote = types.BoolValue(true)
+			} else {
+				item.SendToRemote = types.BoolValue(false)
+			}
+			if cValue := v.Get("path.local-accounting.send-to-remote.facility"); cValue.Exists() {
+				item.SendToRemoteFacility = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("path.maxfilesize"); cValue.Exists() {
+				item.PathMaxfilesize = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("path.path-name"); cValue.Exists() {
+				item.PathPathName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("path.severity"); cValue.Exists() {
+				item.PathSeverity = types.StringValue(cValue.String())
+			}
 			data.File = append(data.File, item)
 			return true
 		})
@@ -1563,7 +2047,7 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "history"); value.Exists() {
 		data.History = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "history-size"); value.Exists() {
+	if value := gjson.GetBytes(res, "history.size"); value.Exists() {
 		data.HistorySize = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "hostnameprefix"); value.Exists() {
@@ -1692,6 +2176,42 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.precfg-suppression-timeout"); value.Exists() {
 		data.EventsPrecfgSuppressionTimeout = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "buffered.buffered-level"); value.Exists() {
+		data.BufferedBufferedLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "buffered.log-buffer-size"); value.Exists() {
+		data.BufferedLogBufferSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "console.console-level"); value.Exists() {
+		data.ConsoleConsoleLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.match1"); value.Exists() {
+		data.ConsoleDiscriminatorMatch1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.match2"); value.Exists() {
+		data.ConsoleDiscriminatorMatch2 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.match3"); value.Exists() {
+		data.ConsoleDiscriminatorMatch3 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.nomatch1"); value.Exists() {
+		data.ConsoleDiscriminatorNomatch1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.nomatch2"); value.Exists() {
+		data.ConsoleDiscriminatorNomatch2 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.discriminator.nomatch3"); value.Exists() {
+		data.ConsoleDiscriminatorNomatch3 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console.facility.all"); value.Exists() {
+		data.FacilityAll = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "history.level"); value.Exists() {
+		data.HistoryLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "monitor.monitor-level"); value.Exists() {
+		data.MonitorMonitorLevel = types.StringValue(value.String())
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1700,6 +2220,42 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 
 func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []string {
 	deletedItems := make([]string, 0)
+	if !state.MonitorMonitorLevel.IsNull() && data.MonitorMonitorLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor/monitor-level", state.getPath()))
+	}
+	if !state.HistoryLevel.IsNull() && data.HistoryLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/history/level", state.getPath()))
+	}
+	if !state.FacilityAll.IsNull() && data.FacilityAll.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console/facility/all", state.getPath()))
+	}
+	if !state.ConsoleDiscriminatorNomatch3.IsNull() && data.ConsoleDiscriminatorNomatch3.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console/discriminator/nomatch3", state.getPath()))
+	}
+	if !state.ConsoleDiscriminatorNomatch2.IsNull() && data.ConsoleDiscriminatorNomatch2.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console/discriminator/nomatch2", state.getPath()))
+	}
+	if !state.ConsoleDiscriminatorNomatch1.IsNull() && data.ConsoleDiscriminatorNomatch1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console/discriminator/nomatch1", state.getPath()))
+	}
+	if !state.ConsoleDiscriminatorMatch3.IsNull() && data.ConsoleDiscriminatorMatch3.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console/discriminator/match3", state.getPath()))
+	}
+	if !state.ConsoleDiscriminatorMatch2.IsNull() && data.ConsoleDiscriminatorMatch2.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console/discriminator/match2", state.getPath()))
+	}
+	if !state.ConsoleDiscriminatorMatch1.IsNull() && data.ConsoleDiscriminatorMatch1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console/discriminator/match1", state.getPath()))
+	}
+	if !state.ConsoleConsoleLevel.IsNull() && data.ConsoleConsoleLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console/console-level", state.getPath()))
+	}
+	if !state.BufferedLogBufferSize.IsNull() && data.BufferedLogBufferSize.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/log-buffer-size", state.getPath()))
+	}
+	if !state.BufferedBufferedLevel.IsNull() && data.BufferedBufferedLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/buffered-level", state.getPath()))
+	}
 	if !state.EventsPrecfgSuppressionTimeout.IsNull() && data.EventsPrecfgSuppressionTimeout.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout", state.getPath()))
 	}
@@ -1935,7 +2491,7 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hostnameprefix", state.getPath()))
 	}
 	if !state.HistorySize.IsNull() && data.HistorySize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/history-size", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/history/size", state.getPath()))
 	}
 	if !state.History.IsNull() && data.History.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/history", state.getPath()))
@@ -1963,6 +2519,24 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 				found = false
 			}
 			if found {
+				if !state.File[i].PathSeverity.IsNull() && data.File[j].PathSeverity.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/path/severity", state.getPath(), keyString))
+				}
+				if !state.File[i].PathPathName.IsNull() && data.File[j].PathPathName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/path/path-name", state.getPath(), keyString))
+				}
+				if !state.File[i].PathMaxfilesize.IsNull() && data.File[j].PathMaxfilesize.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/path/maxfilesize", state.getPath(), keyString))
+				}
+				if !state.File[i].SendToRemoteFacility.IsNull() && data.File[j].SendToRemoteFacility.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/path/local-accounting/send-to-remote/facility", state.getPath(), keyString))
+				}
+				if !state.File[i].SendToRemote.IsNull() && data.File[j].SendToRemote.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/path/local-accounting/send-to-remote", state.getPath(), keyString))
+				}
+				if !state.File[i].LocalAccounting.IsNull() && data.File[j].LocalAccounting.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/path/local-accounting", state.getPath(), keyString))
+				}
 				if !state.File[i].DiscriminatorNomatch3.IsNull() && data.File[j].DiscriminatorNomatch3.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/files/file%v/discriminator/nomatch3", state.getPath(), keyString))
 				}
@@ -2031,7 +2605,7 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/logging-buffer-size", state.getPath()))
 	}
 	if !state.BufferedEntriesCount.IsNull() && data.BufferedEntriesCount.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/buffered-entries/count", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/entries-count", state.getPath()))
 	}
 	if !state.FacilityLevel.IsNull() && data.FacilityLevel.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/facility/level", state.getPath()))
@@ -2079,22 +2653,22 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/archive/device/disk0", state.getPath()))
 	}
 	if !state.MonitorDiscriminatorNomatch3.IsNull() && data.MonitorDiscriminatorNomatch3.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-discriminator/nomatch3", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor/discriminator/nomatch3", state.getPath()))
 	}
 	if !state.MonitorDiscriminatorNomatch2.IsNull() && data.MonitorDiscriminatorNomatch2.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-discriminator/nomatch2", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor/discriminator/nomatch2", state.getPath()))
 	}
 	if !state.MonitorDiscriminatorNomatch1.IsNull() && data.MonitorDiscriminatorNomatch1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-discriminator/nomatch1", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor/discriminator/nomatch1", state.getPath()))
 	}
 	if !state.MonitorDiscriminatorMatch3.IsNull() && data.MonitorDiscriminatorMatch3.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-discriminator/match3", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor/discriminator/match3", state.getPath()))
 	}
 	if !state.MonitorDiscriminatorMatch2.IsNull() && data.MonitorDiscriminatorMatch2.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-discriminator/match2", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor/discriminator/match2", state.getPath()))
 	}
 	if !state.MonitorDiscriminatorMatch1.IsNull() && data.MonitorDiscriminatorMatch1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-discriminator/match1", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor/discriminator/match1", state.getPath()))
 	}
 	if !state.ConsoleFacility.IsNull() && data.ConsoleFacility.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/console-logging/console-log-facility/console-facility-level", state.getPath()))
@@ -2190,6 +2764,12 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		if !data.File[i].SendToRemote.IsNull() && !data.File[i].SendToRemote.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/files/file%v/path/local-accounting/send-to-remote", data.getPath(), keyString))
+		}
+		if !data.File[i].LocalAccounting.IsNull() && !data.File[i].LocalAccounting.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/files/file%v/path/local-accounting", data.getPath(), keyString))
+		}
 	}
 	if !data.ContainerFetchTimestamp.IsNull() && !data.ContainerFetchTimestamp.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/container/fetch-timestamp", data.getPath()))
@@ -2220,6 +2800,42 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *Logging) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.MonitorMonitorLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor/monitor-level", data.getPath()))
+	}
+	if !data.HistoryLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/history/level", data.getPath()))
+	}
+	if !data.FacilityAll.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/console/facility/all", data.getPath()))
+	}
+	if !data.ConsoleDiscriminatorNomatch3.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/console/discriminator/nomatch3", data.getPath()))
+	}
+	if !data.ConsoleDiscriminatorNomatch2.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/console/discriminator/nomatch2", data.getPath()))
+	}
+	if !data.ConsoleDiscriminatorNomatch1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/console/discriminator/nomatch1", data.getPath()))
+	}
+	if !data.ConsoleDiscriminatorMatch3.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/console/discriminator/match3", data.getPath()))
+	}
+	if !data.ConsoleDiscriminatorMatch2.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/console/discriminator/match2", data.getPath()))
+	}
+	if !data.ConsoleDiscriminatorMatch1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/console/discriminator/match1", data.getPath()))
+	}
+	if !data.ConsoleConsoleLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/console/console-level", data.getPath()))
+	}
+	if !data.BufferedLogBufferSize.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/buffered/log-buffer-size", data.getPath()))
+	}
+	if !data.BufferedBufferedLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/buffered/buffered-level", data.getPath()))
+	}
 	if !data.EventsPrecfgSuppressionTimeout.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout", data.getPath()))
 	}
@@ -2287,7 +2903,7 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hostnameprefix", data.getPath()))
 	}
 	if !data.HistorySize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/history-size", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/history/size", data.getPath()))
 	}
 	if !data.History.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/history", data.getPath()))
@@ -2333,7 +2949,7 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/buffered/logging-buffer-size", data.getPath()))
 	}
 	if !data.BufferedEntriesCount.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/buffered/buffered-entries/count", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/buffered/entries-count", data.getPath()))
 	}
 	if !data.FacilityLevel.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/facility/level", data.getPath()))
@@ -2381,22 +2997,22 @@ func (data *Logging) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/archive/device/disk0", data.getPath()))
 	}
 	if !data.MonitorDiscriminatorNomatch3.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor-discriminator/nomatch3", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor/discriminator/nomatch3", data.getPath()))
 	}
 	if !data.MonitorDiscriminatorNomatch2.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor-discriminator/nomatch2", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor/discriminator/nomatch2", data.getPath()))
 	}
 	if !data.MonitorDiscriminatorNomatch1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor-discriminator/nomatch1", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor/discriminator/nomatch1", data.getPath()))
 	}
 	if !data.MonitorDiscriminatorMatch3.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor-discriminator/match3", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor/discriminator/match3", data.getPath()))
 	}
 	if !data.MonitorDiscriminatorMatch2.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor-discriminator/match2", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor/discriminator/match2", data.getPath()))
 	}
 	if !data.MonitorDiscriminatorMatch1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor-discriminator/match1", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor/discriminator/match1", data.getPath()))
 	}
 	if !data.ConsoleFacility.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/console-logging/console-log-facility/console-facility-level", data.getPath()))

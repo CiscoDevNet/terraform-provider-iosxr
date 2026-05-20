@@ -58,6 +58,12 @@ resource "iosxr_crypto" "example" {
       vrf                               = "VRF1"
       message_digest                    = "sha256"
       method_est_credential_certificate = "EST-BOOTSTRAP"
+      # Supported from version 25.1
+      enrollment_authentication_profile = "EAP_PROFILE"
+      # Supported from version 25.1
+      re_enrollment_authentication_profile = "EAP_PROFILE"
+      # Supported from version 25.1
+      ssl_profile = "MTLS_PROFILE"
     }
   ]
   ca_openssh_trustpoints = [
@@ -170,6 +176,8 @@ Optional:
   - Range: `1`-`99`
 - `crl_optional` (Boolean) CRL verification as optional
 - `description` (String) Description for the trustpoint
+- `enrollment_authentication_profile` (String) Authentication profile used during certificate enrollment
+  - Supported from version: `25.1`
 - `enrollment_retry_count` (Number) How many times to poll CA for our certificate
   - Range: `1`-`100`
 - `enrollment_retry_period` (Number) How long to wait between requests to CA for our certificate
@@ -182,6 +190,8 @@ Optional:
   - Choices: `md5`, `sha1`, `sha256`, `sha384`, `sha512`
 - `method_est_credential_certificate` (String) Certificate based authentication in TLS handshake during bootstrap
 - `query_url` (String) CA server query URL
+- `re_enrollment_authentication_profile` (String) Authentication profile used during certificate re-enrollment
+  - Supported from version: `25.1`
 - `renewal_message_type_pkcsreq` (Boolean) Message type PKCSReq(Default)
 - `renewal_message_type_renewalreq` (Boolean) Message type RenewalReq
 - `rsakeypair` (String) RSA key pair
@@ -190,6 +200,8 @@ Optional:
 - `sftp_password` (String, Sensitive) Enter password in encrypted form
 - `sftp_username` (String) Secure FTP username
 - `skip_challenge_password` (Boolean) Skip challenge password attribute for manual enrollment request
+- `ssl_profile` (String) SSL profile parameters used during TLS/mTLS handshake
+  - Supported from version: `25.1`
 - `subject_alternative_name` (String) Include Subject Alternative Name(SAN) in CSR request
 - `subject_name` (String) Subject Name
 - `vrf` (String) Source interface VRF

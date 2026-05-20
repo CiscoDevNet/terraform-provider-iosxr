@@ -1,0 +1,11 @@
+---
+name: CEF Accounting
+path: Cisco-IOS-XR-um-cef-accounting-cfg:/accounting
+doc_category: CEF
+attributes:
+  - yang_name: segment-routing/policies/srv6/disable
+    tf_name: disable
+    type: Bool
+    type_yang_bool: presence
+    example: true
+

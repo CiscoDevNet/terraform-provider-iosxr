@@ -15,6 +15,12 @@ This resource can manage the MPLS Traffic Eng configuration.
 ```terraform
 resource "iosxr_mpls_traffic_eng" "example" {
   traffic_eng = true
+  # Supported from version 25.1
+  disable = true
+  # Supported from version 25.1
+  reoptimize_reoptimization_period_in = 3600
+  # Supported from version 25.1
+  server_ipv4 = "192.0.2.1"
 }
 ```
 
@@ -26,6 +32,13 @@ resource "iosxr_mpls_traffic_eng" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `disable` (Boolean) disable reoptimization
+  - Supported from version: `25.1`
+- `reoptimize_reoptimization_period_in` (Number) Reoptimization period in seconds
+  - Range: `60`-`604800`
+  - Supported from version: `25.1`
+- `server_ipv4` (String) IPv4 address of PCE server
+  - Supported from version: `25.1`
 - `traffic_eng` (Boolean) Go into the MPLS-TE submode
 
 ### Read-Only

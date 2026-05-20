@@ -46,6 +46,8 @@ resource "iosxr_router_bgp_address_family" "example" {
       metric       = 100
       multipath    = true
       route_policy = "ROUTE_POLICY_1"
+      # Supported from version 25.1
+      default_policy_action_in = "accept"
     }
   ]
   redistribute_eigrp = [
@@ -55,6 +57,8 @@ resource "iosxr_router_bgp_address_family" "example" {
       metric                  = 100
       multipath               = true
       route_policy            = "ROUTE_POLICY_1"
+      # Supported from version 25.1
+      default_policy_action_in = "accept"
     }
   ]
   redistribute_isis = [
@@ -64,6 +68,8 @@ resource "iosxr_router_bgp_address_family" "example" {
       metric                             = 100
       multipath                          = true
       route_policy                       = "ROUTE_POLICY_1"
+      # Supported from version 25.1
+      default_policy_action_in = "accept"
     }
   ]
   redistribute_connected                  = true
@@ -137,4 +143,14 @@ resource "iosxr_router_bgp_address_family" "example" {
       peer_sid_index = 101
     }
   ]
+  # Supported from version 25.1
+  as_based_as_list = "ECMP_PEER_AS_LIST"
+  # Supported from version 25.1
+  as_based_delay = 200
+  # Supported from version 25.1
+  fixed_delay = 200
+  # Supported from version 25.1
+  platform_oor_based_delay = 500
+  # Supported from version 25.1
+  platform_oor_based_threshold = 80
 }

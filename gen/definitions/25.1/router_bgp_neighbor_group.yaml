@@ -1,0 +1,27 @@
+---
+name: Router BGP Neighbor Group
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbor-groups/neighbor-group[neighbor-group-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: address-families/address-family
+    tf_name: address_family
+    type: List
+    attributes:
+      - yang_name: default-policy-action/in
+        tf_name: default_policy_action_in
+        description: "Default action if route does not satisfy inbound route-policy"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept
+      - yang_name: default-policy-action/out
+        tf_name: default_policy_action_out
+        description: "Default action if route does not satisfy outbound route-policy"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept
+
+

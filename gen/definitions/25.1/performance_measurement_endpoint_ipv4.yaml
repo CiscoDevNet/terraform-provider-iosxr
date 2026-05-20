@@ -1,0 +1,8 @@
+---
+name: Performance Measurement Endpoint IPv4
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/endpoint/ipv4s/ipv4[address=%s]/vrf[vrf-name=%s]
+doc_category: Performance Monitoring
+attributes:
+  - yang_name: liveness-detection/collect-hbh
+    legacy: true
+

@@ -65,6 +65,8 @@ data "iosxr_ptp" "example" {
 - `log_best_primary_clock_changes` (Boolean) Log best primary clock changes
 - `log_servo_events` (Boolean) Log servo events
 - `min_clock_class` (Number) Clocks with a clock-class higher than minimum clock class will not be considered for selection as a parent clock.
+- `monitor_receiver` (Boolean) Enable monitor-receiver packet exchange
+- `monitor_sender` (Boolean) Enable monitor-sender packet exchange
 - `network_type_high_pdv` (Boolean) The network has high packet delay variation
 - `performance_monitoring` (Boolean) Enable performance monitoring
 - `phase_difference_threshold_breach` (Number) Value at which a bistate alarm is triggered when the phase difference for any foreign primary is exceeded in nanoseconds

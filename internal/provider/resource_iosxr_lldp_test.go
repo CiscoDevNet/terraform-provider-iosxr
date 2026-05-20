@@ -41,7 +41,9 @@ func TestAccIosxrLLDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "system_name", "Router1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "system_description", "Router1-Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "chassis_id", "FOC22439P72"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "chassis_id_type_local", "true"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "chassis_id_type_local", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "subinterfaces_enable", "true"))
 	if os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "subinterfaces_tagged", "true"))
@@ -116,7 +118,9 @@ func testAccIosxrLLDPConfig_all() string {
 	config += `	system_name = "Router1"` + "\n"
 	config += `	system_description = "Router1-Description"` + "\n"
 	config += `	chassis_id = "FOC22439P72"` + "\n"
-	config += `	chassis_id_type_local = true` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	chassis_id_type_local = true` + "\n"
+	}
 	config += `	subinterfaces_enable = true` + "\n"
 	if os.Getenv("NCS") != "" {
 		config += `	subinterfaces_tagged = true` + "\n"

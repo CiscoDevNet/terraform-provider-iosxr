@@ -1,10 +1,11 @@
 resource "iosxr_lldp" "example" {
-  holdtime                               = 50
-  timer                                  = 6
-  reinit                                 = 3
-  system_name                            = "Router1"
-  system_description                     = "Router1-Description"
-  chassis_id                             = "FOC22439P72"
+  holdtime           = 50
+  timer              = 6
+  reinit             = 3
+  system_name        = "Router1"
+  system_description = "Router1-Description"
+  chassis_id         = "FOC22439P72"
+  # Not supported from version 25.1 and above
   chassis_id_type_local                  = true
   subinterfaces_enable                   = true
   subinterfaces_tagged                   = true

@@ -1,0 +1,23 @@
+---
+name: Crypto Client Authentication
+path: Cisco-IOS-XR-um-crypto-cfg:/client-authentication
+doc_category: Crypto
+attributes:
+  - yang_name: profiles/profile
+    tf_name: profile
+    description: "Template that will be pinned to applications"
+    type: List
+    attributes:
+      - yang_name: profile-name
+        id: true
+        example: EAP_PROFILE
+      - yang_name: password/six
+        tf_name: password_six
+        description: "Specifies that an clear text key will follow"
+        type: String
+        example: Cisco123!
+      - yang_name: username
+        tf_name: username
+        description: "Configure Username"
+        type: String
+        example: dot1x_client

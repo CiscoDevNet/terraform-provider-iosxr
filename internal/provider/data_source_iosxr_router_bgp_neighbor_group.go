@@ -969,6 +969,14 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "BGP bestpath selection will allow 'invalid' origin-AS",
 							Computed:            true,
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Default action if route does not satisfy inbound route-policy",
+							Computed:            true,
+						},
+						"default_policy_action_out": schema.StringAttribute{
+							MarkdownDescription: "Default action if route does not satisfy outbound route-policy",
+							Computed:            true,
+						},
 					},
 				},
 			},

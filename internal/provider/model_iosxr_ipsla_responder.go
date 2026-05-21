@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -104,7 +105,7 @@ func (data IPSLAResponderData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data IPSLAResponder) toBody(ctx context.Context) string {
+func (data IPSLAResponder) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Twamp.IsNull() && !data.Twamp.IsUnknown() {
 		if data.Twamp.ValueBool() {
@@ -206,8 +207,29 @@ func (data IPSLAResponder) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data IPSLAResponder) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data IPSLAResponder) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *IPSLAResponder) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.TypeUdpIpv4 {
 		keys := [...]string{"address"}
@@ -1074,7 +1096,6 @@ func (data *IPSLAResponder) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *IPSLAResponder) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.TwampLightSessions {

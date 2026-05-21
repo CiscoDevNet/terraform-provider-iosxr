@@ -41,7 +41,6 @@ import (
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRouterBGPVRFAddressFamilyResource() resource.Resource {
@@ -409,7 +408,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				},
 			},
 			"redistribute_ospf": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF routes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -563,11 +562,18 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 								stringvalidator.LengthBetween(1, 255),
 							},
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("accept", "reject"),
+							},
+						},
 					},
 				},
 			},
 			"redistribute_ospfv3": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 routes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Open Shortest Path First (OSPFv3)").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -721,11 +727,18 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 								stringvalidator.LengthBetween(1, 255),
 							},
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("accept", "reject"),
+							},
+						},
 					},
 				},
 			},
 			"redistribute_eigrp": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Redistribute EIGRP routes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Enhanced Interior Gateway Routing Protocol (EIGRP)").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -767,11 +780,18 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 								stringvalidator.LengthBetween(1, 255),
 							},
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("accept", "reject"),
+							},
+						},
 					},
 				},
 			},
 			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS routes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -827,6 +847,13 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("accept", "reject"),
 							},
 						},
 					},
@@ -1098,14 +1125,17 @@ func (r *RouterBGPVRFAddressFamilyResource) Create(ctx context.Context, req reso
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
 		var ops []gnmi.SetOperation
 
 		// Create object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
@@ -1138,7 +1168,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Create(ctx context.Context, req reso
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *RouterBGPVRFAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterBGPVRFAddressFamily
 
@@ -1209,7 +1238,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Read(ctx context.Context, req resour
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *RouterBGPVRFAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterBGPVRFAddressFamily
 
@@ -1232,6 +1260,10 @@ func (r *RouterBGPVRFAddressFamilyResource) Update(ctx context.Context, req reso
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -1239,7 +1271,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Update(ctx context.Context, req reso
 		var ops []gnmi.SetOperation
 
 		// Update object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		deletedListItems := plan.getDeletedItems(ctx, state)
@@ -1275,7 +1307,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Update(ctx context.Context, req reso
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *RouterBGPVRFAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterBGPVRFAddressFamily
 
@@ -1285,7 +1316,13 @@ func (r *RouterBGPVRFAddressFamilyResource) Delete(ctx context.Context, req reso
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
@@ -1334,7 +1371,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Delete(ctx context.Context, req reso
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *RouterBGPVRFAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

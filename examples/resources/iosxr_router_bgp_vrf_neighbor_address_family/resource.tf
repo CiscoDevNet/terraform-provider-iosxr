@@ -37,4 +37,8 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
   slow_peer_static                                        = true
   origin_as_validation_disable                            = true
   bestpath_origin_as_allow_invalid                        = true
+  # Supported from version 25.1
+  default_policy_action_in = "accept"
+  # Supported from version 25.1
+  default_policy_action_out = "accept"
 }

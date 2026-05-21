@@ -1,0 +1,19 @@
+---
+name: LLDP
+path: Cisco-IOS-XR-um-lldp-cfg:/lldp
+doc_category: Management
+attributes:
+  - yang_name: chassis-id-type/chassis-component
+    legacy: true
+  - yang_name: chassis-id-type/interface-alias
+    legacy: true
+  - yang_name: chassis-id-type/interface-name
+    legacy: true
+  - yang_name: chassis-id-type/local
+    legacy: true
+  - yang_name: chassis-id-type/mac-address
+    legacy: true
+  - yang_name: chassis-id-type/network-address
+    legacy: true
+  - yang_name: chassis-id-type/port-component
+    legacy: true

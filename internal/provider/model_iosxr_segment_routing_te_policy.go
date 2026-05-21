@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -213,7 +214,7 @@ func (data SegmentRoutingTEPolicyData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
+func (data SegmentRoutingTEPolicy) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.PolicyName.IsNull() && !data.PolicyName.IsUnknown() {
 		body, _ = sjson.Set(body, "policy-name", data.PolicyName.ValueString())
@@ -552,8 +553,29 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data SegmentRoutingTEPolicy) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data SegmentRoutingTEPolicy) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv6-disable"); !data.Ipv6Disable.IsNull() {
 		if value.Exists() {
@@ -2545,7 +2567,6 @@ func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context) []s
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *SegmentRoutingTEPolicy) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.Srv6LocatorBehavior.IsNull() {

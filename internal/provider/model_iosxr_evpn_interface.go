@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -108,7 +109,7 @@ func (data EVPNInterfaceData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data EVPNInterface) toBody(ctx context.Context) string {
+func (data EVPNInterface) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
 		body, _ = sjson.Set(body, "interface-name", data.InterfaceName.ValueString())
@@ -213,8 +214,29 @@ func (data EVPNInterface) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data EVPNInterface) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data EVPNInterface) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *EVPNInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() && !data.CoreIsolationGroup.IsNull() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
@@ -718,7 +740,6 @@ func (data *EVPNInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *EVPNInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.AccessSignalBundleDown.IsNull() {

@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -130,6 +131,11 @@ func TestAccDataSourceIosxrPerformanceMeasurementDelayProfile(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "profiles.0.advertise_anomaly_check_lower_bound", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "profiles.0.advertise_anomaly_loss_upper_bound", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "profiles.0.advertise_anomaly_loss_lower_bound", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "profiles.0.collect_hbh", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "profiles.0.ntp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "delay_bins_explicit.0", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "collect_hbh", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "ntp", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -260,7 +266,22 @@ func testAccDataSourceIosxrPerformanceMeasurementDelayProfileConfig() string {
 	config += `		advertise_anomaly_check_lower_bound = 100` + "\n"
 	config += `		advertise_anomaly_loss_upper_bound = 50` + "\n"
 	config += `		advertise_anomaly_loss_lower_bound = 10` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `		collect_hbh = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `		ntp = true` + "\n"
+	}
 	config += `	}]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	delay_bins_explicit = [100]` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	collect_hbh = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	ntp = true` + "\n"
+	}
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

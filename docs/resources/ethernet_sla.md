@@ -44,6 +44,10 @@ resource "iosxr_ethernet_sla" "example" {
       thresholds_stateless_log_on_mean_value       = 2000
       thresholds_stateless_log_on_sample_count     = 10
       thresholds_stateless_log_on_in_and_above_bin = 5
+      # Supported from version 25.1
+      aggregate_minimum_delay = 100
+      # Supported from version 25.1
+      usec_minimum_delay = true
     }
   ]
   schedule_every_minutes  = 1
@@ -123,6 +127,9 @@ Optional:
 
 - `aggregate_bins` (Number) Aggregate results into a number of bins
   - Range: `2`-`100`
+- `aggregate_minimum_delay` (Number) Specify the width of the first bin in milliseconds (or optionally microseconds), independent of the width of the other bins
+  - Range: `1`-`10000000`
+  - Supported from version: `25.1`
 - `aggregate_none` (Boolean) Perform no aggregation
 - `aggregate_usec` (Boolean) Interpret the width in microseconds
 - `aggregate_width` (Number) Width in percentage points, to an accuracy of one percentage point
@@ -158,6 +165,8 @@ Optional:
   - Range: `1`-`2147483647`
 - `thresholds_stateless_log_on_sample_count` (Number) Threshold is breached when the sample count in bins in and above a certain bin number crosses the configured sample count
   - Range: `1`-`2147483647`
+- `usec_minimum_delay` (Boolean) Interpret the minimum-delay in microseconds
+  - Supported from version: `25.1`
 
 ## Import
 

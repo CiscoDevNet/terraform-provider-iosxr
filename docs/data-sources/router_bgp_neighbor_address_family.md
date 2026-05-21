@@ -70,6 +70,8 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 - `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
+- `default_policy_action_in` (String) Default action if route does not satisfy inbound route-policy
+- `default_policy_action_out` (String) Default action if route does not satisfy outbound route-policy
 - `encapsulation_type` (String) Specify encapsulation type
 - `id` (String) The path of the retrieved object.
 - `import_re_originate` (Boolean) Reoriginate imported routes by attaching stitching RTs

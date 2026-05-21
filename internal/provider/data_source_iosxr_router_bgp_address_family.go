@@ -316,7 +316,7 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				},
 			},
 			"redistribute_ospf": schema.ListNestedAttribute{
-				MarkdownDescription: "Redistribute OSPF routes",
+				MarkdownDescription: "Open Shortest Path First (OSPF)",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -460,11 +460,15 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Route policy reference",
 							Computed:            true,
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Set a default action if a route does not satify the policy definition",
+							Computed:            true,
+						},
 					},
 				},
 			},
 			"redistribute_ospfv3": schema.ListNestedAttribute{
-				MarkdownDescription: "Redistribute OSPFv3 routes",
+				MarkdownDescription: "IPv6 Open Shortest Path First (OSPFv3)",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -608,11 +612,15 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Route policy reference",
 							Computed:            true,
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Set a default action if a route does not satify the policy definition",
+							Computed:            true,
+						},
 					},
 				},
 			},
 			"redistribute_eigrp": schema.ListNestedAttribute{
-				MarkdownDescription: "Redistribute EIGRP routes",
+				MarkdownDescription: "Enhanced Interior Gateway Routing Protocol (EIGRP)",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -644,11 +652,15 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Route policy reference",
 							Computed:            true,
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Set a default action if a route does not satify the policy definition",
+							Computed:            true,
+						},
 					},
 				},
 			},
 			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: "Redistribute ISIS routes",
+				MarkdownDescription: "ISO IS-IS",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -694,6 +706,10 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 						},
 						"route_policy": schema.StringAttribute{
 							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Set a default action if a route does not satify the policy definition",
 							Computed:            true,
 						},
 					},
@@ -1050,6 +1066,26 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 						},
 					},
 				},
+			},
+			"as_based_as_list": schema.StringAttribute{
+				MarkdownDescription: "Enable ECMP delay for neighbor AS'es included in the AS list",
+				Computed:            true,
+			},
+			"as_based_delay": schema.Int64Attribute{
+				MarkdownDescription: "Provide a delay interval in msecs",
+				Computed:            true,
+			},
+			"fixed_delay": schema.Int64Attribute{
+				MarkdownDescription: "Provide a delay interval in msecs",
+				Computed:            true,
+			},
+			"platform_oor_based_delay": schema.Int64Attribute{
+				MarkdownDescription: "Provide a delay interval in msecs",
+				Computed:            true,
+			},
+			"platform_oor_based_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Delay only when platform resource usage is above specified threshold",
+				Computed:            true,
 			},
 		},
 	}

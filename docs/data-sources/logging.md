@@ -36,16 +36,25 @@ data "iosxr_logging" "example" {
 - `archive_severity` (String) The minimum severity of log messages to archive
 - `archive_size` (Number) The total size of the archive
 - `archive_threshold` (Number) The size threshold at which a syslog is generated
+- `buffered_buffered_level` (String) buffered level
 - `buffered_discriminator_match1` (String) Set match discriminator 1
 - `buffered_discriminator_match2` (String) Set match discriminator 2
 - `buffered_discriminator_match3` (String) Set match discriminator 3
 - `buffered_discriminator_nomatch1` (String) Set no-match discriminator 1
 - `buffered_discriminator_nomatch2` (String) Set no-match discriminator 2
 - `buffered_discriminator_nomatch3` (String) Set no-match discriminator 3
-- `buffered_entries_count` (Number) Number of syslog entries in buffer
+- `buffered_entries_count` (Number) Syslog in buffer
 - `buffered_level` (String) configure this node
+- `buffered_log_buffer_size` (Number) Logging buffer size
 - `buffered_size` (Number) Logging buffer size
 - `console` (String) Set console logging
+- `console_console_level` (String) console level
+- `console_discriminator_match1` (String) Set match discriminator 1
+- `console_discriminator_match2` (String) Set match discriminator 2
+- `console_discriminator_match3` (String) Set match discriminator 3
+- `console_discriminator_nomatch1` (String) Set no-match discriminator 1
+- `console_discriminator_nomatch2` (String) Set no-match discriminator 2
+- `console_discriminator_nomatch3` (String) Set no-match discriminator 3
 - `console_facility` (String) Console message logging facilities
 - `container_all` (Boolean) Enables log collection from all containers
 - `container_fetch_timestamp` (Boolean) Fetch logs with container timestamp for all containers
@@ -55,12 +64,14 @@ data "iosxr_logging" "example" {
 - `events_precfg_suppression` (String) Suppress events from a card/VM till its configuration is complete
 - `events_precfg_suppression_timeout` (Number) Timeout (in minutes) for pre-config events suppression (default 15)
 - `events_threshold` (Number) Configure threshold (%) for capacity alarm
+- `facility_all` (String) All supported facilities
 - `facility_level` (String) configure this node
 - `file` (Attributes List) Set file logging (see [below for nested schema](#nestedatt--file))
 - `filter_matches` (Attributes List) Configure match string to filter (see [below for nested schema](#nestedatt--filter_matches))
 - `format_bsd` (Boolean) Enable to send the syslog message as BSD format
 - `format_rfc5424` (Boolean) Enable to send the syslog message rfc5424 format
 - `history` (String) Set history logging
+- `history_level` (String) history level
 - `history_size` (Number) Logging history size
 - `hostnameprefix` (String) Hostname prefix to add on msgs to servers
 - `id` (String) The path of the retrieved object.
@@ -76,6 +87,7 @@ data "iosxr_logging" "example" {
 - `monitor_discriminator_nomatch1` (String) Set no-match discriminator 1
 - `monitor_discriminator_nomatch2` (String) Set no-match discriminator 2
 - `monitor_discriminator_nomatch3` (String) Set no-match discriminator 3
+- `monitor_monitor_level` (String) Set monitor logging
 - `source_interfaces` (Attributes List) Specify interface for source address in logging transactions (see [below for nested schema](#nestedatt--source_interfaces))
 - `suppress_duplicates` (Boolean) Suppress consecutive duplicate messages
 - `suppress_rules` (Attributes List) Configure a specified suppression rule (see [below for nested schema](#nestedatt--suppress_rules))
@@ -94,9 +106,15 @@ Read-Only:
 - `discriminator_nomatch2` (String) Set no-match discriminator 2
 - `discriminator_nomatch3` (String) Set no-match discriminator 3
 - `file_name` (String) Set file logging
+- `local_accounting` (Boolean) Store only the command accounting logs
 - `local_accounting_send_to_remote_facility_level` (String) configure this node
 - `maxfilesize` (Number) Set max file size
 - `path` (String) Set file path
+- `path_maxfilesize` (Number) Set max file size
+- `path_path_name` (String) File path (e.g. /disk0: )
+- `path_severity` (String) severity
+- `send_to_remote` (Boolean) Send the command accounting logs to syslog server
+- `send_to_remote_facility` (String) Modify message logging facilities
 - `severity` (String) Set severity level
 
 

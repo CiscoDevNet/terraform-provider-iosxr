@@ -41,7 +41,6 @@ import (
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRouterBGPAFGroupResource() resource.Resource {
@@ -526,6 +525,20 @@ func (r *RouterBGPAFGroupResource) Schema(ctx context.Context, req resource.Sche
 				MarkdownDescription: helpers.NewAttributeDescription("BGP bestpath selection will allow 'invalid' origin-AS").String,
 				Optional:            true,
 			},
+			"default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default action if route does not satisfy inbound route-policy").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
+			"default_policy_action_out": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default action if route does not satisfy outbound route-policy").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
 		},
 	}
 }
@@ -557,14 +570,17 @@ func (r *RouterBGPAFGroupResource) Create(ctx context.Context, req resource.Crea
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
 		var ops []gnmi.SetOperation
 
 		// Create object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
@@ -597,7 +613,6 @@ func (r *RouterBGPAFGroupResource) Create(ctx context.Context, req resource.Crea
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *RouterBGPAFGroupResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterBGPAFGroup
 
@@ -668,7 +683,6 @@ func (r *RouterBGPAFGroupResource) Read(ctx context.Context, req resource.ReadRe
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *RouterBGPAFGroupResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterBGPAFGroup
 
@@ -691,6 +705,10 @@ func (r *RouterBGPAFGroupResource) Update(ctx context.Context, req resource.Upda
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -698,7 +716,7 @@ func (r *RouterBGPAFGroupResource) Update(ctx context.Context, req resource.Upda
 		var ops []gnmi.SetOperation
 
 		// Update object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		deletedListItems := plan.getDeletedItems(ctx, state)
@@ -734,7 +752,6 @@ func (r *RouterBGPAFGroupResource) Update(ctx context.Context, req resource.Upda
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *RouterBGPAFGroupResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterBGPAFGroup
 
@@ -744,7 +761,13 @@ func (r *RouterBGPAFGroupResource) Delete(ctx context.Context, req resource.Dele
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
@@ -793,7 +816,6 @@ func (r *RouterBGPAFGroupResource) Delete(ctx context.Context, req resource.Dele
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *RouterBGPAFGroupResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

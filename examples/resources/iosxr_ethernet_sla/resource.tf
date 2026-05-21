@@ -29,6 +29,10 @@ resource "iosxr_ethernet_sla" "example" {
       thresholds_stateless_log_on_mean_value       = 2000
       thresholds_stateless_log_on_sample_count     = 10
       thresholds_stateless_log_on_in_and_above_bin = 5
+      # Supported from version 25.1
+      aggregate_minimum_delay = 100
+      # Supported from version 25.1
+      usec_minimum_delay = true
     }
   ]
   schedule_every_minutes  = 1

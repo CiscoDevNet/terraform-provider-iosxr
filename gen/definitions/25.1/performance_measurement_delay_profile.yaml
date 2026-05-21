@@ -1,0 +1,56 @@
+---
+name: Performance Measurement Delay Profile
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/delay-profile
+doc_category: Performance Monitoring
+attributes:
+  - yang_name: endpoint/default/histogram/delay-bins/explicit
+    tf_name: delay_bins_explicit
+    description: "explicit list of 27 numbers to split 28 bins. All 27 entries must be configured"
+    type: Int64List
+    example: 100
+  - yang_name: endpoint/default/probe/collect-hbh
+    tf_name: collect_hbh
+    type: Bool
+    type_yang_bool: presence
+    example: true
+  - yang_name: endpoint/default/probe/measurement-mode/timestamp-format/ntp
+    tf_name: ntp
+    type: Bool
+    type_yang_bool: presence
+    example: true
+  - yang_name: interfaces/default/probe/timestamp-format/ntp
+    tf_name: ntp
+    type: Bool
+    type_yang_bool: presence
+    example: true
+  - yang_name: rsvp-te/default/probe/timestamp-format/ntp
+    tf_name: ntp
+    type: Bool
+    type_yang_bool: presence
+    example: true
+  - yang_name: sr-policy/default/probe/collect-hbh
+    tf_name: collect_hbh
+    type: Bool
+    type_yang_bool: presence
+    example: true
+  - yang_name: sr-policy/default/probe/timestamp-format/ntp
+    tf_name: ntp
+    type: Bool
+    type_yang_bool: presence
+    example: true
+  - yang_name: names/name
+    tf_name: profiles
+    type: List
+    attributes:
+      - yang_name: probe/collect-hbh
+        tf_name: collect_hbh
+        type: Bool
+        type_yang_bool: presence
+        example: true
+      - yang_name: probe/timestamp-format/ntp
+        tf_name: ntp
+        type: Bool
+        type_yang_bool: presence
+        example: true
+
+

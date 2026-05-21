@@ -93,6 +93,7 @@ Read-Only:
 - `auto_enroll` (Number) Set auto-enroll percentage at which renewal will be triggered
 - `crl_optional` (Boolean) CRL verification as optional
 - `description` (String) Description for the trustpoint
+- `enrollment_authentication_profile` (String) Authentication profile used during certificate enrollment
 - `enrollment_retry_count` (Number) How many times to poll CA for our certificate
 - `enrollment_retry_period` (Number) How long to wait between requests to CA for our certificate
 - `enrollment_terminal` (Boolean) Enroll via the terminal (cut-and-paste)
@@ -102,6 +103,7 @@ Read-Only:
 - `message_digest` (String) Certificate message digesti self enrollment
 - `method_est_credential_certificate` (String) Certificate based authentication in TLS handshake during bootstrap
 - `query_url` (String) CA server query URL
+- `re_enrollment_authentication_profile` (String) Authentication profile used during certificate re-enrollment
 - `renewal_message_type_pkcsreq` (Boolean) Message type PKCSReq(Default)
 - `renewal_message_type_renewalreq` (Boolean) Message type RenewalReq
 - `rsakeypair` (String) RSA key pair
@@ -110,6 +112,7 @@ Read-Only:
 - `sftp_password` (String, Sensitive) Enter password in encrypted form
 - `sftp_username` (String) Secure FTP username
 - `skip_challenge_password` (Boolean) Skip challenge password attribute for manual enrollment request
+- `ssl_profile` (String) SSL profile parameters used during TLS/mTLS handshake
 - `subject_alternative_name` (String) Include Subject Alternative Name(SAN) in CSR request
 - `subject_name` (String) Subject Name
 - `trustpoint_name` (String) Trustpoint Name

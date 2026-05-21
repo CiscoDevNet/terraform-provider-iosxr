@@ -3,12 +3,12 @@
 page_title: "iosxr_hw_module_profile_8000 Data Source - terraform-provider-iosxr"
 subcategory: "Cisco 8000 Series"
 description: |-
-  This data source can read the HW Module Profile configuration on Cisco 8000 series routers.
+  This data source can read the HW Module Profile 8000 configuration.
 ---
 
 # iosxr_hw_module_profile_8000 (Data Source)
 
-This data source can read the HW Module Profile configuration on Cisco 8000 series routers.
+This data source can read the HW Module Profile 8000 configuration.
 
 ## Example Usage
 
@@ -153,6 +153,8 @@ Read-Only:
 - `buffer_extended_traffic_class` (Attributes List) configure traffic-class (see [below for nested schema](#nestedatt--profile_priority_flow_control_locations--buffer_extended_traffic_class))
 - `buffer_internal_traffic_class` (Attributes List) configure traffic-class (see [below for nested schema](#nestedatt--profile_priority_flow_control_locations--buffer_internal_traffic_class))
 - `location_name` (String) Location to apply PFC configuration
+- `non_pfc_tcs` (Boolean) configure to allow lossy TCs to evict.
+- `non_pfc_tcs_max_non_pfc_voqs` (Number) max lossy voqs to evict
 
 <a id="nestedatt--profile_priority_flow_control_locations--buffer_extended_traffic_class"></a>
 ### Nested Schema for `profile_priority_flow_control_locations.buffer_extended_traffic_class`

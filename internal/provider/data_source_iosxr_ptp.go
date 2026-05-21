@@ -315,6 +315,14 @@ func (d *PTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Configure telecom subordinate clock",
 				Computed:            true,
 			},
+			"monitor_receiver": schema.BoolAttribute{
+				MarkdownDescription: "Enable monitor-receiver packet exchange",
+				Computed:            true,
+			},
+			"monitor_sender": schema.BoolAttribute{
+				MarkdownDescription: "Enable monitor-sender packet exchange",
+				Computed:            true,
+			},
 		},
 	}
 }

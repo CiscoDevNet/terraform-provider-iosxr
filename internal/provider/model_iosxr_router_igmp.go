@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -111,7 +112,7 @@ func (data RouterIGMPData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterIGMP) toBody(ctx context.Context) string {
+func (data RouterIGMP) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AccountingMaxHistory.IsNull() && !data.AccountingMaxHistory.IsUnknown() {
 		body, _ = sjson.Set(body, "accounting.max-history", strconv.FormatInt(data.AccountingMaxHistory.ValueInt64(), 10))
@@ -203,8 +204,29 @@ func (data RouterIGMP) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterIGMP) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterIGMP) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterIGMP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "accounting.max-history"); value.Exists() && !data.AccountingMaxHistory.IsNull() {
 		data.AccountingMaxHistory = types.Int64Value(value.Int())
@@ -698,7 +720,6 @@ func (data *RouterIGMP) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterIGMP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.TrafficProfile.IsNull() {

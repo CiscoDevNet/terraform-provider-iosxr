@@ -14,12 +14,13 @@ This resource can manage the LLDP configuration.
 
 ```terraform
 resource "iosxr_lldp" "example" {
-  holdtime                               = 50
-  timer                                  = 6
-  reinit                                 = 3
-  system_name                            = "Router1"
-  system_description                     = "Router1-Description"
-  chassis_id                             = "FOC22439P72"
+  holdtime           = 50
+  timer              = 6
+  reinit             = 3
+  system_name        = "Router1"
+  system_description = "Router1-Description"
+  chassis_id         = "FOC22439P72"
+  # Not supported from version 25.1 and above
   chassis_id_type_local                  = true
   subinterfaces_enable                   = true
   subinterfaces_tagged                   = true
@@ -41,12 +42,19 @@ resource "iosxr_lldp" "example" {
 
 - `chassis_id` (String) LLDP chassis ID to advertise
 - `chassis_id_type_chassis_component` (Boolean) Value of entPhysicalAlias object defined in IETF RFC 2737
+  - **Not supported from version `25.1` and above**
 - `chassis_id_type_interface_alias` (Boolean) Value of ifAlias object defined in IETF RFC 2863
+  - **Not supported from version `25.1` and above**
 - `chassis_id_type_interface_name` (Boolean) Value of ifName object defined in IETF RFC 2863
+  - **Not supported from version `25.1` and above**
 - `chassis_id_type_local` (Boolean) Chassis identifier based on a locally defined value
+  - **Not supported from version `25.1` and above**
 - `chassis_id_type_mac_address` (Boolean) Value of a unicast source address
+  - **Not supported from version `25.1` and above**
 - `chassis_id_type_network_address` (Boolean) Network address associated with a particular chassis
+  - **Not supported from version `25.1` and above**
 - `chassis_id_type_port_component` (Boolean) Value of entPhysicalAlias object defined in IETF RFC 2737
+  - **Not supported from version `25.1` and above**
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.

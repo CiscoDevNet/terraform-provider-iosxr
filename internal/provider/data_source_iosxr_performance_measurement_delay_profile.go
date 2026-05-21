@@ -506,8 +506,29 @@ func (d *PerformanceMeasurementDelayProfileDataSource) Schema(ctx context.Contex
 							MarkdownDescription: "Anomaly Loss advertisement lower-bound",
 							Computed:            true,
 						},
+						"collect_hbh": schema.BoolAttribute{
+							MarkdownDescription: "Collect hop by hop data for delay sessions",
+							Computed:            true,
+						},
+						"ntp": schema.BoolAttribute{
+							MarkdownDescription: "Network Time Protocol timestamp format",
+							Computed:            true,
+						},
 					},
 				},
+			},
+			"delay_bins_explicit": schema.ListAttribute{
+				MarkdownDescription: "explicit list of 27 numbers to split 28 bins. All 27 entries must be configured",
+				ElementType:         types.Int64Type,
+				Computed:            true,
+			},
+			"collect_hbh": schema.BoolAttribute{
+				MarkdownDescription: "Collect hop by hop data for delay sessions",
+				Computed:            true,
+			},
+			"ntp": schema.BoolAttribute{
+				MarkdownDescription: "Network Time Protocol timestamp format",
+				Computed:            true,
 			},
 		},
 	}

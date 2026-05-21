@@ -115,7 +115,7 @@ func (data SNMPServerVRFData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SNMPServerVRF) toBody(ctx context.Context) string {
+func (data SNMPServerVRF) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.VrfName.IsNull() && !data.VrfName.IsUnknown() {
 		body, _ = sjson.Set(body, "vrf-name", data.VrfName.ValueString())
@@ -256,7 +256,6 @@ func (data SNMPServerVRF) toBody(ctx context.Context) string {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
 func (data *SNMPServerVRF) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Hosts {
 		keys := [...]string{"address"}
@@ -1259,7 +1258,6 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *SNMPServerVRF) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Contexts {

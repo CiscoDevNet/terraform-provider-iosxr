@@ -51,6 +51,10 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
   accept_own                                          = true
   slow_peer_dynamic                                   = true
   slow_peer_dynamic_threshold                         = 260
+  # Supported from version 25.1
+  default_policy_action_in = "accept"
+  # Supported from version 25.1
+  default_policy_action_out = "accept"
 }
 ```
 
@@ -105,6 +109,12 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
 - `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
+- `default_policy_action_in` (String) Default action if route does not satisfy inbound route-policy
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.1`
+- `default_policy_action_out` (String) Default action if route does not satisfy outbound route-policy
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.1`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.

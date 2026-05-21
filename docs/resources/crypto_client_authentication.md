@@ -51,7 +51,7 @@ Required:
 
 Optional:
 
-- `password_six` (String) Specifies that an clear text key will follow
+- `password_six` (String, Sensitive) Specifies that an clear text key will follow
 - `username` (String) Configure Username
 
 ## Import

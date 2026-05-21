@@ -50,32 +50,32 @@ attributes:
     tf_name: console_discriminator_match1
     description: "Set match discriminator 1"
     type: String
-    example: TODO
+    example: MATCH1
   - yang_name: console/discriminator/match2
     tf_name: console_discriminator_match2
     description: "Set match discriminator 2"
     type: String
-    example: TODO
+    example: MATCH2
   - yang_name: console/discriminator/match3
     tf_name: console_discriminator_match3
     description: "Set match discriminator 3"
     type: String
-    example: TODO
+    example: MATCH3
   - yang_name: console/discriminator/nomatch1
     tf_name: console_discriminator_nomatch1
     description: "Set no-match discriminator 1"
     type: String
-    example: TODO
+    example: NOMATCH1
   - yang_name: console/discriminator/nomatch2
     tf_name: console_discriminator_nomatch2
     description: "Set no-match discriminator 2"
     type: String
-    example: TODO
+    example: NOMATCH2
   - yang_name: console/discriminator/nomatch3
     tf_name: console_discriminator_nomatch3
     description: "Set no-match discriminator 3"
     type: String
-    example: TODO
+    example: NOMATCH3
   - yang_name: console/facility/all
     tf_name: facility_all
     description: "All supported facilities"
@@ -109,32 +109,32 @@ attributes:
     tf_name: monitor_discriminator_match1
     description: "Set match discriminator 1"
     type: String
-    example: TODO
+    example: MATCH1
   - yang_name: monitor/discriminator/match2
     tf_name: monitor_discriminator_match2
     description: "Set match discriminator 2"
     type: String
-    example: TODO
+    example: MATCH2
   - yang_name: monitor/discriminator/match3
     tf_name: monitor_discriminator_match3
     description: "Set match discriminator 3"
     type: String
-    example: TODO
+    example: MATCH3
   - yang_name: monitor/discriminator/nomatch1
     tf_name: monitor_discriminator_nomatch1
     description: "Set no-match discriminator 1"
     type: String
-    example: TODO
+    example: NOMATCH1
   - yang_name: monitor/discriminator/nomatch2
     tf_name: monitor_discriminator_nomatch2
     description: "Set no-match discriminator 2"
     type: String
-    example: TODO
+    example: NOMATCH2
   - yang_name: monitor/discriminator/nomatch3
     tf_name: monitor_discriminator_nomatch3
     description: "Set no-match discriminator 3"
     type: String
-    example: TODO
+    example: NOMATCH3
   - yang_name: monitor/monitor-level
     tf_name: monitor_monitor_level
     description: "Set monitor logging"
@@ -199,7 +199,7 @@ attributes:
         tf_name: path_path_name
         description: "File path (e.g. /disk0: )"
         type: String
-        example: TODO
+        example: /disk0:/logging.log
       - yang_name: path/severity
         tf_name: path_severity
         description: "severity"
@@ -274,7 +274,6 @@ attributes:
     legacy: true
   - yang_name: ipv6/precedence
     legacy: true
-  # deprecated/removed container: monitor-discriminator
   - yang_name: monitor-discriminator/match1
     legacy: true
   - yang_name: monitor-discriminator/match2

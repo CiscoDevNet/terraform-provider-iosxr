@@ -13,4 +13,3 @@ attributes:
     type: Bool
     type_yang_bool: presence
     example: true
-

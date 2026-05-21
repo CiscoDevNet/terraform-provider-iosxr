@@ -79,6 +79,7 @@ func (d *CryptoClientAuthenticationDataSource) Schema(ctx context.Context, req d
 						"password_six": schema.StringAttribute{
 							MarkdownDescription: "Specifies that an clear text key will follow",
 							Computed:            true,
+							Sensitive:           true,
 						},
 						"username": schema.StringAttribute{
 							MarkdownDescription: "Configure Username",

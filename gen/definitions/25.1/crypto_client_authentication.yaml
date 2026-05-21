@@ -15,6 +15,7 @@ attributes:
         tf_name: password_six
         description: "Specifies that an clear text key will follow"
         type: String
+        sensitive: true
         example: Cisco123!
       - yang_name: username
         tf_name: username

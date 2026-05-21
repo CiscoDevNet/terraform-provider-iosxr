@@ -94,6 +94,7 @@ func (r *CryptoClientAuthenticationResource) Schema(ctx context.Context, req res
 						"password_six": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specifies that an clear text key will follow").String,
 							Optional:            true,
+							Sensitive:           true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 							},

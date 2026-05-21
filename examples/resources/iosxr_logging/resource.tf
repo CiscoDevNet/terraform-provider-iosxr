@@ -58,7 +58,7 @@ resource "iosxr_logging" "example" {
       # Supported from version 25.1
       path_maxfilesize = 100
       # Supported from version 25.1
-      path_path_name = "TODO"
+      path_path_name = "/disk0:/logging.log"
       # Supported from version 25.1
       path_severity = "alerts"
     }
@@ -112,17 +112,17 @@ resource "iosxr_logging" "example" {
   # Supported from version 25.1
   console_console_level = "alerts"
   # Supported from version 25.1
-  console_discriminator_match1 = "TODO"
+  console_discriminator_match1 = "MATCH1"
   # Supported from version 25.1
-  console_discriminator_match2 = "TODO"
+  console_discriminator_match2 = "MATCH2"
   # Supported from version 25.1
-  console_discriminator_match3 = "TODO"
+  console_discriminator_match3 = "MATCH3"
   # Supported from version 25.1
-  console_discriminator_nomatch1 = "TODO"
+  console_discriminator_nomatch1 = "NOMATCH1"
   # Supported from version 25.1
-  console_discriminator_nomatch2 = "TODO"
+  console_discriminator_nomatch2 = "NOMATCH2"
   # Supported from version 25.1
-  console_discriminator_nomatch3 = "TODO"
+  console_discriminator_nomatch3 = "NOMATCH3"
   # Supported from version 25.1
   facility_all = "all"
   # Supported from version 25.1

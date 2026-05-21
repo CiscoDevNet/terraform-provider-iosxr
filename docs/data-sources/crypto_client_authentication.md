@@ -38,6 +38,6 @@ data "iosxr_crypto_client_authentication" "example" {
 
 Read-Only:
 
-- `password_six` (String) Specifies that an clear text key will follow
+- `password_six` (String, Sensitive) Specifies that an clear text key will follow
 - `profile_name` (String) Template that will be pinned to applications
 - `username` (String) Configure Username

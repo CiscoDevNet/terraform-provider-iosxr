@@ -5,4 +5,3 @@ doc_category: Performance Monitoring
 attributes:
   - yang_name: liveness-detection/collect-hbh
     legacy: true
-

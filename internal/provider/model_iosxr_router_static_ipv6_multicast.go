@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -164,7 +165,7 @@ func (data RouterStaticIPv6MulticastData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterStaticIPv6Multicast) toBody(ctx context.Context) string {
+func (data RouterStaticIPv6Multicast) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.PrefixAddress.IsNull() && !data.PrefixAddress.IsUnknown() {
 		body, _ = sjson.Set(body, "prefix-address", data.PrefixAddress.ValueString())
@@ -439,8 +440,29 @@ func (data RouterStaticIPv6Multicast) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterStaticIPv6Multicast) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterStaticIPv6Multicast) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterStaticIPv6Multicast) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.NexthopInterfaces {
 		keys := [...]string{"interface-name"}
@@ -2186,7 +2208,6 @@ func (data *RouterStaticIPv6Multicast) getEmptyLeafsDelete(ctx context.Context) 
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterStaticIPv6Multicast) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Vrfs {

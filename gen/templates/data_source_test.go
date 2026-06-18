@@ -22,8 +22,10 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -36,6 +38,11 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 	if {{range $i, $e := .TestTags}}{{if $i}} && {{end}}os.Getenv("{{$e}}") == ""{{end}} {
         t.Skip("skipping test, set environment variable {{range $i, $e := .TestTags}}{{if $i}} or {{end}}{{$e}}{{end}}")
     }
+	{{- end}}
+	{{- if .RemovedInVersion}}
+	if helpers.IosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.RemovedInVersion}}") {
+		t.Skipf("skipping test, data source '{{snakeCase .Name}}' is not supported from IOS-XR version {{formatVersionDisplay .RemovedInVersion}} and above (current: %s)", os.Getenv("IOSXR_VERSION"))
+	}
 	{{- end}}
 	var checks []resource.TestCheckFunc
 	{{- $name := .Name }}
@@ -74,7 +81,13 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{$ccclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"))
 	}
 	{{- else}}
+	{{- if or .AddedInVersion .RemovedInVersion}}
+	if {{if .AddedInVersion}}iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.AddedInVersion}}"){{end}}{{if and .AddedInVersion .RemovedInVersion}} && {{end}}{{if .RemovedInVersion}}!iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.RemovedInVersion}}"){{end}} {
+	{{- end}}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{$ccclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"))
+	{{- if or .AddedInVersion .RemovedInVersion}}
+	}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- end}}
@@ -234,12 +247,18 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 	config += `				{{.TfName}} = [{` + "\n"
 					{{- range  .Attributes}}
 					{{- if not .ExcludeTest}}
+					{{- if or .AddedInVersion .RemovedInVersion}}
+	if {{if .AddedInVersion}}iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.AddedInVersion}}"){{end}}{{if and .AddedInVersion .RemovedInVersion}} && {{end}}{{if .RemovedInVersion}}!iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.RemovedInVersion}}"){{end}} {
+					{{- end}}
 					{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `					{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
 	}
 					{{- else}}
 	config += `					{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+					{{- end}}
+					{{- if or .AddedInVersion .RemovedInVersion}}
+	}
 					{{- end}}
 					{{- end}}
 					{{- end}}
@@ -278,12 +297,18 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 	}
 			{{- end}}
 		{{- else}}
+		{{- if or .AddedInVersion .RemovedInVersion}}
+	if {{if .AddedInVersion}}iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.AddedInVersion}}"){{end}}{{if and .AddedInVersion .RemovedInVersion}} && {{end}}{{if .RemovedInVersion}}!iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.RemovedInVersion}}"){{end}} {
+		{{- end}}
 		{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
 	}
 		{{- else}}
 	config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+		{{- end}}
+		{{- if or .AddedInVersion .RemovedInVersion}}
+	}
 		{{- end}}
 		{{- end}}
 		{{- end}}
@@ -293,12 +318,18 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 	}
 		{{- end}}
 	{{- else}}
+	{{- if or .AddedInVersion .RemovedInVersion}}
+	if {{if .AddedInVersion}}iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.AddedInVersion}}"){{end}}{{if and .AddedInVersion .RemovedInVersion}} && {{end}}{{if .RemovedInVersion}}!iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.RemovedInVersion}}"){{end}} {
+	{{- end}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
 	}
 	{{- else}}
 	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion}}
+	}
 	{{- end}}
 	{{- end}}
 	{{- end}}

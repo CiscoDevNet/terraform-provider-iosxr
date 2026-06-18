@@ -71,6 +71,12 @@ func TestAccIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "slow_peer_static", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "origin_as_validation_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "bestpath_origin_as_allow_invalid", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "default_policy_action_in", "accept"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "default_policy_action_out", "accept"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -269,6 +275,12 @@ func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all() string {
 	config += `	slow_peer_static = true` + "\n"
 	config += `	origin_as_validation_disable = true` + "\n"
 	config += `	bestpath_origin_as_allow_invalid = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	default_policy_action_in = "accept"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	default_policy_action_out = "accept"` + "\n"
+	}
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
 	config += `}` + "\n"
 	return config

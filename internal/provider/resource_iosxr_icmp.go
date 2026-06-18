@@ -40,7 +40,6 @@ import (
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewICMPResource() resource.Resource {
@@ -148,14 +147,13 @@ func (r *ICMPResource) Create(ctx context.Context, req resource.CreateRequest, r
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
 		var ops []gnmi.SetOperation
 
 		// Create object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
@@ -188,7 +186,6 @@ func (r *ICMPResource) Create(ctx context.Context, req resource.CreateRequest, r
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *ICMPResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state ICMP
 
@@ -259,7 +256,6 @@ func (r *ICMPResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *ICMPResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state ICMP
 
@@ -289,7 +285,7 @@ func (r *ICMPResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		var ops []gnmi.SetOperation
 
 		// Update object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		deletedListItems := plan.getDeletedItems(ctx, state)
@@ -325,7 +321,6 @@ func (r *ICMPResource) Update(ctx context.Context, req resource.UpdateRequest, r
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *ICMPResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state ICMP
 
@@ -335,7 +330,6 @@ func (r *ICMPResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
@@ -384,7 +378,6 @@ func (r *ICMPResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *ICMPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

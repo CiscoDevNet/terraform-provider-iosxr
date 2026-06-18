@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -402,6 +403,8 @@ type RouterBGPNeighborGroupAddressFamily struct {
 	SlowPeerStatic                                  types.Bool   `tfsdk:"slow_peer_static"`
 	OriginAsValidationDisable                       types.Bool   `tfsdk:"origin_as_validation_disable"`
 	BestpathOriginAsAllowInvalid                    types.Bool   `tfsdk:"bestpath_origin_as_allow_invalid"`
+	DefaultPolicyActionIn                           types.String `tfsdk:"default_policy_action_in"`
+	DefaultPolicyActionOut                          types.String `tfsdk:"default_policy_action_out"`
 }
 
 // End of section. //template:end types
@@ -420,7 +423,7 @@ func (data RouterBGPNeighborGroupData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
+func (data RouterBGPNeighborGroup) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
 		body, _ = sjson.Set(body, "neighbor-group-name", data.Name.ValueString())
@@ -1366,6 +1369,12 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"bestpath.origin-as.allow.invalid", []interface{}{nil})
 				}
 			}
+			if !item.DefaultPolicyActionIn.IsNull() && !item.DefaultPolicyActionIn.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"default-policy-action.in", item.DefaultPolicyActionIn.ValueString())
+			}
+			if !item.DefaultPolicyActionOut.IsNull() && !item.DefaultPolicyActionOut.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"default-policy-action.out", item.DefaultPolicyActionOut.ValueString())
+			}
 		}
 	}
 	return body
@@ -1373,8 +1382,39 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterBGPNeighborGroup) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "address_family.default_policy_action_in",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "address_family.default_policy_action_out",
+			AddedInVersion: "25.1",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterBGPNeighborGroup) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() && !data.RemoteAs.IsNull() {
 		data.RemoteAs = types.StringValue(value.String())
@@ -3080,6 +3120,16 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.AddressFamily[i].BestpathOriginAsAllowInvalid = types.BoolNull()
 		}
+		if value := r.Get("default-policy-action.in"); value.Exists() && !data.AddressFamily[i].DefaultPolicyActionIn.IsNull() {
+			data.AddressFamily[i].DefaultPolicyActionIn = types.StringValue(value.String())
+		} else {
+			data.AddressFamily[i].DefaultPolicyActionIn = types.StringNull()
+		}
+		if value := r.Get("default-policy-action.out"); value.Exists() && !data.AddressFamily[i].DefaultPolicyActionOut.IsNull() {
+			data.AddressFamily[i].DefaultPolicyActionOut = types.StringValue(value.String())
+		} else {
+			data.AddressFamily[i].DefaultPolicyActionOut = types.StringNull()
+		}
 	}
 }
 
@@ -4032,6 +4082,12 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 				item.BestpathOriginAsAllowInvalid = types.BoolValue(true)
 			} else {
 				item.BestpathOriginAsAllowInvalid = types.BoolValue(false)
+			}
+			if cValue := v.Get("default-policy-action.in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("default-policy-action.out"); cValue.Exists() {
+				item.DefaultPolicyActionOut = types.StringValue(cValue.String())
 			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true
@@ -4989,6 +5045,12 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 			} else {
 				item.BestpathOriginAsAllowInvalid = types.BoolValue(false)
 			}
+			if cValue := v.Get("default-policy-action.in"); cValue.Exists() {
+				item.DefaultPolicyActionIn = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("default-policy-action.out"); cValue.Exists() {
+				item.DefaultPolicyActionOut = types.StringValue(cValue.String())
+			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true
 		})
@@ -5024,6 +5086,12 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 				found = false
 			}
 			if found {
+				if !state.AddressFamily[i].DefaultPolicyActionOut.IsNull() && data.AddressFamily[j].DefaultPolicyActionOut.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/default-policy-action/out", state.getPath(), keyString))
+				}
+				if !state.AddressFamily[i].DefaultPolicyActionIn.IsNull() && data.AddressFamily[j].DefaultPolicyActionIn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/default-policy-action/in", state.getPath(), keyString))
+				}
 				if !state.AddressFamily[i].BestpathOriginAsAllowInvalid.IsNull() && data.AddressFamily[j].BestpathOriginAsAllowInvalid.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/bestpath/origin-as/allow/invalid", state.getPath(), keyString))
 				}
@@ -6186,7 +6254,6 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.AddressFamily {

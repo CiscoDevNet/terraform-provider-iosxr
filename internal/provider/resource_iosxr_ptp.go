@@ -41,7 +41,6 @@ import (
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewPTPResource() resource.Resource {
@@ -411,6 +410,14 @@ func (r *PTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Configure telecom subordinate clock").String,
 				Optional:            true,
 			},
+			"monitor_receiver": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable monitor-receiver packet exchange").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
+			},
+			"monitor_sender": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable monitor-sender packet exchange").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -442,14 +449,17 @@ func (r *PTPResource) Create(ctx context.Context, req resource.CreateRequest, re
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
 		var ops []gnmi.SetOperation
 
 		// Create object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
@@ -482,7 +492,6 @@ func (r *PTPResource) Create(ctx context.Context, req resource.CreateRequest, re
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *PTPResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state PTP
 
@@ -553,7 +562,6 @@ func (r *PTPResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *PTPResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state PTP
 
@@ -576,6 +584,10 @@ func (r *PTPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -583,7 +595,7 @@ func (r *PTPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		var ops []gnmi.SetOperation
 
 		// Update object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		deletedListItems := plan.getDeletedItems(ctx, state)
@@ -619,7 +631,6 @@ func (r *PTPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *PTPResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state PTP
 
@@ -629,7 +640,13 @@ func (r *PTPResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
@@ -678,7 +695,6 @@ func (r *PTPResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *PTPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

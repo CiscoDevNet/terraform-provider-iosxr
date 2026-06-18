@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -132,6 +133,8 @@ type RouterBGPVRFNeighborAddressFamily struct {
 	SlowPeerStatic                                  types.Bool   `tfsdk:"slow_peer_static"`
 	OriginAsValidationDisable                       types.Bool   `tfsdk:"origin_as_validation_disable"`
 	BestpathOriginAsAllowInvalid                    types.Bool   `tfsdk:"bestpath_origin_as_allow_invalid"`
+	DefaultPolicyActionIn                           types.String `tfsdk:"default_policy_action_in"`
+	DefaultPolicyActionOut                          types.String `tfsdk:"default_policy_action_out"`
 }
 
 type RouterBGPVRFNeighborAddressFamilyData struct {
@@ -232,6 +235,8 @@ type RouterBGPVRFNeighborAddressFamilyData struct {
 	SlowPeerStatic                                  types.Bool   `tfsdk:"slow_peer_static"`
 	OriginAsValidationDisable                       types.Bool   `tfsdk:"origin_as_validation_disable"`
 	BestpathOriginAsAllowInvalid                    types.Bool   `tfsdk:"bestpath_origin_as_allow_invalid"`
+	DefaultPolicyActionIn                           types.String `tfsdk:"default_policy_action_in"`
+	DefaultPolicyActionOut                          types.String `tfsdk:"default_policy_action_out"`
 }
 
 // End of section. //template:end types
@@ -250,7 +255,7 @@ func (data RouterBGPVRFNeighborAddressFamilyData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterBGPVRFNeighborAddressFamily) toBody(ctx context.Context) string {
+func (data RouterBGPVRFNeighborAddressFamily) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
 		body, _ = sjson.Set(body, "af-name", data.AfName.ValueString())
@@ -668,13 +673,56 @@ func (data RouterBGPVRFNeighborAddressFamily) toBody(ctx context.Context) string
 			body, _ = sjson.Set(body, "bestpath.origin-as.allow.invalid", []interface{}{nil})
 		}
 	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.DefaultPolicyActionIn.IsNull() && !data.DefaultPolicyActionIn.IsUnknown() {
+			body, _ = sjson.Set(body, "default-policy-action.in", data.DefaultPolicyActionIn.ValueString())
+		}
+	}
+	// Field added in version 25.1 - only set if provider version supports it
+	if helpers.VersionAtLeast(providerVersion, "25.1") {
+		if !data.DefaultPolicyActionOut.IsNull() && !data.DefaultPolicyActionOut.IsUnknown() {
+			body, _ = sjson.Set(body, "default-policy-action.out", data.DefaultPolicyActionOut.ValueString())
+		}
+	}
 	return body
 }
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterBGPVRFNeighborAddressFamily) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "default_policy_action_in",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "default_policy_action_out",
+			AddedInVersion: "25.1",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterBGPVRFNeighborAddressFamily) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "encapsulation-type"); value.Exists() && !data.EncapsulationType.IsNull() {
 		data.EncapsulationType = types.StringValue(value.String())
@@ -1411,6 +1459,16 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 	} else {
 		data.BestpathOriginAsAllowInvalid = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "default-policy-action.in"); value.Exists() && !data.DefaultPolicyActionIn.IsNull() {
+		data.DefaultPolicyActionIn = types.StringValue(value.String())
+	} else {
+		data.DefaultPolicyActionIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "default-policy-action.out"); value.Exists() && !data.DefaultPolicyActionOut.IsNull() {
+		data.DefaultPolicyActionOut = types.StringValue(value.String())
+	} else {
+		data.DefaultPolicyActionOut = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1830,6 +1888,12 @@ func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res
 		data.BestpathOriginAsAllowInvalid = types.BoolValue(true)
 	} else {
 		data.BestpathOriginAsAllowInvalid = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-policy-action.in"); value.Exists() {
+		data.DefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-policy-action.out"); value.Exists() {
+		data.DefaultPolicyActionOut = types.StringValue(value.String())
 	}
 }
 
@@ -2251,6 +2315,12 @@ func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context,
 	} else {
 		data.BestpathOriginAsAllowInvalid = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "default-policy-action.in"); value.Exists() {
+		data.DefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-policy-action.out"); value.Exists() {
+		data.DefaultPolicyActionOut = types.StringValue(value.String())
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -2259,6 +2329,12 @@ func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context,
 
 func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPVRFNeighborAddressFamily) []string {
 	deletedItems := make([]string, 0)
+	if !state.DefaultPolicyActionOut.IsNull() && data.DefaultPolicyActionOut.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-policy-action/out", state.getPath()))
+	}
+	if !state.DefaultPolicyActionIn.IsNull() && data.DefaultPolicyActionIn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-policy-action/in", state.getPath()))
+	}
 	if !state.BestpathOriginAsAllowInvalid.IsNull() && data.BestpathOriginAsAllowInvalid.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bestpath/origin-as/allow/invalid", state.getPath()))
 	}
@@ -2757,9 +2833,14 @@ func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.C
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *RouterBGPVRFNeighborAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.DefaultPolicyActionOut.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-policy-action/out", data.getPath()))
+	}
+	if !data.DefaultPolicyActionIn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-policy-action/in", data.getPath()))
+	}
 	if !data.BestpathOriginAsAllowInvalid.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bestpath/origin-as/allow/invalid", data.getPath()))
 	}

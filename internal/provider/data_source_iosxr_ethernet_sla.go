@@ -236,6 +236,14 @@ func (d *EthernetSLADataSource) Schema(ctx context.Context, req datasource.Schem
 							MarkdownDescription: "Specify the bin number in-and-above which samples count towards the threshold sample count",
 							Computed:            true,
 						},
+						"aggregate_minimum_delay": schema.Int64Attribute{
+							MarkdownDescription: "Specify the width of the first bin in milliseconds (or optionally microseconds), independent of the width of the other bins",
+							Computed:            true,
+						},
+						"usec_minimum_delay": schema.BoolAttribute{
+							MarkdownDescription: "Interpret the minimum-delay in microseconds",
+							Computed:            true,
+						},
 					},
 				},
 			},

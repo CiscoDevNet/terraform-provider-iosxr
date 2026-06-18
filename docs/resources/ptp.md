@@ -57,6 +57,10 @@ resource "iosxr_ptp" "example" {
   clock_timescale_ptp                           = true
   clock_time_source_gps                         = true
   clock_profile_g_8275_1_clock_type_t_bc        = true
+  # Supported from version 25.1
+  monitor_receiver = true
+  # Supported from version 25.1
+  monitor_sender = true
 }
 ```
 
@@ -116,6 +120,10 @@ resource "iosxr_ptp" "example" {
 - `log_servo_events` (Boolean) Log servo events
 - `min_clock_class` (Number) Clocks with a clock-class higher than minimum clock class will not be considered for selection as a parent clock.
   - Range: `0`-`255`
+- `monitor_receiver` (Boolean) Enable monitor-receiver packet exchange
+  - Supported from version: `25.1`
+- `monitor_sender` (Boolean) Enable monitor-sender packet exchange
+  - Supported from version: `25.1`
 - `network_type_high_pdv` (Boolean) The network has high packet delay variation
 - `performance_monitoring` (Boolean) Enable performance monitoring
 - `phase_difference_threshold_breach` (Number) Value at which a bistate alarm is triggered when the phase difference for any foreign primary is exceeded in nanoseconds

@@ -99,6 +99,16 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
       advertise_anomaly_check_lower_bound     = 100
       advertise_anomaly_loss_upper_bound      = 50
       advertise_anomaly_loss_lower_bound      = 10
+      # Supported from version 25.1
+      collect_hbh = true
+      # Supported from version 25.1
+      ntp = true
     }
   ]
+  # Supported from version 25.1
+  delay_bins_explicit = [100]
+  # Supported from version 25.1
+  collect_hbh = true
+  # Supported from version 25.1
+  ntp = true
 }

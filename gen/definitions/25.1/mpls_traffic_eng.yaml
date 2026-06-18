@@ -1,0 +1,22 @@
+---
+name: MPLS Traffic Eng
+path: Cisco-IOS-XR-um-mpls-te-cfg:/mpls
+doc_category: MPLS
+attributes:
+  - yang_name: traffic-eng/pce/reoptimize/disable
+    tf_name: disable
+    type: Bool
+    type_yang_bool: presence
+    example: true
+  - yang_name: traffic-eng/pce/reoptimize/reoptimization-period-in
+    tf_name: reoptimize_reoptimization_period_in
+    description: "Reoptimization period in seconds"
+    type: Int64
+    min_int: 60
+    max_int: 604800
+    example: 3600
+  - yang_name: traffic-eng/pce/server/ipv4
+    tf_name: server_ipv4
+    description: "IPv4 address of PCE server"
+    type: String
+    example: 192.0.2.1

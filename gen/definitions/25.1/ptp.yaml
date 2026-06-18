@@ -1,0 +1,15 @@
+---
+name: PTP
+path: Cisco-IOS-XR-um-ptp-cfg:/ptp
+doc_category: Timing
+attributes:
+  - yang_name: profiles/profile/monitor-receiver
+    tf_name: monitor_receiver
+    type: Bool
+    type_yang_bool: presence
+    example: true
+  - yang_name: profiles/profile/monitor-sender
+    tf_name: monitor_sender
+    type: Bool
+    type_yang_bool: presence
+    example: true

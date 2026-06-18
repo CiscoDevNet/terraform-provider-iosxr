@@ -83,7 +83,9 @@ func testAccDataSourceIosxrLLDPConfig() string {
 	config += `	system_name = "Router1"` + "\n"
 	config += `	system_description = "Router1-Description"` + "\n"
 	config += `	chassis_id = "FOC22439P72"` + "\n"
-	config += `	chassis_id_type_local = true` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	chassis_id_type_local = true` + "\n"
+	}
 	config += `	subinterfaces_enable = true` + "\n"
 	if os.Getenv("NCS") != "" {
 		config += `	subinterfaces_tagged = true` + "\n"

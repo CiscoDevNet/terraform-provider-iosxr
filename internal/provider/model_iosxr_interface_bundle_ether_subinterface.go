@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -572,7 +573,7 @@ func (data InterfaceBundleEtherSubinterfaceData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context) string {
+func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
 		body, _ = sjson.Set(body, "", data.Name.ValueString())
@@ -1654,8 +1655,29 @@ func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context) string 
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data InterfaceBundleEtherSubinterface) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data InterfaceBundleEtherSubinterface) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *InterfaceBundleEtherSubinterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); !data.L2transport.IsNull() {
 		if value.Exists() {
@@ -8231,7 +8253,6 @@ func (data *InterfaceBundleEtherSubinterface) getEmptyLeafsDelete(ctx context.Co
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *InterfaceBundleEtherSubinterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.PtpInteropIngressConversionClockClassMappings {

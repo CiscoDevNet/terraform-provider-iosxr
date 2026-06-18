@@ -23,9 +23,11 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -39,7 +41,6 @@ import (
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewMPLSTrafficEngResource() resource.Resource {
@@ -82,6 +83,25 @@ func (r *MPLSTrafficEngResource) Schema(ctx context.Context, req resource.Schema
 				MarkdownDescription: helpers.NewAttributeDescription("Go into the MPLS-TE submode").String,
 				Optional:            true,
 			},
+			"disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("disable reoptimization").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
+			},
+			"reoptimize_reoptimization_period_in": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Reoptimization period in seconds").AddIntegerRangeDescription(60, 604800).String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 604800),
+				},
+			},
+			"server_ipv4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address of PCE server").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
 		},
 	}
 }
@@ -113,14 +133,17 @@ func (r *MPLSTrafficEngResource) Create(ctx context.Context, req resource.Create
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
 		var ops []gnmi.SetOperation
 
 		// Create object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
@@ -153,7 +176,6 @@ func (r *MPLSTrafficEngResource) Create(ctx context.Context, req resource.Create
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *MPLSTrafficEngResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state MPLSTrafficEng
 
@@ -224,7 +246,6 @@ func (r *MPLSTrafficEngResource) Read(ctx context.Context, req resource.ReadRequ
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *MPLSTrafficEngResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state MPLSTrafficEng
 
@@ -247,6 +268,10 @@ func (r *MPLSTrafficEngResource) Update(ctx context.Context, req resource.Update
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -254,7 +279,7 @@ func (r *MPLSTrafficEngResource) Update(ctx context.Context, req resource.Update
 		var ops []gnmi.SetOperation
 
 		// Update object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		deletedListItems := plan.getDeletedItems(ctx, state)
@@ -290,7 +315,6 @@ func (r *MPLSTrafficEngResource) Update(ctx context.Context, req resource.Update
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *MPLSTrafficEngResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state MPLSTrafficEng
 
@@ -300,7 +324,13 @@ func (r *MPLSTrafficEngResource) Delete(ctx context.Context, req resource.Delete
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
@@ -349,7 +379,6 @@ func (r *MPLSTrafficEngResource) Delete(ctx context.Context, req resource.Delete
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *MPLSTrafficEngResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

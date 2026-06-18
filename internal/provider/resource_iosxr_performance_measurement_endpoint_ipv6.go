@@ -40,7 +40,6 @@ import (
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewPerformanceMeasurementEndpointIPv6Resource() resource.Resource {
@@ -159,7 +158,7 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Schema(ctx context.Context,
 				},
 			},
 			"liveness_detection_collect_hbh": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Collect hop by hop data for liveness sessions").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Collect hop by hop data for liveness sessions").String + "\n  - **Not supported from version `25.1` and above**",
 				Optional:            true,
 			},
 			"segment_routing": schema.BoolAttribute{
@@ -233,14 +232,17 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Create(ctx context.Context,
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
 		var ops []gnmi.SetOperation
 
 		// Create object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
@@ -273,7 +275,6 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Create(ctx context.Context,
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *PerformanceMeasurementEndpointIPv6Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state PerformanceMeasurementEndpointIPv6
 
@@ -344,7 +345,6 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Read(ctx context.Context, r
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *PerformanceMeasurementEndpointIPv6Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state PerformanceMeasurementEndpointIPv6
 
@@ -367,6 +367,10 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Update(ctx context.Context,
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -374,7 +378,7 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Update(ctx context.Context,
 		var ops []gnmi.SetOperation
 
 		// Update object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		deletedListItems := plan.getDeletedItems(ctx, state)
@@ -410,7 +414,6 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Update(ctx context.Context,
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *PerformanceMeasurementEndpointIPv6Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state PerformanceMeasurementEndpointIPv6
 
@@ -420,7 +423,13 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Delete(ctx context.Context,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
@@ -469,7 +478,6 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Delete(ctx context.Context,
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *PerformanceMeasurementEndpointIPv6Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

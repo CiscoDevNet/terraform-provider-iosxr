@@ -41,7 +41,6 @@ import (
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewPerformanceMeasurementDelayProfileResource() resource.Resource {
@@ -712,8 +711,29 @@ func (r *PerformanceMeasurementDelayProfileResource) Schema(ctx context.Context,
 								int64validator.Between(0, 98),
 							},
 						},
+						"collect_hbh": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Collect hop by hop data for delay sessions").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+						},
+						"ntp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network Time Protocol timestamp format").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+						},
 					},
 				},
+			},
+			"delay_bins_explicit": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("explicit list of 27 numbers to split 28 bins. All 27 entries must be configured").String + "\n  - Supported from version: `25.1`",
+				ElementType:         types.Int64Type,
+				Optional:            true,
+			},
+			"collect_hbh": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Collect hop by hop data for delay sessions").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
+			},
+			"ntp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Network Time Protocol timestamp format").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
 			},
 		},
 	}
@@ -746,14 +766,17 @@ func (r *PerformanceMeasurementDelayProfileResource) Create(ctx context.Context,
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
 		var ops []gnmi.SetOperation
 
 		// Create object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
@@ -786,7 +809,6 @@ func (r *PerformanceMeasurementDelayProfileResource) Create(ctx context.Context,
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *PerformanceMeasurementDelayProfileResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state PerformanceMeasurementDelayProfile
 
@@ -857,7 +879,6 @@ func (r *PerformanceMeasurementDelayProfileResource) Read(ctx context.Context, r
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *PerformanceMeasurementDelayProfileResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state PerformanceMeasurementDelayProfile
 
@@ -880,6 +901,10 @@ func (r *PerformanceMeasurementDelayProfileResource) Update(ctx context.Context,
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -887,7 +912,7 @@ func (r *PerformanceMeasurementDelayProfileResource) Update(ctx context.Context,
 		var ops []gnmi.SetOperation
 
 		// Update object
-		body := plan.toBody(ctx)
+		body := plan.toBody(ctx, r.data.Version)
 		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		deletedListItems := plan.getDeletedItems(ctx, state)
@@ -923,7 +948,6 @@ func (r *PerformanceMeasurementDelayProfileResource) Update(ctx context.Context,
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *PerformanceMeasurementDelayProfileResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state PerformanceMeasurementDelayProfile
 
@@ -933,7 +957,13 @@ func (r *PerformanceMeasurementDelayProfileResource) Delete(ctx context.Context,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
@@ -982,7 +1012,6 @@ func (r *PerformanceMeasurementDelayProfileResource) Delete(ctx context.Context,
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *PerformanceMeasurementDelayProfileResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

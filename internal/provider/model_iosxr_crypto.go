@@ -26,6 +26,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -141,30 +142,33 @@ type CryptoData struct {
 	FipsMode                                       types.Bool                   `tfsdk:"fips_mode"`
 }
 type CryptoCaTrustpoints struct {
-	TrustpointName                 types.String `tfsdk:"trustpoint_name"`
-	Description                    types.String `tfsdk:"description"`
-	EnrollmentRetryCount           types.Int64  `tfsdk:"enrollment_retry_count"`
-	EnrollmentRetryPeriod          types.Int64  `tfsdk:"enrollment_retry_period"`
-	EnrollmentUrl                  types.String `tfsdk:"enrollment_url"`
-	EnrollmentTerminal             types.Bool   `tfsdk:"enrollment_terminal"`
-	SftpUsername                   types.String `tfsdk:"sftp_username"`
-	SftpPassword                   types.String `tfsdk:"sftp_password"`
-	AutoEnroll                     types.Int64  `tfsdk:"auto_enroll"`
-	RenewalMessageTypePkcsreq      types.Bool   `tfsdk:"renewal_message_type_pkcsreq"`
-	RenewalMessageTypeRenewalreq   types.Bool   `tfsdk:"renewal_message_type_renewalreq"`
-	SkipChallengePassword          types.Bool   `tfsdk:"skip_challenge_password"`
-	Rsakeypair                     types.String `tfsdk:"rsakeypair"`
-	CrlOptional                    types.Bool   `tfsdk:"crl_optional"`
-	QueryUrl                       types.String `tfsdk:"query_url"`
-	IpAddress                      types.String `tfsdk:"ip_address"`
-	IpAddressNone                  types.Bool   `tfsdk:"ip_address_none"`
-	SubjectName                    types.String `tfsdk:"subject_name"`
-	SubjectAlternativeName         types.String `tfsdk:"subject_alternative_name"`
-	SerialNumber                   types.Bool   `tfsdk:"serial_number"`
-	SerialNumberNone               types.Bool   `tfsdk:"serial_number_none"`
-	Vrf                            types.String `tfsdk:"vrf"`
-	MessageDigest                  types.String `tfsdk:"message_digest"`
-	MethodEstCredentialCertificate types.String `tfsdk:"method_est_credential_certificate"`
+	TrustpointName                    types.String `tfsdk:"trustpoint_name"`
+	Description                       types.String `tfsdk:"description"`
+	EnrollmentRetryCount              types.Int64  `tfsdk:"enrollment_retry_count"`
+	EnrollmentRetryPeriod             types.Int64  `tfsdk:"enrollment_retry_period"`
+	EnrollmentUrl                     types.String `tfsdk:"enrollment_url"`
+	EnrollmentTerminal                types.Bool   `tfsdk:"enrollment_terminal"`
+	SftpUsername                      types.String `tfsdk:"sftp_username"`
+	SftpPassword                      types.String `tfsdk:"sftp_password"`
+	AutoEnroll                        types.Int64  `tfsdk:"auto_enroll"`
+	RenewalMessageTypePkcsreq         types.Bool   `tfsdk:"renewal_message_type_pkcsreq"`
+	RenewalMessageTypeRenewalreq      types.Bool   `tfsdk:"renewal_message_type_renewalreq"`
+	SkipChallengePassword             types.Bool   `tfsdk:"skip_challenge_password"`
+	Rsakeypair                        types.String `tfsdk:"rsakeypair"`
+	CrlOptional                       types.Bool   `tfsdk:"crl_optional"`
+	QueryUrl                          types.String `tfsdk:"query_url"`
+	IpAddress                         types.String `tfsdk:"ip_address"`
+	IpAddressNone                     types.Bool   `tfsdk:"ip_address_none"`
+	SubjectName                       types.String `tfsdk:"subject_name"`
+	SubjectAlternativeName            types.String `tfsdk:"subject_alternative_name"`
+	SerialNumber                      types.Bool   `tfsdk:"serial_number"`
+	SerialNumberNone                  types.Bool   `tfsdk:"serial_number_none"`
+	Vrf                               types.String `tfsdk:"vrf"`
+	MessageDigest                     types.String `tfsdk:"message_digest"`
+	MethodEstCredentialCertificate    types.String `tfsdk:"method_est_credential_certificate"`
+	EnrollmentAuthenticationProfile   types.String `tfsdk:"enrollment_authentication_profile"`
+	ReEnrollmentAuthenticationProfile types.String `tfsdk:"re_enrollment_authentication_profile"`
+	SslProfile                        types.String `tfsdk:"ssl_profile"`
 }
 type CryptoCaOpensshTrustpoints struct {
 	TrustpointName types.String `tfsdk:"trustpoint_name"`
@@ -187,7 +191,7 @@ func (data CryptoData) getPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data Crypto) toBody(ctx context.Context) string {
+func (data Crypto) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.CaTrustpointSystemDescription.IsNull() && !data.CaTrustpointSystemDescription.IsUnknown() {
 		body, _ = sjson.Set(body, "ca.trustpoint.system-trustpoint.description", data.CaTrustpointSystemDescription.ValueString())
@@ -442,6 +446,15 @@ func (data Crypto) toBody(ctx context.Context) string {
 			if !item.MethodEstCredentialCertificate.IsNull() && !item.MethodEstCredentialCertificate.IsUnknown() {
 				body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"method.est.credential.certificate", item.MethodEstCredentialCertificate.ValueString())
 			}
+			if !item.EnrollmentAuthenticationProfile.IsNull() && !item.EnrollmentAuthenticationProfile.IsUnknown() {
+				body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"enrollment.authentication-profile", item.EnrollmentAuthenticationProfile.ValueString())
+			}
+			if !item.ReEnrollmentAuthenticationProfile.IsNull() && !item.ReEnrollmentAuthenticationProfile.IsUnknown() {
+				body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"re-enrollment.authentication-profile", item.ReEnrollmentAuthenticationProfile.ValueString())
+			}
+			if !item.SslProfile.IsNull() && !item.SslProfile.IsUnknown() {
+				body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"ssl-profile", item.SslProfile.ValueString())
+			}
 		}
 	}
 	if len(data.CaOpensshTrustpoints) > 0 {
@@ -460,8 +473,43 @@ func (data Crypto) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
+// GetVersionConstraints returns the version constraints for all fields
+func (data Crypto) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "ca_trustpoints.enrollment_authentication_profile",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "ca_trustpoints.re_enrollment_authentication_profile",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "ca_trustpoints.ssl_profile",
+			AddedInVersion: "25.1",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data Crypto) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.description"); value.Exists() && !data.CaTrustpointSystemDescription.IsNull() {
 		data.CaTrustpointSystemDescription = types.StringValue(value.String())
@@ -864,6 +912,21 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.CaTrustpoints[i].MethodEstCredentialCertificate = types.StringNull()
 		}
+		if value := r.Get("enrollment.authentication-profile"); value.Exists() && !data.CaTrustpoints[i].EnrollmentAuthenticationProfile.IsNull() {
+			data.CaTrustpoints[i].EnrollmentAuthenticationProfile = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].EnrollmentAuthenticationProfile = types.StringNull()
+		}
+		if value := r.Get("re-enrollment.authentication-profile"); value.Exists() && !data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile.IsNull() {
+			data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile = types.StringNull()
+		}
+		if value := r.Get("ssl-profile"); value.Exists() && !data.CaTrustpoints[i].SslProfile.IsNull() {
+			data.CaTrustpoints[i].SslProfile = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].SslProfile = types.StringNull()
+		}
 	}
 	for i := range data.CaOpensshTrustpoints {
 		keys := [...]string{"trustpoint-name"}
@@ -1182,6 +1245,15 @@ func (data *Crypto) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() {
 				item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("enrollment.authentication-profile"); cValue.Exists() {
+				item.EnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("re-enrollment.authentication-profile"); cValue.Exists() {
+				item.ReEnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ssl-profile"); cValue.Exists() {
+				item.SslProfile = types.StringValue(cValue.String())
+			}
 			data.CaTrustpoints = append(data.CaTrustpoints, item)
 			return true
 		})
@@ -1461,6 +1533,15 @@ func (data *CryptoData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() {
 				item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("enrollment.authentication-profile"); cValue.Exists() {
+				item.EnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("re-enrollment.authentication-profile"); cValue.Exists() {
+				item.ReEnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ssl-profile"); cValue.Exists() {
+				item.SslProfile = types.StringValue(cValue.String())
+			}
 			data.CaTrustpoints = append(data.CaTrustpoints, item)
 			return true
 		})
@@ -1597,6 +1678,15 @@ func (data *Crypto) getDeletedItems(ctx context.Context, state Crypto) []string 
 				found = false
 			}
 			if found {
+				if !state.CaTrustpoints[i].SslProfile.IsNull() && data.CaTrustpoints[j].SslProfile.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/ssl-profile", state.getPath(), keyString))
+				}
+				if !state.CaTrustpoints[i].ReEnrollmentAuthenticationProfile.IsNull() && data.CaTrustpoints[j].ReEnrollmentAuthenticationProfile.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/re-enrollment/authentication-profile", state.getPath(), keyString))
+				}
+				if !state.CaTrustpoints[i].EnrollmentAuthenticationProfile.IsNull() && data.CaTrustpoints[j].EnrollmentAuthenticationProfile.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/enrollment/authentication-profile", state.getPath(), keyString))
+				}
 				if !state.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() && data.CaTrustpoints[j].MethodEstCredentialCertificate.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/method/est/credential/certificate", state.getPath(), keyString))
 				}
@@ -1878,7 +1968,6 @@ func (data *Crypto) getEmptyLeafsDelete(ctx context.Context) []string {
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
 func (data *Crypto) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.FipsMode.IsNull() {

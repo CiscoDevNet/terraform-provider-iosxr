@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -67,16 +68,19 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_ospf.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_ospf.0.multipath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_ospf.0.route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_ospf.0.default_policy_action_in", "accept"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.instance_name", "EIGRP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.match_internal_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.multipath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.default_policy_action_in", "accept"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_isis.0.instance_name", "ISIS1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_isis.0.level_1_level_2_level_1_inter_area", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_isis.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_isis.0.multipath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_isis.0.route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_isis.0.default_policy_action_in", "accept"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_connected", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_connected_metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_connected_multipath", "true"))
@@ -136,6 +140,11 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "segment_routing_srv6_alloc_mode_per_vrf", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "peer_set_ids.0.peer_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "peer_set_ids.0.peer_sid_index", "101"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "as_based_as_list", "ECMP_PEER_AS_LIST"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "as_based_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "fixed_delay", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "platform_oor_based_delay", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "platform_oor_based_threshold", "80"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -228,6 +237,9 @@ func testAccDataSourceIosxrRouterBGPAddressFamilyConfig() string {
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
 	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `		default_policy_action_in = "accept"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	redistribute_eigrp = [{` + "\n"
 	config += `		instance_name = "EIGRP1"` + "\n"
@@ -235,6 +247,9 @@ func testAccDataSourceIosxrRouterBGPAddressFamilyConfig() string {
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
 	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `		default_policy_action_in = "accept"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	redistribute_isis = [{` + "\n"
 	config += `		instance_name = "ISIS1"` + "\n"
@@ -242,6 +257,9 @@ func testAccDataSourceIosxrRouterBGPAddressFamilyConfig() string {
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
 	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `		default_policy_action_in = "accept"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	redistribute_connected = true` + "\n"
 	config += `	redistribute_connected_metric = 100` + "\n"
@@ -308,6 +326,21 @@ func testAccDataSourceIosxrRouterBGPAddressFamilyConfig() string {
 	config += `		peer_id = 1` + "\n"
 	config += `		peer_sid_index = 101` + "\n"
 	config += `	}]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	as_based_as_list = "ECMP_PEER_AS_LIST"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	as_based_delay = 200` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	fixed_delay = 200` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	platform_oor_based_delay = 500` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `	platform_oor_based_threshold = 80` + "\n"
+	}
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

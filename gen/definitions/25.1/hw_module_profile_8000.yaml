@@ -1,0 +1,21 @@
+---
+name: HW Module Profile 8000
+path: Cisco-IOS-XR-um-8000-hw-module-profile-cfg:/hw-module
+doc_category: Cisco 8000 Series
+attributes:
+  - yang_name: profile/priority-flow-control/locations/location
+    tf_name: profile_priority_flow_control_locations
+    type: List
+    attributes:
+      - yang_name: buffer-extended/non-pfc-tcs
+        tf_name: non_pfc_tcs
+        type: Bool
+        type_yang_bool: presence
+        example: true
+      - yang_name: buffer-extended/non-pfc-tcs/max-non-pfc-voqs
+        tf_name: non_pfc_tcs_max_non_pfc_voqs
+        description: "max lossy voqs to evict"
+        type: Int64
+        min_int: 1
+        max_int: 3800
+        example: 100

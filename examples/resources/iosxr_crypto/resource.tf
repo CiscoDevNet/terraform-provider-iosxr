@@ -43,6 +43,12 @@ resource "iosxr_crypto" "example" {
       vrf                               = "VRF1"
       message_digest                    = "sha256"
       method_est_credential_certificate = "EST-BOOTSTRAP"
+      # Supported from version 25.1
+      enrollment_authentication_profile = "EAP_PROFILE"
+      # Supported from version 25.1
+      re_enrollment_authentication_profile = "EAP_PROFILE"
+      # Supported from version 25.1
+      ssl_profile = "MTLS_PROFILE"
     }
   ]
   ca_openssh_trustpoints = [

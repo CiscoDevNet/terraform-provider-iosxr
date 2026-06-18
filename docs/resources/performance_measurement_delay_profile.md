@@ -114,8 +114,18 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
       advertise_anomaly_check_lower_bound     = 100
       advertise_anomaly_loss_upper_bound      = 50
       advertise_anomaly_loss_lower_bound      = 10
+      # Supported from version 25.1
+      collect_hbh = true
+      # Supported from version 25.1
+      ntp = true
     }
   ]
+  # Supported from version 25.1
+  delay_bins_explicit = [100]
+  # Supported from version 25.1
+  collect_hbh = true
+  # Supported from version 25.1
+  ntp = true
 }
 ```
 
@@ -124,6 +134,10 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
 
 ### Optional
 
+- `collect_hbh` (Boolean) Collect hop by hop data for delay sessions
+  - Supported from version: `25.1`
+- `delay_bins_explicit` (List of Number) explicit list of 27 numbers to split 28 bins. All 27 entries must be configured
+  - Supported from version: `25.1`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
@@ -200,6 +214,8 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
   - Range: `0`-`7`
 - `interfaces_default_probe_tx_interval` (Number) TX interval
   - Range: `30000`-`15000000`
+- `ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.1`
 - `profiles` (Attributes List) Delay profile name (see [below for nested schema](#nestedatt--profiles))
 - `sr_policy_default` (Boolean) Default profile
 - `sr_policy_default_advertisement_accelerated` (Boolean) SR Policy delay profile advertisement accelerated
@@ -282,6 +298,10 @@ Optional:
 - `advertise_threshold_check_average_delay` (Boolean) Enable average-delay threshold-check
 - `advertise_threshold_check_maximum_delay` (Boolean) Enable maximum-delay threshold-check
 - `advertise_threshold_check_minimum_delay` (Boolean) Enable minimum-delay threshold-check
+- `collect_hbh` (Boolean) Collect hop by hop data for delay sessions
+  - Supported from version: `25.1`
+- `ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.1`
 - `probe_computation_interval` (Number) Interval for metric computation
   - Range: `1`-`3600`
 - `probe_flow_label_explicit` (Boolean) explicit list of flow labels

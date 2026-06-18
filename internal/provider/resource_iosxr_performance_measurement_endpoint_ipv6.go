@@ -158,7 +158,7 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Schema(ctx context.Context,
 				},
 			},
 			"liveness_detection_collect_hbh": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Collect hop by hop data for liveness sessions").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Collect hop by hop data for liveness sessions").String + "\n  - **Not supported from version `25.1` and above**",
 				Optional:            true,
 			},
 			"segment_routing": schema.BoolAttribute{
@@ -230,6 +230,10 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Create(ctx context.Context,
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -363,6 +367,10 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Update(ctx context.Context,
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -414,6 +422,13 @@ func (r *PerformanceMeasurementEndpointIPv6Resource) Delete(ctx context.Context,
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
+	}
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {

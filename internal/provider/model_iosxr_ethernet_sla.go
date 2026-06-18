@@ -124,6 +124,8 @@ type EthernetSLAStatisticsMeasure struct {
 	ThresholdsStatelessLogOnMeanValue     types.Int64  `tfsdk:"thresholds_stateless_log_on_mean_value"`
 	ThresholdsStatelessLogOnSampleCount   types.Int64  `tfsdk:"thresholds_stateless_log_on_sample_count"`
 	ThresholdsStatelessLogOnInAndAboveBin types.Int64  `tfsdk:"thresholds_stateless_log_on_in_and_above_bin"`
+	AggregateMinimumDelay                 types.Int64  `tfsdk:"aggregate_minimum_delay"`
+	UsecMinimumDelay                      types.Bool   `tfsdk:"usec_minimum_delay"`
 }
 
 // End of section. //template:end types
@@ -320,6 +322,14 @@ func (data EthernetSLA) toBody(ctx context.Context, providerVersion string) stri
 			if !item.ThresholdsStatelessLogOnInAndAboveBin.IsNull() && !item.ThresholdsStatelessLogOnInAndAboveBin.IsUnknown() {
 				body, _ = sjson.Set(body, "statistics.measures.measure"+"."+strconv.Itoa(index)+"."+"thresholds.type.stateless.log.on.in-and-above.bin", strconv.FormatInt(item.ThresholdsStatelessLogOnInAndAboveBin.ValueInt64(), 10))
 			}
+			if !item.AggregateMinimumDelay.IsNull() && !item.AggregateMinimumDelay.IsUnknown() {
+				body, _ = sjson.Set(body, "statistics.measures.measure"+"."+strconv.Itoa(index)+"."+"aggregate.minimum-delay", strconv.FormatInt(item.AggregateMinimumDelay.ValueInt64(), 10))
+			}
+			if !item.UsecMinimumDelay.IsNull() && !item.UsecMinimumDelay.IsUnknown() {
+				if item.UsecMinimumDelay.ValueBool() {
+					body, _ = sjson.Set(body, "statistics.measures.measure"+"."+strconv.Itoa(index)+"."+"aggregate.usec-minimum-delay", map[string]string{})
+				}
+			}
 		}
 	}
 	return body
@@ -332,6 +342,16 @@ func (data EthernetSLA) toBody(ctx context.Context, providerVersion string) stri
 // GetVersionConstraints returns the version constraints for all fields
 func (data EthernetSLA) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "statistics_measure.aggregate_minimum_delay",
+			AddedInVersion: "25.1",
+		},
+		{
+			FieldPath:      "statistics_measure.usec_minimum_delay",
+			AddedInVersion: "25.1",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -622,6 +642,20 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin = types.Int64Null()
 		}
+		if value := r.Get("aggregate.minimum-delay"); value.Exists() && !data.StatisticsMeasure[i].AggregateMinimumDelay.IsNull() {
+			data.StatisticsMeasure[i].AggregateMinimumDelay = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].AggregateMinimumDelay = types.Int64Null()
+		}
+		if value := r.Get("aggregate.usec-minimum-delay"); !data.StatisticsMeasure[i].UsecMinimumDelay.IsNull() {
+			if value.Exists() {
+				data.StatisticsMeasure[i].UsecMinimumDelay = types.BoolValue(true)
+			} else {
+				data.StatisticsMeasure[i].UsecMinimumDelay = types.BoolValue(false)
+			}
+		} else {
+			data.StatisticsMeasure[i].UsecMinimumDelay = types.BoolNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "schedule.every.week.on"); value.Exists() && !data.ScheduleEveryWeekOn.IsNull() {
 		data.ScheduleEveryWeekOn = types.StringValue(value.String())
@@ -822,6 +856,14 @@ func (data *EthernetSLA) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("thresholds.type.stateless.log.on.in-and-above.bin"); cValue.Exists() {
 				item.ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("aggregate.minimum-delay"); cValue.Exists() {
+				item.AggregateMinimumDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("aggregate.usec-minimum-delay"); cValue.Exists() {
+				item.UsecMinimumDelay = types.BoolValue(true)
+			} else {
+				item.UsecMinimumDelay = types.BoolValue(false)
+			}
 			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
 			return true
 		})
@@ -1007,6 +1049,14 @@ func (data *EthernetSLAData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("thresholds.type.stateless.log.on.in-and-above.bin"); cValue.Exists() {
 				item.ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("aggregate.minimum-delay"); cValue.Exists() {
+				item.AggregateMinimumDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("aggregate.usec-minimum-delay"); cValue.Exists() {
+				item.UsecMinimumDelay = types.BoolValue(true)
+			} else {
+				item.UsecMinimumDelay = types.BoolValue(false)
+			}
 			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
 			return true
 		})
@@ -1092,6 +1142,12 @@ func (data *EthernetSLA) getDeletedItems(ctx context.Context, state EthernetSLA)
 				found = false
 			}
 			if found {
+				if !state.StatisticsMeasure[i].UsecMinimumDelay.IsNull() && data.StatisticsMeasure[j].UsecMinimumDelay.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/usec-minimum-delay", state.getPath(), keyString))
+				}
+				if !state.StatisticsMeasure[i].AggregateMinimumDelay.IsNull() && data.StatisticsMeasure[j].AggregateMinimumDelay.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/minimum-delay", state.getPath(), keyString))
+				}
 				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnInAndAboveBin.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateless/log/on/in-and-above/bin", state.getPath(), keyString))
 				}
@@ -1234,6 +1290,9 @@ func (data *EthernetSLA) getEmptyLeafsDelete(ctx context.Context) []string {
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.StatisticsMeasure[i].UsecMinimumDelay.IsNull() && !data.StatisticsMeasure[i].UsecMinimumDelay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/usec-minimum-delay", data.getPath(), keyString))
 		}
 		if !data.StatisticsMeasure[i].BucketsProbes.IsNull() && !data.StatisticsMeasure[i].BucketsProbes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/statistics/measures/measure%v/buckets/probes", data.getPath(), keyString))

@@ -170,6 +170,12 @@ func (data PerformanceMeasurementEndpointIPv6) toBody(ctx context.Context, provi
 // GetVersionConstraints returns the version constraints for all fields
 func (data PerformanceMeasurementEndpointIPv6) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:        "liveness_detection_collect_hbh",
+			RemovedInVersion: "25.1",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}

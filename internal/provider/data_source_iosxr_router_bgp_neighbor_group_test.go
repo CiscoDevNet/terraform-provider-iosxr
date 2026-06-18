@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -119,6 +120,8 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_family.0.accept_own", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_family.0.slow_peer_dynamic", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_family.0.slow_peer_dynamic_threshold", "260"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_family.0.default_policy_action_in", "accept"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_family.0.default_policy_action_out", "accept"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -319,6 +322,12 @@ func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
 	config += `		accept_own = true` + "\n"
 	config += `		slow_peer_dynamic = true` + "\n"
 	config += `		slow_peer_dynamic_threshold = 260` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `		default_policy_action_in = "accept"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.1") {
+		config += `		default_policy_action_out = "accept"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
 	config += `}` + "\n"

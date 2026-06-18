@@ -56,7 +56,7 @@ func (d *HWModuleProfile8000DataSource) Metadata(_ context.Context, req datasour
 func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the HW Module Profile configuration on Cisco 8000 series routers.",
+		MarkdownDescription: "This data source can read the HW Module Profile 8000 configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -488,6 +488,14 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 									},
 								},
 							},
+						},
+						"non_pfc_tcs": schema.BoolAttribute{
+							MarkdownDescription: "configure to allow lossy TCs to evict.",
+							Computed:            true,
+						},
+						"non_pfc_tcs_max_non_pfc_voqs": schema.Int64Attribute{
+							MarkdownDescription: "max lossy voqs to evict",
+							Computed:            true,
 						},
 					},
 				},

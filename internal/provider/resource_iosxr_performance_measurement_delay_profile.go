@@ -711,8 +711,29 @@ func (r *PerformanceMeasurementDelayProfileResource) Schema(ctx context.Context,
 								int64validator.Between(0, 98),
 							},
 						},
+						"collect_hbh": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Collect hop by hop data for delay sessions").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+						},
+						"ntp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Network Time Protocol timestamp format").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+						},
 					},
 				},
+			},
+			"delay_bins_explicit": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("explicit list of 27 numbers to split 28 bins. All 27 entries must be configured").String + "\n  - Supported from version: `25.1`",
+				ElementType:         types.Int64Type,
+				Optional:            true,
+			},
+			"collect_hbh": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Collect hop by hop data for delay sessions").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
+			},
+			"ntp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Network Time Protocol timestamp format").String + "\n  - Supported from version: `25.1`",
+				Optional:            true,
 			},
 		},
 	}
@@ -743,6 +764,10 @@ func (r *PerformanceMeasurementDelayProfileResource) Create(ctx context.Context,
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -876,6 +901,10 @@ func (r *PerformanceMeasurementDelayProfileResource) Update(ctx context.Context,
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -927,6 +956,13 @@ func (r *PerformanceMeasurementDelayProfileResource) Delete(ctx context.Context,
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
+	}
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {

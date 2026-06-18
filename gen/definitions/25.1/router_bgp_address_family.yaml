@@ -1,0 +1,86 @@
+---
+name: Router BGP Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: ecmp-delay/as-based/as-list
+    tf_name: as_based_as_list
+    description: "Enable ECMP delay for neighbor AS'es included in the AS list"
+    type: String
+    example: ECMP_PEER_AS_LIST
+  - yang_name: ecmp-delay/as-based/delay
+    tf_name: as_based_delay
+    description: "Provide a delay interval in msecs"
+    type: Int64
+    min_int: 10
+    max_int: 300000
+    example: 200
+  - yang_name: ecmp-delay/fixed/delay
+    tf_name: fixed_delay
+    description: "Provide a delay interval in msecs"
+    type: Int64
+    min_int: 10
+    max_int: 300000
+    example: 200
+  - yang_name: ecmp-delay/platform-oor-based/delay
+    tf_name: platform_oor_based_delay
+    description: "Provide a delay interval in msecs"
+    type: Int64
+    min_int: 10
+    max_int: 300000
+    example: 500
+  - yang_name: ecmp-delay/platform-oor-based/threshold
+    tf_name: platform_oor_based_threshold
+    description: "Delay only when platform resource usage is above specified threshold"
+    type: Int64
+    min_int: 10
+    max_int: 90
+    example: 80
+  - yang_name: redistribute/eigrps/eigrp
+    tf_name: redistribute_eigrp
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        tf_name: default_policy_action_in
+        description: "Set a default action if a route does not satify the policy definition"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept
+  - yang_name: redistribute/isis-processes/isis-process
+    tf_name: redistribute_isis
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        tf_name: default_policy_action_in
+        description: "Set a default action if a route does not satify the policy definition"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept
+  - yang_name: redistribute/ospfs/ospf
+    tf_name: redistribute_ospf
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        tf_name: default_policy_action_in
+        description: "Set a default action if a route does not satify the policy definition"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept
+  - yang_name: redistribute/ospfv3s/ospfv3
+    tf_name: redistribute_ospfv3
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        tf_name: default_policy_action_in
+        description: "Set a default action if a route does not satify the policy definition"
+        type: String
+        enum_values:
+          - accept
+          - reject
+        example: accept

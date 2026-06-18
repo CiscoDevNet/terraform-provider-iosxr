@@ -335,6 +335,17 @@ func (r *EthernetSLAResource) Schema(ctx context.Context, req resource.SchemaReq
 								int64validator.Between(2, 100),
 							},
 						},
+						"aggregate_minimum_delay": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the width of the first bin in milliseconds (or optionally microseconds), independent of the width of the other bins").AddIntegerRangeDescription(1, 10000000).String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 10000000),
+							},
+						},
+						"usec_minimum_delay": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interpret the minimum-delay in microseconds").String + "\n  - Supported from version: `25.1`",
+							Optional:            true,
+						},
 					},
 				},
 			},
@@ -420,6 +431,10 @@ func (r *EthernetSLAResource) Create(ctx context.Context, req resource.CreateReq
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -553,6 +568,10 @@ func (r *EthernetSLAResource) Update(ctx context.Context, req resource.UpdateReq
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -604,6 +623,13 @@ func (r *EthernetSLAResource) Delete(ctx context.Context, req resource.DeleteReq
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
+	}
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {

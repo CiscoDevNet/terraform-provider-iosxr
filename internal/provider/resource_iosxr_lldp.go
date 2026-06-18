@@ -128,31 +128,31 @@ func (r *LLDPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"chassis_id_type_chassis_component": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Value of entPhysicalAlias object defined in IETF RFC 2737").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Value of entPhysicalAlias object defined in IETF RFC 2737").String + "\n  - **Not supported from version `25.1` and above**",
 				Optional:            true,
 			},
 			"chassis_id_type_interface_alias": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Value of ifAlias object defined in IETF RFC 2863").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Value of ifAlias object defined in IETF RFC 2863").String + "\n  - **Not supported from version `25.1` and above**",
 				Optional:            true,
 			},
 			"chassis_id_type_port_component": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Value of entPhysicalAlias object defined in IETF RFC 2737").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Value of entPhysicalAlias object defined in IETF RFC 2737").String + "\n  - **Not supported from version `25.1` and above**",
 				Optional:            true,
 			},
 			"chassis_id_type_mac_address": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Value of a unicast source address").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Value of a unicast source address").String + "\n  - **Not supported from version `25.1` and above**",
 				Optional:            true,
 			},
 			"chassis_id_type_network_address": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Network address associated with a particular chassis").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Network address associated with a particular chassis").String + "\n  - **Not supported from version `25.1` and above**",
 				Optional:            true,
 			},
 			"chassis_id_type_interface_name": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Value of ifName object defined in IETF RFC 2863").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Value of ifName object defined in IETF RFC 2863").String + "\n  - **Not supported from version `25.1` and above**",
 				Optional:            true,
 			},
 			"chassis_id_type_local": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Chassis identifier based on a locally defined value").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Chassis identifier based on a locally defined value").String + "\n  - **Not supported from version `25.1` and above**",
 				Optional:            true,
 			},
 			"subinterfaces_enable": schema.BoolAttribute{
@@ -224,6 +224,10 @@ func (r *LLDPResource) Create(ctx context.Context, req resource.CreateRequest, r
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -357,6 +361,10 @@ func (r *LLDPResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -408,6 +416,13 @@ func (r *LLDPResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
+	}
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(r.data.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 	device, ok := r.data.Devices[state.Device.ValueString()]
 	if !ok {

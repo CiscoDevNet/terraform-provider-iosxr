@@ -48,6 +48,8 @@ data "iosxr_router_bgp_address_family" "example" {
 - `allocate_label_all_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
 - `allocate_label_route_policy` (String) Allocate label route policy
 - `allocate_label_route_policy_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
+- `as_based_as_list` (String) Enable ECMP delay for neighbor AS'es included in the AS list
+- `as_based_delay` (Number) Provide a delay interval in msecs
 - `as_path_loopcheck_out_disable` (Boolean) Disable
 - `bgp_attribute_download` (Boolean) Configure attribute download for this address-family
 - `bgp_bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
@@ -78,6 +80,7 @@ data "iosxr_router_bgp_address_family" "example" {
 - `event_prefix_route_policy` (String) Policy for per-prefix tracing
 - `export_to_vrf_allow_backup` (Boolean) Allow Export of backup path
 - `export_to_vrf_allow_best_external` (Boolean) Allow Export of best-external
+- `fixed_delay` (Number) Provide a delay interval in msecs
 - `global_table_multicast` (Boolean) Enable global table multicast
 - `id` (String) The path of the retrieved object.
 - `import_from_bridge_domain` (Boolean) Import IP hosts from EVPN bridge-domain
@@ -111,16 +114,18 @@ data "iosxr_router_bgp_address_family" "example" {
 - `nexthop_trigger_delay_non_critical` (Number) For non-critical notification
 - `peer_set_ids` (Attributes List) configuration for a single EPE Peer Set (see [below for nested schema](#nestedatt--peer_set_ids))
 - `permanent_network_route_policy` (String) Route policy to read the prefixes from
+- `platform_oor_based_delay` (Number) Provide a delay interval in msecs
+- `platform_oor_based_threshold` (Number) Delay only when platform resource usage is above specified threshold
 - `prefix_ecmp_delay` (Number) Interval(ms)
 - `prefix_ecmp_delay_oor_threshold` (Number) Delay only when platform resource usage is above threshold
 - `redistribute_connected` (Boolean) Redistribute connected routes
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
 - `redistribute_connected_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_connected_route_policy` (String) Route policy reference
-- `redistribute_eigrp` (Attributes List) Redistribute EIGRP routes (see [below for nested schema](#nestedatt--redistribute_eigrp))
-- `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
-- `redistribute_ospf` (Attributes List) Redistribute OSPF routes (see [below for nested schema](#nestedatt--redistribute_ospf))
-- `redistribute_ospfv3` (Attributes List) Redistribute OSPFv3 routes (see [below for nested schema](#nestedatt--redistribute_ospfv3))
+- `redistribute_eigrp` (Attributes List) Enhanced Interior Gateway Routing Protocol (EIGRP) (see [below for nested schema](#nestedatt--redistribute_eigrp))
+- `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
+- `redistribute_ospfv3` (Attributes List) IPv6 Open Shortest Path First (OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospfv3))
 - `redistribute_rip` (Boolean) Redistribute RIP routes
 - `redistribute_rip_metric` (Number) Metric for redistributed routes
 - `redistribute_rip_multipath` (Boolean) Enable installation of multiple paths from RIB
@@ -222,6 +227,7 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
 - `instance_name` (String) EIGRP instance name
 - `match_external` (Boolean) Redistribute EIGRP external routes
 - `match_internal` (Boolean) Redistribute EIGRP internal routes
@@ -236,6 +242,7 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
 - `instance_name` (String) ISIS instance name
 - `level_1` (Boolean) Redistribute ISIS level 1 routes
 - `level_1_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
@@ -254,6 +261,7 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
 - `match_external` (Boolean) Redistribute OSPF external routes
 - `match_external_1` (Boolean) Redistribute OSPF external type 1 routes
 - `match_external_1_nssa_external` (Boolean) Redistribute OSPF external type 1 and NSSA external routes
@@ -296,6 +304,7 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
 - `match_external` (Boolean) Redistribute OSPFv3 external routes
 - `match_external_1` (Boolean) Redistribute OSPFv3 external type 1 routes
 - `match_external_1_nssa_external` (Boolean) Redistribute OSPFv3 external type 1 and NSSA external routes

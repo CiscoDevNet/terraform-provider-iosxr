@@ -1,0 +1,288 @@
+---
+name: Logging
+path: Cisco-IOS-XR-um-logging-cfg:/logging
+doc_category: Management
+attributes:
+  - yang_name: buffered/buffered-level
+    tf_name: buffered_buffered_level
+    description: "buffered level"
+    type: String
+    enum_values:
+      - alerts
+      - critical
+      - debugging
+      - emergencies
+      - errors
+      - informational
+      - notifications
+      - warnings
+    example: alerts
+  - yang_name: buffered/entries-count
+    tf_name: buffered_entries_count
+    description: "Syslog in buffer"
+    type: Int64
+    min_int: 2545
+    max_int: 151699
+    example: 100
+  - yang_name: buffered/log-buffer-size
+    tf_name: buffered_log_buffer_size
+    description: "Logging buffer size"
+    type: Int64
+    min_int: 2097152
+    max_int: 125000000
+    example: 100
+  - yang_name: console/console-level
+    tf_name: console_console_level
+    description: "console level"
+    type: String
+    enum_values:
+      - alerts
+      - critical
+      - debugging
+      - disable
+      - emergencies
+      - errors
+      - informational
+      - notifications
+      - warning
+    example: alerts
+  - yang_name: console/discriminator/match1
+    tf_name: console_discriminator_match1
+    description: "Set match discriminator 1"
+    type: String
+    example: MATCH1
+  - yang_name: console/discriminator/match2
+    tf_name: console_discriminator_match2
+    description: "Set match discriminator 2"
+    type: String
+    example: MATCH2
+  - yang_name: console/discriminator/match3
+    tf_name: console_discriminator_match3
+    description: "Set match discriminator 3"
+    type: String
+    example: MATCH3
+  - yang_name: console/discriminator/nomatch1
+    tf_name: console_discriminator_nomatch1
+    description: "Set no-match discriminator 1"
+    type: String
+    example: NOMATCH1
+  - yang_name: console/discriminator/nomatch2
+    tf_name: console_discriminator_nomatch2
+    description: "Set no-match discriminator 2"
+    type: String
+    example: NOMATCH2
+  - yang_name: console/discriminator/nomatch3
+    tf_name: console_discriminator_nomatch3
+    description: "Set no-match discriminator 3"
+    type: String
+    example: NOMATCH3
+  - yang_name: console/facility/all
+    tf_name: facility_all
+    description: "All supported facilities"
+    type: String
+    enum_values:
+      - all
+    example: all
+  - yang_name: history/level
+    tf_name: history_level
+    description: "history level"
+    type: String
+    enum_values:
+      - alerts
+      - critical
+      - debugging
+      - disable
+      - emergencies
+      - errors
+      - informational
+      - notifications
+      - warnings
+    example: alerts
+  - yang_name: history/size
+    tf_name: history_size
+    description: "Logging history size"
+    type: Int64
+    min_int: 1
+    max_int: 500
+    example: 100
+  - yang_name: monitor/discriminator/match1
+    tf_name: monitor_discriminator_match1
+    description: "Set match discriminator 1"
+    type: String
+    example: MATCH1
+  - yang_name: monitor/discriminator/match2
+    tf_name: monitor_discriminator_match2
+    description: "Set match discriminator 2"
+    type: String
+    example: MATCH2
+  - yang_name: monitor/discriminator/match3
+    tf_name: monitor_discriminator_match3
+    description: "Set match discriminator 3"
+    type: String
+    example: MATCH3
+  - yang_name: monitor/discriminator/nomatch1
+    tf_name: monitor_discriminator_nomatch1
+    description: "Set no-match discriminator 1"
+    type: String
+    example: NOMATCH1
+  - yang_name: monitor/discriminator/nomatch2
+    tf_name: monitor_discriminator_nomatch2
+    description: "Set no-match discriminator 2"
+    type: String
+    example: NOMATCH2
+  - yang_name: monitor/discriminator/nomatch3
+    tf_name: monitor_discriminator_nomatch3
+    description: "Set no-match discriminator 3"
+    type: String
+    example: NOMATCH3
+  - yang_name: monitor/monitor-level
+    tf_name: monitor_monitor_level
+    description: "Set monitor logging"
+    type: String
+    enum_values:
+      - alerts
+      - critical
+      - debugging
+      - disable
+      - emergencies
+      - errors
+      - informational
+      - notifications
+      - warning
+    example: alerts
+  - yang_name: files/file
+    tf_name: file
+    type: List
+    attributes:
+      - yang_name: path/local-accounting
+        tf_name: local_accounting
+        type: Bool
+        type_yang_bool: presence
+        example: true
+      - yang_name: path/local-accounting/send-to-remote
+        tf_name: send_to_remote
+        type: Bool
+        type_yang_bool: presence
+        example: true
+      - yang_name: path/local-accounting/send-to-remote/facility
+        tf_name: send_to_remote_facility
+        description: "Modify message logging facilities"
+        type: String
+        enum_values:
+          - auth
+          - cron
+          - daemon
+          - kern
+          - local0
+          - local1
+          - local2
+          - local3
+          - local4
+          - local5
+          - local6
+          - local7
+          - lpr
+          - mail
+          - news
+          - syslog
+          - user
+          - uucp
+        example: auth
+      - yang_name: path/maxfilesize
+        tf_name: path_maxfilesize
+        description: "Set max file size"
+        type: Int64
+        min_int: 1
+        max_int: 2097152
+        example: 100
+      - yang_name: path/path-name
+        tf_name: path_path_name
+        description: "File path (e.g. /disk0: )"
+        type: String
+        example: /disk0:/logging.log
+      - yang_name: path/severity
+        tf_name: path_severity
+        description: "severity"
+        type: String
+        enum_values:
+          - alerts
+          - critical
+          - debugging
+          - disable
+          - emergencies
+          - errors
+          - informational
+          - notifications
+          - warning
+        example: alerts
+      - yang_name: local-accounting/send-to-remote/facility/level
+        legacy: true
+      - yang_name: maxfilesize
+        legacy: true
+      - yang_name: path
+        legacy: true
+      - yang_name: severity
+        legacy: true
+  - yang_name: source-interfaces/source-interface
+    tf_name: source_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        tf_name: interface_name
+        description: "Specify interface for source address in logging transactions"
+        type: String
+        example: GigabitEthernet0/0/0/0
+      - yang_name: vrf-name
+        tf_name: vrf_name
+        description: "Set VRF option"
+        type: String
+        example: VRF1
+      - yang_name: source-interface-name
+        legacy: true
+      - yang_name: vrfs/vrf
+        legacy: true
+    legacy: true
+  - yang_name: archive/device/disk1
+    legacy: true
+  - yang_name: archive/device/harddisk
+    legacy: true
+  - yang_name: archive/frequency/daily
+    legacy: true
+  - yang_name: archive/frequency/weekly
+    legacy: true
+  - yang_name: format/bsd
+    legacy: true
+  - yang_name: format/rfc5424
+    legacy: true
+  - yang_name: archive/device/disk0
+    legacy: true
+  - yang_name: buffered/level
+    legacy: true
+  - yang_name: buffered/logging-buffer-size
+    legacy: true
+  - yang_name: console-logging/console-log-facility/console-facility-level
+    legacy: true
+  - yang_name: facility/level
+    legacy: true
+  - yang_name: history-size
+    legacy: true
+  - yang_name: ipv4/dscp
+    legacy: true
+  - yang_name: ipv4/precedence
+    legacy: true
+  - yang_name: ipv6/dscp
+    legacy: true
+  - yang_name: ipv6/precedence
+    legacy: true
+  - yang_name: monitor-discriminator/match1
+    legacy: true
+  - yang_name: monitor-discriminator/match2
+    legacy: true
+  - yang_name: monitor-discriminator/match3
+    legacy: true
+  - yang_name: monitor-discriminator/nomatch1
+    legacy: true
+  - yang_name: monitor-discriminator/nomatch2
+    legacy: true
+  - yang_name: monitor-discriminator/nomatch3
+    legacy: true

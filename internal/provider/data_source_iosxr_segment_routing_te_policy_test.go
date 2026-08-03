@@ -116,10 +116,8 @@ func TestAccDataSourceIosxrSegmentRoutingTEPolicy(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrSegmentRoutingTEPolicyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
-	attributes = {
-	}
 }
 
 `
@@ -211,7 +209,7 @@ func testAccDataSourceIosxrSegmentRoutingTEPolicyConfig() string {
 	config += `	srv6_locator_name = "LOC1"` + "\n"
 	config += `	srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
 	config += `	srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

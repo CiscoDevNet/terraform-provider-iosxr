@@ -105,7 +105,7 @@ func TestAccDataSourceIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -113,46 +113,46 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_2]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_2"
 		"rpl-route-policy" = "route-policy ROUTE_POLICY_2\n  pass\nend-policy\n"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]"
 	attributes = {
 		"process-id" = "P1"
 	}
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_yang.PreReq1, ]
 }
 
-resource "iosxr_gnmi" "PreReq3" {
+resource "iosxr_yang" "PreReq3" {
 	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]"
 	attributes = {
 		"af-name" = "ipv4"
 		"saf-name" = "unicast"
 	}
-	depends_on = [iosxr_gnmi.PreReq2, ]
+	depends_on = [iosxr_yang.PreReq2, ]
 }
 
-resource "iosxr_gnmi" "PreReq4" {
+resource "iosxr_yang" "PreReq4" {
 	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]"
 	attributes = {
 		"segment-routing/mpls/enable" = "<NULL>"
 	}
-	depends_on = [iosxr_gnmi.PreReq3, ]
+	depends_on = [iosxr_yang.PreReq3, ]
 }
 
-resource "iosxr_gnmi" "PreReq5" {
+resource "iosxr_yang" "PreReq5" {
 	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
 	attributes = {
 		"interface-name" = "GigabitEthernet0/0/0/1"
 	}
-	depends_on = [iosxr_gnmi.PreReq4, ]
+	depends_on = [iosxr_yang.PreReq4, ]
 }
 
 `
@@ -267,7 +267,7 @@ func testAccDataSourceIosxrRouterISISInterfaceAddressFamilyConfig() string {
 	config += `		level_number = 1` + "\n"
 	config += `		route_policy = "ROUTE_POLICY_2"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

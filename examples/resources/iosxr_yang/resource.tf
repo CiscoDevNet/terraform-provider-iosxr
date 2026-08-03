@@ -1,11 +1,11 @@
-resource "iosxr_gnmi" "hostname" {
+resource "iosxr_yang" "hostname" {
   path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
   attributes = {
     system-network-name = "ROUTER-1"
   }
 }
 
-resource "iosxr_gnmi" "vrf" {
+resource "iosxr_yang" "vrf" {
   path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
   attributes = {
     vrf-name    = "VRF1"
@@ -27,7 +27,7 @@ resource "iosxr_gnmi" "vrf" {
   ]
 }
 
-resource "iosxr_gnmi" "domain_host" {
+resource "iosxr_yang" "domain_host" {
   path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=abc.cisco.com]"
   attributes = {
     "host-name" = "abc.cisco.com"

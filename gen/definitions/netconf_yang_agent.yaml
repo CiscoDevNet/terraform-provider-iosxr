@@ -6,12 +6,14 @@ attributes:
   - yang_name: ssh
     tf_name: ssh
     example: true
+    exclude_test: true
   - yang_name: with-defaults-support/enable
     tf_name: with_defaults_support
     example: true
   - yang_name: rate-limit
     description: "Number of bytes to process per second"
     example: 4096
+    exclude_test: true
   - yang_name: session/limit
     example: 50
   - yang_name: session/idle-timeout

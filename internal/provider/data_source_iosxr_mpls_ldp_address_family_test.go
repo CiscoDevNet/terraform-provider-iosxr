@@ -71,10 +71,8 @@ func TestAccDataSourceIosxrMPLSLDPAddressFamily(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrMPLSLDPAddressFamilyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
-	attributes = {
-	}
 }
 
 `
@@ -122,7 +120,7 @@ func testAccDataSourceIosxrMPLSLDPAddressFamilyConfig() string {
 	config += `		label_space_id = 0` + "\n"
 	config += `		for = "ACL1"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -526,6 +526,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		return
 	}
 	if config.ClientCache.IsNull() {
+		clientCache = true // default
 		clientCacheStr := os.Getenv("IOSXR_CLIENT_CACHE")
 		if clientCacheStr != "" {
 			var err error
@@ -538,7 +539,6 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				return
 			}
 		}
-		// default is false
 	} else {
 		clientCache = config.ClientCache.ValueBool()
 	}

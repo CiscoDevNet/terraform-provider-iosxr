@@ -181,8 +181,8 @@ github.com/netascode/go-gnmi v0.1.0 h1:vtegtRcludrU4sXjm4hmfBSeXZUXuUZhpYNnRYpN8
 github.com/netascode/go-gnmi v0.1.0/go.mod h1:m80jSPrGXf/oYYzW6DiDCamcSyNtFd8zWkgo9RJeW30=
 github.com/netascode/go-netconf v0.5.1 h1:RPAY4cL8h9/mM/JVVTohPJRxP1Bqn555ZwBNW3VwgC4=
 github.com/netascode/go-netconf v0.5.1/go.mod h1:Pg3hmq36XOa6P0uTtWBhe0PenJmaxXWBlua2DZxik6M=
-github.com/netascode/xmldot v0.5.0 h1:BNxsQrNee6zHhly4qi8s/4LkzaEK2ehL5nAQm5r4Zqg=
-github.com/netascode/xmldot v0.5.0/go.mod h1:T0zddov+d7Sgam8cpJSOr155HiKyXwY58PE/iiuXbT8=
+github.com/netascode/xmldot v0.5.1 h1:eqJ1b6/tCTMnlojbQOL3oASg4/48EOFwPxOLfu01N34=
+github.com/netascode/xmldot v0.5.1/go.mod h1:T0zddov+d7Sgam8cpJSOr155HiKyXwY58PE/iiuXbT8=
 github.com/oklog/run v1.2.0 h1:O8x3yXwah4A73hJdlrwo/2X6J62gE5qTMusH0dvz60E=
 github.com/oklog/run v1.2.0/go.mod h1:mgDbKRSwPhJfesJ4PntqFUbKQRZ50NgmZTSPlFA0YFk=
 github.com/openconfig/gnmi v0.14.1 h1:qKMuFvhIRR2/xxCOsStPQ25aKpbMDdWr3kI+nP9bhMs=

@@ -158,6 +158,7 @@ func testAccIosxrRouterISISInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_isis_interface" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	state = passive` + "\n"
 	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -199,6 +199,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
+	config += `	tag = 100` + "\n"
 	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -752,6 +752,14 @@ attributes:
         example: ACL1
       - yang_name: v3/systemowner
         example: true
+  - yang_name: context/contexts/context
+    tf_name: contexts
+    type: List
+    attributes:
+      - yang_name: context-name
+        tf_name: name
+        id: true
+        example: CONTEXT1
   - yang_name: oid-poll-stats
     tf_name: oid_poll_stats
     example: true

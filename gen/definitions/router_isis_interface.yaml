@@ -17,7 +17,7 @@ attributes:
     exclude_test: true
     example: true
   - yang_name: state
-    minimum_test_value: "passive"
+    minimum_test_value: '"passive"'
     example: "passive"
   - yang_name: circuit-type
     example: level-1

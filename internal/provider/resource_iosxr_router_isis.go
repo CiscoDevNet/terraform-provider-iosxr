@@ -1064,7 +1064,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						"auto_cost_reference_bandwidth": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("The reference bandwidth value (kbits/sec)").AddIntegerRangeDescription(1, 4294967295).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967295),
 							},

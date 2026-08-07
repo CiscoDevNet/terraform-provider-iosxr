@@ -752,6 +752,30 @@ attributes:
         example: ACL1
       - yang_name: v3/systemowner
         example: true
+  - yang_name: context/contexts/context
+    tf_name: contexts
+    type: List
+    attributes:
+      - yang_name: context-name
+        tf_name: name
+        id: true
+        example: CONTEXT1
+  - yang_name: context/mappings/mapping
+    tf_name: context_mappings
+    type: List
+    attributes:
+      - yang_name: context-name
+        tf_name: name
+        id: true
+        example: CONTEXT1
+      - yang_name: feature
+        example: bridge
+      - yang_name: instance
+        example: "INSTANCE1"
+      - yang_name: vrf
+        example: VRF1
+      - yang_name: topology
+        example: "TOPOLOGY1"
   - yang_name: oid-poll-stats
     tf_name: oid_poll_stats
     example: true

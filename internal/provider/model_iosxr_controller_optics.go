@@ -181,9 +181,7 @@ func (data ControllerOptics) toBodyXML(ctx context.Context, stateArg ...*Control
 	{
 		nsBody := netconf.Body{}
 		if !data.PerformanceMonitoring.IsNull() && !data.PerformanceMonitoring.IsUnknown() {
-			if data.PerformanceMonitoring.ValueBool() {
-				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/optics-performance-monitoring", "")
-			}
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-controller-optics-cfg:optics/optics-performance-monitoring", data.PerformanceMonitoring.ValueBool())
 		}
 		if !data.TransceiverDisable.IsNull() && !data.TransceiverDisable.IsUnknown() {
 			if data.TransceiverDisable.ValueBool() {

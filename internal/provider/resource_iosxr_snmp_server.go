@@ -1323,6 +1323,69 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
+			"contexts": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Context Name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Context Name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"context_mappings": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("context mapping").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("context mapping").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"feature": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure feature ").AddStringEnumDescription("bridge", "ospf", "ospfv3", "vrf").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bridge", "ospf", "ospfv3", "vrf"),
+							},
+						},
+						"instance": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Protocol instance associated with the context").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Vrf associated with the context").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"topology": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Topology name associated with the context").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+					},
+				},
+			},
 			"oid_poll_stats": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable OID poll stats oper CLI").String,
 				Optional:            true,
@@ -1540,39 +1603,34 @@ func (r *SNMPServerResource) Read(ctx context.Context, req resource.ReadRequest,
 			}
 
 			// Use GetWithRetry to handle device sync delays
-			getResp, isEmpty, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
+			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return
 			}
 
-			// If resource not found after retries, remove from state
-			if isEmpty {
+			// Only a "not found" error means the element was deleted; remove it from state.
+			if notFound {
 				resp.State.RemoveResource(ctx)
 				return
 			}
 
-			// Defensive bounds checking for response structure
-			if len(getResp.Notifications) == 0 {
-				resp.Diagnostics.AddError("Invalid gNMI response",
-					"Response contains no notifications")
-				return
-			}
-			if len(getResp.Notifications[0].Update) == 0 {
-				resp.Diagnostics.AddError("Invalid gNMI response",
-					"Response notification contains no updates")
-				return
-			}
-
-			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			tflog.Debug(ctx, fmt.Sprintf("respBody : %s", respBody))
-			if imp {
-				// After `terraform import` we switch to a full read so all device
-				// attributes are populated in state (fromBody overwrites everything).
-				state.fromBody(ctx, gjson.ParseBytes(respBody))
+			// A successful but empty ({}) response means the element exists but the
+			// device returned no data (e.g. a keys-only list entry). Preserve state
+			// as-is instead of removing it, which would cause a perpetual recreate.
+			if helpers.IsGnmiGetResponseEmpty(&getResp) {
+				tflog.Warn(ctx, fmt.Sprintf("%s: gNMI returned empty response, preserving state as-is", state.Id.ValueString()))
 			} else {
-				// Normal read: preserve config-only fields not returned by the device.
-				state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+				respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
+				tflog.Debug(ctx, fmt.Sprintf("respBody : %s", respBody))
+				if imp {
+					// After `terraform import` we switch to a full read so all device
+					// attributes are populated in state (fromBody overwrites everything).
+					state.fromBody(ctx, gjson.ParseBytes(respBody))
+				} else {
+					// Normal read: preserve config-only fields not returned by the device.
+					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+				}
 			}
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)

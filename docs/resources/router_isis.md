@@ -392,8 +392,6 @@ Required:
 
 Required:
 
-- `auto_cost_reference_bandwidth` (Number) The reference bandwidth value (kbits/sec)
-  - Range: `1`-`4294967295`
 - `number` (Number) Algorithm number
   - Range: `128`-`255`
 
@@ -407,6 +405,8 @@ Optional:
 - `affinity_reverse_exclude_any` (List of String) Reverse affinity to exclude
 - `affinity_reverse_include_all` (List of String) Reverse affinity to include
 - `affinity_reverse_include_any` (List of String) Reverse affinity to include
+- `auto_cost_reference_bandwidth` (Number) The reference bandwidth value (kbits/sec)
+  - Range: `1`-`4294967295`
 - `auto_cost_reference_bandwidth_granularity` (Number) Granularity
   - Range: `1`-`4294967295`
 - `auto_cost_reference_group_mode` (Boolean) Enable Group mode for bandwidth metric computation

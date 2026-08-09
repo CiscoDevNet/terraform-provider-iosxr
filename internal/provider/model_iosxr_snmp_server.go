@@ -160,6 +160,8 @@ type SNMPServer struct {
 	EngineIdLocal                                  types.String                `tfsdk:"engine_id_local"`
 	EngineIdRemotes                                []SNMPServerEngineIdRemotes `tfsdk:"engine_id_remotes"`
 	Users                                          []SNMPServerUsers           `tfsdk:"users"`
+	Contexts                                       []SNMPServerContexts        `tfsdk:"contexts"`
+	ContextMappings                                []SNMPServerContextMappings `tfsdk:"context_mappings"`
 	OidPollStats                                   types.Bool                  `tfsdk:"oid_poll_stats"`
 	TimeoutsSubagent                               types.Int64                 `tfsdk:"timeouts_subagent"`
 	TimeoutsDuplicate                              types.Int64                 `tfsdk:"timeouts_duplicate"`
@@ -293,6 +295,8 @@ type SNMPServerData struct {
 	EngineIdLocal                                  types.String                `tfsdk:"engine_id_local"`
 	EngineIdRemotes                                []SNMPServerEngineIdRemotes `tfsdk:"engine_id_remotes"`
 	Users                                          []SNMPServerUsers           `tfsdk:"users"`
+	Contexts                                       []SNMPServerContexts        `tfsdk:"contexts"`
+	ContextMappings                                []SNMPServerContextMappings `tfsdk:"context_mappings"`
 	OidPollStats                                   types.Bool                  `tfsdk:"oid_poll_stats"`
 	TimeoutsSubagent                               types.Int64                 `tfsdk:"timeouts_subagent"`
 	TimeoutsDuplicate                              types.Int64                 `tfsdk:"timeouts_duplicate"`
@@ -388,6 +392,16 @@ type SNMPServerUsers struct {
 	V3Ipv4                           types.String `tfsdk:"v3_ipv4"`
 	V3Ipv6                           types.String `tfsdk:"v3_ipv6"`
 	V3Systemowner                    types.Bool   `tfsdk:"v3_systemowner"`
+}
+type SNMPServerContexts struct {
+	Name types.String `tfsdk:"name"`
+}
+type SNMPServerContextMappings struct {
+	Name     types.String `tfsdk:"name"`
+	Feature  types.String `tfsdk:"feature"`
+	Instance types.String `tfsdk:"instance"`
+	Vrf      types.String `tfsdk:"vrf"`
+	Topology types.String `tfsdk:"topology"`
 }
 type SNMPServerHostsTrapsUnencryptedStrings struct {
 	CommunityString        types.String `tfsdk:"community_string"`
@@ -1385,6 +1399,34 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 				if item.V3Systemowner.ValueBool() {
 					body, _ = sjson.Set(body, "users.user"+"."+strconv.Itoa(index)+"."+"v3.systemowner", map[string]string{})
 				}
+			}
+		}
+	}
+	if len(data.Contexts) > 0 {
+		body, _ = sjson.Set(body, "context.contexts.context", []interface{}{})
+		for index, item := range data.Contexts {
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "context.contexts.context"+"."+strconv.Itoa(index)+"."+"context-name", item.Name.ValueString())
+			}
+		}
+	}
+	if len(data.ContextMappings) > 0 {
+		body, _ = sjson.Set(body, "context.mappings.mapping", []interface{}{})
+		for index, item := range data.ContextMappings {
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "context.mappings.mapping"+"."+strconv.Itoa(index)+"."+"context-name", item.Name.ValueString())
+			}
+			if !item.Feature.IsNull() && !item.Feature.IsUnknown() {
+				body, _ = sjson.Set(body, "context.mappings.mapping"+"."+strconv.Itoa(index)+"."+"feature", item.Feature.ValueString())
+			}
+			if !item.Instance.IsNull() && !item.Instance.IsUnknown() {
+				body, _ = sjson.Set(body, "context.mappings.mapping"+"."+strconv.Itoa(index)+"."+"instance", item.Instance.ValueString())
+			}
+			if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
+				body, _ = sjson.Set(body, "context.mappings.mapping"+"."+strconv.Itoa(index)+"."+"vrf", item.Vrf.ValueString())
+			}
+			if !item.Topology.IsNull() && !item.Topology.IsUnknown() {
+				body, _ = sjson.Set(body, "context.mappings.mapping"+"."+strconv.Itoa(index)+"."+"topology", item.Topology.ValueString())
 			}
 		}
 	}
@@ -3303,6 +3345,84 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res gjson.Result) {
 			}
 		}
 	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
+
+		var r gjson.Result
+		res.Get("context.contexts.context").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("context-name"); value.Exists() && !data.Contexts[i].Name.IsNull() {
+			data.Contexts[i].Name = types.StringValue(value.String())
+		} else {
+			data.Contexts[i].Name = types.StringNull()
+		}
+	}
+	for i := range data.ContextMappings {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.ContextMappings[i].Name.ValueString()}
+
+		var r gjson.Result
+		res.Get("context.mappings.mapping").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("context-name"); value.Exists() && !data.ContextMappings[i].Name.IsNull() {
+			data.ContextMappings[i].Name = types.StringValue(value.String())
+		} else {
+			data.ContextMappings[i].Name = types.StringNull()
+		}
+		if value := r.Get("feature"); value.Exists() && !data.ContextMappings[i].Feature.IsNull() {
+			data.ContextMappings[i].Feature = types.StringValue(value.String())
+		} else {
+			data.ContextMappings[i].Feature = types.StringNull()
+		}
+		if value := r.Get("instance"); value.Exists() && !data.ContextMappings[i].Instance.IsNull() {
+			data.ContextMappings[i].Instance = types.StringValue(value.String())
+		} else {
+			data.ContextMappings[i].Instance = types.StringNull()
+		}
+		if value := r.Get("vrf"); value.Exists() && !data.ContextMappings[i].Vrf.IsNull() {
+			data.ContextMappings[i].Vrf = types.StringValue(value.String())
+		} else {
+			data.ContextMappings[i].Vrf = types.StringNull()
+		}
+		if value := r.Get("topology"); value.Exists() && !data.ContextMappings[i].Topology.IsNull() {
+			data.ContextMappings[i].Topology = types.StringValue(value.String())
+		} else {
+			data.ContextMappings[i].Topology = types.StringNull()
+		}
+	}
 	if value := res.Get("oid-poll-stats"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OidPollStats.IsNull() {
@@ -3859,6 +3979,34 @@ func (data SNMPServer) toBodyXML(ctx context.Context, stateArg ...*SNMPServer) s
 				if item.V3Systemowner.ValueBool() {
 					body = helpers.SetFromXPath(body, basePath+"/v3/systemowner", "")
 				}
+			}
+		}
+	}
+	if len(data.Contexts) > 0 {
+		for _, item := range data.Contexts {
+			basePath := data.getXPath() + "/context/contexts/context[context-name='" + item.Name.ValueString() + "']"
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/context-name", item.Name.ValueString())
+			}
+		}
+	}
+	if len(data.ContextMappings) > 0 {
+		for _, item := range data.ContextMappings {
+			basePath := data.getXPath() + "/context/mappings/mapping[context-name='" + item.Name.ValueString() + "']"
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/context-name", item.Name.ValueString())
+			}
+			if !item.Feature.IsNull() && !item.Feature.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/feature", item.Feature.ValueString())
+			}
+			if !item.Instance.IsNull() && !item.Instance.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/instance", item.Instance.ValueString())
+			}
+			if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/vrf", item.Vrf.ValueString())
+			}
+			if !item.Topology.IsNull() && !item.Topology.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/topology", item.Topology.ValueString())
 			}
 		}
 	}
@@ -6256,6 +6404,84 @@ func (data *SNMPServer) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			}
 		}
 	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/context/contexts/context").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "context-name"); value.Exists() && !data.Contexts[i].Name.IsNull() {
+			data.Contexts[i].Name = types.StringValue(value.String())
+		} else if data.Contexts[i].Name.IsNull() {
+			data.Contexts[i].Name = types.StringNull()
+		}
+	}
+	for i := range data.ContextMappings {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.ContextMappings[i].Name.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/context/mappings/mapping").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "context-name"); value.Exists() && !data.ContextMappings[i].Name.IsNull() {
+			data.ContextMappings[i].Name = types.StringValue(value.String())
+		} else if data.ContextMappings[i].Name.IsNull() {
+			data.ContextMappings[i].Name = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "feature"); value.Exists() && !data.ContextMappings[i].Feature.IsNull() {
+			data.ContextMappings[i].Feature = types.StringValue(value.String())
+		} else if data.ContextMappings[i].Feature.IsNull() {
+			data.ContextMappings[i].Feature = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "instance"); value.Exists() && !data.ContextMappings[i].Instance.IsNull() {
+			data.ContextMappings[i].Instance = types.StringValue(value.String())
+		} else if data.ContextMappings[i].Instance.IsNull() {
+			data.ContextMappings[i].Instance = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "vrf"); value.Exists() && !data.ContextMappings[i].Vrf.IsNull() {
+			data.ContextMappings[i].Vrf = types.StringValue(value.String())
+		} else if data.ContextMappings[i].Vrf.IsNull() {
+			data.ContextMappings[i].Vrf = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "topology"); value.Exists() && !data.ContextMappings[i].Topology.IsNull() {
+			data.ContextMappings[i].Topology = types.StringValue(value.String())
+		} else if data.ContextMappings[i].Topology.IsNull() {
+			data.ContextMappings[i].Topology = types.StringNull()
+		}
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oid-poll-stats"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
 		if !data.OidPollStats.IsNull() {
@@ -7320,6 +7546,40 @@ func (data *SNMPServer) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
+	if value := res.Get(prefix + "context.contexts.context"); value.Exists() {
+		data.Contexts = make([]SNMPServerContexts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerContexts{}
+			if cValue := v.Get("context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "context.mappings.mapping"); value.Exists() {
+		data.ContextMappings = make([]SNMPServerContextMappings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerContextMappings{}
+			if cValue := v.Get("context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("feature"); cValue.Exists() {
+				item.Feature = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("instance"); cValue.Exists() {
+				item.Instance = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("vrf"); cValue.Exists() {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("topology"); cValue.Exists() {
+				item.Topology = types.StringValue(cValue.String())
+			}
+			data.ContextMappings = append(data.ContextMappings, item)
+			return true
+		})
+	}
 	if value := res.Get(prefix + "oid-poll-stats"); value.Exists() {
 		data.OidPollStats = types.BoolValue(true)
 	} else if !data.OidPollStats.IsNull() {
@@ -8310,6 +8570,40 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
+	if value := res.Get(prefix + "context.contexts.context"); value.Exists() {
+		data.Contexts = make([]SNMPServerContexts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerContexts{}
+			if cValue := v.Get("context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
+	if value := res.Get(prefix + "context.mappings.mapping"); value.Exists() {
+		data.ContextMappings = make([]SNMPServerContextMappings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerContextMappings{}
+			if cValue := v.Get("context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("feature"); cValue.Exists() {
+				item.Feature = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("instance"); cValue.Exists() {
+				item.Instance = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("vrf"); cValue.Exists() {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("topology"); cValue.Exists() {
+				item.Topology = types.StringValue(cValue.String())
+			}
+			data.ContextMappings = append(data.ContextMappings, item)
+			return true
+		})
+	}
 	if value := res.Get(prefix + "oid-poll-stats"); value.Exists() {
 		data.OidPollStats = types.BoolValue(true)
 	} else {
@@ -9287,6 +9581,40 @@ func (data *SNMPServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 				item.V3Systemowner = types.BoolValue(false)
 			}
 			data.Users = append(data.Users, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/context/contexts/context"); value.Exists() {
+		data.Contexts = make([]SNMPServerContexts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerContexts{}
+			if cValue := helpers.GetFromXPath(v, "context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/context/mappings/mapping"); value.Exists() {
+		data.ContextMappings = make([]SNMPServerContextMappings, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerContextMappings{}
+			if cValue := helpers.GetFromXPath(v, "context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "feature"); cValue.Exists() {
+				item.Feature = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "instance"); cValue.Exists() {
+				item.Instance = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "vrf"); cValue.Exists() {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "topology"); cValue.Exists() {
+				item.Topology = types.StringValue(cValue.String())
+			}
+			data.ContextMappings = append(data.ContextMappings, item)
 			return true
 		})
 	}
@@ -10270,6 +10598,40 @@ func (data *SNMPServerData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/context/contexts/context"); value.Exists() {
+		data.Contexts = make([]SNMPServerContexts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerContexts{}
+			if cValue := helpers.GetFromXPath(v, "context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/context/mappings/mapping"); value.Exists() {
+		data.ContextMappings = make([]SNMPServerContextMappings, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SNMPServerContextMappings{}
+			if cValue := helpers.GetFromXPath(v, "context-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "feature"); cValue.Exists() {
+				item.Feature = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "instance"); cValue.Exists() {
+				item.Instance = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "vrf"); cValue.Exists() {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "topology"); cValue.Exists() {
+				item.Topology = types.StringValue(cValue.String())
+			}
+			data.ContextMappings = append(data.ContextMappings, item)
+			return true
+		})
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/oid-poll-stats"); value.Exists() {
 		data.OidPollStats = types.BoolValue(true)
 	} else {
@@ -10344,6 +10706,78 @@ func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) [
 	}
 	if !state.OidPollStats.IsNull() && data.OidPollStats.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/oid-poll-stats", state.getPath()))
+	}
+	for i := range state.ContextMappings {
+		keys := [...]string{"context-name"}
+		stateKeyValues := [...]string{state.ContextMappings[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ContextMappings[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ContextMappings {
+			found = true
+			if state.ContextMappings[i].Name.ValueString() != data.ContextMappings[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ContextMappings[i].Topology.IsNull() && data.ContextMappings[j].Topology.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/context/mappings/mapping%v/topology", state.getPath(), keyString))
+				}
+				if !state.ContextMappings[i].Vrf.IsNull() && data.ContextMappings[j].Vrf.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/context/mappings/mapping%v/vrf", state.getPath(), keyString))
+				}
+				if !state.ContextMappings[i].Instance.IsNull() && data.ContextMappings[j].Instance.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/context/mappings/mapping%v/instance", state.getPath(), keyString))
+				}
+				if !state.ContextMappings[i].Feature.IsNull() && data.ContextMappings[j].Feature.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/context/mappings/mapping%v/feature", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/context/mappings/mapping%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Contexts {
+		keys := [...]string{"context-name"}
+		stateKeyValues := [...]string{state.Contexts[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Contexts[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Contexts {
+			found = true
+			if state.Contexts[i].Name.ValueString() != data.Contexts[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/context/contexts/context%v", state.getPath(), keyString))
+		}
 	}
 	for i := range state.Users {
 		keys := [...]string{"user-name"}
@@ -11319,6 +11753,22 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context, state *SNMPServ
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oid-poll-stats", data.getXPath()))
 		}
 	}
+	for i := range data.ContextMappings {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.ContextMappings[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.Users {
 		keys := [...]string{"user-name"}
 		keyValues := [...]string{data.Users[i].UserName.ValueString()}
@@ -12165,6 +12615,18 @@ func (data *SNMPServer) getDeletePaths(ctx context.Context) []string {
 	if !data.OidPollStats.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/oid-poll-stats", data.getPath()))
 	}
+	for i := range data.ContextMappings {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[context-name=" + data.ContextMappings[i].Name.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/context/mappings/mapping%v", data.getPath(), keyPath))
+	}
+	for i := range data.Contexts {
+		// Build path with bracket notation for keys
+		keyPath := ""
+		keyPath += "[context-name=" + data.Contexts[i].Name.ValueString() + "]"
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/context/contexts/context%v", data.getPath(), keyPath))
+	}
 	for i := range data.Users {
 		// Build path with bracket notation for keys
 		keyPath := ""
@@ -12710,6 +13172,78 @@ func (data *SNMPServer) addDeletedItemsXML(ctx context.Context, state SNMPServer
 		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
 			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.ContextMappings {
+		stateKeys := [...]string{"context-name"}
+		stateKeyValues := [...]string{state.ContextMappings[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ContextMappings[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ContextMappings {
+			found = true
+			if state.ContextMappings[i].Name.ValueString() != data.ContextMappings[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ContextMappings[i].Topology.IsNull() && data.ContextMappings[j].Topology.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/context/mappings/mapping%v/topology", predicates))
+				}
+				if !state.ContextMappings[i].Vrf.IsNull() && data.ContextMappings[j].Vrf.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/context/mappings/mapping%v/vrf", predicates))
+				}
+				if !state.ContextMappings[i].Instance.IsNull() && data.ContextMappings[j].Instance.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/context/mappings/mapping%v/instance", predicates))
+				}
+				if !state.ContextMappings[i].Feature.IsNull() && data.ContextMappings[j].Feature.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/context/mappings/mapping%v/feature", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/context/mappings/mapping%v", predicates))
+		}
+	}
+	for i := range state.Contexts {
+		stateKeys := [...]string{"context-name"}
+		stateKeyValues := [...]string{state.Contexts[i].Name.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Contexts[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Contexts {
+			found = true
+			if state.Contexts[i].Name.ValueString() != data.Contexts[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/context/contexts/context%v", predicates))
 		}
 	}
 	for i := range state.Users {
@@ -15203,6 +15737,26 @@ func (data *SNMPServer) addDeletePathsXML(ctx context.Context, body string) stri
 	}
 	if !data.OidPollStats.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/oid-poll-stats")
+	}
+	for i := range data.ContextMappings {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.ContextMappings[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/context/mappings/mapping%v", predicates))
+	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].Name.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/context/contexts/context%v", predicates))
 	}
 	for i := range data.Users {
 		keys := [...]string{"user-name"}

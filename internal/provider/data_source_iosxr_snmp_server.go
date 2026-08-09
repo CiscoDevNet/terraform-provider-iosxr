@@ -1009,6 +1009,46 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
+			"contexts": schema.ListNestedAttribute{
+				MarkdownDescription: "Context Name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Context Name",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"context_mappings": schema.ListNestedAttribute{
+				MarkdownDescription: "context mapping",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "context mapping",
+							Computed:            true,
+						},
+						"feature": schema.StringAttribute{
+							MarkdownDescription: "Configure feature ",
+							Computed:            true,
+						},
+						"instance": schema.StringAttribute{
+							MarkdownDescription: "Protocol instance associated with the context",
+							Computed:            true,
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: "Vrf associated with the context",
+							Computed:            true,
+						},
+						"topology": schema.StringAttribute{
+							MarkdownDescription: "Topology name associated with the context",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"oid_poll_stats": schema.BoolAttribute{
 				MarkdownDescription: "Enable OID poll stats oper CLI",
 				Computed:            true,

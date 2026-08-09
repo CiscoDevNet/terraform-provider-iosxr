@@ -5,6 +5,7 @@
 - Fix: preserve resource state when a gNMI read returns an empty response so keys-only resources are no longer perpetually recreated
 - Add NETCONF protocol support (`protocol = "netconf"`) as an alternative to gNMI, with support for NETCONF 1.0/1.1, candidate and running datastore workflows, connection reuse, and automatic capability detection
 - BREAKING CHANGE: Rename resource and data source `iosxr_gnmi` to `iosxr_yang`. Update all HCL references and run `terraform state mv` to migrate existing state.
+- Fix: preserve newlines in multi-line `iosxr_cli` commands by JSON-encoding the gNMI `json_ietf` value and XML-escaping the NETCONF payload, so multi-line CLI submode configuration applies correctly instead of being sent as invalid single-line content
 
 ## 0.7.1
 

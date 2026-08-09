@@ -24,8 +24,10 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -33,6 +35,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -43,6 +46,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
+	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
@@ -87,19 +92,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			{{- end}}
-			{{- range  .Attributes}}
+			{{- range .Attributes}}
 			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-					{{- if len .EnumValues -}}
-					.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-					{{- end -}}
-					{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-					.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-					{{- end -}}
-					{{- if len .DefaultValue -}}
-					.AddDefaultValueDescription("{{.DefaultValue}}")
-					{{- end -}}
-					.String,
+				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
 				{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 				ElementType:         types.StringType,
 				{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
@@ -120,7 +115,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				Validators: []validator.String{
 					stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
 				},
-				{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
+				{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
 				Validators: []validator.String{
 					{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
 					stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
@@ -149,19 +144,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- if or (eq .Type "List") (eq .Type "Set")}}
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						{{- range  .Attributes}}
+						{{- range .Attributes}}
 						"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-								{{- if len .EnumValues -}}
-								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-								{{- end -}}
-								{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-								{{- end -}}
-								{{- if len .DefaultValue -}}
-								.AddDefaultValueDescription("{{.DefaultValue}}")
-								{{- end -}}
-								.String,
+							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
 							{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 							ElementType:         types.StringType,
 							{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
@@ -182,7 +167,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 							Validators: []validator.String{
 								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
 							},
-							{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
+							{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
 							Validators: []validator.String{
 								{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
 								stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
@@ -206,19 +191,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 							{{- if or (eq .Type "List") (eq .Type "Set")}}
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									{{- range  .Attributes}}
+									{{- range .Attributes}}
 									"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-											{{- if len .EnumValues -}}
-											.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-											{{- end -}}
-											{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-											.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-											{{- end -}}
-											{{- if len .DefaultValue -}}
-											.AddDefaultValueDescription("{{.DefaultValue}}")
-											{{- end -}}
-											.String,
+										MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
 										{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 										ElementType:         types.StringType,
 										{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
@@ -239,7 +214,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 										Validators: []validator.String{
 											stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
 										},
-										{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
+										{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
 										Validators: []validator.String{
 											{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
 											stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
@@ -263,127 +238,107 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 										{{- if or (eq .Type "List") (eq .Type "Set")}}
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-											{{- range  .Attributes}}
-											"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-												MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-													{{- if len .EnumValues -}}
-													.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-													{{- end -}}
-													{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-													.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-													{{- end -}}
-													{{- if len .DefaultValue -}}
-													.AddDefaultValueDescription("{{.DefaultValue}}")
-													{{- end -}}
-													.String,
-												{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
-												ElementType:         types.StringType,
-												{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-												ElementType:         types.Int64Type,
-												{{- end}}
-												{{- if or .Id .Mandatory}}
-												Required:            true,
-												{{- else}}
-												Optional:            true,
-												{{- end}}
-												{{- if len .DefaultValue}}
-												Computed:            true,
-												{{- end}}
-												{{- if .Sensitive}}
-												Sensitive:           true,
-												{{- end}}
-												{{- if len .EnumValues}}
-												Validators: []validator.String{
-													stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
-												},
-												{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
-												Validators: []validator.String{
-													{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
-													stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
+												{{- range .Attributes}}
+												"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
+													{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
+													ElementType:         types.StringType,
+													{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+													ElementType:         types.Int64Type,
 													{{- end}}
-													{{- range .StringPatterns}}
-													stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
+													{{- if or .Id .Mandatory}}
+													Required:            true,
+													{{- else}}
+													Optional:            true,
 													{{- end}}
-												},
-												{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-												Validators: []validator.Int64{
-													int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-												},
-												{{- end}}
-												{{- if and (len .DefaultValue) (eq .Type "Int64")}}
-												Default:             int64default.StaticInt64({{.DefaultValue}}),
-												{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
-												Default:             booldefault.StaticBool({{.DefaultValue}}),
-												{{- else if and (len .DefaultValue) (eq .Type "String")}}
-												Default:             stringdefault.StaticString("{{.DefaultValue}}"),
-												{{- end}}
-												{{- if or (eq .Type "List") (eq .Type "Set")}}
-												NestedObject: schema.NestedAttributeObject{
-													Attributes: map[string]schema.Attribute{
-														{{- range  .Attributes}}
-														"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-															MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
-																{{- if len .EnumValues -}}
-																.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
-																{{- end -}}
-																{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
-																.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
-																{{- end -}}
-																{{- if len .DefaultValue -}}
-																.AddDefaultValueDescription("{{.DefaultValue}}")
-																{{- end -}}
-																.String,
-															{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
-															ElementType:         types.StringType,
-															{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-															ElementType:         types.Int64Type,
-															{{- end}}
-															{{- if or .Id .Mandatory}}
-															Required:            true,
-															{{- else}}
-															Optional:            true,
-															{{- end}}
-															{{- if len .DefaultValue}}
-															Computed:            true,
-															{{- end}}
-															{{- if .Sensitive}}
-															Sensitive:           true,
-															{{- end}}
-															{{- if len .EnumValues}}
-															Validators: []validator.String{
-																stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
-															},
-															{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
-															Validators: []validator.String{
-																{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
-																stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
-																{{- end}}
-																{{- range .StringPatterns}}
-																stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
-																{{- end}}
-															},
-															{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-															Validators: []validator.Int64{
-																int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-															},
-															{{- end}}
-															{{- if and (len .DefaultValue) (eq .Type "Int64")}}
-															Default:             int64default.StaticInt64({{.DefaultValue}}),
-															{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
-															Default:             booldefault.StaticBool({{.DefaultValue}}),
-															{{- else if and (len .DefaultValue) (eq .Type "String")}}
-															Default:             stringdefault.StaticString("{{.DefaultValue}}"),
-															{{- end}}
-														},
+													{{- if len .DefaultValue}}
+													Computed:            true,
+													{{- end}}
+													{{- if .Sensitive}}
+													Sensitive:           true,
+													{{- end}}
+													{{- if len .EnumValues}}
+													Validators: []validator.String{
+														stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
+													},
+													{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+													Validators: []validator.String{
+														{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+														stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
+														{{- end}}
+														{{- range .StringPatterns}}
+														stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
 														{{- end}}
 													},
+													{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
+													Validators: []validator.Int64{
+														int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+													},
+													{{- end}}
+													{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+													Default:             int64default.StaticInt64({{.DefaultValue}}),
+													{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+													Default:             booldefault.StaticBool({{.DefaultValue}}),
+													{{- else if and (len .DefaultValue) (eq .Type "String")}}
+													Default:             stringdefault.StaticString("{{.DefaultValue}}"),
+													{{- end}}
+													{{- if or (eq .Type "List") (eq .Type "Set")}}
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															{{- range .Attributes}}
+															"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
+																MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
+																{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
+																ElementType:         types.StringType,
+																{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+																ElementType:         types.Int64Type,
+																{{- end}}
+																{{- if or .Id .Mandatory}}
+																Required:            true,
+																{{- else}}
+																Optional:            true,
+																{{- end}}
+																{{- if len .DefaultValue}}
+																Computed:            true,
+																{{- end}}
+																{{- if .Sensitive}}
+																Sensitive:           true,
+																{{- end}}
+																{{- if len .EnumValues}}
+																Validators: []validator.String{
+																	stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
+																},
+																{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+																Validators: []validator.String{
+																	{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+																	stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
+																	{{- end}}
+																	{{- range .StringPatterns}}
+																	stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
+																	{{- end}}
+																},
+																{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
+																Validators: []validator.Int64{
+																	int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+																},
+																{{- end}}
+																{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+																Default:             int64default.StaticInt64({{.DefaultValue}}),
+																{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+																Default:             booldefault.StaticBool({{.DefaultValue}}),
+																{{- else if and (len .DefaultValue) (eq .Type "String")}}
+																Default:             stringdefault.StaticString("{{.DefaultValue}}"),
+																{{- end}}
+															},
+															{{- end}}
+														},
+													},
+													{{- end}}
 												},
 												{{- end}}
 											},
-											{{- end}}
 										},
-									},
-									{{- end}}
+										{{- end}}
 									},
 									{{- end}}
 								},
@@ -431,31 +386,62 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
-		var ops []gnmi.SetOperation
-
-		// Create object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
-
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
-
-		for _, i := range emptyLeafsDelete {
-			ops = append(ops, gnmi.Delete(i))
-		}
-
-		if device.AutoCommit {
-			if !r.data.ReuseConnection {
-				defer device.Client.Disconnect()
+		if device.Protocol == "gnmi" {
+			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
 			}
-			_, err := device.Client.Set(ctx, ops)
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
 				return
 			}
+
+
+			var ops []gnmi.SetOperation
+
+			// Create object
+			body := plan.toBody(ctx)
+			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
+
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+
+			for _, i := range emptyLeafsDelete {
+				ops = append(ops, gnmi.Delete(i))
+			}
+
+			if device.AutoCommit {
+				_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+			} else {
+				device.AppendCandidateOps(ops)
+				tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d operation(s) in candidate store (total pending: %d)", plan.getPath(), len(ops), device.PendingOpsCount()))
+			}
 		} else {
-			device.AppendCandidateOps(ops)
-			tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d operation(s) in candidate store (total pending: %d)", plan.getPath(), len(ops), device.PendingOpsCount()))
+			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			bodyStr := plan.toBodyXML(ctx)
+
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
+			}
 		}
 	}
 
@@ -491,65 +477,118 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
+	// Check if we are being called after `terraform import`.
+	// During import we use fromBody/fromBodyXML (full overwrite from device).
+	// During normal reads we use updateFromBody/updateFromBodyXML (preserve config-only fields).
+	imp, impDiags := helpers.IsFlagImporting(ctx, req)
+	resp.Diagnostics.Append(impDiags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	if device.Managed {
-		// When auto_commit is false, if there are pending operations, flush them NOW before reading.
-		// This allows all operations to accumulate and be sent as ONE batch when
-		// the first Read() happens, and errors can be reported back to Terraform.
-		if !device.AutoCommit && device.HasPendingOps() {
-			flushOps := device.DrainCandidateOps()
-			tflog.Info(ctx, fmt.Sprintf("Flushing %d batched operation(s) before Read", len(flushOps)))
-			
+		_ = diags // Avoid unused variable error
+		if device.Protocol == "gnmi" {
+			// When auto_commit is false, if there are pending operations, flush them NOW before reading.
+			// This allows all operations to accumulate and be sent as ONE batch when
+			// the first Read() happens, and errors can be reported back to Terraform.
+			if !device.AutoCommit && device.HasPendingOps() {
+				flushOps := device.DrainCandidateOps()
+				tflog.Info(ctx, fmt.Sprintf("Flushing %d batched operation(s) before Read", len(flushOps)))
+
 			if !r.data.ReuseConnection {
-				defer device.Client.Disconnect()
+				defer device.GnmiClient.Disconnect()
 			}
-			_, err := device.Client.Set(ctx, flushOps)
+			_, err := device.GnmiClient.Set(ctx, flushOps)
+				if err != nil {
+					// Re-queue on failure
+					device.AppendCandidateOps(flushOps)
+					resp.Diagnostics.AddError("Batch operation failed", fmt.Sprintf("Failed to commit %d batched operation(s): %s", len(flushOps), err.Error()))
+					return
+				}
+				tflog.Info(ctx, fmt.Sprintf("Successfully committed %d batched operation(s) to device", len(flushOps)))
+			}
+			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			// Use GetWithRetry to handle device sync delays
+			getResp, isEmpty, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
 			if err != nil {
-				// Re-queue on failure
-				device.AppendCandidateOps(flushOps)
-				resp.Diagnostics.AddError("Batch operation failed", fmt.Sprintf("Failed to commit %d batched operation(s): %s", len(flushOps), err.Error()))
-				return
-			}
-			tflog.Info(ctx, fmt.Sprintf("Successfully committed %d batched operation(s) to device", len(flushOps)))
-		}
-		
-		// Now read from device (which has the flushed changes)
-		if !r.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		getResp, err := device.Client.Get(ctx, []string{state.Id.ValueString()})
-		if err != nil {
-			if strings.Contains(err.Error(), "Requested element(s) not found") {
-				resp.State.RemoveResource(ctx)
-				return
-			} else {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return
 			}
-		}
 
-		// Defensive bounds checking for response structure
-		if len(getResp.Notifications) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response contains no notifications")
-			return
-		}
-		if len(getResp.Notifications[0].Update) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response notification contains no updates")
-			return
-		}
+			// If resource not found after retries, remove from state
+			if isEmpty {
+				resp.State.RemoveResource(ctx)
+				return
+			}
 
-		imp, diags := helpers.IsFlagImporting(ctx, req)
-		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-			return
-		}
+			// Defensive bounds checking for response structure
+			if len(getResp.Notifications) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response contains no notifications")
+				return
+			}
+			if len(getResp.Notifications[0].Update) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response notification contains no updates")
+				return
+			}
 
-		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-		if imp {
-			state.fromBody(ctx, respBody)
+			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
+			tflog.Debug(ctx, fmt.Sprintf("respBody : %s", respBody))
+			if imp {
+				// After `terraform import` we switch to a full read so all device
+				// attributes are populated in state (fromBody overwrites everything).
+				state.fromBody(ctx, gjson.ParseBytes(respBody))
+			} else {
+				// Normal read: preserve config-only fields not returned by the device.
+				state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+			}
 		} else {
-			state.updateFromBody(ctx, respBody)
+			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			filter := helpers.GetSubtreeFilter(state.getXPath())
+
+			// Use GetConfigWithRetry to handle device sync delays
+			res, isEmpty, err := helpers.GetConfigWithRetry(ctx, device.NetconfClient, "running", filter, state.getXPath())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object: %s", err))
+				return
+			}
+
+			if isEmpty {
+				// NETCONF returned empty response after retries — preserve state as-is.
+				tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response after retries, preserving state as-is", state.Id.ValueString()))
+			} else {
+				if imp {
+					// After `terraform import` we switch to a full read so all device
+					// attributes are populated in state (fromBodyXML overwrites everything).
+					state.fromBodyXML(ctx, res.Res)
+				} else {
+					// Normal read: preserve config-only fields not returned by the device.
+					state.updateFromBodyXML(ctx, res.Res)
+				}
+			}
 		}
 	}
 
@@ -591,38 +630,70 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	if device.Managed {
-		var ops []gnmi.SetOperation
+		if device.Protocol == "gnmi" {
+			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
-		// Update object
-		body := plan.toBody(ctx)
-		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		deletedListItems := plan.getDeletedItems(ctx, state)
-		tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
+			var ops []gnmi.SetOperation
 
-		for _, i := range deletedListItems {
-			ops = append(ops, gnmi.Delete(i))
-		}
+			// Update object
+			body := plan.toBody(ctx)
+			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			deletedListItems := plan.getDeletedItems(ctx, state)
+			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
+
+			for _, i := range deletedListItems {
+				ops = append(ops, gnmi.Delete(i))
+			}
+
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 		for _, i := range emptyLeafsDelete {
 			ops = append(ops, gnmi.Delete(i))
 		}
-
 		if device.AutoCommit {
-			if !r.data.ReuseConnection {
-				defer device.Client.Disconnect()
-			}
-			_, err := device.Client.Set(ctx, ops)
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
-			}
+			_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
 		} else {
 			device.AppendCandidateOps(ops)
 			tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d operation(s) in candidate store (total pending: %d)", plan.Id.ValueString(), len(ops), device.PendingOpsCount()))
+		}
+		} else {
+			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			body := plan.toBodyXML(ctx, &state)
+			deleteBody := plan.addDeletedItemsXML(ctx, state, body)
+
+			 // Combine update and delete operations into a single transaction
+		 	combinedBody := body + deleteBody
+		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true); err != nil {
+		 		resp.Diagnostics.AddError("Client Error", err.Error())
+		 		return
+			}
 		}
 	}
 
@@ -655,8 +726,6 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
 	if device.Managed {
-		var ops []gnmi.SetOperation
-
 		{{- if or .DefaultDeleteAttributes .NoDelete}}
 		deleteMode := "attributes"
 		{{- else}}
@@ -671,32 +740,111 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 		{{- end}}
 
 		if deleteMode == "all" {
-			ops = append(ops, gnmi.Delete(state.Id.ValueString()))
+			if device.Protocol == "gnmi" {
+				locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, true)
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+				if locked {
+					defer device.GetOpMutex().Unlock()
+				}
+				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+
+				var ops []gnmi.SetOperation
+				ops = append(ops, gnmi.Delete(state.Id.ValueString()))
+
+				_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+			} else {
+				// NETCONF - Serialize write operations
+				locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+				if locked {
+					defer device.GetOpMutex().Unlock()
+				}
+
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+					resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				body := netconf.Body{}
+				// Use state.Id (like gNMI does) which contains the full XPath, with fallback
+				xpath := state.Id.ValueString()
+				if xpath == "" {
+					// Fallback if Id is not set (defensive programming)
+					xpath = state.getPath()
+					tflog.Warn(ctx, fmt.Sprintf("NETCONF DELETE: state.Id was empty, using fallback getPath(): %s", xpath))
+				}
+
+				// RemoveFromXPathString returns raw XML string for delete operations
+				xmlStr := helpers.RemoveFromXPath(body, xpath).Res()
+
+				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, true); err != nil {
+					resp.Diagnostics.AddError("Client Error", err.Error())
+					return
+				}
+			}
 		} else {
-			deletePaths := state.getDeletePaths(ctx)
-			tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+			if device.Protocol == "gnmi" {
+				locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, true)
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+				if locked {
+					defer device.GetOpMutex().Unlock()
+				}
+				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+
+				var ops []gnmi.SetOperation
+				deletePaths := state.getDeletePaths(ctx)
+				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 			for _, i := range deletePaths {
 				ops = append(ops, gnmi.Delete(i))
 			}
-		}
 
-		if len(ops) > 0 {
-			// DESTROY: Always commit immediately, ignore auto_commit setting.
-			// During destroy, iosxr_commit is already gone (destroyed first via depends_on),
-			// so batched ops would never be flushed. Each resource must self-commit its delete.
-			// This matches NETCONF PR #332 destroy behavior: auto_commit=true during destroy.
-			if !r.data.ReuseConnection {
-				defer device.Client.Disconnect()
-			}
-			_, err := device.Client.Set(ctx, ops)
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
+			if len(ops) > 0 {
+				_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
 			}
 			tflog.Debug(ctx, fmt.Sprintf("%s: Committed %d delete operation(s) immediately (destroy always commits)", state.Id.ValueString(), len(ops)))
+		} else {
+			// NETCONF - Serialize write operations
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			body := state.addDeletePathsXML(ctx, "")
+
+			// Use EditConfigWithOptions with ignoreDataMissing=true to allow graceful deletion
+			// of non-existent elements (matching gNMI behavior)
+			if err := helpers.EditConfigWithOptions(ctx, device.NetconfClient, body, true, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
+			}
 		}
 	}
+}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 

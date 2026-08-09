@@ -14,9 +14,7 @@ This resource can manage the Netconf Yang Agent configuration.
 
 ```terraform
 resource "iosxr_netconf_yang_agent" "example" {
-  ssh                           = true
   with_defaults_support         = true
-  rate_limit                    = 4096
   session_limit                 = 50
   session_idle_timeout          = 30
   session_absolute_timeout      = 1440

@@ -69,13 +69,11 @@ func TestAccDataSourceIosxrMPLSLDPMLDP(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrMPLSLDPMLDPPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
-	attributes = {
-	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=LDP_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "LDP_POLICY_1"
@@ -119,7 +117,7 @@ func testAccDataSourceIosxrMPLSLDPMLDPConfig() string {
 	config += `		forwarding_recursive_route_policy = "LDP_POLICY_1"` + "\n"
 	config += `		rib_unicast_always = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

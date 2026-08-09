@@ -69,7 +69,7 @@ func TestAccDataSourceIosxrLineConsole(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrLineConsolePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=CONSOLE_ACL]"
 	attributes = {
 		"access-list-name" = "CONSOLE_ACL"
@@ -123,7 +123,7 @@ func testAccDataSourceIosxrLineConsoleConfig() string {
 	config += `	timestamp_disable = true` + "\n"
 	config += `	pager = "none"` + "\n"
 	config += `	telnet_transparent = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

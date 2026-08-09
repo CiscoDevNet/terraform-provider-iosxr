@@ -108,10 +108,10 @@ func (r *CommitResource) commitBatch(ctx context.Context, device *IosxrProviderD
 		len(ops), deviceName, updates, deletes, replaces))
 
 	if !r.data.ReuseConnection {
-		defer func() { _ = device.Client.Disconnect() }()
+		defer func() { _ = device.GnmiClient.Disconnect() }()
 	}
 
-	_, err := device.Client.Set(ctx, ops)
+	_, err := device.GnmiClient.Set(ctx, ops)
 	if err != nil {
 		device.AppendCandidateOps(ops) // re-queue on failure so next apply can retry
 		return fmt.Errorf("gNMI Set failed: %w", err)

@@ -138,7 +138,7 @@ func iosxrRouterStaticVRFIPv4UnicastImportStateIdFunc(resourceName string) resou
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterStaticVRFIPv4UnicastPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]"
 	attributes = {
 		"vrf-name" = "VRF2"
@@ -159,7 +159,7 @@ func testAccIosxrRouterStaticVRFIPv4UnicastConfig_minimum() string {
 	config += `	nexthop_interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -250,7 +250,7 @@ func testAccIosxrRouterStaticVRFIPv4UnicastConfig_all() string {
 	config += `			metric = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

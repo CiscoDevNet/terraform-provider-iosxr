@@ -74,7 +74,7 @@ func TestAccDataSourceIosxrFlowMonitorMap(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrFlowMonitorMapPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=exporter_map1]"
 	attributes = {
 		"exporter-map-name" = "exporter_map1"
@@ -114,7 +114,7 @@ func testAccDataSourceIosxrFlowMonitorMapConfig() string {
 	config += `	sflow_options_sample_header_size = 128` + "\n"
 	config += `	sflow_options_input_ifindex = "physical"` + "\n"
 	config += `	sflow_options_output_ifindex = "physical"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

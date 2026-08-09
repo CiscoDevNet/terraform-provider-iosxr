@@ -34,7 +34,6 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/openconfig/goyang/pkg/yang"
-	"golang.org/x/tools/imports"
 	"gopkg.in/yaml.v3"
 )
 
@@ -747,18 +746,6 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 		log.Fatalf("Error creating output file: %v", err)
 	}
 	content := output.Bytes()
-	// Run goimports to fix unused/missing imports for .go files
-	if strings.HasSuffix(outputFile, ".go") {
-		fixed, err := imports.Process(outputFile, content, &imports.Options{
-			Comments:   true,
-			TabIndent:  true,
-			TabWidth:   8,
-			FormatOnly: false,
-		})
-		if err == nil {
-			content = fixed
-		}
-	}
 	f.Write(content)
 }
 

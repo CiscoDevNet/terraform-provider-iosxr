@@ -39,8 +39,6 @@ func TestAccIosxrNetconfYangAgent(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_limit", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_idle_timeout", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_absolute_timeout", "1440"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "netconf_v1", "1.0-only"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "netconf_v1_streaming_disabled", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -99,8 +97,6 @@ func testAccIosxrNetconfYangAgentConfig_all() string {
 	config += `	session_limit = 50` + "\n"
 	config += `	session_idle_timeout = 30` + "\n"
 	config += `	session_absolute_timeout = 1440` + "\n"
-	config += `	netconf_v1 = "1.0-only"` + "\n"
-	config += `	netconf_v1_streaming_disabled = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -183,6 +183,12 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.v3_ipv4", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.v3_ipv6", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.v3_systemowner", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "contexts.0.name", "CONTEXT1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "context_mappings.0.name", "CONTEXT1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "context_mappings.0.feature", "bridge"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "context_mappings.0.instance", "INSTANCE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "context_mappings.0.vrf", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "context_mappings.0.topology", "TOPOLOGY1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "oid_poll_stats", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "timeouts_subagent", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "timeouts_duplicate", "10"))
@@ -454,6 +460,16 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config += `		v3_ipv4 = "ACL1"` + "\n"
 	config += `		v3_ipv6 = "ACL1"` + "\n"
 	config += `		v3_systemowner = true` + "\n"
+	config += `		}]` + "\n"
+	config += `	contexts = [{` + "\n"
+	config += `		name = "CONTEXT1"` + "\n"
+	config += `		}]` + "\n"
+	config += `	context_mappings = [{` + "\n"
+	config += `		name = "CONTEXT1"` + "\n"
+	config += `		feature = "bridge"` + "\n"
+	config += `		instance = "INSTANCE1"` + "\n"
+	config += `		vrf = "VRF1"` + "\n"
+	config += `		topology = "TOPOLOGY1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	oid_poll_stats = true` + "\n"
 	config += `	timeouts_subagent = 20` + "\n"

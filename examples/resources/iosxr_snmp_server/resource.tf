@@ -207,6 +207,20 @@ resource "iosxr_snmp_server" "example" {
       v3_systemowner             = true
     }
   ]
+  contexts = [
+    {
+      name = "CONTEXT1"
+    }
+  ]
+  context_mappings = [
+    {
+      name     = "CONTEXT1"
+      feature  = "bridge"
+      instance = "INSTANCE1"
+      vrf      = "VRF1"
+      topology = "TOPOLOGY1"
+    }
+  ]
   oid_poll_stats                   = true
   timeouts_subagent                = 20
   timeouts_duplicate               = 10

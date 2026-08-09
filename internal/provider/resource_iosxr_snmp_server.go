@@ -1323,6 +1323,69 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
+			"contexts": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Context Name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Context Name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"context_mappings": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("context mapping").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("context mapping").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"feature": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure feature ").AddStringEnumDescription("bridge", "ospf", "ospfv3", "vrf").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bridge", "ospf", "ospfv3", "vrf"),
+							},
+						},
+						"instance": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Protocol instance associated with the context").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Vrf associated with the context").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"topology": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Topology name associated with the context").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+					},
+				},
+			},
 			"oid_poll_stats": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable OID poll stats oper CLI").String,
 				Optional:            true,

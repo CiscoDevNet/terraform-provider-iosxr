@@ -745,8 +745,7 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 	if err != nil {
 		log.Fatalf("Error creating output file: %v", err)
 	}
-	content := output.Bytes()
-	f.Write(content)
+	f.Write(output.Bytes())
 }
 
 func main() {

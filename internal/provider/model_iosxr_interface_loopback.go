@@ -1024,14 +1024,10 @@ func (data InterfaceLoopback) toBodyXML(ctx context.Context, stateArg ...*Interf
 			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/type", data.Ipv4VerifyUnicastSourceReachableViaType.ValueString())
 		}
 		if !data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() && !data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.IsUnknown() {
-			if data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.ValueBool() {
-				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-self-ping", "")
-			}
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-self-ping", data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.ValueBool())
 		}
 		if !data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.IsNull() && !data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.IsUnknown() {
-			if data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.ValueBool() {
-				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-default", "")
-			}
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-default", data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.ValueBool())
 		}
 		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
 		if nsErr != nil {
@@ -1052,14 +1048,10 @@ func (data InterfaceLoopback) toBodyXML(ctx context.Context, stateArg ...*Interf
 			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/type", data.Ipv6VerifyUnicastSourceReachableViaType.ValueString())
 		}
 		if !data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() && !data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.IsUnknown() {
-			if data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.ValueBool() {
-				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-self-ping", "")
-			}
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-self-ping", data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.ValueBool())
 		}
 		if !data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.IsNull() && !data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.IsUnknown() {
-			if data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.ValueBool() {
-				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-default", "")
-			}
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-default", data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.ValueBool())
 		}
 		if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.IsUnknown() {
 			if data.Ipv6Enable.ValueBool() {

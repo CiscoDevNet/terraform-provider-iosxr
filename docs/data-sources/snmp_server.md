@@ -29,6 +29,8 @@ data "iosxr_snmp_server" "example" {
 - `chassis_id` (String) String to uniquely identify this chassis
 - `communities` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--communities))
 - `contact` (String) Text for mib Object sysContact
+- `context_mappings` (Attributes List) context mapping (see [below for nested schema](#nestedatt--context_mappings))
+- `contexts` (Attributes List) Context Name (see [below for nested schema](#nestedatt--contexts))
 - `drop_report_acl_ipv4` (String) Type of Access-list
 - `drop_report_acl_ipv6` (String) Type of Access-list
 - `drop_unknown_user` (Boolean) Silently drop unknown v3 user packets
@@ -169,6 +171,26 @@ Read-Only:
 - `sdrowner` (Boolean) SDR Owner permissions for MIB Objects
 - `systemowner` (Boolean) System Owner permissions for MIB objects
 - `view` (String) Restrict this community to a named view
+
+
+<a id="nestedatt--context_mappings"></a>
+### Nested Schema for `context_mappings`
+
+Read-Only:
+
+- `feature` (String) Configure feature
+- `instance` (String) Protocol instance associated with the context
+- `name` (String) context mapping
+- `topology` (String) Topology name associated with the context
+- `vrf` (String) Vrf associated with the context
+
+
+<a id="nestedatt--contexts"></a>
+### Nested Schema for `contexts`
+
+Read-Only:
+
+- `name` (String) Context Name
 
 
 <a id="nestedatt--engine_id_remotes"></a>

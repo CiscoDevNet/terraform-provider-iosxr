@@ -153,6 +153,13 @@ func IsGnmiConnectionError(err error) bool {
 // gNMI Get may return empty/incomplete data immediately after Set due to device sync delay.
 // This function retries with exponential backoff to handle such cases.
 //
+// The returned bool reports whether the element was NOT FOUND (i.e. the device
+// responded with a "Requested element(s) not found" error), which is the only
+// signal that the element has been deleted. A successful but empty ({}) response
+// is NOT treated as not-found: it means the element exists but has no data to
+// return (e.g. a keys-only list entry) and must be kept in state. Callers can
+// use IsGnmiGetResponseEmpty on the returned response to detect that case.
+//
 // Parameters:
 //   - ctx: context.Context
 //   - client: *gnmi.Client
@@ -161,7 +168,7 @@ func IsGnmiConnectionError(err error) bool {
 //
 // Returns:
 //   - gnmi.GetRes: The response from Get (by value)
-//   - bool: true if response is empty after all retries
+//   - bool: true only if the element was not found (deleted)
 //   - error: any error that occurred
 func GetWithRetry(ctx context.Context, client *gnmi.Client, paths []string, pathForLogging string) (gnmi.GetRes, bool, error) {
 	var getResp gnmi.GetRes
@@ -172,9 +179,9 @@ func GetWithRetry(ctx context.Context, client *gnmi.Client, paths []string, path
 	for attempt := 0; attempt <= maxRetries; attempt++ {
 		getResp, err = client.Get(ctx, paths)
 		if err != nil {
-			// Check if this is a "not found" error
+			// A "not found" error is the only signal that the element was deleted.
 			if strings.Contains(err.Error(), "Requested element(s) not found") {
-				return gnmi.GetRes{}, true, nil // Not an error, just empty result
+				return gnmi.GetRes{}, true, nil // notFound: element does not exist
 			}
 			return gnmi.GetRes{}, false, fmt.Errorf("failed to retrieve object (%s): %w", pathForLogging, err)
 		}
@@ -184,18 +191,28 @@ func GetWithRetry(ctx context.Context, client *gnmi.Client, paths []string, path
 		tflog.Debug(ctx, fmt.Sprintf("gNMI Get response for %s (attempt %d/%d): isEmpty=%v",
 			pathForLogging, attempt+1, maxRetries+1, isEmpty))
 
-		// If we got data or this is the last attempt, break
+		// If we got data or this is the last attempt, break. A successful but
+		// empty ({}) response is reported as found (notFound=false) so the caller
+		// preserves the resource in state rather than removing it.
 		if !isEmpty || attempt == maxRetries {
-			return getResp, isEmpty, nil
+			return getResp, false, nil
 		}
 
-		// Wait before retrying (exponential backoff)
+		// Wait before retrying (exponential backoff) to absorb post-Set sync delay
 		delay := baseDelay * time.Duration(1<<uint(attempt))
 		tflog.Debug(ctx, fmt.Sprintf("gNMI returned empty response, retrying after %v", delay))
 		time.Sleep(delay)
 	}
 
-	return getResp, isGnmiGetResponseEmpty(&getResp), nil
+	return getResp, false, nil
+}
+
+// IsGnmiGetResponseEmpty reports whether a successful gNMI Get response carried
+// no data (empty body, "{}" or "[]"). An empty body still means the element
+// exists; it is used by generated Read logic to decide whether to refresh
+// attributes from the device or preserve the current state as-is.
+func IsGnmiGetResponseEmpty(resp *gnmi.GetRes) bool {
+	return isGnmiGetResponseEmpty(resp)
 }
 
 // isGnmiGetResponseEmpty checks if a gNMI Get response is empty or has no data

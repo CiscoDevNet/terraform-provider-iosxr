@@ -42,7 +42,6 @@ import (
 type NetconfYangAgent struct {
 	Device                     types.String `tfsdk:"device"`
 	Id                         types.String `tfsdk:"id"`
-	DeleteMode                 types.String `tfsdk:"delete_mode"`
 	Ssh                        types.Bool   `tfsdk:"ssh"`
 	WithDefaultsSupport        types.Bool   `tfsdk:"with_defaults_support"`
 	RateLimit                  types.Int64  `tfsdk:"rate_limit"`

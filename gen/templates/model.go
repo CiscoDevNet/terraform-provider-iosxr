@@ -2226,10 +2226,12 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context, stateArg ...*{{ca
 		{{- range .Attributes}}
 		{{- if and (not .Reference) (ne .Type "List") (ne .Type "Set")}}
 		if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
-			{{- if eq .Type "Bool"}}
+			{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 			if data.{{toGoName .TfName}}.ValueBool() {
 				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/{{.XPath}}", "")
 			}
+			{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/{{.XPath}}", data.{{toGoName .TfName}}.ValueBool())
 			{{- else if eq .Type "Int64"}}
 			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/{{.XPath}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
 			{{- else}}

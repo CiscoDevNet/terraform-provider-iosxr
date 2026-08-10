@@ -94,10 +94,12 @@ provider "iosxr" {
 - `ca_certificate` (String) TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
 - `certificate` (String) TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.
 - `client_cache` (Boolean) Enable or disable client-side caching of device connections. This can improve performance by reusing existing connections. Defaults to `true`.
+- `connect_timeout` (Number) Timeout in seconds for establishing a gnmi/netconf connection to the device. This can also be set as the IOSXR_CONNECT_TIMEOUT environment variable. Defaults to 30s (gnmi) and 10s (netconf).
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
 - `host` (String) Hostname or IP address of the Cisco IOS-XR device. Optionally a port can be added with `:port`. Default port is `57400` for gNMI and `830` for NETCONF. This can also be set as the IOSXR_HOST environment variable.
 - `key` (String) TLS private key content. This can also be set as the IOSXR_KEY environment variable.
 - `lock_release_timeout` (Number) Number of seconds to wait for the device database lock to be released. This can also be set as the IOSXR_LOCK_RELEASE_TIMEOUT environment variable. Defaults to `120`.
+- `operation_timeout` (Number) Per-operation timeout in seconds applied to every gnmi/netconf operation (both reads and writes). This can also be set as the IOSXR_OPERATION_TIMEOUT environment variable. Defaults to 15s (gnmi) and 30s (netconf).
 - `password` (String, Sensitive) Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.
 - `protocol` (String) Protocol to use for device communication. Either `gnmi` or `netconf` (SSH). This can also be set as the IOSXR_PROTOCOL environment variable. Defaults to `gnmi`.
 - `retries` (Number) Number of retries for API calls. This can also be set as the IOSXR_RETRIES environment variable. Defaults to `3`.

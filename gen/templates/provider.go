@@ -72,6 +72,8 @@ type providerData struct {
 	CaCertificate      types.String         `tfsdk:"ca_certificate"`
 	Retries            types.Int64          `tfsdk:"retries"`
 	LockReleaseTimeout types.Int64          `tfsdk:"lock_release_timeout"`
+	OperationTimeout   types.Int64          `tfsdk:"operation_timeout"`
+	ConnectTimeout     types.Int64          `tfsdk:"connect_timeout"`
 	AutoCommit         types.Bool           `tfsdk:"auto_commit"`
 	ReuseConnection    types.Bool           `tfsdk:"reuse_connection"`
 	ClientCache        types.Bool           `tfsdk:"client_cache"`
@@ -224,6 +226,20 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 600),
+				},
+			},
+			"operation_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Per-operation timeout in seconds applied to every gnmi/netconf operation (both reads and writes). This can also be set as the IOSXR_OPERATION_TIMEOUT environment variable. Defaults to 15s (gnmi) and 30s (netconf).",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 3600),
+				},
+			},
+			"connect_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Timeout in seconds for establishing a gnmi/netconf connection to the device. This can also be set as the IOSXR_CONNECT_TIMEOUT environment variable. Defaults to 30s (gnmi) and 10s (netconf).",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 3600),
 				},
 			},
 			"reuse_connection": schema.BoolAttribute{
@@ -537,6 +553,60 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		lockReleaseTimeout = config.LockReleaseTimeout.ValueInt64()
 	}
 
+	// per-operation timeout for gNMI/netconf
+	var operationTimeout int64
+	operationTimeoutSet := false
+	if config.OperationTimeout.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as operation_timeout",
+		)
+		return
+	}
+
+	if config.OperationTimeout.IsNull() {
+		operationTimeoutStr := os.Getenv("IOSXR_OPERATION_TIMEOUT")
+		if operationTimeoutStr != "" {
+			operationTimeout, _ = strconv.ParseInt(operationTimeoutStr, 0, 64)
+			operationTimeoutSet = true
+		}
+	} else {
+		operationTimeout = config.OperationTimeout.ValueInt64()
+		operationTimeoutSet = true
+	}
+
+	// connection-establishment timeout for gNMI/netconf
+	var connectTimeout int64
+	connectTimeoutSet := false
+	if config.ConnectTimeout.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as connect_timeout",
+		)
+		return
+	}
+
+	if config.ConnectTimeout.IsNull() {
+		connectTimeoutStr := os.Getenv("IOSXR_CONNECT_TIMEOUT")
+		if connectTimeoutStr != "" {
+			connectTimeout, _ = strconv.ParseInt(connectTimeoutStr, 0, 64)
+			connectTimeoutSet = true
+		}
+	} else {
+		connectTimeout = config.ConnectTimeout.ValueInt64()
+		connectTimeoutSet = true
+	}
+
+	// Derived durations shared by gNMI and NETCONF client construction, only applied
+	// when the corresponding timeout is explicitly set. gNMI derives its total budget
+	// internally as OperationTimeout + backoff; NETCONF needs an explicit TotalTimeout,
+	// so we size it the same way to keep behaviour consistent.
+	operationTimeoutDur := time.Duration(operationTimeout) * time.Second
+	connectTimeoutDur := time.Duration(connectTimeout) * time.Second
+	netconfTotalTimeout := operationTimeoutDur + retryBackoffBudget(retries)
+
 	var reuseConnection bool
 	if config.ReuseConnection.IsUnknown() {
 		// Cannot connect to client with an unknown value
@@ -712,6 +782,12 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				gnmi.MaxRetries(int(retries)),
 				gnmi.WithLogger(logger),
 			}
+			if operationTimeoutSet {
+				opts = append(opts, gnmi.OperationTimeout(operationTimeoutDur))
+			}
+			if connectTimeoutSet {
+				opts = append(opts, gnmi.ConnectTimeout(connectTimeoutDur))
+			}
 
 			if certificate != "" {
 				opts = append(opts, gnmi.TLSCert(certificate))
@@ -778,6 +854,12 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				netconf.MaxRetries(int(retries)),
 				netconf.LockReleaseTimeout(time.Duration(lockReleaseTimeout) * time.Second),
 				netconf.WithLogger(logger),
+			}
+			if operationTimeoutSet {
+				opts = append(opts, netconf.AttemptTimeout(operationTimeoutDur), netconf.TotalTimeout(netconfTotalTimeout))
+			}
+			if connectTimeoutSet {
+				opts = append(opts, netconf.ConnectTimeout(connectTimeoutDur))
 			}
 			if !verifyCertificate {
 				opts = append(opts, netconf.InsecureSkipHostKeyVerification())
@@ -854,6 +936,12 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					gnmi.MaxRetries(int(retries)),
 					gnmi.WithLogger(logger),
 				}
+				if operationTimeoutSet {
+					opts = append(opts, gnmi.OperationTimeout(operationTimeoutDur))
+				}
+				if connectTimeoutSet {
+					opts = append(opts, gnmi.ConnectTimeout(connectTimeoutDur))
+				}
 
 				if certificate != "" {
 					opts = append(opts, gnmi.TLSCert(certificate))
@@ -928,6 +1016,12 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					netconf.LockReleaseTimeout(time.Duration(lockReleaseTimeout) * time.Second),
 					netconf.WithLogger(logger),
 				}
+				if operationTimeoutSet {
+					opts = append(opts, netconf.AttemptTimeout(operationTimeoutDur), netconf.TotalTimeout(netconfTotalTimeout))
+				}
+				if connectTimeoutSet {
+					opts = append(opts, netconf.ConnectTimeout(connectTimeoutDur))
+				}
 				if !verifyCertificate {
 					opts = append(opts, netconf.InsecureSkipHostKeyVerification())
 				}
@@ -990,6 +1084,27 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 }
 
 // End of section. //template:end provider
+
+// summed exponential backoff across all retry attempts using the shared client defaults (min 1s, max 60s, factor 2).
+// moves netconf client from having a hard operation timeout to an operation_timeout plus backoff budget.
+func retryBackoffBudget(retries int64) time.Duration {
+	const (
+		minDelay = time.Second
+		maxDelay = 60 * time.Second
+	)
+	total := time.Duration(0)
+	delay := minDelay
+	for attempt := int64(0); attempt <= retries; attempt++ {
+		if delay > maxDelay {
+			total += maxDelay
+		} else {
+			total += delay
+		}
+		delay *= 2
+	}
+	// pad for up to 10% jitter added per attempt by the clients
+	return total + total/10
+}
 
 // parseHostPort splits "host" or "host:port" and returns (host, port).
 // If no port is present in the string, defaultPort is returned.

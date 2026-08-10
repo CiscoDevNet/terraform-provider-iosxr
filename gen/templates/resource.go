@@ -412,10 +412,15 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			_, err := device.GnmiClient.Set(ctx, ops)
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
+			if device.AutoCommit {
+				_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+			} else {
+				device.AppendCandidateOps(ops)
+				tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d operation(s) in candidate store (total pending: %d)", plan.getPath(), len(ops), device.PendingOpsCount()))
 			}
 		} else {
 			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
@@ -484,6 +489,25 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 	if device.Managed {
 		_ = diags // Avoid unused variable error
 		if device.Protocol == "gnmi" {
+			// When auto_commit is false, if there are pending operations, flush them NOW before reading.
+			// This allows all operations to accumulate and be sent as ONE batch when
+			// the first Read() happens, and errors can be reported back to Terraform.
+			if !device.AutoCommit && device.HasPendingOps() {
+				flushOps := device.DrainCandidateOps()
+				tflog.Info(ctx, fmt.Sprintf("Flushing %d batched operation(s) before Read", len(flushOps)))
+
+			if !r.data.ReuseConnection {
+				defer device.GnmiClient.Disconnect()
+			}
+			_, err := device.GnmiClient.Set(ctx, flushOps)
+				if err != nil {
+					// Re-queue on failure
+					device.AppendCandidateOps(flushOps)
+					resp.Diagnostics.AddError("Batch operation failed", fmt.Sprintf("Failed to commit %d batched operation(s): %s", len(flushOps), err.Error()))
+					return
+				}
+				tflog.Info(ctx, fmt.Sprintf("Successfully committed %d batched operation(s) to device", len(flushOps)))
+			}
 			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
 			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			if locked {
@@ -632,12 +656,16 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		for _, i := range emptyLeafsDelete {
 			ops = append(ops, gnmi.Delete(i))
 		}
-
-		_, err := device.GnmiClient.Set(ctx, ops)
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
-			}
+		if device.AutoCommit {
+			_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+		} else {
+			device.AppendCandidateOps(ops)
+			tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d operation(s) in candidate store (total pending: %d)", plan.Id.ValueString(), len(ops), device.PendingOpsCount()))
+		}
 		} else {
 			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
@@ -775,42 +803,43 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 				deletePaths := state.getDeletePaths(ctx)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
-				for _, i := range deletePaths {
-					ops = append(ops, gnmi.Delete(i))
-				}
+			for _, i := range deletePaths {
+				ops = append(ops, gnmi.Delete(i))
+			}
 
-				if len(ops) > 0 {
-					_, err := device.GnmiClient.Set(ctx, ops)
-					if err != nil {
-						resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-						return
-					}
-				}
-			} else {
-				// NETCONF - Serialize write operations
-				locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
-				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
-				if locked {
-					defer device.GetOpMutex().Unlock()
-				}
-
-				// Ensure connection is healthy (reconnect if stale)
-				if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
-					resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
-					return
-				}
-
-				body := state.addDeletePathsXML(ctx, "")
-
-				// Use EditConfigWithOptions with ignoreDataMissing=true to allow graceful deletion
-				// of non-existent elements (matching gNMI behavior)
-				if err := helpers.EditConfigWithOptions(ctx, device.NetconfClient, body, true, true); err != nil {
-					resp.Diagnostics.AddError("Client Error", err.Error())
+			if len(ops) > 0 {
+				_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 					return
 				}
 			}
+			tflog.Debug(ctx, fmt.Sprintf("%s: Committed %d delete operation(s) immediately (destroy always commits)", state.Id.ValueString(), len(ops)))
+		} else {
+			// NETCONF - Serialize write operations
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			body := state.addDeletePathsXML(ctx, "")
+
+			// Use EditConfigWithOptions with ignoreDataMissing=true to allow graceful deletion
+			// of non-existent elements (matching gNMI behavior)
+			if err := helpers.EditConfigWithOptions(ctx, device.NetconfClient, body, true, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
+			}
 		}
 	}
+}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 

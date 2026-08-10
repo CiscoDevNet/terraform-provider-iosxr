@@ -48,12 +48,15 @@ import (
 //go:generate go run gen/doc_category.go
 
 func main() {
+	ctx := context.Background()
+
 	opts := providerserver.ServeOpts{
 		Address: "registry.terraform.io/CiscoDevNet/iosxr",
 	}
 
-	err := providerserver.Serve(context.Background(), provider.New, opts)
-
+	// Serve the provider - commits only happen via explicit iosxr_commit resources
+	// No auto-flush occurs on shutdown
+	err := providerserver.Serve(ctx, provider.New, opts)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

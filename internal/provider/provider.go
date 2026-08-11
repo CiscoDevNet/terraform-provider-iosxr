@@ -160,15 +160,15 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				Optional:            true,
 			},
 			"certificate": schema.StringAttribute{
-				MarkdownDescription: "TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.",
+				MarkdownDescription: "Path to the TLS certificate file. This can also be set as the IOSXR_CERTIFICATE environment variable.",
 				Optional:            true,
 			},
 			"key": schema.StringAttribute{
-				MarkdownDescription: "TLS private key content. This can also be set as the IOSXR_KEY environment variable.",
+				MarkdownDescription: "Path to the TLS private key file. This can also be set as the IOSXR_KEY environment variable.",
 				Optional:            true,
 			},
 			"ca_certificate": schema.StringAttribute{
-				MarkdownDescription: "TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.",
+				MarkdownDescription: "Path to the TLS CA certificate file. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.",
 				Optional:            true,
 			},
 			"retries": schema.Int64Attribute{

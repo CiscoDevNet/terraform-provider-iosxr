@@ -90,12 +90,12 @@ provider "iosxr" {
 
 ### Optional
 
-- `ca_certificate` (String) TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
-- `certificate` (String) TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.
+- `ca_certificate` (String) Path to the TLS CA certificate file. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
+- `certificate` (String) Path to the TLS certificate file. This can also be set as the IOSXR_CERTIFICATE environment variable.
 - `client_cache` (Boolean) Enable or disable client-side caching of device connections. This can improve performance by reusing existing connections. Defaults to `true`.
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
 - `host` (String) Hostname or IP address of the Cisco IOS-XR device. Optionally a port can be added with `:port`. Default port is `57400` for gNMI and `830` for NETCONF. This can also be set as the IOSXR_HOST environment variable.
-- `key` (String) TLS private key content. This can also be set as the IOSXR_KEY environment variable.
+- `key` (String) Path to the TLS private key file. This can also be set as the IOSXR_KEY environment variable.
 - `lock_release_timeout` (Number) Number of seconds to wait for the device database lock to be released. This can also be set as the IOSXR_LOCK_RELEASE_TIMEOUT environment variable. Defaults to `120`.
 - `password` (String, Sensitive) Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.
 - `protocol` (String) Protocol to use for device communication. Either `gnmi` or `netconf` (SSH). This can also be set as the IOSXR_PROTOCOL environment variable. Defaults to `gnmi`.

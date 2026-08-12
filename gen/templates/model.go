@@ -2340,6 +2340,19 @@ func (data {{camelCase .Name}}) toBodyXML(ctx context.Context, stateArg ...*{{ca
 	{{- end}}
 	{{- end}}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
 	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
@@ -2390,8 +2403,8 @@ func (data *{{camelCase .Name}}) updateFromBodyXML(ctx context.Context, res xmld
 	{{- end}}
 	{{- else if eq .Type "String"}}
 	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
-		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl")}}
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl") (and (eq $.Name "Banner") (eq .TfName "line"))}}
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := {{if .ReadRaw}}value.Raw{{else}}value.String(){{end}}
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -2660,8 +2673,8 @@ func (data *{{camelCase .Name}}) fromBodyXML(ctx context.Context, res xmldot.Res
 	}
 	{{- else if eq .Type "String"}}
 	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
-		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl")}}
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl") (and (eq $.Name "Banner") (eq .TfName "line"))}}
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := {{if .ReadRaw}}value.Raw{{else}}value.String(){{end}}
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -2958,8 +2971,8 @@ func (data *{{camelCase .Name}}Data) fromBodyXML(ctx context.Context, res xmldot
 	}
 	{{- else if eq .Type "String"}}
 	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
-		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl")}}
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl") (and (eq $.Name "Banner") (eq .TfName "line"))}}
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := {{if .ReadRaw}}value.Raw{{else}}value.String(){{end}}
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"

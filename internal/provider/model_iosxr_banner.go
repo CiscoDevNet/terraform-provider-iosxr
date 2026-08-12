@@ -112,6 +112,19 @@ func (data Banner) toBodyXML(ctx context.Context, stateArg ...*Banner) string {
 		return ""
 	}
 	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
 	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
@@ -138,7 +151,12 @@ func (data *Banner) updateFromBody(ctx context.Context, res gjson.Result) {
 
 func (data *Banner) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() && !data.Line.IsNull() {
-		data.Line = types.StringValue(value.String())
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Line = types.StringValue(rplValue)
 	} else if data.Line.IsNull() {
 		data.Line = types.StringNull()
 	}
@@ -187,7 +205,12 @@ func (data *BannerData) fromBody(ctx context.Context, res gjson.Result) {
 
 func (data *Banner) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() {
-		data.Line = types.StringValue(value.String())
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Line = types.StringValue(rplValue)
 	}
 }
 
@@ -197,7 +220,12 @@ func (data *Banner) fromBodyXML(ctx context.Context, res xmldot.Result) {
 
 func (data *BannerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() {
-		data.Line = types.StringValue(value.String())
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Line = types.StringValue(rplValue)
 	}
 }
 

@@ -907,13 +907,19 @@ func (r *SegmentRoutingTEResource) Create(ctx context.Context, req resource.Crea
 			// Create object
 			body := plan.toBody(ctx)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
+			}
+
+			// Skip an empty "{}" body when deletes already carry the intent (IOS-XR
+			// rejects a "{}" update); still send it when it's the only op so bare
+			// containers are created and the SetRequest isn't empty.
+			if body != "{}" || len(ops) == 0 {
+				ops = append(ops, gnmi.Update(plan.getPath(), body))
 			}
 
 			_, err := device.GnmiClient.Set(ctx, ops)
@@ -1120,7 +1126,6 @@ func (r *SegmentRoutingTEResource) Update(ctx context.Context, req resource.Upda
 
 			// Update object
 			body := plan.toBody(ctx)
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 			deletedListItems := plan.getDeletedItems(ctx, state)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
@@ -1134,6 +1139,12 @@ func (r *SegmentRoutingTEResource) Update(ctx context.Context, req resource.Upda
 
 			for _, i := range emptyLeafsDelete {
 				ops = append(ops, gnmi.Delete(i))
+			}
+
+			// Skip an empty "{}" body when other ops carry the intent; still send it
+			// when it's the only op (see Create for rationale).
+			if body != "{}" || len(ops) == 0 {
+				ops = append(ops, gnmi.Update(plan.getPath(), body))
 			}
 
 			_, err := device.GnmiClient.Set(ctx, ops)

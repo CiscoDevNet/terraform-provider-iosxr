@@ -230,7 +230,10 @@ func isGnmiGetResponseEmpty(resp *gnmi.GetRes) bool {
 	// Check if the value is actually empty
 	val := resp.Notifications[0].Update[0].Val
 	if val == nil {
-		return true
+		// An update entry with no value means the keyed node exists but is bare
+		// (e.g. a bare Bundle-Ether), so it's present, not empty. A truly-absent
+		// node returns zero updates (handled above).
+		return false
 	}
 	jsonVal := val.GetJsonIetfVal()
 	jsonStr := strings.TrimSpace(string(jsonVal))

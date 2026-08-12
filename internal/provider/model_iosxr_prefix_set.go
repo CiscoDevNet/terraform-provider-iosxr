@@ -151,7 +151,7 @@ func (data *PrefixSet) updateFromBody(ctx context.Context, res gjson.Result) {
 
 func (data *PrefixSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-prefix-set"); value.Exists() && !data.Rpl.IsNull() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -202,7 +202,7 @@ func (data *PrefixSetData) fromBody(ctx context.Context, res gjson.Result) {
 
 func (data *PrefixSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-prefix-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -216,7 +216,7 @@ func (data *PrefixSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 
 func (data *PrefixSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-prefix-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"

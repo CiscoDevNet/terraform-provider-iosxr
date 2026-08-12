@@ -151,7 +151,7 @@ func (data *RDSet) updateFromBody(ctx context.Context, res gjson.Result) {
 
 func (data *RDSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rplrd-set"); value.Exists() && !data.Rpl.IsNull() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -202,7 +202,7 @@ func (data *RDSetData) fromBody(ctx context.Context, res gjson.Result) {
 
 func (data *RDSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rplrd-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -216,7 +216,7 @@ func (data *RDSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 
 func (data *RDSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rplrd-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"

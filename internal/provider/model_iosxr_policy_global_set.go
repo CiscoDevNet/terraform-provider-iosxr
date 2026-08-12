@@ -142,7 +142,7 @@ func (data PolicyGlobalSet) toBodyXML(ctx context.Context, stateArg ...*PolicyGl
 
 func (data *PolicyGlobalSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/policy-global-set"); value.Exists() && !data.Rpl.IsNull() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -193,7 +193,7 @@ func (data *PolicyGlobalSetData) fromBody(ctx context.Context, res gjson.Result)
 
 func (data *PolicyGlobalSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/policy-global-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -207,7 +207,7 @@ func (data *PolicyGlobalSet) fromBodyXML(ctx context.Context, res xmldot.Result)
 
 func (data *PolicyGlobalSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/policy-global-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"

@@ -151,7 +151,7 @@ func (data *ExtcommunityBandwidthSet) updateFromBody(ctx context.Context, res gj
 
 func (data *ExtcommunityBandwidthSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-bandwidth-set"); value.Exists() && !data.Rpl.IsNull() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -205,7 +205,7 @@ func (data *ExtcommunityBandwidthSetData) fromBody(ctx context.Context, res gjso
 
 func (data *ExtcommunityBandwidthSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-bandwidth-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -220,7 +220,7 @@ func (data *ExtcommunityBandwidthSet) fromBodyXML(ctx context.Context, res xmldo
 
 func (data *ExtcommunityBandwidthSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-bandwidth-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"

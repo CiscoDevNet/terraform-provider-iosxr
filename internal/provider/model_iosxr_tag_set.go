@@ -149,7 +149,7 @@ func (data TagSet) toBodyXML(ctx context.Context, stateArg ...*TagSet) string {
 
 func (data *TagSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-tag-set"); value.Exists() && !data.Rpl.IsNull() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -200,7 +200,7 @@ func (data *TagSetData) fromBody(ctx context.Context, res gjson.Result) {
 
 func (data *TagSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-tag-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -214,7 +214,7 @@ func (data *TagSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 
 func (data *TagSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-tag-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"

@@ -151,7 +151,7 @@ func (data *ExtcommunityEVPNLinkBandwidthSet) updateFromBody(ctx context.Context
 
 func (data *ExtcommunityEVPNLinkBandwidthSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-evpn-bandwidth-set"); value.Exists() && !data.Rpl.IsNull() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -205,7 +205,7 @@ func (data *ExtcommunityEVPNLinkBandwidthSetData) fromBody(ctx context.Context, 
 
 func (data *ExtcommunityEVPNLinkBandwidthSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-evpn-bandwidth-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -220,7 +220,7 @@ func (data *ExtcommunityEVPNLinkBandwidthSet) fromBodyXML(ctx context.Context, r
 
 func (data *ExtcommunityEVPNLinkBandwidthSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-evpn-bandwidth-set"); value.Exists() {
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := value.String()
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"

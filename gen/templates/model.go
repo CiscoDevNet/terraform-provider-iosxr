@@ -2403,8 +2403,8 @@ func (data *{{camelCase .Name}}) updateFromBodyXML(ctx context.Context, res xmld
 	{{- end}}
 	{{- else if eq .Type "String"}}
 	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
-		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl")}}
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl") (and (eq $.Name "Banner") (eq .TfName "line"))}}
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := {{if .ReadRaw}}value.Raw{{else}}value.String(){{end}}
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -2673,8 +2673,8 @@ func (data *{{camelCase .Name}}) fromBodyXML(ctx context.Context, res xmldot.Res
 	}
 	{{- else if eq .Type "String"}}
 	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
-		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl")}}
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl") (and (eq $.Name "Banner") (eq .TfName "line"))}}
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := {{if .ReadRaw}}value.Raw{{else}}value.String(){{end}}
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"
@@ -2971,8 +2971,8 @@ func (data *{{camelCase .Name}}Data) fromBodyXML(ctx context.Context, res xmldot
 	}
 	{{- else if eq .Type "String"}}
 	if value := helpers.GetFromXPath(res, "data/" + data.getXPath() + "/{{.XPath}}"); value.Exists() {
-		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl")}}
-		// Normalize RPL value to ensure it ends with newline (matches gNMI behavior)
+		{{- if or (eq .TfName "rpl") (hasPrefix .YangName "rpl") (and (eq $.Name "Banner") (eq .TfName "line"))}}
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
 		rplValue := {{if .ReadRaw}}value.Raw{{else}}value.String(){{end}}
 		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
 			rplValue = rplValue + "\n"

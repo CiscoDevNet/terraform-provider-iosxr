@@ -151,7 +151,12 @@ func (data *Banner) updateFromBody(ctx context.Context, res gjson.Result) {
 
 func (data *Banner) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() && !data.Line.IsNull() {
-		data.Line = types.StringValue(value.String())
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Line = types.StringValue(rplValue)
 	} else if data.Line.IsNull() {
 		data.Line = types.StringNull()
 	}
@@ -200,7 +205,12 @@ func (data *BannerData) fromBody(ctx context.Context, res gjson.Result) {
 
 func (data *Banner) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() {
-		data.Line = types.StringValue(value.String())
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Line = types.StringValue(rplValue)
 	}
 }
 
@@ -210,7 +220,12 @@ func (data *Banner) fromBodyXML(ctx context.Context, res xmldot.Result) {
 
 func (data *BannerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() {
-		data.Line = types.StringValue(value.String())
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Line = types.StringValue(rplValue)
 	}
 }
 

@@ -365,6 +365,9 @@ func GetConfigWithTimeout(ctx context.Context, client *netconf.Client, source st
 
 // IsGetConfigResponseEmpty checks if a GetConfig response has an empty <data> element.
 func IsGetConfigResponseEmpty(res *netconf.Res) bool {
+	if res == nil {
+		return true
+	}
 	dataResult := res.Res.Get("data")
 	if !dataResult.Exists() {
 		return true

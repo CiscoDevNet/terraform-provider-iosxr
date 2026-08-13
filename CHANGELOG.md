@@ -1,4 +1,4 @@
-## 0.7.2
+## Unreleased
 
 - Add `contexts`, `context_mappings` lists to `iosxr_snmp_server` resource and data source
 - Fix: Make `auto_cost_reference_bandwidth` optional in `router_isis` resource and data source

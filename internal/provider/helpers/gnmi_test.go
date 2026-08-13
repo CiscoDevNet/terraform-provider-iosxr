@@ -23,6 +23,9 @@ import (
 	"strings"
 	"sync"
 	"testing"
+
+	ggnmi "github.com/netascode/go-gnmi"
+	gnmiproto "github.com/openconfig/gnmi/proto/gnmi"
 )
 
 // TestCloseGnmiConnection tests the CloseGnmiConnection function
@@ -59,25 +62,19 @@ func TestAcquireGnmiLock(t *testing.T) {
 		expectLock      bool
 	}{
 		{
-			name:            "no reuse - should lock",
+			name:            "no reuse locks regardless of operation type",
 			reuseConnection: false,
 			isWrite:         false,
 			expectLock:      true,
 		},
 		{
-			name:            "no reuse - write operation - should lock",
-			reuseConnection: false,
-			isWrite:         true,
-			expectLock:      true,
-		},
-		{
-			name:            "reuse - write operation - should lock",
+			name:            "reuse write locks",
 			reuseConnection: true,
 			isWrite:         true,
 			expectLock:      true,
 		},
 		{
-			name:            "reuse - read operation - should NOT lock",
+			name:            "reuse read does not lock",
 			reuseConnection: true,
 			isWrite:         false,
 			expectLock:      false,
@@ -93,12 +90,31 @@ func TestAcquireGnmiLock(t *testing.T) {
 				t.Errorf("AcquireGnmiLock() = %v, expected %v", acquired, tt.expectLock)
 			}
 
-			// If lock was acquired, unlock it
 			if acquired {
 				mutex.Unlock()
 			}
 		})
 	}
+
+	t.Run("no reuse blocks concurrent caller", func(t *testing.T) {
+		var mutex sync.Mutex
+		acquired := AcquireGnmiLock(&mutex, false, false)
+		if !acquired {
+			t.Fatal("first AcquireGnmiLock() should have acquired the lock")
+		}
+
+		done := make(chan bool, 1)
+		go func() {
+			done <- !mutex.TryLock()
+		}()
+		blocked := <-done
+
+		mutex.Unlock()
+
+		if !blocked {
+			t.Error("second caller should have been blocked while first held the lock")
+		}
+	})
 }
 
 // TestIsGnmiConnectionError tests the IsGnmiConnectionError function
@@ -149,7 +165,7 @@ func TestIsGnmiConnectionError(t *testing.T) {
 			expected: true,
 		},
 		{
-			name:     "uppercase - Connection is Closing",
+			name:     "uppercase connection is closing",
 			err:      errors.New("Connection is Closing"),
 			expected: true,
 		},
@@ -175,17 +191,73 @@ func TestIsGnmiConnectionError(t *testing.T) {
 	}
 }
 
-// TestIsGnmiGetResponseEmpty tests the isGnmiGetResponseEmpty function
+// TestIsGnmiGetResponseEmpty tests all conditions in IsGnmiGetResponseEmpty.
 func TestIsGnmiGetResponseEmpty(t *testing.T) {
-	t.Run("nil response", func(t *testing.T) {
-		result := isGnmiGetResponseEmpty(nil)
-		if !result {
-			t.Error("isGnmiGetResponseEmpty(nil) should return true")
-		}
-	})
+	makeRes := func(notifications []*gnmiproto.Notification) *ggnmi.GetRes {
+		return &ggnmi.GetRes{Notifications: notifications}
+	}
+	makeUpdate := func(val *gnmiproto.TypedValue) *gnmiproto.Update {
+		return &gnmiproto.Update{Val: val}
+	}
+	makeTypedValue := func(json string) *gnmiproto.TypedValue {
+		return &gnmiproto.TypedValue{Value: &gnmiproto.TypedValue_JsonIetfVal{JsonIetfVal: []byte(json)}}
+	}
 
-	// Note: We can't easily construct gnmi.GetRes objects without internal types,
-	// so we test the nil case which is the most critical
+	tests := []struct {
+		name     string
+		res      *ggnmi.GetRes
+		expected bool
+	}{
+		{
+			name:     "nil pointer",
+			res:      nil,
+			expected: true,
+		},
+		{
+			name:     "zero notifications",
+			res:      makeRes(nil),
+			expected: true,
+		},
+		{
+			name:     "notification with zero updates",
+			res:      makeRes([]*gnmiproto.Notification{{}}),
+			expected: true,
+		},
+		{
+			name:     "nil val means bare node is present",
+			res:      makeRes([]*gnmiproto.Notification{{Update: []*gnmiproto.Update{makeUpdate(nil)}}}),
+			expected: false,
+		},
+		{
+			name:     "update with empty JSON object",
+			res:      makeRes([]*gnmiproto.Notification{{Update: []*gnmiproto.Update{makeUpdate(makeTypedValue("{}"))}}}),
+			expected: true,
+		},
+		{
+			name:     "update with empty JSON array",
+			res:      makeRes([]*gnmiproto.Notification{{Update: []*gnmiproto.Update{makeUpdate(makeTypedValue("[]"))}}}),
+			expected: true,
+		},
+		{
+			name:     "update with empty string val",
+			res:      makeRes([]*gnmiproto.Notification{{Update: []*gnmiproto.Update{makeUpdate(makeTypedValue(""))}}}),
+			expected: true,
+		},
+		{
+			name:     "update with real content",
+			res:      makeRes([]*gnmiproto.Notification{{Update: []*gnmiproto.Update{makeUpdate(makeTypedValue(`{"hostname":"router1"}`))}}}),
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := IsGnmiGetResponseEmpty(tt.res)
+			if result != tt.expected {
+				t.Errorf("IsGnmiGetResponseEmpty() = %v, expected %v", result, tt.expected)
+			}
+		})
+	}
 }
 
 // TestEnsureGnmiConnection tests error handling

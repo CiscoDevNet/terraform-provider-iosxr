@@ -151,12 +151,8 @@ func (data *Banner) updateFromBody(ctx context.Context, res gjson.Result) {
 
 func (data *Banner) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() && !data.Line.IsNull() {
-		// Normalize value to ensure it ends with newline (matches gNMI behavior)
-		rplValue := value.String()
-		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
-			rplValue = rplValue + "\n"
-		}
-		data.Line = types.StringValue(rplValue)
+		// Device normalizes banner content by stripping trailing newlines; read back exactly what the device returns.
+		data.Line = types.StringValue(value.String())
 	} else if data.Line.IsNull() {
 		data.Line = types.StringNull()
 	}
@@ -205,12 +201,8 @@ func (data *BannerData) fromBody(ctx context.Context, res gjson.Result) {
 
 func (data *Banner) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() {
-		// Normalize value to ensure it ends with newline (matches gNMI behavior)
-		rplValue := value.String()
-		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
-			rplValue = rplValue + "\n"
-		}
-		data.Line = types.StringValue(rplValue)
+		// Device normalizes banner content by stripping trailing newlines; read back exactly what the device returns.
+		data.Line = types.StringValue(value.String())
 	}
 }
 
@@ -220,12 +212,8 @@ func (data *Banner) fromBodyXML(ctx context.Context, res xmldot.Result) {
 
 func (data *BannerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/line"); value.Exists() {
-		// Normalize value to ensure it ends with newline (matches gNMI behavior)
-		rplValue := value.String()
-		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
-			rplValue = rplValue + "\n"
-		}
-		data.Line = types.StringValue(rplValue)
+		// Device normalizes banner content by stripping trailing newlines; read back exactly what the device returns.
+		data.Line = types.StringValue(value.String())
 	}
 }
 

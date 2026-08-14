@@ -121,6 +121,7 @@ resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
+		"bgp/graceful-restart/enable" = "<NULL>"
 	}
 	lists = [
 		{
@@ -179,7 +180,6 @@ resource "iosxr_yang" "PreReq1" {
 
 func testAccDataSourceIosxrRouterBGPNeighborConfig() string {
 	config := `resource "iosxr_router_bgp_neighbor" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	address = "10.1.1.2"` + "\n"
 	config += `	remote_as = "65002"` + "\n"

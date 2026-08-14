@@ -43,7 +43,6 @@ import (
 type RouterBGPVRFNeighbor struct {
 	Device                                                      types.String                             `tfsdk:"device"`
 	Id                                                          types.String                             `tfsdk:"id"`
-	DeleteMode                                                  types.String                             `tfsdk:"delete_mode"`
 	AsNumber                                                    types.String                             `tfsdk:"as_number"`
 	VrfName                                                     types.String                             `tfsdk:"vrf_name"`
 	Address                                                     types.String                             `tfsdk:"address"`

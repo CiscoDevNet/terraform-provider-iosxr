@@ -146,7 +146,7 @@ resource "iosxr_yang" "PreReq0" {
 			key = "af-name"
 			items = [
 				{
-					"af-name" = "ipv4-unicast"
+					"af-name" = "vpnv4-unicast"
 				},
 			]
 		},
@@ -164,6 +164,15 @@ resource "iosxr_yang" "PreReq0" {
 
 resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"rd/two-byte-as/two-byte-as-number" = "65004"
+		"rd/two-byte-as/asn2-index" = "1"
+	}
+	depends_on = [iosxr_yang.PreReq0, ]
+}
+
+resource "iosxr_yang" "PreReq2" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]"
 	lists = [
 		{
 			name = "address-families/address-family"
@@ -175,9 +184,10 @@ resource "iosxr_yang" "PreReq1" {
 			]
 		},
 	]
+	depends_on = [iosxr_yang.PreReq1, ]
 }
 
-resource "iosxr_yang" "PreReq2" {
+resource "iosxr_yang" "PreReq3" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
 	lists = [
 		{
@@ -192,6 +202,7 @@ resource "iosxr_yang" "PreReq2" {
 			]
 		},
 	]
+	depends_on = [iosxr_yang.PreReq2, ]
 }
 
 `
@@ -202,7 +213,6 @@ resource "iosxr_yang" "PreReq2" {
 
 func testAccDataSourceIosxrRouterBGPVRFNeighborConfig() string {
 	config := `resource "iosxr_router_bgp_vrf_neighbor" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	address = "10.1.1.2"` + "\n"
@@ -276,7 +286,7 @@ func testAccDataSourceIosxrRouterBGPVRFNeighborConfig() string {
 	config += `	graceful_maintenance_as_prepends_number = 3` + "\n"
 	config += `	graceful_maintenance_bandwidth_aware_percentage_threshold = 75` + "\n"
 	config += `	graceful_maintenance_bandwidth_aware_percentage_threshold_high = 80` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

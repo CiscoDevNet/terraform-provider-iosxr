@@ -1,6 +1,7 @@
 ---
 name: Router BGP Neighbor
 path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[address=%s]
+no_delete_attributes: true
 doc_category: BGP
 attributes:
   - yang_name: as-number
@@ -522,6 +523,8 @@ test_prerequisites:
     attributes:
       - name: as-number
         value: 65001
+      - name: bgp/graceful-restart/enable
+        value: "<NULL>"
     lists:
       - name: neighbor-groups/neighbor-group
         key: neighbor-group-name

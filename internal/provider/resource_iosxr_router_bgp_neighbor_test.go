@@ -150,6 +150,7 @@ resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
+		"bgp/graceful-restart/enable" = "<NULL>"
 	}
 	lists = [
 		{

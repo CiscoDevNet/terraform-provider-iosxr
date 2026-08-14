@@ -146,8 +146,6 @@ resource "iosxr_router_bgp_vrf_neighbor" "example" {
   - Choices: `accept`, `reject`
 - `default_policy_action_out` (String) Default action if route does not satisfy outbound route-policy
   - Choices: `accept`, `reject`
-- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
-  - Choices: `all`, `attributes`
 - `description` (String) Neighbor specific description
 - `device` (String) A device name from the provider configuration.
 - `dmz_link_bandwidth` (Boolean) Propagate the DMZ link bandwidth

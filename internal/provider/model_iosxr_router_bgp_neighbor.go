@@ -43,7 +43,6 @@ import (
 type RouterBGPNeighbor struct {
 	Device                                                      types.String                          `tfsdk:"device"`
 	Id                                                          types.String                          `tfsdk:"id"`
-	DeleteMode                                                  types.String                          `tfsdk:"delete_mode"`
 	AsNumber                                                    types.String                          `tfsdk:"as_number"`
 	Address                                                     types.String                          `tfsdk:"address"`
 	RemoteAs                                                    types.String                          `tfsdk:"remote_as"`

@@ -1,6 +1,7 @@
 ---
 name: Router BGP VRF Neighbor
 path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[address=%s]
+no_delete_attributes: true
 doc_category: BGP
 attributes:
   - yang_name: as-number
@@ -561,7 +562,7 @@ test_prerequisites:
         items:
           - attributes:
               - name: af-name
-                value: ipv4-unicast
+                value: vpnv4-unicast
       - name: vrfs/vrf
         key: vrf-name
         items:
@@ -569,6 +570,14 @@ test_prerequisites:
               - name: vrf-name
                 value: VRF1
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]
+    dependencies: [0]
+    attributes:
+      - name: rd/two-byte-as/two-byte-as-number
+        value: "65004"
+      - name: rd/two-byte-as/asn2-index
+        value: 1
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]
+    dependencies: [1]
     lists:
       - name: address-families/address-family
         key: af-name
@@ -577,6 +586,7 @@ test_prerequisites:
               - name: af-name
                 value: ipv4-unicast
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers
+    dependencies: [2]
     lists:
       - name: server
         key: server-number

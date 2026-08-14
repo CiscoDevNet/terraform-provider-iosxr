@@ -184,6 +184,7 @@ attributes:
     requires_replace: true
     example: 2
     exclude_test: true
+
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:

@@ -9,6 +9,10 @@ description: |-
 
 ## Unreleased
 
+- BREAKING CHANGE: Remove `neighbors` list from `router_bgp` resource and data source. Use the new `router_bgp_neighbor` resource instead.
+- BREAKING CHANGE: Remove `neighbors` list from `router_bgp_vrf` resource and data source. Use the new `router_bgp_vrf_neighbor` resource instead.
+- Add `router_bgp_neighbor` resource and data source
+- Add `router_bgp_vrf_neighbor` resource and data source
 - Add `contexts`, `context_mappings` lists to `iosxr_snmp_server` resource and data source
 - Fix: Make `auto_cost_reference_bandwidth` optional in `router_isis` resource and data source
 - Fix: preserve resource state when a gNMI read returns an empty response so keys-only resources are no longer perpetually recreated

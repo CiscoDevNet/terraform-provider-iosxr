@@ -9,8 +9,11 @@ description: |-
 
 ## Unreleased
 
+- Add `neighbor_password_encrypted` to `iosxr_mpls_ldp` resource and data source
+- Add `iosxr_logging_events_link_status` resource and data source
+- Add `iosxr_clock` resource and data source
 - Add `contexts`, `context_mappings` lists to `iosxr_snmp_server` resource and data source
-- Fix: Make `auto_cost_reference_bandwidth` optional in `router_isis` resource and data source
+- Fix: Make `auto_cost_reference_bandwidth` optional in `iosxr_router_isis` resource and data source
 - Fix: preserve resource state when a gNMI read returns an empty response so keys-only resources are no longer perpetually recreated
 - Add NETCONF protocol support (`protocol = "netconf"`) as an alternative to gNMI, with support for NETCONF 1.0/1.1, candidate and running datastore workflows, connection reuse, and automatic capability detection
 - BREAKING CHANGE: Rename resource and data source `iosxr_gnmi` to `iosxr_yang`. Update all HCL references and run `terraform state mv` to migrate existing state.

@@ -58,6 +58,7 @@ data "iosxr_mpls_ldp" "example" {
 - `neighbor_dual_stack_tlv_compliance` (Boolean) Configure dual-stack tlv compliance checks
 - `neighbor_dual_stack_transport_connection_max_wait` (Number) Maximum wait for prefered transport connection establishment
 - `neighbor_dual_stack_transport_connection_prefer_ipv4` (Boolean) IPv4
+- `neighbor_password_encrypted` (String, Sensitive) Specifies an ENCRYPTED password will follow
 - `neighbors` (Attributes List) configure this node (see [below for nested schema](#nestedatt--neighbors))
 - `nsr` (Boolean) Configure Non-Stop Routing
 - `router_id` (String) Configure router Id

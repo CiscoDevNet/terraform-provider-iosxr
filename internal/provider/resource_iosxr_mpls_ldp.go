@@ -319,6 +319,14 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("Configure dual-stack tlv compliance checks").String,
 				Optional:            true,
 			},
+			"neighbor_password_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password will follow").String,
+				Optional:            true,
+				Sensitive:           true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+				},
+			},
 			"neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("configure this node").String,
 				Optional:            true,

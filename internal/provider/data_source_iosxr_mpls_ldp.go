@@ -246,6 +246,11 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Configure dual-stack tlv compliance checks",
 				Computed:            true,
 			},
+			"neighbor_password_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies an ENCRYPTED password will follow",
+				Computed:            true,
+				Sensitive:           true,
+			},
 			"neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: "configure this node",
 				Computed:            true,

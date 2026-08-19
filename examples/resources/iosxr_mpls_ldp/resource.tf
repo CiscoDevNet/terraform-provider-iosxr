@@ -36,6 +36,7 @@ resource "iosxr_mpls_ldp" "example" {
   neighbor_dual_stack_transport_connection_prefer_ipv4     = true
   neighbor_dual_stack_transport_connection_max_wait        = 30
   neighbor_dual_stack_tlv_compliance                       = true
+  neighbor_password_encrypted                              = "060506324F41"
   neighbors = [
     {
       neighbor_address   = "192.168.2.1"

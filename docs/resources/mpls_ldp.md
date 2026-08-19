@@ -51,6 +51,7 @@ resource "iosxr_mpls_ldp" "example" {
   neighbor_dual_stack_transport_connection_prefer_ipv4     = true
   neighbor_dual_stack_transport_connection_max_wait        = 30
   neighbor_dual_stack_tlv_compliance                       = true
+  neighbor_password_encrypted                              = "060506324F41"
   neighbors = [
     {
       neighbor_address   = "192.168.2.1"
@@ -110,6 +111,7 @@ resource "iosxr_mpls_ldp" "example" {
 - `neighbor_dual_stack_transport_connection_max_wait` (Number) Maximum wait for prefered transport connection establishment
   - Range: `0`-`60`
 - `neighbor_dual_stack_transport_connection_prefer_ipv4` (Boolean) IPv4
+- `neighbor_password_encrypted` (String, Sensitive) Specifies an ENCRYPTED password will follow
 - `neighbors` (Attributes List) configure this node (see [below for nested schema](#nestedatt--neighbors))
 - `nsr` (Boolean) Configure Non-Stop Routing
 - `router_id` (String) Configure router Id

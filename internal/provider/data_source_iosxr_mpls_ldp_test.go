@@ -131,6 +131,7 @@ func testAccDataSourceIosxrMPLSLDPConfig() string {
 	config += `	neighbor_dual_stack_transport_connection_prefer_ipv4 = true` + "\n"
 	config += `	neighbor_dual_stack_transport_connection_max_wait = 30` + "\n"
 	config += `	neighbor_dual_stack_tlv_compliance = true` + "\n"
+	config += `	neighbor_password_encrypted = "060506324F41"` + "\n"
 	config += `	neighbors = [{` + "\n"
 	config += `		neighbor_address = "192.168.2.1"` + "\n"
 	config += `		label_space_id = 0` + "\n"

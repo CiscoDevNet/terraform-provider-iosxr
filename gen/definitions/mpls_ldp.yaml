@@ -128,6 +128,10 @@ attributes:
     example: 30
   - yang_name: neighbor/dual-stack/tlv-compliance
     example: true
+  - yang_name: neighbor/password/encrypted
+    sensitive: true
+    write_only: true
+    example: 060506324F41
   - yang_name: neighbor/neighbors/neighbor
     tf_name: neighbors
     type: List

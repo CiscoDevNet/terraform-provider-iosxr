@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- Add `iosxr_http_client` resource and data source
 - Add `neighbor_password_encrypted` to `iosxr_mpls_ldp` resource and data source
 - Add `iosxr_logging_events_link_status` resource and data source
 - Add `iosxr_clock` resource and data source

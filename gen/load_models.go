@@ -152,6 +152,7 @@ var models = []string{
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-lpts-punt-flow-trap-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-cli-alias-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-ftp-tftp-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-http-client-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-crypto-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-dhcp-ipv4-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-dhcp-ipv6-cfg.yang",

@@ -1,0 +1,11 @@
+---
+name: Logging Events Link Status
+path: Cisco-IOS-XR-um-interface-cfg:/logging/events/link-status
+doc_category: Management
+attributes:
+  - yang_name: software-interfaces
+    example: true
+    minimum_test_value: true
+  - yang_name: disable
+    example: true
+    exclude_test: true

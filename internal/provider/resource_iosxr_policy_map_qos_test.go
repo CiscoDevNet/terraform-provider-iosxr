@@ -58,9 +58,7 @@ func TestAccIosxrPolicyMapQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.priority_level", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.queue_limits.0.value", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.queue_limits.0.unit", "ms"))
-	if os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.random_detect_default", "true"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.random_detect_ecn", "true"))
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 			checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.random_detect.0.minimum_threshold_value", "100"))
@@ -171,9 +169,7 @@ func testAccIosxrPolicyMapQoSConfig_all() string {
 	config += `			value = "100"` + "\n"
 	config += `			unit = "ms"` + "\n"
 	config += `		}]` + "\n"
-	if os.Getenv("XRV9K") != "" {
-		config += `		random_detect_default = true` + "\n"
-	}
+	config += `		random_detect_ecn = true` + "\n"
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `		random_detect = [{` + "\n"
 		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {

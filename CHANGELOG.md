@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add `random_detect_ecn` to `iosxr_policy_map_qos` resource and data source
 - Add `iosxr_http_client` resource and data source
 - Add `neighbor_password_encrypted` to `iosxr_mpls_ldp` resource and data source
 - Add `iosxr_logging_events_link_status` resource and data source

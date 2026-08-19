@@ -84,6 +84,7 @@ Read-Only:
 - `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--classes--queue_limits))
 - `random_detect` (Attributes List) Enable Random Early Detection. All RED profiles in a class must be based on the same field. (see [below for nested schema](#nestedatt--classes--random_detect))
 - `random_detect_default` (Boolean) Enable RED with default min and max thresholds
+- `random_detect_ecn` (Boolean) ECN based WRED
 - `service_policy_name` (String) Name of the child service policy
 - `set_cos` (Number) Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.
 - `set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.

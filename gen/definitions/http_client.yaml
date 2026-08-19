@@ -1,0 +1,52 @@
+---
+name: HTTP Client
+path: Cisco-IOS-XR-um-http-client-cfg:/http/client
+doc_category: Management
+attributes:
+  - yang_name: vrf
+    example: MGMT
+  - yang_name: secure-verify-peer/disable
+    example: true
+  - yang_name: secure-verify-host/disable
+    example: true
+  - yang_name: response/timeout
+    example: 60
+  - yang_name: connection/timeout
+    example: 30
+  - yang_name: connection/retry
+    example: 5
+  - yang_name: source-interface/ipv4/interface
+    tf_name: source_interface_ipv4
+    example: MgmtEth0/RP0/CPU0/0
+  - yang_name: source-interface/ipv6/interface
+    tf_name: source_interface_ipv6
+    example: MgmtEth0/RP0/CPU0/0
+    exclude_test: true
+  - yang_name: version/default
+    example: true
+    minimum_test_value: true
+  - yang_name: version/http1.0
+    tf_name: version_10
+    example: true
+    exclude_test: true
+  - yang_name: version/http1.1
+    tf_name: version_11
+    example: true
+    exclude_test: true
+  - yang_name: tcp-window-scale
+    example: 14
+  - yang_name: ssl/version/tls1.0
+    tf_name: ssl_version_tls10
+    example: true
+    exclude_test: true
+  - yang_name: ssl/version/tls1.1
+    tf_name: ssl_version_tls11
+    example: true
+    exclude_test: true
+  - yang_name: ssl/version/tls1.2
+    tf_name: ssl_version_tls12
+    example: true
+    exclude_test: true
+  - yang_name: ssl/version/tls1.3
+    tf_name: ssl_version_tls13
+    example: true

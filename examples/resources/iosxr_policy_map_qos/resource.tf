@@ -20,7 +20,7 @@ resource "iosxr_policy_map_qos" "example" {
           unit  = "ms"
         }
       ]
-      random_detect_default = true
+      random_detect_ecn = true
       random_detect = [
         {
           minimum_threshold_value = 100

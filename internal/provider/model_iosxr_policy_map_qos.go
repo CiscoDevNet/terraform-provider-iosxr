@@ -99,6 +99,7 @@ type PolicyMapQoSClasses struct {
 	PriorityLevel                                    types.Int64                       `tfsdk:"priority_level"`
 	QueueLimits                                      []PolicyMapQoSClassesQueueLimits  `tfsdk:"queue_limits"`
 	RandomDetectDefault                              types.Bool                        `tfsdk:"random_detect_default"`
+	RandomDetectEcn                                  types.Bool                        `tfsdk:"random_detect_ecn"`
 	RandomDetect                                     []PolicyMapQoSClassesRandomDetect `tfsdk:"random_detect"`
 	ServicePolicyName                                types.String                      `tfsdk:"service_policy_name"`
 	SetTrafficClass                                  types.Int64                       `tfsdk:"set_traffic_class"`
@@ -306,6 +307,11 @@ func (data PolicyMapQoS) toBody(ctx context.Context) string {
 			if !item.RandomDetectDefault.IsNull() && !item.RandomDetectDefault.IsUnknown() {
 				if item.RandomDetectDefault.ValueBool() {
 					body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"random-detect-default", map[string]string{})
+				}
+			}
+			if !item.RandomDetectEcn.IsNull() && !item.RandomDetectEcn.IsUnknown() {
+				if item.RandomDetectEcn.ValueBool() {
+					body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"random-detect-ecn", map[string]string{})
 				}
 			}
 			if !item.ServicePolicyName.IsNull() && !item.ServicePolicyName.IsUnknown() {
@@ -709,6 +715,18 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res gjson.Result) 
 				data.Classes[i].RandomDetectDefault = types.BoolNull()
 			}
 		}
+		if value := r.Get("random-detect-ecn"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Classes[i].RandomDetectEcn.IsNull() {
+				data.Classes[i].RandomDetectEcn = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Classes[i].RandomDetectEcn.IsNull() {
+				data.Classes[i].RandomDetectEcn = types.BoolNull()
+			}
+		}
 		for ci := range data.Classes[i].RandomDetect {
 			keys := [...]string{"minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit"}
 			keyValues := [...]string{strconv.FormatInt(data.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(data.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString()}
@@ -988,6 +1006,11 @@ func (data PolicyMapQoS) toBodyXML(ctx context.Context, stateArg ...*PolicyMapQo
 			if !item.RandomDetectDefault.IsNull() && !item.RandomDetectDefault.IsUnknown() {
 				if item.RandomDetectDefault.ValueBool() {
 					body = helpers.SetFromXPath(body, basePath+"/random-detect-default", "")
+				}
+			}
+			if !item.RandomDetectEcn.IsNull() && !item.RandomDetectEcn.IsUnknown() {
+				if item.RandomDetectEcn.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/random-detect-ecn", "")
 				}
 			}
 			if len(item.RandomDetect) > 0 {
@@ -1407,6 +1430,18 @@ func (data *PolicyMapQoS) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.Classes[i].RandomDetectDefault = types.BoolNull()
 			}
 		}
+		if value := helpers.GetFromXPath(r, "random-detect-ecn"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Classes[i].RandomDetectEcn.IsNull() {
+				data.Classes[i].RandomDetectEcn = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Classes[i].RandomDetectEcn.IsNull() {
+				data.Classes[i].RandomDetectEcn = types.BoolNull()
+			}
+		}
 		for ci := range data.Classes[i].RandomDetect {
 			keys := [...]string{"minimum-threshold-value", "minimum-threshold-unit", "maximum-threshold-value", "maximum-threshold-unit"}
 			keyValues := [...]string{strconv.FormatInt(data.Classes[i].RandomDetect[ci].MinimumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MinimumThresholdUnit.ValueString(), strconv.FormatInt(data.Classes[i].RandomDetect[ci].MaximumThresholdValue.ValueInt64(), 10), data.Classes[i].RandomDetect[ci].MaximumThresholdUnit.ValueString()}
@@ -1702,6 +1737,12 @@ func (data *PolicyMapQoS) fromBody(ctx context.Context, res gjson.Result) {
 				// Only set to false if it was previously set
 				item.RandomDetectDefault = types.BoolValue(false)
 			}
+			if cValue := v.Get("random-detect-ecn"); cValue.Exists() {
+				item.RandomDetectEcn = types.BoolValue(true)
+			} else if !item.RandomDetectEcn.IsNull() {
+				// Only set to false if it was previously set
+				item.RandomDetectEcn = types.BoolValue(false)
+			}
 			if cValue := v.Get("random-detect"); cValue.Exists() {
 				item.RandomDetect = make([]PolicyMapQoSClassesRandomDetect, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
@@ -1944,6 +1985,11 @@ func (data *PolicyMapQoSData) fromBody(ctx context.Context, res gjson.Result) {
 			} else {
 				item.RandomDetectDefault = types.BoolValue(false)
 			}
+			if cValue := v.Get("random-detect-ecn"); cValue.Exists() {
+				item.RandomDetectEcn = types.BoolValue(true)
+			} else {
+				item.RandomDetectEcn = types.BoolValue(false)
+			}
 			if cValue := v.Get("random-detect"); cValue.Exists() {
 				item.RandomDetect = make([]PolicyMapQoSClassesRandomDetect, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
@@ -2176,6 +2222,11 @@ func (data *PolicyMapQoS) fromBodyXML(ctx context.Context, res xmldot.Result) {
 				item.RandomDetectDefault = types.BoolValue(true)
 			} else {
 				item.RandomDetectDefault = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "random-detect-ecn"); cValue.Exists() {
+				item.RandomDetectEcn = types.BoolValue(true)
+			} else {
+				item.RandomDetectEcn = types.BoolValue(false)
 			}
 			if cValue := helpers.GetFromXPath(v, "random-detect"); cValue.Exists() {
 				item.RandomDetect = make([]PolicyMapQoSClassesRandomDetect, 0)
@@ -2410,6 +2461,11 @@ func (data *PolicyMapQoSData) fromBodyXML(ctx context.Context, res xmldot.Result
 			} else {
 				item.RandomDetectDefault = types.BoolValue(false)
 			}
+			if cValue := helpers.GetFromXPath(v, "random-detect-ecn"); cValue.Exists() {
+				item.RandomDetectEcn = types.BoolValue(true)
+			} else {
+				item.RandomDetectEcn = types.BoolValue(false)
+			}
 			if cValue := helpers.GetFromXPath(v, "random-detect"); cValue.Exists() {
 				item.RandomDetect = make([]PolicyMapQoSClassesRandomDetect, 0)
 				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
@@ -2595,6 +2651,9 @@ func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQo
 					if !found {
 						deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/random-detect%v", state.getPath(), keyString, ckeyString))
 					}
+				}
+				if !state.Classes[i].RandomDetectEcn.IsNull() && data.Classes[j].RandomDetectEcn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/random-detect-ecn", state.getPath(), keyString))
 				}
 				if !state.Classes[i].RandomDetectDefault.IsNull() && data.Classes[j].RandomDetectDefault.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/random-detect-default", state.getPath(), keyString))
@@ -2786,6 +2845,13 @@ func (data *PolicyMapQoS) getEmptyLeafsDelete(ctx context.Context, state *Policy
 			ckeyString := ""
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		// Only delete if state has true and plan has false
+		if !data.Classes[i].RandomDetectEcn.IsNull() && !data.Classes[i].RandomDetectEcn.ValueBool() {
+			// Check if corresponding state item exists and has true value
+			if state != nil && i < len(state.Classes) && !state.Classes[i].RandomDetectEcn.IsNull() && state.Classes[i].RandomDetectEcn.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/class%v/random-detect-ecn", data.getXPath(), keyString))
 			}
 		}
 		// Only delete if state has true and plan has false
@@ -2991,6 +3057,10 @@ func (data *PolicyMapQoS) addDeletedItemsXML(ctx context.Context, state PolicyMa
 					if !found {
 						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/class%v/random-detect%v", predicates, cpredicates))
 					}
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Classes[i].RandomDetectEcn.IsNull() && state.Classes[i].RandomDetectEcn.ValueBool() && data.Classes[j].RandomDetectEcn.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/class%v/random-detect-ecn", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.Classes[i].RandomDetectDefault.IsNull() && state.Classes[i].RandomDetectDefault.ValueBool() && data.Classes[j].RandomDetectDefault.IsNull() {

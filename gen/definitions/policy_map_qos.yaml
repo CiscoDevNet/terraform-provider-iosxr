@@ -226,6 +226,10 @@ attributes:
         tf_name: random_detect_default
         test_tags: [XRV9K]
         include_example: true
+        exclude_test: true
+        example: true
+      - yang_name: random-detect-ecn
+        tf_name: random_detect_ecn
         example: true
       - yang_name: random-detect
         tf_name: random_detect

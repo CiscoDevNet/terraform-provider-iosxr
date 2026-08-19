@@ -271,6 +271,10 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Enable RED with default min and max thresholds",
 							Computed:            true,
 						},
+						"random_detect_ecn": schema.BoolAttribute{
+							MarkdownDescription: "ECN based WRED",
+							Computed:            true,
+						},
 						"random_detect": schema.ListNestedAttribute{
 							MarkdownDescription: "Enable Random Early Detection. All RED profiles in a class must be based on the same field.",
 							Computed:            true,

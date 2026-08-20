@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add `macsec_psk_keychain_name`, `macsec_fallback_psk_keychain`, `macsec_policy`, `macsec_eap_policy` to `iosxr_interface_bundle_ether`, `iosxr_interface_bundle_ether_subinterface` resource and data source
 - Add `random_detect_ecn` to `iosxr_policy_map_qos` resource and data source
 - Add `iosxr_http_client` resource and data source
 - Add `neighbor_password_encrypted` to `iosxr_mpls_ldp` resource and data source

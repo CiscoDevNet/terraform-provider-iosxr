@@ -890,6 +890,22 @@ func (d *InterfaceBundleEtherDataSource) Schema(ctx context.Context, req datasou
 				MarkdownDescription: "Disable LLDP RX on an interface",
 				Computed:            true,
 			},
+			"macsec_psk_keychain_name": schema.StringAttribute{
+				MarkdownDescription: "Name of keychain to be used to get keys, maximum length 32",
+				Computed:            true,
+			},
+			"macsec_fallback_psk_keychain": schema.StringAttribute{
+				MarkdownDescription: "Configure MKA fallback PSK Keychain",
+				Computed:            true,
+			},
+			"macsec_policy": schema.StringAttribute{
+				MarkdownDescription: "Enter the policy name, maximum length 16",
+				Computed:            true,
+			},
+			"macsec_eap_policy": schema.StringAttribute{
+				MarkdownDescription: "Enter the policy name",
+				Computed:            true,
+			},
 			"monitor_sessions": schema.ListNestedAttribute{
 				MarkdownDescription: "Monitor-session configuration commands",
 				Computed:            true,

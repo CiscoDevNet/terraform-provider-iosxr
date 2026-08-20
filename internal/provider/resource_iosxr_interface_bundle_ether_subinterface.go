@@ -1025,6 +1025,38 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Schema(ctx context.Context, r
 				MarkdownDescription: helpers.NewAttributeDescription("Disable LLDP RX on an interface").String,
 				Optional:            true,
 			},
+			"macsec_psk_keychain_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of keychain to be used to get keys, maximum length 32").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"macsec_fallback_psk_keychain": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure MKA fallback PSK Keychain").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"macsec_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter the policy name, maximum length 16").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 16),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"macsec_eap_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter the policy name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 16),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
 			"monitor_sessions": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Monitor-session configuration commands").String,
 				Optional:            true,

@@ -731,6 +731,22 @@ attributes:
   - yang_name: Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable
     tf_name: lldp_receive_disable
     example: true
+  - yang_name: Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name
+    tf_name: macsec_psk_keychain_name
+    exclude_test: true
+    example: KEY1
+  - yang_name: Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain
+    tf_name: macsec_fallback_psk_keychain
+    exclude_test: true
+    example: KEY2
+  - yang_name: Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy
+    tf_name: macsec_policy
+    exclude_test: true
+    example: POLICY1
+  - yang_name: Cisco-IOS-XR-um-macsec-cfg:eap/policy
+    tf_name: macsec_eap_policy
+    exclude_test: true
+    example: POLICY2
   - yang_name: Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session
     tf_name: monitor_sessions
     test_tags: [NCS, C8000]

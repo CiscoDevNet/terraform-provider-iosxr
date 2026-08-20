@@ -1,0 +1,11 @@
+---
+name: Clock
+path: Cisco-IOS-XR-um-clock-exr-cfg:/clock/timezone/%s
+no_augment_config: true
+doc_category: Management
+attributes:
+  - tf_name: timezone
+    id: true
+    type: String
+    description: "IANA timezone identifier (replace slashes with hyphens, e.g. America-New_York for America/New_York)"
+    example: America-New_York

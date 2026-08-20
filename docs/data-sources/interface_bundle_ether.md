@@ -159,6 +159,10 @@ data "iosxr_interface_bundle_ether" "example" {
 - `load_interval` (Number) Specify interval for load calculation for an interface
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `mac_address` (String) Set the Mac address(xxxx.xxxx.xxxx) on an interface
+- `macsec_eap_policy` (String) Enter the policy name
+- `macsec_fallback_psk_keychain` (String) Configure MKA fallback PSK Keychain
+- `macsec_policy` (String) Enter the policy name, maximum length 16
+- `macsec_psk_keychain_name` (String) Name of keychain to be used to get keys, maximum length 32
 - `monitor_sessions` (Attributes List) Monitor-session configuration commands (see [below for nested schema](#nestedatt--monitor_sessions))
 - `mpls_mtu` (Number) Set the MPLS MTU for the interface
 - `mtu` (Number) Set the MTU on an interface

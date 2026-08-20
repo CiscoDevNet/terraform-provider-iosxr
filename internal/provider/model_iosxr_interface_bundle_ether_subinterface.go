@@ -154,6 +154,10 @@ type InterfaceBundleEtherSubinterface struct {
 	Lldp                                               types.Bool                                                                      `tfsdk:"lldp"`
 	LldpTransmitDisable                                types.Bool                                                                      `tfsdk:"lldp_transmit_disable"`
 	LldpReceiveDisable                                 types.Bool                                                                      `tfsdk:"lldp_receive_disable"`
+	MacsecPskKeychainName                              types.String                                                                    `tfsdk:"macsec_psk_keychain_name"`
+	MacsecFallbackPskKeychain                          types.String                                                                    `tfsdk:"macsec_fallback_psk_keychain"`
+	MacsecPolicy                                       types.String                                                                    `tfsdk:"macsec_policy"`
+	MacsecEapPolicy                                    types.String                                                                    `tfsdk:"macsec_eap_policy"`
 	MonitorSessions                                    []InterfaceBundleEtherSubinterfaceMonitorSessions                               `tfsdk:"monitor_sessions"`
 	Ptp                                                types.Bool                                                                      `tfsdk:"ptp"`
 	PtpProfile                                         types.String                                                                    `tfsdk:"ptp_profile"`
@@ -339,6 +343,10 @@ type InterfaceBundleEtherSubinterfaceData struct {
 	Lldp                                               types.Bool                                                                      `tfsdk:"lldp"`
 	LldpTransmitDisable                                types.Bool                                                                      `tfsdk:"lldp_transmit_disable"`
 	LldpReceiveDisable                                 types.Bool                                                                      `tfsdk:"lldp_receive_disable"`
+	MacsecPskKeychainName                              types.String                                                                    `tfsdk:"macsec_psk_keychain_name"`
+	MacsecFallbackPskKeychain                          types.String                                                                    `tfsdk:"macsec_fallback_psk_keychain"`
+	MacsecPolicy                                       types.String                                                                    `tfsdk:"macsec_policy"`
+	MacsecEapPolicy                                    types.String                                                                    `tfsdk:"macsec_eap_policy"`
 	MonitorSessions                                    []InterfaceBundleEtherSubinterfaceMonitorSessions                               `tfsdk:"monitor_sessions"`
 	Ptp                                                types.Bool                                                                      `tfsdk:"ptp"`
 	PtpProfile                                         types.String                                                                    `tfsdk:"ptp_profile"`
@@ -961,6 +969,18 @@ func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context) string 
 		if data.LldpReceiveDisable.ValueBool() {
 			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-lldp-cfg:lldp.receive.disable", map[string]string{})
 		}
+	}
+	if !data.MacsecPskKeychainName.IsNull() && !data.MacsecPskKeychainName.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-macsec-cfg:macsec.psk-keychain.keychain-name", data.MacsecPskKeychainName.ValueString())
+	}
+	if !data.MacsecFallbackPskKeychain.IsNull() && !data.MacsecFallbackPskKeychain.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-macsec-cfg:macsec.psk-keychain.fallback-psk-keychain", data.MacsecFallbackPskKeychain.ValueString())
+	}
+	if !data.MacsecPolicy.IsNull() && !data.MacsecPolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-macsec-cfg:macsec.psk-keychain.policy", data.MacsecPolicy.ValueString())
+	}
+	if !data.MacsecEapPolicy.IsNull() && !data.MacsecEapPolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-macsec-cfg:eap.policy", data.MacsecEapPolicy.ValueString())
 	}
 	if !data.Ptp.IsNull() && !data.Ptp.IsUnknown() {
 		if data.Ptp.ValueBool() {
@@ -3051,6 +3071,26 @@ func (data *InterfaceBundleEtherSubinterface) updateFromBody(ctx context.Context
 			data.LldpReceiveDisable = types.BoolNull()
 		}
 	}
+	if value := res.Get("Cisco-IOS-XR-um-macsec-cfg:macsec.psk-keychain.keychain-name"); value.Exists() && !data.MacsecPskKeychainName.IsNull() {
+		data.MacsecPskKeychainName = types.StringValue(value.String())
+	} else if data.MacsecPskKeychainName.IsNull() {
+		data.MacsecPskKeychainName = types.StringNull()
+	}
+	if value := res.Get("Cisco-IOS-XR-um-macsec-cfg:macsec.psk-keychain.fallback-psk-keychain"); value.Exists() && !data.MacsecFallbackPskKeychain.IsNull() {
+		data.MacsecFallbackPskKeychain = types.StringValue(value.String())
+	} else if data.MacsecFallbackPskKeychain.IsNull() {
+		data.MacsecFallbackPskKeychain = types.StringNull()
+	}
+	if value := res.Get("Cisco-IOS-XR-um-macsec-cfg:macsec.psk-keychain.policy"); value.Exists() && !data.MacsecPolicy.IsNull() {
+		data.MacsecPolicy = types.StringValue(value.String())
+	} else if data.MacsecPolicy.IsNull() {
+		data.MacsecPolicy = types.StringNull()
+	}
+	if value := res.Get("Cisco-IOS-XR-um-macsec-cfg:eap.policy"); value.Exists() && !data.MacsecEapPolicy.IsNull() {
+		data.MacsecEapPolicy = types.StringValue(value.String())
+	} else if data.MacsecEapPolicy.IsNull() {
+		data.MacsecEapPolicy = types.StringNull()
+	}
 	for i := range data.MonitorSessions {
 		keys := [...]string{"session-name"}
 		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
@@ -4218,6 +4258,9 @@ func (data InterfaceBundleEtherSubinterface) toBodyXML(ctx context.Context, stat
 	if !data.MplsMtu.IsNull() && !data.MplsMtu.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-if-mpls-cfg:mpls/mtu", strconv.FormatInt(data.MplsMtu.ValueInt64(), 10))
 	}
+	if !data.MacsecEapPolicy.IsNull() && !data.MacsecEapPolicy.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:eap/policy", data.MacsecEapPolicy.ValueString())
+	}
 	if len(data.MonitorSessions) > 0 {
 		for _, item := range data.MonitorSessions {
 			basePath := data.getXPath() + "/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session[session-name='" + item.SessionName.ValueString() + "']"
@@ -4937,6 +4980,30 @@ func (data InterfaceBundleEtherSubinterface) toBodyXML(ctx context.Context, stat
 			if data.LldpReceiveDisable.ValueBool() {
 				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable", "")
 			}
+		}
+		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
+		if nsErr != nil {
+			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
+			if !strings.Contains(nsErr.Error(), "invalid path syntax") {
+				tflog.Error(ctx, fmt.Sprintf("Error converting nsBody to nested XML: %s", nsErr))
+			}
+			// For xmlns attribute errors, we skip this group and continue
+			nsBodyXML = ""
+		}
+		if nsBodyXML != "" {
+			bodyString = helpers.InjectXMLSibling(bodyString, helpers.ExtractInnerXML(nsBodyXML))
+		}
+	}
+	{
+		nsBody := netconf.Body{}
+		if !data.MacsecPskKeychainName.IsNull() && !data.MacsecPskKeychainName.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name", data.MacsecPskKeychainName.ValueString())
+		}
+		if !data.MacsecFallbackPskKeychain.IsNull() && !data.MacsecFallbackPskKeychain.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain", data.MacsecFallbackPskKeychain.ValueString())
+		}
+		if !data.MacsecPolicy.IsNull() && !data.MacsecPolicy.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy", data.MacsecPolicy.ValueString())
 		}
 		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
 		if nsErr != nil {
@@ -6804,6 +6871,26 @@ func (data *InterfaceBundleEtherSubinterface) updateFromBodyXML(ctx context.Cont
 			data.LldpReceiveDisable = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name"); value.Exists() && !data.MacsecPskKeychainName.IsNull() {
+		data.MacsecPskKeychainName = types.StringValue(value.String())
+	} else if data.MacsecPskKeychainName.IsNull() {
+		data.MacsecPskKeychainName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain"); value.Exists() && !data.MacsecFallbackPskKeychain.IsNull() {
+		data.MacsecFallbackPskKeychain = types.StringValue(value.String())
+	} else if data.MacsecFallbackPskKeychain.IsNull() {
+		data.MacsecFallbackPskKeychain = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy"); value.Exists() && !data.MacsecPolicy.IsNull() {
+		data.MacsecPolicy = types.StringValue(value.String())
+	} else if data.MacsecPolicy.IsNull() {
+		data.MacsecPolicy = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:eap/policy"); value.Exists() && !data.MacsecEapPolicy.IsNull() {
+		data.MacsecEapPolicy = types.StringValue(value.String())
+	} else if data.MacsecEapPolicy.IsNull() {
+		data.MacsecEapPolicy = types.StringNull()
+	}
 	for i := range data.MonitorSessions {
 		keys := [...]string{"session-name"}
 		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
@@ -8592,6 +8679,18 @@ func (data *InterfaceBundleEtherSubinterfaceData) fromBody(ctx context.Context, 
 	} else {
 		data.LldpReceiveDisable = types.BoolValue(false)
 	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-macsec-cfg:macsec.psk-keychain.keychain-name"); value.Exists() {
+		data.MacsecPskKeychainName = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-macsec-cfg:macsec.psk-keychain.fallback-psk-keychain"); value.Exists() {
+		data.MacsecFallbackPskKeychain = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-macsec-cfg:macsec.psk-keychain.policy"); value.Exists() {
+		data.MacsecPolicy = types.StringValue(value.String())
+	}
+	if value := res.Get(prefix + "Cisco-IOS-XR-um-macsec-cfg:eap.policy"); value.Exists() {
+		data.MacsecEapPolicy = types.StringValue(value.String())
+	}
 	if value := res.Get(prefix + "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions.monitor-session"); value.Exists() {
 		data.MonitorSessions = make([]InterfaceBundleEtherSubinterfaceMonitorSessions, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -9755,6 +9854,18 @@ func (data *InterfaceBundleEtherSubinterface) fromBodyXML(ctx context.Context, r
 		data.LldpReceiveDisable = types.BoolValue(true)
 	} else {
 		data.LldpReceiveDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name"); value.Exists() {
+		data.MacsecPskKeychainName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain"); value.Exists() {
+		data.MacsecFallbackPskKeychain = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy"); value.Exists() {
+		data.MacsecPolicy = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:eap/policy"); value.Exists() {
+		data.MacsecEapPolicy = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session"); value.Exists() {
 		data.MonitorSessions = make([]InterfaceBundleEtherSubinterfaceMonitorSessions, 0)
@@ -10920,6 +11031,18 @@ func (data *InterfaceBundleEtherSubinterfaceData) fromBodyXML(ctx context.Contex
 	} else {
 		data.LldpReceiveDisable = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name"); value.Exists() {
+		data.MacsecPskKeychainName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain"); value.Exists() {
+		data.MacsecFallbackPskKeychain = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy"); value.Exists() {
+		data.MacsecPolicy = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:eap/policy"); value.Exists() {
+		data.MacsecEapPolicy = types.StringValue(value.String())
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session"); value.Exists() {
 		data.MonitorSessions = make([]InterfaceBundleEtherSubinterfaceMonitorSessions, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
@@ -12001,6 +12124,18 @@ func (data *InterfaceBundleEtherSubinterface) getDeletedItems(ctx context.Contex
 		if !found {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v", state.getPath(), keyString))
 		}
+	}
+	if !state.MacsecEapPolicy.IsNull() && data.MacsecEapPolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-macsec-cfg:eap/policy", state.getPath()))
+	}
+	if !state.MacsecPolicy.IsNull() && data.MacsecPolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy", state.getPath()))
+	}
+	if !state.MacsecFallbackPskKeychain.IsNull() && data.MacsecFallbackPskKeychain.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain", state.getPath()))
+	}
+	if !state.MacsecPskKeychainName.IsNull() && data.MacsecPskKeychainName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name", state.getPath()))
 	}
 	if !state.LldpReceiveDisable.IsNull() && data.LldpReceiveDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable", state.getPath()))
@@ -13944,6 +14079,18 @@ func (data *InterfaceBundleEtherSubinterface) getDeletePaths(ctx context.Context
 		keyPath += "[session-name=" + data.MonitorSessions[i].SessionName.ValueString() + "]"
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v", data.getPath(), keyPath))
 	}
+	if !data.MacsecEapPolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-macsec-cfg:eap/policy", data.getPath()))
+	}
+	if !data.MacsecPolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy", data.getPath()))
+	}
+	if !data.MacsecFallbackPskKeychain.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain", data.getPath()))
+	}
+	if !data.MacsecPskKeychainName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name", data.getPath()))
+	}
 	if !data.LldpReceiveDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable", data.getPath()))
 	}
@@ -15705,6 +15852,66 @@ func (data *InterfaceBundleEtherSubinterface) addDeletedItemsXML(ctx context.Con
 		}
 		if !found {
 			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v", predicates))
+		}
+	}
+	if !state.MacsecEapPolicy.IsNull() && data.MacsecEapPolicy.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-macsec-cfg:eap/policy"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MacsecPolicy.IsNull() && data.MacsecPolicy.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MacsecFallbackPskKeychain.IsNull() && data.MacsecFallbackPskKeychain.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MacsecPskKeychainName.IsNull() && data.MacsecPskKeychainName.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
@@ -18313,6 +18520,18 @@ func (data *InterfaceBundleEtherSubinterface) addDeletePathsXML(ctx context.Cont
 		}
 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session%v", predicates))
+	}
+	if !data.MacsecEapPolicy.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:eap/policy")
+	}
+	if !data.MacsecPolicy.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/policy")
+	}
+	if !data.MacsecFallbackPskKeychain.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/fallback-psk-keychain")
+	}
+	if !data.MacsecPskKeychainName.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-macsec-cfg:macsec/psk-keychain/keychain-name")
 	}
 	if !data.LldpReceiveDisable.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable")

@@ -88,6 +88,7 @@ type MPLSLDP struct {
 	NeighborDualStackTransportConnectionPreferIpv4   types.Bool         `tfsdk:"neighbor_dual_stack_transport_connection_prefer_ipv4"`
 	NeighborDualStackTransportConnectionMaxWait      types.Int64        `tfsdk:"neighbor_dual_stack_transport_connection_max_wait"`
 	NeighborDualStackTlvCompliance                   types.Bool         `tfsdk:"neighbor_dual_stack_tlv_compliance"`
+	NeighborPasswordEncrypted                        types.String       `tfsdk:"neighbor_password_encrypted"`
 	Neighbors                                        []MPLSLDPNeighbors `tfsdk:"neighbors"`
 }
 
@@ -138,6 +139,7 @@ type MPLSLDPData struct {
 	NeighborDualStackTransportConnectionPreferIpv4   types.Bool         `tfsdk:"neighbor_dual_stack_transport_connection_prefer_ipv4"`
 	NeighborDualStackTransportConnectionMaxWait      types.Int64        `tfsdk:"neighbor_dual_stack_transport_connection_max_wait"`
 	NeighborDualStackTlvCompliance                   types.Bool         `tfsdk:"neighbor_dual_stack_tlv_compliance"`
+	NeighborPasswordEncrypted                        types.String       `tfsdk:"neighbor_password_encrypted"`
 	Neighbors                                        []MPLSLDPNeighbors `tfsdk:"neighbors"`
 }
 type MPLSLDPNeighbors struct {
@@ -355,6 +357,9 @@ func (data MPLSLDP) toBody(ctx context.Context) string {
 		if data.NeighborDualStackTlvCompliance.ValueBool() {
 			body, _ = sjson.Set(body, "neighbor.dual-stack.tlv-compliance", map[string]string{})
 		}
+	}
+	if !data.NeighborPasswordEncrypted.IsNull() && !data.NeighborPasswordEncrypted.IsUnknown() {
+		body, _ = sjson.Set(body, "neighbor.password.encrypted", data.NeighborPasswordEncrypted.ValueString())
 	}
 	if len(data.Neighbors) > 0 {
 		body, _ = sjson.Set(body, "neighbor.neighbors.neighbor", []interface{}{})
@@ -983,6 +988,9 @@ func (data MPLSLDP) toBodyXML(ctx context.Context, stateArg ...*MPLSLDP) string 
 		if data.NeighborDualStackTlvCompliance.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/neighbor/dual-stack/tlv-compliance", "")
 		}
+	}
+	if !data.NeighborPasswordEncrypted.IsNull() && !data.NeighborPasswordEncrypted.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/neighbor/password/encrypted", data.NeighborPasswordEncrypted.ValueString())
 	}
 	if len(data.Neighbors) > 0 {
 		for _, item := range data.Neighbors {
@@ -1879,6 +1887,9 @@ func (data *MPLSLDPData) fromBody(ctx context.Context, res gjson.Result) {
 	} else {
 		data.NeighborDualStackTlvCompliance = types.BoolValue(false)
 	}
+	if value := res.Get(prefix + "neighbor.password.encrypted"); value.Exists() {
+		data.NeighborPasswordEncrypted = types.StringValue(value.String())
+	}
 	if value := res.Get(prefix + "neighbor.neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]MPLSLDPNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -2086,6 +2097,9 @@ func (data *MPLSLDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		data.NeighborDualStackTlvCompliance = types.BoolValue(true)
 	} else {
 		data.NeighborDualStackTlvCompliance = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbor/password/encrypted"); value.Exists() {
+		data.NeighborPasswordEncrypted = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbor/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]MPLSLDPNeighbors, 0)
@@ -2295,6 +2309,9 @@ func (data *MPLSLDPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else {
 		data.NeighborDualStackTlvCompliance = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbor/password/encrypted"); value.Exists() {
+		data.NeighborPasswordEncrypted = types.StringValue(value.String())
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbor/neighbors/neighbor"); value.Exists() {
 		data.Neighbors = make([]MPLSLDPNeighbors, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
@@ -2365,6 +2382,9 @@ func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []strin
 		if !found {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/neighbors/neighbor%v", state.getPath(), keyString))
 		}
+	}
+	if !state.NeighborPasswordEncrypted.IsNull() && data.NeighborPasswordEncrypted.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/password/encrypted", state.getPath()))
 	}
 	if !state.NeighborDualStackTlvCompliance.IsNull() && data.NeighborDualStackTlvCompliance.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/dual-stack/tlv-compliance", state.getPath()))
@@ -2680,6 +2700,9 @@ func (data *MPLSLDP) getDeletePaths(ctx context.Context) []string {
 		keyPath += "[label-space-id=" + strconv.FormatInt(data.Neighbors[i].LabelSpaceId.ValueInt64(), 10) + "]"
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/neighbors/neighbor%v", data.getPath(), keyPath))
 	}
+	if !data.NeighborPasswordEncrypted.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/password/encrypted", data.getPath()))
+	}
 	if !data.NeighborDualStackTlvCompliance.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/dual-stack/tlv-compliance", data.getPath()))
 	}
@@ -2865,6 +2888,21 @@ func (data *MPLSLDP) addDeletedItemsXML(ctx context.Context, state MPLSLDP, body
 		}
 		if !found {
 			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/neighbor/neighbors/neighbor%v", predicates))
+		}
+	}
+	if !state.NeighborPasswordEncrypted.IsNull() && data.NeighborPasswordEncrypted.IsNull() {
+		deletePath := state.getXPath() + "/neighbor/password/encrypted"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
@@ -3606,6 +3644,9 @@ func (data *MPLSLDP) addDeletePathsXML(ctx context.Context, body string) string 
 		}
 
 		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/neighbor/neighbors/neighbor%v", predicates))
+	}
+	if !data.NeighborPasswordEncrypted.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/neighbor/password/encrypted")
 	}
 	if !data.NeighborDualStackTlvCompliance.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/neighbor/dual-stack/tlv-compliance")

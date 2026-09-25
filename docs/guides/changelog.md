@@ -7,6 +7,25 @@ description: |-
 
 # Changelog
 
+## Unreleased
+
+- BREAKING CHANGE: Remove `neighbors` list from `router_bgp` resource and data source. Use the new `router_bgp_neighbor` resource instead.
+- BREAKING CHANGE: Remove `neighbors` list from `router_bgp_vrf` resource and data source. Use the new `router_bgp_vrf_neighbor` resource instead.
+- Add `router_bgp_neighbor` resource and data source
+- Add `router_bgp_vrf_neighbor` resource and data source
+- Add `macsec_psk_keychain_name`, `macsec_fallback_psk_keychain`, `macsec_policy`, `macsec_eap_policy` to `iosxr_interface_bundle_ether`, `iosxr_interface_bundle_ether_subinterface` resource and data source
+- Add `random_detect_ecn` to `iosxr_policy_map_qos` resource and data source
+- Add `iosxr_http_client` resource and data source
+- Add `neighbor_password_encrypted` to `iosxr_mpls_ldp` resource and data source
+- Add `iosxr_logging_events_link_status` resource and data source
+- Add `iosxr_clock` resource and data source
+- Add `contexts`, `context_mappings` lists to `iosxr_snmp_server` resource and data source
+- Fix: Make `auto_cost_reference_bandwidth` optional in `iosxr_router_isis` resource and data source
+- Fix: preserve resource state when a gNMI read returns an empty response so keys-only resources are no longer perpetually recreated
+- Add NETCONF protocol support (`protocol = "netconf"`) as an alternative to gNMI, with support for NETCONF 1.0/1.1, candidate and running datastore workflows, connection reuse, and automatic capability detection
+- BREAKING CHANGE: Rename resource and data source `iosxr_gnmi` to `iosxr_yang`. Update all HCL references and run `terraform state mv` to migrate existing state.
+- Fix: preserve newlines in multi-line `iosxr_cli` commands by JSON-encoding the gNMI `json_ietf` value and XML-escaping the NETCONF payload, so multi-line CLI submode configuration applies correctly instead of being sent as invalid single-line content
+
 ## 0.7.1
 
 - Add `monitor_sessions` to `iosxr_interface_bundle_ether`, `iosxr_interface_bundle_ether_subinterface`, `iosxr_interface_bvi` resource and data source

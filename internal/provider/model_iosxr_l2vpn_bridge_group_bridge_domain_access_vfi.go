@@ -26,9 +26,13 @@ import (
 	"path"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -76,6 +80,19 @@ func (data L2VPNBridgeGroupBridgeDomainAccessVFI) getPath() string {
 
 func (data L2VPNBridgeGroupBridgeDomainAccessVFIData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]/access-vfis/access-vfi[access-vfi-name=%s]", data.BridgeGroupName.ValueString(), data.BridgeDomainName.ValueString(), data.AccessVfiName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data L2VPNBridgeGroupBridgeDomainAccessVFI) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]/access-vfis/access-vfi[access-vfi-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.BridgeGroupName.ValueString()), fmt.Sprintf("%v", data.BridgeDomainName.ValueString()), fmt.Sprintf("%v", data.AccessVfiName.ValueString()))
+	return path
+}
+
+func (data L2VPNBridgeGroupBridgeDomainAccessVFIData) getXPath() string {
+	path := "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]/access-vfis/access-vfi[access-vfi-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.BridgeGroupName.ValueString()), fmt.Sprintf("%v", data.BridgeDomainName.ValueString()), fmt.Sprintf("%v", data.AccessVfiName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -178,9 +195,10 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBody(ctx context.Co
 		if value.Exists() {
 			data.Shutdown = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.Shutdown = types.BoolValue(false)
 		}
-	} else {
+	} else if data.Shutdown.IsNull() {
 		data.Shutdown = types.BoolNull()
 	}
 	for i := range data.Neighbors {
@@ -260,7 +278,8 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBody(ctx context.Co
 func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) fromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
-	} else {
+	} else if !data.Shutdown.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Shutdown = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
@@ -418,7 +437,7 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getDeletedItems(ctx context.C
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getEmptyLeafsDelete(ctx context.Context, state *L2VPNBridgeGroupBridgeDomainAccessVFI, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Neighbors {
 		keys := [...]string{"address", "pw-id"}
@@ -437,7 +456,9 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getEmptyLeafsDelete(ctx conte
 		}
 	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shutdown"))
+		if state != nil && !state.Shutdown.IsNull() && state.Shutdown.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shutdown"))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -471,7 +492,362 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getDeletePaths(ctx context.Co
 	if !data.Shutdown.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "shutdown"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data L2VPNBridgeGroupBridgeDomainAccessVFI) toBodyXML(ctx context.Context, stateArg ...*L2VPNBridgeGroupBridgeDomainAccessVFI) string {
+	var state *L2VPNBridgeGroupBridgeDomainAccessVFI
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.Shutdown.IsNull() && !data.Shutdown.IsUnknown() {
+		if data.Shutdown.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/shutdown", "")
+		}
+	}
+	if len(data.Neighbors) > 0 {
+		for _, item := range data.Neighbors {
+			basePath := data.getXPath() + "/neighbors/neighbor[address='" + item.Address.ValueString() + "' and pw-id='" + strconv.FormatInt(item.PwId.ValueInt64(), 10) + "']"
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.PwId.IsNull() && !item.PwId.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/pw-id", strconv.FormatInt(item.PwId.ValueInt64(), 10))
+			}
+			if len(item.StaticMacAddresses) > 0 {
+				for _, citem := range item.StaticMacAddresses {
+					cbasePath := basePath + "/static-mac-addresses/static-mac-address[mac-address='" + citem.MacAddress.ValueString() + "']"
+					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/mac-address", citem.MacAddress.ValueString())
+					}
+				}
+			}
+			if !item.PwClass.IsNull() && !item.PwClass.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/pw-class", item.PwClass.ValueString())
+			}
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Shutdown.IsNull() {
+			data.Shutdown = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Shutdown.IsNull() {
+			data.Shutdown = types.BoolNull()
+		}
+	}
+	for i := range data.Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbors/neighbor").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.Neighbors[i].Address.IsNull() {
+			data.Neighbors[i].Address = types.StringValue(value.String())
+		} else if data.Neighbors[i].Address.IsNull() {
+			data.Neighbors[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "pw-id"); value.Exists() && !data.Neighbors[i].PwId.IsNull() {
+			data.Neighbors[i].PwId = types.Int64Value(value.Int())
+		} else if data.Neighbors[i].PwId.IsNull() {
+			data.Neighbors[i].PwId = types.Int64Null()
+		}
+		for ci := range data.Neighbors[i].StaticMacAddresses {
+			keys := [...]string{"mac-address"}
+			keyValues := [...]string{data.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "static-mac-addresses/static-mac-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "mac-address"); value.Exists() && !data.Neighbors[i].StaticMacAddresses[ci].MacAddress.IsNull() {
+				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
+			} else if data.Neighbors[i].StaticMacAddresses[ci].MacAddress.IsNull() {
+				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "pw-class"); value.Exists() && !data.Neighbors[i].PwClass.IsNull() {
+			data.Neighbors[i].PwClass = types.StringValue(value.String())
+		} else if data.Neighbors[i].PwClass.IsNull() {
+			data.Neighbors[i].PwClass = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
+	} else {
+		data.Shutdown = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
+		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainAccessVFINeighbors{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "static-mac-addresses/static-mac-address"); cValue.Exists() {
+				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "mac-address"); ccValue.Exists() {
+						cItem.MacAddress = types.StringValue(ccValue.String())
+					}
+					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Neighbors = append(data.Neighbors, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
+	} else {
+		data.Shutdown = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/neighbors/neighbor"); value.Exists() {
+		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighbors, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainAccessVFINeighbors{}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "static-mac-addresses/static-mac-address"); cValue.Exists() {
+				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "mac-address"); ccValue.Exists() {
+						cItem.MacAddress = types.StringValue(ccValue.String())
+					}
+					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Neighbors = append(data.Neighbors, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) addDeletedItemsXML(ctx context.Context, state L2VPNBridgeGroupBridgeDomainAccessVFI, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Neighbors {
+		stateKeys := [...]string{"address", "pw-id"}
+		stateKeyValues := [...]string{state.Neighbors[i].Address.ValueString(), strconv.FormatInt(state.Neighbors[i].PwId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Neighbors[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Neighbors[i].PwId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Neighbors {
+			found = true
+			if state.Neighbors[i].Address.ValueString() != data.Neighbors[j].Address.ValueString() {
+				found = false
+			}
+			if state.Neighbors[i].PwId.ValueInt64() != data.Neighbors[j].PwId.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.Neighbors[i].PwClass.IsNull() && data.Neighbors[j].PwClass.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/pw-class", predicates))
+				}
+				for ci := range state.Neighbors[i].StaticMacAddresses {
+					cstateKeys := [...]string{"mac-address"}
+					cstateKeyValues := [...]string{state.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Neighbors[j].StaticMacAddresses {
+						found = true
+						if state.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString() != data.Neighbors[j].StaticMacAddresses[cj].MacAddress.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v/static-mac-addresses/static-mac-address%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/neighbors/neighbor%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Shutdown.IsNull() && state.Shutdown.ValueBool() && data.Shutdown.IsNull() {
+		deletePath := state.getXPath() + "/shutdown"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/neighbors/neighbor%v", predicates))
+	}
+	if !data.Shutdown.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/shutdown")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

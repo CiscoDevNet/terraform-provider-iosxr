@@ -95,6 +95,12 @@ func iosxrSNMPServerVRFImportStateIdFunc(resourceName string) resource.ImportSta
 func testAccIosxrSNMPServerVRFConfig_minimum() string {
 	config := `resource "iosxr_snmp_server_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	hosts = [{` + "\n"
+	config += `		address = "11.11.11.11"` + "\n"
+	config += `		traps_unencrypted_strings = [{` + "\n"
+	config += `			community_string = "COMMUNITY1"` + "\n"
+	config += `		}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

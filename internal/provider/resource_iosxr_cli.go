@@ -18,9 +18,13 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -28,6 +32,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 )
+
+// JSON-encode the CLI string so that embedded newlines, quotes and
+// other control characters are properly escaped in the gNMI json_ietf value.
+func cliGnmiBody(cli string) (string, error) {
+	b, err := json.Marshal(cli)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
+// XML-escape the CLI string so that embedded special characters
+// (&, <, >, etc.) are safe inside the <cli> element. Newlines are preserved.
+func cliNetconfBody(cli string) (string, error) {
+	var buf bytes.Buffer
+	if err := xml.EscapeText(&buf, []byte(cli)); err != nil {
+		return "", err
+	}
+	return fmt.Sprintf(`<cli xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-cli-cfg">%s</cli>`, buf.String()), nil
+}
 
 // Ensure provider defined types fully satisfy framework interfaces
 var _ resource.Resource = &CliResource{}
@@ -94,19 +118,46 @@ func (r *CliResource) Create(ctx context.Context, req resource.CreateRequest, re
 	}
 
 	if d.Managed {
-		// Send CLI command as plain JSON string value to Cisco-IOS-XR-cli-cfg:/cli path
-		body := fmt.Sprintf("\"%s\"", cli.ValueString())
-
-		var ops []gnmi.SetOperation
-		ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
-
-		if !r.data.ReuseConnection {
-			defer d.Client.Disconnect()
-		}
-		_, err := d.Client.Set(ctx, ops)
-		if err != nil {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
-			return
+		if d.Protocol == "gnmi" {
+			locked := helpers.AcquireGnmiLock(d.GetOpMutex(), d.ReuseConnection, true)
+			defer helpers.CloseGnmiConnection(ctx, d.GnmiClient, d.ReuseConnection)
+			if locked {
+				defer d.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, d.GnmiClient, d.ReuseConnection, d.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+			body, err := cliGnmiBody(cli.ValueString())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to encode CLI commands, got error: %s", err))
+				return
+			}
+			var ops []gnmi.SetOperation
+			ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
+			if _, err := d.GnmiClient.Set(ctx, ops); err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
+				return
+			}
+		} else {
+			locked := helpers.AcquireNetconfLock(d.GetOpMutex(), d.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, d.NetconfClient, d.ReuseConnection)
+			if locked {
+				defer d.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureNetconfConnection(ctx, d.NetconfClient, d.ReuseConnection, d.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+			xmlBody, err := cliNetconfBody(cli.ValueString())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to encode CLI commands, got error: %s", err))
+				return
+			}
+			if err := helpers.EditConfig(ctx, d.NetconfClient, xmlBody, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
+				return
+			}
 		}
 	}
 
@@ -145,19 +196,46 @@ func (r *CliResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	}
 
 	if d.Managed {
-		// Send CLI command as plain JSON string value to Cisco-IOS-XR-cli-cfg:/cli path
-		body := fmt.Sprintf("\"%s\"", cli.ValueString())
-
-		var ops []gnmi.SetOperation
-		ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
-
-		if !r.data.ReuseConnection {
-			defer d.Client.Disconnect()
-		}
-		_, err := d.Client.Set(ctx, ops)
-		if err != nil {
-			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
-			return
+		if d.Protocol == "gnmi" {
+			locked := helpers.AcquireGnmiLock(d.GetOpMutex(), d.ReuseConnection, true)
+			defer helpers.CloseGnmiConnection(ctx, d.GnmiClient, d.ReuseConnection)
+			if locked {
+				defer d.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, d.GnmiClient, d.ReuseConnection, d.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+			body, err := cliGnmiBody(cli.ValueString())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to encode CLI commands, got error: %s", err))
+				return
+			}
+			var ops []gnmi.SetOperation
+			ops = append(ops, gnmi.Update("Cisco-IOS-XR-cli-cfg:/cli", body))
+			if _, err := d.GnmiClient.Set(ctx, ops); err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
+				return
+			}
+		} else {
+			locked := helpers.AcquireNetconfLock(d.GetOpMutex(), d.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, d.NetconfClient, d.ReuseConnection)
+			if locked {
+				defer d.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureNetconfConnection(ctx, d.NetconfClient, d.ReuseConnection, d.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+			xmlBody, err := cliNetconfBody(cli.ValueString())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to encode CLI commands, got error: %s", err))
+				return
+			}
+			if err := helpers.EditConfig(ctx, d.NetconfClient, xmlBody, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to send CLI commands, got error: %s", err))
+				return
+			}
 		}
 	}
 

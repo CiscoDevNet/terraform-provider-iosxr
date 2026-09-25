@@ -37,6 +37,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -523,32 +524,60 @@ func (r *AAAAccountingResource) Create(ctx context.Context, req resource.CreateR
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
-		var ops []gnmi.SetOperation
+		if device.Protocol == "gnmi" {
+			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
-		// Create object
-		body := plan.toBody(ctx, device.Version)
-		// Skip an empty Update -- IOS-XR rejects a truly empty gNMI Update ("data is presented at
-		// none leaf node") instead of treating it as a no-op.
-		if body != "{}" {
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
-		}
+			var ops []gnmi.SetOperation
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, device.Version)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			// Create object
+			body := plan.toBody(ctx, device.Version)
+			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-		for _, i := range emptyLeafsDelete {
-			ops = append(ops, gnmi.Delete(i))
-		}
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
-		if !r.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		// Skip Set entirely when there's nothing to send -- the gNMI client rejects an empty
-		// operations list ("operations cannot be empty").
-		if len(ops) > 0 {
-			_, err := device.Client.Set(ctx, ops)
+			for _, i := range emptyLeafsDelete {
+				ops = append(ops, gnmi.Delete(i))
+			}
+
+			// Skip an empty "{}" body when deletes already carry the intent (IOS-XR
+			// rejects a "{}" update); still send it when it's the only op so bare
+			// containers are created and the SetRequest isn't empty.
+			if body != "{}" || len(ops) == 0 {
+				ops = append(ops, gnmi.Update(plan.getPath(), body))
+			}
+
+			_, err := device.GnmiClient.Set(ctx, ops)
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+				return
+			}
+		} else {
+			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			bodyStr := plan.toBodyXML(ctx)
+
+			if err := helpers.EditConfig(ctx, device.NetconfClient, bodyStr, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
 		}
@@ -585,53 +614,94 @@ func (r *AAAAccountingResource) Read(ctx context.Context, req resource.ReadReque
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
+	// Check if we are being called after `terraform import`.
+	// During import we use fromBody/fromBodyXML (full overwrite from device).
+	// During normal reads we use updateFromBody/updateFromBodyXML (preserve config-only fields).
+	imp, impDiags := helpers.IsFlagImporting(ctx, req)
+	resp.Diagnostics.Append(impDiags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	if device.Managed {
-		if !r.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		readPath := state.Id.ValueString()
-		getResp, err := device.Client.Get(ctx, []string{readPath})
-		if err != nil {
-			if strings.Contains(err.Error(), "Requested element(s) not found") {
-				// A no-op state (nothing written, see Create's empty-body guard) reads back as
-				// "not found" -- that's expected, not drift. Don't remove, or every plan
-				// perpetually re-proposes create.
-				if state.toBody(ctx, device.Version) == "{}" {
-					diags = resp.State.Set(ctx, &state)
-					resp.Diagnostics.Append(diags...)
-					return
-				}
-				resp.State.RemoveResource(ctx)
+		_ = diags // Avoid unused variable error
+		if device.Protocol == "gnmi" {
+			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
 				return
-			} else {
+			}
+
+			// Use GetWithRetry to handle device sync delays
+			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
+			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return
 			}
-		}
 
-		// Defensive bounds checking for response structure
-		if len(getResp.Notifications) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response contains no notifications")
-			return
-		}
-		if len(getResp.Notifications[0].Update) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response notification contains no updates")
-			return
-		}
+			// Only a "not found" error means the element was deleted; remove it from state.
+			if notFound {
+				resp.State.RemoveResource(ctx)
+				return
+			}
 
-		imp, diags := helpers.IsFlagImporting(ctx, req)
-		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
-			return
-		}
-
-		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-		if imp {
-			state.fromBody(ctx, respBody, device.Version)
+			// A successful but empty ({}) response means the element exists but the
+			// device returned no data (e.g. a keys-only list entry). Preserve state
+			// as-is instead of removing it, which would cause a perpetual recreate.
+			if helpers.IsGnmiGetResponseEmpty(&getResp) {
+				tflog.Warn(ctx, fmt.Sprintf("%s: gNMI returned empty response, preserving state as-is", state.Id.ValueString()))
+			} else {
+				respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
+				tflog.Debug(ctx, fmt.Sprintf("respBody : %s", respBody))
+				if imp {
+					// After `terraform import` we switch to a full read so all device
+					// attributes are populated in state (fromBody overwrites everything).
+					state.fromBody(ctx, respBody, device.Version)
+				} else {
+					// Normal read: preserve config-only fields not returned by the device.
+					state.updateFromBody(ctx, respBody, device.Version)
+				}
+			}
 		} else {
-			state.updateFromBody(ctx, respBody, device.Version)
+			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			filter := helpers.GetSubtreeFilter(state.getXPath())
+
+			// Use GetConfigWithRetry to handle device sync delays
+			res, isEmpty, err := helpers.GetConfigWithRetry(ctx, device.NetconfClient, "running", filter, state.getXPath())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object: %s", err))
+				return
+			}
+
+			if isEmpty {
+				// NETCONF returned empty response after retries — preserve state as-is.
+				tflog.Warn(ctx, fmt.Sprintf("%s: NETCONF returned empty response after retries, preserving state as-is", state.Id.ValueString()))
+			} else {
+				if imp {
+					// After `terraform import` we switch to a full read so all device
+					// attributes are populated in state (fromBodyXML overwrites everything).
+					state.fromBodyXML(ctx, res.Res)
+				} else {
+					// Normal read: preserve config-only fields not returned by the device.
+					state.updateFromBodyXML(ctx, res.Res)
+				}
+			}
 		}
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
@@ -671,37 +741,68 @@ func (r *AAAAccountingResource) Update(ctx context.Context, req resource.UpdateR
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	if device.Managed {
-		var ops []gnmi.SetOperation
+		if device.Protocol == "gnmi" {
+			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
-		// Update object
-		body := plan.toBody(ctx, device.Version)
-		// Skip an empty Update -- see Create above.
-		if body != "{}" {
-			ops = append(ops, gnmi.Update(plan.getPath(), body))
-		}
+			var ops []gnmi.SetOperation
 
-		deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
-		tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
+			// Update object
+			body := plan.toBody(ctx, device.Version)
 
-		for _, i := range deletedListItems {
-			ops = append(ops, gnmi.Delete(i))
-		}
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
+			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
-		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, device.Version)
-		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+			for _, i := range deletedListItems {
+				ops = append(ops, gnmi.Delete(i))
+			}
 
-		for _, i := range emptyLeafsDelete {
-			ops = append(ops, gnmi.Delete(i))
-		}
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
+			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
-		if !r.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		// Skip Set entirely when there's nothing to send -- see Create above.
-		if len(ops) > 0 {
-			_, err := device.Client.Set(ctx, ops)
+			for _, i := range emptyLeafsDelete {
+				ops = append(ops, gnmi.Delete(i))
+			}
+
+			// Skip an empty "{}" body when other ops carry the intent; still send it
+			// when it's the only op (see Create for rationale).
+			if body != "{}" || len(ops) == 0 {
+				ops = append(ops, gnmi.Update(plan.getPath(), body))
+			}
+
+			_, err := device.GnmiClient.Set(ctx, ops)
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+				return
+			}
+		} else {
+			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			body := plan.toBodyXML(ctx, &state)
+			deleteBody := plan.addDeletedItemsXML(ctx, state, body)
+
+			// Combine update and delete operations into a single transaction
+			combinedBody := body + deleteBody
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
 		}
@@ -734,7 +835,6 @@ func (r *AAAAccountingResource) Delete(ctx context.Context, req resource.DeleteR
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
 	if device.Managed {
-		var ops []gnmi.SetOperation
 		deleteMode := "all"
 		if state.DeleteMode.ValueString() == "all" {
 			deleteMode = "all"
@@ -743,24 +843,105 @@ func (r *AAAAccountingResource) Delete(ctx context.Context, req resource.DeleteR
 		}
 
 		if deleteMode == "all" {
-			ops = append(ops, gnmi.Delete(state.Id.ValueString()))
+			if device.Protocol == "gnmi" {
+				locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, true)
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+				if locked {
+					defer device.GetOpMutex().Unlock()
+				}
+				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				var ops []gnmi.SetOperation
+				ops = append(ops, gnmi.Delete(state.Id.ValueString()))
+
+				_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+			} else {
+				// NETCONF - Serialize write operations
+				locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+				if locked {
+					defer device.GetOpMutex().Unlock()
+				}
+
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+					resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				body := netconf.Body{}
+				// Use state.Id (like gNMI does) which contains the full XPath, with fallback
+				xpath := state.Id.ValueString()
+				if xpath == "" {
+					// Fallback if Id is not set (defensive programming)
+					xpath = state.getPath()
+					tflog.Warn(ctx, fmt.Sprintf("NETCONF DELETE: state.Id was empty, using fallback getPath(): %s", xpath))
+				}
+
+				// RemoveFromXPathString returns raw XML string for delete operations
+				xmlStr := helpers.RemoveFromXPath(body, xpath).Res()
+
+				if err := helpers.EditConfig(ctx, device.NetconfClient, xmlStr, true); err != nil {
+					resp.Diagnostics.AddError("Client Error", err.Error())
+					return
+				}
+			}
 		} else {
-			deletePaths := state.getDeletePaths(ctx, device.Version)
-			tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+			if device.Protocol == "gnmi" {
+				locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, true)
+				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+				if locked {
+					defer device.GetOpMutex().Unlock()
+				}
+				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
 
-			for _, i := range deletePaths {
-				ops = append(ops, gnmi.Delete(i))
-			}
-		}
+				var ops []gnmi.SetOperation
+				deletePaths := state.getDeletePaths(ctx, device.Version)
+				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
-		if len(ops) > 0 {
-			if !r.data.ReuseConnection {
-				defer device.Client.Disconnect()
-			}
-			_, err := device.Client.Set(ctx, ops)
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
+				for _, i := range deletePaths {
+					ops = append(ops, gnmi.Delete(i))
+				}
+
+				if len(ops) > 0 {
+					_, err := device.GnmiClient.Set(ctx, ops)
+					if err != nil {
+						resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+						return
+					}
+				}
+			} else {
+				// NETCONF - Serialize write operations
+				locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, true)
+				defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+				if locked {
+					defer device.GetOpMutex().Unlock()
+				}
+
+				// Ensure connection is healthy (reconnect if stale)
+				if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+					resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+					return
+				}
+
+				body := state.addDeletePathsXML(ctx, "")
+
+				// Use EditConfigWithOptions with ignoreDataMissing=true to allow graceful deletion
+				// of non-existent elements (matching gNMI behavior)
+				if err := helpers.EditConfigWithOptions(ctx, device.NetconfClient, body, true, true); err != nil {
+					resp.Diagnostics.AddError("Client Error", err.Error())
+					return
+				}
 			}
 		}
 	}

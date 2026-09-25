@@ -96,7 +96,7 @@ func iosxrRouterIGMPVRFImportStateIdFunc(resourceName string) resource.ImportSta
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterIGMPVRFPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-igmp-cfg:/router/igmp"
 	attributes = {
 	}
@@ -112,7 +112,7 @@ func testAccIosxrRouterIGMPVRFConfig_minimum() string {
 	config := `resource "iosxr_router_igmp_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	version = "3"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -146,7 +146,7 @@ func testAccIosxrRouterIGMPVRFConfig_all() string {
 	config += `	missed_packets_grp_spec_query = 5000` + "\n"
 	config += `	missed_packets_ssm_query = 5000` + "\n"
 	config += `	missed_packets_member_report = 5000` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -24,9 +24,13 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -58,6 +62,19 @@ func (data ExtcommunitySegNHSet) getPath() string {
 
 func (data ExtcommunitySegNHSetData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-seg-nh-sets/extended-community-seg-nh-set[set-name=%s]", data.SetName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data ExtcommunitySegNHSet) getXPath() string {
+	path := "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-seg-nh-sets/extended-community-seg-nh-set[set-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.SetName.ValueString()))
+	return path
+}
+
+func (data ExtcommunitySegNHSetData) getXPath() string {
+	path := "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-seg-nh-sets/extended-community-seg-nh-set[set-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.SetName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -134,7 +151,7 @@ func (data ExtcommunitySegNHSet) GetPatternConstraints() []helpers.FieldPatternC
 func (data *ExtcommunitySegNHSet) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-seg-nh-set"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
-	} else {
+	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
 	}
 }
@@ -175,7 +192,7 @@ func (data *ExtcommunitySegNHSet) getDeletedItems(ctx context.Context, state Ext
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *ExtcommunitySegNHSet) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *ExtcommunitySegNHSet) getEmptyLeafsDelete(ctx context.Context, state *ExtcommunitySegNHSet, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
@@ -188,7 +205,139 @@ func (data *ExtcommunitySegNHSet) getDeletePaths(ctx context.Context, version st
 	if !data.Rpl.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "rpl-extended-community-seg-nh-set"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data ExtcommunitySegNHSet) toBodyXML(ctx context.Context, stateArg ...*ExtcommunitySegNHSet) string {
+	var state *ExtcommunitySegNHSet
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/rpl-extended-community-seg-nh-set", data.Rpl.ValueString())
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *ExtcommunitySegNHSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-seg-nh-set"); value.Exists() && !data.Rpl.IsNull() {
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Rpl = types.StringValue(rplValue)
+	} else if data.Rpl.IsNull() {
+		data.Rpl = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *ExtcommunitySegNHSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-seg-nh-set"); value.Exists() {
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Rpl = types.StringValue(rplValue)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *ExtcommunitySegNHSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rpl-extended-community-seg-nh-set"); value.Exists() {
+		// Normalize value to ensure it ends with newline (matches gNMI behavior)
+		rplValue := value.String()
+		if rplValue != "" && !strings.HasSuffix(rplValue, "\n") {
+			rplValue = rplValue + "\n"
+		}
+		data.Rpl = types.StringValue(rplValue)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *ExtcommunitySegNHSet) addDeletedItemsXML(ctx context.Context, state ExtcommunitySegNHSet, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletePath := state.getXPath() + "/rpl-extended-community-seg-nh-set"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *ExtcommunitySegNHSet) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Rpl.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/rpl-extended-community-seg-nh-set")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

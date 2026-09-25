@@ -92,18 +92,18 @@ func iosxrRouterVRRPInterfaceIPv6ImportStateIdFunc(resourceName string) resource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterVRRPInterfaceIPv6PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
 	attributes = {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]"
 	attributes = {
 		"interface-name" = "GigabitEthernet0/0/0/2"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
 `
@@ -120,7 +120,7 @@ func testAccIosxrRouterVRRPInterfaceIPv6Config_minimum() string {
 	config += `		address = "2001:db8::1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	address_linklocal = "fe80::2"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -154,7 +154,7 @@ func testAccIosxrRouterVRRPInterfaceIPv6Config_all() string {
 	config += `		priority_decrement = 22` + "\n"
 	config += `		}]` + "\n"
 	config += `	bfd_fast_detect_peer_ipv6 = "3::3"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

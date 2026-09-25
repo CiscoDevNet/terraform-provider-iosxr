@@ -94,10 +94,8 @@ func TestAccDataSourceIosxrMPLSLDPVRF(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrMPLSLDPVRFPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
-	attributes = {
-	}
 }
 
 `
@@ -170,7 +168,7 @@ func testAccDataSourceIosxrMPLSLDPVRFConfig() string {
 	config += `		address_family_ipv6 = true` + "\n"
 	config += `		address_family_ipv6_discovery_transport_address_ip = "2001:db8::1"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

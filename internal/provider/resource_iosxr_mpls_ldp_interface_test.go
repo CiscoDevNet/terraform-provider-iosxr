@@ -85,7 +85,7 @@ func iosxrMPLSLDPInterfaceImportStateIdFunc(resourceName string) resource.Import
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrMPLSLDPInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
 	attributes = {
 	}
@@ -100,7 +100,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrMPLSLDPInterfaceConfig_minimum() string {
 	config := `resource "iosxr_mpls_ldp_interface" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -123,7 +123,7 @@ func testAccIosxrMPLSLDPInterfaceConfig_all() string {
 	config += `		igp_auto_config_disable = true` + "\n"
 	config += `		mldp_disable = true` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

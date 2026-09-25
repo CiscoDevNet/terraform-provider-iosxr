@@ -77,10 +77,8 @@ func TestAccDataSourceIosxrPerformanceMeasurementLivenessProfile(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
-	attributes = {
-	}
 }
 
 `
@@ -123,7 +121,7 @@ func testAccDataSourceIosxrPerformanceMeasurementLivenessProfileConfig() string 
 	config += `		probe_sweep_destination_range = 10` + "\n"
 	config += `		probe_tos_dscp = 48` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

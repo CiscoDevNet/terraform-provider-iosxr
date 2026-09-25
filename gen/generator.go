@@ -36,6 +36,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/openconfig/goyang/pkg/yang"
 	"gopkg.in/yaml.v3"
 )
@@ -470,6 +471,17 @@ func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	return attributes
 }
 
+// Templating helper function to get ID attributes from a list
+func GetIdAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
+	idAttrs := []YamlConfigAttribute{}
+	for _, attr := range attributes {
+		if attr.Id {
+			idAttrs = append(idAttrs, attr)
+		}
+	}
+	return idAttrs
+}
+
 // Templating helper function to get xpath if available
 func GetXPath(yangPath, xPath string) string {
 	if xPath != "" {
@@ -479,13 +491,13 @@ func GetXPath(yangPath, xPath string) string {
 }
 
 func GetDeletePath(attribute YamlConfigAttribute) string {
-	path := GetXPath(attribute.YangName, attribute.XPath)
+	path := attribute.XPath
 	if attribute.DeleteGrandparent {
 		// Remove two levels: grandparent
-		return RemoveLastPathElement(RemoveLastPathElement(path))
+		return helpers.RemoveLastPathElement(helpers.RemoveLastPathElement(path))
 	}
 	if attribute.DeleteParent {
-		return RemoveLastPathElement(path)
+		return helpers.RemoveLastPathElement(path)
 	}
 	return path
 }
@@ -554,9 +566,9 @@ func GetDeletePathExpr(attr YamlConfigAttribute, versionVar string) string {
 func applyDeleteMode(p, mode string) string {
 	switch mode {
 	case "grandparent":
-		return RemoveLastPathElement(RemoveLastPathElement(p))
+		return helpers.RemoveLastPathElement(helpers.RemoveLastPathElement(p))
 	case "parent":
-		return RemoveLastPathElement(p)
+		return helpers.RemoveLastPathElement(p)
 	default:
 		return p
 	}
@@ -580,14 +592,6 @@ func HasVersionDeleteMode(attributes []YamlConfigAttribute) bool {
 	return false
 }
 
-func ReverseAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
-	reversed := make([]YamlConfigAttribute, len(attributes))
-	for i, v := range attributes {
-		reversed[len(attributes)-1-i] = v
-	}
-	return reversed
-}
-
 // Templating helper function to add two integers
 func Add(a, b int) int {
 	return a + b
@@ -604,32 +608,81 @@ func GetExamplePath(path string, attributes []YamlConfigAttribute) string {
 	return fmt.Sprintf(path, a...)
 }
 
-// Templating helper function to identify last element of list
-func IsLast(index int, len int) bool {
-	return index+1 == len
+// ReverseAttributes reverses a slice of YamlConfigAttribute
+func ReverseAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
+	reversed := make([]YamlConfigAttribute, len(attributes))
+	for i, v := range attributes {
+		reversed[len(attributes)-1-i] = v
+	}
+	return reversed
 }
 
-// Templating helper function to remove last element of path
-func RemoveLastPathElement(p string) string {
-	return path.Dir(p)
+// IsXmlNamespaceSibling reports whether attr must be emitted as a separate
+// XML sibling body to prevent xmldot from merging same-named elements that
+// belong to different YANG namespaces.
+//
+// An attribute needs sibling treatment when:
+//  1. Its yang_name carries an explicit namespace prefix anywhere in the path
+//     (e.g. "traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/all"), AND
+//  2. At least one other attribute in the same sibling list shares the same root element.
+//
+// The explicit yaml flag xml_namespace_sibling:true is still honoured for
+// backward compatibility, but is no longer required.
+func IsXmlNamespaceSibling(attr YamlConfigAttribute, allAttrs []YamlConfigAttribute) bool {
+	yangNames := make([]string, len(allAttrs))
+	for i, a := range allAttrs {
+		yangNames[i] = a.YangName
+	}
+	return helpers.IsXmlNamespaceSiblingStr(attr.YangName, yangNames)
 }
 
-func contains(s []string, str string) bool {
-	for _, v := range s {
-		if v == str {
-			return true
+// HasXmlNamespaceSiblings returns true when any attribute in the list needs
+// separate XML sibling treatment (either via explicit flag or auto-detection).
+func HasXmlNamespaceSiblings(attributes []YamlConfigAttribute) bool {
+	yangNames := make([]string, len(attributes))
+	for i, a := range attributes {
+		yangNames[i] = a.YangName
+	}
+	return helpers.HasXmlNamespaceSiblingsStr(yangNames)
+}
+
+// SiblingGroup holds a set of attributes that share the same top-level XML
+// namespace element (e.g. all "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute/…"
+// attributes belong to the same group).  They must be emitted into a single
+// nsBody so they produce one merged XML element rather than duplicate siblings.
+type SiblingGroup struct {
+	// Key is "<namespace-prefix>:<top-element-name>", e.g.
+	// "Cisco-IOS-XR-um-mpls-te-cfg:fast-reroute"
+	Key        string
+	Attributes []YamlConfigAttribute
+}
+
+// GroupXmlSiblings returns the xml-namespace-sibling attributes from allAttrs
+// collected into groups that share the same top-level element.  The order of
+// groups follows the first occurrence of each key in allAttrs.
+func GroupXmlSiblings(allAttrs []YamlConfigAttribute) []SiblingGroup {
+	helperGroups := helpers.GroupXmlSiblingsStr(allAttrs, func(attr YamlConfigAttribute) string {
+		return attr.YangName
+	})
+
+	// Convert helper.SiblingGroup[YamlConfigAttribute] to generator.SiblingGroup
+	groups := make([]SiblingGroup, len(helperGroups))
+	for i, hg := range helperGroups {
+		groups[i] = SiblingGroup{
+			Key:        hg.Key,
+			Attributes: hg.Items,
 		}
 	}
-	return false
+	return groups
 }
 
 // Templating helper function to generate version suffix for type names.
 // Dotted format "24.4" → "V24_4" (dot replaced with underscore for valid Go identifier).
 func VersionSuffix(version string) string {
-        if version == "" {
-                return ""
-        }
-        return "V" + strings.ReplaceAll(version, ".", "_")
+	if version == "" {
+		return ""
+	}
+	return "V" + strings.ReplaceAll(version, ".", "_")
 }
 
 // CollectVersionConstraints recursively collects all attributes that have version constraints
@@ -759,7 +812,6 @@ type VersionedAttrRow struct {
 	RemovedIn string `json:"removed_in,omitempty"`
 }
 
-
 // CollectRemovedAttrs recursively collects attributes that have RemovedInVersion set, sorted by name.
 func CollectRemovedAttrs(attrs []YamlConfigAttribute, prefix string) []VersionedAttrRow {
 	var rows []VersionedAttrRow
@@ -783,15 +835,15 @@ func CollectRemovedAttrs(attrs []YamlConfigAttribute, prefix string) []Versioned
 // New dotted format ("25.2", "24.4") is returned as-is.
 // Legacy 4-digit compact format ("2512") is converted to "MM.mm" (patch dropped).
 func FormatVersionDisplay(version string) string {
-        if strings.Contains(version, ".") {
-                return version // already dotted major.minor
-        }
-        if len(version) == 4 {
-                if _, err := strconv.Atoi(version); err == nil {
-                        return version[0:2] + "." + string(version[2])
-                }
-        }
-        return version
+	if strings.Contains(version, ".") {
+		return version // already dotted major.minor
+	}
+	if len(version) == 4 {
+		if _, err := strconv.Atoi(version); err == nil {
+			return version[0:2] + "." + string(version[2])
+		}
+	}
+	return version
 }
 
 // FormatVersionRanges formats version-specific ranges for markdown description
@@ -1326,26 +1378,26 @@ func SortedAttrs(attrs []YamlConfigAttribute) []YamlConfigAttribute {
 // Map of templating functions
 var functions = template.FuncMap{
 	"toGoName":                              ToGoName,
-	"toJsonPath":                            ToJsonPath,
-	"jsonPathExpr":                          JsonPathExpr,
-	"keyPathExpr":                           KeyPathExpr,
-	"typeYangBoolExpr":                      TypeYangBoolExpr,
 	"camelCase":                             CamelCase,
 	"snakeCase":                             SnakeCase,
-	"versionSuffix":                         VersionSuffix,
+	"add":                                   Add,
+	"isLast":                                helpers.IsLast,
+	"sprintf":                               fmt.Sprintf,
+	"removeLastPathElement":                 helpers.RemoveLastPathElement,
+	"getXPath":                              GetXPath,
+	"getDeletePath":                         GetDeletePath,
+	"reverseAttributes":                     ReverseAttributes,
 	"hasId":                                 HasId,
 	"hasReference":                          HasReference,
 	"importParts":                           ImportParts,
 	"importAttributes":                      ImportAttributes,
-	"add":                                   Add,
 	"getExamplePath":                        GetExamplePath,
-	"isLast":                                IsLast,
-	"sprintf":                               fmt.Sprintf,
-	"removeLastPathElement":                 RemoveLastPathElement,
-	"getXPath":                              GetXPath,
-	"getDeletePath":                         GetDeletePath,
+	"toJsonPath":                            ToJsonPath,
+	"jsonPathExpr":                          JsonPathExpr,
+	"keyPathExpr":                           KeyPathExpr,
+	"typeYangBoolExpr":                      TypeYangBoolExpr,
+	"versionSuffix":                         VersionSuffix,
 	"getDeletePathExpr":                     GetDeletePathExpr,
-	"reverseAttributes":                     ReverseAttributes,
 	"collectVersionConstraints":             CollectVersionConstraints,
 	"hasVersionConstraints":                 HasVersionConstraints,
 	"formatVersionRanges":                   FormatVersionRanges,
@@ -1373,6 +1425,14 @@ var functions = template.FuncMap{
 	"hasVersionDefaultsRecursive":           HasVersionDefaultsRecursive,
 	"collectRemovedAttrs":                   CollectRemovedAttrs,
 	"sortedAttrs":                           SortedAttrs,
+	"getIdAttributes":                       GetIdAttributes,
+	"getLastPathElement":                    helpers.GetLastPathElement,
+	"toDotPath":                             helpers.ToDotPath,
+	"hasPrefix":                             strings.HasPrefix,
+	"hasXmlNamespaceSiblings":               HasXmlNamespaceSiblings,
+	"isXmlNamespaceSibling":                 IsXmlNamespaceSibling,
+	"xmlNamespacePrefixFromXPath":           helpers.XmlNamespacePrefixFromXPath,
+	"groupXmlSiblings":                      GroupXmlSiblings,
 }
 
 func resolvePath(e *yang.Entry, path string) *yang.Entry {
@@ -1380,11 +1440,11 @@ func resolvePath(e *yang.Entry, path string) *yang.Entry {
 
 	for _, pathElement := range pathElements {
 		if len(pathElement) > 0 {
-			// remove key
+			// remove XPath predicate (e.g., [name=value] or [name=%v])
 			if strings.Contains(pathElement, "[") {
 				pathElement = pathElement[:strings.Index(pathElement, "[")]
 			}
-			// remove reference
+			// remove namespace prefix (e.g., Cisco-IOS-XE-bgp:bgp -> bgp)
 			if strings.Contains(pathElement, ":") {
 				pathElement = pathElement[strings.Index(pathElement, ":")+1:]
 			}
@@ -1466,15 +1526,15 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 	//fmt.Printf("%s, Kind: %+v, Type: %+v\n\n", leaf.Name, leaf.Kind, leaf.Type)
 	if leaf.Kind.String() == "Leaf" {
 		if leaf.ListAttr != nil {
-			if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
+			if helpers.Contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
 				attr.Type = "StringList"
-			} else if contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+			} else if helpers.Contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 				attr.Type = "Int64List"
 			} else {
 				panic(fmt.Sprintf("Unknown leaf-list type, attribute: %s, type: %s", attr.YangName, leaf.Type.Kind.String()))
 			}
 			// TODO parse union type
-		} else if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
+		} else if helpers.Contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
 			attr.Type = "String"
 			if leaf.Type.Length != nil {
 				if attr.StringMinLength == 0 {
@@ -1492,7 +1552,7 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 			if len(leaf.Type.Pattern) > 0 && len(attr.StringPatterns) == 0 {
 				attr.StringPatterns = leaf.Type.Pattern
 			}
-		} else if contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+		} else if helpers.Contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 			attr.Type = "Int64"
 			if leaf.Type.Range != nil {
 				if attr.MinInt == 0 {
@@ -1510,7 +1570,7 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 					attr.MaxInt = int64(max)
 				}
 			}
-		} else if contains([]string{"boolean", "empty"}, leaf.Type.Kind.String()) {
+		} else if helpers.Contains([]string{"boolean", "empty"}, leaf.Type.Kind.String()) {
 			if attr.TypeYangBool == "" {
 				if leaf.Type.Kind.String() == "boolean" {
 					attr.TypeYangBool = "boolean"
@@ -1519,7 +1579,7 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 				}
 			}
 			attr.Type = "Bool"
-		} else if contains([]string{"enumeration"}, leaf.Type.Kind.String()) {
+		} else if helpers.Contains([]string{"enumeration"}, leaf.Type.Kind.String()) {
 			attr.Type = "String"
 			attr.EnumValues = leaf.Type.Enum.Names()
 		} else {
@@ -1536,8 +1596,10 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		attr.XPath = attr.YangName
 	}
 	if attr.TfName == "" {
-		tfName := strings.ReplaceAll(ToYangShortName(attr.XPath), "-", "_")
+		tfName := strings.ReplaceAll(helpers.ToYangShortName(attr.XPath), "-", "_")
 		tfName = strings.ReplaceAll(tfName, "/", "_")
+		// Trim leading underscores to comply with tfsdk naming rules (must start with letter)
+		tfName = strings.TrimLeft(tfName, "_")
 		attr.TfName = tfName
 	}
 	if attr.Description == "" {
@@ -1566,7 +1628,7 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 	} else {
 		path = config.Path
 	}
-
+	path = strings.TrimPrefix(path, "/")
 	module := strings.Split(path, ":")[0]
 	e, errors := yang.GetModule(module, modelPaths...)
 	if len(errors) > 0 {
@@ -1584,6 +1646,37 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 	addKeys(e, config)
 
 	for ia := range config.Attributes {
+		// Default XPath from YangName if not explicitly set (do this first for all attributes)
+		if config.Attributes[ia].XPath == "" {
+			config.Attributes[ia].XPath = config.Attributes[ia].YangName
+		}
+
+		// For Lists with NoAugmentConfig, still process child attributes to set their XPath
+		if config.Attributes[ia].Type == "List" && config.Attributes[ia].NoAugmentConfig {
+			for iaa := range config.Attributes[ia].Attributes {
+				// Default XPath from YangName if not explicitly set
+				if config.Attributes[ia].Attributes[iaa].XPath == "" {
+					config.Attributes[ia].Attributes[iaa].XPath = config.Attributes[ia].Attributes[iaa].YangName
+				}
+				// If parent list has no_augment_config and child is an id attribute, inherit the flag
+				if config.Attributes[ia].Attributes[iaa].Id && !config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
+					config.Attributes[ia].Attributes[iaa].NoAugmentConfig = true
+				}
+				// For nested lists, also set XPath for their children
+				if config.Attributes[ia].Attributes[iaa].Type == "List" && config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
+					for iaaa := range config.Attributes[ia].Attributes[iaa].Attributes {
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath == "" {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName
+						}
+						// If parent list has no_augment_config and child is an id attribute, inherit the flag
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig = true
+						}
+					}
+				}
+			}
+		}
+
 		if config.Attributes[ia].Id || config.Attributes[ia].Reference || config.Attributes[ia].NoAugmentConfig {
 			continue
 		}
@@ -1596,6 +1689,10 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 		if config.Attributes[ia].Type == "List" {
 			el := resolvePath(e, config.Attributes[ia].YangName)
 			for iaa := range config.Attributes[ia].Attributes {
+				// Default XPath from YangName if not explicitly set (do this first for all attributes)
+				if config.Attributes[ia].Attributes[iaa].XPath == "" {
+					config.Attributes[ia].Attributes[iaa].XPath = config.Attributes[ia].Attributes[iaa].YangName
+				}
 				if config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
 					continue
 				}
@@ -1606,23 +1703,61 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 				if config.Attributes[ia].Attributes[iaa].Type == "List" {
 					ell := resolvePath(el, config.Attributes[ia].Attributes[iaa].YangName)
 					for iaaa := range config.Attributes[ia].Attributes[iaa].Attributes {
-						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
-							continue
+						// Default XPath from YangName if not explicitly set (do this first for all attributes)
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath == "" {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName
 						}
 						if _, ok := safeResolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName); !ok {
 							continue
 						}
-						parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
-						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" {
+						// If parent list has no_augment_config and child is an id attribute, inherit the flag
+						if config.Attributes[ia].Attributes[iaa].NoAugmentConfig && config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig = true
+						}
+						// Only skip parseAttribute if no_augment_config, but still process children
+						if !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
+						}
+						// Process children if this is a List (check Type from YAML, or if children exist)
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "List" || config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Type == "Set" || len(config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes) > 0 {
 							elll := resolvePath(ell, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].YangName)
 							for iaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes {
-								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
-									continue
-								}
 								if _, ok := safeResolvePath(elll, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].YangName); !ok {
 									continue
 								}
-								parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
+								// Default XPath from YangName if not explicitly set (do this first for all attributes)
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].XPath == "" {
+									config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].YangName
+								}
+								// If parent list has no_augment_config and child is an id attribute, inherit the flag
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig && config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig = true
+								}
+								// Only skip parseAttribute if no_augment_config, but still process children
+								if !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig {
+									parseAttribute(elll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa])
+								}
+								// Process level 5 children if this is a List
+								if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Type == "List" || config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Type == "Set" || len(config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes) > 0 {
+									ellll := resolvePath(elll, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].YangName)
+									for iaaaaa := range config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes {
+										if _, ok := safeResolvePath(ellll, config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].YangName); !ok {
+											continue
+										}
+										// Default XPath from YangName if not explicitly set
+										if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].XPath == "" {
+											config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].XPath = config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].YangName
+										}
+										// If parent list has no_augment_config and child is an id attribute, inherit the flag
+										if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].NoAugmentConfig && config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].Id && !config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].NoAugmentConfig {
+											config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].NoAugmentConfig = true
+										}
+										if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa].NoAugmentConfig {
+											continue
+										}
+										parseAttribute(ellll, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa].Attributes[iaaaa].Attributes[iaaaaa])
+									}
+								}
 							}
 						}
 					}
@@ -1673,12 +1808,19 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 
 	// skip first line with 'build-ignore' directive for go files
 	scanner := bufio.NewScanner(file)
+	// Increase buffer to 1MB to handle long lines in large templates/generated files.
+	// The default 64KB limit silently truncates the scan, producing a misleading
+	// "unexpected EOF" parse error at whatever template line was last read.
+	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
 	if strings.HasSuffix(templatePath, ".go") {
 		scanner.Scan()
 	}
 	var temp string
 	for scanner.Scan() {
 		temp = temp + scanner.Text() + "\n"
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatalf("Error reading template %s: %v", templatePath, err)
 	}
 
 	template, err := template.New(path.Base(templatePath)).Funcs(functions).Parse(temp)
@@ -1699,8 +1841,10 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 	} else if strings.HasSuffix(templatePath, ".go") {
 		defer existingFile.Close()
 		existingScanner := bufio.NewScanner(existingFile)
+		existingScanner.Buffer(make([]byte, 1024*1024), 1024*1024)
 		var newContent string
 		currentSectionName := ""
+		processedSections := make(map[string]bool)
 		beginRegex := regexp.MustCompile(`\/\/template:begin\s(.*?)$`)
 		endRegex := regexp.MustCompile(`\/\/template:end\s(.*?)$`)
 		for existingScanner.Scan() {
@@ -1709,6 +1853,7 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 				matches := beginRegex.FindStringSubmatch(line)
 				if len(matches) > 1 && matches[1] != "" {
 					currentSectionName = matches[1]
+					processedSections[currentSectionName] = true
 				} else {
 					newContent += line + "\n"
 				}
@@ -1721,6 +1866,7 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 				}
 			}
 		}
+
 		output = bytes.NewBufferString(newContent)
 	} else {
 		existingFile.Close()

@@ -22,10 +22,15 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
+	"fmt"
 	"path"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -85,6 +90,17 @@ func (data ServiceTimestamps) getPath() string {
 
 func (data ServiceTimestampsData) getPath() string {
 	return "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data ServiceTimestamps) getXPath() string {
+	path := "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps"
+	return path
+}
+
+func (data ServiceTimestampsData) getXPath() string {
+	path := "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -283,144 +299,160 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte, v
 		if value.Exists() {
 			data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DebugDatetimeLocaltimeOnly = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DebugDatetimeLocaltimeOnly.IsNull() {
 		data.DebugDatetimeLocaltimeOnly = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "debug.datetime.localtime"); !data.DebugDatetimeLocaltime.IsNull() {
 		if value.Exists() {
 			data.DebugDatetimeLocaltime = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DebugDatetimeLocaltime = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DebugDatetimeLocaltime.IsNull() {
 		data.DebugDatetimeLocaltime = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "debug.datetime.msec"); !data.DebugDatetimeMsec.IsNull() {
 		if value.Exists() {
 			data.DebugDatetimeMsec = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DebugDatetimeMsec = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DebugDatetimeMsec.IsNull() {
 		data.DebugDatetimeMsec = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "debug.datetime.show-timezone"); !data.DebugDatetimeShowTimezone.IsNull() {
 		if value.Exists() {
 			data.DebugDatetimeShowTimezone = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DebugDatetimeShowTimezone = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DebugDatetimeShowTimezone.IsNull() {
 		data.DebugDatetimeShowTimezone = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "debug.datetime.year"); !data.DebugDatetimeYear.IsNull() {
 		if value.Exists() {
 			data.DebugDatetimeYear = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DebugDatetimeYear = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DebugDatetimeYear.IsNull() {
 		data.DebugDatetimeYear = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "debug.uptime"); !data.DebugUptime.IsNull() {
 		if value.Exists() {
 			data.DebugUptime = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DebugUptime = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DebugUptime.IsNull() {
 		data.DebugUptime = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "debug.disable"); !data.DebugDisable.IsNull() {
 		if value.Exists() {
 			data.DebugDisable = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DebugDisable = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DebugDisable.IsNull() {
 		data.DebugDisable = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "log.datetime.localtime-only"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.LogDatetimeLocaltimeOnly.IsNull() {
 		if value.Exists() {
 			data.LogDatetimeLocaltimeOnly = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.LogDatetimeLocaltimeOnly = types.BoolValue(false)
 		}
-	} else {
+	} else if data.LogDatetimeLocaltimeOnly.IsNull() {
 		data.LogDatetimeLocaltimeOnly = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "log.datetime.localtime"); !data.LogDatetimeLocaltime.IsNull() {
 		if value.Exists() {
 			data.LogDatetimeLocaltime = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.LogDatetimeLocaltime = types.BoolValue(false)
 		}
-	} else {
+	} else if data.LogDatetimeLocaltime.IsNull() {
 		data.LogDatetimeLocaltime = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "log.datetime.msec"); !data.LogDatetimeMsec.IsNull() {
 		if value.Exists() {
 			data.LogDatetimeMsec = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.LogDatetimeMsec = types.BoolValue(false)
 		}
-	} else {
+	} else if data.LogDatetimeMsec.IsNull() {
 		data.LogDatetimeMsec = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "log.datetime.show-timezone"); !data.LogDatetimeShowTimezone.IsNull() {
 		if value.Exists() {
 			data.LogDatetimeShowTimezone = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.LogDatetimeShowTimezone = types.BoolValue(false)
 		}
-	} else {
+	} else if data.LogDatetimeShowTimezone.IsNull() {
 		data.LogDatetimeShowTimezone = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "log.datetime.year"); !data.LogDatetimeYear.IsNull() {
 		if value.Exists() {
 			data.LogDatetimeYear = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.LogDatetimeYear = types.BoolValue(false)
 		}
-	} else {
+	} else if data.LogDatetimeYear.IsNull() {
 		data.LogDatetimeYear = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "log.uptime"); !data.LogUptime.IsNull() {
 		if value.Exists() {
 			data.LogUptime = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.LogUptime = types.BoolValue(false)
 		}
-	} else {
+	} else if data.LogUptime.IsNull() {
 		data.LogUptime = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "log.disable"); !data.LogDisable.IsNull() {
 		if value.Exists() {
 			data.LogDisable = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.LogDisable = types.BoolValue(false)
 		}
-	} else {
+	} else if data.LogDisable.IsNull() {
 		data.LogDisable = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "debug.datetime.usec"); helpers.VersionAtLeast(version, "25.4") && !data.DebugDatetimeUsec.IsNull() {
 		if value.Exists() {
 			data.DebugDatetimeUsec = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DebugDatetimeUsec = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DebugDatetimeUsec.IsNull() {
 		data.DebugDatetimeUsec = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "log.datetime.usec"); helpers.VersionAtLeast(version, "25.4") && !data.LogDatetimeUsec.IsNull() {
 		if value.Exists() {
 			data.LogDatetimeUsec = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.LogDatetimeUsec = types.BoolValue(false)
 		}
-	} else {
+	} else if data.LogDatetimeUsec.IsNull() {
 		data.LogDatetimeUsec = types.BoolNull()
 	}
 }
@@ -433,7 +465,8 @@ func (data *ServiceTimestamps) fromBody(ctx context.Context, res []byte, version
 	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "debug.datetime.localtime-only"); value.Exists() {
 			data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)
-		} else {
+		} else if !data.DebugDatetimeLocaltimeOnly.IsNull() {
+			// Only set to false if it was previously set in state
 			data.DebugDatetimeLocaltimeOnly = types.BoolValue(false)
 		}
 	} else {
@@ -441,38 +474,45 @@ func (data *ServiceTimestamps) fromBody(ctx context.Context, res []byte, version
 	}
 	if value := gjson.GetBytes(res, "debug.datetime.localtime"); value.Exists() {
 		data.DebugDatetimeLocaltime = types.BoolValue(true)
-	} else {
+	} else if !data.DebugDatetimeLocaltime.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DebugDatetimeLocaltime = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "debug.datetime.msec"); value.Exists() {
 		data.DebugDatetimeMsec = types.BoolValue(true)
-	} else {
+	} else if !data.DebugDatetimeMsec.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DebugDatetimeMsec = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "debug.datetime.show-timezone"); value.Exists() {
 		data.DebugDatetimeShowTimezone = types.BoolValue(true)
-	} else {
+	} else if !data.DebugDatetimeShowTimezone.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DebugDatetimeShowTimezone = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "debug.datetime.year"); value.Exists() {
 		data.DebugDatetimeYear = types.BoolValue(true)
-	} else {
+	} else if !data.DebugDatetimeYear.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DebugDatetimeYear = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "debug.uptime"); value.Exists() {
 		data.DebugUptime = types.BoolValue(true)
-	} else {
+	} else if !data.DebugUptime.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DebugUptime = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "debug.disable"); value.Exists() {
 		data.DebugDisable = types.BoolValue(true)
-	} else {
+	} else if !data.DebugDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DebugDisable = types.BoolValue(false)
 	}
 	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "log.datetime.localtime-only"); value.Exists() {
 			data.LogDatetimeLocaltimeOnly = types.BoolValue(true)
-		} else {
+		} else if !data.LogDatetimeLocaltimeOnly.IsNull() {
+			// Only set to false if it was previously set in state
 			data.LogDatetimeLocaltimeOnly = types.BoolValue(false)
 		}
 	} else {
@@ -480,38 +520,45 @@ func (data *ServiceTimestamps) fromBody(ctx context.Context, res []byte, version
 	}
 	if value := gjson.GetBytes(res, "log.datetime.localtime"); value.Exists() {
 		data.LogDatetimeLocaltime = types.BoolValue(true)
-	} else {
+	} else if !data.LogDatetimeLocaltime.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LogDatetimeLocaltime = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "log.datetime.msec"); value.Exists() {
 		data.LogDatetimeMsec = types.BoolValue(true)
-	} else {
+	} else if !data.LogDatetimeMsec.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LogDatetimeMsec = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "log.datetime.show-timezone"); value.Exists() {
 		data.LogDatetimeShowTimezone = types.BoolValue(true)
-	} else {
+	} else if !data.LogDatetimeShowTimezone.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LogDatetimeShowTimezone = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "log.datetime.year"); value.Exists() {
 		data.LogDatetimeYear = types.BoolValue(true)
-	} else {
+	} else if !data.LogDatetimeYear.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LogDatetimeYear = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "log.uptime"); value.Exists() {
 		data.LogUptime = types.BoolValue(true)
-	} else {
+	} else if !data.LogUptime.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LogUptime = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "log.disable"); value.Exists() {
 		data.LogDisable = types.BoolValue(true)
-	} else {
+	} else if !data.LogDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LogDisable = types.BoolValue(false)
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "debug.datetime.usec"); value.Exists() {
 			data.DebugDatetimeUsec = types.BoolValue(true)
-		} else {
+		} else if !data.DebugDatetimeUsec.IsNull() {
+			// Only set to false if it was previously set in state
 			data.DebugDatetimeUsec = types.BoolValue(false)
 		}
 	} else {
@@ -520,7 +567,8 @@ func (data *ServiceTimestamps) fromBody(ctx context.Context, res []byte, version
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "log.datetime.usec"); value.Exists() {
 			data.LogDatetimeUsec = types.BoolValue(true)
-		} else {
+		} else if !data.LogDatetimeUsec.IsNull() {
+			// Only set to false if it was previously set in state
 			data.LogDatetimeUsec = types.BoolValue(false)
 		}
 	} else {
@@ -692,55 +740,87 @@ func (data *ServiceTimestamps) getDeletedItems(ctx context.Context, state Servic
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *ServiceTimestamps) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *ServiceTimestamps) getEmptyLeafsDelete(ctx context.Context, state *ServiceTimestamps, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.LogDatetimeUsec.IsNull() && !data.LogDatetimeUsec.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/usec"))
+		if state != nil && !state.LogDatetimeUsec.IsNull() && state.LogDatetimeUsec.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/usec"))
+		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.DebugDatetimeUsec.IsNull() && !data.DebugDatetimeUsec.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/usec"))
+		if state != nil && !state.DebugDatetimeUsec.IsNull() && state.DebugDatetimeUsec.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/usec"))
+		}
 	}
 	if !data.LogDisable.IsNull() && !data.LogDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/disable"))
+		if state != nil && !state.LogDisable.IsNull() && state.LogDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/disable"))
+		}
 	}
 	if !data.LogUptime.IsNull() && !data.LogUptime.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/uptime"))
+		if state != nil && !state.LogUptime.IsNull() && state.LogUptime.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/uptime"))
+		}
 	}
 	if !data.LogDatetimeYear.IsNull() && !data.LogDatetimeYear.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/year"))
+		if state != nil && !state.LogDatetimeYear.IsNull() && state.LogDatetimeYear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/year"))
+		}
 	}
 	if !data.LogDatetimeShowTimezone.IsNull() && !data.LogDatetimeShowTimezone.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/show-timezone"))
+		if state != nil && !state.LogDatetimeShowTimezone.IsNull() && state.LogDatetimeShowTimezone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/show-timezone"))
+		}
 	}
 	if !data.LogDatetimeMsec.IsNull() && !data.LogDatetimeMsec.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/msec"))
+		if state != nil && !state.LogDatetimeMsec.IsNull() && state.LogDatetimeMsec.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/msec"))
+		}
 	}
 	if !data.LogDatetimeLocaltime.IsNull() && !data.LogDatetimeLocaltime.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/localtime"))
+		if state != nil && !state.LogDatetimeLocaltime.IsNull() && state.LogDatetimeLocaltime.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/localtime"))
+		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.LogDatetimeLocaltimeOnly.IsNull() && !data.LogDatetimeLocaltimeOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/localtime-only"))
+		if state != nil && !state.LogDatetimeLocaltimeOnly.IsNull() && state.LogDatetimeLocaltimeOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/localtime-only"))
+		}
 	}
 	if !data.DebugDisable.IsNull() && !data.DebugDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/disable"))
+		if state != nil && !state.DebugDisable.IsNull() && state.DebugDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/disable"))
+		}
 	}
 	if !data.DebugUptime.IsNull() && !data.DebugUptime.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/uptime"))
+		if state != nil && !state.DebugUptime.IsNull() && state.DebugUptime.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/uptime"))
+		}
 	}
 	if !data.DebugDatetimeYear.IsNull() && !data.DebugDatetimeYear.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/year"))
+		if state != nil && !state.DebugDatetimeYear.IsNull() && state.DebugDatetimeYear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/year"))
+		}
 	}
 	if !data.DebugDatetimeShowTimezone.IsNull() && !data.DebugDatetimeShowTimezone.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/show-timezone"))
+		if state != nil && !state.DebugDatetimeShowTimezone.IsNull() && state.DebugDatetimeShowTimezone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/show-timezone"))
+		}
 	}
 	if !data.DebugDatetimeMsec.IsNull() && !data.DebugDatetimeMsec.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/msec"))
+		if state != nil && !state.DebugDatetimeMsec.IsNull() && state.DebugDatetimeMsec.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/msec"))
+		}
 	}
 	if !data.DebugDatetimeLocaltime.IsNull() && !data.DebugDatetimeLocaltime.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/localtime"))
+		if state != nil && !state.DebugDatetimeLocaltime.IsNull() && state.DebugDatetimeLocaltime.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/localtime"))
+		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.DebugDatetimeLocaltimeOnly.IsNull() && !data.DebugDatetimeLocaltimeOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/localtime-only"))
+		if state != nil && !state.DebugDatetimeLocaltimeOnly.IsNull() && state.DebugDatetimeLocaltimeOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/localtime-only"))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -798,7 +878,812 @@ func (data *ServiceTimestamps) getDeletePaths(ctx context.Context, version strin
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.DebugDatetimeLocaltimeOnly.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPathForVersion(version), "debug/datetime/localtime-only"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data ServiceTimestamps) toBodyXML(ctx context.Context, stateArg ...*ServiceTimestamps) string {
+	var state *ServiceTimestamps
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.DebugDatetimeLocaltimeOnly.IsNull() && !data.DebugDatetimeLocaltimeOnly.IsUnknown() {
+		if data.DebugDatetimeLocaltimeOnly.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/debug/datetime/localtime-only", "")
+		}
+	}
+	if !data.DebugDatetimeLocaltime.IsNull() && !data.DebugDatetimeLocaltime.IsUnknown() {
+		if data.DebugDatetimeLocaltime.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/debug/datetime/localtime", "")
+		}
+	}
+	if !data.DebugDatetimeMsec.IsNull() && !data.DebugDatetimeMsec.IsUnknown() {
+		if data.DebugDatetimeMsec.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/debug/datetime/msec", "")
+		}
+	}
+	if !data.DebugDatetimeShowTimezone.IsNull() && !data.DebugDatetimeShowTimezone.IsUnknown() {
+		if data.DebugDatetimeShowTimezone.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/debug/datetime/show-timezone", "")
+		}
+	}
+	if !data.DebugDatetimeYear.IsNull() && !data.DebugDatetimeYear.IsUnknown() {
+		if data.DebugDatetimeYear.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/debug/datetime/year", "")
+		}
+	}
+	if !data.DebugUptime.IsNull() && !data.DebugUptime.IsUnknown() {
+		if data.DebugUptime.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/debug/uptime", "")
+		}
+	}
+	if !data.DebugDisable.IsNull() && !data.DebugDisable.IsUnknown() {
+		if data.DebugDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/debug/disable", "")
+		}
+	}
+	if !data.LogDatetimeLocaltimeOnly.IsNull() && !data.LogDatetimeLocaltimeOnly.IsUnknown() {
+		if data.LogDatetimeLocaltimeOnly.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/datetime/localtime-only", "")
+		}
+	}
+	if !data.LogDatetimeLocaltime.IsNull() && !data.LogDatetimeLocaltime.IsUnknown() {
+		if data.LogDatetimeLocaltime.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/datetime/localtime", "")
+		}
+	}
+	if !data.LogDatetimeMsec.IsNull() && !data.LogDatetimeMsec.IsUnknown() {
+		if data.LogDatetimeMsec.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/datetime/msec", "")
+		}
+	}
+	if !data.LogDatetimeShowTimezone.IsNull() && !data.LogDatetimeShowTimezone.IsUnknown() {
+		if data.LogDatetimeShowTimezone.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/datetime/show-timezone", "")
+		}
+	}
+	if !data.LogDatetimeYear.IsNull() && !data.LogDatetimeYear.IsUnknown() {
+		if data.LogDatetimeYear.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/datetime/year", "")
+		}
+	}
+	if !data.LogUptime.IsNull() && !data.LogUptime.IsUnknown() {
+		if data.LogUptime.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/uptime", "")
+		}
+	}
+	if !data.LogDisable.IsNull() && !data.LogDisable.IsUnknown() {
+		if data.LogDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/disable", "")
+		}
+	}
+	if !data.DebugDatetimeUsec.IsNull() && !data.DebugDatetimeUsec.IsUnknown() {
+		if data.DebugDatetimeUsec.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/debug/datetime/usec", "")
+		}
+	}
+	if !data.LogDatetimeUsec.IsNull() && !data.LogDatetimeUsec.IsUnknown() {
+		if data.LogDatetimeUsec.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/datetime/usec", "")
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *ServiceTimestamps) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/localtime-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DebugDatetimeLocaltimeOnly.IsNull() {
+			data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DebugDatetimeLocaltimeOnly.IsNull() {
+			data.DebugDatetimeLocaltimeOnly = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/localtime"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DebugDatetimeLocaltime.IsNull() {
+			data.DebugDatetimeLocaltime = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DebugDatetimeLocaltime.IsNull() {
+			data.DebugDatetimeLocaltime = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/msec"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DebugDatetimeMsec.IsNull() {
+			data.DebugDatetimeMsec = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DebugDatetimeMsec.IsNull() {
+			data.DebugDatetimeMsec = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/show-timezone"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DebugDatetimeShowTimezone.IsNull() {
+			data.DebugDatetimeShowTimezone = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DebugDatetimeShowTimezone.IsNull() {
+			data.DebugDatetimeShowTimezone = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/year"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DebugDatetimeYear.IsNull() {
+			data.DebugDatetimeYear = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DebugDatetimeYear.IsNull() {
+			data.DebugDatetimeYear = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/uptime"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DebugUptime.IsNull() {
+			data.DebugUptime = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DebugUptime.IsNull() {
+			data.DebugUptime = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DebugDisable.IsNull() {
+			data.DebugDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DebugDisable.IsNull() {
+			data.DebugDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/localtime-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogDatetimeLocaltimeOnly.IsNull() {
+			data.LogDatetimeLocaltimeOnly = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogDatetimeLocaltimeOnly.IsNull() {
+			data.LogDatetimeLocaltimeOnly = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/localtime"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogDatetimeLocaltime.IsNull() {
+			data.LogDatetimeLocaltime = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogDatetimeLocaltime.IsNull() {
+			data.LogDatetimeLocaltime = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/msec"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogDatetimeMsec.IsNull() {
+			data.LogDatetimeMsec = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogDatetimeMsec.IsNull() {
+			data.LogDatetimeMsec = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/show-timezone"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogDatetimeShowTimezone.IsNull() {
+			data.LogDatetimeShowTimezone = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogDatetimeShowTimezone.IsNull() {
+			data.LogDatetimeShowTimezone = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/year"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogDatetimeYear.IsNull() {
+			data.LogDatetimeYear = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogDatetimeYear.IsNull() {
+			data.LogDatetimeYear = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/uptime"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogUptime.IsNull() {
+			data.LogUptime = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogUptime.IsNull() {
+			data.LogUptime = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogDisable.IsNull() {
+			data.LogDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogDisable.IsNull() {
+			data.LogDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/usec"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DebugDatetimeUsec.IsNull() {
+			data.DebugDatetimeUsec = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DebugDatetimeUsec.IsNull() {
+			data.DebugDatetimeUsec = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/usec"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogDatetimeUsec.IsNull() {
+			data.LogDatetimeUsec = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogDatetimeUsec.IsNull() {
+			data.LogDatetimeUsec = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *ServiceTimestamps) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/localtime-only"); value.Exists() {
+		data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeLocaltimeOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/localtime"); value.Exists() {
+		data.DebugDatetimeLocaltime = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeLocaltime = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/msec"); value.Exists() {
+		data.DebugDatetimeMsec = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeMsec = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/show-timezone"); value.Exists() {
+		data.DebugDatetimeShowTimezone = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeShowTimezone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/year"); value.Exists() {
+		data.DebugDatetimeYear = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeYear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/uptime"); value.Exists() {
+		data.DebugUptime = types.BoolValue(true)
+	} else {
+		data.DebugUptime = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/disable"); value.Exists() {
+		data.DebugDisable = types.BoolValue(true)
+	} else {
+		data.DebugDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/localtime-only"); value.Exists() {
+		data.LogDatetimeLocaltimeOnly = types.BoolValue(true)
+	} else {
+		data.LogDatetimeLocaltimeOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/localtime"); value.Exists() {
+		data.LogDatetimeLocaltime = types.BoolValue(true)
+	} else {
+		data.LogDatetimeLocaltime = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/msec"); value.Exists() {
+		data.LogDatetimeMsec = types.BoolValue(true)
+	} else {
+		data.LogDatetimeMsec = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/show-timezone"); value.Exists() {
+		data.LogDatetimeShowTimezone = types.BoolValue(true)
+	} else {
+		data.LogDatetimeShowTimezone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/year"); value.Exists() {
+		data.LogDatetimeYear = types.BoolValue(true)
+	} else {
+		data.LogDatetimeYear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/uptime"); value.Exists() {
+		data.LogUptime = types.BoolValue(true)
+	} else {
+		data.LogUptime = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/disable"); value.Exists() {
+		data.LogDisable = types.BoolValue(true)
+	} else {
+		data.LogDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/usec"); value.Exists() {
+		data.DebugDatetimeUsec = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeUsec = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/usec"); value.Exists() {
+		data.LogDatetimeUsec = types.BoolValue(true)
+	} else {
+		data.LogDatetimeUsec = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *ServiceTimestampsData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/localtime-only"); value.Exists() {
+		data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeLocaltimeOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/localtime"); value.Exists() {
+		data.DebugDatetimeLocaltime = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeLocaltime = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/msec"); value.Exists() {
+		data.DebugDatetimeMsec = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeMsec = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/show-timezone"); value.Exists() {
+		data.DebugDatetimeShowTimezone = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeShowTimezone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/year"); value.Exists() {
+		data.DebugDatetimeYear = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeYear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/uptime"); value.Exists() {
+		data.DebugUptime = types.BoolValue(true)
+	} else {
+		data.DebugUptime = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/disable"); value.Exists() {
+		data.DebugDisable = types.BoolValue(true)
+	} else {
+		data.DebugDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/localtime-only"); value.Exists() {
+		data.LogDatetimeLocaltimeOnly = types.BoolValue(true)
+	} else {
+		data.LogDatetimeLocaltimeOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/localtime"); value.Exists() {
+		data.LogDatetimeLocaltime = types.BoolValue(true)
+	} else {
+		data.LogDatetimeLocaltime = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/msec"); value.Exists() {
+		data.LogDatetimeMsec = types.BoolValue(true)
+	} else {
+		data.LogDatetimeMsec = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/show-timezone"); value.Exists() {
+		data.LogDatetimeShowTimezone = types.BoolValue(true)
+	} else {
+		data.LogDatetimeShowTimezone = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/year"); value.Exists() {
+		data.LogDatetimeYear = types.BoolValue(true)
+	} else {
+		data.LogDatetimeYear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/uptime"); value.Exists() {
+		data.LogUptime = types.BoolValue(true)
+	} else {
+		data.LogUptime = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/disable"); value.Exists() {
+		data.LogDisable = types.BoolValue(true)
+	} else {
+		data.LogDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/debug/datetime/usec"); value.Exists() {
+		data.DebugDatetimeUsec = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeUsec = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/datetime/usec"); value.Exists() {
+		data.LogDatetimeUsec = types.BoolValue(true)
+	} else {
+		data.LogDatetimeUsec = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *ServiceTimestamps) addDeletedItemsXML(ctx context.Context, state ServiceTimestamps, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogDatetimeUsec.IsNull() && state.LogDatetimeUsec.ValueBool() && data.LogDatetimeUsec.IsNull() {
+		deletePath := state.getXPath() + "/log/datetime/usec"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DebugDatetimeUsec.IsNull() && state.DebugDatetimeUsec.ValueBool() && data.DebugDatetimeUsec.IsNull() {
+		deletePath := state.getXPath() + "/debug/datetime/usec"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogDisable.IsNull() && state.LogDisable.ValueBool() && data.LogDisable.IsNull() {
+		deletePath := state.getXPath() + "/log/disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogUptime.IsNull() && state.LogUptime.ValueBool() && data.LogUptime.IsNull() {
+		deletePath := state.getXPath() + "/log/uptime"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogDatetimeYear.IsNull() && state.LogDatetimeYear.ValueBool() && data.LogDatetimeYear.IsNull() {
+		deletePath := state.getXPath() + "/log/datetime/year"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogDatetimeShowTimezone.IsNull() && state.LogDatetimeShowTimezone.ValueBool() && data.LogDatetimeShowTimezone.IsNull() {
+		deletePath := state.getXPath() + "/log/datetime/show-timezone"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogDatetimeMsec.IsNull() && state.LogDatetimeMsec.ValueBool() && data.LogDatetimeMsec.IsNull() {
+		deletePath := state.getXPath() + "/log/datetime/msec"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogDatetimeLocaltime.IsNull() && state.LogDatetimeLocaltime.ValueBool() && data.LogDatetimeLocaltime.IsNull() {
+		deletePath := state.getXPath() + "/log/datetime/localtime"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogDatetimeLocaltimeOnly.IsNull() && state.LogDatetimeLocaltimeOnly.ValueBool() && data.LogDatetimeLocaltimeOnly.IsNull() {
+		deletePath := state.getXPath() + "/log/datetime/localtime-only"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DebugDisable.IsNull() && state.DebugDisable.ValueBool() && data.DebugDisable.IsNull() {
+		deletePath := state.getXPath() + "/debug/disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DebugUptime.IsNull() && state.DebugUptime.ValueBool() && data.DebugUptime.IsNull() {
+		deletePath := state.getXPath() + "/debug/uptime"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DebugDatetimeYear.IsNull() && state.DebugDatetimeYear.ValueBool() && data.DebugDatetimeYear.IsNull() {
+		deletePath := state.getXPath() + "/debug/datetime/year"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DebugDatetimeShowTimezone.IsNull() && state.DebugDatetimeShowTimezone.ValueBool() && data.DebugDatetimeShowTimezone.IsNull() {
+		deletePath := state.getXPath() + "/debug/datetime/show-timezone"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DebugDatetimeMsec.IsNull() && state.DebugDatetimeMsec.ValueBool() && data.DebugDatetimeMsec.IsNull() {
+		deletePath := state.getXPath() + "/debug/datetime/msec"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DebugDatetimeLocaltime.IsNull() && state.DebugDatetimeLocaltime.ValueBool() && data.DebugDatetimeLocaltime.IsNull() {
+		deletePath := state.getXPath() + "/debug/datetime/localtime"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DebugDatetimeLocaltimeOnly.IsNull() && state.DebugDatetimeLocaltimeOnly.ValueBool() && data.DebugDatetimeLocaltimeOnly.IsNull() {
+		deletePath := state.getXPath() + "/debug/datetime/localtime-only"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *ServiceTimestamps) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.LogDatetimeUsec.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log/datetime/usec")
+	}
+	if !data.DebugDatetimeUsec.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/debug/datetime/usec")
+	}
+	if !data.LogDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log/disable")
+	}
+	if !data.LogUptime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log/uptime")
+	}
+	if !data.LogDatetimeYear.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log/datetime/year")
+	}
+	if !data.LogDatetimeShowTimezone.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log/datetime/show-timezone")
+	}
+	if !data.LogDatetimeMsec.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log/datetime/msec")
+	}
+	if !data.LogDatetimeLocaltime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log/datetime/localtime")
+	}
+	if !data.LogDatetimeLocaltimeOnly.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log/datetime/localtime-only")
+	}
+	if !data.DebugDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/debug/disable")
+	}
+	if !data.DebugUptime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/debug/uptime")
+	}
+	if !data.DebugDatetimeYear.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/debug/datetime/year")
+	}
+	if !data.DebugDatetimeShowTimezone.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/debug/datetime/show-timezone")
+	}
+	if !data.DebugDatetimeMsec.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/debug/datetime/msec")
+	}
+	if !data.DebugDatetimeLocaltime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/debug/datetime/localtime")
+	}
+	if !data.DebugDatetimeLocaltimeOnly.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/debug/datetime/localtime-only")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

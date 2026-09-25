@@ -86,26 +86,26 @@ func iosxrL2VPNBridgeGroupBridgeDomainAccessVFIImportStateIdFunc(resourceName st
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrL2VPNBridgeGroupBridgeDomainAccessVFIPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
 	attributes = {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]"
 	attributes = {
 		"group-name" = "BG123"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]/bridge-domains/bridge-domain[bridge-domain-name=BD123]"
 	attributes = {
 		"bridge-domain-name" = "BD123"
 	}
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_yang.PreReq1, ]
 }
 
 `
@@ -119,7 +119,7 @@ func testAccIosxrL2VPNBridgeGroupBridgeDomainAccessVFIConfig_minimum() string {
 	config += `	bridge_group_name = "BG123"` + "\n"
 	config += `	bridge_domain_name = "BD123"` + "\n"
 	config += `	access_vfi_name = "ACCESS_VFI1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -142,7 +142,7 @@ func testAccIosxrL2VPNBridgeGroupBridgeDomainAccessVFIConfig_all() string {
 	config += `		}]` + "\n"
 	config += `		pw_class = "PW_CLASS_1"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

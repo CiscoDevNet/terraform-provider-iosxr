@@ -24,10 +24,15 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -84,6 +89,19 @@ func (data PerformanceMeasurementInterface) getPath() string {
 
 func (data PerformanceMeasurementInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data PerformanceMeasurementInterface) getXPath() string {
+	path := "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/interfaces/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
+}
+
+func (data PerformanceMeasurementInterfaceData) getXPath() string {
+	path := "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/interfaces/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -212,93 +230,100 @@ func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context,
 		if value.Exists() {
 			data.DelayMeasurement = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DelayMeasurement = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DelayMeasurement.IsNull() {
 		data.DelayMeasurement = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.fallback"); !data.DelayMeasurementFallback.IsNull() {
 		if value.Exists() {
 			data.DelayMeasurementFallback = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.DelayMeasurementFallback = types.BoolValue(false)
 		}
-	} else {
+	} else if data.DelayMeasurementFallback.IsNull() {
 		data.DelayMeasurementFallback = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.advertise-delay"); value.Exists() && !data.DelayMeasurementAdvertiseDelay.IsNull() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayMeasurementAdvertiseDelay.IsNull() {
 		data.DelayMeasurementAdvertiseDelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.delay-profile.name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringValue(value.String())
-	} else {
+	} else if data.DelayMeasurementProfileName.IsNull() {
 		data.DelayMeasurementProfileName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.static-delay"); value.Exists() && !data.DelayMeasurementStaticDelay.IsNull() {
 		data.DelayMeasurementStaticDelay = types.Int64Value(value.Int())
-	} else {
+	} else if data.DelayMeasurementStaticDelay.IsNull() {
 		data.DelayMeasurementStaticDelay = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "next-hop.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NextHopIpv4.IsNull() {
 		data.NextHopIpv4 = types.StringValue(value.String())
-	} else {
+	} else if data.NextHopIpv4.IsNull() {
 		data.NextHopIpv4 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "next-hop.ipv6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NextHopIpv6.IsNull() {
 		data.NextHopIpv6 = types.StringValue(value.String())
-	} else {
+	} else if data.NextHopIpv6.IsNull() {
 		data.NextHopIpv6 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "path-tracing"); !data.PathTracing.IsNull() {
 		if value.Exists() {
 			data.PathTracing = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.PathTracing = types.BoolValue(false)
 		}
-	} else {
+	} else if data.PathTracing.IsNull() {
 		data.PathTracing = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "path-tracing.interface-id"); value.Exists() && !data.PathTracingInterfaceId.IsNull() {
 		data.PathTracingInterfaceId = types.Int64Value(value.Int())
-	} else {
+	} else if data.PathTracingInterfaceId.IsNull() {
 		data.PathTracingInterfaceId = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st0"); !data.PathTracingTimestampTemplateSt0.IsNull() {
 		if value.Exists() {
 			data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.PathTracingTimestampTemplateSt0 = types.BoolValue(false)
 		}
-	} else {
+	} else if data.PathTracingTimestampTemplateSt0.IsNull() {
 		data.PathTracingTimestampTemplateSt0 = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st1"); !data.PathTracingTimestampTemplateSt1.IsNull() {
 		if value.Exists() {
 			data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.PathTracingTimestampTemplateSt1 = types.BoolValue(false)
 		}
-	} else {
+	} else if data.PathTracingTimestampTemplateSt1.IsNull() {
 		data.PathTracingTimestampTemplateSt1 = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st2"); !data.PathTracingTimestampTemplateSt2.IsNull() {
 		if value.Exists() {
 			data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.PathTracingTimestampTemplateSt2 = types.BoolValue(false)
 		}
-	} else {
+	} else if data.PathTracingTimestampTemplateSt2.IsNull() {
 		data.PathTracingTimestampTemplateSt2 = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st3"); !data.PathTracingTimestampTemplateSt3.IsNull() {
 		if value.Exists() {
 			data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.PathTracingTimestampTemplateSt3 = types.BoolValue(false)
 		}
-	} else {
+	} else if data.PathTracingTimestampTemplateSt3.IsNull() {
 		data.PathTracingTimestampTemplateSt3 = types.BoolNull()
 	}
 }
@@ -310,12 +335,14 @@ func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context,
 func (data *PerformanceMeasurementInterface) fromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "delay-measurement"); value.Exists() {
 		data.DelayMeasurement = types.BoolValue(true)
-	} else {
+	} else if !data.DelayMeasurement.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DelayMeasurement = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.fallback"); value.Exists() {
 		data.DelayMeasurementFallback = types.BoolValue(true)
-	} else {
+	} else if !data.DelayMeasurementFallback.IsNull() {
+		// Only set to false if it was previously set in state
 		data.DelayMeasurementFallback = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "delay-measurement.advertise-delay"); value.Exists() {
@@ -335,7 +362,8 @@ func (data *PerformanceMeasurementInterface) fromBody(ctx context.Context, res [
 	}
 	if value := gjson.GetBytes(res, "path-tracing"); value.Exists() {
 		data.PathTracing = types.BoolValue(true)
-	} else {
+	} else if !data.PathTracing.IsNull() {
+		// Only set to false if it was previously set in state
 		data.PathTracing = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "path-tracing.interface-id"); value.Exists() {
@@ -343,22 +371,26 @@ func (data *PerformanceMeasurementInterface) fromBody(ctx context.Context, res [
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st0"); value.Exists() {
 		data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
-	} else {
+	} else if !data.PathTracingTimestampTemplateSt0.IsNull() {
+		// Only set to false if it was previously set in state
 		data.PathTracingTimestampTemplateSt0 = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st1"); value.Exists() {
 		data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
-	} else {
+	} else if !data.PathTracingTimestampTemplateSt1.IsNull() {
+		// Only set to false if it was previously set in state
 		data.PathTracingTimestampTemplateSt1 = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st2"); value.Exists() {
 		data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
-	} else {
+	} else if !data.PathTracingTimestampTemplateSt2.IsNull() {
+		// Only set to false if it was previously set in state
 		data.PathTracingTimestampTemplateSt2 = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "path-tracing.timestamp.template.st3"); value.Exists() {
 		data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
-	} else {
+	} else if !data.PathTracingTimestampTemplateSt3.IsNull() {
+		// Only set to false if it was previously set in state
 		data.PathTracingTimestampTemplateSt3 = types.BoolValue(false)
 	}
 }
@@ -475,28 +507,42 @@ func (data *PerformanceMeasurementInterface) getDeletedItems(ctx context.Context
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *PerformanceMeasurementInterface) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *PerformanceMeasurementInterface) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementInterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.PathTracingTimestampTemplateSt3.IsNull() && !data.PathTracingTimestampTemplateSt3.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st3"))
+		if state != nil && !state.PathTracingTimestampTemplateSt3.IsNull() && state.PathTracingTimestampTemplateSt3.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st3"))
+		}
 	}
 	if !data.PathTracingTimestampTemplateSt2.IsNull() && !data.PathTracingTimestampTemplateSt2.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st2"))
+		if state != nil && !state.PathTracingTimestampTemplateSt2.IsNull() && state.PathTracingTimestampTemplateSt2.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st2"))
+		}
 	}
 	if !data.PathTracingTimestampTemplateSt1.IsNull() && !data.PathTracingTimestampTemplateSt1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st1"))
+		if state != nil && !state.PathTracingTimestampTemplateSt1.IsNull() && state.PathTracingTimestampTemplateSt1.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st1"))
+		}
 	}
 	if !data.PathTracingTimestampTemplateSt0.IsNull() && !data.PathTracingTimestampTemplateSt0.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st0"))
+		if state != nil && !state.PathTracingTimestampTemplateSt0.IsNull() && state.PathTracingTimestampTemplateSt0.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st0"))
+		}
 	}
 	if !data.PathTracing.IsNull() && !data.PathTracing.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing"))
+		if state != nil && !state.PathTracing.IsNull() && state.PathTracing.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing"))
+		}
 	}
 	if !data.DelayMeasurementFallback.IsNull() && !data.DelayMeasurementFallback.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "delay-measurement"))
+		if state != nil && !state.DelayMeasurementFallback.IsNull() && state.DelayMeasurementFallback.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "delay-measurement"))
+		}
 	}
 	if !data.DelayMeasurement.IsNull() && !data.DelayMeasurement.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "delay-measurement"))
+		if state != nil && !state.DelayMeasurement.IsNull() && state.DelayMeasurement.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "delay-measurement"))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -545,7 +591,613 @@ func (data *PerformanceMeasurementInterface) getDeletePaths(ctx context.Context,
 	if !data.DelayMeasurement.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "delay-measurement"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data PerformanceMeasurementInterface) toBodyXML(ctx context.Context, stateArg ...*PerformanceMeasurementInterface) string {
+	var state *PerformanceMeasurementInterface
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.DelayMeasurement.IsNull() && !data.DelayMeasurement.IsUnknown() {
+		if data.DelayMeasurement.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/delay-measurement", "")
+		}
+	}
+	if !data.DelayMeasurementFallback.IsNull() && !data.DelayMeasurementFallback.IsUnknown() {
+		if data.DelayMeasurementFallback.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/delay-measurement/fallback", "")
+		}
+	}
+	if !data.DelayMeasurementAdvertiseDelay.IsNull() && !data.DelayMeasurementAdvertiseDelay.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/delay-measurement/advertise-delay", strconv.FormatInt(data.DelayMeasurementAdvertiseDelay.ValueInt64(), 10))
+	}
+	if !data.DelayMeasurementProfileName.IsNull() && !data.DelayMeasurementProfileName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/delay-measurement/delay-profile/name", data.DelayMeasurementProfileName.ValueString())
+	}
+	if !data.DelayMeasurementStaticDelay.IsNull() && !data.DelayMeasurementStaticDelay.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/delay-measurement/static-delay", strconv.FormatInt(data.DelayMeasurementStaticDelay.ValueInt64(), 10))
+	}
+	if !data.NextHopIpv4.IsNull() && !data.NextHopIpv4.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/next-hop/ipv4", data.NextHopIpv4.ValueString())
+	}
+	if !data.NextHopIpv6.IsNull() && !data.NextHopIpv6.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/next-hop/ipv6", data.NextHopIpv6.ValueString())
+	}
+	if !data.PathTracing.IsNull() && !data.PathTracing.IsUnknown() {
+		if data.PathTracing.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/path-tracing", "")
+		}
+	}
+	if !data.PathTracingInterfaceId.IsNull() && !data.PathTracingInterfaceId.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/path-tracing/interface-id", strconv.FormatInt(data.PathTracingInterfaceId.ValueInt64(), 10))
+	}
+	if !data.PathTracingTimestampTemplateSt0.IsNull() && !data.PathTracingTimestampTemplateSt0.IsUnknown() {
+		if data.PathTracingTimestampTemplateSt0.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/path-tracing/timestamp/template/st0", "")
+		}
+	}
+	if !data.PathTracingTimestampTemplateSt1.IsNull() && !data.PathTracingTimestampTemplateSt1.IsUnknown() {
+		if data.PathTracingTimestampTemplateSt1.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/path-tracing/timestamp/template/st1", "")
+		}
+	}
+	if !data.PathTracingTimestampTemplateSt2.IsNull() && !data.PathTracingTimestampTemplateSt2.IsUnknown() {
+		if data.PathTracingTimestampTemplateSt2.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/path-tracing/timestamp/template/st2", "")
+		}
+	}
+	if !data.PathTracingTimestampTemplateSt3.IsNull() && !data.PathTracingTimestampTemplateSt3.IsUnknown() {
+		if data.PathTracingTimestampTemplateSt3.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/path-tracing/timestamp/template/st3", "")
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *PerformanceMeasurementInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayMeasurement.IsNull() {
+			data.DelayMeasurement = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DelayMeasurement.IsNull() {
+			data.DelayMeasurement = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/fallback"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DelayMeasurementFallback.IsNull() {
+			data.DelayMeasurementFallback = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DelayMeasurementFallback.IsNull() {
+			data.DelayMeasurementFallback = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/advertise-delay"); value.Exists() && !data.DelayMeasurementAdvertiseDelay.IsNull() {
+		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
+	} else if data.DelayMeasurementAdvertiseDelay.IsNull() {
+		data.DelayMeasurementAdvertiseDelay = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() && !data.DelayMeasurementProfileName.IsNull() {
+		data.DelayMeasurementProfileName = types.StringValue(value.String())
+	} else if data.DelayMeasurementProfileName.IsNull() {
+		data.DelayMeasurementProfileName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/static-delay"); value.Exists() && !data.DelayMeasurementStaticDelay.IsNull() {
+		data.DelayMeasurementStaticDelay = types.Int64Value(value.Int())
+	} else if data.DelayMeasurementStaticDelay.IsNull() {
+		data.DelayMeasurementStaticDelay = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv4"); value.Exists() && !data.NextHopIpv4.IsNull() {
+		data.NextHopIpv4 = types.StringValue(value.String())
+	} else if data.NextHopIpv4.IsNull() {
+		data.NextHopIpv4 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv6"); value.Exists() && !data.NextHopIpv6.IsNull() {
+		data.NextHopIpv6 = types.StringValue(value.String())
+	} else if data.NextHopIpv6.IsNull() {
+		data.NextHopIpv6 = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracing.IsNull() {
+			data.PathTracing = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PathTracing.IsNull() {
+			data.PathTracing = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/interface-id"); value.Exists() && !data.PathTracingInterfaceId.IsNull() {
+		data.PathTracingInterfaceId = types.Int64Value(value.Int())
+	} else if data.PathTracingInterfaceId.IsNull() {
+		data.PathTracingInterfaceId = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st0"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracingTimestampTemplateSt0.IsNull() {
+			data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PathTracingTimestampTemplateSt0.IsNull() {
+			data.PathTracingTimestampTemplateSt0 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracingTimestampTemplateSt1.IsNull() {
+			data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PathTracingTimestampTemplateSt1.IsNull() {
+			data.PathTracingTimestampTemplateSt1 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st2"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracingTimestampTemplateSt2.IsNull() {
+			data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PathTracingTimestampTemplateSt2.IsNull() {
+			data.PathTracingTimestampTemplateSt2 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st3"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PathTracingTimestampTemplateSt3.IsNull() {
+			data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PathTracingTimestampTemplateSt3.IsNull() {
+			data.PathTracingTimestampTemplateSt3 = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *PerformanceMeasurementInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement"); value.Exists() {
+		data.DelayMeasurement = types.BoolValue(true)
+	} else {
+		data.DelayMeasurement = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/fallback"); value.Exists() {
+		data.DelayMeasurementFallback = types.BoolValue(true)
+	} else {
+		data.DelayMeasurementFallback = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/advertise-delay"); value.Exists() {
+		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
+		data.DelayMeasurementProfileName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/static-delay"); value.Exists() {
+		data.DelayMeasurementStaticDelay = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv4"); value.Exists() {
+		data.NextHopIpv4 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv6"); value.Exists() {
+		data.NextHopIpv6 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing"); value.Exists() {
+		data.PathTracing = types.BoolValue(true)
+	} else {
+		data.PathTracing = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/interface-id"); value.Exists() {
+		data.PathTracingInterfaceId = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st0"); value.Exists() {
+		data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
+	} else {
+		data.PathTracingTimestampTemplateSt0 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st1"); value.Exists() {
+		data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
+	} else {
+		data.PathTracingTimestampTemplateSt1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st2"); value.Exists() {
+		data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
+	} else {
+		data.PathTracingTimestampTemplateSt2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st3"); value.Exists() {
+		data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
+	} else {
+		data.PathTracingTimestampTemplateSt3 = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *PerformanceMeasurementInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement"); value.Exists() {
+		data.DelayMeasurement = types.BoolValue(true)
+	} else {
+		data.DelayMeasurement = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/fallback"); value.Exists() {
+		data.DelayMeasurementFallback = types.BoolValue(true)
+	} else {
+		data.DelayMeasurementFallback = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/advertise-delay"); value.Exists() {
+		data.DelayMeasurementAdvertiseDelay = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/delay-profile/name"); value.Exists() {
+		data.DelayMeasurementProfileName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-measurement/static-delay"); value.Exists() {
+		data.DelayMeasurementStaticDelay = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv4"); value.Exists() {
+		data.NextHopIpv4 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/next-hop/ipv6"); value.Exists() {
+		data.NextHopIpv6 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing"); value.Exists() {
+		data.PathTracing = types.BoolValue(true)
+	} else {
+		data.PathTracing = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/interface-id"); value.Exists() {
+		data.PathTracingInterfaceId = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st0"); value.Exists() {
+		data.PathTracingTimestampTemplateSt0 = types.BoolValue(true)
+	} else {
+		data.PathTracingTimestampTemplateSt0 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st1"); value.Exists() {
+		data.PathTracingTimestampTemplateSt1 = types.BoolValue(true)
+	} else {
+		data.PathTracingTimestampTemplateSt1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st2"); value.Exists() {
+		data.PathTracingTimestampTemplateSt2 = types.BoolValue(true)
+	} else {
+		data.PathTracingTimestampTemplateSt2 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/path-tracing/timestamp/template/st3"); value.Exists() {
+		data.PathTracingTimestampTemplateSt3 = types.BoolValue(true)
+	} else {
+		data.PathTracingTimestampTemplateSt3 = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *PerformanceMeasurementInterface) addDeletedItemsXML(ctx context.Context, state PerformanceMeasurementInterface, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PathTracingTimestampTemplateSt3.IsNull() && state.PathTracingTimestampTemplateSt3.ValueBool() && data.PathTracingTimestampTemplateSt3.IsNull() {
+		deletePath := state.getXPath() + "/path-tracing/timestamp/template/st3"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PathTracingTimestampTemplateSt2.IsNull() && state.PathTracingTimestampTemplateSt2.ValueBool() && data.PathTracingTimestampTemplateSt2.IsNull() {
+		deletePath := state.getXPath() + "/path-tracing/timestamp/template/st2"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PathTracingTimestampTemplateSt1.IsNull() && state.PathTracingTimestampTemplateSt1.ValueBool() && data.PathTracingTimestampTemplateSt1.IsNull() {
+		deletePath := state.getXPath() + "/path-tracing/timestamp/template/st1"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PathTracingTimestampTemplateSt0.IsNull() && state.PathTracingTimestampTemplateSt0.ValueBool() && data.PathTracingTimestampTemplateSt0.IsNull() {
+		deletePath := state.getXPath() + "/path-tracing/timestamp/template/st0"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.PathTracingInterfaceId.IsNull() && data.PathTracingInterfaceId.IsNull() {
+		deletePath := state.getXPath() + "/path-tracing/interface-id"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PathTracing.IsNull() && state.PathTracing.ValueBool() && data.PathTracing.IsNull() {
+		deletePath := state.getXPath() + "/path-tracing"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.NextHopIpv6.IsNull() && data.NextHopIpv6.IsNull() {
+		deletePath := state.getXPath() + "/next-hop/ipv6"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.NextHopIpv4.IsNull() && data.NextHopIpv4.IsNull() {
+		deletePath := state.getXPath() + "/next-hop/ipv4"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DelayMeasurementStaticDelay.IsNull() && data.DelayMeasurementStaticDelay.IsNull() {
+		deletePath := state.getXPath() + "/delay-measurement/static-delay"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DelayMeasurementProfileName.IsNull() && data.DelayMeasurementProfileName.IsNull() {
+		deletePath := state.getXPath() + "/delay-measurement/delay-profile/name"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DelayMeasurementAdvertiseDelay.IsNull() && data.DelayMeasurementAdvertiseDelay.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/delay-measurement"
+		predicates := make(map[string]string)
+		if !state.DelayMeasurementFallback.IsNull() {
+			predicates["fallback"] = fmt.Sprintf("%v", state.DelayMeasurementFallback.ValueBool())
+		}
+		predicates["advertise-delay"] = fmt.Sprintf("%v", state.DelayMeasurementAdvertiseDelay.ValueInt64())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DelayMeasurementFallback.IsNull() && state.DelayMeasurementFallback.ValueBool() && data.DelayMeasurementFallback.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/delay-measurement"
+		predicates := make(map[string]string)
+		if !state.DelayMeasurementAdvertiseDelay.IsNull() {
+			predicates["advertise-delay"] = fmt.Sprintf("%v", state.DelayMeasurementAdvertiseDelay.ValueInt64())
+		}
+		predicates["fallback"] = fmt.Sprintf("%v", state.DelayMeasurementFallback.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DelayMeasurement.IsNull() && state.DelayMeasurement.ValueBool() && data.DelayMeasurement.IsNull() {
+		deletePath := state.getXPath() + "/delay-measurement"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *PerformanceMeasurementInterface) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.PathTracingTimestampTemplateSt3.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/path-tracing/timestamp/template/st3")
+	}
+	if !data.PathTracingTimestampTemplateSt2.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/path-tracing/timestamp/template/st2")
+	}
+	if !data.PathTracingTimestampTemplateSt1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/path-tracing/timestamp/template/st1")
+	}
+	if !data.PathTracingTimestampTemplateSt0.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/path-tracing/timestamp/template/st0")
+	}
+	if !data.PathTracingInterfaceId.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/path-tracing/interface-id")
+	}
+	if !data.PathTracing.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/path-tracing")
+	}
+	if !data.NextHopIpv6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/next-hop/ipv6")
+	}
+	if !data.NextHopIpv4.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/next-hop/ipv4")
+	}
+	if !data.DelayMeasurementStaticDelay.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay-measurement/static-delay")
+	}
+	if !data.DelayMeasurementProfileName.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay-measurement/delay-profile/name")
+	}
+	if !data.DelayMeasurementAdvertiseDelay.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay-measurement")
+	}
+	if !data.DelayMeasurementFallback.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay-measurement")
+	}
+	if !data.DelayMeasurement.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay-measurement")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

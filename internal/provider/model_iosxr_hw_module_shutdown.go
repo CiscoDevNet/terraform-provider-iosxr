@@ -24,9 +24,13 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -60,6 +64,19 @@ func (data HWModuleShutdown) getPath() string {
 
 func (data HWModuleShutdownData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-hw-module-shut-cfg:/hw-module/locations/location[location-name=%s]", data.LocationName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data HWModuleShutdown) getXPath() string {
+	path := "Cisco-IOS-XR-um-hw-module-shut-cfg:/hw-module/locations/location[location-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.LocationName.ValueString()))
+	return path
+}
+
+func (data HWModuleShutdownData) getXPath() string {
+	path := "Cisco-IOS-XR-um-hw-module-shut-cfg:/hw-module/locations/location[location-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.LocationName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -145,18 +162,20 @@ func (data *HWModuleShutdown) updateFromBody(ctx context.Context, res []byte, ve
 		if value.Exists() {
 			data.Shut = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.Shut = types.BoolValue(false)
 		}
-	} else {
+	} else if data.Shut.IsNull() {
 		data.Shut = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "unshut"); !data.Unshut.IsNull() {
 		if value.Exists() {
 			data.Unshut = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.Unshut = types.BoolValue(false)
 		}
-	} else {
+	} else if data.Unshut.IsNull() {
 		data.Unshut = types.BoolNull()
 	}
 }
@@ -168,12 +187,14 @@ func (data *HWModuleShutdown) updateFromBody(ctx context.Context, res []byte, ve
 func (data *HWModuleShutdown) fromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "shut"); value.Exists() {
 		data.Shut = types.BoolValue(true)
-	} else {
+	} else if !data.Shut.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Shut = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "unshut"); value.Exists() {
 		data.Unshut = types.BoolValue(true)
-	} else {
+	} else if !data.Unshut.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Unshut = types.BoolValue(false)
 	}
 }
@@ -214,13 +235,17 @@ func (data *HWModuleShutdown) getDeletedItems(ctx context.Context, state HWModul
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *HWModuleShutdown) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *HWModuleShutdown) getEmptyLeafsDelete(ctx context.Context, state *HWModuleShutdown, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.Unshut.IsNull() && !data.Unshut.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "unshut"))
+		if state != nil && !state.Unshut.IsNull() && state.Unshut.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "unshut"))
+		}
 	}
 	if !data.Shut.IsNull() && !data.Shut.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shut"))
+		if state != nil && !state.Shut.IsNull() && state.Shut.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shut"))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -236,7 +261,182 @@ func (data *HWModuleShutdown) getDeletePaths(ctx context.Context, version string
 	if !data.Shut.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "shut"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data HWModuleShutdown) toBodyXML(ctx context.Context, stateArg ...*HWModuleShutdown) string {
+	var state *HWModuleShutdown
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.Shut.IsNull() && !data.Shut.IsUnknown() {
+		if data.Shut.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/shut", "")
+		}
+	}
+	if !data.Unshut.IsNull() && !data.Unshut.IsUnknown() {
+		if data.Unshut.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/unshut", "")
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *HWModuleShutdown) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shut"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Shut.IsNull() {
+			data.Shut = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Shut.IsNull() {
+			data.Shut = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unshut"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Unshut.IsNull() {
+			data.Unshut = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Unshut.IsNull() {
+			data.Unshut = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *HWModuleShutdown) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shut"); value.Exists() {
+		data.Shut = types.BoolValue(true)
+	} else {
+		data.Shut = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unshut"); value.Exists() {
+		data.Unshut = types.BoolValue(true)
+	} else {
+		data.Unshut = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *HWModuleShutdownData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/shut"); value.Exists() {
+		data.Shut = types.BoolValue(true)
+	} else {
+		data.Shut = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/unshut"); value.Exists() {
+		data.Unshut = types.BoolValue(true)
+	} else {
+		data.Unshut = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *HWModuleShutdown) addDeletedItemsXML(ctx context.Context, state HWModuleShutdown, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Unshut.IsNull() && state.Unshut.ValueBool() && data.Unshut.IsNull() {
+		deletePath := state.getXPath() + "/unshut"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Shut.IsNull() && state.Shut.ValueBool() && data.Shut.IsNull() {
+		deletePath := state.getXPath() + "/shut"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *HWModuleShutdown) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Unshut.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/unshut")
+	}
+	if !data.Shut.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/shut")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

@@ -174,7 +174,7 @@ func TestAccDataSourceIosxrPerformanceMeasurementDelayProfile(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrPerformanceMeasurementDelayProfilePrerequisitesConfig_V24_4 = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
 	attributes = {
 	}
@@ -325,7 +325,7 @@ func testAccDataSourceIosxrPerformanceMeasurementDelayProfileConfig() string {
 		config += `	sr_policy_default_probe_timestamp_format_ntp = true` + "\n"
 	}
 	config += selectVersionDependsOn(map[string]string{
-		"24.4": `[iosxr_gnmi.PreReq0, ]`,
+		"24.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

@@ -101,6 +101,7 @@ attributes:
     example: 1
   - yang_name: tag
     tf_name: tag
+    minimum_test_value: 100
     example: 100
   - yang_name: tag-levels/tag-level
     tf_name: tag_levels

@@ -177,7 +177,7 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterBGPAddressFamilyPrerequisitesConfig_V24_4 = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
 	attributes = {
 	}
@@ -195,7 +195,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -366,7 +366,7 @@ func testAccDataSourceIosxrRouterBGPAddressFamilyConfig() string {
 		config += `	platform_oor_based_threshold = 80` + "\n"
 	}
 	config += selectVersionDependsOn(map[string]string{
-		"24.4": `[iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]`,
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

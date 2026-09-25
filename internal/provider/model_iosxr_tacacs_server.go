@@ -26,9 +26,13 @@ import (
 	"path"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -82,6 +86,17 @@ func (data TACACSServer) getPath() string {
 
 func (data TACACSServerData) getPath() string {
 	return "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data TACACSServer) getXPath() string {
+	path := "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server"
+	return path
+}
+
+func (data TACACSServerData) getXPath() string {
+	path := "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -250,14 +265,17 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte, versio
 		} else {
 			data.Hosts[i].HolddownTime = types.Int64Null()
 		}
-		if value := r.Get("single-connection"); !data.Hosts[i].SingleConnection.IsNull() {
-			if value.Exists() {
+		if value := r.Get("single-connection"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].SingleConnection.IsNull() {
 				data.Hosts[i].SingleConnection = types.BoolValue(true)
-			} else {
-				data.Hosts[i].SingleConnection = types.BoolValue(false)
 			}
 		} else {
-			data.Hosts[i].SingleConnection = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].SingleConnection.IsNull() {
+				data.Hosts[i].SingleConnection = types.BoolNull()
+			}
 		}
 		if value := r.Get("single-connection-idle-timeout"); value.Exists() && !data.Hosts[i].SingleConnectionIdleTimeout.IsNull() {
 			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Value(value.Int())
@@ -267,22 +285,22 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte, versio
 	}
 	if value := gjson.GetBytes(res, "timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
-	} else {
+	} else if data.Timeout.IsNull() {
 		data.Timeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "holddown-time"); value.Exists() && !data.HolddownTime.IsNull() {
 		data.HolddownTime = types.Int64Value(value.Int())
-	} else {
+	} else if data.HolddownTime.IsNull() {
 		data.HolddownTime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringValue(value.String())
-	} else {
+	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
 	}
 }
@@ -313,7 +331,8 @@ func (data *TACACSServer) fromBody(ctx context.Context, res []byte, version stri
 			}
 			if cValue := v.Get("single-connection"); cValue.Exists() {
 				item.SingleConnection = types.BoolValue(true)
-			} else {
+			} else if !item.SingleConnection.IsNull() {
+				// Only set to false if it was previously set
 				item.SingleConnection = types.BoolValue(false)
 			}
 			if cValue := v.Get("single-connection-idle-timeout"); cValue.Exists() {
@@ -478,7 +497,7 @@ func (data *TACACSServer) getDeletedItems(ctx context.Context, state TACACSServe
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *TACACSServer) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *TACACSServer) getEmptyLeafsDelete(ctx context.Context, state *TACACSServer, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Hosts {
 		keys := [...]string{"ordering-index", "address", "port"}
@@ -488,7 +507,9 @@ func (data *TACACSServer) getEmptyLeafsDelete(ctx context.Context, version strin
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Hosts[i].SingleConnection.IsNull() && !data.Hosts[i].SingleConnection.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "single-connection"))
+			if state != nil && i < len(state.Hosts) && !state.Hosts[i].SingleConnection.IsNull() && state.Hosts[i].SingleConnection.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "single-connection"))
+			}
 		}
 	}
 	return emptyLeafsDelete
@@ -541,7 +562,519 @@ func (data *TACACSServer) getDeletePaths(ctx context.Context, version string) []
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data TACACSServer) toBodyXML(ctx context.Context, stateArg ...*TACACSServer) string {
+	var state *TACACSServer
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if len(data.Hosts) > 0 {
+		for _, item := range data.Hosts {
+			basePath := data.getXPath() + "/hosts/host[ordering-index='" + strconv.FormatInt(item.OrderingIndex.ValueInt64(), 10) + "' and address='" + item.Address.ValueString() + "' and port='" + strconv.FormatInt(item.Port.ValueInt64(), 10) + "']"
+			if !item.OrderingIndex.IsNull() && !item.OrderingIndex.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/ordering-index", strconv.FormatInt(item.OrderingIndex.ValueInt64(), 10))
+			}
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/address", item.Address.ValueString())
+			}
+			if !item.Port.IsNull() && !item.Port.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/port", strconv.FormatInt(item.Port.ValueInt64(), 10))
+			}
+			if !item.Timeout.IsNull() && !item.Timeout.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/timeout", strconv.FormatInt(item.Timeout.ValueInt64(), 10))
+			}
+			if !item.HolddownTime.IsNull() && !item.HolddownTime.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/holddown-time", strconv.FormatInt(item.HolddownTime.ValueInt64(), 10))
+			}
+			if !item.KeyType7.IsNull() && !item.KeyType7.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/key/seven", item.KeyType7.ValueString())
+			}
+			if !item.KeyType6.IsNull() && !item.KeyType6.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/key/six", item.KeyType6.ValueString())
+			}
+			if !item.SingleConnection.IsNull() && !item.SingleConnection.IsUnknown() {
+				if item.SingleConnection.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/single-connection", "")
+				}
+			}
+			if !item.SingleConnectionIdleTimeout.IsNull() && !item.SingleConnectionIdleTimeout.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/single-connection-idle-timeout", strconv.FormatInt(item.SingleConnectionIdleTimeout.ValueInt64(), 10))
+			}
+		}
+	}
+	if !data.KeyType7.IsNull() && !data.KeyType7.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/key/seven", data.KeyType7.ValueString())
+	}
+	if !data.KeyType6.IsNull() && !data.KeyType6.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/key/six", data.KeyType6.ValueString())
+	}
+	if !data.Timeout.IsNull() && !data.Timeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timeout", strconv.FormatInt(data.Timeout.ValueInt64(), 10))
+	}
+	if !data.HolddownTime.IsNull() && !data.HolddownTime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/holddown-time", strconv.FormatInt(data.HolddownTime.ValueInt64(), 10))
+	}
+	if !data.Ipv4Dscp.IsNull() && !data.Ipv4Dscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/dscp", data.Ipv4Dscp.ValueString())
+	}
+	if !data.Ipv6Dscp.IsNull() && !data.Ipv6Dscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/dscp", data.Ipv6Dscp.ValueString())
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *TACACSServer) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	for i := range data.Hosts {
+		keys := [...]string{"ordering-index", "address", "port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hosts/host").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "ordering-index"); value.Exists() && !data.Hosts[i].OrderingIndex.IsNull() {
+			data.Hosts[i].OrderingIndex = types.Int64Value(value.Int())
+		} else if data.Hosts[i].OrderingIndex.IsNull() {
+			data.Hosts[i].OrderingIndex = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "address"); value.Exists() && !data.Hosts[i].Address.IsNull() {
+			data.Hosts[i].Address = types.StringValue(value.String())
+		} else if data.Hosts[i].Address.IsNull() {
+			data.Hosts[i].Address = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "port"); value.Exists() && !data.Hosts[i].Port.IsNull() {
+			data.Hosts[i].Port = types.Int64Value(value.Int())
+		} else if data.Hosts[i].Port.IsNull() {
+			data.Hosts[i].Port = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "timeout"); value.Exists() && !data.Hosts[i].Timeout.IsNull() {
+			data.Hosts[i].Timeout = types.Int64Value(value.Int())
+		} else if data.Hosts[i].Timeout.IsNull() {
+			data.Hosts[i].Timeout = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "holddown-time"); value.Exists() && !data.Hosts[i].HolddownTime.IsNull() {
+			data.Hosts[i].HolddownTime = types.Int64Value(value.Int())
+		} else if data.Hosts[i].HolddownTime.IsNull() {
+			data.Hosts[i].HolddownTime = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "single-connection"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].SingleConnection.IsNull() {
+				data.Hosts[i].SingleConnection = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].SingleConnection.IsNull() {
+				data.Hosts[i].SingleConnection = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "single-connection-idle-timeout"); value.Exists() && !data.Hosts[i].SingleConnectionIdleTimeout.IsNull() {
+			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Value(value.Int())
+		} else if data.Hosts[i].SingleConnectionIdleTimeout.IsNull() {
+			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Null()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() && !data.Timeout.IsNull() {
+		data.Timeout = types.Int64Value(value.Int())
+	} else if data.Timeout.IsNull() {
+		data.Timeout = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holddown-time"); value.Exists() && !data.HolddownTime.IsNull() {
+		data.HolddownTime = types.Int64Value(value.Int())
+	} else if data.HolddownTime.IsNull() {
+		data.HolddownTime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	} else if data.Ipv4Dscp.IsNull() {
+		data.Ipv4Dscp = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	} else if data.Ipv6Dscp.IsNull() {
+		data.Ipv6Dscp = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *TACACSServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hosts/host"); value.Exists() {
+		data.Hosts = make([]TACACSServerHosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TACACSServerHosts{}
+			if cValue := helpers.GetFromXPath(v, "ordering-index"); cValue.Exists() {
+				item.OrderingIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "holddown-time"); cValue.Exists() {
+				item.HolddownTime = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "key/seven"); cValue.Exists() {
+				item.KeyType7 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "key/six"); cValue.Exists() {
+				item.KeyType6 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "single-connection"); cValue.Exists() {
+				item.SingleConnection = types.BoolValue(true)
+			} else {
+				item.SingleConnection = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "single-connection-idle-timeout"); cValue.Exists() {
+				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
+			}
+			data.Hosts = append(data.Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key/seven"); value.Exists() {
+		data.KeyType7 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key/six"); value.Exists() {
+		data.KeyType6 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() {
+		data.Timeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holddown-time"); value.Exists() {
+		data.HolddownTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *TACACSServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hosts/host"); value.Exists() {
+		data.Hosts = make([]TACACSServerHosts, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := TACACSServerHosts{}
+			if cValue := helpers.GetFromXPath(v, "ordering-index"); cValue.Exists() {
+				item.OrderingIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "holddown-time"); cValue.Exists() {
+				item.HolddownTime = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "key/seven"); cValue.Exists() {
+				item.KeyType7 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "key/six"); cValue.Exists() {
+				item.KeyType6 = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "single-connection"); cValue.Exists() {
+				item.SingleConnection = types.BoolValue(true)
+			} else {
+				item.SingleConnection = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "single-connection-idle-timeout"); cValue.Exists() {
+				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
+			}
+			data.Hosts = append(data.Hosts, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key/seven"); value.Exists() {
+		data.KeyType7 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/key/six"); value.Exists() {
+		data.KeyType6 = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() {
+		data.Timeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holddown-time"); value.Exists() {
+		data.HolddownTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/dscp"); value.Exists() {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *TACACSServer) addDeletedItemsXML(ctx context.Context, state TACACSServer, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.Ipv6Dscp.IsNull() && data.Ipv6Dscp.IsNull() {
+		deletePath := state.getXPath() + "/ipv6/dscp"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
+		deletePath := state.getXPath() + "/ipv4/dscp"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.HolddownTime.IsNull() && data.HolddownTime.IsNull() {
+		deletePath := state.getXPath() + "/holddown-time"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Timeout.IsNull() && data.Timeout.IsNull() {
+		deletePath := state.getXPath() + "/timeout"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.KeyType6.IsNull() && data.KeyType6.IsNull() {
+		deletePath := state.getXPath() + "/key/six"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.KeyType7.IsNull() && data.KeyType7.IsNull() {
+		deletePath := state.getXPath() + "/key/seven"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.Hosts {
+		stateKeys := [...]string{"ordering-index", "address", "port"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Hosts[i].OrderingIndex.ValueInt64(), 10), state.Hosts[i].Address.ValueString(), strconv.FormatInt(state.Hosts[i].Port.ValueInt64(), 10)}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Hosts[i].OrderingIndex.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Hosts[i].Port.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Hosts {
+			found = true
+			if state.Hosts[i].OrderingIndex.ValueInt64() != data.Hosts[j].OrderingIndex.ValueInt64() {
+				found = false
+			}
+			if state.Hosts[i].Address.ValueString() != data.Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if state.Hosts[i].Port.ValueInt64() != data.Hosts[j].Port.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/single-connection-idle-timeout", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Hosts[i].SingleConnection.IsNull() && state.Hosts[i].SingleConnection.ValueBool() && data.Hosts[j].SingleConnection.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/single-connection", predicates))
+				}
+				if !state.Hosts[i].KeyType6.IsNull() && data.Hosts[j].KeyType6.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/key/six", predicates))
+				}
+				if !state.Hosts[i].KeyType7.IsNull() && data.Hosts[j].KeyType7.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/key/seven", predicates))
+				}
+				if !state.Hosts[i].HolddownTime.IsNull() && data.Hosts[j].HolddownTime.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/holddown-time", predicates))
+				}
+				if !state.Hosts[i].Timeout.IsNull() && data.Hosts[j].Timeout.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/timeout", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v", predicates))
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *TACACSServer) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.Ipv6Dscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/dscp")
+	}
+	if !data.Ipv4Dscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/dscp")
+	}
+	if !data.HolddownTime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/holddown-time")
+	}
+	if !data.Timeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timeout")
+	}
+	if !data.KeyType6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/key/six")
+	}
+	if !data.KeyType7.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/key/seven")
+	}
+	for i := range data.Hosts {
+		keys := [...]string{"ordering-index", "address", "port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/hosts/host%v", predicates))
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

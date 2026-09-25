@@ -23,32 +23,32 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceIosxrGnmi(t *testing.T) {
+func TestAccDataSourceIosxrYang(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrGnmiConfigInterface,
+				Config: testAccDataSourceIosxrYangConfigInterface,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_gnmi.test", "id", "Cisco-IOS-XR-um-hostname-cfg:/hostname"),
-					resource.TestCheckResourceAttr("data.iosxr_gnmi.test", "attributes.system-network-name", "TF-ROUTER-1"),
+					resource.TestCheckResourceAttr("data.iosxr_yang.test", "id", "Cisco-IOS-XR-um-hostname-cfg:/hostname"),
+					resource.TestCheckResourceAttr("data.iosxr_yang.test", "attributes.system-network-name", "TF-ROUTER-1"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrGnmiConfigInterface = `
-resource "iosxr_gnmi" "test" {
+const testAccDataSourceIosxrYangConfigInterface = `
+resource "iosxr_yang" "test" {
 	path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 	attributes = {
 		system-network-name = "TF-ROUTER-1"
 	}
 }
 
-data "iosxr_gnmi" "test" {
+data "iosxr_yang" "test" {
 	path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
-	depends_on = [iosxr_gnmi.test]
+	depends_on = [iosxr_yang.test]
 }
 `

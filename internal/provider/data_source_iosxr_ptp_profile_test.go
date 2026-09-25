@@ -125,10 +125,8 @@ func TestAccDataSourceIosxrPTPProfile(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrPTPProfilePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-ptp-cfg:/ptp"
-	attributes = {
-	}
 }
 
 `
@@ -230,7 +228,7 @@ func testAccDataSourceIosxrPTPProfileConfig() string {
 	config += `		clock_class_to_map_from = 13` + "\n"
 	config += `		clock_class_to_map_to = 6` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

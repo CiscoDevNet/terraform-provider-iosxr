@@ -22,11 +22,16 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
+	"fmt"
 	"path"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -63,6 +68,17 @@ func (data MPLSTrafficEng) getPath() string {
 
 func (data MPLSTrafficEngData) getPath() string {
 	return "Cisco-IOS-XR-um-mpls-te-cfg:/mpls"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data MPLSTrafficEng) getXPath() string {
+	path := "Cisco-IOS-XR-um-mpls-te-cfg:/mpls"
+	return path
+}
+
+func (data MPLSTrafficEngData) getXPath() string {
+	path := "Cisco-IOS-XR-um-mpls-te-cfg:/mpls"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -171,28 +187,30 @@ func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte, vers
 		if value.Exists() {
 			data.TrafficEng = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.TrafficEng = types.BoolValue(false)
 		}
-	} else {
+	} else if data.TrafficEng.IsNull() {
 		data.TrafficEng = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "traffic-eng.pce.reoptimize.disable"); helpers.VersionAtLeast(version, "25.4") && !data.Disable.IsNull() {
 		if value.Exists() {
 			data.Disable = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.Disable = types.BoolValue(false)
 		}
-	} else {
+	} else if data.Disable.IsNull() {
 		data.Disable = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "traffic-eng.pce.reoptimize.reoptimization-period-in"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.ReoptimizeReoptimizationPeriodIn.IsNull() {
 		data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
-	} else {
+	} else if data.ReoptimizeReoptimizationPeriodIn.IsNull() {
 		data.ReoptimizeReoptimizationPeriodIn = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "traffic-eng.pce.server.ipv4"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ServerIpv4.IsNull() {
 		data.ServerIpv4 = types.StringValue(value.String())
-	} else {
+	} else if data.ServerIpv4.IsNull() {
 		data.ServerIpv4 = types.StringNull()
 	}
 }
@@ -204,13 +222,15 @@ func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte, vers
 func (data *MPLSTrafficEng) fromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
-	} else {
+	} else if !data.TrafficEng.IsNull() {
+		// Only set to false if it was previously set in state
 		data.TrafficEng = types.BoolValue(false)
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "traffic-eng.pce.reoptimize.disable"); value.Exists() {
 			data.Disable = types.BoolValue(true)
-		} else {
+		} else if !data.Disable.IsNull() {
+			// Only set to false if it was previously set in state
 			data.Disable = types.BoolValue(false)
 		}
 	} else {
@@ -292,13 +312,17 @@ func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTraff
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context, state *MPLSTrafficEng, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.Disable.IsNull() && !data.Disable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "traffic-eng/pce/reoptimize/disable"))
+		if state != nil && !state.Disable.IsNull() && state.Disable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "traffic-eng/pce/reoptimize/disable"))
+		}
 	}
 	if !data.TrafficEng.IsNull() && !data.TrafficEng.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "traffic-eng"))
+		if state != nil && !state.TrafficEng.IsNull() && state.TrafficEng.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "traffic-eng"))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -320,7 +344,246 @@ func (data *MPLSTrafficEng) getDeletePaths(ctx context.Context, version string) 
 	if !data.TrafficEng.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "traffic-eng"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data MPLSTrafficEng) toBodyXML(ctx context.Context, stateArg ...*MPLSTrafficEng) string {
+	var state *MPLSTrafficEng
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.TrafficEng.IsNull() && !data.TrafficEng.IsUnknown() {
+		if data.TrafficEng.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng", "")
+		}
+	}
+	if !data.Disable.IsNull() && !data.Disable.IsUnknown() {
+		if data.Disable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng/pce/reoptimize/disable", "")
+		}
+	}
+	if !data.ReoptimizeReoptimizationPeriodIn.IsNull() && !data.ReoptimizeReoptimizationPeriodIn.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in", strconv.FormatInt(data.ReoptimizeReoptimizationPeriodIn.ValueInt64(), 10))
+	}
+	if !data.ServerIpv4.IsNull() && !data.ServerIpv4.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng/pce/server/ipv4", data.ServerIpv4.ValueString())
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *MPLSTrafficEng) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TrafficEng.IsNull() {
+			data.TrafficEng = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TrafficEng.IsNull() {
+			data.TrafficEng = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Disable.IsNull() {
+			data.Disable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Disable.IsNull() {
+			data.Disable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in"); value.Exists() && !data.ReoptimizeReoptimizationPeriodIn.IsNull() {
+		data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
+	} else if data.ReoptimizeReoptimizationPeriodIn.IsNull() {
+		data.ReoptimizeReoptimizationPeriodIn = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/server/ipv4"); value.Exists() && !data.ServerIpv4.IsNull() {
+		data.ServerIpv4 = types.StringValue(value.String())
+	} else if data.ServerIpv4.IsNull() {
+		data.ServerIpv4 = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *MPLSTrafficEng) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng"); value.Exists() {
+		data.TrafficEng = types.BoolValue(true)
+	} else {
+		data.TrafficEng = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/disable"); value.Exists() {
+		data.Disable = types.BoolValue(true)
+	} else {
+		data.Disable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in"); value.Exists() {
+		data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/server/ipv4"); value.Exists() {
+		data.ServerIpv4 = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *MPLSTrafficEngData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng"); value.Exists() {
+		data.TrafficEng = types.BoolValue(true)
+	} else {
+		data.TrafficEng = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/disable"); value.Exists() {
+		data.Disable = types.BoolValue(true)
+	} else {
+		data.Disable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in"); value.Exists() {
+		data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/server/ipv4"); value.Exists() {
+		data.ServerIpv4 = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *MPLSTrafficEng) addDeletedItemsXML(ctx context.Context, state MPLSTrafficEng, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.ServerIpv4.IsNull() && data.ServerIpv4.IsNull() {
+		deletePath := state.getXPath() + "/traffic-eng/pce/server/ipv4"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ReoptimizeReoptimizationPeriodIn.IsNull() && data.ReoptimizeReoptimizationPeriodIn.IsNull() {
+		deletePath := state.getXPath() + "/traffic-eng/pce/reoptimize/reoptimization-period-in"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Disable.IsNull() && state.Disable.ValueBool() && data.Disable.IsNull() {
+		deletePath := state.getXPath() + "/traffic-eng/pce/reoptimize/disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TrafficEng.IsNull() && state.TrafficEng.ValueBool() && data.TrafficEng.IsNull() {
+		deletePath := state.getXPath() + "/traffic-eng"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *MPLSTrafficEng) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.ServerIpv4.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/traffic-eng/pce/server/ipv4")
+	}
+	if !data.ReoptimizeReoptimizationPeriodIn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in")
+	}
+	if !data.Disable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/traffic-eng/pce/reoptimize/disable")
+	}
+	if !data.TrafficEng.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/traffic-eng")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

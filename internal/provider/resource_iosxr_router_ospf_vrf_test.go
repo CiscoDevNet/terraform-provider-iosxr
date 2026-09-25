@@ -279,20 +279,20 @@ func iosxrRouterOSPFVRFImportStateIdFunc(resourceName string) resource.ImportSta
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterOSPFVRFPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
 	attributes = {
 		"process-name" = "OSPF1"
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
 		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
 `
@@ -306,7 +306,7 @@ func testAccIosxrRouterOSPFVRFConfig_minimum() string {
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	weight = 1000` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -547,7 +547,7 @@ func testAccIosxrRouterOSPFVRFConfig_all() string {
 	config += `	exchange_timer = 60` + "\n"
 	config += `	exchange_timer_hold_time = 120` + "\n"
 	config += `	exchange_timer_recovery_count = 10` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -29,6 +29,9 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -63,6 +66,17 @@ func (data CryptoSSL) getPath() string {
 
 func (data CryptoSSLData) getPath() string {
 	return "Cisco-IOS-XR-um-crypto-cfg:/ssl"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data CryptoSSL) getXPath() string {
+	path := "Cisco-IOS-XR-um-crypto-cfg:/ssl"
+	return path
+}
+
+func (data CryptoSSLData) getXPath() string {
+	path := "Cisco-IOS-XR-um-crypto-cfg:/ssl"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -266,7 +280,7 @@ func (data *CryptoSSL) getDeletedItems(ctx context.Context, state CryptoSSL, ver
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *CryptoSSL) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *CryptoSSL) getEmptyLeafsDelete(ctx context.Context, state *CryptoSSL, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Profile {
 		keys := [...]string{"profile-name"}
@@ -302,7 +316,208 @@ func (data *CryptoSSL) getDeletePaths(ctx context.Context, version string) []str
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data CryptoSSL) toBodyXML(ctx context.Context, stateArg ...*CryptoSSL) string {
+	var state *CryptoSSL
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if len(data.Profile) > 0 {
+		for _, item := range data.Profile {
+			basePath := data.getXPath() + "/profiles/profile[profile-name='" + item.ProfileName.ValueString() + "']"
+			if !item.ProfileName.IsNull() && !item.ProfileName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/profile-name", item.ProfileName.ValueString())
+			}
+			if !item.Certificate.IsNull() && !item.Certificate.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/certificate", item.Certificate.ValueString())
+			}
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *CryptoSSL) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	for i := range data.Profile {
+		keys := [...]string{"profile-name"}
+		keyValues := [...]string{data.Profile[i].ProfileName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "profile-name"); value.Exists() && !data.Profile[i].ProfileName.IsNull() {
+			data.Profile[i].ProfileName = types.StringValue(value.String())
+		} else if data.Profile[i].ProfileName.IsNull() {
+			data.Profile[i].ProfileName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "certificate"); value.Exists() && !data.Profile[i].Certificate.IsNull() {
+			data.Profile[i].Certificate = types.StringValue(value.String())
+		} else if data.Profile[i].Certificate.IsNull() {
+			data.Profile[i].Certificate = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *CryptoSSL) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
+		data.Profile = make([]CryptoSSLProfile, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CryptoSSLProfile{}
+			if cValue := helpers.GetFromXPath(v, "profile-name"); cValue.Exists() {
+				item.ProfileName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "certificate"); cValue.Exists() {
+				item.Certificate = types.StringValue(cValue.String())
+			}
+			data.Profile = append(data.Profile, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *CryptoSSLData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
+		data.Profile = make([]CryptoSSLProfile, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CryptoSSLProfile{}
+			if cValue := helpers.GetFromXPath(v, "profile-name"); cValue.Exists() {
+				item.ProfileName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "certificate"); cValue.Exists() {
+				item.Certificate = types.StringValue(cValue.String())
+			}
+			data.Profile = append(data.Profile, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *CryptoSSL) addDeletedItemsXML(ctx context.Context, state CryptoSSL, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Profile {
+		stateKeys := [...]string{"profile-name"}
+		stateKeyValues := [...]string{state.Profile[i].ProfileName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Profile[i].ProfileName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Profile {
+			found = true
+			if state.Profile[i].ProfileName.ValueString() != data.Profile[j].ProfileName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Profile[i].Certificate.IsNull() && data.Profile[j].Certificate.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/certificate", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v", predicates))
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *CryptoSSL) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.Profile {
+		keys := [...]string{"profile-name"}
+		keyValues := [...]string{data.Profile[i].ProfileName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profiles/profile%v", predicates))
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

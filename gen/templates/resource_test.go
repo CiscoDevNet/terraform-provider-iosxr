@@ -514,7 +514,7 @@ func iosxr{{camelCase .Name}}ImportStateIdFunc(resourceName string) resource.Imp
 {{- range $ver, $prereqs := .VersionTestPrerequisites}}
 const testAccIosxr{{camelCase $.Name}}PrerequisitesConfig_{{versionSuffix $ver}} = `
 {{- range $index, $item := $prereqs}}
-resource "iosxr_gnmi" "PreReq{{$index}}" {
+resource "iosxr_yang" "PreReq{{$index}}" {
 	path = "{{.Path}}"
 	{{- if .NoDelete}}
 	delete = false
@@ -549,7 +549,7 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
 	]
 	{{- end}}
 	{{- if .Dependencies}}
-	depends_on = [{{range .Dependencies}}iosxr_gnmi.PreReq{{.}}, {{end}}]
+	depends_on = [{{range .Dependencies}}iosxr_yang.PreReq{{.}}, {{end}}]
 	{{- end}}
 }
 {{ end}}
@@ -566,7 +566,7 @@ func testAccIosxr{{camelCase .Name}}PrerequisitesConfig() string {
 {{- else}}
 const testAccIosxr{{camelCase .Name}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
-resource "iosxr_gnmi" "PreReq{{$index}}" {
+resource "iosxr_yang" "PreReq{{$index}}" {
 	path = "{{.Path}}"
 	{{- if .NoDelete}}
 	delete = false
@@ -601,7 +601,7 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
 	]
 	{{- end}}
 	{{- if .Dependencies}}
-	depends_on = [{{range .Dependencies}}iosxr_gnmi.PreReq{{.}}, {{end}}]
+	depends_on = [{{range .Dependencies}}iosxr_yang.PreReq{{.}}, {{end}}]
 	{{- end}}
 }
 {{ end}}
@@ -1169,11 +1169,11 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	{{- if .VersionTestPrerequisites}}
 	config += selectVersionDependsOn(map[string]string{
 		{{- range $ver, $prereqs := .VersionTestPrerequisites}}
-		"{{$ver}}": `[{{range $i, $_ := $prereqs}}iosxr_gnmi.PreReq{{$i}}, {{end}}]`,
+		"{{$ver}}": `[{{range $i, $_ := $prereqs}}iosxr_yang.PreReq{{$i}}, {{end}}]`,
 		{{- end}}
 	}) + "\n"
 	{{- else if .TestPrerequisites}}
-	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_gnmi.PreReq{{$index}}, {{end}}]` + "\n"
+	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_yang.PreReq{{$index}}, {{end}}]` + "\n"
 	{{- end}}
 	config += `}` + "\n"
 	return config
@@ -1738,11 +1738,11 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 	{{- if .VersionTestPrerequisites}}
 	config += selectVersionDependsOn(map[string]string{
 		{{- range $ver, $prereqs := .VersionTestPrerequisites}}
-		"{{$ver}}": `[{{range $i, $_ := $prereqs}}iosxr_gnmi.PreReq{{$i}}, {{end}}]`,
+		"{{$ver}}": `[{{range $i, $_ := $prereqs}}iosxr_yang.PreReq{{$i}}, {{end}}]`,
 		{{- end}}
 	}) + "\n"
 	{{- else if .TestPrerequisites}}
-	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_gnmi.PreReq{{$index}}, {{end}}]` + "\n"
+	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_yang.PreReq{{$index}}, {{end}}]` + "\n"
 	{{- end}}
 	config += `}` + "\n"
 	return config

@@ -90,7 +90,7 @@ func iosxrPerformanceMeasurementInterfaceImportStateIdFunc(resourceName string) 
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrPerformanceMeasurementInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
 	attributes = {
 	}
@@ -105,7 +105,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrPerformanceMeasurementInterfaceConfig_minimum() string {
 	config := `resource "iosxr_performance_measurement_interface" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -131,7 +131,7 @@ func testAccIosxrPerformanceMeasurementInterfaceConfig_all() string {
 	if os.Getenv("XRV9K") != "" {
 		config += `	path_tracing_timestamp_template_st0 = true` + "\n"
 	}
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

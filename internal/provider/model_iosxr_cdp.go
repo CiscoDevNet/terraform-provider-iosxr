@@ -22,11 +22,17 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
+	"fmt"
 	"path"
+	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -65,6 +71,17 @@ func (data CDP) getPath() string {
 
 func (data CDPData) getPath() string {
 	return "Cisco-IOS-XR-um-cdp-cfg:/cdp"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data CDP) getXPath() string {
+	path := "Cisco-IOS-XR-um-cdp-cfg:/cdp"
+	return path
+}
+
+func (data CDPData) getXPath() string {
+	path := "Cisco-IOS-XR-um-cdp-cfg:/cdp"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -158,37 +175,40 @@ func (data *CDP) updateFromBody(ctx context.Context, res []byte, version string)
 		if value.Exists() {
 			data.Enable = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.Enable = types.BoolValue(false)
 		}
-	} else {
+	} else if data.Enable.IsNull() {
 		data.Enable = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "holdtime"); value.Exists() && !data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Value(value.Int())
-	} else {
+	} else if data.Holdtime.IsNull() {
 		data.Holdtime = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timer"); value.Exists() && !data.Timer.IsNull() {
 		data.Timer = types.Int64Value(value.Int())
-	} else {
+	} else if data.Timer.IsNull() {
 		data.Timer = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "advertise.v1"); !data.AdvertiseV1.IsNull() {
 		if value.Exists() {
 			data.AdvertiseV1 = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.AdvertiseV1 = types.BoolValue(false)
 		}
-	} else {
+	} else if data.AdvertiseV1.IsNull() {
 		data.AdvertiseV1 = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "log.adjacency.changes"); !data.LogAdjacencyChanges.IsNull() {
 		if value.Exists() {
 			data.LogAdjacencyChanges = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.LogAdjacencyChanges = types.BoolValue(false)
 		}
-	} else {
+	} else if data.LogAdjacencyChanges.IsNull() {
 		data.LogAdjacencyChanges = types.BoolNull()
 	}
 }
@@ -200,7 +220,8 @@ func (data *CDP) updateFromBody(ctx context.Context, res []byte, version string)
 func (data *CDP) fromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
-	} else {
+	} else if !data.Enable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.Enable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "holdtime"); value.Exists() {
@@ -211,12 +232,14 @@ func (data *CDP) fromBody(ctx context.Context, res []byte, version string) {
 	}
 	if value := gjson.GetBytes(res, "advertise.v1"); value.Exists() {
 		data.AdvertiseV1 = types.BoolValue(true)
-	} else {
+	} else if !data.AdvertiseV1.IsNull() {
+		// Only set to false if it was previously set in state
 		data.AdvertiseV1 = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "log.adjacency.changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
-	} else {
+	} else if !data.LogAdjacencyChanges.IsNull() {
+		// Only set to false if it was previously set in state
 		data.LogAdjacencyChanges = types.BoolValue(false)
 	}
 }
@@ -277,16 +300,22 @@ func (data *CDP) getDeletedItems(ctx context.Context, state CDP, version string)
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *CDP) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *CDP) getEmptyLeafsDelete(ctx context.Context, state *CDP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/adjacency/changes"))
+		if state != nil && !state.LogAdjacencyChanges.IsNull() && state.LogAdjacencyChanges.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/adjacency/changes"))
+		}
 	}
 	if !data.AdvertiseV1.IsNull() && !data.AdvertiseV1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "advertise"))
+		if state != nil && !state.AdvertiseV1.IsNull() && state.AdvertiseV1.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "advertise"))
+		}
 	}
 	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable"))
+		if state != nil && !state.Enable.IsNull() && state.Enable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable"))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -311,7 +340,295 @@ func (data *CDP) getDeletePaths(ctx context.Context, version string) []string {
 	if !data.Enable.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "enable"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data CDP) toBodyXML(ctx context.Context, stateArg ...*CDP) string {
+	var state *CDP
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
+		if data.Enable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/enable", "")
+		}
+	}
+	if !data.Holdtime.IsNull() && !data.Holdtime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/holdtime", strconv.FormatInt(data.Holdtime.ValueInt64(), 10))
+	}
+	if !data.Timer.IsNull() && !data.Timer.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/timer", strconv.FormatInt(data.Timer.ValueInt64(), 10))
+	}
+	if !data.AdvertiseV1.IsNull() && !data.AdvertiseV1.IsUnknown() {
+		if data.AdvertiseV1.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/advertise/v1", "")
+		}
+	}
+	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.IsUnknown() {
+		if data.LogAdjacencyChanges.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/log/adjacency/changes", "")
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *CDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Enable.IsNull() {
+			data.Enable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Enable.IsNull() {
+			data.Enable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdtime"); value.Exists() && !data.Holdtime.IsNull() {
+		data.Holdtime = types.Int64Value(value.Int())
+	} else if data.Holdtime.IsNull() {
+		data.Holdtime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer"); value.Exists() && !data.Timer.IsNull() {
+		data.Timer = types.Int64Value(value.Int())
+	} else if data.Timer.IsNull() {
+		data.Timer = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise/v1"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AdvertiseV1.IsNull() {
+			data.AdvertiseV1 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AdvertiseV1.IsNull() {
+			data.AdvertiseV1 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/adjacency/changes"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LogAdjacencyChanges.IsNull() {
+			data.LogAdjacencyChanges = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LogAdjacencyChanges.IsNull() {
+			data.LogAdjacencyChanges = types.BoolNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *CDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdtime"); value.Exists() {
+		data.Holdtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer"); value.Exists() {
+		data.Timer = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise/v1"); value.Exists() {
+		data.AdvertiseV1 = types.BoolValue(true)
+	} else {
+		data.AdvertiseV1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/adjacency/changes"); value.Exists() {
+		data.LogAdjacencyChanges = types.BoolValue(true)
+	} else {
+		data.LogAdjacencyChanges = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *CDPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/holdtime"); value.Exists() {
+		data.Holdtime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timer"); value.Exists() {
+		data.Timer = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/advertise/v1"); value.Exists() {
+		data.AdvertiseV1 = types.BoolValue(true)
+	} else {
+		data.AdvertiseV1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/log/adjacency/changes"); value.Exists() {
+		data.LogAdjacencyChanges = types.BoolValue(true)
+	} else {
+		data.LogAdjacencyChanges = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *CDP) addDeletedItemsXML(ctx context.Context, state CDP, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LogAdjacencyChanges.IsNull() && state.LogAdjacencyChanges.ValueBool() && data.LogAdjacencyChanges.IsNull() {
+		deletePath := state.getXPath() + "/log/adjacency/changes"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AdvertiseV1.IsNull() && state.AdvertiseV1.ValueBool() && data.AdvertiseV1.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/advertise"
+		predicates := make(map[string]string)
+		predicates["v1"] = fmt.Sprintf("%v", state.AdvertiseV1.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Timer.IsNull() && data.Timer.IsNull() {
+		deletePath := state.getXPath() + "/timer"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Holdtime.IsNull() && data.Holdtime.IsNull() {
+		deletePath := state.getXPath() + "/holdtime"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Enable.IsNull() && state.Enable.ValueBool() && data.Enable.IsNull() {
+		deletePath := state.getXPath() + "/enable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *CDP) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.LogAdjacencyChanges.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/log/adjacency/changes")
+	}
+	if !data.AdvertiseV1.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/advertise")
+	}
+	if !data.Timer.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/timer")
+	}
+	if !data.Holdtime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/holdtime")
+	}
+	if !data.Enable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/enable")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

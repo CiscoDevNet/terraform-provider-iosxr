@@ -98,7 +98,7 @@ func iosxrSegmentRoutingV6ImportStateIdFunc(resourceName string) resource.Import
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrSegmentRoutingV6PrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
 	attributes = {
 		"enable" = "<NULL>"
@@ -114,7 +114,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrSegmentRoutingV6Config_minimum() string {
 	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
 	config += `	sid_holdtime = 10` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -154,7 +154,7 @@ func testAccIosxrSegmentRoutingV6Config_all() string {
 		config += `	encapsulation_hop_limit_value = 1` + "\n"
 	}
 	config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

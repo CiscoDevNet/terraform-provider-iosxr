@@ -113,36 +113,36 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterOSPFAreaInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
 	attributes = {
 		"process-name" = "OSPF1"
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]"
 	attributes = {
 		"area-id" = "0"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]/interfaces/interface[interface-name=Loopback1]"
 	attributes = {
 		"interface-name" = "Loopback1"
 	}
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_yang.PreReq1, ]
 }
 
-resource "iosxr_gnmi" "PreReq3" {
+resource "iosxr_yang" "PreReq3" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
 		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
 	}
-	depends_on = [iosxr_gnmi.PreReq2, ]
+	depends_on = [iosxr_yang.PreReq2, ]
 }
 
 `
@@ -240,7 +240,7 @@ func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config += `		index_n_flag_clear = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	advertise_prefix_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

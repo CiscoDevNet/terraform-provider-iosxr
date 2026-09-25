@@ -89,7 +89,7 @@ func TestAccDataSourceIosxrRouterBGPAFGroup(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterBGPAFGroupPrerequisitesConfig_V24_4 = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -107,7 +107,7 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -123,10 +123,10 @@ resource "iosxr_gnmi" "PreReq1" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_yang.PreReq0, ]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
+resource "iosxr_yang" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/af-groups/af-group[af-group-name=AFGROUP1]"
 	attributes = {
 		"af-group-name" = "AFGROUP1"
@@ -142,10 +142,10 @@ resource "iosxr_gnmi" "PreReq2" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_yang.PreReq1, ]
 }
 
-resource "iosxr_gnmi" "PreReq3" {
+resource "iosxr_yang" "PreReq3" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -214,7 +214,7 @@ func testAccDataSourceIosxrRouterBGPAFGroupConfig() string {
 		config += `	default_policy_action_out = "accept"` + "\n"
 	}
 	config += selectVersionDependsOn(map[string]string{
-		"24.4": `[iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]`,
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

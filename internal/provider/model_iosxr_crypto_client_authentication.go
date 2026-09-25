@@ -29,6 +29,9 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -64,6 +67,17 @@ func (data CryptoClientAuthentication) getPath() string {
 
 func (data CryptoClientAuthenticationData) getPath() string {
 	return "Cisco-IOS-XR-um-crypto-cfg:/client-authentication"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data CryptoClientAuthentication) getXPath() string {
+	path := "Cisco-IOS-XR-um-crypto-cfg:/client-authentication"
+	return path
+}
+
+func (data CryptoClientAuthenticationData) getXPath() string {
+	path := "Cisco-IOS-XR-um-crypto-cfg:/client-authentication"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -284,7 +298,7 @@ func (data *CryptoClientAuthentication) getDeletedItems(ctx context.Context, sta
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *CryptoClientAuthentication) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *CryptoClientAuthentication) getEmptyLeafsDelete(ctx context.Context, state *CryptoClientAuthentication, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Profile {
 		keys := [...]string{"profile-name"}
@@ -320,7 +334,225 @@ func (data *CryptoClientAuthentication) getDeletePaths(ctx context.Context, vers
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data CryptoClientAuthentication) toBodyXML(ctx context.Context, stateArg ...*CryptoClientAuthentication) string {
+	var state *CryptoClientAuthentication
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if len(data.Profile) > 0 {
+		for _, item := range data.Profile {
+			basePath := data.getXPath() + "/profiles/profile[profile-name='" + item.ProfileName.ValueString() + "']"
+			if !item.ProfileName.IsNull() && !item.ProfileName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/profile-name", item.ProfileName.ValueString())
+			}
+			if !item.PasswordSix.IsNull() && !item.PasswordSix.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/password/six", item.PasswordSix.ValueString())
+			}
+			if !item.Username.IsNull() && !item.Username.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/username", item.Username.ValueString())
+			}
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *CryptoClientAuthentication) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	for i := range data.Profile {
+		keys := [...]string{"profile-name"}
+		keyValues := [...]string{data.Profile[i].ProfileName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "profile-name"); value.Exists() && !data.Profile[i].ProfileName.IsNull() {
+			data.Profile[i].ProfileName = types.StringValue(value.String())
+		} else if data.Profile[i].ProfileName.IsNull() {
+			data.Profile[i].ProfileName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "password/six"); value.Exists() && !data.Profile[i].PasswordSix.IsNull() {
+			data.Profile[i].PasswordSix = types.StringValue(value.String())
+		} else if data.Profile[i].PasswordSix.IsNull() {
+			data.Profile[i].PasswordSix = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "username"); value.Exists() && !data.Profile[i].Username.IsNull() {
+			data.Profile[i].Username = types.StringValue(value.String())
+		} else if data.Profile[i].Username.IsNull() {
+			data.Profile[i].Username = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *CryptoClientAuthentication) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
+		data.Profile = make([]CryptoClientAuthenticationProfile, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CryptoClientAuthenticationProfile{}
+			if cValue := helpers.GetFromXPath(v, "profile-name"); cValue.Exists() {
+				item.ProfileName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "password/six"); cValue.Exists() {
+				item.PasswordSix = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "username"); cValue.Exists() {
+				item.Username = types.StringValue(cValue.String())
+			}
+			data.Profile = append(data.Profile, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *CryptoClientAuthenticationData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
+		data.Profile = make([]CryptoClientAuthenticationProfile, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := CryptoClientAuthenticationProfile{}
+			if cValue := helpers.GetFromXPath(v, "profile-name"); cValue.Exists() {
+				item.ProfileName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "password/six"); cValue.Exists() {
+				item.PasswordSix = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "username"); cValue.Exists() {
+				item.Username = types.StringValue(cValue.String())
+			}
+			data.Profile = append(data.Profile, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *CryptoClientAuthentication) addDeletedItemsXML(ctx context.Context, state CryptoClientAuthentication, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Profile {
+		stateKeys := [...]string{"profile-name"}
+		stateKeyValues := [...]string{state.Profile[i].ProfileName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Profile[i].ProfileName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Profile {
+			found = true
+			if state.Profile[i].ProfileName.ValueString() != data.Profile[j].ProfileName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Profile[i].Username.IsNull() && data.Profile[j].Username.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/username", predicates))
+				}
+				if !state.Profile[i].PasswordSix.IsNull() && data.Profile[j].PasswordSix.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/password/six", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v", predicates))
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *CryptoClientAuthentication) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.Profile {
+		keys := [...]string{"profile-name"}
+		keyValues := [...]string{data.Profile[i].ProfileName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profiles/profile%v", predicates))
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

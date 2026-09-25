@@ -23,9 +23,13 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 )
 
@@ -55,6 +59,17 @@ func (data BGPASFormat) getPath() string {
 
 func (data BGPASFormatData) getPath() string {
 	return "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data BGPASFormat) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
+	return path
+}
+
+func (data BGPASFormatData) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -125,8 +140,11 @@ func (data BGPASFormat) GetPatternConstraints() []helpers.FieldPatternConstraint
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte, version string) {
-	if value := gjson.ParseBytes(res); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AsFormat.IsNull() {
+	if value := gjson.ParseBytes(res); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.AsFormat = types.StringValue(value.String())
+	} else if !data.AsFormat.IsNull() {
+		// Preserve config-only value not returned by the device.
+		data.AsFormat = types.StringValue(data.AsFormat.ValueString())
 	} else {
 		data.AsFormat = types.StringNull()
 	}
@@ -168,7 +186,7 @@ func (data *BGPASFormat) getDeletedItems(ctx context.Context, state BGPASFormat,
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context, state *BGPASFormat, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
@@ -181,7 +199,122 @@ func (data *BGPASFormat) getDeletePaths(ctx context.Context, version string) []s
 	if !data.AsFormat.IsNull() {
 		deletePaths = append(deletePaths, data.getPath())
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data BGPASFormat) toBodyXML(ctx context.Context, stateArg ...*BGPASFormat) string {
+	var state *BGPASFormat
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	// Special case: value goes directly into root element text content
+	body := netconf.Body{}
+	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath(), data.AsFormat.ValueString())
+	}
+	bodyString, err := body.String()
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to string: %s", err))
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *BGPASFormat) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/as-format"); value.Exists() && !data.AsFormat.IsNull() {
+		data.AsFormat = types.StringValue(value.String())
+	} else if data.AsFormat.IsNull() {
+		data.AsFormat = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *BGPASFormat) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	// Special case: single no_augment_config string attribute - value is in root element text content
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+		return
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/as-format"); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *BGPASFormatData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	// Special case: single no_augment_config string attribute - value is in root element text content
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+		return
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/as-format"); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *BGPASFormat) addDeletedItemsXML(ctx context.Context, state BGPASFormat, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.AsFormat.IsNull() && data.AsFormat.IsNull() {
+		// For no_augment_config leaf with enum values, delete the specific child element (value)
+		// Path should be: root-element/<value> where value is the enum value
+		deletePath := state.getXPath() + "/" + state.AsFormat.ValueString()
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *BGPASFormat) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.AsFormat.IsNull() {
+		// For no_augment_config, delete the entire container (not child elements)
+		// This is because these use YANG choice/case - you can't delete individual choice values
+		deletePath := data.getXPath()
+		b = helpers.RemoveFromXPath(b, deletePath)
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

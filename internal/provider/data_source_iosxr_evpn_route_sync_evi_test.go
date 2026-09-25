@@ -59,7 +59,7 @@ func TestAccDataSourceIosxrEVPNRouteSyncEVI(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNRouteSyncEVIPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "EVI_POLICY_1"
@@ -67,10 +67,8 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
-resource "iosxr_gnmi" "PreReq1" {
+resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
-	attributes = {
-	}
 }
 
 `
@@ -97,7 +95,7 @@ func testAccDataSourceIosxrEVPNRouteSyncEVIConfig() string {
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	vrf_default = true` + "\n"
 	}
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

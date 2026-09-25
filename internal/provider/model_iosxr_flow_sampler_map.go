@@ -25,9 +25,13 @@ import (
 	"fmt"
 	"path"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -61,6 +65,19 @@ func (data FlowSamplerMap) getPath() string {
 
 func (data FlowSamplerMapData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.Name.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data FlowSamplerMap) getXPath() string {
+	path := "Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.Name.ValueString()))
+	return path
+}
+
+func (data FlowSamplerMapData) getXPath() string {
+	path := "Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.Name.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -140,12 +157,12 @@ func (data FlowSamplerMap) GetPatternConstraints() []helpers.FieldPatternConstra
 func (data *FlowSamplerMap) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "random"); value.Exists() && !data.Random.IsNull() {
 		data.Random = types.Int64Value(value.Int())
-	} else {
+	} else if data.Random.IsNull() {
 		data.Random = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "out-of"); value.Exists() && !data.OutOf.IsNull() {
 		data.OutOf = types.Int64Value(value.Int())
-	} else {
+	} else if data.OutOf.IsNull() {
 		data.OutOf = types.Int64Null()
 	}
 }
@@ -195,7 +212,7 @@ func (data *FlowSamplerMap) getDeletedItems(ctx context.Context, state FlowSampl
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *FlowSamplerMap) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *FlowSamplerMap) getEmptyLeafsDelete(ctx context.Context, state *FlowSamplerMap, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
@@ -211,7 +228,156 @@ func (data *FlowSamplerMap) getDeletePaths(ctx context.Context, version string) 
 	if !data.Random.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "random"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data FlowSamplerMap) toBodyXML(ctx context.Context, stateArg ...*FlowSamplerMap) string {
+	var state *FlowSamplerMap
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.Random.IsNull() && !data.Random.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/random", strconv.FormatInt(data.Random.ValueInt64(), 10))
+	}
+	if !data.OutOf.IsNull() && !data.OutOf.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/out-of", strconv.FormatInt(data.OutOf.ValueInt64(), 10))
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *FlowSamplerMap) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/random"); value.Exists() && !data.Random.IsNull() {
+		data.Random = types.Int64Value(value.Int())
+	} else if data.Random.IsNull() {
+		data.Random = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/out-of"); value.Exists() && !data.OutOf.IsNull() {
+		data.OutOf = types.Int64Value(value.Int())
+	} else if data.OutOf.IsNull() {
+		data.OutOf = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *FlowSamplerMap) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/random"); value.Exists() {
+		data.Random = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/out-of"); value.Exists() {
+		data.OutOf = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *FlowSamplerMapData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/random"); value.Exists() {
+		data.Random = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/out-of"); value.Exists() {
+		data.OutOf = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *FlowSamplerMap) addDeletedItemsXML(ctx context.Context, state FlowSamplerMap, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.OutOf.IsNull() && data.OutOf.IsNull() {
+		deletePath := state.getXPath() + "/out-of"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Random.IsNull() && data.Random.IsNull() {
+		deletePath := state.getXPath() + "/random"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *FlowSamplerMap) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.OutOf.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/out-of")
+	}
+	if !data.Random.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/random")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

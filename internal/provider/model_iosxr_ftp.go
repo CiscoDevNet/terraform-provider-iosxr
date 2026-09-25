@@ -29,6 +29,9 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -67,6 +70,17 @@ func (data FTP) getPath() string {
 
 func (data FTPData) getPath() string {
 	return "Cisco-IOS-XR-um-ftp-tftp-cfg:/ftp"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data FTP) getXPath() string {
+	path := "Cisco-IOS-XR-um-ftp-tftp-cfg:/ftp"
+	return path
+}
+
+func (data FTPData) getXPath() string {
+	path := "Cisco-IOS-XR-um-ftp-tftp-cfg:/ftp"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -188,14 +202,17 @@ func (data *FTP) updateFromBody(ctx context.Context, res []byte, version string)
 		} else {
 			data.ClientVrfs[i].VrfName = types.StringNull()
 		}
-		if value := r.Get("passive"); !data.ClientVrfs[i].Passive.IsNull() {
-			if value.Exists() {
+		if value := r.Get("passive"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.ClientVrfs[i].Passive.IsNull() {
 				data.ClientVrfs[i].Passive = types.BoolValue(true)
-			} else {
-				data.ClientVrfs[i].Passive = types.BoolValue(false)
 			}
 		} else {
-			data.ClientVrfs[i].Passive = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ClientVrfs[i].Passive.IsNull() {
+				data.ClientVrfs[i].Passive = types.BoolNull()
+			}
 		}
 		if value := r.Get("source-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ClientVrfs[i].SourceInterface.IsNull() {
 			data.ClientVrfs[i].SourceInterface = types.StringValue(value.String())
@@ -224,7 +241,8 @@ func (data *FTP) fromBody(ctx context.Context, res []byte, version string) {
 			}
 			if cValue := v.Get("passive"); cValue.Exists() {
 				item.Passive = types.BoolValue(true)
-			} else {
+			} else if !item.Passive.IsNull() {
+				// Only set to false if it was previously set
 				item.Passive = types.BoolValue(false)
 			}
 			if cValue := v.Get("source-interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
@@ -326,7 +344,7 @@ func (data *FTP) getDeletedItems(ctx context.Context, state FTP, version string)
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *FTP) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *FTP) getEmptyLeafsDelete(ctx context.Context, state *FTP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.ClientVrfs {
 		keys := [...]string{"vrf-name"}
@@ -336,7 +354,9 @@ func (data *FTP) getEmptyLeafsDelete(ctx context.Context, version string) []stri
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.ClientVrfs[i].Passive.IsNull() && !data.ClientVrfs[i].Passive.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "client/vrfs/vrf", keyString), "passive"))
+			if state != nil && i < len(state.ClientVrfs) && !state.ClientVrfs[i].Passive.IsNull() && state.ClientVrfs[i].Passive.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "client/vrfs/vrf", keyString), "passive"))
+			}
 		}
 	}
 	return emptyLeafsDelete
@@ -365,7 +385,280 @@ func (data *FTP) getDeletePaths(ctx context.Context, version string) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "client/vrfs/vrf", keyString))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data FTP) toBodyXML(ctx context.Context, stateArg ...*FTP) string {
+	var state *FTP
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if len(data.ClientVrfs) > 0 {
+		for _, item := range data.ClientVrfs {
+			basePath := data.getXPath() + "/client/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
+			}
+			if !item.Passive.IsNull() && !item.Passive.IsUnknown() {
+				if item.Passive.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/passive", "")
+				}
+			}
+			if !item.SourceInterface.IsNull() && !item.SourceInterface.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/source-interface", item.SourceInterface.ValueString())
+			}
+			if !item.AnonymousPassword.IsNull() && !item.AnonymousPassword.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/anonymous-password", item.AnonymousPassword.ValueString())
+			}
+			if !item.Username.IsNull() && !item.Username.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/username", item.Username.ValueString())
+			}
+			if !item.Password.IsNull() && !item.Password.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/password/encrypted", item.Password.ValueString())
+			}
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *FTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	for i := range data.ClientVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/vrfs/vrf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() && !data.ClientVrfs[i].VrfName.IsNull() {
+			data.ClientVrfs[i].VrfName = types.StringValue(value.String())
+		} else if data.ClientVrfs[i].VrfName.IsNull() {
+			data.ClientVrfs[i].VrfName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "passive"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.ClientVrfs[i].Passive.IsNull() {
+				data.ClientVrfs[i].Passive = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ClientVrfs[i].Passive.IsNull() {
+				data.ClientVrfs[i].Passive = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "source-interface"); value.Exists() && !data.ClientVrfs[i].SourceInterface.IsNull() {
+			data.ClientVrfs[i].SourceInterface = types.StringValue(value.String())
+		} else if data.ClientVrfs[i].SourceInterface.IsNull() {
+			data.ClientVrfs[i].SourceInterface = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "username"); value.Exists() && !data.ClientVrfs[i].Username.IsNull() {
+			data.ClientVrfs[i].Username = types.StringValue(value.String())
+		} else if data.ClientVrfs[i].Username.IsNull() {
+			data.ClientVrfs[i].Username = types.StringNull()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *FTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
+		data.ClientVrfs = make([]FTPClientVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := FTPClientVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "passive"); cValue.Exists() {
+				item.Passive = types.BoolValue(true)
+			} else {
+				item.Passive = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "source-interface"); cValue.Exists() {
+				item.SourceInterface = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "anonymous-password"); cValue.Exists() {
+				item.AnonymousPassword = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "username"); cValue.Exists() {
+				item.Username = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "password/encrypted"); cValue.Exists() {
+				item.Password = types.StringValue(cValue.String())
+			}
+			data.ClientVrfs = append(data.ClientVrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *FTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/client/vrfs/vrf"); value.Exists() {
+		data.ClientVrfs = make([]FTPClientVrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := FTPClientVrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "passive"); cValue.Exists() {
+				item.Passive = types.BoolValue(true)
+			} else {
+				item.Passive = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "source-interface"); cValue.Exists() {
+				item.SourceInterface = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "anonymous-password"); cValue.Exists() {
+				item.AnonymousPassword = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "username"); cValue.Exists() {
+				item.Username = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "password/encrypted"); cValue.Exists() {
+				item.Password = types.StringValue(cValue.String())
+			}
+			data.ClientVrfs = append(data.ClientVrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *FTP) addDeletedItemsXML(ctx context.Context, state FTP, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.ClientVrfs {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.ClientVrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ClientVrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ClientVrfs {
+			found = true
+			if state.ClientVrfs[i].VrfName.ValueString() != data.ClientVrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ClientVrfs[i].Password.IsNull() && data.ClientVrfs[j].Password.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/password/encrypted", predicates))
+				}
+				if !state.ClientVrfs[i].Username.IsNull() && data.ClientVrfs[j].Username.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/username", predicates))
+				}
+				if !state.ClientVrfs[i].AnonymousPassword.IsNull() && data.ClientVrfs[j].AnonymousPassword.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/anonymous-password", predicates))
+				}
+				if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/source-interface", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.ClientVrfs[i].Passive.IsNull() && state.ClientVrfs[i].Passive.ValueBool() && data.ClientVrfs[j].Passive.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v/passive", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/client/vrfs/vrf%v", predicates))
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *FTP) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.ClientVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/client/vrfs/vrf%v", predicates))
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

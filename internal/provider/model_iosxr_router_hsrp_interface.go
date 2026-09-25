@@ -25,9 +25,13 @@ import (
 	"fmt"
 	"path"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -72,6 +76,19 @@ func (data RouterHSRPInterface) getPath() string {
 
 func (data RouterHSRPInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data RouterHSRPInterface) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
+}
+
+func (data RouterHSRPInterfaceData) getXPath() string {
+	path := "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]"
+	path = fmt.Sprintf(path, fmt.Sprintf("%v", data.InterfaceName.ValueString()))
+	return path
 }
 
 // End of section. //template:end getPath
@@ -172,43 +189,45 @@ func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res []byte,
 		if value.Exists() {
 			data.HsrpUseBia = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.HsrpUseBia = types.BoolValue(false)
 		}
-	} else {
+	} else if data.HsrpUseBia.IsNull() {
 		data.HsrpUseBia = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "hsrp.redirects.disable"); !data.HsrpRedirectsDisable.IsNull() {
 		if value.Exists() {
 			data.HsrpRedirectsDisable = types.BoolValue(true)
 		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
 			data.HsrpRedirectsDisable = types.BoolValue(false)
 		}
-	} else {
+	} else if data.HsrpRedirectsDisable.IsNull() {
 		data.HsrpRedirectsDisable = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "hsrp.delay.minimum"); value.Exists() && !data.HsrpDelayMinimum.IsNull() {
 		data.HsrpDelayMinimum = types.Int64Value(value.Int())
-	} else {
+	} else if data.HsrpDelayMinimum.IsNull() {
 		data.HsrpDelayMinimum = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "hsrp.delay.reload"); value.Exists() && !data.HsrpDelayReload.IsNull() {
 		data.HsrpDelayReload = types.Int64Value(value.Int())
-	} else {
+	} else if data.HsrpDelayReload.IsNull() {
 		data.HsrpDelayReload = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "hsrp.bfd.minimum-interval"); value.Exists() && !data.HsrpBfdMinimumInterval.IsNull() {
 		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
-	} else {
+	} else if data.HsrpBfdMinimumInterval.IsNull() {
 		data.HsrpBfdMinimumInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "hsrp.bfd.multiplier"); value.Exists() && !data.HsrpBfdMultiplier.IsNull() {
 		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
-	} else {
+	} else if data.HsrpBfdMultiplier.IsNull() {
 		data.HsrpBfdMultiplier = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "hsrp.mac-refresh"); value.Exists() && !data.HsrpMacRefresh.IsNull() {
 		data.HsrpMacRefresh = types.Int64Value(value.Int())
-	} else {
+	} else if data.HsrpMacRefresh.IsNull() {
 		data.HsrpMacRefresh = types.Int64Null()
 	}
 }
@@ -220,12 +239,14 @@ func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res []byte,
 func (data *RouterHSRPInterface) fromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "hsrp.use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
-	} else {
+	} else if !data.HsrpUseBia.IsNull() {
+		// Only set to false if it was previously set in state
 		data.HsrpUseBia = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "hsrp.redirects.disable"); value.Exists() {
 		data.HsrpRedirectsDisable = types.BoolValue(true)
-	} else {
+	} else if !data.HsrpRedirectsDisable.IsNull() {
+		// Only set to false if it was previously set in state
 		data.HsrpRedirectsDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "hsrp.delay.minimum"); value.Exists() {
@@ -311,13 +332,17 @@ func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state Rout
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context, state *RouterHSRPInterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.HsrpRedirectsDisable.IsNull() && !data.HsrpRedirectsDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hsrp/redirects/disable"))
+		if state != nil && !state.HsrpRedirectsDisable.IsNull() && state.HsrpRedirectsDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hsrp/redirects/disable"))
+		}
 	}
 	if !data.HsrpUseBia.IsNull() && !data.HsrpUseBia.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hsrp/use-bia"))
+		if state != nil && !state.HsrpUseBia.IsNull() && state.HsrpUseBia.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hsrp/use-bia"))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -348,7 +373,342 @@ func (data *RouterHSRPInterface) getDeletePaths(ctx context.Context, version str
 	if !data.HsrpUseBia.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "hsrp/use-bia"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data RouterHSRPInterface) toBodyXML(ctx context.Context, stateArg ...*RouterHSRPInterface) string {
+	var state *RouterHSRPInterface
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.HsrpUseBia.IsNull() && !data.HsrpUseBia.IsUnknown() {
+		if data.HsrpUseBia.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/use-bia", "")
+		}
+	}
+	if !data.HsrpRedirectsDisable.IsNull() && !data.HsrpRedirectsDisable.IsUnknown() {
+		if data.HsrpRedirectsDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/redirects/disable", "")
+		}
+	}
+	if !data.HsrpDelayMinimum.IsNull() && !data.HsrpDelayMinimum.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/delay/minimum", strconv.FormatInt(data.HsrpDelayMinimum.ValueInt64(), 10))
+	}
+	if !data.HsrpDelayReload.IsNull() && !data.HsrpDelayReload.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/delay/reload", strconv.FormatInt(data.HsrpDelayReload.ValueInt64(), 10))
+	}
+	if !data.HsrpBfdMinimumInterval.IsNull() && !data.HsrpBfdMinimumInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/bfd/minimum-interval", strconv.FormatInt(data.HsrpBfdMinimumInterval.ValueInt64(), 10))
+	}
+	if !data.HsrpBfdMultiplier.IsNull() && !data.HsrpBfdMultiplier.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/bfd/multiplier", strconv.FormatInt(data.HsrpBfdMultiplier.ValueInt64(), 10))
+	}
+	if !data.HsrpMacRefresh.IsNull() && !data.HsrpMacRefresh.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/hsrp/mac-refresh", strconv.FormatInt(data.HsrpMacRefresh.ValueInt64(), 10))
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *RouterHSRPInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/use-bia"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.HsrpUseBia.IsNull() {
+			data.HsrpUseBia = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.HsrpUseBia.IsNull() {
+			data.HsrpUseBia = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/redirects/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.HsrpRedirectsDisable.IsNull() {
+			data.HsrpRedirectsDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.HsrpRedirectsDisable.IsNull() {
+			data.HsrpRedirectsDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/delay/minimum"); value.Exists() && !data.HsrpDelayMinimum.IsNull() {
+		data.HsrpDelayMinimum = types.Int64Value(value.Int())
+	} else if data.HsrpDelayMinimum.IsNull() {
+		data.HsrpDelayMinimum = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/delay/reload"); value.Exists() && !data.HsrpDelayReload.IsNull() {
+		data.HsrpDelayReload = types.Int64Value(value.Int())
+	} else if data.HsrpDelayReload.IsNull() {
+		data.HsrpDelayReload = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/bfd/minimum-interval"); value.Exists() && !data.HsrpBfdMinimumInterval.IsNull() {
+		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
+	} else if data.HsrpBfdMinimumInterval.IsNull() {
+		data.HsrpBfdMinimumInterval = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/bfd/multiplier"); value.Exists() && !data.HsrpBfdMultiplier.IsNull() {
+		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
+	} else if data.HsrpBfdMultiplier.IsNull() {
+		data.HsrpBfdMultiplier = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/mac-refresh"); value.Exists() && !data.HsrpMacRefresh.IsNull() {
+		data.HsrpMacRefresh = types.Int64Value(value.Int())
+	} else if data.HsrpMacRefresh.IsNull() {
+		data.HsrpMacRefresh = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *RouterHSRPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/use-bia"); value.Exists() {
+		data.HsrpUseBia = types.BoolValue(true)
+	} else {
+		data.HsrpUseBia = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/redirects/disable"); value.Exists() {
+		data.HsrpRedirectsDisable = types.BoolValue(true)
+	} else {
+		data.HsrpRedirectsDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/delay/minimum"); value.Exists() {
+		data.HsrpDelayMinimum = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/delay/reload"); value.Exists() {
+		data.HsrpDelayReload = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/bfd/minimum-interval"); value.Exists() {
+		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/bfd/multiplier"); value.Exists() {
+		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/mac-refresh"); value.Exists() {
+		data.HsrpMacRefresh = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *RouterHSRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/use-bia"); value.Exists() {
+		data.HsrpUseBia = types.BoolValue(true)
+	} else {
+		data.HsrpUseBia = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/redirects/disable"); value.Exists() {
+		data.HsrpRedirectsDisable = types.BoolValue(true)
+	} else {
+		data.HsrpRedirectsDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/delay/minimum"); value.Exists() {
+		data.HsrpDelayMinimum = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/delay/reload"); value.Exists() {
+		data.HsrpDelayReload = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/bfd/minimum-interval"); value.Exists() {
+		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/bfd/multiplier"); value.Exists() {
+		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/hsrp/mac-refresh"); value.Exists() {
+		data.HsrpMacRefresh = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *RouterHSRPInterface) addDeletedItemsXML(ctx context.Context, state RouterHSRPInterface, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.HsrpMacRefresh.IsNull() && data.HsrpMacRefresh.IsNull() {
+		deletePath := state.getXPath() + "/hsrp/mac-refresh"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.HsrpBfdMultiplier.IsNull() && data.HsrpBfdMultiplier.IsNull() {
+		deletePath := state.getXPath() + "/hsrp/bfd/multiplier"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.HsrpBfdMinimumInterval.IsNull() && data.HsrpBfdMinimumInterval.IsNull() {
+		deletePath := state.getXPath() + "/hsrp/bfd/minimum-interval"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.HsrpDelayReload.IsNull() && data.HsrpDelayReload.IsNull() {
+		deletePath := state.getXPath() + "/hsrp/delay/reload"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.HsrpDelayMinimum.IsNull() && data.HsrpDelayMinimum.IsNull() {
+		deletePath := state.getXPath() + "/hsrp/delay/minimum"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.HsrpRedirectsDisable.IsNull() && state.HsrpRedirectsDisable.ValueBool() && data.HsrpRedirectsDisable.IsNull() {
+		deletePath := state.getXPath() + "/hsrp/redirects/disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.HsrpUseBia.IsNull() && state.HsrpUseBia.ValueBool() && data.HsrpUseBia.IsNull() {
+		deletePath := state.getXPath() + "/hsrp/use-bia"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *RouterHSRPInterface) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.HsrpMacRefresh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hsrp/mac-refresh")
+	}
+	if !data.HsrpBfdMultiplier.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hsrp/bfd/multiplier")
+	}
+	if !data.HsrpBfdMinimumInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hsrp/bfd/minimum-interval")
+	}
+	if !data.HsrpDelayReload.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hsrp/delay/reload")
+	}
+	if !data.HsrpDelayMinimum.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hsrp/delay/minimum")
+	}
+	if !data.HsrpRedirectsDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hsrp/redirects/disable")
+	}
+	if !data.HsrpUseBia.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/hsrp/use-bia")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

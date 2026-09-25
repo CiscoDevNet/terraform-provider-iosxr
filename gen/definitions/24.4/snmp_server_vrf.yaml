@@ -8,6 +8,7 @@ attributes:
   - yang_name: hosts/host
     tf_name: hosts
     type: List
+    minimum_test_value: '[address="11.11.11.11"]'
     attributes:
       - yang_name: address
         id: true
@@ -75,11 +76,9 @@ attributes:
       - yang_name: informs/unencrypted/unencrypted-string
         tf_name: informs_unencrypted_strings
         type: List
-        minimum_test_value: '["COMMUNITY2"]'
         attributes:
           - yang_name: community-string
             id: true
-            minimum_test_value: '"COMMUNITY2"'
             sensitive: true
             write_only: true
             example: COMMUNITY2

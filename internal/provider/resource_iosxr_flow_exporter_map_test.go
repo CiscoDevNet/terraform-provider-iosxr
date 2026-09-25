@@ -94,7 +94,7 @@ func iosxrFlowExporterMapImportStateIdFunc(resourceName string) resource.ImportS
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrFlowExporterMapPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
 		"vrf-name" = "VRF1"
@@ -111,7 +111,7 @@ func testAccIosxrFlowExporterMapConfig_minimum() string {
 	config := `resource "iosxr_flow_exporter_map" "test" {` + "\n"
 	config += `	name = "exporter_map1"` + "\n"
 	config += `	version_export_format = "v9"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -138,7 +138,7 @@ func testAccIosxrFlowExporterMapConfig_all() string {
 	config += `	version_options_sampler_table_timeout = 4096` + "\n"
 	config += `	version_options_class_table_timeout = 255` + "\n"
 	config += `	version_options_vrf_table_timeout = 122` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

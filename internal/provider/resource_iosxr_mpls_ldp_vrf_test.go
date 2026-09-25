@@ -121,7 +121,7 @@ func iosxrMPLSLDPVRFImportStateIdFunc(resourceName string) resource.ImportStateI
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrMPLSLDPVRFPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
 	attributes = {
 	}
@@ -137,7 +137,7 @@ func testAccIosxrMPLSLDPVRFConfig_minimum() string {
 	config := `resource "iosxr_mpls_ldp_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -209,7 +209,7 @@ func testAccIosxrMPLSLDPVRFConfig_all() string {
 	config += `		address_family_ipv6 = true` + "\n"
 	config += `		address_family_ipv6_discovery_transport_address_ip = "2001:db8::1"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

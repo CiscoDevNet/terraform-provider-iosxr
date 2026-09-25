@@ -180,6 +180,12 @@ func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_ipv4", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_ipv6", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_systemowner", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "contexts.0.name", "CONTEXT1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "context_mappings.0.name", "CONTEXT1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "context_mappings.0.feature", "bridge"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "context_mappings.0.instance", "INSTANCE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "context_mappings.0.vrf", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "context_mappings.0.topology", "TOPOLOGY1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "oid_poll_stats", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "timeouts_subagent", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "timeouts_duplicate", "10"))
@@ -207,7 +213,7 @@ func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrSNMPServerPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
 	attributes = {
 		"access-list-name" = "ACL1"
@@ -419,6 +425,16 @@ func testAccDataSourceIosxrSNMPServerConfig() string {
 	config += `		v3_ipv6 = "ACL1"` + "\n"
 	config += `		v3_systemowner = true` + "\n"
 	config += `	}]` + "\n"
+	config += `	contexts = [{` + "\n"
+	config += `		name = "CONTEXT1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	context_mappings = [{` + "\n"
+	config += `		name = "CONTEXT1"` + "\n"
+	config += `		feature = "bridge"` + "\n"
+	config += `		instance = "INSTANCE1"` + "\n"
+	config += `		vrf = "VRF1"` + "\n"
+	config += `		topology = "TOPOLOGY1"` + "\n"
+	config += `	}]` + "\n"
 	config += `	oid_poll_stats = true` + "\n"
 	config += `	timeouts_subagent = 20` + "\n"
 	config += `	timeouts_duplicate = 10` + "\n"
@@ -430,7 +446,7 @@ func testAccDataSourceIosxrSNMPServerConfig() string {
 	config += `	inform_retries = 10` + "\n"
 	config += `	inform_timeout = 10` + "\n"
 	config += `	inform_pending = 10` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

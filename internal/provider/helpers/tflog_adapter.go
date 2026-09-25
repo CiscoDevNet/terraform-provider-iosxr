@@ -38,7 +38,7 @@ import (
 //
 // Usage in provider initialization:
 //
-//	logger := helpers.NewTflogAdapter()
+//	logger := helpers.NewTflogAdapter("gnmi")
 //	client, err := gnmi.NewClient(host,
 //	    gnmi.Username(username),
 //	    gnmi.Password(password),
@@ -48,18 +48,27 @@ import (
 // Usage in resource operations:
 //
 //	// Context is automatically propagated through go-gnmi's Logger interface
-//	_, err := device.Client.Set(ctx, ops)
+//	_, err := device.GnmiClient.Set(ctx, ops)
 //	// Logs will automatically use the correct context and gnmi subsystem
-type TflogAdapter struct{}
+type TflogAdapter struct {
+	subsystem string
+}
 
 var _ gnmi.Logger = (*TflogAdapter)(nil)
 
-// NewTflogAdapter creates a new Terraform logging adapter.
+// NewTflogAdapter creates a new Terraform logging adapter for a specific subsystem.
 //
 // The adapter automatically receives context from go-gnmi's Logger interface
 // on each logging call, ensuring proper context propagation without manual management.
-func NewTflogAdapter() *TflogAdapter {
-	return &TflogAdapter{}
+//
+// The subsystem parameter defines the logging category (e.g., "gnmi", "netconf").
+func NewTflogAdapter(subsystem string) *TflogAdapter {
+	if subsystem == "" {
+		subsystem = "provider"
+	}
+	return &TflogAdapter{
+		subsystem: subsystem,
+	}
 }
 
 // Debug logs a debug message with structured key-value pairs to tflog.SubsystemDebug.
@@ -70,20 +79,20 @@ func NewTflogAdapter() *TflogAdapter {
 // Context is provided by go-gnmi's Logger interface, ensuring automatic
 // propagation of trace IDs, request IDs, and deadlines.
 //
-// Logs are written to the "gnmi" subsystem for proper organization and filtering.
+// Logs are written to the configured subsystem for proper organization and filtering.
 // The subsystem is automatically created if it doesn't exist.
 func (t *TflogAdapter) Debug(ctx context.Context, msg string, keysAndValues ...any) {
 	if ctx == nil {
 		return
 	}
 	// Ensure subsystem exists (idempotent operation)
-	ctx = tflog.NewSubsystem(ctx, "gnmi")
+	ctx = tflog.NewSubsystem(ctx, t.subsystem)
 
 	fields := keysAndValuesToMap(keysAndValues)
 	if fields != nil {
-		tflog.SubsystemDebug(ctx, "gnmi", msg, fields)
+		tflog.SubsystemDebug(ctx, t.subsystem, msg, fields)
 	} else {
-		tflog.SubsystemDebug(ctx, "gnmi", msg)
+		tflog.SubsystemDebug(ctx, t.subsystem, msg)
 	}
 }
 
@@ -95,20 +104,20 @@ func (t *TflogAdapter) Debug(ctx context.Context, msg string, keysAndValues ...a
 // Context is provided by go-gnmi's Logger interface, ensuring automatic
 // propagation of trace IDs, request IDs, and deadlines.
 //
-// Logs are written to the "gnmi" subsystem for proper organization and filtering.
+// Logs are written to the configured subsystem for proper organization and filtering.
 // The subsystem is automatically created if it doesn't exist.
 func (t *TflogAdapter) Info(ctx context.Context, msg string, keysAndValues ...any) {
 	if ctx == nil {
 		return
 	}
 	// Ensure subsystem exists (idempotent operation)
-	ctx = tflog.NewSubsystem(ctx, "gnmi")
+	ctx = tflog.NewSubsystem(ctx, t.subsystem)
 
 	fields := keysAndValuesToMap(keysAndValues)
 	if fields != nil {
-		tflog.SubsystemInfo(ctx, "gnmi", msg, fields)
+		tflog.SubsystemInfo(ctx, t.subsystem, msg, fields)
 	} else {
-		tflog.SubsystemInfo(ctx, "gnmi", msg)
+		tflog.SubsystemInfo(ctx, t.subsystem, msg)
 	}
 }
 
@@ -120,20 +129,20 @@ func (t *TflogAdapter) Info(ctx context.Context, msg string, keysAndValues ...an
 // Context is provided by go-gnmi's Logger interface, ensuring automatic
 // propagation of trace IDs, request IDs, and deadlines.
 //
-// Logs are written to the "gnmi" subsystem for proper organization and filtering.
+// Logs are written to the configured subsystem for proper organization and filtering.
 // The subsystem is automatically created if it doesn't exist.
 func (t *TflogAdapter) Warn(ctx context.Context, msg string, keysAndValues ...any) {
 	if ctx == nil {
 		return
 	}
 	// Ensure subsystem exists (idempotent operation)
-	ctx = tflog.NewSubsystem(ctx, "gnmi")
+	ctx = tflog.NewSubsystem(ctx, t.subsystem)
 
 	fields := keysAndValuesToMap(keysAndValues)
 	if fields != nil {
-		tflog.SubsystemWarn(ctx, "gnmi", msg, fields)
+		tflog.SubsystemWarn(ctx, t.subsystem, msg, fields)
 	} else {
-		tflog.SubsystemWarn(ctx, "gnmi", msg)
+		tflog.SubsystemWarn(ctx, t.subsystem, msg)
 	}
 }
 
@@ -144,20 +153,20 @@ func (t *TflogAdapter) Warn(ctx context.Context, msg string, keysAndValues ...an
 // Context is provided by go-gnmi's Logger interface, ensuring automatic
 // propagation of trace IDs, request IDs, and deadlines.
 //
-// Logs are written to the "gnmi" subsystem for proper organization and filtering.
+// Logs are written to the configured subsystem for proper organization and filtering.
 // The subsystem is automatically created if it doesn't exist.
 func (t *TflogAdapter) Error(ctx context.Context, msg string, keysAndValues ...any) {
 	if ctx == nil {
 		return
 	}
 	// Ensure subsystem exists (idempotent operation)
-	ctx = tflog.NewSubsystem(ctx, "gnmi")
+	ctx = tflog.NewSubsystem(ctx, t.subsystem)
 
 	fields := keysAndValuesToMap(keysAndValues)
 	if fields != nil {
-		tflog.SubsystemError(ctx, "gnmi", msg, fields)
+		tflog.SubsystemError(ctx, t.subsystem, msg, fields)
 	} else {
-		tflog.SubsystemError(ctx, "gnmi", msg)
+		tflog.SubsystemError(ctx, t.subsystem, msg)
 	}
 }
 

@@ -43,7 +43,7 @@ func TestAccDataSourceIosxrSegmentRoutingMappingServer(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingMappingServerPrerequisitesConfig + testAccDataSourceIosxrSegmentRoutingMappingServerConfig(),
+				Config: testAccDataSourceIosxrSegmentRoutingMappingServerConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -53,15 +53,6 @@ func TestAccDataSourceIosxrSegmentRoutingMappingServer(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrSegmentRoutingMappingServerPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing"
-	attributes = {
-		"enable" = "<NULL>"
-	}
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -80,7 +71,6 @@ func testAccDataSourceIosxrSegmentRoutingMappingServerConfig() string {
 	config += `			attached = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

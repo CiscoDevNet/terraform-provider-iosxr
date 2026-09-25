@@ -198,7 +198,7 @@ func iosxrPerformanceMeasurementDelayProfileImportStateIdFunc(resourceName strin
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrPerformanceMeasurementDelayProfilePrerequisitesConfig_V24_4 = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
 	attributes = {
 	}
@@ -222,7 +222,7 @@ func testAccIosxrPerformanceMeasurementDelayProfileConfig_minimum() string {
 	config := `resource "iosxr_performance_measurement_delay_profile" "test" {` + "\n"
 	config += `	interfaces_default_probe_computation_interval = "60"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
-		"24.4": `[iosxr_gnmi.PreReq0, ]`,
+		"24.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -362,7 +362,7 @@ func testAccIosxrPerformanceMeasurementDelayProfileConfig_all() string {
 		config += `	sr_policy_default_probe_timestamp_format_ntp = true` + "\n"
 	}
 	config += selectVersionDependsOn(map[string]string{
-		"24.4": `[iosxr_gnmi.PreReq0, ]`,
+		"24.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

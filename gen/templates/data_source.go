@@ -31,10 +31,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/tidwall/gjson"
+
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/netascode/go-gnmi"
+	"github.com/netascode/go-netconf"
 )
 
 // End of section. //template:end imports
@@ -210,29 +213,61 @@ func (d *{{camelCase .Name}}{{$versionSuffix}}DataSource) Read(ctx context.Conte
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", {{if .HasPathVersion}}config.getPathForVersion(device.Version){{else}}config.getPath(){{end}}))
 
 	if device.Managed {
-		if !d.data.ReuseConnection {
-			defer device.Client.Disconnect()
-		}
-		getResp, err := device.Client.Get(ctx, []string{ {{if .HasPathVersion}}config.getPathForVersion(device.Version){{else}}config.getPath(){{end}}})
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-			return
-		}
+		if device.Protocol == "gnmi" {
+			// Ensure connection is healthy (reconnect if stale)
+			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
-		// Defensive bounds checking for response structure
-		if len(getResp.Notifications) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response contains no notifications")
-			return
-		}
-		if len(getResp.Notifications[0].Update) == 0 {
-			resp.Diagnostics.AddError("Invalid gNMI response",
-				"Response notification contains no updates")
-			return
-		}
+			getResp, err := device.GnmiClient.Get(ctx, []string{ {{if .HasPathVersion}}config.getPathForVersion(device.Version){{else}}config.getPath(){{end}}})
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				return
+			}
 
-		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-		config.fromBody(ctx, respBody, device.Version)
+			// Defensive bounds checking for response structure
+			if len(getResp.Notifications) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response contains no notifications")
+				return
+			}
+			if len(getResp.Notifications[0].Update) == 0 {
+				resp.Diagnostics.AddError("Invalid gNMI response",
+					"Response notification contains no updates")
+				return
+			}
+
+			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
+			config.fromBody(ctx, respBody, device.Version)
+		} else {
+			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
+			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+			defer helpers.CloseNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection)
+
+			// Ensure connection is healthy (reconnect if stale)
+			if err := helpers.EnsureNetconfConnection(ctx, device.NetconfClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("NETCONF Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
+
+			filter := helpers.GetSubtreeFilter(config.getXPath())
+			res, err := helpers.GetConfigWithTimeout(ctx, device.NetconfClient, "running", filter)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object (%s), got error: %s", config.getPath(), err))
+				return
+			}
+
+			config.fromBodyXML(ctx, res.Res)
+		}
 	}
 
 	config.Id = types.StringValue({{if .HasPathVersion}}config.getPathForVersion(device.Version){{else}}config.getPath(){{end}})

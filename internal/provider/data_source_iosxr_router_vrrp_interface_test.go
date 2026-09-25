@@ -53,10 +53,8 @@ func TestAccDataSourceIosxrRouterVRRPInterface(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterVRRPInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
-	attributes = {
-	}
 }
 
 `
@@ -74,7 +72,7 @@ func testAccDataSourceIosxrRouterVRRPInterfaceConfig() string {
 	config += `	delay_reload = 4321` + "\n"
 	config += `	bfd_minimum_interval = 255` + "\n"
 	config += `	bfd_multiplier = 33` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

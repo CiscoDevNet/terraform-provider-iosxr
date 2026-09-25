@@ -32,14 +32,10 @@ import (
 
 func TestAccDataSourceIosxrNetconfYangAgent(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "ssh", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "with_defaults_support", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "rate_limit", "4096"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "session_limit", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "session_idle_timeout", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "session_absolute_timeout", "1440"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "netconf_v1", "1.0-only"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "netconf_v1_streaming_disabled", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -62,15 +58,10 @@ func TestAccDataSourceIosxrNetconfYangAgent(t *testing.T) {
 
 func testAccDataSourceIosxrNetconfYangAgentConfig() string {
 	config := `resource "iosxr_netconf_yang_agent" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	ssh = true` + "\n"
 	config += `	with_defaults_support = true` + "\n"
-	config += `	rate_limit = 4096` + "\n"
 	config += `	session_limit = 50` + "\n"
 	config += `	session_idle_timeout = 30` + "\n"
 	config += `	session_absolute_timeout = 1440` + "\n"
-	config += `	netconf_v1 = "1.0-only"` + "\n"
-	config += `	netconf_v1_streaming_disabled = true` + "\n"
 	config += `}` + "\n"
 
 	config += `

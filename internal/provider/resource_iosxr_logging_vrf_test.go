@@ -118,7 +118,7 @@ func iosxrLoggingVRFImportStateIdFunc(resourceName string) resource.ImportStateI
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrLoggingVRFPrerequisitesConfig_V24_4 = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=server.cisco.com]"
 	attributes = {
 		"host-name" = "server.cisco.com"
@@ -134,7 +134,7 @@ resource "iosxr_gnmi" "PreReq0" {
 
 `
 const testAccIosxrLoggingVRFPrerequisitesConfig_V25_4 = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=server.cisco.com]"
 	attributes = {
 		"host-name" = "server.cisco.com"
@@ -173,8 +173,8 @@ func testAccIosxrLoggingVRFConfig_minimum() string {
 	}, "\"informational\"") + "\n"
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
-		"24.4": `[iosxr_gnmi.PreReq0, ]`,
-		"25.4": `[iosxr_gnmi.PreReq0, ]`,
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -233,8 +233,8 @@ func testAccIosxrLoggingVRFConfig_all() string {
 	}
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
-		"24.4": `[iosxr_gnmi.PreReq0, ]`,
-		"25.4": `[iosxr_gnmi.PreReq0, ]`,
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

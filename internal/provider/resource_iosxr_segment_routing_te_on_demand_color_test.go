@@ -112,7 +112,7 @@ func iosxrSegmentRoutingTEOnDemandColorImportStateIdFunc(resourceName string) re
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
+resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
 	attributes = {
 	}
@@ -130,7 +130,7 @@ func testAccIosxrSegmentRoutingTEOnDemandColorConfig_minimum() string {
 	config += `	maximum_sid_depth = 6` + "\n"
 	config += `	effective_metric_value = 1000` + "\n"
 	config += `	effective_metric_type = "default"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -184,7 +184,7 @@ func testAccIosxrSegmentRoutingTEOnDemandColorConfig_all() string {
 	config += `	srv6_locator_name = "LOC1"` + "\n"
 	config += `	srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
 	config += `	srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

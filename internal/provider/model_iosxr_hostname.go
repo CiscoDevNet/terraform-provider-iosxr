@@ -22,10 +22,15 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
+	"fmt"
 	"path"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -55,6 +60,17 @@ func (data Hostname) getPath() string {
 
 func (data HostnameData) getPath() string {
 	return "Cisco-IOS-XR-um-hostname-cfg:/hostname"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data Hostname) getXPath() string {
+	path := "Cisco-IOS-XR-um-hostname-cfg:/hostname"
+	return path
+}
+
+func (data HostnameData) getXPath() string {
+	path := "Cisco-IOS-XR-um-hostname-cfg:/hostname"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -128,7 +144,7 @@ func (data Hostname) GetPatternConstraints() []helpers.FieldPatternConstraint {
 func (data *Hostname) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringValue(value.String())
-	} else {
+	} else if data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringNull()
 	}
 }
@@ -169,7 +185,7 @@ func (data *Hostname) getDeletedItems(ctx context.Context, state Hostname, versi
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *Hostname) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *Hostname) getEmptyLeafsDelete(ctx context.Context, state *Hostname, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
@@ -182,7 +198,124 @@ func (data *Hostname) getDeletePaths(ctx context.Context, version string) []stri
 	if !data.SystemNetworkName.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "system-network-name"))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data Hostname) toBodyXML(ctx context.Context, stateArg ...*Hostname) string {
+	var state *Hostname
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if !data.SystemNetworkName.IsNull() && !data.SystemNetworkName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/system-network-name", data.SystemNetworkName.ValueString())
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *Hostname) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/system-network-name"); value.Exists() && !data.SystemNetworkName.IsNull() {
+		data.SystemNetworkName = types.StringValue(value.String())
+	} else if data.SystemNetworkName.IsNull() {
+		data.SystemNetworkName = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *Hostname) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/system-network-name"); value.Exists() {
+		data.SystemNetworkName = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *HostnameData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/system-network-name"); value.Exists() {
+		data.SystemNetworkName = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *Hostname) addDeletedItemsXML(ctx context.Context, state Hostname, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.SystemNetworkName.IsNull() && data.SystemNetworkName.IsNull() {
+		deletePath := state.getXPath() + "/system-network-name"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *Hostname) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	if !data.SystemNetworkName.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/system-network-name")
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

@@ -29,6 +29,9 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-netconf"
+	"github.com/netascode/xmldot"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -108,6 +111,17 @@ func (data SRLG) getPath() string {
 
 func (data SRLGData) getPath() string {
 	return "Cisco-IOS-XR-um-vrf-cfg:/srlg"
+}
+
+// getXPath returns the XPath for NETCONF operations
+func (data SRLG) getXPath() string {
+	path := "Cisco-IOS-XR-um-vrf-cfg:/srlg"
+	return path
+}
+
+func (data SRLGData) getXPath() string {
+	path := "Cisco-IOS-XR-um-vrf-cfg:/srlg"
+	return path
 }
 
 // End of section. //template:end getPath
@@ -350,14 +364,17 @@ func (data *SRLG) updateFromBody(ctx context.Context, res []byte, version string
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("include-optical"); !data.Interfaces[i].IncludeOptical.IsNull() {
-			if value.Exists() {
+		if value := r.Get("include-optical"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].IncludeOptical.IsNull() {
 				data.Interfaces[i].IncludeOptical = types.BoolValue(true)
-			} else {
-				data.Interfaces[i].IncludeOptical = types.BoolValue(false)
 			}
 		} else {
-			data.Interfaces[i].IncludeOptical = types.BoolNull()
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Interfaces[i].IncludeOptical.IsNull() {
+				data.Interfaces[i].IncludeOptical = types.BoolNull()
+			}
 		}
 		if value := r.Get("include-optical.priority"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Interfaces[i].IncludeOpticalPriority.IsNull() {
 			data.Interfaces[i].IncludeOpticalPriority = types.StringValue(value.String())
@@ -636,7 +653,8 @@ func (data *SRLG) fromBody(ctx context.Context, res []byte, version string) {
 			}
 			if cValue := v.Get("include-optical"); cValue.Exists() {
 				item.IncludeOptical = types.BoolValue(true)
-			} else {
+			} else if !item.IncludeOptical.IsNull() {
+				// Only set to false if it was previously set
 				item.IncludeOptical = types.BoolValue(false)
 			}
 			if cValue := v.Get("include-optical.priority"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
@@ -1203,7 +1221,7 @@ func (data *SRLG) getDeletedItems(ctx context.Context, state SRLG, version strin
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *SRLG) getEmptyLeafsDelete(ctx context.Context, version string) []string {
+func (data *SRLG) getEmptyLeafsDelete(ctx context.Context, state *SRLG, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.InheritLocations {
 		keys := [...]string{"location-name"}
@@ -1269,7 +1287,9 @@ func (data *SRLG) getEmptyLeafsDelete(ctx context.Context, version string) []str
 			}
 		}
 		if !data.Interfaces[i].IncludeOptical.IsNull() && !data.Interfaces[i].IncludeOptical.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "include-optical"))
+			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].IncludeOptical.IsNull() && state.Interfaces[i].IncludeOptical.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "include-optical"))
+			}
 		}
 	}
 	for i := range data.Names {
@@ -1360,7 +1380,1134 @@ func (data *SRLG) getDeletePaths(ctx context.Context, version string) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString))
 	}
+
 	return deletePaths
 }
 
 // End of section. //template:end getDeletePaths
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
+
+func (data SRLG) toBodyXML(ctx context.Context, stateArg ...*SRLG) string {
+	var state *SRLG
+	if len(stateArg) > 0 {
+		state = stateArg[0]
+	}
+	body := netconf.Body{}
+	if len(data.Names) > 0 {
+		for _, item := range data.Names {
+			basePath := data.getXPath() + "/names/name[srlg-name='" + item.SrlgName.ValueString() + "']"
+			if !item.SrlgName.IsNull() && !item.SrlgName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/srlg-name", item.SrlgName.ValueString())
+			}
+			if !item.Value.IsNull() && !item.Value.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/value", strconv.FormatInt(item.Value.ValueInt64(), 10))
+			}
+			if !item.Description.IsNull() && !item.Description.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/description", item.Description.ValueString())
+			}
+		}
+	}
+	if len(data.Interfaces) > 0 {
+		for _, item := range data.Interfaces {
+			basePath := data.getXPath() + "/interfaces/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
+			}
+			if !item.IncludeOptical.IsNull() && !item.IncludeOptical.IsUnknown() {
+				if item.IncludeOptical.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/include-optical", "")
+				}
+			}
+			if !item.IncludeOpticalPriority.IsNull() && !item.IncludeOpticalPriority.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/include-optical/priority", item.IncludeOpticalPriority.ValueString())
+			}
+			if len(item.Indexes) > 0 {
+				for _, citem := range item.Indexes {
+					cbasePath := basePath + "/indexes/index[index-number='" + strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10) + "']"
+					if !citem.IndexNumber.IsNull() && !citem.IndexNumber.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/index-number", strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10))
+					}
+					if !citem.Value.IsNull() && !citem.Value.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/value", strconv.FormatInt(citem.Value.ValueInt64(), 10))
+					}
+					if !citem.Priority.IsNull() && !citem.Priority.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/priority", citem.Priority.ValueString())
+					}
+				}
+			}
+			if len(item.Names) > 0 {
+				for _, citem := range item.Names {
+					cbasePath := basePath + "/names/name[srlg-name='" + citem.SrlgName.ValueString() + "']"
+					if !citem.SrlgName.IsNull() && !citem.SrlgName.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/srlg-name", citem.SrlgName.ValueString())
+					}
+				}
+			}
+			if len(item.Groups) > 0 {
+				for _, citem := range item.Groups {
+					cbasePath := basePath + "/groups/group[index-number='" + strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10) + "']"
+					if !citem.IndexNumber.IsNull() && !citem.IndexNumber.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/index-number", strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10))
+					}
+					if !citem.GroupName.IsNull() && !citem.GroupName.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/group-name", citem.GroupName.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if len(data.Groups) > 0 {
+		for _, item := range data.Groups {
+			basePath := data.getXPath() + "/groups/group[group-name='" + item.GroupName.ValueString() + "']"
+			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/group-name", item.GroupName.ValueString())
+			}
+			if len(item.Indexes) > 0 {
+				for _, citem := range item.Indexes {
+					cbasePath := basePath + "/indexes/index[index-number='" + strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10) + "']"
+					if !citem.IndexNumber.IsNull() && !citem.IndexNumber.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/index-number", strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10))
+					}
+					if !citem.Value.IsNull() && !citem.Value.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/value", strconv.FormatInt(citem.Value.ValueInt64(), 10))
+					}
+					if !citem.Priority.IsNull() && !citem.Priority.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/priority", citem.Priority.ValueString())
+					}
+				}
+			}
+		}
+	}
+	if len(data.InheritLocations) > 0 {
+		for _, item := range data.InheritLocations {
+			basePath := data.getXPath() + "/inherit-locations/inherit-location[location-name='" + item.LocationName.ValueString() + "']"
+			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
+			}
+			if len(item.Indexes) > 0 {
+				for _, citem := range item.Indexes {
+					cbasePath := basePath + "/indexes/index[index-number='" + strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10) + "']"
+					if !citem.IndexNumber.IsNull() && !citem.IndexNumber.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/index-number", strconv.FormatInt(citem.IndexNumber.ValueInt64(), 10))
+					}
+					if !citem.Value.IsNull() && !citem.Value.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/value", strconv.FormatInt(citem.Value.ValueInt64(), 10))
+					}
+					if !citem.Priority.IsNull() && !citem.Priority.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/priority", citem.Priority.ValueString())
+					}
+				}
+			}
+		}
+	}
+	bodyString, err := helpers.BodyToNestedXML(body)
+	if err != nil {
+		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
+		// If there's an error (e.g., invalid path syntax for xmlns attributes), return empty string
+		// This allows XML namespace siblings to be handled separately
+		return ""
+	}
+	bodyString = helpers.AddNamespaceToRootElement(bodyString, data.getXPath())
+	// On Create, seed the keyed base node when no leaves were emitted so a
+	// keys-only entry (e.g. address-family ipv4 unicast) isn't sent as an empty
+	// body, which EditConfig skips — creating drift. Uses default merge
+	// (RFC 6241 §7.2); getXPath()'s key gives a valid minimal list entry
+	// (RFC 7950 §7.8.2). Create-only (state == nil) leaves Update untouched.
+	if bodyString == "" && state == nil {
+		seededBody, seedErr := helpers.BodyToNestedXML(helpers.SetFromXPath(netconf.Body{}, data.getXPath(), ""))
+		if seedErr != nil {
+			tflog.Error(ctx, fmt.Sprintf("Error seeding keys-only base node: %s", seedErr))
+		} else {
+			bodyString = helpers.AddNamespaceToRootElement(seededBody, data.getXPath())
+		}
+	}
+	// Append delete XML for empty bool leafs (false values that need explicit removal)
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
+		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
+	}
+	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
+	return bodyString
+}
+
+// End of section. //template:end toBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
+
+func (data *SRLG) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
+	for i := range data.Names {
+		keys := [...]string{"srlg-name"}
+		keyValues := [...]string{data.Names[i].SrlgName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/names/name").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "srlg-name"); value.Exists() && !data.Names[i].SrlgName.IsNull() {
+			data.Names[i].SrlgName = types.StringValue(value.String())
+		} else if data.Names[i].SrlgName.IsNull() {
+			data.Names[i].SrlgName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "value"); value.Exists() && !data.Names[i].Value.IsNull() {
+			data.Names[i].Value = types.Int64Value(value.Int())
+		} else if data.Names[i].Value.IsNull() {
+			data.Names[i].Value = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "description"); value.Exists() && !data.Names[i].Description.IsNull() {
+			data.Names[i].Description = types.StringValue(value.String())
+		} else if data.Names[i].Description.IsNull() {
+			data.Names[i].Description = types.StringNull()
+		}
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.Interfaces[i].InterfaceName.IsNull() {
+			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
+		} else if data.Interfaces[i].InterfaceName.IsNull() {
+			data.Interfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "include-optical"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Interfaces[i].IncludeOptical.IsNull() {
+				data.Interfaces[i].IncludeOptical = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Interfaces[i].IncludeOptical.IsNull() {
+				data.Interfaces[i].IncludeOptical = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "include-optical/priority"); value.Exists() && !data.Interfaces[i].IncludeOpticalPriority.IsNull() {
+			data.Interfaces[i].IncludeOpticalPriority = types.StringValue(value.String())
+		} else if data.Interfaces[i].IncludeOpticalPriority.IsNull() {
+			data.Interfaces[i].IncludeOpticalPriority = types.StringNull()
+		}
+		for ci := range data.Interfaces[i].Indexes {
+			keys := [...]string{"index-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "indexes/index").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "index-number"); value.Exists() && !data.Interfaces[i].Indexes[ci].IndexNumber.IsNull() {
+				data.Interfaces[i].Indexes[ci].IndexNumber = types.Int64Value(value.Int())
+			} else if data.Interfaces[i].Indexes[ci].IndexNumber.IsNull() {
+				data.Interfaces[i].Indexes[ci].IndexNumber = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "value"); value.Exists() && !data.Interfaces[i].Indexes[ci].Value.IsNull() {
+				data.Interfaces[i].Indexes[ci].Value = types.Int64Value(value.Int())
+			} else if data.Interfaces[i].Indexes[ci].Value.IsNull() {
+				data.Interfaces[i].Indexes[ci].Value = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "priority"); value.Exists() && !data.Interfaces[i].Indexes[ci].Priority.IsNull() {
+				data.Interfaces[i].Indexes[ci].Priority = types.StringValue(value.String())
+			} else if data.Interfaces[i].Indexes[ci].Priority.IsNull() {
+				data.Interfaces[i].Indexes[ci].Priority = types.StringNull()
+			}
+		}
+		for ci := range data.Interfaces[i].Names {
+			keys := [...]string{"srlg-name"}
+			keyValues := [...]string{data.Interfaces[i].Names[ci].SrlgName.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "names/name").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "srlg-name"); value.Exists() && !data.Interfaces[i].Names[ci].SrlgName.IsNull() {
+				data.Interfaces[i].Names[ci].SrlgName = types.StringValue(value.String())
+			} else if data.Interfaces[i].Names[ci].SrlgName.IsNull() {
+				data.Interfaces[i].Names[ci].SrlgName = types.StringNull()
+			}
+		}
+		for ci := range data.Interfaces[i].Groups {
+			keys := [...]string{"index-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "groups/group").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "index-number"); value.Exists() && !data.Interfaces[i].Groups[ci].IndexNumber.IsNull() {
+				data.Interfaces[i].Groups[ci].IndexNumber = types.Int64Value(value.Int())
+			} else if data.Interfaces[i].Groups[ci].IndexNumber.IsNull() {
+				data.Interfaces[i].Groups[ci].IndexNumber = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "group-name"); value.Exists() && !data.Interfaces[i].Groups[ci].GroupName.IsNull() {
+				data.Interfaces[i].Groups[ci].GroupName = types.StringValue(value.String())
+			} else if data.Interfaces[i].Groups[ci].GroupName.IsNull() {
+				data.Interfaces[i].Groups[ci].GroupName = types.StringNull()
+			}
+		}
+	}
+	for i := range data.Groups {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/groups/group").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "group-name"); value.Exists() && !data.Groups[i].GroupName.IsNull() {
+			data.Groups[i].GroupName = types.StringValue(value.String())
+		} else if data.Groups[i].GroupName.IsNull() {
+			data.Groups[i].GroupName = types.StringNull()
+		}
+		for ci := range data.Groups[i].Indexes {
+			keys := [...]string{"index-number"}
+			keyValues := [...]string{strconv.FormatInt(data.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "indexes/index").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "index-number"); value.Exists() && !data.Groups[i].Indexes[ci].IndexNumber.IsNull() {
+				data.Groups[i].Indexes[ci].IndexNumber = types.Int64Value(value.Int())
+			} else if data.Groups[i].Indexes[ci].IndexNumber.IsNull() {
+				data.Groups[i].Indexes[ci].IndexNumber = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "value"); value.Exists() && !data.Groups[i].Indexes[ci].Value.IsNull() {
+				data.Groups[i].Indexes[ci].Value = types.Int64Value(value.Int())
+			} else if data.Groups[i].Indexes[ci].Value.IsNull() {
+				data.Groups[i].Indexes[ci].Value = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "priority"); value.Exists() && !data.Groups[i].Indexes[ci].Priority.IsNull() {
+				data.Groups[i].Indexes[ci].Priority = types.StringValue(value.String())
+			} else if data.Groups[i].Indexes[ci].Priority.IsNull() {
+				data.Groups[i].Indexes[ci].Priority = types.StringNull()
+			}
+		}
+	}
+	for i := range data.InheritLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.InheritLocations[i].LocationName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/inherit-locations/inherit-location").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "location-name"); value.Exists() && !data.InheritLocations[i].LocationName.IsNull() {
+			data.InheritLocations[i].LocationName = types.StringValue(value.String())
+		} else if data.InheritLocations[i].LocationName.IsNull() {
+			data.InheritLocations[i].LocationName = types.StringNull()
+		}
+		for ci := range data.InheritLocations[i].Indexes {
+			keys := [...]string{"index-number"}
+			keyValues := [...]string{strconv.FormatInt(data.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "indexes/index").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "index-number"); value.Exists() && !data.InheritLocations[i].Indexes[ci].IndexNumber.IsNull() {
+				data.InheritLocations[i].Indexes[ci].IndexNumber = types.Int64Value(value.Int())
+			} else if data.InheritLocations[i].Indexes[ci].IndexNumber.IsNull() {
+				data.InheritLocations[i].Indexes[ci].IndexNumber = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "value"); value.Exists() && !data.InheritLocations[i].Indexes[ci].Value.IsNull() {
+				data.InheritLocations[i].Indexes[ci].Value = types.Int64Value(value.Int())
+			} else if data.InheritLocations[i].Indexes[ci].Value.IsNull() {
+				data.InheritLocations[i].Indexes[ci].Value = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "priority"); value.Exists() && !data.InheritLocations[i].Indexes[ci].Priority.IsNull() {
+				data.InheritLocations[i].Indexes[ci].Priority = types.StringValue(value.String())
+			} else if data.InheritLocations[i].Indexes[ci].Priority.IsNull() {
+				data.InheritLocations[i].Indexes[ci].Priority = types.StringNull()
+			}
+		}
+	}
+}
+
+// End of section. //template:end updateFromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
+
+func (data *SRLG) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/names/name"); value.Exists() {
+		data.Names = make([]SRLGNames, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGNames{}
+			if cValue := helpers.GetFromXPath(v, "srlg-name"); cValue.Exists() {
+				item.SrlgName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "value"); cValue.Exists() {
+				item.Value = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "description"); cValue.Exists() {
+				item.Description = types.StringValue(cValue.String())
+			}
+			data.Names = append(data.Names, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]SRLGInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "include-optical"); cValue.Exists() {
+				item.IncludeOptical = types.BoolValue(true)
+			} else {
+				item.IncludeOptical = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "include-optical/priority"); cValue.Exists() {
+				item.IncludeOpticalPriority = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
+				item.Indexes = make([]SRLGInterfacesIndexes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInterfacesIndexes{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
+						cItem.Priority = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "names/name"); cValue.Exists() {
+				item.Names = make([]SRLGInterfacesNames, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInterfacesNames{}
+					if ccValue := helpers.GetFromXPath(cv, "srlg-name"); ccValue.Exists() {
+						cItem.SrlgName = types.StringValue(ccValue.String())
+					}
+					item.Names = append(item.Names, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group"); cValue.Exists() {
+				item.Groups = make([]SRLGInterfacesGroups, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInterfacesGroups{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "group-name"); ccValue.Exists() {
+						cItem.GroupName = types.StringValue(ccValue.String())
+					}
+					item.Groups = append(item.Groups, cItem)
+					return true
+				})
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/groups/group"); value.Exists() {
+		data.Groups = make([]SRLGGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGGroups{}
+			if cValue := helpers.GetFromXPath(v, "group-name"); cValue.Exists() {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
+				item.Indexes = make([]SRLGGroupsIndexes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGGroupsIndexes{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
+						cItem.Priority = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			data.Groups = append(data.Groups, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/inherit-locations/inherit-location"); value.Exists() {
+		data.InheritLocations = make([]SRLGInheritLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGInheritLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
+				item.Indexes = make([]SRLGInheritLocationsIndexes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInheritLocationsIndexes{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
+						cItem.Priority = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			data.InheritLocations = append(data.InheritLocations, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
+
+func (data *SRLGData) fromBodyXML(ctx context.Context, res xmldot.Result) {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/names/name"); value.Exists() {
+		data.Names = make([]SRLGNames, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGNames{}
+			if cValue := helpers.GetFromXPath(v, "srlg-name"); cValue.Exists() {
+				item.SrlgName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "value"); cValue.Exists() {
+				item.Value = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "description"); cValue.Exists() {
+				item.Description = types.StringValue(cValue.String())
+			}
+			data.Names = append(data.Names, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/interface"); value.Exists() {
+		data.Interfaces = make([]SRLGInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "include-optical"); cValue.Exists() {
+				item.IncludeOptical = types.BoolValue(true)
+			} else {
+				item.IncludeOptical = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "include-optical/priority"); cValue.Exists() {
+				item.IncludeOpticalPriority = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
+				item.Indexes = make([]SRLGInterfacesIndexes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInterfacesIndexes{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
+						cItem.Priority = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "names/name"); cValue.Exists() {
+				item.Names = make([]SRLGInterfacesNames, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInterfacesNames{}
+					if ccValue := helpers.GetFromXPath(cv, "srlg-name"); ccValue.Exists() {
+						cItem.SrlgName = types.StringValue(ccValue.String())
+					}
+					item.Names = append(item.Names, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "groups/group"); cValue.Exists() {
+				item.Groups = make([]SRLGInterfacesGroups, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInterfacesGroups{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "group-name"); ccValue.Exists() {
+						cItem.GroupName = types.StringValue(ccValue.String())
+					}
+					item.Groups = append(item.Groups, cItem)
+					return true
+				})
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/groups/group"); value.Exists() {
+		data.Groups = make([]SRLGGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGGroups{}
+			if cValue := helpers.GetFromXPath(v, "group-name"); cValue.Exists() {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
+				item.Indexes = make([]SRLGGroupsIndexes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGGroupsIndexes{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
+						cItem.Priority = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			data.Groups = append(data.Groups, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/inherit-locations/inherit-location"); value.Exists() {
+		data.InheritLocations = make([]SRLGInheritLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := SRLGInheritLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "indexes/index"); cValue.Exists() {
+				item.Indexes = make([]SRLGInheritLocationsIndexes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := SRLGInheritLocationsIndexes{}
+					if ccValue := helpers.GetFromXPath(cv, "index-number"); ccValue.Exists() {
+						cItem.IndexNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "priority"); ccValue.Exists() {
+						cItem.Priority = types.StringValue(ccValue.String())
+					}
+					item.Indexes = append(item.Indexes, cItem)
+					return true
+				})
+			}
+			data.InheritLocations = append(data.InheritLocations, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyDataXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
+
+func (data *SRLG) addDeletedItemsXML(ctx context.Context, state SRLG, body string) string {
+	// Start with an empty body - we'll build up the delete operations
+	b := netconf.Body{}
+	deletedPaths := make(map[string]bool)
+	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.InheritLocations {
+		stateKeys := [...]string{"location-name"}
+		stateKeyValues := [...]string{state.InheritLocations[i].LocationName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.InheritLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.InheritLocations {
+			found = true
+			if state.InheritLocations[i].LocationName.ValueString() != data.InheritLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.InheritLocations[i].Indexes {
+					cstateKeys := [...]string{"index-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.InheritLocations[j].Indexes {
+						found = true
+						if state.InheritLocations[i].Indexes[ci].IndexNumber.ValueInt64() != data.InheritLocations[j].Indexes[cj].IndexNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.InheritLocations[i].Indexes[ci].Priority.IsNull() && data.InheritLocations[j].Indexes[cj].Priority.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/inherit-locations/inherit-location%v/indexes/index%v/priority", predicates, cpredicates))
+							}
+							if !state.InheritLocations[i].Indexes[ci].Value.IsNull() && data.InheritLocations[j].Indexes[cj].Value.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/inherit-locations/inherit-location%v/indexes/index%v/value", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/inherit-locations/inherit-location%v/indexes/index%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/inherit-locations/inherit-location%v", predicates))
+		}
+	}
+	for i := range state.Groups {
+		stateKeys := [...]string{"group-name"}
+		stateKeyValues := [...]string{state.Groups[i].GroupName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Groups[i].GroupName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Groups {
+			found = true
+			if state.Groups[i].GroupName.ValueString() != data.Groups[j].GroupName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.Groups[i].Indexes {
+					cstateKeys := [...]string{"index-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Groups[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Groups[i].Indexes[ci].IndexNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Groups[j].Indexes {
+						found = true
+						if state.Groups[i].Indexes[ci].IndexNumber.ValueInt64() != data.Groups[j].Indexes[cj].IndexNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.Groups[i].Indexes[ci].Priority.IsNull() && data.Groups[j].Indexes[cj].Priority.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/groups/group%v/indexes/index%v/priority", predicates, cpredicates))
+							}
+							if !state.Groups[i].Indexes[ci].Value.IsNull() && data.Groups[j].Indexes[cj].Value.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/groups/group%v/indexes/index%v/value", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/groups/group%v/indexes/index%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/groups/group%v", predicates))
+		}
+	}
+	for i := range state.Interfaces {
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.Interfaces[i].Groups {
+					cstateKeys := [...]string{"index-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Interfaces[i].Groups[ci].IndexNumber.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Interfaces[i].Groups[ci].IndexNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Interfaces[j].Groups {
+						found = true
+						if state.Interfaces[i].Groups[ci].IndexNumber.ValueInt64() != data.Interfaces[j].Groups[cj].IndexNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.Interfaces[i].Groups[ci].GroupName.IsNull() && data.Interfaces[j].Groups[cj].GroupName.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/groups/group%v/group-name", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/groups/group%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Interfaces[i].Names {
+					cstateKeys := [...]string{"srlg-name"}
+					cstateKeyValues := [...]string{state.Interfaces[i].Names[ci].SrlgName.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Interfaces[i].Names[ci].SrlgName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Interfaces[j].Names {
+						found = true
+						if state.Interfaces[i].Names[ci].SrlgName.ValueString() != data.Interfaces[j].Names[cj].SrlgName.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/names/name%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.Interfaces[i].Indexes {
+					cstateKeys := [...]string{"index-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Interfaces[j].Indexes {
+						found = true
+						if state.Interfaces[i].Indexes[ci].IndexNumber.ValueInt64() != data.Interfaces[j].Indexes[cj].IndexNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.Interfaces[i].Indexes[ci].Priority.IsNull() && data.Interfaces[j].Indexes[cj].Priority.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/indexes/index%v/priority", predicates, cpredicates))
+							}
+							if !state.Interfaces[i].Indexes[ci].Value.IsNull() && data.Interfaces[j].Indexes[cj].Value.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/indexes/index%v/value", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/indexes/index%v", predicates, cpredicates))
+					}
+				}
+				if !state.Interfaces[i].IncludeOpticalPriority.IsNull() && data.Interfaces[j].IncludeOpticalPriority.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/include-optical/priority", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Interfaces[i].IncludeOptical.IsNull() && state.Interfaces[i].IncludeOptical.ValueBool() && data.Interfaces[j].IncludeOptical.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v/include-optical", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/interfaces/interface%v", predicates))
+		}
+	}
+	for i := range state.Names {
+		stateKeys := [...]string{"srlg-name"}
+		stateKeyValues := [...]string{state.Names[i].SrlgName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Names[i].SrlgName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Names {
+			found = true
+			if state.Names[i].SrlgName.ValueString() != data.Names[j].SrlgName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Names[i].Description.IsNull() && data.Names[j].Description.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/description", predicates))
+				}
+				if !state.Names[i].Value.IsNull() && data.Names[j].Value.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/value", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v", predicates))
+		}
+	}
+
+	//b = helpers.CleanupRedundantRemoveOperations(b)
+	return b.Res()
+}
+
+// End of section. //template:end addDeletedItemsXML
+
+// Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
+
+func (data *SRLG) addDeletePathsXML(ctx context.Context, body string) string {
+	b := netconf.NewBody(body)
+	for i := range data.InheritLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.InheritLocations[i].LocationName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/inherit-locations/inherit-location%v", predicates))
+	}
+	for i := range data.Groups {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/groups/group%v", predicates))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/interfaces/interface%v", predicates))
+	}
+	for i := range data.Names {
+		keys := [...]string{"srlg-name"}
+		keyValues := [...]string{data.Names[i].SrlgName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/names/name%v", predicates))
+	}
+
+	return b.Res()
+}
+
+// End of section. //template:end addDeletePathsXML

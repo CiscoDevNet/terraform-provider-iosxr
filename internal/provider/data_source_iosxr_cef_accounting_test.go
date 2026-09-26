@@ -21,8 +21,10 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -31,6 +33,9 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrCEFAccounting(t *testing.T) {
+	if os.Getenv("IOSXR_VERSION") != "" && !helpers.VersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		t.Skipf("skipping test, data source 'cef_accounting' is only supported from IOS-XR version 25.4 and above (current: %s)", os.Getenv("IOSXR_VERSION"))
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_accounting.test", "disable", "true"))
 	resource.Test(t, resource.TestCase{

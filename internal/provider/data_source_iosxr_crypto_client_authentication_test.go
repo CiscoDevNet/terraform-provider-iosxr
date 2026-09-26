@@ -21,8 +21,10 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -31,6 +33,9 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrCryptoClientAuthentication(t *testing.T) {
+	if os.Getenv("IOSXR_VERSION") != "" && !helpers.VersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		t.Skipf("skipping test, data source 'crypto_client_authentication' is only supported from IOS-XR version 25.4 and above (current: %s)", os.Getenv("IOSXR_VERSION"))
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_crypto_client_authentication.test", "profile.0.profile_name", "EAP_PROFILE"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_crypto_client_authentication.test", "profile.0.password_six", "Cisco123!"))

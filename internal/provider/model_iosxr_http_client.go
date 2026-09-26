@@ -146,12 +146,12 @@ func (data HTTPClient) toBody(ctx context.Context, providerVersion string) strin
 	}
 	if !data.Version10.IsNull() && !data.Version10.IsUnknown() {
 		if data.Version10.ValueBool() {
-			body, _ = sjson.Set(body, "version.http1\\\\.0", map[string]string{})
+			body, _ = sjson.Set(body, "version.http1\\.0", map[string]string{})
 		}
 	}
 	if !data.Version11.IsNull() && !data.Version11.IsUnknown() {
 		if data.Version11.ValueBool() {
-			body, _ = sjson.Set(body, "version.http1\\\\.1", map[string]string{})
+			body, _ = sjson.Set(body, "version.http1\\.1", map[string]string{})
 		}
 	}
 	if !data.TcpWindowScale.IsNull() && !data.TcpWindowScale.IsUnknown() {
@@ -159,22 +159,22 @@ func (data HTTPClient) toBody(ctx context.Context, providerVersion string) strin
 	}
 	if !data.SslVersionTls10.IsNull() && !data.SslVersionTls10.IsUnknown() {
 		if data.SslVersionTls10.ValueBool() {
-			body, _ = sjson.Set(body, "ssl.version.tls1\\\\.0", map[string]string{})
+			body, _ = sjson.Set(body, "ssl.version.tls1\\.0", map[string]string{})
 		}
 	}
 	if !data.SslVersionTls11.IsNull() && !data.SslVersionTls11.IsUnknown() {
 		if data.SslVersionTls11.ValueBool() {
-			body, _ = sjson.Set(body, "ssl.version.tls1\\\\.1", map[string]string{})
+			body, _ = sjson.Set(body, "ssl.version.tls1\\.1", map[string]string{})
 		}
 	}
 	if !data.SslVersionTls12.IsNull() && !data.SslVersionTls12.IsUnknown() {
 		if data.SslVersionTls12.ValueBool() {
-			body, _ = sjson.Set(body, "ssl.version.tls1\\\\.2", map[string]string{})
+			body, _ = sjson.Set(body, "ssl.version.tls1\\.2", map[string]string{})
 		}
 	}
 	if !data.SslVersionTls13.IsNull() && !data.SslVersionTls13.IsUnknown() {
 		if data.SslVersionTls13.ValueBool() {
-			body, _ = sjson.Set(body, "ssl.version.tls1\\\\.3", map[string]string{})
+			body, _ = sjson.Set(body, "ssl.version.tls1\\.3", map[string]string{})
 		}
 	}
 	return body
@@ -244,7 +244,7 @@ func (data *HTTPClient) updateFromBody(ctx context.Context, res []byte, version 
 	} else if data.VersionDefault.IsNull() {
 		data.VersionDefault = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "version.http1\\\\.0"); !data.Version10.IsNull() {
+	if value := gjson.GetBytes(res, "version.http1\\.0"); !data.Version10.IsNull() {
 		if value.Exists() {
 			data.Version10 = types.BoolValue(true)
 		} else {
@@ -254,7 +254,7 @@ func (data *HTTPClient) updateFromBody(ctx context.Context, res []byte, version 
 	} else if data.Version10.IsNull() {
 		data.Version10 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "version.http1\\\\.1"); !data.Version11.IsNull() {
+	if value := gjson.GetBytes(res, "version.http1\\.1"); !data.Version11.IsNull() {
 		if value.Exists() {
 			data.Version11 = types.BoolValue(true)
 		} else {
@@ -269,7 +269,7 @@ func (data *HTTPClient) updateFromBody(ctx context.Context, res []byte, version 
 	} else if data.TcpWindowScale.IsNull() {
 		data.TcpWindowScale = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.0"); !data.SslVersionTls10.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.0"); !data.SslVersionTls10.IsNull() {
 		if value.Exists() {
 			data.SslVersionTls10 = types.BoolValue(true)
 		} else {
@@ -279,7 +279,7 @@ func (data *HTTPClient) updateFromBody(ctx context.Context, res []byte, version 
 	} else if data.SslVersionTls10.IsNull() {
 		data.SslVersionTls10 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.1"); !data.SslVersionTls11.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.1"); !data.SslVersionTls11.IsNull() {
 		if value.Exists() {
 			data.SslVersionTls11 = types.BoolValue(true)
 		} else {
@@ -289,7 +289,7 @@ func (data *HTTPClient) updateFromBody(ctx context.Context, res []byte, version 
 	} else if data.SslVersionTls11.IsNull() {
 		data.SslVersionTls11 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.2"); !data.SslVersionTls12.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.2"); !data.SslVersionTls12.IsNull() {
 		if value.Exists() {
 			data.SslVersionTls12 = types.BoolValue(true)
 		} else {
@@ -299,7 +299,7 @@ func (data *HTTPClient) updateFromBody(ctx context.Context, res []byte, version 
 	} else if data.SslVersionTls12.IsNull() {
 		data.SslVersionTls12 = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.3"); !data.SslVersionTls13.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.3"); !data.SslVersionTls13.IsNull() {
 		if value.Exists() {
 			data.SslVersionTls13 = types.BoolValue(true)
 		} else {
@@ -352,13 +352,13 @@ func (data *HTTPClient) fromBody(ctx context.Context, res []byte, version string
 		// Only set to false if it was previously set in state
 		data.VersionDefault = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "version.http1\\\\.0"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.http1\\.0"); value.Exists() {
 		data.Version10 = types.BoolValue(true)
 	} else if !data.Version10.IsNull() {
 		// Only set to false if it was previously set in state
 		data.Version10 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "version.http1\\\\.1"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.http1\\.1"); value.Exists() {
 		data.Version11 = types.BoolValue(true)
 	} else if !data.Version11.IsNull() {
 		// Only set to false if it was previously set in state
@@ -367,25 +367,25 @@ func (data *HTTPClient) fromBody(ctx context.Context, res []byte, version string
 	if value := gjson.GetBytes(res, "tcp-window-scale"); value.Exists() {
 		data.TcpWindowScale = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.0"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.0"); value.Exists() {
 		data.SslVersionTls10 = types.BoolValue(true)
 	} else if !data.SslVersionTls10.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SslVersionTls10 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.1"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.1"); value.Exists() {
 		data.SslVersionTls11 = types.BoolValue(true)
 	} else if !data.SslVersionTls11.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SslVersionTls11 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.2"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.2"); value.Exists() {
 		data.SslVersionTls12 = types.BoolValue(true)
 	} else if !data.SslVersionTls12.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SslVersionTls12 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.3"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.3"); value.Exists() {
 		data.SslVersionTls13 = types.BoolValue(true)
 	} else if !data.SslVersionTls13.IsNull() {
 		// Only set to false if it was previously set in state
@@ -431,12 +431,12 @@ func (data *HTTPClientData) fromBody(ctx context.Context, res []byte, version st
 	} else {
 		data.VersionDefault = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "version.http1\\\\.0"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.http1\\.0"); value.Exists() {
 		data.Version10 = types.BoolValue(true)
 	} else {
 		data.Version10 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "version.http1\\\\.1"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.http1\\.1"); value.Exists() {
 		data.Version11 = types.BoolValue(true)
 	} else {
 		data.Version11 = types.BoolValue(false)
@@ -444,22 +444,22 @@ func (data *HTTPClientData) fromBody(ctx context.Context, res []byte, version st
 	if value := gjson.GetBytes(res, "tcp-window-scale"); value.Exists() {
 		data.TcpWindowScale = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.0"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.0"); value.Exists() {
 		data.SslVersionTls10 = types.BoolValue(true)
 	} else {
 		data.SslVersionTls10 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.1"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.1"); value.Exists() {
 		data.SslVersionTls11 = types.BoolValue(true)
 	} else {
 		data.SslVersionTls11 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.2"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.2"); value.Exists() {
 		data.SslVersionTls12 = types.BoolValue(true)
 	} else {
 		data.SslVersionTls12 = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "ssl.version.tls1\\\\.3"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.3"); value.Exists() {
 		data.SslVersionTls13 = types.BoolValue(true)
 	} else {
 		data.SslVersionTls13 = types.BoolValue(false)

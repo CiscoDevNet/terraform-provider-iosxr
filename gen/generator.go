@@ -273,7 +273,7 @@ func ToJsonPath(yangPath, xPath string) string {
 	// Split by /, escape dots in each segment, then join with .
 	parts := strings.Split(path, "/")
 	for i, part := range parts {
-		parts[i] = strings.ReplaceAll(part, ".", "\\\\.")
+		parts[i] = strings.ReplaceAll(part, ".", "\\.")
 	}
 	return strings.Join(parts, ".")
 }

@@ -5,7 +5,7 @@
 ## Requirements
 
 - [Terraform](https://www.terraform.io/downloads.html) >= 1.0
-- [Go](https://golang.org/doc/install) >= 1.24
+- [Go](https://golang.org/doc/install) >= 1.25
 
 ## Building The Provider
 
@@ -45,12 +45,16 @@ If you wish to work on the provider, you'll first need [Go](http://www.golang.or
 
 To compile the provider, run `go install`. This will build the provider and put the provider binary in the `$GOPATH/bin` directory.
 
-To generate or update documentation, run `go generate`.
+More information about how the code generation works can be found in the [contribution guide](CONTRIBUTING.md).
 
-In order to run the full suite of Acceptance tests, run `make testacc`. Make sure the respective environment variables are set (e.g., `IOSXR_USERNAME`, `IOSXR_PASSWORD`, `IOSXR_HOST`).
+## Acceptance Tests
 
-*Note:* Acceptance tests create real resources.
+In order to run the full suite of acceptance tests, set up a `.env` file with the appropriate environment variables. Copy the sample file at `.env.sample` to `.env`, then edit the file to set the appropriate environment variables.
 
 ```shell
-make testacc
+cp .env.sample .env
 ```
+
+Then, run `make test` to execute all acceptance tests across devices and the two currently supported versions.
+
+> **Note**: Acceptance tests create real resources.

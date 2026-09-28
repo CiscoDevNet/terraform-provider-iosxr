@@ -29,7 +29,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var generalResources = []string{"gnmi", "cli"}
+var generalResources = []string{"yang", "cli"}
 
 const (
 	definitionsPath = "./gen/definitions/"

@@ -58,12 +58,12 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- if .IntroducedInVersion}}
 	if os.Getenv("IOSXR_VERSION") != "" && !helpers.VersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.IntroducedInVersion}}") {
-		t.Skipf("skipping test, data source '{{snakeCase .Name}}' is only supported from IOS-XR version {{formatVersionDisplay .IntroducedInVersion}} and above (current: %s)", os.Getenv("IOSXR_VERSION"))
+		t.Skipf("skipping test, only supported from IOS-XR version {{formatVersionDisplay .IntroducedInVersion}} and above (current: %s)", os.Getenv("IOSXR_VERSION"))
 	}
 	{{- end}}
 	{{- if .RemovedInVersion}}
 	if helpers.VersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.RemovedInVersion}}") {
-		t.Skipf("skipping test, data source '{{snakeCase .Name}}' is not supported from IOS-XR version {{formatVersionDisplay .RemovedInVersion}} and above (current: %s)", os.Getenv("IOSXR_VERSION"))
+		t.Skipf("skipping test, not supported from IOS-XR version {{formatVersionDisplay .RemovedInVersion}} and above (current: %s)", os.Getenv("IOSXR_VERSION"))
 	}
 	{{- end}}
 	var checks []resource.TestCheckFunc

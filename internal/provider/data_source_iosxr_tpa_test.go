@@ -37,7 +37,7 @@ func TestAccDataSourceIosxrTPA(t *testing.T) {
 		t.Skip("skipping test, set environment variable TPA")
 	}
 	if helpers.VersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		t.Skipf("skipping test, data source 'tpa' is not supported from IOS-XR version 25.4 and above (current: %s)", os.Getenv("IOSXR_VERSION"))
+		t.Skipf("skipping test, not supported from IOS-XR version 25.4 and above (current: %s)", os.Getenv("IOSXR_VERSION"))
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tpa.test", "statistics_update_frequency", "60"))

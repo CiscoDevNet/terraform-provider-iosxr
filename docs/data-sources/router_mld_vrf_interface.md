@@ -15,7 +15,7 @@ This data source can read the Router MLD VRF Interface configuration.
 ```terraform
 data "iosxr_router_mld_vrf_interface" "example" {
   interface_name = "GigabitEthernet0/0/0/1"
-  vrf_name = "VRF1"
+  vrf_name       = "VRF1"
 }
 ```
 

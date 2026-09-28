@@ -15,7 +15,7 @@ This data source can read the Router Static IPv6 Multicast configuration.
 ```terraform
 data "iosxr_router_static_ipv6_multicast" "example" {
   prefix_address = "1::"
-  prefix_length = 64
+  prefix_length  = 64
 }
 ```
 

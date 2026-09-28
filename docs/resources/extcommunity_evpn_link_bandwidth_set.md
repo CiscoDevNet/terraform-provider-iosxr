@@ -14,7 +14,7 @@ This resource can manage the Extcommunity EVPN Link Bandwidth Set configuration.
 
 ```terraform
 resource "iosxr_extcommunity_evpn_link_bandwidth_set" "example" {
-  rpl = "extcommunity-set evpn-link-bandwidth EVPN1\n  0:65001,\n  1:65001\nend-set\n"
+  rpl      = "extcommunity-set evpn-link-bandwidth EVPN1\n  0:65001,\n  1:65001\nend-set\n"
   set_name = "EVPN1"
 }
 ```

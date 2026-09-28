@@ -14,7 +14,7 @@ This data source can read the Router BGP Neighbor configuration.
 
 ```terraform
 data "iosxr_router_bgp_neighbor" "example" {
-  address = "10.1.1.2"
+  address   = "10.1.1.2"
   as_number = "65001"
 }
 ```

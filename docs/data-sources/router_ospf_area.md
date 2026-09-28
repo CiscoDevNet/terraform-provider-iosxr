@@ -14,7 +14,7 @@ This data source can read the Router OSPF Area configuration.
 
 ```terraform
 data "iosxr_router_ospf_area" "example" {
-  area_id = "1"
+  area_id      = "1"
   process_name = "OSPF1"
 }
 ```

@@ -15,7 +15,7 @@ This resource can manage the HW Module Shutdown configuration.
 ```terraform
 resource "iosxr_hw_module_shutdown" "example" {
   location_name = "0/0/CPU0"
-  unshut = true
+  unshut        = true
 }
 ```
 

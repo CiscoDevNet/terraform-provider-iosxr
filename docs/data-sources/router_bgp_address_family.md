@@ -14,7 +14,7 @@ This data source can read the Router BGP Address Family configuration.
 
 ```terraform
 data "iosxr_router_bgp_address_family" "example" {
-  af_name = "ipv4-unicast"
+  af_name   = "ipv4-unicast"
   as_number = "65001"
 }
 ```

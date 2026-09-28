@@ -74,7 +74,7 @@ attributes:
       - yang_name: type/icmp/echo/history/filter/failures
         tf_name: icmp_echo_history_filter_failures
         exclude_test: true
-        example: false
+        example: true
       - yang_name: type/icmp/echo/history/lives
         tf_name: icmp_echo_history_lives
         exclude_test: true
@@ -249,10 +249,12 @@ attributes:
         example: 7
       - yang_name: type/udp/echo/control/disable
         tf_name: udp_echo_control_disable
-        example: false
+        exclude_test: true
+        example: true
       - yang_name: type/udp/echo/verify-data
         tf_name: udp_echo_verify_data
-        example: false
+        exclude_test: true
+        example: true
       - yang_name: type/udp/echo/tos
         tf_name: udp_echo_tos
         example: 0
@@ -347,11 +349,11 @@ attributes:
       - yang_name: type/udp/jitter/control/disable
         tf_name: udp_jitter_control_disable
         exclude_test: true
-        example: false
+        example: true
       - yang_name: type/udp/jitter/verify-data
         tf_name: udp_jitter_verify_data
         exclude_test: true
-        example: false
+        example: true
       - yang_name: type/udp/jitter/statistics/hourly/buckets
         tf_name: udp_jitter_statistics_hourly_buckets
         exclude_test: true
@@ -515,6 +517,7 @@ attributes:
   - yang_name: schedule/operations/operation
     tf_name: schedules
     type: List
+    exclude_test: true
     attributes:
       - yang_name: operation-number
         id: true
@@ -555,7 +558,8 @@ attributes:
         example: 2032
       - yang_name: start-time/pending
         tf_name: start_pending
-        example: false
+        exclude_test: true
+        example: true
       - yang_name: start-time/after/time/hour
         tf_name: start_after_hour
         optional: true

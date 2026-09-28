@@ -15,7 +15,7 @@ This data source can read the Router BGP Session Group configuration.
 ```terraform
 data "iosxr_router_bgp_session_group" "example" {
   as_number = "65001"
-  name = "SGROUP1"
+  name      = "SGROUP1"
 }
 ```
 

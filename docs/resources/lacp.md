@@ -14,7 +14,7 @@ This resource can manage the LACP configuration.
 
 ```terraform
 resource "iosxr_lacp" "example" {
-  mac = "00:11:00:11:00:11"
+  mac      = "00:11:00:11:00:11"
   priority = 1
 }
 ```

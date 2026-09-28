@@ -22,13 +22,13 @@ resource "iosxr_telnet" "example" {
       ipv4_server_max_servers = 32
       ipv6_server_access_list = "ACCESS11"
       ipv6_server_max_servers = 34
-      vrf_name = "ROI"
+      vrf_name                = "ROI"
     }
   ]
   vrfs_dscp = [
     {
       ipv4_dscp = 55
-      vrf_name = "TOI"
+      vrf_name  = "TOI"
     }
   ]
 }

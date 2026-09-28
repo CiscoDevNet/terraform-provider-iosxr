@@ -14,9 +14,9 @@ This data source can read the Router ISIS Address Family configuration.
 
 ```terraform
 data "iosxr_router_isis_address_family" "example" {
-  af_name = "ipv4"
+  af_name    = "ipv4"
   process_id = "P1"
-  saf_name = "unicast"
+  saf_name   = "unicast"
 }
 ```
 

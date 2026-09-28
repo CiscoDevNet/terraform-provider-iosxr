@@ -36,7 +36,7 @@ import (
 
 func TestAccIosxrCryptoClientAuthentication(t *testing.T) {
 	if os.Getenv("IOSXR_VERSION") != "" && !helpers.VersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		t.Skipf("skipping test, resource 'crypto_client_authentication' is only supported from IOS-XR version 25.4 and above (current: %s)", os.Getenv("IOSXR_VERSION"))
+		t.Skipf("skipping test, only supported from IOS-XR version 25.4 and above (current: %s)", os.Getenv("IOSXR_VERSION"))
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto_client_authentication.test", "profile.0.profile_name", "EAP_PROFILE"))

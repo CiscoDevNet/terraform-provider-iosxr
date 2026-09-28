@@ -15,8 +15,8 @@ This data source can read the Router Static VRF IPv6 Unicast configuration.
 ```terraform
 data "iosxr_router_static_vrf_ipv6_unicast" "example" {
   prefix_address = "1::"
-  prefix_length = 64
-  vrf_name = "VRF2"
+  prefix_length  = 64
+  vrf_name       = "VRF2"
 }
 ```
 

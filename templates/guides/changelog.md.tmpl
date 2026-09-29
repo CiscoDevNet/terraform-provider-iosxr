@@ -9,6 +9,7 @@ description: |-
 
 ## Unreleased
 
+- Add `iosxr_cef_accounting` resource and data source
 - BREAKING CHANGE: Remove `neighbors` list from `router_bgp` resource and data source. Use the new `router_bgp_neighbor` resource instead.
 - BREAKING CHANGE: Remove `neighbors` list from `router_bgp_vrf` resource and data source. Use the new `router_bgp_vrf_neighbor` resource instead.
 - Add `router_bgp_neighbor` resource and data source

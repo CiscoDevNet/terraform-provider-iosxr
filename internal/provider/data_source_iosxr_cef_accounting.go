@@ -58,7 +58,7 @@ func (d *CEFAccountingDataSource) Metadata(_ context.Context, req datasource.Met
 func (d *CEFAccountingDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the CEF Accounting configuration.\n\n> **Note:** This data source is only supported from IOS-XR version 25.4 and above.",
+		MarkdownDescription: "This data source can read the CEF Accounting configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -69,8 +69,24 @@ func (d *CEFAccountingDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"disable": schema.BoolAttribute{
-				MarkdownDescription: "Disable all policy accounting",
+			"interfaces_mpls_ipv4_rsvp_te": schema.BoolAttribute{
+				MarkdownDescription: "Enable RSVP-TE accounting",
+				Computed:            true,
+			},
+			"interfaces_segment_routing_mpls_ipv4": schema.BoolAttribute{
+				MarkdownDescription: "Enable IPv4 accounting",
+				Computed:            true,
+			},
+			"interfaces_segment_routing_mpls_ipv6": schema.BoolAttribute{
+				MarkdownDescription: "Enable IPv6 accounting",
+				Computed:            true,
+			},
+			"prefixes_ipv6_mode_per_prefix_per_nexthop_srv6_locators": schema.BoolAttribute{
+				MarkdownDescription: "Segment-routing SRv6 locator prefixes only",
+				Computed:            true,
+			},
+			"segment_routing_policies_srv6_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable all policy accounting" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
 		},

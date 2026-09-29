@@ -24,6 +24,7 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"sort"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -39,16 +40,24 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type CEFAccounting struct {
-	Device     types.String `tfsdk:"device"`
-	Id         types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	Disable    types.Bool   `tfsdk:"disable"`
+	Device                                          types.String `tfsdk:"device"`
+	Id                                              types.String `tfsdk:"id"`
+	DeleteMode                                      types.String `tfsdk:"delete_mode"`
+	InterfacesMplsIpv4RsvpTe                        types.Bool   `tfsdk:"interfaces_mpls_ipv4_rsvp_te"`
+	InterfacesSegmentRoutingMplsIpv4                types.Bool   `tfsdk:"interfaces_segment_routing_mpls_ipv4"`
+	InterfacesSegmentRoutingMplsIpv6                types.Bool   `tfsdk:"interfaces_segment_routing_mpls_ipv6"`
+	PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators types.Bool   `tfsdk:"prefixes_ipv6_mode_per_prefix_per_nexthop_srv6_locators"`
+	SegmentRoutingPoliciesSrv6Disable               types.Bool   `tfsdk:"segment_routing_policies_srv6_disable"`
 }
 
 type CEFAccountingData struct {
-	Device  types.String `tfsdk:"device"`
-	Id      types.String `tfsdk:"id"`
-	Disable types.Bool   `tfsdk:"disable"`
+	Device                                          types.String `tfsdk:"device"`
+	Id                                              types.String `tfsdk:"id"`
+	InterfacesMplsIpv4RsvpTe                        types.Bool   `tfsdk:"interfaces_mpls_ipv4_rsvp_te"`
+	InterfacesSegmentRoutingMplsIpv4                types.Bool   `tfsdk:"interfaces_segment_routing_mpls_ipv4"`
+	InterfacesSegmentRoutingMplsIpv6                types.Bool   `tfsdk:"interfaces_segment_routing_mpls_ipv6"`
+	PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators types.Bool   `tfsdk:"prefixes_ipv6_mode_per_prefix_per_nexthop_srv6_locators"`
+	SegmentRoutingPoliciesSrv6Disable               types.Bool   `tfsdk:"segment_routing_policies_srv6_disable"`
 }
 
 // End of section. //template:end types
@@ -80,9 +89,31 @@ func (data CEFAccountingData) getXPath() string {
 
 func (data CEFAccounting) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
-	if !data.Disable.IsNull() && !data.Disable.IsUnknown() {
-		if data.Disable.ValueBool() {
-			body, _ = sjson.Set(body, "segment-routing.policies.srv6.disable", map[string]string{})
+	if !data.InterfacesMplsIpv4RsvpTe.IsNull() && !data.InterfacesMplsIpv4RsvpTe.IsUnknown() {
+		if data.InterfacesMplsIpv4RsvpTe.ValueBool() {
+			body, _ = sjson.Set(body, "interfaces.mpls.ipv4.rsvp-te", map[string]string{})
+		}
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv4.IsNull() && !data.InterfacesSegmentRoutingMplsIpv4.IsUnknown() {
+		if data.InterfacesSegmentRoutingMplsIpv4.ValueBool() {
+			body, _ = sjson.Set(body, "interfaces.segment-routing.mpls.ipv4", map[string]string{})
+		}
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv6.IsNull() && !data.InterfacesSegmentRoutingMplsIpv6.IsUnknown() {
+		if data.InterfacesSegmentRoutingMplsIpv6.ValueBool() {
+			body, _ = sjson.Set(body, "interfaces.segment-routing.mpls.ipv6", map[string]string{})
+		}
+	}
+	if !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() && !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsUnknown() {
+		if data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.ValueBool() {
+			body, _ = sjson.Set(body, "prefixes.ipv6.mode.per-prefix.per-nexthop.srv6-locators", map[string]string{})
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.SegmentRoutingPoliciesSrv6Disable.IsNull() && !data.SegmentRoutingPoliciesSrv6Disable.IsUnknown() {
+			if data.SegmentRoutingPoliciesSrv6Disable.ValueBool() {
+				body, _ = sjson.Set(body, "segment-routing.policies.srv6.disable", map[string]string{})
+			}
 		}
 	}
 	return body
@@ -96,6 +127,12 @@ func (data CEFAccounting) toBody(ctx context.Context, providerVersion string) st
 func (data CEFAccounting) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "segment_routing_policies_srv6_disable",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -145,15 +182,55 @@ func (data CEFAccounting) GetPatternConstraints() []helpers.FieldPatternConstrai
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *CEFAccounting) updateFromBody(ctx context.Context, res []byte, version string) {
-	if value := gjson.GetBytes(res, "segment-routing.policies.srv6.disable"); !data.Disable.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.mpls.ipv4.rsvp-te"); !data.InterfacesMplsIpv4RsvpTe.IsNull() {
 		if value.Exists() {
-			data.Disable = types.BoolValue(true)
+			data.InterfacesMplsIpv4RsvpTe = types.BoolValue(true)
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
-			data.Disable = types.BoolValue(false)
+			data.InterfacesMplsIpv4RsvpTe = types.BoolValue(false)
 		}
-	} else if data.Disable.IsNull() {
-		data.Disable = types.BoolNull()
+	} else if data.InterfacesMplsIpv4RsvpTe.IsNull() {
+		data.InterfacesMplsIpv4RsvpTe = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "interfaces.segment-routing.mpls.ipv4"); !data.InterfacesSegmentRoutingMplsIpv4.IsNull() {
+		if value.Exists() {
+			data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(false)
+		}
+	} else if data.InterfacesSegmentRoutingMplsIpv4.IsNull() {
+		data.InterfacesSegmentRoutingMplsIpv4 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "interfaces.segment-routing.mpls.ipv6"); !data.InterfacesSegmentRoutingMplsIpv6.IsNull() {
+		if value.Exists() {
+			data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(false)
+		}
+	} else if data.InterfacesSegmentRoutingMplsIpv6.IsNull() {
+		data.InterfacesSegmentRoutingMplsIpv6 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "prefixes.ipv6.mode.per-prefix.per-nexthop.srv6-locators"); !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() {
+		if value.Exists() {
+			data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(false)
+		}
+	} else if data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() {
+		data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.policies.srv6.disable"); helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingPoliciesSrv6Disable.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(false)
+		}
+	} else if data.SegmentRoutingPoliciesSrv6Disable.IsNull() {
+		data.SegmentRoutingPoliciesSrv6Disable = types.BoolNull()
 	}
 }
 
@@ -162,11 +239,39 @@ func (data *CEFAccounting) updateFromBody(ctx context.Context, res []byte, versi
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *CEFAccounting) fromBody(ctx context.Context, res []byte, version string) {
-	if value := gjson.GetBytes(res, "segment-routing.policies.srv6.disable"); value.Exists() {
-		data.Disable = types.BoolValue(true)
-	} else if !data.Disable.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.mpls.ipv4.rsvp-te"); value.Exists() {
+		data.InterfacesMplsIpv4RsvpTe = types.BoolValue(true)
+	} else if !data.InterfacesMplsIpv4RsvpTe.IsNull() {
 		// Only set to false if it was previously set in state
-		data.Disable = types.BoolValue(false)
+		data.InterfacesMplsIpv4RsvpTe = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.segment-routing.mpls.ipv4"); value.Exists() {
+		data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(true)
+	} else if !data.InterfacesSegmentRoutingMplsIpv4.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.segment-routing.mpls.ipv6"); value.Exists() {
+		data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(true)
+	} else if !data.InterfacesSegmentRoutingMplsIpv6.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "prefixes.ipv6.mode.per-prefix.per-nexthop.srv6-locators"); value.Exists() {
+		data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(true)
+	} else if !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "segment-routing.policies.srv6.disable"); value.Exists() {
+			data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(true)
+		} else if !data.SegmentRoutingPoliciesSrv6Disable.IsNull() {
+			// Only set to false if it was previously set in state
+			data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingPoliciesSrv6Disable = types.BoolNull()
 	}
 }
 
@@ -175,10 +280,34 @@ func (data *CEFAccounting) fromBody(ctx context.Context, res []byte, version str
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *CEFAccountingData) fromBody(ctx context.Context, res []byte, version string) {
-	if value := gjson.GetBytes(res, "segment-routing.policies.srv6.disable"); value.Exists() {
-		data.Disable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "interfaces.mpls.ipv4.rsvp-te"); value.Exists() {
+		data.InterfacesMplsIpv4RsvpTe = types.BoolValue(true)
 	} else {
-		data.Disable = types.BoolValue(false)
+		data.InterfacesMplsIpv4RsvpTe = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.segment-routing.mpls.ipv4"); value.Exists() {
+		data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(true)
+	} else {
+		data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.segment-routing.mpls.ipv6"); value.Exists() {
+		data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(true)
+	} else {
+		data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "prefixes.ipv6.mode.per-prefix.per-nexthop.srv6-locators"); value.Exists() {
+		data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(true)
+	} else {
+		data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "segment-routing.policies.srv6.disable"); value.Exists() {
+			data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingPoliciesSrv6Disable = types.BoolNull()
 	}
 }
 
@@ -188,8 +317,20 @@ func (data *CEFAccountingData) fromBody(ctx context.Context, res []byte, version
 
 func (data *CEFAccounting) getDeletedItems(ctx context.Context, state CEFAccounting, version string) []string {
 	deletedItems := make([]string, 0)
-	if !state.Disable.IsNull() && data.Disable.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingPoliciesSrv6Disable.IsNull() && data.SegmentRoutingPoliciesSrv6Disable.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/policies/srv6/disable"))
+	}
+	if !state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() && data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "prefixes/ipv6/mode/per-prefix"))
+	}
+	if !state.InterfacesSegmentRoutingMplsIpv6.IsNull() && data.InterfacesSegmentRoutingMplsIpv6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/segment-routing/mpls/ipv6"))
+	}
+	if !state.InterfacesSegmentRoutingMplsIpv4.IsNull() && data.InterfacesSegmentRoutingMplsIpv4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/segment-routing/mpls/ipv4"))
+	}
+	if !state.InterfacesMplsIpv4RsvpTe.IsNull() && data.InterfacesMplsIpv4RsvpTe.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/mpls/ipv4"))
 	}
 	return deletedItems
 }
@@ -200,9 +341,29 @@ func (data *CEFAccounting) getDeletedItems(ctx context.Context, state CEFAccount
 
 func (data *CEFAccounting) getEmptyLeafsDelete(ctx context.Context, state *CEFAccounting, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.Disable.IsNull() && !data.Disable.ValueBool() {
-		if state != nil && !state.Disable.IsNull() && state.Disable.ValueBool() {
+	if helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingPoliciesSrv6Disable.IsNull() && !data.SegmentRoutingPoliciesSrv6Disable.ValueBool() {
+		if state != nil && !state.SegmentRoutingPoliciesSrv6Disable.IsNull() && state.SegmentRoutingPoliciesSrv6Disable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/policies/srv6/disable"))
+		}
+	}
+	if !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() && !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.ValueBool() {
+		if state != nil && !state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() && state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefixes/ipv6/mode/per-prefix"))
+		}
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv6.IsNull() && !data.InterfacesSegmentRoutingMplsIpv6.ValueBool() {
+		if state != nil && !state.InterfacesSegmentRoutingMplsIpv6.IsNull() && state.InterfacesSegmentRoutingMplsIpv6.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/segment-routing/mpls/ipv6"))
+		}
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv4.IsNull() && !data.InterfacesSegmentRoutingMplsIpv4.ValueBool() {
+		if state != nil && !state.InterfacesSegmentRoutingMplsIpv4.IsNull() && state.InterfacesSegmentRoutingMplsIpv4.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/segment-routing/mpls/ipv4"))
+		}
+	}
+	if !data.InterfacesMplsIpv4RsvpTe.IsNull() && !data.InterfacesMplsIpv4RsvpTe.ValueBool() {
+		if state != nil && !state.InterfacesMplsIpv4RsvpTe.IsNull() && state.InterfacesMplsIpv4RsvpTe.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/mpls/ipv4"))
 		}
 	}
 	return emptyLeafsDelete
@@ -213,8 +374,20 @@ func (data *CEFAccounting) getEmptyLeafsDelete(ctx context.Context, state *CEFAc
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *CEFAccounting) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
-	if !data.Disable.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingPoliciesSrv6Disable.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/policies/srv6/disable"))
+	}
+	if !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "prefixes/ipv6/mode/per-prefix"))
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/segment-routing/mpls/ipv6"))
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/segment-routing/mpls/ipv4"))
+	}
+	if !data.InterfacesMplsIpv4RsvpTe.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/mpls/ipv4"))
 	}
 
 	return deletePaths
@@ -230,8 +403,28 @@ func (data CEFAccounting) toBodyXML(ctx context.Context, stateArg ...*CEFAccount
 		state = stateArg[0]
 	}
 	body := netconf.Body{}
-	if !data.Disable.IsNull() && !data.Disable.IsUnknown() {
-		if data.Disable.ValueBool() {
+	if !data.InterfacesMplsIpv4RsvpTe.IsNull() && !data.InterfacesMplsIpv4RsvpTe.IsUnknown() {
+		if data.InterfacesMplsIpv4RsvpTe.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/interfaces/mpls/ipv4/rsvp-te", "")
+		}
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv4.IsNull() && !data.InterfacesSegmentRoutingMplsIpv4.IsUnknown() {
+		if data.InterfacesSegmentRoutingMplsIpv4.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/interfaces/segment-routing/mpls/ipv4", "")
+		}
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv6.IsNull() && !data.InterfacesSegmentRoutingMplsIpv6.IsUnknown() {
+		if data.InterfacesSegmentRoutingMplsIpv6.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/interfaces/segment-routing/mpls/ipv6", "")
+		}
+	}
+	if !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() && !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsUnknown() {
+		if data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/prefixes/ipv6/mode/per-prefix/per-nexthop/srv6-locators", "")
+		}
+	}
+	if !data.SegmentRoutingPoliciesSrv6Disable.IsNull() && !data.SegmentRoutingPoliciesSrv6Disable.IsUnknown() {
+		if data.SegmentRoutingPoliciesSrv6Disable.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/policies/srv6/disable", "")
 		}
 	}
@@ -269,15 +462,59 @@ func (data CEFAccounting) toBodyXML(ctx context.Context, stateArg ...*CEFAccount
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *CEFAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/policies/srv6/disable"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/mpls/ipv4/rsvp-te"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
-		if !data.Disable.IsNull() {
-			data.Disable = types.BoolValue(true)
+		if !data.InterfacesMplsIpv4RsvpTe.IsNull() {
+			data.InterfacesMplsIpv4RsvpTe = types.BoolValue(true)
 		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
-		if data.Disable.IsNull() {
-			data.Disable = types.BoolNull()
+		if data.InterfacesMplsIpv4RsvpTe.IsNull() {
+			data.InterfacesMplsIpv4RsvpTe = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/segment-routing/mpls/ipv4"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesSegmentRoutingMplsIpv4.IsNull() {
+			data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.InterfacesSegmentRoutingMplsIpv4.IsNull() {
+			data.InterfacesSegmentRoutingMplsIpv4 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/segment-routing/mpls/ipv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesSegmentRoutingMplsIpv6.IsNull() {
+			data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.InterfacesSegmentRoutingMplsIpv6.IsNull() {
+			data.InterfacesSegmentRoutingMplsIpv6 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefixes/ipv6/mode/per-prefix/per-nexthop/srv6-locators"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() {
+			data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() {
+			data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/policies/srv6/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SegmentRoutingPoliciesSrv6Disable.IsNull() {
+			data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SegmentRoutingPoliciesSrv6Disable.IsNull() {
+			data.SegmentRoutingPoliciesSrv6Disable = types.BoolNull()
 		}
 	}
 }
@@ -287,10 +524,30 @@ func (data *CEFAccounting) updateFromBodyXML(ctx context.Context, res xmldot.Res
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *CEFAccounting) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/policies/srv6/disable"); value.Exists() {
-		data.Disable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/mpls/ipv4/rsvp-te"); value.Exists() {
+		data.InterfacesMplsIpv4RsvpTe = types.BoolValue(true)
 	} else {
-		data.Disable = types.BoolValue(false)
+		data.InterfacesMplsIpv4RsvpTe = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/segment-routing/mpls/ipv4"); value.Exists() {
+		data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(true)
+	} else {
+		data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/segment-routing/mpls/ipv6"); value.Exists() {
+		data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(true)
+	} else {
+		data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefixes/ipv6/mode/per-prefix/per-nexthop/srv6-locators"); value.Exists() {
+		data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(true)
+	} else {
+		data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/policies/srv6/disable"); value.Exists() {
+		data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(false)
 	}
 }
 
@@ -299,10 +556,30 @@ func (data *CEFAccounting) fromBodyXML(ctx context.Context, res xmldot.Result) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *CEFAccountingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/policies/srv6/disable"); value.Exists() {
-		data.Disable = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/mpls/ipv4/rsvp-te"); value.Exists() {
+		data.InterfacesMplsIpv4RsvpTe = types.BoolValue(true)
 	} else {
-		data.Disable = types.BoolValue(false)
+		data.InterfacesMplsIpv4RsvpTe = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/segment-routing/mpls/ipv4"); value.Exists() {
+		data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(true)
+	} else {
+		data.InterfacesSegmentRoutingMplsIpv4 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/segment-routing/mpls/ipv6"); value.Exists() {
+		data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(true)
+	} else {
+		data.InterfacesSegmentRoutingMplsIpv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/prefixes/ipv6/mode/per-prefix/per-nexthop/srv6-locators"); value.Exists() {
+		data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(true)
+	} else {
+		data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/policies/srv6/disable"); value.Exists() {
+		data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingPoliciesSrv6Disable = types.BoolValue(false)
 	}
 }
 
@@ -316,7 +593,7 @@ func (data *CEFAccounting) addDeletedItemsXML(ctx context.Context, state CEFAcco
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	// For boolean fields, only delete if state was true (presence container was set)
-	if !state.Disable.IsNull() && state.Disable.ValueBool() && data.Disable.IsNull() {
+	if !state.SegmentRoutingPoliciesSrv6Disable.IsNull() && state.SegmentRoutingPoliciesSrv6Disable.ValueBool() && data.SegmentRoutingPoliciesSrv6Disable.IsNull() {
 		deletePath := state.getXPath() + "/segment-routing/policies/srv6/disable"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -327,6 +604,78 @@ func (data *CEFAccounting) addDeletedItemsXML(ctx context.Context, state CEFAcco
 			}
 		}
 		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() && state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.ValueBool() && data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/prefixes/ipv6/mode/per-prefix"
+		predicates := make(map[string]string)
+		predicates["srv6-locators"] = fmt.Sprintf("%v", state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.InterfacesSegmentRoutingMplsIpv6.IsNull() && state.InterfacesSegmentRoutingMplsIpv6.ValueBool() && data.InterfacesSegmentRoutingMplsIpv6.IsNull() {
+		deletePath := state.getXPath() + "/interfaces/segment-routing/mpls/ipv6"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.InterfacesSegmentRoutingMplsIpv4.IsNull() && state.InterfacesSegmentRoutingMplsIpv4.ValueBool() && data.InterfacesSegmentRoutingMplsIpv4.IsNull() {
+		deletePath := state.getXPath() + "/interfaces/segment-routing/mpls/ipv4"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.InterfacesMplsIpv4RsvpTe.IsNull() && state.InterfacesMplsIpv4RsvpTe.ValueBool() && data.InterfacesMplsIpv4RsvpTe.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/interfaces/mpls/ipv4"
+		predicates := make(map[string]string)
+		predicates["rsvp-te"] = fmt.Sprintf("%v", state.InterfacesMplsIpv4RsvpTe.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
 			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
@@ -342,8 +691,20 @@ func (data *CEFAccounting) addDeletedItemsXML(ctx context.Context, state CEFAcco
 
 func (data *CEFAccounting) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
-	if !data.Disable.IsNull() {
+	if !data.SegmentRoutingPoliciesSrv6Disable.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/policies/srv6/disable")
+	}
+	if !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/prefixes/ipv6/mode/per-prefix")
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/interfaces/segment-routing/mpls/ipv6")
+	}
+	if !data.InterfacesSegmentRoutingMplsIpv4.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/interfaces/segment-routing/mpls/ipv4")
+	}
+	if !data.InterfacesMplsIpv4RsvpTe.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/interfaces/mpls/ipv4")
 	}
 
 	return b.Res()

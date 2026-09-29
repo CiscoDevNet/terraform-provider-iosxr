@@ -57,7 +57,7 @@ func (r *CEFAccountingResource) Metadata(_ context.Context, req resource.Metadat
 func (r *CEFAccountingResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the CEF Accounting configuration.\n\n> **Note:** This resource is only supported from IOS-XR version 25.4 and above.",
+		MarkdownDescription: "This resource can manage the CEF Accounting configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -78,8 +78,24 @@ func (r *CEFAccountingResource) Schema(ctx context.Context, req resource.SchemaR
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
-			"disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable all policy accounting").String,
+			"interfaces_mpls_ipv4_rsvp_te": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable RSVP-TE accounting").String,
+				Optional:            true,
+			},
+			"interfaces_segment_routing_mpls_ipv4": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable IPv4 accounting").String,
+				Optional:            true,
+			},
+			"interfaces_segment_routing_mpls_ipv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable IPv6 accounting").String,
+				Optional:            true,
+			},
+			"prefixes_ipv6_mode_per_prefix_per_nexthop_srv6_locators": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Segment-routing SRv6 locator prefixes only").String,
+				Optional:            true,
+			},
+			"segment_routing_policies_srv6_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable all policy accounting").String + "\n  - Supported from version: `25.4`",
 				Optional:            true,
 			},
 		},
@@ -111,6 +127,10 @@ func (r *CEFAccountingResource) Create(ctx context.Context, req resource.CreateR
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -329,6 +349,10 @@ func (r *CEFAccountingResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -422,6 +446,14 @@ func (r *CEFAccountingResource) Delete(ctx context.Context, req resource.DeleteR
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

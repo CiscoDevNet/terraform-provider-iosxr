@@ -1,10 +1,11 @@
 ---
 name: CEF Accounting
 path: Cisco-IOS-XR-um-cef-accounting-cfg:/accounting
-doc_category: CEF
+doc_category: System
 attributes:
   - yang_name: segment-routing/policies/srv6/disable
-    tf_name: disable
     type: Bool
     type_yang_bool: presence
+    test_tags: [NCS, C8000, XRD]
+    include_example: true
     example: true

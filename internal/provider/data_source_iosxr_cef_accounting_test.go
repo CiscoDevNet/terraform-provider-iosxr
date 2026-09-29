@@ -24,7 +24,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -33,11 +32,18 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrCEFAccounting(t *testing.T) {
-	if os.Getenv("IOSXR_VERSION") != "" && !helpers.VersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		t.Skipf("skipping test, only supported from IOS-XR version 25.4 and above (current: %s)", os.Getenv("IOSXR_VERSION"))
-	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_accounting.test", "disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_accounting.test", "interfaces_mpls_ipv4_rsvp_te", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_accounting.test", "interfaces_segment_routing_mpls_ipv4", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_accounting.test", "interfaces_segment_routing_mpls_ipv6", "true"))
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" || os.Getenv("XRD") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_accounting.test", "prefixes_ipv6_mode_per_prefix_per_nexthop_srv6_locators", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" || os.Getenv("XRD") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_accounting.test", "segment_routing_policies_srv6_disable", "true"))
+		}
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -61,7 +67,17 @@ func TestAccDataSourceIosxrCEFAccounting(t *testing.T) {
 func testAccDataSourceIosxrCEFAccountingConfig() string {
 	config := `resource "iosxr_cef_accounting" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	disable = true` + "\n"
+	config += `	interfaces_mpls_ipv4_rsvp_te = true` + "\n"
+	config += `	interfaces_segment_routing_mpls_ipv4 = true` + "\n"
+	config += `	interfaces_segment_routing_mpls_ipv6 = true` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" || os.Getenv("XRD") != "" {
+		config += `	prefixes_ipv6_mode_per_prefix_per_nexthop_srv6_locators = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" || os.Getenv("XRD") != "" {
+			config += `	segment_routing_policies_srv6_disable = true` + "\n"
+		}
+	}
 	config += `}` + "\n"
 
 	config += `

@@ -23,7 +23,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"regexp"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -102,30 +101,24 @@ func (r *LLDPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"system_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("LLDP system name to advertise").String,
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP system name to advertise").String + "\n  - Length: `1`-`256` (v24.4), `1`-`255` (v25.4)",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9_.-]+`), ""),
 				},
 			},
 			"system_description": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("LLDP system description to advertise").String,
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP system description to advertise").String + "\n  - Length: `1`-`256` (v24.4), `1`-`255` (v25.4)",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9_.-]+`), ""),
 				},
 			},
 			"chassis_id": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("LLDP chassis ID to advertise").String,
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP chassis ID to advertise").String + "\n  - Length: `1`-`256` (v24.4), `1`-`255` (v25.4)",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9_.-:]+`), ""),
 				},
 			},
 			"chassis_id_type_chassis_component": schema.BoolAttribute{
@@ -194,6 +187,17 @@ func (r *LLDPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"tlv_select_system_name_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("disable System Name TLV").String,
+				Optional:            true,
+			},
+			"chassis_id_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("LLDP chassis ID type to advertise").AddStringEnumDescription("chassis-component", "interface-alias", "interface-name", "local", "mac-address", "network-address", "port-component").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("chassis-component", "interface-alias", "interface-name", "local", "mac-address", "network-address", "port-component"),
+				},
+			},
+			"interface_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable LLDP only based on interface LLDP configuration. No Global enable").String + "\n  - Supported from version: `25.4`",
 				Optional:            true,
 			},
 		},

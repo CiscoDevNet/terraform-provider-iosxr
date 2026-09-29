@@ -161,6 +161,14 @@ func (d *LLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "disable System Name TLV",
 				Computed:            true,
 			},
+			"chassis_id_type": schema.StringAttribute{
+				MarkdownDescription: "LLDP chassis ID type to advertise" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"interface_only": schema.BoolAttribute{
+				MarkdownDescription: "Enable LLDP only based on interface LLDP configuration. No Global enable" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }

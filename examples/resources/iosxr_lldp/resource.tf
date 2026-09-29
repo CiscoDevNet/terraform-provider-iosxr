@@ -1,7 +1,9 @@
 resource "iosxr_lldp" "example" {
   chassis_id                             = "FOC22439P72"
+  chassis_id_type                        = "local"
   extended_show_width_enable             = true
   holdtime                               = 50
+  interface_only                         = true
   management_enable                      = true
   priorityaddr_enable                    = true
   reinit                                 = 3

@@ -29,8 +29,10 @@ This resource can manage the LLDP configuration.
 ```terraform
 resource "iosxr_lldp" "example" {
   chassis_id                             = "FOC22439P72"
+  chassis_id_type                        = "local"
   extended_show_width_enable             = true
   holdtime                               = 50
+  interface_only                         = true
   management_enable                      = true
   priorityaddr_enable                    = true
   reinit                                 = 3
@@ -53,6 +55,10 @@ resource "iosxr_lldp" "example" {
 ### Optional
 
 - `chassis_id` (String) LLDP chassis ID to advertise
+  - Length: `1`-`256` (v24.4), `1`-`255` (v25.4)
+- `chassis_id_type` (String) LLDP chassis ID type to advertise
+  - Choices: `chassis-component`, `interface-alias`, `interface-name`, `local`, `mac-address`, `network-address`, `port-component`
+  - Supported from version: `25.4`
 - `chassis_id_type_chassis_component` (Boolean) Value of entPhysicalAlias object defined in IETF RFC 2737
   - **Not supported from version `25.4` and above**
 - `chassis_id_type_interface_alias` (Boolean) Value of ifAlias object defined in IETF RFC 2863
@@ -73,6 +79,8 @@ resource "iosxr_lldp" "example" {
 - `extended_show_width_enable` (Boolean) Enable Extended Show LLDP Neighbor Width
 - `holdtime` (Number) Specify the holdtime (in sec) to be sent in packets
   - Range: `0`-`65535`
+- `interface_only` (Boolean) Enable LLDP only based on interface LLDP configuration. No Global enable
+  - Supported from version: `25.4`
 - `management_enable` (Boolean) Enable LLDP over Management interface as well
 - `priorityaddr_enable` (Boolean) Enable LLDP to use Management interface address first(if configured)
 - `reinit` (Number) Delay (in sec) for LLDP initialization on any interface
@@ -80,7 +88,9 @@ resource "iosxr_lldp" "example" {
 - `subinterfaces_enable` (Boolean) Enable LLDP over Sub-interfaces as well
 - `subinterfaces_tagged` (Boolean) Enable VLAN tagging for LLDP PDU over Sub-interfaces
 - `system_description` (String) LLDP system description to advertise
+  - Length: `1`-`256` (v24.4), `1`-`255` (v25.4)
 - `system_name` (String) LLDP system name to advertise
+  - Length: `1`-`256` (v24.4), `1`-`255` (v25.4)
 - `timer` (Number) Specify the rate at which LLDP packets are sent (in sec)
   - Range: `5`-`65534`
 - `tlv_select_management_address_disable` (Boolean) disable Management Address TLV

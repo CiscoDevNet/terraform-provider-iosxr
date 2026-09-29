@@ -66,6 +66,8 @@ type LLDP struct {
 	TlvSelectSystemCapabilitiesDisable types.Bool   `tfsdk:"tlv_select_system_capabilities_disable"`
 	TlvSelectSystemDescriptionDisable  types.Bool   `tfsdk:"tlv_select_system_description_disable"`
 	TlvSelectSystemNameDisable         types.Bool   `tfsdk:"tlv_select_system_name_disable"`
+	ChassisIdType                      types.String `tfsdk:"chassis_id_type"`
+	InterfaceOnly                      types.Bool   `tfsdk:"interface_only"`
 }
 
 type LLDPData struct {
@@ -94,6 +96,8 @@ type LLDPData struct {
 	TlvSelectSystemCapabilitiesDisable types.Bool   `tfsdk:"tlv_select_system_capabilities_disable"`
 	TlvSelectSystemDescriptionDisable  types.Bool   `tfsdk:"tlv_select_system_description_disable"`
 	TlvSelectSystemNameDisable         types.Bool   `tfsdk:"tlv_select_system_name_disable"`
+	ChassisIdType                      types.String `tfsdk:"chassis_id_type"`
+	InterfaceOnly                      types.Bool   `tfsdk:"interface_only"`
 }
 
 // End of section. //template:end types
@@ -193,53 +197,155 @@ func (data LLDP) toBody(ctx context.Context, providerVersion string) string {
 		}
 	}
 	if !data.SubinterfacesEnable.IsNull() && !data.SubinterfacesEnable.IsUnknown() {
-		if data.SubinterfacesEnable.ValueBool() {
-			body, _ = sjson.Set(body, "subinterfaces.enable", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.SubinterfacesEnable.ValueBool() {
+				body, _ = sjson.Set(body, "subinterfaces.enable", []interface{}{nil})
+			}
+		case "presence":
+			if data.SubinterfacesEnable.ValueBool() {
+				body, _ = sjson.Set(body, "subinterfaces.enable", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "subinterfaces.enable", data.SubinterfacesEnable.ValueBool())
 		}
 	}
 	if !data.SubinterfacesTagged.IsNull() && !data.SubinterfacesTagged.IsUnknown() {
-		if data.SubinterfacesTagged.ValueBool() {
-			body, _ = sjson.Set(body, "subinterfaces-tagged", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.SubinterfacesTagged.ValueBool() {
+				body, _ = sjson.Set(body, "subinterfaces-tagged", []interface{}{nil})
+			}
+		case "presence":
+			if data.SubinterfacesTagged.ValueBool() {
+				body, _ = sjson.Set(body, "subinterfaces-tagged", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "subinterfaces-tagged", data.SubinterfacesTagged.ValueBool())
 		}
 	}
 	if !data.ManagementEnable.IsNull() && !data.ManagementEnable.IsUnknown() {
-		if data.ManagementEnable.ValueBool() {
-			body, _ = sjson.Set(body, "management.enable", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.ManagementEnable.ValueBool() {
+				body, _ = sjson.Set(body, "management.enable", []interface{}{nil})
+			}
+		case "presence":
+			if data.ManagementEnable.ValueBool() {
+				body, _ = sjson.Set(body, "management.enable", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "management.enable", data.ManagementEnable.ValueBool())
 		}
 	}
 	if !data.PriorityaddrEnable.IsNull() && !data.PriorityaddrEnable.IsUnknown() {
-		if data.PriorityaddrEnable.ValueBool() {
-			body, _ = sjson.Set(body, "priorityaddr.enable", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.PriorityaddrEnable.ValueBool() {
+				body, _ = sjson.Set(body, "priorityaddr.enable", []interface{}{nil})
+			}
+		case "presence":
+			if data.PriorityaddrEnable.ValueBool() {
+				body, _ = sjson.Set(body, "priorityaddr.enable", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "priorityaddr.enable", data.PriorityaddrEnable.ValueBool())
 		}
 	}
 	if !data.ExtendedShowWidthEnable.IsNull() && !data.ExtendedShowWidthEnable.IsUnknown() {
-		if data.ExtendedShowWidthEnable.ValueBool() {
-			body, _ = sjson.Set(body, "extended-show-width.enable", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.ExtendedShowWidthEnable.ValueBool() {
+				body, _ = sjson.Set(body, "extended-show-width.enable", []interface{}{nil})
+			}
+		case "presence":
+			if data.ExtendedShowWidthEnable.ValueBool() {
+				body, _ = sjson.Set(body, "extended-show-width.enable", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "extended-show-width.enable", data.ExtendedShowWidthEnable.ValueBool())
 		}
 	}
 	if !data.TlvSelectManagementAddressDisable.IsNull() && !data.TlvSelectManagementAddressDisable.IsUnknown() {
-		if data.TlvSelectManagementAddressDisable.ValueBool() {
-			body, _ = sjson.Set(body, "tlv-select.management-address.disable", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.TlvSelectManagementAddressDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.management-address.disable", []interface{}{nil})
+			}
+		case "presence":
+			if data.TlvSelectManagementAddressDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.management-address.disable", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "tlv-select.management-address.disable", data.TlvSelectManagementAddressDisable.ValueBool())
 		}
 	}
 	if !data.TlvSelectPortDescriptionDisable.IsNull() && !data.TlvSelectPortDescriptionDisable.IsUnknown() {
-		if data.TlvSelectPortDescriptionDisable.ValueBool() {
-			body, _ = sjson.Set(body, "tlv-select.port-description.disable", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.TlvSelectPortDescriptionDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.port-description.disable", []interface{}{nil})
+			}
+		case "presence":
+			if data.TlvSelectPortDescriptionDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.port-description.disable", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "tlv-select.port-description.disable", data.TlvSelectPortDescriptionDisable.ValueBool())
 		}
 	}
 	if !data.TlvSelectSystemCapabilitiesDisable.IsNull() && !data.TlvSelectSystemCapabilitiesDisable.IsUnknown() {
-		if data.TlvSelectSystemCapabilitiesDisable.ValueBool() {
-			body, _ = sjson.Set(body, "tlv-select.system-capabilities.disable", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.TlvSelectSystemCapabilitiesDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.system-capabilities.disable", []interface{}{nil})
+			}
+		case "presence":
+			if data.TlvSelectSystemCapabilitiesDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.system-capabilities.disable", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "tlv-select.system-capabilities.disable", data.TlvSelectSystemCapabilitiesDisable.ValueBool())
 		}
 	}
 	if !data.TlvSelectSystemDescriptionDisable.IsNull() && !data.TlvSelectSystemDescriptionDisable.IsUnknown() {
-		if data.TlvSelectSystemDescriptionDisable.ValueBool() {
-			body, _ = sjson.Set(body, "tlv-select.system-description.disable", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.TlvSelectSystemDescriptionDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.system-description.disable", []interface{}{nil})
+			}
+		case "presence":
+			if data.TlvSelectSystemDescriptionDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.system-description.disable", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "tlv-select.system-description.disable", data.TlvSelectSystemDescriptionDisable.ValueBool())
 		}
 	}
 	if !data.TlvSelectSystemNameDisable.IsNull() && !data.TlvSelectSystemNameDisable.IsUnknown() {
-		if data.TlvSelectSystemNameDisable.ValueBool() {
-			body, _ = sjson.Set(body, "tlv-select.system-name.disable", map[string]string{})
+		switch helpers.GetPathVersion(providerVersion, "presence", map[string]string{"25.4": "empty"}) {
+		case "empty":
+			if data.TlvSelectSystemNameDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.system-name.disable", []interface{}{nil})
+			}
+		case "presence":
+			if data.TlvSelectSystemNameDisable.ValueBool() {
+				body, _ = sjson.Set(body, "tlv-select.system-name.disable", map[string]string{})
+			}
+		default:
+			body, _ = sjson.Set(body, "tlv-select.system-name.disable", data.TlvSelectSystemNameDisable.ValueBool())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ChassisIdType.IsNull() && !data.ChassisIdType.IsUnknown() {
+			body, _ = sjson.Set(body, "chassis-id-type", data.ChassisIdType.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.InterfaceOnly.IsNull() && !data.InterfaceOnly.IsUnknown() {
+			if data.InterfaceOnly.ValueBool() {
+				body, _ = sjson.Set(body, "interface-only", []interface{}{nil})
+			}
 		}
 	}
 	return body
@@ -289,6 +395,14 @@ func (data LLDP) GetVersionConstraints() []helpers.FieldVersionConstraint {
 
 			RemovedInVersion: "25.4",
 		},
+		{
+			FieldPath:      "chassis_id_type",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "interface_only",
+			AddedInVersion: "25.4",
+		},
 	}...)
 	if len(constraints) == 0 {
 		return nil
@@ -320,7 +434,29 @@ func (data LLDP) GetEnumConstraints() []helpers.FieldEnumConstraint {
 
 // GetStringLengthConstraints returns the version-specific string length constraints
 func (data LLDP) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
-	return nil
+	return []helpers.FieldStringLengthConstraint{
+		{
+			FieldPath: "system_name",
+			VersionStringLengths: map[string]helpers.StringLengthConstraint{
+				"24.4": {Min: 1, Max: 256},
+				"25.4": {Min: 1, Max: 255},
+			},
+		},
+		{
+			FieldPath: "system_description",
+			VersionStringLengths: map[string]helpers.StringLengthConstraint{
+				"24.4": {Min: 1, Max: 256},
+				"25.4": {Min: 1, Max: 255},
+			},
+		},
+		{
+			FieldPath: "chassis_id",
+			VersionStringLengths: map[string]helpers.StringLengthConstraint{
+				"24.4": {Min: 1, Max: 256},
+				"25.4": {Min: 1, Max: 255},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getStringLengthConstraints
@@ -329,7 +465,29 @@ func (data LLDP) GetStringLengthConstraints() []helpers.FieldStringLengthConstra
 
 // GetPatternConstraints returns the version-specific string pattern constraints
 func (data LLDP) GetPatternConstraints() []helpers.FieldPatternConstraint {
-	return nil
+	return []helpers.FieldPatternConstraint{
+		{
+			FieldPath: "system_name",
+			VersionPatterns: map[string][]string{
+				"24.4": {`[\w\-\.:,_@#%$\+=\| ;]+`, `[a-zA-Z0-9_.-]+`},
+				"25.4": {`[\w\-\.:,_@#%$\+=\| ;]+`},
+			},
+		},
+		{
+			FieldPath: "system_description",
+			VersionPatterns: map[string][]string{
+				"24.4": {`[\w\-\.:,_@#%$\+=\| ;]+`, `[a-zA-Z0-9_.-]+`},
+				"25.4": {`[\w\-\.:,_@#%$\+=\| ;]+`},
+			},
+		},
+		{
+			FieldPath: "chassis_id",
+			VersionPatterns: map[string][]string{
+				"24.4": {`[\w\-\.:,_@#%$\+=\| ;]+`, `[a-zA-Z0-9_.-:]+`},
+				"25.4": {`[\w\-\.:,_@#%$\+=\| ;]+`},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getPatternConstraints
@@ -539,6 +697,21 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte, version string
 	} else if data.TlvSelectSystemNameDisable.IsNull() {
 		data.TlvSelectSystemNameDisable = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "chassis-id-type"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ChassisIdType.IsNull() {
+		data.ChassisIdType = types.StringValue(value.String())
+	} else if data.ChassisIdType.IsNull() {
+		data.ChassisIdType = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "interface-only"); helpers.VersionAtLeast(version, "25.4") && !data.InterfaceOnly.IsNull() {
+		if value.Exists() {
+			data.InterfaceOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfaceOnly = types.BoolValue(false)
+		}
+	} else if data.InterfaceOnly.IsNull() {
+		data.InterfaceOnly = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -694,6 +867,23 @@ func (data *LLDP) fromBody(ctx context.Context, res []byte, version string) {
 		// Only set to false if it was previously set in state
 		data.TlvSelectSystemNameDisable = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "chassis-id-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ChassisIdType = types.StringValue(value.String())
+		}
+	} else {
+		data.ChassisIdType = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "interface-only"); value.Exists() {
+			data.InterfaceOnly = types.BoolValue(true)
+		} else if !data.InterfaceOnly.IsNull() {
+			// Only set to false if it was previously set in state
+			data.InterfaceOnly = types.BoolValue(false)
+		}
+	} else {
+		data.InterfaceOnly = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -832,6 +1022,22 @@ func (data *LLDPData) fromBody(ctx context.Context, res []byte, version string) 
 	} else {
 		data.TlvSelectSystemNameDisable = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "chassis-id-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ChassisIdType = types.StringValue(value.String())
+		}
+	} else {
+		data.ChassisIdType = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "interface-only"); value.Exists() {
+			data.InterfaceOnly = types.BoolValue(true)
+		} else {
+			data.InterfaceOnly = types.BoolValue(false)
+		}
+	} else {
+		data.InterfaceOnly = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -840,6 +1046,12 @@ func (data *LLDPData) fromBody(ctx context.Context, res []byte, version string) 
 
 func (data *LLDP) getDeletedItems(ctx context.Context, state LLDP, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.InterfaceOnly.IsNull() && data.InterfaceOnly.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interface-only"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ChassisIdType.IsNull() && data.ChassisIdType.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "chassis-id-type"))
+	}
 	if !state.TlvSelectSystemNameDisable.IsNull() && data.TlvSelectSystemNameDisable.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "tlv-select/system-name/disable"))
 	}
@@ -918,6 +1130,11 @@ func (data *LLDP) getDeletedItems(ctx context.Context, state LLDP, version strin
 
 func (data *LLDP) getEmptyLeafsDelete(ctx context.Context, state *LLDP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.InterfaceOnly.IsNull() && !data.InterfaceOnly.ValueBool() {
+		if state != nil && !state.InterfaceOnly.IsNull() && state.InterfaceOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interface-only"))
+		}
+	}
 	if !data.TlvSelectSystemNameDisable.IsNull() && !data.TlvSelectSystemNameDisable.ValueBool() {
 		if state != nil && !state.TlvSelectSystemNameDisable.IsNull() && state.TlvSelectSystemNameDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tlv-select/system-name/disable"))
@@ -1011,6 +1228,12 @@ func (data *LLDP) getEmptyLeafsDelete(ctx context.Context, state *LLDP, version 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *LLDP) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.InterfaceOnly.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interface-only"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ChassisIdType.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "chassis-id-type"))
+	}
 	if !data.TlvSelectSystemNameDisable.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "tlv-select/system-name/disable"))
 	}
@@ -1195,6 +1418,14 @@ func (data LLDP) toBodyXML(ctx context.Context, stateArg ...*LLDP) string {
 	if !data.TlvSelectSystemNameDisable.IsNull() && !data.TlvSelectSystemNameDisable.IsUnknown() {
 		if data.TlvSelectSystemNameDisable.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/tlv-select/system-name/disable", "")
+		}
+	}
+	if !data.ChassisIdType.IsNull() && !data.ChassisIdType.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/chassis-id-type", data.ChassisIdType.ValueString())
+	}
+	if !data.InterfaceOnly.IsNull() && !data.InterfaceOnly.IsUnknown() {
+		if data.InterfaceOnly.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/interface-only", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -1448,6 +1679,22 @@ func (data *LLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.TlvSelectSystemNameDisable = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/chassis-id-type"); value.Exists() && !data.ChassisIdType.IsNull() {
+		data.ChassisIdType = types.StringValue(value.String())
+	} else if data.ChassisIdType.IsNull() {
+		data.ChassisIdType = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interface-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfaceOnly.IsNull() {
+			data.InterfaceOnly = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.InterfaceOnly.IsNull() {
+			data.InterfaceOnly = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -1557,6 +1804,14 @@ func (data *LLDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		data.TlvSelectSystemNameDisable = types.BoolValue(true)
 	} else {
 		data.TlvSelectSystemNameDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/chassis-id-type"); value.Exists() {
+		data.ChassisIdType = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interface-only"); value.Exists() {
+		data.InterfaceOnly = types.BoolValue(true)
+	} else {
+		data.InterfaceOnly = types.BoolValue(false)
 	}
 }
 
@@ -1668,6 +1923,14 @@ func (data *LLDPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else {
 		data.TlvSelectSystemNameDisable = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/chassis-id-type"); value.Exists() {
+		data.ChassisIdType = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interface-only"); value.Exists() {
+		data.InterfaceOnly = types.BoolValue(true)
+	} else {
+		data.InterfaceOnly = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -1679,6 +1942,37 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.InterfaceOnly.IsNull() && state.InterfaceOnly.ValueBool() && data.InterfaceOnly.IsNull() {
+		deletePath := state.getXPath() + "/interface-only"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ChassisIdType.IsNull() && data.ChassisIdType.IsNull() {
+		deletePath := state.getXPath() + "/chassis-id-type"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TlvSelectSystemNameDisable.IsNull() && state.TlvSelectSystemNameDisable.ValueBool() && data.TlvSelectSystemNameDisable.IsNull() {
 		deletePath := state.getXPath() + "/tlv-select/system-name/disable"
@@ -2052,6 +2346,12 @@ func (data *LLDP) addDeletedItemsXML(ctx context.Context, state LLDP, body strin
 
 func (data *LLDP) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.InterfaceOnly.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/interface-only")
+	}
+	if !data.ChassisIdType.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/chassis-id-type")
+	}
 	if !data.TlvSelectSystemNameDisable.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tlv-select/system-name/disable")
 	}

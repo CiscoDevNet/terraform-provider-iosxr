@@ -41,6 +41,8 @@ data "iosxr_lldp" "example" {
 ### Read-Only
 
 - `chassis_id` (String) LLDP chassis ID to advertise
+- `chassis_id_type` (String) LLDP chassis ID type to advertise
+  - Supported from version: `25.4`
 - `chassis_id_type_chassis_component` (Boolean) Value of entPhysicalAlias object defined in IETF RFC 2737
   - **Not supported from version `25.4` and above**
 - `chassis_id_type_interface_alias` (Boolean) Value of ifAlias object defined in IETF RFC 2863
@@ -58,6 +60,8 @@ data "iosxr_lldp" "example" {
 - `extended_show_width_enable` (Boolean) Enable Extended Show LLDP Neighbor Width
 - `holdtime` (Number) Specify the holdtime (in sec) to be sent in packets
 - `id` (String) The path of the retrieved object.
+- `interface_only` (Boolean) Enable LLDP only based on interface LLDP configuration. No Global enable
+  - Supported from version: `25.4`
 - `management_enable` (Boolean) Enable LLDP over Management interface as well
 - `priorityaddr_enable` (Boolean) Enable LLDP to use Management interface address first(if configured)
 - `reinit` (Number) Delay (in sec) for LLDP initialization on any interface

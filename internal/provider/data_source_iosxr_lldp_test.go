@@ -56,6 +56,12 @@ func TestAccDataSourceIosxrLLDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_system_capabilities_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_system_description_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_system_name_disable", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "chassis_id_type", "local"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "interface_only", "true"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -102,6 +108,12 @@ func testAccDataSourceIosxrLLDPConfig() string {
 	config += `	tlv_select_system_capabilities_disable = true` + "\n"
 	config += `	tlv_select_system_description_disable = true` + "\n"
 	config += `	tlv_select_system_name_disable = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	chassis_id_type = "local"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	interface_only = true` + "\n"
+	}
 	config += `}` + "\n"
 
 	config += `

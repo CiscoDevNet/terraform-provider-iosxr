@@ -605,24 +605,6 @@ func (r *EVPNStitchingEVIResource) Read(ctx context.Context, req resource.ReadRe
 	if device.Managed {
 		_ = diags // Avoid unused variable error
 		if device.Protocol == "gnmi" {
-			// When auto_commit is false, flush any staged operations now before
-			// reading, so a batch that was never explicitly committed via
-			// iosxr_commit still reaches the device the next time anything
-			// reads state (e.g. a later, unrelated `terraform plan`/`apply`).
-			if !device.AutoCommit && device.HasPendingOps() {
-				flushOps := device.DrainCandidateOps()
-				tflog.Info(ctx, fmt.Sprintf("Flushing %d batched operation(s) before Read", len(flushOps)))
-				if !device.ReuseConnection {
-					defer func() { _ = device.GnmiClient.Disconnect() }()
-				}
-				if _, err := device.GnmiClient.Set(ctx, flushOps); err != nil {
-					device.AppendCandidateOps(flushOps) // re-queue on failure so a later apply can retry
-					resp.Diagnostics.AddError("Batch operation failed", fmt.Sprintf("Failed to commit %d batched operation(s): %s", len(flushOps), err.Error()))
-					return
-				}
-				tflog.Info(ctx, fmt.Sprintf("Successfully committed %d batched operation(s) to device", len(flushOps)))
-			}
-
 			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
 			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			if locked {

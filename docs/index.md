@@ -1,10 +1,7 @@
-
 ---
-layout: ""
 page_title: "Provider: IOSXR"
 description: |-
   The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices.
-
 ---
 
 # IOSXR Provider

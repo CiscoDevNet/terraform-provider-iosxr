@@ -68,7 +68,7 @@ func main() {
 		log.Fatalf("Error parsing %s: %v", versionChangesDataPath, err)
 	}
 
-	fmt.Println("rendering multi-version docs")
+	fmt.Println("rendering multi-version removed from docs")
 
 	injectVersionCompat(data, resourceDocsPath, "resources")
 	injectVersionCompat(data, dataSourceDocsPath, "data-sources")

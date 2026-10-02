@@ -74,11 +74,11 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 				Computed:            true,
 			},
 			"profile_tcam_fib_ipv4_unicast_percent": schema.Int64Attribute{
-				MarkdownDescription: "percent to configure",
+				MarkdownDescription: "percent to configure" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_tcam_fib_ipv6_unicast_percent": schema.Int64Attribute{
-				MarkdownDescription: "percent to configure",
+				MarkdownDescription: "percent to configure" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_tcam_format_access_list_ipv4_src_addr": schema.BoolAttribute{
@@ -315,7 +315,7 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 				Computed:            true,
 			},
 			"profile_cef_mplsoudp_scale": schema.BoolAttribute{
-				MarkdownDescription: "Enable mplsoudp scale",
+				MarkdownDescription: "Enable mplsoudp scale" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_cef_stats_label_app_default": schema.StringAttribute{
@@ -507,15 +507,15 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 				},
 			},
 			"profile_gue_udp_dest_port_ipv4": schema.Int64Attribute{
-				MarkdownDescription: "Configure unreserved udp port number for ipv4 payload",
+				MarkdownDescription: "Configure unreserved udp port number for ipv4 payload" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_gue_udp_dest_port_ipv6": schema.Int64Attribute{
-				MarkdownDescription: "Configure unreserved udp port number for ipv6 payload",
+				MarkdownDescription: "Configure unreserved udp port number for ipv6 payload" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_gue_udp_dest_port_mpls": schema.Int64Attribute{
-				MarkdownDescription: "Configure unreserved udp port number for mpls payload",
+				MarkdownDescription: "Configure unreserved udp port number for mpls payload" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_npu_buffer_extended_locations": schema.ListNestedAttribute{
@@ -568,6 +568,34 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 			},
 			"profile_irb_throughput_optimized": schema.BoolAttribute{
 				MarkdownDescription: "Configure BVI throughput-optimized mode",
+				Computed:            true,
+			},
+			"profile_tcam_format_og_compr_id_extension": schema.BoolAttribute{
+				MarkdownDescription: "Enable wide compression result of OG ACL" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_qos_mode": schema.StringAttribute{
+				MarkdownDescription: "Configure QOS Mode" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_cef_iptunnel_scale": schema.BoolAttribute{
+				MarkdownDescription: "Enable iptunnel scale" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_cef_hash_ip_field_duplication": schema.BoolAttribute{
+				MarkdownDescription: "Enable IP field duplication for hash" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_l2fib_evpn_aging": schema.BoolAttribute{
+				MarkdownDescription: "Configure evpn-aging profile" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_route_scale_host_route": schema.BoolAttribute{
+				MarkdownDescription: "Enable host route scale for ARP/ND" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_route_scale_lpm_full_scale": schema.BoolAttribute{
+				MarkdownDescription: "Enable full scale for LPM" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
 		},

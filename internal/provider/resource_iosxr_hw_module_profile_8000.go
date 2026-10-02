@@ -85,14 +85,14 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_tcam_fib_ipv4_unicast_percent": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("percent to configure").AddIntegerRangeDescription(1, 100).String,
+				MarkdownDescription: helpers.NewAttributeDescription("percent to configure").AddIntegerRangeDescription(1, 100).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 100),
 				},
 			},
 			"profile_tcam_fib_ipv6_unicast_percent": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("percent to configure").AddIntegerRangeDescription(0, 100).String,
+				MarkdownDescription: helpers.NewAttributeDescription("percent to configure").AddIntegerRangeDescription(0, 100).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
@@ -426,7 +426,7 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_cef_mplsoudp_scale": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable mplsoudp scale").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Enable mplsoudp scale").String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 			},
 			"profile_cef_stats_label_app_default": schema.StringAttribute{
@@ -630,32 +630,36 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 										},
 									},
 									"pause_threshold": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("configure pause-threshold").AddIntegerRangeDescription(307200, 1574400).String,
+										MarkdownDescription: helpers.NewAttributeDescription("configure pause-threshold").String + "\n  - Range: `307200`-`1574400` (v24.4), `307200`-`5760000` (v25.4)",
 										Required:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(307200, 1574400),
+											int64validator.Between(307200, 5760000),
 										},
+										// Precise per-version range validation still done at runtime in Create/Update.
 									},
 									"headroom": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("configure headroom").AddIntegerRangeDescription(345600, 1651200).String,
+										MarkdownDescription: helpers.NewAttributeDescription("configure headroom").String + "\n  - Range: `345600`-`1651200` (v24.4), `201600`-`1651200` (v25.4)",
 										Required:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(345600, 1651200),
+											int64validator.Between(201600, 1651200),
 										},
+										// Precise per-version range validation still done at runtime in Create/Update.
 									},
 									"ecn": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("configure ecn").AddIntegerRangeDescription(153600, 897408).String,
+										MarkdownDescription: helpers.NewAttributeDescription("configure ecn").String + "\n  - Range: `153600`-`897408` (v24.4), `153600`-`5749376` (v25.4)",
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(153600, 897408),
+											int64validator.Between(153600, 5749376),
 										},
+										// Precise per-version range validation still done at runtime in Create/Update.
 									},
 									"max_threshold": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("ecn max threshold").AddIntegerRangeDescription(153600, 1495680).String,
+										MarkdownDescription: helpers.NewAttributeDescription("ecn max threshold").String + "\n  - Range: `153600`-`1495680` (v24.4), `153600`-`5759616` (v25.4)",
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(153600, 1495680),
+											int64validator.Between(153600, 5759616),
 										},
+										// Precise per-version range validation still done at runtime in Create/Update.
 									},
 									"probability_percentage": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("maximum probability percentage").AddIntegerRangeDescription(1, 100).String,
@@ -689,21 +693,21 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			"profile_gue_udp_dest_port_ipv4": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for ipv4 payload").AddIntegerRangeDescription(1000, 64000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for ipv4 payload").AddIntegerRangeDescription(1000, 64000).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1000, 64000),
 				},
 			},
 			"profile_gue_udp_dest_port_ipv6": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for ipv6 payload").AddIntegerRangeDescription(1000, 64000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for ipv6 payload").AddIntegerRangeDescription(1000, 64000).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1000, 64000),
 				},
 			},
 			"profile_gue_udp_dest_port_mpls": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for mpls payload").AddIntegerRangeDescription(1000, 64000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for mpls payload").AddIntegerRangeDescription(1000, 64000).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1000, 64000),
@@ -765,6 +769,37 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 			},
 			"profile_irb_throughput_optimized": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure BVI throughput-optimized mode").String,
+				Optional:            true,
+			},
+			"profile_tcam_format_og_compr_id_extension": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable wide compression result of OG ACL").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_qos_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure QOS Mode").AddStringEnumDescription("l3vpn-short-pipe").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("l3vpn-short-pipe"),
+				},
+			},
+			"profile_cef_iptunnel_scale": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable iptunnel scale").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_cef_hash_ip_field_duplication": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable IP field duplication for hash").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_l2fib_evpn_aging": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure evpn-aging profile").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_route_scale_host_route": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable host route scale for ARP/ND").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_route_scale_lpm_full_scale": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable full scale for LPM").String + "\n  - Supported from version: `25.4`",
 				Optional:            true,
 			},
 		},

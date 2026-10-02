@@ -3,6 +3,12 @@ name: HW Module Profile 8000
 path: Cisco-IOS-XR-um-8000-hw-module-profile-cfg:/hw-module
 doc_category: Cisco 8000 Series
 attributes:
+  # ===========================================================
+  # profile/priority-flow-control/locations/location: non-pfc-tcs added, buffer-internal ranges widened
+  # 24.4: buffer-extended/traffic-class, buffer-internal/traffic-class only
+  # 25.4: buffer-extended/non-pfc-tcs (new); buffer-internal pause-threshold, headroom, ecn,
+  #       max-threshold ranges changed
+  # ===========================================================
   - yang_name: profile/priority-flow-control/locations/location
     tf_name: profile_priority_flow_control_locations
     type: List
@@ -11,18 +17,59 @@ attributes:
         tf_name: non_pfc_tcs
         type: Bool
         type_yang_bool: presence
+        exclude_test: true
         example: true
       - yang_name: buffer-extended/non-pfc-tcs/max-non-pfc-voqs/number-of-evict-voqs
         tf_name: non_pfc_tcs_max_non_pfc_voqs_number_of_evict_voqs
-        description: "number of evict voqs"
-        type: Int64
-        min_int: 1
-        max_int: 3800
+        exclude_test: true
         example: 100
       - yang_name: buffer-extended/non-pfc-tcs/max-non-pfc-voqs/hbm-buffers-percentage
         tf_name: non_pfc_tcs_max_non_pfc_voqs_hbm_buffers_percentage
-        description: "configure hbm-buffers-percentage for non-pfc-tcs"
-        type: Int64
-        min_int: 50
-        max_int: 80
+        exclude_test: true
         example: 60
+      - yang_name: buffer-internal/traffic-class
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: pause-threshold
+          - yang_name: headroom
+          - yang_name: ecn
+          - yang_name: max-threshold
+
+  # ===========================================================
+  # REMOVALS — paths present in 24.4 base, absent from 25.4
+  # ===========================================================
+  - yang_name: profile/tcam/fib/ipv4/unicast/percent
+    legacy: true
+  - yang_name: profile/tcam/fib/ipv6/unicast/percent
+    legacy: true
+  - yang_name: profile/gue/udp-dest-port/ipv4
+    legacy: true
+  - yang_name: profile/gue/udp-dest-port/ipv6
+    legacy: true
+  - yang_name: profile/gue/udp-dest-port/mpls
+    legacy: true
+  - yang_name: profile/cef/mplsoudp/scale
+    legacy: true
+
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: profile/tcam/format/og-compr-id-extension
+    exclude_test: true
+    example: true
+  - yang_name: profile/qos/mode
+    minimum_test_value: '"l3vpn-short-pipe"'
+    example: l3vpn-short-pipe
+  - yang_name: profile/cef/iptunnel/scale
+    example: true
+  - yang_name: profile/cef/hash/ip-field-duplication
+    example: true
+  - yang_name: profile/l2fib/evpn-aging
+    example: true
+  - yang_name: profile/route/scale/host-route
+    exclude_test: true
+    example: true
+  - yang_name: profile/route/scale/lpm/full-scale
+    exclude_test: true
+    example: true

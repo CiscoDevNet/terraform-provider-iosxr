@@ -232,7 +232,7 @@ attributes:
   - yang_name: profile/priority-flow-control/locations/location
     tf_name: profile_priority_flow_control_locations
     type: List
-    exclude_test: true
+    # exclude_test: true
     attributes:
       - yang_name: location-name
         id: true
@@ -242,7 +242,7 @@ attributes:
         attributes:
           - yang_name: traffic-class-id
             id: true
-            example: 1
+            example: 5
           - yang_name: pause-threshold
             example: 10
           - yang_name: pause-threshold-bytes
@@ -251,7 +251,8 @@ attributes:
           - yang_name: ms
             example: true
           - yang_name: ms/headroom
-            example: 4096
+            exclude_test: true
+            example: 10
           - yang_name: us
             exclude_test: true
             example: true
@@ -259,6 +260,7 @@ attributes:
             exclude_test: true
             example: 4096
           - yang_name: kbytes
+            exclude_test: true
             example: true
           - yang_name: kbytes/headroom
             exclude_test: true
@@ -271,6 +273,7 @@ attributes:
             example: 15
       - yang_name: buffer-internal/traffic-class
         type: List
+        exclude_test: true
         attributes:
           - yang_name: traffic-class-id
             id: true

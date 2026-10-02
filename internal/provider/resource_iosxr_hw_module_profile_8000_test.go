@@ -38,8 +38,12 @@ func TestAccIosxrHWModuleProfile8000(t *testing.T) {
 		t.Skip("skipping test, set environment variable C8000")
 	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_tcam_fib_ipv4_unicast_percent", "50"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_tcam_fib_ipv6_unicast_percent", "50"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_tcam_fib_ipv4_unicast_percent", "50"))
+	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_tcam_fib_ipv6_unicast_percent", "50"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_tcam_format_access_list_ipv4_src_addr", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_tcam_format_access_list_ipv4_dst_addr", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_tcam_format_access_list_ipv4_src_port", "true"))
@@ -74,7 +78,9 @@ func TestAccIosxrHWModuleProfile8000(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_lpts_acl", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_lpts_pifib_entry_counters", "256"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_vxlan_ipv6_tnl_scale", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_mplsoudp_scale", "true"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_mplsoudp_scale", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_stats_label_app_default", "dynamic"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_ttl_tunnel_ip_decrement", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_te_tunnel_highscale_no_ldp_over_te", "true"))
@@ -91,9 +97,19 @@ func TestAccIosxrHWModuleProfile8000(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_stats_no_bvi_ingress", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_stats_acl_permit", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_bw_threshold", "80"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_gue_udp_dest_port_ipv4", "7000"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_gue_udp_dest_port_ipv6", "8000"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_gue_udp_dest_port_mpls", "9000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_priority_flow_control_locations.0.location_name", "0/RP0/CPU0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_priority_flow_control_locations.0.buffer_extended_traffic_class.0.traffic_class_id", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_priority_flow_control_locations.0.buffer_extended_traffic_class.0.pause_threshold", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_priority_flow_control_locations.0.buffer_extended_traffic_class.0.ms", "true"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_gue_udp_dest_port_ipv4", "7000"))
+	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_gue_udp_dest_port_ipv6", "8000"))
+	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_gue_udp_dest_port_mpls", "9000"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_npu_buffer_extended_locations.0.location_name", "0/RP0/CPU0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_npu_buffer_extended_locations.0.bandwidth_congestion_detection_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_npu_buffer_extended_locations.0.bandwidth_congestion_protect_enable", "true"))
@@ -102,6 +118,18 @@ func TestAccIosxrHWModuleProfile8000(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_l2fib_higher_scale", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_route_scale_ipv6_unicast_connected_prefix_high", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_flowspec_ipv6_packet_len_enable", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_qos_mode", "l3vpn-short-pipe"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_iptunnel_scale", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_cef_hash_ip_field_duplication", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile_8000.test", "profile_l2fib_evpn_aging", "true"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -146,7 +174,12 @@ func iosxrHWModuleProfile8000ImportStateIdFunc(resourceName string) resource.Imp
 
 func testAccIosxrHWModuleProfile8000Config_minimum() string {
 	config := `resource "iosxr_hw_module_profile_8000" "test" {` + "\n"
-	config += `	profile_tcam_fib_ipv4_unicast_percent = 50` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_tcam_fib_ipv4_unicast_percent = 50` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_qos_mode = "l3vpn-short-pipe"` + "\n"
+	}
 	config += `}` + "\n"
 	return config
 }
@@ -157,8 +190,12 @@ func testAccIosxrHWModuleProfile8000Config_minimum() string {
 
 func testAccIosxrHWModuleProfile8000Config_all() string {
 	config := `resource "iosxr_hw_module_profile_8000" "test" {` + "\n"
-	config += `	profile_tcam_fib_ipv4_unicast_percent = 50` + "\n"
-	config += `	profile_tcam_fib_ipv6_unicast_percent = 50` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_tcam_fib_ipv4_unicast_percent = 50` + "\n"
+	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_tcam_fib_ipv6_unicast_percent = 50` + "\n"
+	}
 	config += `	profile_tcam_format_access_list_ipv4_src_addr = true` + "\n"
 	config += `	profile_tcam_format_access_list_ipv4_dst_addr = true` + "\n"
 	config += `	profile_tcam_format_access_list_ipv4_src_port = true` + "\n"
@@ -193,7 +230,9 @@ func testAccIosxrHWModuleProfile8000Config_all() string {
 	config += `	profile_cef_lpts_acl = true` + "\n"
 	config += `	profile_cef_lpts_pifib_entry_counters = 256` + "\n"
 	config += `	profile_cef_vxlan_ipv6_tnl_scale = true` + "\n"
-	config += `	profile_cef_mplsoudp_scale = true` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_cef_mplsoudp_scale = true` + "\n"
+	}
 	config += `	profile_cef_stats_label_app_default = "dynamic"` + "\n"
 	config += `	profile_cef_ttl_tunnel_ip_decrement = "disable"` + "\n"
 	config += `	profile_cef_te_tunnel_highscale_no_ldp_over_te = true` + "\n"
@@ -214,9 +253,23 @@ func testAccIosxrHWModuleProfile8000Config_all() string {
 	config += `	profile_stats_no_bvi_ingress = true` + "\n"
 	config += `	profile_stats_acl_permit = true` + "\n"
 	config += `	profile_bw_threshold = "80"` + "\n"
-	config += `	profile_gue_udp_dest_port_ipv4 = 7000` + "\n"
-	config += `	profile_gue_udp_dest_port_ipv6 = 8000` + "\n"
-	config += `	profile_gue_udp_dest_port_mpls = 9000` + "\n"
+	config += `	profile_priority_flow_control_locations = [{` + "\n"
+	config += `		location_name = "0/RP0/CPU0"` + "\n"
+	config += `		buffer_extended_traffic_class = [{` + "\n"
+	config += `			traffic_class_id = 5` + "\n"
+	config += `			pause_threshold = 10` + "\n"
+	config += `			ms = true` + "\n"
+	config += `		}]` + "\n"
+	config += `		}]` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_gue_udp_dest_port_ipv4 = 7000` + "\n"
+	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_gue_udp_dest_port_ipv6 = 8000` + "\n"
+	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_gue_udp_dest_port_mpls = 9000` + "\n"
+	}
 	config += `	profile_npu_buffer_extended_locations = [{` + "\n"
 	config += `		location_name = "0/RP0/CPU0"` + "\n"
 	config += `		bandwidth_congestion_detection_enable = true` + "\n"
@@ -227,6 +280,18 @@ func testAccIosxrHWModuleProfile8000Config_all() string {
 	config += `	profile_l2fib_higher_scale = true` + "\n"
 	config += `	profile_route_scale_ipv6_unicast_connected_prefix_high = true` + "\n"
 	config += `	profile_flowspec_ipv6_packet_len_enable = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_qos_mode = "l3vpn-short-pipe"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_cef_iptunnel_scale = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_cef_hash_ip_field_duplication = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	profile_l2fib_evpn_aging = true` + "\n"
+	}
 	config += `}` + "\n"
 	return config
 }

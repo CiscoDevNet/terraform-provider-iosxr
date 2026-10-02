@@ -10,6 +10,19 @@ description: |-
 
 This data source can read the HW Module Profile 8000 configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `profile_cef_mplsoudp_scale` | `25.4` |
+| `profile_gue_udp_dest_port_ipv4` | `25.4` |
+| `profile_gue_udp_dest_port_ipv6` | `25.4` |
+| `profile_gue_udp_dest_port_mpls` | `25.4` |
+| `profile_tcam_fib_ipv4_unicast_percent` | `25.4` |
+| `profile_tcam_fib_ipv6_unicast_percent` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -34,11 +47,16 @@ data "iosxr_hw_module_profile_8000" "example" {
 - `profile_cef_cbf` (String) Enable cbf
 - `profile_cef_cbf_forward_class_list` (List of Number) Configure hardware forward class list
 - `profile_cef_dark_bw` (String) Configure dark-bandwidth
+- `profile_cef_hash_ip_field_duplication` (Boolean) Enable IP field duplication for hash
+  - Supported from version: `25.4`
 - `profile_cef_ip_redirect` (String) IP redirect
+- `profile_cef_iptunnel_scale` (Boolean) Enable iptunnel scale
+  - Supported from version: `25.4`
 - `profile_cef_ipv6_hop_limit` (String) Hop-limit 0 packets
 - `profile_cef_lpts_acl` (Boolean) Enable ACL
 - `profile_cef_lpts_pifib_entry_counters` (Number) Configure number of counters
 - `profile_cef_mplsoudp_scale` (Boolean) Enable mplsoudp scale
+  - **Not supported from version `25.4` and above**
 - `profile_cef_source_rtbh_enable` (Boolean) Enable Source-based RTBH
 - `profile_cef_sropt` (String) Enable debug message for SROPT
 - `profile_cef_stats_label_app_default` (String) Applies to - LDP and SR
@@ -54,10 +72,15 @@ data "iosxr_hw_module_profile_8000" "example" {
 - `profile_encap_exact_locations_all_virtual` (Boolean) All Main Bundle interfaces
 - `profile_flowspec_ipv6_packet_len_enable` (Boolean) flowspec enable ipv6-packet-length configuration
 - `profile_gue_udp_dest_port_ipv4` (Number) Configure unreserved udp port number for ipv4 payload
+  - **Not supported from version `25.4` and above**
 - `profile_gue_udp_dest_port_ipv6` (Number) Configure unreserved udp port number for ipv6 payload
+  - **Not supported from version `25.4` and above**
 - `profile_gue_udp_dest_port_mpls` (Number) Configure unreserved udp port number for mpls payload
+  - **Not supported from version `25.4` and above**
 - `profile_irb_throughput_optimized` (Boolean) Configure BVI throughput-optimized mode
 - `profile_l2fib_bridge_flush_convergence` (Boolean) Configure BD flush convergence mode
+- `profile_l2fib_evpn_aging` (Boolean) Configure evpn-aging profile
+  - Supported from version: `25.4`
 - `profile_l2fib_higher_scale` (Boolean) Configure L2 high-scale mode
 - `profile_l2fib_pw_stats` (Boolean) Configure PW stats
 - `profile_l2fib_vxlan_dc_leaf` (Boolean) Configure vxlan-dc-leaf profile
@@ -68,17 +91,25 @@ data "iosxr_hw_module_profile_8000" "example" {
 - `profile_qos_intra_npu_over_fabric` (String) Configure QOS intra-npu-over-fabric
 - `profile_qos_l2_mode` (String) Configure QOS mode for L2 interfaces
 - `profile_qos_low_latency_mode` (String) Configure QOS low-latency
+- `profile_qos_mode` (String) Configure QOS Mode
+  - Supported from version: `25.4`
 - `profile_qos_qos_stats_push_collection` (Boolean) Enable QoS stats push collection
 - `profile_qos_voq_mode_eight` (Boolean) 8 VoQ Mode
 - `profile_qos_voq_mode_fair_eight` (Boolean) fair-8 VoQ Mode
 - `profile_qos_voq_mode_fair_four` (Boolean) fair-4 VoQ Mode
 - `profile_qos_voq_mode_four` (Boolean) 4 VoQ Mode
+- `profile_route_scale_host_route` (Boolean) Enable host route scale for ARP/ND
+  - Supported from version: `25.4`
 - `profile_route_scale_ipv6_unicast_connected_prefix_high` (Boolean) Enable profile ipv6-unicast connected-prefix high
+- `profile_route_scale_lpm_full_scale` (Boolean) Enable full scale for LPM
+  - Supported from version: `25.4`
 - `profile_stats_acl_permit` (Boolean) Configure ACL permit stats
 - `profile_stats_no_bvi_ingress` (Boolean) Disable BVI ingress counter stats
 - `profile_stats_voqs_sharing_counters` (String) Configure number of voqs (1, 2, 4) sharing counters
 - `profile_tcam_fib_ipv4_unicast_percent` (Number) percent to configure
+  - **Not supported from version `25.4` and above**
 - `profile_tcam_fib_ipv6_unicast_percent` (Number) percent to configure
+  - **Not supported from version `25.4` and above**
 - `profile_tcam_format_access_list_ipv4_dst_addr` (Boolean) ipv4 destination address
 - `profile_tcam_format_access_list_ipv4_dst_object_group` (Boolean) destination object group
 - `profile_tcam_format_access_list_ipv4_dst_port` (Boolean) destination port for TCP/UDP
@@ -118,6 +149,8 @@ data "iosxr_hw_module_profile_8000" "example" {
 - `profile_tcam_format_access_list_ipv6_udf6` (String) user defined filter
 - `profile_tcam_format_access_list_ipv6_udf7` (String) user defined filter
 - `profile_tcam_format_access_list_ipv6_udf8` (String) user defined filter
+- `profile_tcam_format_og_compr_id_extension` (Boolean) Enable wide compression result of OG ACL
+  - Supported from version: `25.4`
 
 <a id="nestedatt--profile_encap_exact_interfaces"></a>
 ### Nested Schema for `profile_encap_exact_interfaces`

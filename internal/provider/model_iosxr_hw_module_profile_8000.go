@@ -136,6 +136,13 @@ type HWModuleProfile8000 struct {
 	ProfileRouteScaleIpv6UnicastConnectedPrefixHigh  types.Bool                                               `tfsdk:"profile_route_scale_ipv6_unicast_connected_prefix_high"`
 	ProfileFlowspecIpv6PacketLenEnable               types.Bool                                               `tfsdk:"profile_flowspec_ipv6_packet_len_enable"`
 	ProfileIrbThroughputOptimized                    types.Bool                                               `tfsdk:"profile_irb_throughput_optimized"`
+	ProfileTcamFormatOgComprIdExtension              types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension"`
+	ProfileQosMode                                   types.String                                             `tfsdk:"profile_qos_mode"`
+	ProfileCefIptunnelScale                          types.Bool                                               `tfsdk:"profile_cef_iptunnel_scale"`
+	ProfileCefHashIpFieldDuplication                 types.Bool                                               `tfsdk:"profile_cef_hash_ip_field_duplication"`
+	ProfileL2fibEvpnAging                            types.Bool                                               `tfsdk:"profile_l2fib_evpn_aging"`
+	ProfileRouteScaleHostRoute                       types.Bool                                               `tfsdk:"profile_route_scale_host_route"`
+	ProfileRouteScaleLpmFullScale                    types.Bool                                               `tfsdk:"profile_route_scale_lpm_full_scale"`
 }
 
 type HWModuleProfile8000Data struct {
@@ -232,6 +239,13 @@ type HWModuleProfile8000Data struct {
 	ProfileRouteScaleIpv6UnicastConnectedPrefixHigh  types.Bool                                               `tfsdk:"profile_route_scale_ipv6_unicast_connected_prefix_high"`
 	ProfileFlowspecIpv6PacketLenEnable               types.Bool                                               `tfsdk:"profile_flowspec_ipv6_packet_len_enable"`
 	ProfileIrbThroughputOptimized                    types.Bool                                               `tfsdk:"profile_irb_throughput_optimized"`
+	ProfileTcamFormatOgComprIdExtension              types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension"`
+	ProfileQosMode                                   types.String                                             `tfsdk:"profile_qos_mode"`
+	ProfileCefIptunnelScale                          types.Bool                                               `tfsdk:"profile_cef_iptunnel_scale"`
+	ProfileCefHashIpFieldDuplication                 types.Bool                                               `tfsdk:"profile_cef_hash_ip_field_duplication"`
+	ProfileL2fibEvpnAging                            types.Bool                                               `tfsdk:"profile_l2fib_evpn_aging"`
+	ProfileRouteScaleHostRoute                       types.Bool                                               `tfsdk:"profile_route_scale_host_route"`
+	ProfileRouteScaleLpmFullScale                    types.Bool                                               `tfsdk:"profile_route_scale_lpm_full_scale"`
 }
 type HWModuleProfile8000ProfileEncapExactInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -308,11 +322,15 @@ func (data HWModuleProfile8000) toBody(ctx context.Context, providerVersion stri
 			body, _ = sjson.Set(body, "multicast.route-scale", map[string]string{})
 		}
 	}
-	if !data.ProfileTcamFibIpv4UnicastPercent.IsNull() && !data.ProfileTcamFibIpv4UnicastPercent.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.tcam.fib.ipv4.unicast.percent", strconv.FormatInt(data.ProfileTcamFibIpv4UnicastPercent.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileTcamFibIpv4UnicastPercent.IsNull() && !data.ProfileTcamFibIpv4UnicastPercent.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.tcam.fib.ipv4.unicast.percent", strconv.FormatInt(data.ProfileTcamFibIpv4UnicastPercent.ValueInt64(), 10))
+		}
 	}
-	if !data.ProfileTcamFibIpv6UnicastPercent.IsNull() && !data.ProfileTcamFibIpv6UnicastPercent.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.tcam.fib.ipv6.unicast.percent", strconv.FormatInt(data.ProfileTcamFibIpv6UnicastPercent.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileTcamFibIpv6UnicastPercent.IsNull() && !data.ProfileTcamFibIpv6UnicastPercent.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.tcam.fib.ipv6.unicast.percent", strconv.FormatInt(data.ProfileTcamFibIpv6UnicastPercent.ValueInt64(), 10))
+		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsUnknown() {
 		if data.ProfileTcamFormatAccessListIpv4SrcAddr.ValueBool() {
@@ -552,9 +570,11 @@ func (data HWModuleProfile8000) toBody(ctx context.Context, providerVersion stri
 			body, _ = sjson.Set(body, "profile.cef.vxlan.ipv6-tnl-scale", map[string]string{})
 		}
 	}
-	if !data.ProfileCefMplsoudpScale.IsNull() && !data.ProfileCefMplsoudpScale.IsUnknown() {
-		if data.ProfileCefMplsoudpScale.ValueBool() {
-			body, _ = sjson.Set(body, "profile.cef.mplsoudp.scale", map[string]string{})
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileCefMplsoudpScale.IsNull() && !data.ProfileCefMplsoudpScale.IsUnknown() {
+			if data.ProfileCefMplsoudpScale.ValueBool() {
+				body, _ = sjson.Set(body, "profile.cef.mplsoudp.scale", map[string]string{})
+			}
 		}
 	}
 	if !data.ProfileCefStatsLabelAppDefault.IsNull() && !data.ProfileCefStatsLabelAppDefault.IsUnknown() {
@@ -617,14 +637,20 @@ func (data HWModuleProfile8000) toBody(ctx context.Context, providerVersion stri
 	if !data.ProfileBwThreshold.IsNull() && !data.ProfileBwThreshold.IsUnknown() {
 		body, _ = sjson.Set(body, "profile.bw-threshold", data.ProfileBwThreshold.ValueString())
 	}
-	if !data.ProfileGueUdpDestPortIpv4.IsNull() && !data.ProfileGueUdpDestPortIpv4.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.gue.udp-dest-port.ipv4", strconv.FormatInt(data.ProfileGueUdpDestPortIpv4.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileGueUdpDestPortIpv4.IsNull() && !data.ProfileGueUdpDestPortIpv4.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.gue.udp-dest-port.ipv4", strconv.FormatInt(data.ProfileGueUdpDestPortIpv4.ValueInt64(), 10))
+		}
 	}
-	if !data.ProfileGueUdpDestPortIpv6.IsNull() && !data.ProfileGueUdpDestPortIpv6.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.gue.udp-dest-port.ipv6", strconv.FormatInt(data.ProfileGueUdpDestPortIpv6.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileGueUdpDestPortIpv6.IsNull() && !data.ProfileGueUdpDestPortIpv6.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.gue.udp-dest-port.ipv6", strconv.FormatInt(data.ProfileGueUdpDestPortIpv6.ValueInt64(), 10))
+		}
 	}
-	if !data.ProfileGueUdpDestPortMpls.IsNull() && !data.ProfileGueUdpDestPortMpls.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.gue.udp-dest-port.mpls", strconv.FormatInt(data.ProfileGueUdpDestPortMpls.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileGueUdpDestPortMpls.IsNull() && !data.ProfileGueUdpDestPortMpls.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.gue.udp-dest-port.mpls", strconv.FormatInt(data.ProfileGueUdpDestPortMpls.ValueInt64(), 10))
+		}
 	}
 	if !data.ProfileL2fibPwStats.IsNull() && !data.ProfileL2fibPwStats.IsUnknown() {
 		if data.ProfileL2fibPwStats.ValueBool() {
@@ -662,6 +688,53 @@ func (data HWModuleProfile8000) toBody(ctx context.Context, providerVersion stri
 	if !data.ProfileIrbThroughputOptimized.IsNull() && !data.ProfileIrbThroughputOptimized.IsUnknown() {
 		if data.ProfileIrbThroughputOptimized.ValueBool() {
 			body, _ = sjson.Set(body, "profile.irb.throughput-optimized", map[string]string{})
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.IsUnknown() {
+			if data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+				body, _ = sjson.Set(body, "profile.tcam.format.og-compr-id-extension", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileQosMode.IsNull() && !data.ProfileQosMode.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.qos.mode", data.ProfileQosMode.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileCefIptunnelScale.IsNull() && !data.ProfileCefIptunnelScale.IsUnknown() {
+			if data.ProfileCefIptunnelScale.ValueBool() {
+				body, _ = sjson.Set(body, "profile.cef.iptunnel.scale", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileCefHashIpFieldDuplication.IsNull() && !data.ProfileCefHashIpFieldDuplication.IsUnknown() {
+			if data.ProfileCefHashIpFieldDuplication.ValueBool() {
+				body, _ = sjson.Set(body, "profile.cef.hash.ip-field-duplication", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileL2fibEvpnAging.IsNull() && !data.ProfileL2fibEvpnAging.IsUnknown() {
+			if data.ProfileL2fibEvpnAging.ValueBool() {
+				body, _ = sjson.Set(body, "profile.l2fib.evpn-aging", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileRouteScaleHostRoute.IsNull() && !data.ProfileRouteScaleHostRoute.IsUnknown() {
+			if data.ProfileRouteScaleHostRoute.ValueBool() {
+				body, _ = sjson.Set(body, "profile.route.scale.host-route", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.IsUnknown() {
+			if data.ProfileRouteScaleLpmFullScale.ValueBool() {
+				body, _ = sjson.Set(body, "profile.route.scale.lpm.full-scale", map[string]string{})
+			}
 		}
 	}
 	if len(data.ProfileEncapExactInterfaces) > 0 {
@@ -805,6 +878,21 @@ func (data HWModuleProfile8000) GetVersionConstraints() []helpers.FieldVersionCo
 
 	constraints = append(constraints, []helpers.FieldVersionConstraint{
 		{
+			FieldPath: "profile_tcam_fib_ipv4_unicast_percent",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_tcam_fib_ipv6_unicast_percent",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_cef_mplsoudp_scale",
+
+			RemovedInVersion: "25.4",
+		},
+		{
 			FieldPath:      "profile_priority_flow_control_locations.non_pfc_tcs",
 			AddedInVersion: "25.4",
 		},
@@ -814,6 +902,49 @@ func (data HWModuleProfile8000) GetVersionConstraints() []helpers.FieldVersionCo
 		},
 		{
 			FieldPath:      "profile_priority_flow_control_locations.non_pfc_tcs_max_non_pfc_voqs_hbm_buffers_percentage",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_gue_udp_dest_port_ipv4",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_gue_udp_dest_port_ipv6",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_gue_udp_dest_port_mpls",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_tcam_format_og_compr_id_extension",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_qos_mode",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_cef_iptunnel_scale",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_cef_hash_ip_field_duplication",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_l2fib_evpn_aging",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_route_scale_host_route",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_route_scale_lpm_full_scale",
 			AddedInVersion: "25.4",
 		},
 	}...)
@@ -829,7 +960,36 @@ func (data HWModuleProfile8000) GetVersionConstraints() []helpers.FieldVersionCo
 
 // GetRangeConstraints returns the version-specific range constraints for integer fields
 func (data HWModuleProfile8000) GetRangeConstraints() []helpers.FieldRangeConstraint {
-	return nil
+	return []helpers.FieldRangeConstraint{
+		{
+			FieldPath: "profile_priority_flow_control_locations.buffer_internal_traffic_class.pause_threshold",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 307200, Max: 1574400},
+				"25.4": {Min: 307200, Max: 5760000},
+			},
+		},
+		{
+			FieldPath: "profile_priority_flow_control_locations.buffer_internal_traffic_class.headroom",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 345600, Max: 1651200},
+				"25.4": {Min: 201600, Max: 1651200},
+			},
+		},
+		{
+			FieldPath: "profile_priority_flow_control_locations.buffer_internal_traffic_class.ecn",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 153600, Max: 897408},
+				"25.4": {Min: 153600, Max: 5749376},
+			},
+		},
+		{
+			FieldPath: "profile_priority_flow_control_locations.buffer_internal_traffic_class.max_threshold",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 153600, Max: 1495680},
+				"25.4": {Min: 153600, Max: 5759616},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getRangeConstraints
@@ -876,12 +1036,12 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte,
 	} else if data.MulticastRouteScale.IsNull() {
 		data.MulticastRouteScale = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() && !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
 	} else if data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() && !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
 	} else if data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Null()
@@ -1331,7 +1491,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte,
 	} else if data.ProfileCefVxlanIpv6TnlScale.IsNull() {
 		data.ProfileCefVxlanIpv6TnlScale = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); !data.ProfileCefMplsoudpScale.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileCefMplsoudpScale.IsNull() {
 		if value.Exists() {
 			data.ProfileCefMplsoudpScale = types.BoolValue(true)
 		} else {
@@ -1718,17 +1878,17 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte,
 			data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); value.Exists() && !data.ProfileGueUdpDestPortIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileGueUdpDestPortIpv4.IsNull() {
 		data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
 	} else if data.ProfileGueUdpDestPortIpv4.IsNull() {
 		data.ProfileGueUdpDestPortIpv4 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); value.Exists() && !data.ProfileGueUdpDestPortIpv6.IsNull() {
+	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileGueUdpDestPortIpv6.IsNull() {
 		data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
 	} else if data.ProfileGueUdpDestPortIpv6.IsNull() {
 		data.ProfileGueUdpDestPortIpv6 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); value.Exists() && !data.ProfileGueUdpDestPortMpls.IsNull() {
+	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileGueUdpDestPortMpls.IsNull() {
 		data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
 	} else if data.ProfileGueUdpDestPortMpls.IsNull() {
 		data.ProfileGueUdpDestPortMpls = types.Int64Null()
@@ -1861,6 +2021,71 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte,
 	} else if data.ProfileIrbThroughputOptimized.IsNull() {
 		data.ProfileIrbThroughputOptimized = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		if value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
+		}
+	} else if data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.qos.mode"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileQosMode.IsNull() {
+		data.ProfileQosMode = types.StringValue(value.String())
+	} else if data.ProfileQosMode.IsNull() {
+		data.ProfileQosMode = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "profile.cef.iptunnel.scale"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefIptunnelScale.IsNull() {
+		if value.Exists() {
+			data.ProfileCefIptunnelScale = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefIptunnelScale = types.BoolValue(false)
+		}
+	} else if data.ProfileCefIptunnelScale.IsNull() {
+		data.ProfileCefIptunnelScale = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.cef.hash.ip-field-duplication"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefHashIpFieldDuplication.IsNull() {
+		if value.Exists() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+		}
+	} else if data.ProfileCefHashIpFieldDuplication.IsNull() {
+		data.ProfileCefHashIpFieldDuplication = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.evpn-aging"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileL2fibEvpnAging.IsNull() {
+		if value.Exists() {
+			data.ProfileL2fibEvpnAging = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileL2fibEvpnAging = types.BoolValue(false)
+		}
+	} else if data.ProfileL2fibEvpnAging.IsNull() {
+		data.ProfileL2fibEvpnAging = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.route.scale.host-route"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleHostRoute.IsNull() {
+		if value.Exists() {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+		}
+	} else if data.ProfileRouteScaleHostRoute.IsNull() {
+		data.ProfileRouteScaleHostRoute = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.route.scale.lpm.full-scale"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleLpmFullScale.IsNull() {
+		if value.Exists() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+		}
+	} else if data.ProfileRouteScaleLpmFullScale.IsNull() {
+		data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1874,11 +2099,19 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res []byte, versi
 		// Only set to false if it was previously set in state
 		data.MulticastRouteScale = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() {
-		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() {
+			data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() {
-		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() {
+			data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-addr"); value.Exists() {
 		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(true)
@@ -2149,11 +2382,15 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res []byte, versi
 		// Only set to false if it was previously set in state
 		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); value.Exists() {
-		data.ProfileCefMplsoudpScale = types.BoolValue(true)
-	} else if !data.ProfileCefMplsoudpScale.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileCefMplsoudpScale = types.BoolValue(false)
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); value.Exists() {
+			data.ProfileCefMplsoudpScale = types.BoolValue(true)
+		} else if !data.ProfileCefMplsoudpScale.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileCefMplsoudpScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefMplsoudpScale = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "profile.cef.stats.label.app-default"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.ProfileCefStatsLabelAppDefault = types.StringValue(value.String())
@@ -2356,14 +2593,26 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res []byte, versi
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); value.Exists() {
-		data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); value.Exists() {
+			data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortIpv4 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); value.Exists() {
-		data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); value.Exists() {
+			data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortIpv6 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); value.Exists() {
-		data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); value.Exists() {
+			data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortMpls = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "profile.npu.buffer-extended.locations.location"); value.Exists() {
 		data.ProfileNpuBufferExtendedLocations = make([]HWModuleProfile8000ProfileNpuBufferExtendedLocations, 0)
@@ -2433,6 +2682,73 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res []byte, versi
 		// Only set to false if it was previously set in state
 		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+		} else if !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.qos.mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ProfileQosMode = types.StringValue(value.String())
+		}
+	} else {
+		data.ProfileQosMode = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.iptunnel.scale"); value.Exists() {
+			data.ProfileCefIptunnelScale = types.BoolValue(true)
+		} else if !data.ProfileCefIptunnelScale.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileCefIptunnelScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefIptunnelScale = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.hash.ip-field-duplication"); value.Exists() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+		} else if !data.ProfileCefHashIpFieldDuplication.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefHashIpFieldDuplication = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.l2fib.evpn-aging"); value.Exists() {
+			data.ProfileL2fibEvpnAging = types.BoolValue(true)
+		} else if !data.ProfileL2fibEvpnAging.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileL2fibEvpnAging = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileL2fibEvpnAging = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.route.scale.host-route"); value.Exists() {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+		} else if !data.ProfileRouteScaleHostRoute.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileRouteScaleHostRoute = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.route.scale.lpm.full-scale"); value.Exists() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+		} else if !data.ProfileRouteScaleLpmFullScale.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -2445,11 +2761,19 @@ func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res []byte, v
 	} else {
 		data.MulticastRouteScale = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() {
-		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() {
+			data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() {
-		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() {
+			data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-addr"); value.Exists() {
 		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(true)
@@ -2689,10 +3013,14 @@ func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res []byte, v
 	} else {
 		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); value.Exists() {
-		data.ProfileCefMplsoudpScale = types.BoolValue(true)
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); value.Exists() {
+			data.ProfileCefMplsoudpScale = types.BoolValue(true)
+		} else {
+			data.ProfileCefMplsoudpScale = types.BoolValue(false)
+		}
 	} else {
-		data.ProfileCefMplsoudpScale = types.BoolValue(false)
+		data.ProfileCefMplsoudpScale = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "profile.cef.stats.label.app-default"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.ProfileCefStatsLabelAppDefault = types.StringValue(value.String())
@@ -2885,14 +3213,26 @@ func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res []byte, v
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); value.Exists() {
-		data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); value.Exists() {
+			data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortIpv4 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); value.Exists() {
-		data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); value.Exists() {
+			data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortIpv6 = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); value.Exists() {
-		data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); value.Exists() {
+			data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortMpls = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "profile.npu.buffer-extended.locations.location"); value.Exists() {
 		data.ProfileNpuBufferExtendedLocations = make([]HWModuleProfile8000ProfileNpuBufferExtendedLocations, 0)
@@ -2953,6 +3293,67 @@ func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res []byte, v
 	} else {
 		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+		} else {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.qos.mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ProfileQosMode = types.StringValue(value.String())
+		}
+	} else {
+		data.ProfileQosMode = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.iptunnel.scale"); value.Exists() {
+			data.ProfileCefIptunnelScale = types.BoolValue(true)
+		} else {
+			data.ProfileCefIptunnelScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefIptunnelScale = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.hash.ip-field-duplication"); value.Exists() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+		} else {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefHashIpFieldDuplication = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.l2fib.evpn-aging"); value.Exists() {
+			data.ProfileL2fibEvpnAging = types.BoolValue(true)
+		} else {
+			data.ProfileL2fibEvpnAging = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileL2fibEvpnAging = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.route.scale.host-route"); value.Exists() {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+		} else {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileRouteScaleHostRoute = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.route.scale.lpm.full-scale"); value.Exists() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+		} else {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -2961,6 +3362,27 @@ func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res []byte, v
 
 func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWModuleProfile8000, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileRouteScaleLpmFullScale.IsNull() && data.ProfileRouteScaleLpmFullScale.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/route/scale/lpm/full-scale"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileRouteScaleHostRoute.IsNull() && data.ProfileRouteScaleHostRoute.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/route/scale/host-route"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileL2fibEvpnAging.IsNull() && data.ProfileL2fibEvpnAging.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/l2fib/evpn-aging"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileCefHashIpFieldDuplication.IsNull() && data.ProfileCefHashIpFieldDuplication.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/hash/ip-field-duplication"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileCefIptunnelScale.IsNull() && data.ProfileCefIptunnelScale.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/iptunnel/scale"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileQosMode.IsNull() && data.ProfileQosMode.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/mode"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileTcamFormatOgComprIdExtension.IsNull() && data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/og-compr-id-extension"))
+	}
 	if !state.ProfileIrbThroughputOptimized.IsNull() && data.ProfileIrbThroughputOptimized.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/irb/throughput-optimized"))
 	}
@@ -3021,13 +3443,13 @@ func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWMo
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "profile/npu/buffer-extended/locations/location", keyString))
 		}
 	}
-	if !state.ProfileGueUdpDestPortMpls.IsNull() && data.ProfileGueUdpDestPortMpls.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileGueUdpDestPortMpls.IsNull() && data.ProfileGueUdpDestPortMpls.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/gue/udp-dest-port"))
 	}
-	if !state.ProfileGueUdpDestPortIpv6.IsNull() && data.ProfileGueUdpDestPortIpv6.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileGueUdpDestPortIpv6.IsNull() && data.ProfileGueUdpDestPortIpv6.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/gue/udp-dest-port"))
 	}
-	if !state.ProfileGueUdpDestPortIpv4.IsNull() && data.ProfileGueUdpDestPortIpv4.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileGueUdpDestPortIpv4.IsNull() && data.ProfileGueUdpDestPortIpv4.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/gue/udp-dest-port"))
 	}
 	for i := range state.ProfilePriorityFlowControlLocations {
@@ -3276,7 +3698,7 @@ func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWMo
 	if !state.ProfileCefStatsLabelAppDefault.IsNull() && data.ProfileCefStatsLabelAppDefault.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/stats/label/app-default"))
 	}
-	if !state.ProfileCefMplsoudpScale.IsNull() && data.ProfileCefMplsoudpScale.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileCefMplsoudpScale.IsNull() && data.ProfileCefMplsoudpScale.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/mplsoudp/scale"))
 	}
 	if !state.ProfileCefVxlanIpv6TnlScale.IsNull() && data.ProfileCefVxlanIpv6TnlScale.IsNull() {
@@ -3453,10 +3875,10 @@ func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWMo
 	if !state.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
 	}
-	if !state.ProfileTcamFibIpv6UnicastPercent.IsNull() && data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileTcamFibIpv6UnicastPercent.IsNull() && data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/fib/ipv6/unicast/percent"))
 	}
-	if !state.ProfileTcamFibIpv4UnicastPercent.IsNull() && data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileTcamFibIpv4UnicastPercent.IsNull() && data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/fib/ipv4/unicast/percent"))
 	}
 	if !state.MulticastRouteScale.IsNull() && data.MulticastRouteScale.IsNull() {
@@ -3471,6 +3893,36 @@ func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWMo
 
 func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state *HWModuleProfile8000, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.ValueBool() {
+		if state != nil && !state.ProfileRouteScaleLpmFullScale.IsNull() && state.ProfileRouteScaleLpmFullScale.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/route/scale/lpm/full-scale"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleHostRoute.IsNull() && !data.ProfileRouteScaleHostRoute.ValueBool() {
+		if state != nil && !state.ProfileRouteScaleHostRoute.IsNull() && state.ProfileRouteScaleHostRoute.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/route/scale/host-route"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileL2fibEvpnAging.IsNull() && !data.ProfileL2fibEvpnAging.ValueBool() {
+		if state != nil && !state.ProfileL2fibEvpnAging.IsNull() && state.ProfileL2fibEvpnAging.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/evpn-aging"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefHashIpFieldDuplication.IsNull() && !data.ProfileCefHashIpFieldDuplication.ValueBool() {
+		if state != nil && !state.ProfileCefHashIpFieldDuplication.IsNull() && state.ProfileCefHashIpFieldDuplication.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/hash/ip-field-duplication"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefIptunnelScale.IsNull() && !data.ProfileCefIptunnelScale.ValueBool() {
+		if state != nil && !state.ProfileCefIptunnelScale.IsNull() && state.ProfileCefIptunnelScale.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/iptunnel/scale"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+		if state != nil && !state.ProfileTcamFormatOgComprIdExtension.IsNull() && state.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension"))
+		}
+	}
 	if !data.ProfileIrbThroughputOptimized.IsNull() && !data.ProfileIrbThroughputOptimized.ValueBool() {
 		if state != nil && !state.ProfileIrbThroughputOptimized.IsNull() && state.ProfileIrbThroughputOptimized.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/irb/throughput-optimized"))
@@ -3634,7 +4086,7 @@ func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state 
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/te-tunnel/highscale-no-ldp-over-te"))
 		}
 	}
-	if !data.ProfileCefMplsoudpScale.IsNull() && !data.ProfileCefMplsoudpScale.ValueBool() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileCefMplsoudpScale.IsNull() && !data.ProfileCefMplsoudpScale.ValueBool() {
 		if state != nil && !state.ProfileCefMplsoudpScale.IsNull() && state.ProfileCefMplsoudpScale.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/mplsoudp/scale"))
 		}
@@ -3807,6 +4259,27 @@ func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *HWModuleProfile8000) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleLpmFullScale.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/route/scale/lpm/full-scale"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleHostRoute.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/route/scale/host-route"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileL2fibEvpnAging.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/l2fib/evpn-aging"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefHashIpFieldDuplication.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/hash/ip-field-duplication"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefIptunnelScale.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/iptunnel/scale"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileQosMode.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/mode"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension"))
+	}
 	if !data.ProfileIrbThroughputOptimized.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/irb/throughput-optimized"))
 	}
@@ -3849,13 +4322,13 @@ func (data *HWModuleProfile8000) getDeletePaths(ctx context.Context, version str
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "profile/npu/buffer-extended/locations/location", keyString))
 	}
-	if !data.ProfileGueUdpDestPortMpls.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileGueUdpDestPortMpls.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/gue/udp-dest-port"))
 	}
-	if !data.ProfileGueUdpDestPortIpv6.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileGueUdpDestPortIpv6.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/gue/udp-dest-port"))
 	}
-	if !data.ProfileGueUdpDestPortIpv4.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileGueUdpDestPortIpv4.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/gue/udp-dest-port"))
 	}
 	for i := range data.ProfilePriorityFlowControlLocations {
@@ -3954,7 +4427,7 @@ func (data *HWModuleProfile8000) getDeletePaths(ctx context.Context, version str
 	if !data.ProfileCefStatsLabelAppDefault.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/stats/label/app-default"))
 	}
-	if !data.ProfileCefMplsoudpScale.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileCefMplsoudpScale.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/mplsoudp/scale"))
 	}
 	if !data.ProfileCefVxlanIpv6TnlScale.IsNull() {
@@ -4131,10 +4604,10 @@ func (data *HWModuleProfile8000) getDeletePaths(ctx context.Context, version str
 	if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 	}
-	if !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/fib/ipv6/unicast/percent"))
 	}
-	if !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/fib/ipv4/unicast/percent"))
 	}
 	if !data.MulticastRouteScale.IsNull() {
@@ -4637,6 +5110,39 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context, stateArg ...*HWMo
 	if !data.ProfileIrbThroughputOptimized.IsNull() && !data.ProfileIrbThroughputOptimized.IsUnknown() {
 		if data.ProfileIrbThroughputOptimized.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/irb/throughput-optimized", "")
+		}
+	}
+	if !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.IsUnknown() {
+		if data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/tcam/format/og-compr-id-extension", "")
+		}
+	}
+	if !data.ProfileQosMode.IsNull() && !data.ProfileQosMode.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile/qos/mode", data.ProfileQosMode.ValueString())
+	}
+	if !data.ProfileCefIptunnelScale.IsNull() && !data.ProfileCefIptunnelScale.IsUnknown() {
+		if data.ProfileCefIptunnelScale.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/cef/iptunnel/scale", "")
+		}
+	}
+	if !data.ProfileCefHashIpFieldDuplication.IsNull() && !data.ProfileCefHashIpFieldDuplication.IsUnknown() {
+		if data.ProfileCefHashIpFieldDuplication.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/cef/hash/ip-field-duplication", "")
+		}
+	}
+	if !data.ProfileL2fibEvpnAging.IsNull() && !data.ProfileL2fibEvpnAging.IsUnknown() {
+		if data.ProfileL2fibEvpnAging.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/l2fib/evpn-aging", "")
+		}
+	}
+	if !data.ProfileRouteScaleHostRoute.IsNull() && !data.ProfileRouteScaleHostRoute.IsUnknown() {
+		if data.ProfileRouteScaleHostRoute.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/route/scale/host-route", "")
+		}
+	}
+	if !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.IsUnknown() {
+		if data.ProfileRouteScaleLpmFullScale.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/route/scale/lpm/full-scale", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -5717,6 +6223,77 @@ func (data *HWModuleProfile8000) updateFromBodyXML(ctx context.Context, res xmld
 			data.ProfileIrbThroughputOptimized = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/qos/mode"); value.Exists() && !data.ProfileQosMode.IsNull() {
+		data.ProfileQosMode = types.StringValue(value.String())
+	} else if data.ProfileQosMode.IsNull() {
+		data.ProfileQosMode = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/iptunnel/scale"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileCefIptunnelScale.IsNull() {
+			data.ProfileCefIptunnelScale = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileCefIptunnelScale.IsNull() {
+			data.ProfileCefIptunnelScale = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/hash/ip-field-duplication"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileCefHashIpFieldDuplication.IsNull() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileCefHashIpFieldDuplication.IsNull() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/l2fib/evpn-aging"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileL2fibEvpnAging.IsNull() {
+			data.ProfileL2fibEvpnAging = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileL2fibEvpnAging.IsNull() {
+			data.ProfileL2fibEvpnAging = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/host-route"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileRouteScaleHostRoute.IsNull() {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileRouteScaleHostRoute.IsNull() {
+			data.ProfileRouteScaleHostRoute = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/lpm/full-scale"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileRouteScaleLpmFullScale.IsNull() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileRouteScaleLpmFullScale.IsNull() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -6224,6 +6801,39 @@ func (data *HWModuleProfile8000) fromBodyXML(ctx context.Context, res xmldot.Res
 		data.ProfileIrbThroughputOptimized = types.BoolValue(true)
 	} else {
 		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/qos/mode"); value.Exists() {
+		data.ProfileQosMode = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/iptunnel/scale"); value.Exists() {
+		data.ProfileCefIptunnelScale = types.BoolValue(true)
+	} else {
+		data.ProfileCefIptunnelScale = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/hash/ip-field-duplication"); value.Exists() {
+		data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+	} else {
+		data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/l2fib/evpn-aging"); value.Exists() {
+		data.ProfileL2fibEvpnAging = types.BoolValue(true)
+	} else {
+		data.ProfileL2fibEvpnAging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/host-route"); value.Exists() {
+		data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+	} else {
+		data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/lpm/full-scale"); value.Exists() {
+		data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+	} else {
+		data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
 	}
 }
 
@@ -6733,6 +7343,39 @@ func (data *HWModuleProfile8000Data) fromBodyXML(ctx context.Context, res xmldot
 	} else {
 		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/qos/mode"); value.Exists() {
+		data.ProfileQosMode = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/iptunnel/scale"); value.Exists() {
+		data.ProfileCefIptunnelScale = types.BoolValue(true)
+	} else {
+		data.ProfileCefIptunnelScale = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/hash/ip-field-duplication"); value.Exists() {
+		data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+	} else {
+		data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/l2fib/evpn-aging"); value.Exists() {
+		data.ProfileL2fibEvpnAging = types.BoolValue(true)
+	} else {
+		data.ProfileL2fibEvpnAging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/host-route"); value.Exists() {
+		data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+	} else {
+		data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/lpm/full-scale"); value.Exists() {
+		data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+	} else {
+		data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -6744,6 +7387,117 @@ func (data *HWModuleProfile8000) addDeletedItemsXML(ctx context.Context, state H
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileRouteScaleLpmFullScale.IsNull() && state.ProfileRouteScaleLpmFullScale.ValueBool() && data.ProfileRouteScaleLpmFullScale.IsNull() {
+		deletePath := state.getXPath() + "/profile/route/scale/lpm/full-scale"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileRouteScaleHostRoute.IsNull() && state.ProfileRouteScaleHostRoute.ValueBool() && data.ProfileRouteScaleHostRoute.IsNull() {
+		deletePath := state.getXPath() + "/profile/route/scale/host-route"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileL2fibEvpnAging.IsNull() && state.ProfileL2fibEvpnAging.ValueBool() && data.ProfileL2fibEvpnAging.IsNull() {
+		deletePath := state.getXPath() + "/profile/l2fib/evpn-aging"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileCefHashIpFieldDuplication.IsNull() && state.ProfileCefHashIpFieldDuplication.ValueBool() && data.ProfileCefHashIpFieldDuplication.IsNull() {
+		deletePath := state.getXPath() + "/profile/cef/hash/ip-field-duplication"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileCefIptunnelScale.IsNull() && state.ProfileCefIptunnelScale.ValueBool() && data.ProfileCefIptunnelScale.IsNull() {
+		deletePath := state.getXPath() + "/profile/cef/iptunnel/scale"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProfileQosMode.IsNull() && data.ProfileQosMode.IsNull() {
+		deletePath := state.getXPath() + "/profile/qos/mode"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileTcamFormatOgComprIdExtension.IsNull() && state.ProfileTcamFormatOgComprIdExtension.ValueBool() && data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		deletePath := state.getXPath() + "/profile/tcam/format/og-compr-id-extension"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ProfileIrbThroughputOptimized.IsNull() && state.ProfileIrbThroughputOptimized.ValueBool() && data.ProfileIrbThroughputOptimized.IsNull() {
 		deletePath := state.getXPath() + "/profile/irb/throughput-optimized"
@@ -9240,6 +9994,27 @@ func (data *HWModuleProfile8000) addDeletedItemsXML(ctx context.Context, state H
 
 func (data *HWModuleProfile8000) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.ProfileRouteScaleLpmFullScale.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/route/scale/lpm/full-scale")
+	}
+	if !data.ProfileRouteScaleHostRoute.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/route/scale/host-route")
+	}
+	if !data.ProfileL2fibEvpnAging.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/l2fib/evpn-aging")
+	}
+	if !data.ProfileCefHashIpFieldDuplication.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/cef/hash/ip-field-duplication")
+	}
+	if !data.ProfileCefIptunnelScale.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/cef/iptunnel/scale")
+	}
+	if !data.ProfileQosMode.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/qos/mode")
+	}
+	if !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/tcam/format/og-compr-id-extension")
+	}
 	if !data.ProfileIrbThroughputOptimized.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/irb/throughput-optimized")
 	}

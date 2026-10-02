@@ -4,11 +4,12 @@ resource "iosxr_hw_module_profile_8000" "example" {
   profile_cef_cbf                                             = "enable"
   profile_cef_cbf_forward_class_list                          = [0]
   profile_cef_dark_bw                                         = "enable"
+  profile_cef_hash_ip_field_duplication                       = true
   profile_cef_ip_redirect                                     = "enable"
+  profile_cef_iptunnel_scale                                  = true
   profile_cef_ipv6_hop_limit                                  = "punt"
   profile_cef_lpts_acl                                        = true
   profile_cef_lpts_pifib_entry_counters                       = 256
-  profile_cef_mplsoudp_scale                                  = true
   profile_cef_source_rtbh_enable                              = true
   profile_cef_sropt                                           = "enable"
   profile_cef_stats_label_app_default                         = "dynamic"
@@ -31,10 +32,8 @@ resource "iosxr_hw_module_profile_8000" "example" {
   profile_encap_exact_locations_all         = true
   profile_encap_exact_locations_all_virtual = true
   profile_flowspec_ipv6_packet_len_enable   = true
-  profile_gue_udp_dest_port_ipv4            = 7000
-  profile_gue_udp_dest_port_ipv6            = 8000
-  profile_gue_udp_dest_port_mpls            = 9000
   profile_l2fib_bridge_flush_convergence    = true
+  profile_l2fib_evpn_aging                  = true
   profile_l2fib_higher_scale                = true
   profile_l2fib_pw_stats                    = true
   profile_npu_buffer_extended_locations = [
@@ -44,18 +43,29 @@ resource "iosxr_hw_module_profile_8000" "example" {
       location_name                         = "0/RP0/CPU0"
     }
   ]
+  profile_priority_flow_control_locations = [
+    {
+      buffer_extended_traffic_class = [
+        {
+          ms               = true
+          pause_threshold  = 10
+          traffic_class_id = 5
+        }
+      ]
+      location_name = "0/RP0/CPU0"
+    }
+  ]
   profile_qos_high_water_marks                           = true
   profile_qos_intra_npu_over_fabric                      = "disable"
   profile_qos_l2_mode                                    = "L3"
   profile_qos_low_latency_mode                           = "1"
+  profile_qos_mode                                       = "l3vpn-short-pipe"
   profile_qos_qos_stats_push_collection                  = true
   profile_qos_voq_mode_fair_eight                        = true
   profile_route_scale_ipv6_unicast_connected_prefix_high = true
   profile_stats_acl_permit                               = true
   profile_stats_no_bvi_ingress                           = true
   profile_stats_voqs_sharing_counters                    = "1"
-  profile_tcam_fib_ipv4_unicast_percent                  = 50
-  profile_tcam_fib_ipv6_unicast_percent                  = 50
   profile_tcam_format_access_list_ipv4_dst_addr          = true
   profile_tcam_format_access_list_ipv4_dst_port          = true
   profile_tcam_format_access_list_ipv4_frag_bit          = true

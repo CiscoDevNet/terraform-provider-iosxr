@@ -66,7 +66,7 @@ Required:
 
 - `interface_name` (String) Specify an IOS-XR interface to expose to Linux
 - `linux_managed` (String) Properties of this interface are controlled by linux, not IOS-XR
-  - Choices: `disable`, `enable`
+  - Choices: `disable`, `enable` (v24.4), `disable`, `disable-l3-only`, `enable` (v25.4)
 
 Optional:
 

@@ -307,7 +307,15 @@ func (data LinuxNetworking) GetRangeConstraints() []helpers.FieldRangeConstraint
 
 // GetEnumConstraints returns the version-specific enum constraints for string fields
 func (data LinuxNetworking) GetEnumConstraints() []helpers.FieldEnumConstraint {
-	return nil
+	return []helpers.FieldEnumConstraint{
+		{
+			FieldPath: "exposed_interfaces.linux_managed",
+			VersionEnums: map[string][]string{
+				"24.4": {"disable", "enable"},
+				"25.4": {"disable", "disable-l3-only", "enable"},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getEnumConstraints

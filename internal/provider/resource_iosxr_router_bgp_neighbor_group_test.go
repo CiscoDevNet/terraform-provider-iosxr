@@ -253,11 +253,96 @@ resource "iosxr_yang" "PreReq4" {
 }
 
 `
+const testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv6-unicast"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_yang" "PreReq2" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "session-groups/session-group"
+			key = "session-group-name"
+			items = [
+				{
+					"session-group-name" = "SGROUP1"
+				},
+			]
+		},
+	]
+	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]
+}
+
+resource "iosxr_yang" "PreReq3" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
+	attributes = {
+	}
+	lists = [
+		{
+			name = "server"
+			key = "server-number"
+			items = [
+				{
+					"server-number" = "1"
+					"host/host-name" = "192.168.1.100"
+					"host/port" = "5000"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_yang" "PreReq4" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+`
 
 func testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig_V24_4,
+			"25.4": testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -272,6 +357,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_minimum() string {
 	config += `	name = "GROUP1"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -385,6 +471,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_all() string {
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

@@ -50,6 +50,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   distance_bgp_local_route                      = 190
   dynamic_med_interval                          = 5
   label_mode_per_prefix                         = true
+  maximum_paths_ebgp_bestpath_only              = true
   maximum_paths_ebgp_multipath                  = 10
   maximum_paths_ebgp_route_policy               = "ROUTE_POLICY_1"
   maximum_paths_ebgp_selective                  = true
@@ -66,11 +67,12 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
       route_policy = "ROUTE_POLICY_1"
     }
   ]
-  nexthop_route_policy                = "ROUTE_POLICY_1"
-  redistribute_connected              = true
-  redistribute_connected_metric       = 100
-  redistribute_connected_multipath    = true
-  redistribute_connected_route_policy = "ROUTE_POLICY_1"
+  nexthop_route_policy                            = "ROUTE_POLICY_1"
+  redistribute_connected                          = true
+  redistribute_connected_default_policy_action_in = "accept"
+  redistribute_connected_metric                   = 100
+  redistribute_connected_multipath                = true
+  redistribute_connected_route_policy             = "ROUTE_POLICY_1"
   redistribute_eigrp = [
     {
       default_policy_action_in = "accept"
@@ -102,10 +104,12 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
     }
   ]
   redistribute_rip                                         = true
+  redistribute_rip_default_policy_action_in                = "accept"
   redistribute_rip_metric                                  = 100
   redistribute_rip_multipath                               = true
   redistribute_rip_route_policy                            = "ROUTE_POLICY_1"
   redistribute_static                                      = true
+  redistribute_static_default_policy_action_in             = "accept"
   redistribute_static_metric                               = 100
   redistribute_static_multipath                            = true
   redistribute_static_route_policy                         = "ROUTE_POLICY_1"
@@ -113,6 +117,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   segment_routing_srv6_locator                             = "locator101"
   segment_routing_srv6_usid_allocation_wide_local_id_block = true
   table_policy                                             = "ROUTE_POLICY_1"
+  update_out_quick_withdraw                                = "enable"
   vrf_name                                                 = "VRF2"
   weight_reset_on_import                                   = true
 }
@@ -191,6 +196,8 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `label_mode_per_vrf_46` (Boolean) Set per VRF 46 label mode
 - `label_mode_route_policy` (String) Use a route policy to select prefixes for label allocation mode
 - `label_security_asbr_rpf` (Boolean) RPF Label Security for Option-B
+- `maximum_paths_ebgp_bestpath_only` (Boolean) Apply policy only for bestpath. This is needed if user doesnt want to deprefer any paths and apply certain attributes to bestpath only
+  - Supported from version: `25.4`
 - `maximum_paths_ebgp_multipath` (Number) Number of paths (limit includes backup path)
   - Range: `2`-`128`
 - `maximum_paths_ebgp_route_policy` (String) Route policy to specify ORF and inbound filter
@@ -215,6 +222,9 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `originator_pe_id` (String) Set and send originator PE ID.
 - `permanent_network_route_policy` (String) Route policy to read the prefixes from
 - `redistribute_connected` (Boolean) Redistribute connected routes
+- `redistribute_connected_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.4`
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
 - `redistribute_connected_multipath` (Boolean) Enable installation of multiple paths from RIB
@@ -224,11 +234,17 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
 - `redistribute_ospfv3` (Attributes List) IPv6 Open Shortest Path First (OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospfv3))
 - `redistribute_rip` (Boolean) Redistribute RIP routes
+- `redistribute_rip_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.4`
 - `redistribute_rip_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
 - `redistribute_rip_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_rip_route_policy` (String) Route policy reference
 - `redistribute_static` (Boolean) Redistribute static routes
+- `redistribute_static_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.4`
 - `redistribute_static_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
 - `redistribute_static_multipath` (Boolean) Enable installation of multiple paths from RIB
@@ -241,6 +257,9 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Wide LIB allocation
 - `segmented_multicast` (Boolean) Enable segmented multicast
 - `table_policy` (String) Configure policy for installation of routes to RIB
+- `update_out_quick_withdraw` (String) Generation of quick withdraw messages
+  - Choices: `disable`, `enable`
+  - Supported from version: `25.4`
 - `weight_reset_on_import` (Boolean) Reset weight of paths on import
 
 ### Read-Only

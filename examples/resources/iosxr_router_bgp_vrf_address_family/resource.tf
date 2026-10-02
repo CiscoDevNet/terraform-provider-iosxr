@@ -35,6 +35,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   distance_bgp_local_route                      = 190
   dynamic_med_interval                          = 5
   label_mode_per_prefix                         = true
+  maximum_paths_ebgp_bestpath_only              = true
   maximum_paths_ebgp_multipath                  = 10
   maximum_paths_ebgp_route_policy               = "ROUTE_POLICY_1"
   maximum_paths_ebgp_selective                  = true
@@ -51,11 +52,12 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
       route_policy = "ROUTE_POLICY_1"
     }
   ]
-  nexthop_route_policy                = "ROUTE_POLICY_1"
-  redistribute_connected              = true
-  redistribute_connected_metric       = 100
-  redistribute_connected_multipath    = true
-  redistribute_connected_route_policy = "ROUTE_POLICY_1"
+  nexthop_route_policy                            = "ROUTE_POLICY_1"
+  redistribute_connected                          = true
+  redistribute_connected_default_policy_action_in = "accept"
+  redistribute_connected_metric                   = 100
+  redistribute_connected_multipath                = true
+  redistribute_connected_route_policy             = "ROUTE_POLICY_1"
   redistribute_eigrp = [
     {
       default_policy_action_in = "accept"
@@ -87,10 +89,12 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
     }
   ]
   redistribute_rip                                         = true
+  redistribute_rip_default_policy_action_in                = "accept"
   redistribute_rip_metric                                  = 100
   redistribute_rip_multipath                               = true
   redistribute_rip_route_policy                            = "ROUTE_POLICY_1"
   redistribute_static                                      = true
+  redistribute_static_default_policy_action_in             = "accept"
   redistribute_static_metric                               = 100
   redistribute_static_multipath                            = true
   redistribute_static_route_policy                         = "ROUTE_POLICY_1"
@@ -98,6 +102,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   segment_routing_srv6_locator                             = "locator101"
   segment_routing_srv6_usid_allocation_wide_local_id_block = true
   table_policy                                             = "ROUTE_POLICY_1"
+  update_out_quick_withdraw                                = "enable"
   vrf_name                                                 = "VRF2"
   weight_reset_on_import                                   = true
 }

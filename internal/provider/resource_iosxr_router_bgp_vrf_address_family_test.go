@@ -120,6 +120,21 @@ func TestAccIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "nexthop_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "as_path_loopcheck_out_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "mvpn_single_forwarder_selection", "highest-ip-address"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_default_policy_action_in", "accept"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_static_default_policy_action_in", "accept"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_rip_default_policy_action_in", "accept"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ebgp_bestpath_only", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "update_out_quick_withdraw", "enable"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -234,11 +249,85 @@ resource "iosxr_yang" "PreReq5" {
 }
 
 `
+const testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]"
+	attributes = {
+		"vrf-name" = "VRF2"
+	}
+}
+
+resource "iosxr_yang" "PreReq2" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
+	attributes = {
+		"two-byte-as-number" = "65001"
+		"asn2-index" = "2"
+	}
+	depends_on = [iosxr_yang.PreReq1, ]
+}
+
+resource "iosxr_yang" "PreReq3" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+		"bgp/router-id" = "22.22.22.22"
+	}
+	depends_on = [iosxr_yang.PreReq2, ]
+}
+
+resource "iosxr_yang" "PreReq4" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			]
+		},
+	]
+	depends_on = [iosxr_yang.PreReq3, ]
+}
+
+resource "iosxr_yang" "PreReq5" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv6-unicast"
+				},
+			]
+		},
+	]
+	depends_on = [iosxr_yang.PreReq3, ]
+}
+
+`
 
 func testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig_V24_4,
+			"25.4": testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -254,6 +343,7 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_minimum() string {
 	config += `	af_name = "ipv4-unicast"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -362,8 +452,24 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_all() string {
 	config += `	nexthop_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	as_path_loopcheck_out_disable = true` + "\n"
 	config += `	mvpn_single_forwarder_selection = "highest-ip-address"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	redistribute_connected_default_policy_action_in = "accept"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	redistribute_static_default_policy_action_in = "accept"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	redistribute_rip_default_policy_action_in = "accept"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	maximum_paths_ebgp_bestpath_only = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	update_out_quick_withdraw = "enable"` + "\n"
+	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

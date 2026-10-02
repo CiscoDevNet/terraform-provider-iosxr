@@ -3,84 +3,85 @@ name: Router BGP Address Family
 path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/address-families/address-family[af-name=%s]
 doc_category: BGP
 attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+    # Mutually exclusive with prefix-ecmp-delay/ attributes
   - yang_name: ecmp-delay/as-based/as-list
-    tf_name: as_based_as_list
-    description: "Enable ECMP delay for neighbor AS'es included in the AS list"
-    type: String
+    test_tags: [NCS, C8000]
+    exclude_test: true
     example: ECMP_PEER_AS_LIST
   - yang_name: ecmp-delay/as-based/delay
-    tf_name: as_based_delay
-    description: "Provide a delay interval in msecs"
-    type: Int64
-    min_int: 10
-    max_int: 300000
+    test_tags: [NCS, C8000]
+    exclude_test: true
     example: 200
   - yang_name: ecmp-delay/fixed/delay
-    tf_name: fixed_delay
-    description: "Provide a delay interval in msecs"
-    type: Int64
-    min_int: 10
-    max_int: 300000
+    test_tags: [NCS, C8000]
     example: 200
   - yang_name: ecmp-delay/platform-oor-based/delay
-    tf_name: platform_oor_based_delay
-    description: "Provide a delay interval in msecs"
-    type: Int64
-    min_int: 10
-    max_int: 300000
+    test_tags: [NCS, C8000]
+    exclude_test: true
     example: 500
   - yang_name: ecmp-delay/platform-oor-based/threshold
-    tf_name: platform_oor_based_threshold
-    description: "Delay only when platform resource usage is above specified threshold"
-    type: Int64
-    min_int: 10
-    max_int: 90
+    test_tags: [NCS, C8000]
+    exclude_test: true
     example: 80
   - yang_name: redistribute/eigrps/eigrp
     tf_name: redistribute_eigrp
     type: List
     attributes:
       - yang_name: default-policy-action-in
-        tf_name: default_policy_action_in
-        description: "Set a default action if a route does not satify the policy definition"
-        type: String
-        enum_values:
-          - accept
-          - reject
         example: accept
   - yang_name: redistribute/isis-processes/isis-process
     tf_name: redistribute_isis
     type: List
     attributes:
       - yang_name: default-policy-action-in
-        tf_name: default_policy_action_in
-        description: "Set a default action if a route does not satify the policy definition"
-        type: String
-        enum_values:
-          - accept
-          - reject
         example: accept
   - yang_name: redistribute/ospfs/ospf
     tf_name: redistribute_ospf
     type: List
     attributes:
       - yang_name: default-policy-action-in
-        tf_name: default_policy_action_in
-        description: "Set a default action if a route does not satify the policy definition"
-        type: String
-        enum_values:
-          - accept
-          - reject
         example: accept
   - yang_name: redistribute/ospfv3s/ospfv3
     tf_name: redistribute_ospfv3
     type: List
     attributes:
       - yang_name: default-policy-action-in
-        tf_name: default_policy_action_in
-        description: "Set a default action if a route does not satify the policy definition"
-        type: String
-        enum_values:
-          - accept
-          - reject
         example: accept
+  - yang_name: redistribute/connected/default-policy-action-in
+    example: accept
+  - yang_name: redistribute/static/default-policy-action-in
+    example: accept
+  - yang_name: redistribute/rip/default-policy-action-in
+    example: accept
+  - yang_name: vrf/all/update/out/quick-withdraw/disable
+    exclude_test: true
+    example: true
+  - yang_name: update/out/quick-withdraw/disable
+    example: true
+  - yang_name: maximum-paths/ebgp/bestpath-only
+    delete_parent: true
+    example: true
+  - yang_name: delay-route/inbound
+    example: 100
+  - yang_name: fast-reroute/per-link
+    exclude_test: true
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies
+    lists:
+      - name: route-policy
+        key: route-policy-name
+        items:
+          - attributes:
+              - name: route-policy-name
+                value: ROUTE_POLICY_1
+              - name: rpl-route-policy
+                value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001

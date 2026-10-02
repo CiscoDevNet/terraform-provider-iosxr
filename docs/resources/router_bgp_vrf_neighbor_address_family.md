@@ -101,6 +101,14 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
   - Range: `1`-`10`
 - `as_override` (Boolean) Override matching AS-number while sending update
 - `as_override_inheritance_disable` (Boolean) Prevent as-override from being inherited from the parent
+- `bandwidth_grp_inbound_inheritance_disable` (Boolean) Prevent item being inherited from a parent group
+  - Supported from version: `25.4`
+- `bandwidth_grp_inbound_name` (String) Bandwidth group name
+  - Supported from version: `25.4`
+- `bandwidth_grp_outbound_inheritance_disable` (Boolean) Prevent item being inherited from a parent group
+  - Supported from version: `25.4`
+- `bandwidth_grp_outbound_name` (String) Bandwidth group name
+  - Supported from version: `25.4`
 - `bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
 - `capability_orf_prefix` (String) Capability to RECEIVE the ORF from this neighbor
   - Choices: `both`, `none`, `receive`, `send`
@@ -120,6 +128,10 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `device` (String) A device name from the provider configuration.
 - `encapsulation_type` (String) Specify encapsulation type
   - Choices: `srv6`, `vxlan`
+- `fast_reroute_per_link_multipath_backup_address` (String) Backup IP address
+  - Supported from version: `25.4`
+- `fast_reroute_per_link_multipath_backup_address_inheritance_disable` (Boolean) Prevent fast-reroute-per-link from being inherited from the parent
+  - Supported from version: `25.4`
 - `import_re_originate` (Boolean) Reoriginate imported routes by attaching stitching RTs
 - `import_stitching_rt` (Boolean) Import routes using stitching RTs
 - `import_stitching_rt_re_originate` (Boolean) Re-originate imported routes

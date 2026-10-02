@@ -979,6 +979,30 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Default action if route does not satisfy outbound route-policy" + "\n  - Supported from version: `25.4`",
 							Computed:            true,
 						},
+						"bandwidth_grp_outbound_name": schema.StringAttribute{
+							MarkdownDescription: "Bandwidth group name" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"bandwidth_grp_outbound_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent item being inherited from a parent group" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"bandwidth_grp_inbound_name": schema.StringAttribute{
+							MarkdownDescription: "Bandwidth group name" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"bandwidth_grp_inbound_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent item being inherited from a parent group" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"fast_reroute_per_link_multipath_backup_address": schema.StringAttribute{
+							MarkdownDescription: "Backup IP address" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"fast_reroute_per_link_multipath_backup_address_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent fast-reroute-per-link from being inherited from the parent" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},

@@ -281,6 +281,18 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "IPv4Address:index (hex or decimal format)",
 				Computed:            true,
 			},
+			"distance_bgp_external": schema.Int64Attribute{
+				MarkdownDescription: "Distance for routes external to the AS" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"distance_bgp_internal": schema.Int64Attribute{
+				MarkdownDescription: "Distance for routes internal to the AS" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"distance_bgp_local": schema.Int64Attribute{
+				MarkdownDescription: "Distance for routes that are locally generated" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }

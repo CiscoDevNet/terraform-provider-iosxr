@@ -898,10 +898,15 @@ attributes:
     example: true
   - yang_name: rnh/install/extcomm/only
     example: true
+    # Mutually exclusive with ecmp-delay/ attributes
   - yang_name: prefix-ecmp-delay/prefix-ecmp-delay-number
     tf_name: prefix_ecmp_delay
+    test_tags: [NCS, C8000]
+    exclude_test: true
     example: 1000
   - yang_name: prefix-ecmp-delay/oor-threshold
+    test_tags: [NCS, C8000]
+    exclude_test: true
     example: 90
   - yang_name: bgp/origin-as/validation/enable
     example: true

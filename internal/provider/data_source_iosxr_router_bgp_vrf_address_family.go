@@ -889,6 +889,26 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 				MarkdownDescription: "Disable",
 				Computed:            true,
 			},
+			"redistribute_connected_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"redistribute_static_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"redistribute_rip_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"maximum_paths_ebgp_bestpath_only": schema.BoolAttribute{
+				MarkdownDescription: "Apply policy only for bestpath. This is needed if user doesnt want to deprefer any paths and apply certain attributes to bestpath only" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"update_out_quick_withdraw": schema.StringAttribute{
+				MarkdownDescription: "Generation of quick withdraw messages" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }

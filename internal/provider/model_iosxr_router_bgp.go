@@ -141,6 +141,11 @@ type RouterBGP struct {
 	BfdMinimumInterval                               types.Int64                                      `tfsdk:"bfd_minimum_interval"`
 	RpkiRoutes                                       []RouterBGPRpkiRoutes                            `tfsdk:"rpki_routes"`
 	RpkiServers                                      []RouterBGPRpkiServers                           `tfsdk:"rpki_servers"`
+	BandwidthGroups                                  []RouterBGPBandwidthGroups                       `tfsdk:"bandwidth_groups"`
+	BgpNeighborDownFastHoldTimer                     types.Int64                                      `tfsdk:"bgp_neighbor_down_fast_hold_timer"`
+	DistanceBgpExternal                              types.Int64                                      `tfsdk:"distance_bgp_external"`
+	DistanceBgpInternal                              types.Int64                                      `tfsdk:"distance_bgp_internal"`
+	DistanceBgpLocal                                 types.Int64                                      `tfsdk:"distance_bgp_local"`
 }
 
 type RouterBGPData struct {
@@ -242,6 +247,11 @@ type RouterBGPData struct {
 	BfdMinimumInterval                               types.Int64                                      `tfsdk:"bfd_minimum_interval"`
 	RpkiRoutes                                       []RouterBGPRpkiRoutes                            `tfsdk:"rpki_routes"`
 	RpkiServers                                      []RouterBGPRpkiServers                           `tfsdk:"rpki_servers"`
+	BandwidthGroups                                  []RouterBGPBandwidthGroups                       `tfsdk:"bandwidth_groups"`
+	BgpNeighborDownFastHoldTimer                     types.Int64                                      `tfsdk:"bgp_neighbor_down_fast_hold_timer"`
+	DistanceBgpExternal                              types.Int64                                      `tfsdk:"distance_bgp_external"`
+	DistanceBgpInternal                              types.Int64                                      `tfsdk:"distance_bgp_internal"`
+	DistanceBgpLocal                                 types.Int64                                      `tfsdk:"distance_bgp_local"`
 }
 type RouterBGPGracefulMaintenanceActivateInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -286,6 +296,10 @@ type RouterBGPRpkiServers struct {
 	BindSourceInterface types.String `tfsdk:"bind_source_interface"`
 	Shutdown            types.Bool   `tfsdk:"shutdown"`
 }
+type RouterBGPBandwidthGroups struct {
+	BandwidthGroupName types.String                           `tfsdk:"bandwidth_group_name"`
+	BandwidthIds       []RouterBGPBandwidthGroupsBandwidthIds `tfsdk:"bandwidth_ids"`
+}
 type RouterBGPAttributeFilterGroupsAttributeCodeRanges struct {
 	Start           types.Int64 `tfsdk:"start"`
 	End             types.Int64 `tfsdk:"end"`
@@ -294,6 +308,12 @@ type RouterBGPAttributeFilterGroupsAttributeCodeRanges struct {
 }
 type RouterBGPAsListsAsNumbers struct {
 	AsValue types.String `tfsdk:"as_value"`
+}
+type RouterBGPBandwidthGroupsBandwidthIds struct {
+	BandwidthIdNumber types.Int64  `tfsdk:"bandwidth_id_number"`
+	Value             types.Int64  `tfsdk:"value"`
+	BandwidthUnit     types.String `tfsdk:"bandwidth_unit"`
+	Asn               types.Int64  `tfsdk:"asn"`
 }
 
 // End of section. //template:end types
@@ -700,6 +720,26 @@ func (data RouterBGP) toBody(ctx context.Context, providerVersion string) string
 	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
 		body, _ = sjson.Set(body, "bfd.minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.BgpNeighborDownFastHoldTimer.IsNull() && !data.BgpNeighborDownFastHoldTimer.IsUnknown() {
+			body, _ = sjson.Set(body, "bgp.neighbor-down.fast-hold-timer", strconv.FormatInt(data.BgpNeighborDownFastHoldTimer.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.DistanceBgpExternal.IsNull() && !data.DistanceBgpExternal.IsUnknown() {
+			body, _ = sjson.Set(body, "distance.bgp.external", strconv.FormatInt(data.DistanceBgpExternal.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.DistanceBgpInternal.IsNull() && !data.DistanceBgpInternal.IsUnknown() {
+			body, _ = sjson.Set(body, "distance.bgp.internal", strconv.FormatInt(data.DistanceBgpInternal.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.DistanceBgpLocal.IsNull() && !data.DistanceBgpLocal.IsUnknown() {
+			body, _ = sjson.Set(body, "distance.bgp.local", strconv.FormatInt(data.DistanceBgpLocal.ValueInt64(), 10))
+		}
+	}
 	if len(data.GracefulMaintenanceActivateInterfaces) > 0 {
 		body, _ = sjson.Set(body, "graceful-maintenance.activate.interfaces.interface", []interface{}{})
 		for index, item := range data.GracefulMaintenanceActivateInterfaces {
@@ -849,6 +889,41 @@ func (data RouterBGP) toBody(ctx context.Context, providerVersion string) string
 			}
 		}
 	}
+	if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.BandwidthGroups) > 0 {
+		body, _ = sjson.Set(body, "bandwidth-groups.bandwidth-group", []interface{}{})
+		for index, item := range data.BandwidthGroups {
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.BandwidthGroupName.IsNull() && !item.BandwidthGroupName.IsUnknown() {
+					body, _ = sjson.Set(body, "bandwidth-groups.bandwidth-group"+"."+strconv.Itoa(index)+"."+"bandwidth-group-name", item.BandwidthGroupName.ValueString())
+				}
+			}
+			if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(item.BandwidthIds) > 0 {
+				body, _ = sjson.Set(body, "bandwidth-groups.bandwidth-group"+"."+strconv.Itoa(index)+"."+"bandwidth-ids.bandwidth-id", []interface{}{})
+				for cindex, citem := range item.BandwidthIds {
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.BandwidthIdNumber.IsNull() && !citem.BandwidthIdNumber.IsUnknown() {
+							body, _ = sjson.Set(body, "bandwidth-groups.bandwidth-group"+"."+strconv.Itoa(index)+"."+"bandwidth-ids.bandwidth-id"+"."+strconv.Itoa(cindex)+"."+"bandwidth-id-number", strconv.FormatInt(citem.BandwidthIdNumber.ValueInt64(), 10))
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Value.IsNull() && !citem.Value.IsUnknown() {
+							body, _ = sjson.Set(body, "bandwidth-groups.bandwidth-group"+"."+strconv.Itoa(index)+"."+"bandwidth-ids.bandwidth-id"+"."+strconv.Itoa(cindex)+"."+"value", strconv.FormatInt(citem.Value.ValueInt64(), 10))
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.BandwidthUnit.IsNull() && !citem.BandwidthUnit.IsUnknown() {
+							body, _ = sjson.Set(body, "bandwidth-groups.bandwidth-group"+"."+strconv.Itoa(index)+"."+"bandwidth-ids.bandwidth-id"+"."+strconv.Itoa(cindex)+"."+"bandwidth-unit", citem.BandwidthUnit.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Asn.IsNull() && !citem.Asn.IsUnknown() {
+							body, _ = sjson.Set(body, "bandwidth-groups.bandwidth-group"+"."+strconv.Itoa(index)+"."+"bandwidth-ids.bandwidth-id"+"."+strconv.Itoa(cindex)+"."+"asn", strconv.FormatInt(citem.Asn.ValueInt64(), 10))
+						}
+					}
+				}
+			}
+		}
+	}
 	return body
 }
 
@@ -860,6 +935,52 @@ func (data RouterBGP) toBody(ctx context.Context, providerVersion string) string
 func (data RouterBGP) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "bandwidth_groups",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "bandwidth_groups.bandwidth_group_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "bandwidth_groups.bandwidth_ids",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "bandwidth_groups.bandwidth_ids.bandwidth_id_number",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "bandwidth_groups.bandwidth_ids.value",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "bandwidth_groups.bandwidth_ids.bandwidth_unit",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "bandwidth_groups.bandwidth_ids.asn",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "bgp_neighbor_down_fast_hold_timer",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "distance_bgp_external",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "distance_bgp_internal",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "distance_bgp_local",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -2049,6 +2170,107 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte, version s
 			}
 		}
 	}
+	for i := range data.BandwidthGroups {
+		var keys []string
+		var keyValues []string
+		if helpers.VersionAtLeast(version, "25.4") {
+			keys = append(keys, "bandwidth-group-name")
+			keyValues = append(keyValues, data.BandwidthGroups[i].BandwidthGroupName.ValueString())
+		}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "bandwidth-groups.bandwidth-group").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("bandwidth-group-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.BandwidthGroups[i].BandwidthGroupName.IsNull() {
+			data.BandwidthGroups[i].BandwidthGroupName = types.StringValue(value.String())
+		} else {
+			data.BandwidthGroups[i].BandwidthGroupName = types.StringNull()
+		}
+		for ci := range data.BandwidthGroups[i].BandwidthIds {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "bandwidth-id-number")
+				keyValues = append(keyValues, strconv.FormatInt(data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.ValueInt64(), 10))
+			}
+
+			var cr gjson.Result
+			r.Get("bandwidth-ids.bandwidth-id").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("bandwidth-id-number"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber = types.Int64Value(value.Int())
+			} else {
+				data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber = types.Int64Null()
+			}
+			if value := cr.Get("value"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.BandwidthGroups[i].BandwidthIds[ci].Value.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].Value = types.Int64Value(value.Int())
+			} else {
+				data.BandwidthGroups[i].BandwidthIds[ci].Value = types.Int64Null()
+			}
+			if value := cr.Get("bandwidth-unit"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.BandwidthGroups[i].BandwidthIds[ci].BandwidthUnit.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].BandwidthUnit = types.StringValue(value.String())
+			} else {
+				data.BandwidthGroups[i].BandwidthIds[ci].BandwidthUnit = types.StringNull()
+			}
+			if value := cr.Get("asn"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.BandwidthGroups[i].BandwidthIds[ci].Asn.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].Asn = types.Int64Value(value.Int())
+			} else {
+				data.BandwidthGroups[i].BandwidthIds[ci].Asn = types.Int64Null()
+			}
+		}
+	}
+	if value := gjson.GetBytes(res, "bgp.neighbor-down.fast-hold-timer"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.BgpNeighborDownFastHoldTimer.IsNull() {
+		data.BgpNeighborDownFastHoldTimer = types.Int64Value(value.Int())
+	} else if data.BgpNeighborDownFastHoldTimer.IsNull() {
+		data.BgpNeighborDownFastHoldTimer = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "distance.bgp.external"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.DistanceBgpExternal.IsNull() {
+		data.DistanceBgpExternal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpExternal.IsNull() {
+		data.DistanceBgpExternal = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "distance.bgp.internal"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.DistanceBgpInternal.IsNull() {
+		data.DistanceBgpInternal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpInternal.IsNull() {
+		data.DistanceBgpInternal = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "distance.bgp.local"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.DistanceBgpLocal.IsNull() {
+		data.DistanceBgpLocal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpLocal.IsNull() {
+		data.DistanceBgpLocal = types.Int64Null()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -2664,6 +2886,85 @@ func (data *RouterBGP) fromBody(ctx context.Context, res []byte, version string)
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "bandwidth-groups.bandwidth-group"); value.Exists() {
+		data.BandwidthGroups = make([]RouterBGPBandwidthGroups, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterBGPBandwidthGroups{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-group-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.BandwidthGroupName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.BandwidthGroupName = types.StringNull()
+			}
+			if cValue := v.Get("bandwidth-ids.bandwidth-id"); cValue.Exists() {
+				item.BandwidthIds = make([]RouterBGPBandwidthGroupsBandwidthIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterBGPBandwidthGroupsBandwidthIds{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("bandwidth-id-number"); ccValue.Exists() {
+							cItem.BandwidthIdNumber = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.BandwidthIdNumber = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("value"); ccValue.Exists() {
+							cItem.Value = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Value = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("bandwidth-unit"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.BandwidthUnit = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.BandwidthUnit = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("asn"); ccValue.Exists() {
+							cItem.Asn = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Asn = types.Int64Null()
+					}
+					item.BandwidthIds = append(item.BandwidthIds, cItem)
+					return true
+				})
+			}
+			data.BandwidthGroups = append(data.BandwidthGroups, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "bgp.neighbor-down.fast-hold-timer"); value.Exists() {
+			data.BgpNeighborDownFastHoldTimer = types.Int64Value(value.Int())
+		}
+	} else {
+		data.BgpNeighborDownFastHoldTimer = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.external"); value.Exists() {
+			data.DistanceBgpExternal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpExternal = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.internal"); value.Exists() {
+			data.DistanceBgpInternal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpInternal = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.local"); value.Exists() {
+			data.DistanceBgpLocal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpLocal = types.Int64Null()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -3220,6 +3521,85 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res []byte, version str
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "bandwidth-groups.bandwidth-group"); value.Exists() {
+		data.BandwidthGroups = make([]RouterBGPBandwidthGroups, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterBGPBandwidthGroups{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-group-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.BandwidthGroupName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.BandwidthGroupName = types.StringNull()
+			}
+			if cValue := v.Get("bandwidth-ids.bandwidth-id"); cValue.Exists() {
+				item.BandwidthIds = make([]RouterBGPBandwidthGroupsBandwidthIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterBGPBandwidthGroupsBandwidthIds{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("bandwidth-id-number"); ccValue.Exists() {
+							cItem.BandwidthIdNumber = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.BandwidthIdNumber = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("value"); ccValue.Exists() {
+							cItem.Value = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Value = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("bandwidth-unit"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.BandwidthUnit = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.BandwidthUnit = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("asn"); ccValue.Exists() {
+							cItem.Asn = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Asn = types.Int64Null()
+					}
+					item.BandwidthIds = append(item.BandwidthIds, cItem)
+					return true
+				})
+			}
+			data.BandwidthGroups = append(data.BandwidthGroups, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "bgp.neighbor-down.fast-hold-timer"); value.Exists() {
+			data.BgpNeighborDownFastHoldTimer = types.Int64Value(value.Int())
+		}
+	} else {
+		data.BgpNeighborDownFastHoldTimer = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.external"); value.Exists() {
+			data.DistanceBgpExternal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpExternal = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.internal"); value.Exists() {
+			data.DistanceBgpInternal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpInternal = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.local"); value.Exists() {
+			data.DistanceBgpLocal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpLocal = types.Int64Null()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -3228,6 +3608,99 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res []byte, version str
 
 func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.DistanceBgpLocal.IsNull() && data.DistanceBgpLocal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distance/bgp/local"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.DistanceBgpInternal.IsNull() && data.DistanceBgpInternal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distance/bgp/internal"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.DistanceBgpExternal.IsNull() && data.DistanceBgpExternal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distance/bgp/external"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.BgpNeighborDownFastHoldTimer.IsNull() && data.BgpNeighborDownFastHoldTimer.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bgp/neighbor-down/fast-hold-timer"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range state.BandwidthGroups {
+			var keys []string
+			var stateKeyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "bandwidth-group-name")
+				stateKeyValues = append(stateKeyValues, state.BandwidthGroups[i].BandwidthGroupName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(state.BandwidthGroups[i].BandwidthGroupName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+
+			found := false
+			for j := range data.BandwidthGroups {
+				found = true
+				if state.BandwidthGroups[i].BandwidthGroupName.ValueString() != data.BandwidthGroups[j].BandwidthGroupName.ValueString() {
+					found = false
+				}
+				if found {
+					if helpers.VersionAtLeast(version, "25.4") {
+						for ci := range state.BandwidthGroups[i].BandwidthIds {
+							var ckeys []string
+							var cstateKeyValues []string
+							if helpers.VersionAtLeast(version, "25.4") {
+								ckeys = append(ckeys, "bandwidth-id-number")
+								cstateKeyValues = append(cstateKeyValues, strconv.FormatInt(state.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.ValueInt64(), 10))
+							}
+							ckeyString := ""
+							for cki := range ckeys {
+								ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+							}
+
+							cemptyKeys := true
+							if !reflect.ValueOf(state.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.ValueInt64()).IsZero() {
+								cemptyKeys = false
+							}
+							if cemptyKeys {
+								continue
+							}
+
+							found := false
+							for cj := range data.BandwidthGroups[j].BandwidthIds {
+								found = true
+								if state.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.ValueInt64() != data.BandwidthGroups[j].BandwidthIds[cj].BandwidthIdNumber.ValueInt64() {
+									found = false
+								}
+								if found {
+									if helpers.VersionAtLeast(version, "25.4") && !state.BandwidthGroups[i].BandwidthIds[ci].Asn.IsNull() && data.BandwidthGroups[j].BandwidthIds[cj].Asn.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "bandwidth-groups/bandwidth-group", keyString, "bandwidth-ids/bandwidth-id", ckeyString), "asn"))
+									}
+									if helpers.VersionAtLeast(version, "25.4") && !state.BandwidthGroups[i].BandwidthIds[ci].BandwidthUnit.IsNull() && data.BandwidthGroups[j].BandwidthIds[cj].BandwidthUnit.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "bandwidth-groups/bandwidth-group", keyString, "bandwidth-ids/bandwidth-id", ckeyString), "bandwidth-unit"))
+									}
+									if helpers.VersionAtLeast(version, "25.4") && !state.BandwidthGroups[i].BandwidthIds[ci].Value.IsNull() && data.BandwidthGroups[j].BandwidthIds[cj].Value.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "bandwidth-groups/bandwidth-group", keyString, "bandwidth-ids/bandwidth-id", ckeyString), "value"))
+									}
+									break
+								}
+							}
+							if !found {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "bandwidth-groups/bandwidth-group", keyString, "bandwidth-ids/bandwidth-id", ckeyString))
+							}
+						}
+					}
+					break
+				}
+			}
+			if !found {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "bandwidth-groups/bandwidth-group", keyString))
+			}
+		}
+	}
 	for i := range state.RpkiServers {
 		keys := [...]string{"server-name"}
 		stateKeyValues := [...]string{state.RpkiServers[i].Server.ValueString()}
@@ -3888,6 +4361,34 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP, ver
 
 func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.BandwidthGroups {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "bandwidth-group-name")
+				keyValues = append(keyValues, data.BandwidthGroups[i].BandwidthGroupName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				for ci := range data.BandwidthGroups[i].BandwidthIds {
+					var ckeys []string
+					var ckeyValues []string
+					if helpers.VersionAtLeast(version, "25.4") {
+						ckeys = append(ckeys, "bandwidth-id-number")
+						ckeyValues = append(ckeyValues, strconv.FormatInt(data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.ValueInt64(), 10))
+					}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+					}
+				}
+			}
+		}
+	}
 	for i := range data.RpkiServers {
 		keys := [...]string{"server-name"}
 		keyValues := [...]string{data.RpkiServers[i].Server.ValueString()}
@@ -4289,6 +4790,42 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context, state *RouterBGP
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *RouterBGP) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.DistanceBgpLocal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distance/bgp/local"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.DistanceBgpInternal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distance/bgp/internal"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.DistanceBgpExternal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distance/bgp/external"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.BgpNeighborDownFastHoldTimer.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bgp/neighbor-down/fast-hold-timer"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.BandwidthGroups {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "bandwidth-group-name")
+				keyValues = append(keyValues, data.BandwidthGroups[i].BandwidthGroupName.ValueString())
+			}
+
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(data.BandwidthGroups[i].BandwidthGroupName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "bandwidth-groups/bandwidth-group", keyString))
+		}
+	}
 	for i := range data.RpkiServers {
 		keys := [...]string{"server-name"}
 		keyValues := [...]string{data.RpkiServers[i].Server.ValueString()}
@@ -5250,6 +5787,43 @@ func (data RouterBGP) toBodyXML(ctx context.Context, stateArg ...*RouterBGP) str
 				}
 			}
 		}
+	}
+	if len(data.BandwidthGroups) > 0 {
+		for _, item := range data.BandwidthGroups {
+			basePath := data.getXPath() + "/bandwidth-groups/bandwidth-group[bandwidth-group-name='" + item.BandwidthGroupName.ValueString() + "']"
+			if !item.BandwidthGroupName.IsNull() && !item.BandwidthGroupName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/bandwidth-group-name", item.BandwidthGroupName.ValueString())
+			}
+			if len(item.BandwidthIds) > 0 {
+				for _, citem := range item.BandwidthIds {
+					cbasePath := basePath + "/bandwidth-ids/bandwidth-id[bandwidth-id-number='" + strconv.FormatInt(citem.BandwidthIdNumber.ValueInt64(), 10) + "']"
+					if !citem.BandwidthIdNumber.IsNull() && !citem.BandwidthIdNumber.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/bandwidth-id-number", strconv.FormatInt(citem.BandwidthIdNumber.ValueInt64(), 10))
+					}
+					if !citem.Value.IsNull() && !citem.Value.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/value", strconv.FormatInt(citem.Value.ValueInt64(), 10))
+					}
+					if !citem.BandwidthUnit.IsNull() && !citem.BandwidthUnit.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/bandwidth-unit", citem.BandwidthUnit.ValueString())
+					}
+					if !citem.Asn.IsNull() && !citem.Asn.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/asn", strconv.FormatInt(citem.Asn.ValueInt64(), 10))
+					}
+				}
+			}
+		}
+	}
+	if !data.BgpNeighborDownFastHoldTimer.IsNull() && !data.BgpNeighborDownFastHoldTimer.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/bgp/neighbor-down/fast-hold-timer", strconv.FormatInt(data.BgpNeighborDownFastHoldTimer.ValueInt64(), 10))
+	}
+	if !data.DistanceBgpExternal.IsNull() && !data.DistanceBgpExternal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/distance/bgp/external", strconv.FormatInt(data.DistanceBgpExternal.ValueInt64(), 10))
+	}
+	if !data.DistanceBgpInternal.IsNull() && !data.DistanceBgpInternal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/distance/bgp/internal", strconv.FormatInt(data.DistanceBgpInternal.ValueInt64(), 10))
+	}
+	if !data.DistanceBgpLocal.IsNull() && !data.DistanceBgpLocal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/distance/bgp/local", strconv.FormatInt(data.DistanceBgpLocal.ValueInt64(), 10))
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -6481,6 +7055,99 @@ func (data *RouterBGP) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 			}
 		}
 	}
+	for i := range data.BandwidthGroups {
+		keys := [...]string{"bandwidth-group-name"}
+		keyValues := [...]string{data.BandwidthGroups[i].BandwidthGroupName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth-groups/bandwidth-group").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "bandwidth-group-name"); value.Exists() && !data.BandwidthGroups[i].BandwidthGroupName.IsNull() {
+			data.BandwidthGroups[i].BandwidthGroupName = types.StringValue(value.String())
+		} else if data.BandwidthGroups[i].BandwidthGroupName.IsNull() {
+			data.BandwidthGroups[i].BandwidthGroupName = types.StringNull()
+		}
+		for ci := range data.BandwidthGroups[i].BandwidthIds {
+			keys := [...]string{"bandwidth-id-number"}
+			keyValues := [...]string{strconv.FormatInt(data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "bandwidth-ids/bandwidth-id").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "bandwidth-id-number"); value.Exists() && !data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber = types.Int64Value(value.Int())
+			} else if data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "value"); value.Exists() && !data.BandwidthGroups[i].BandwidthIds[ci].Value.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].Value = types.Int64Value(value.Int())
+			} else if data.BandwidthGroups[i].BandwidthIds[ci].Value.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].Value = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "bandwidth-unit"); value.Exists() && !data.BandwidthGroups[i].BandwidthIds[ci].BandwidthUnit.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].BandwidthUnit = types.StringValue(value.String())
+			} else if data.BandwidthGroups[i].BandwidthIds[ci].BandwidthUnit.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].BandwidthUnit = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "asn"); value.Exists() && !data.BandwidthGroups[i].BandwidthIds[ci].Asn.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].Asn = types.Int64Value(value.Int())
+			} else if data.BandwidthGroups[i].BandwidthIds[ci].Asn.IsNull() {
+				data.BandwidthGroups[i].BandwidthIds[ci].Asn = types.Int64Null()
+			}
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/neighbor-down/fast-hold-timer"); value.Exists() && !data.BgpNeighborDownFastHoldTimer.IsNull() {
+		data.BgpNeighborDownFastHoldTimer = types.Int64Value(value.Int())
+	} else if data.BgpNeighborDownFastHoldTimer.IsNull() {
+		data.BgpNeighborDownFastHoldTimer = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/external"); value.Exists() && !data.DistanceBgpExternal.IsNull() {
+		data.DistanceBgpExternal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpExternal.IsNull() {
+		data.DistanceBgpExternal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/internal"); value.Exists() && !data.DistanceBgpInternal.IsNull() {
+		data.DistanceBgpInternal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpInternal.IsNull() {
+		data.DistanceBgpInternal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/local"); value.Exists() && !data.DistanceBgpLocal.IsNull() {
+		data.DistanceBgpLocal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpLocal.IsNull() {
+		data.DistanceBgpLocal = types.Int64Null()
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -7039,6 +7706,49 @@ func (data *RouterBGP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.RpkiServers = append(data.RpkiServers, item)
 			return true
 		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth-groups/bandwidth-group"); value.Exists() {
+		data.BandwidthGroups = make([]RouterBGPBandwidthGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterBGPBandwidthGroups{}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-group-name"); cValue.Exists() {
+				item.BandwidthGroupName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-ids/bandwidth-id"); cValue.Exists() {
+				item.BandwidthIds = make([]RouterBGPBandwidthGroupsBandwidthIds, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RouterBGPBandwidthGroupsBandwidthIds{}
+					if ccValue := helpers.GetFromXPath(cv, "bandwidth-id-number"); ccValue.Exists() {
+						cItem.BandwidthIdNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "bandwidth-unit"); ccValue.Exists() {
+						cItem.BandwidthUnit = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "asn"); ccValue.Exists() {
+						cItem.Asn = types.Int64Value(ccValue.Int())
+					}
+					item.BandwidthIds = append(item.BandwidthIds, cItem)
+					return true
+				})
+			}
+			data.BandwidthGroups = append(data.BandwidthGroups, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/neighbor-down/fast-hold-timer"); value.Exists() {
+		data.BgpNeighborDownFastHoldTimer = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/external"); value.Exists() {
+		data.DistanceBgpExternal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/internal"); value.Exists() {
+		data.DistanceBgpInternal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/local"); value.Exists() {
+		data.DistanceBgpLocal = types.Int64Value(value.Int())
 	}
 }
 
@@ -7599,6 +8309,49 @@ func (data *RouterBGPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bandwidth-groups/bandwidth-group"); value.Exists() {
+		data.BandwidthGroups = make([]RouterBGPBandwidthGroups, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := RouterBGPBandwidthGroups{}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-group-name"); cValue.Exists() {
+				item.BandwidthGroupName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-ids/bandwidth-id"); cValue.Exists() {
+				item.BandwidthIds = make([]RouterBGPBandwidthGroupsBandwidthIds, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RouterBGPBandwidthGroupsBandwidthIds{}
+					if ccValue := helpers.GetFromXPath(cv, "bandwidth-id-number"); ccValue.Exists() {
+						cItem.BandwidthIdNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "value"); ccValue.Exists() {
+						cItem.Value = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "bandwidth-unit"); ccValue.Exists() {
+						cItem.BandwidthUnit = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "asn"); ccValue.Exists() {
+						cItem.Asn = types.Int64Value(ccValue.Int())
+					}
+					item.BandwidthIds = append(item.BandwidthIds, cItem)
+					return true
+				})
+			}
+			data.BandwidthGroups = append(data.BandwidthGroups, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/bgp/neighbor-down/fast-hold-timer"); value.Exists() {
+		data.BgpNeighborDownFastHoldTimer = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/external"); value.Exists() {
+		data.DistanceBgpExternal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/internal"); value.Exists() {
+		data.DistanceBgpInternal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/local"); value.Exists() {
+		data.DistanceBgpLocal = types.Int64Value(value.Int())
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -7610,6 +8363,135 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.DistanceBgpLocal.IsNull() && data.DistanceBgpLocal.IsNull() {
+		deletePath := state.getXPath() + "/distance/bgp/local"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DistanceBgpInternal.IsNull() && data.DistanceBgpInternal.IsNull() {
+		deletePath := state.getXPath() + "/distance/bgp/internal"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DistanceBgpExternal.IsNull() && data.DistanceBgpExternal.IsNull() {
+		deletePath := state.getXPath() + "/distance/bgp/external"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.BgpNeighborDownFastHoldTimer.IsNull() && data.BgpNeighborDownFastHoldTimer.IsNull() {
+		deletePath := state.getXPath() + "/bgp/neighbor-down/fast-hold-timer"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.BandwidthGroups {
+		stateKeys := [...]string{"bandwidth-group-name"}
+		stateKeyValues := [...]string{state.BandwidthGroups[i].BandwidthGroupName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.BandwidthGroups[i].BandwidthGroupName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.BandwidthGroups {
+			found = true
+			if state.BandwidthGroups[i].BandwidthGroupName.ValueString() != data.BandwidthGroups[j].BandwidthGroupName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.BandwidthGroups[i].BandwidthIds {
+					cstateKeys := [...]string{"bandwidth-id-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.BandwidthGroups[j].BandwidthIds {
+						found = true
+						if state.BandwidthGroups[i].BandwidthIds[ci].BandwidthIdNumber.ValueInt64() != data.BandwidthGroups[j].BandwidthIds[cj].BandwidthIdNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.BandwidthGroups[i].BandwidthIds[ci].Asn.IsNull() && data.BandwidthGroups[j].BandwidthIds[cj].Asn.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bandwidth-groups/bandwidth-group%v/bandwidth-ids/bandwidth-id%v/asn", predicates, cpredicates))
+							}
+							if !state.BandwidthGroups[i].BandwidthIds[ci].BandwidthUnit.IsNull() && data.BandwidthGroups[j].BandwidthIds[cj].BandwidthUnit.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bandwidth-groups/bandwidth-group%v/bandwidth-ids/bandwidth-id%v/bandwidth-unit", predicates, cpredicates))
+							}
+							if !state.BandwidthGroups[i].BandwidthIds[ci].Value.IsNull() && data.BandwidthGroups[j].BandwidthIds[cj].Value.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bandwidth-groups/bandwidth-group%v/bandwidth-ids/bandwidth-id%v/value", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bandwidth-groups/bandwidth-group%v/bandwidth-ids/bandwidth-id%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/bandwidth-groups/bandwidth-group%v", predicates))
+		}
+	}
 	for i := range state.RpkiServers {
 		stateKeys := [...]string{"server-name"}
 		stateKeyValues := [...]string{state.RpkiServers[i].Server.ValueString()}
@@ -9495,6 +10377,28 @@ func (data *RouterBGP) addDeletedItemsXML(ctx context.Context, state RouterBGP, 
 
 func (data *RouterBGP) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.DistanceBgpLocal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/distance/bgp/local")
+	}
+	if !data.DistanceBgpInternal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/distance/bgp/internal")
+	}
+	if !data.DistanceBgpExternal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/distance/bgp/external")
+	}
+	if !data.BgpNeighborDownFastHoldTimer.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp/neighbor-down/fast-hold-timer")
+	}
+	for i := range data.BandwidthGroups {
+		keys := [...]string{"bandwidth-group-name"}
+		keyValues := [...]string{data.BandwidthGroups[i].BandwidthGroupName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/bandwidth-groups/bandwidth-group%v", predicates))
+	}
 	for i := range data.RpkiServers {
 		keys := [...]string{"server-name"}
 		keyValues := [...]string{data.RpkiServers[i].Server.ValueString()}

@@ -25,6 +25,9 @@ resource "iosxr_router_bgp_vrf" "example" {
   bgp_unsafe_ebgp_policy                = true
   default_information_originate         = true
   default_metric                        = 125
+  distance_bgp_external                 = 100
+  distance_bgp_internal                 = 150
+  distance_bgp_local                    = 200
   mpls_activate_interfaces = [
     {
       interface_name = "GigabitEthernet0/0/0/1"

@@ -20,8 +20,6 @@ resource "iosxr_router_bgp_address_family" "example" {
     }
   ]
   allocate_label_all_unlabeled_path    = true
-  as_based_as_list                     = "ECMP_PEER_AS_LIST"
-  as_based_delay                       = 200
   as_number                            = "65001"
   as_path_loopcheck_out_disable        = true
   bgp_attribute_download               = true
@@ -50,6 +48,7 @@ resource "iosxr_router_bgp_address_family" "example" {
   bgp_origin_as_validation_signal_ibgp          = true
   bgp_scan_time                                 = 60
   default_martian_check_disable                 = true
+  delay_route_inbound                           = 100
   distance_bgp_external_route                   = 200
   distance_bgp_internal_route                   = 195
   distance_bgp_local_route                      = 190
@@ -58,8 +57,8 @@ resource "iosxr_router_bgp_address_family" "example" {
   event_prefix_route_policy                     = "ROUTE_POLICY_1"
   export_to_vrf_allow_backup                    = true
   export_to_vrf_allow_best_external             = true
-  fixed_delay                                   = 200
   import_from_bridge_domain                     = true
+  maximum_paths_ebgp_bestpath_only              = true
   maximum_paths_ebgp_multipath                  = 10
   maximum_paths_ebgp_route_policy               = "ROUTE_POLICY_1"
   maximum_paths_ebgp_selective                  = true
@@ -86,15 +85,12 @@ resource "iosxr_router_bgp_address_family" "example" {
       peer_sid_index = 101
     }
   ]
-  permanent_network_route_policy      = "ROUTE_POLICY_1"
-  platform_oor_based_delay            = 500
-  platform_oor_based_threshold        = 80
-  prefix_ecmp_delay                   = 1000
-  prefix_ecmp_delay_oor_threshold     = 90
-  redistribute_connected              = true
-  redistribute_connected_metric       = 100
-  redistribute_connected_multipath    = true
-  redistribute_connected_route_policy = "ROUTE_POLICY_1"
+  permanent_network_route_policy                  = "ROUTE_POLICY_1"
+  redistribute_connected                          = true
+  redistribute_connected_default_policy_action_in = "accept"
+  redistribute_connected_metric                   = 100
+  redistribute_connected_multipath                = true
+  redistribute_connected_route_policy             = "ROUTE_POLICY_1"
   redistribute_eigrp = [
     {
       default_policy_action_in = "accept"
@@ -125,10 +121,12 @@ resource "iosxr_router_bgp_address_family" "example" {
     }
   ]
   redistribute_rip                                         = true
+  redistribute_rip_default_policy_action_in                = "accept"
   redistribute_rip_metric                                  = 100
   redistribute_rip_multipath                               = true
   redistribute_rip_route_policy                            = "ROUTE_POLICY_1"
   redistribute_static                                      = true
+  redistribute_static_default_policy_action_in             = "accept"
   redistribute_static_metric                               = 100
   redistribute_static_multipath                            = true
   redistribute_static_route_policy                         = "ROUTE_POLICY_1"
@@ -142,6 +140,7 @@ resource "iosxr_router_bgp_address_family" "example" {
   update_limit_address_family                              = 10
   update_limit_sub_group_ebgp                              = 10
   update_limit_sub_group_ibgp                              = 10
+  update_out_quick_withdraw_disable                        = true
   update_wait_install                                      = true
   update_wait_install_delay_startup                        = 300
   weight_reset_on_import                                   = true

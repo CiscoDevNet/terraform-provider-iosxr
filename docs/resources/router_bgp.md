@@ -42,6 +42,19 @@ resource "iosxr_router_bgp" "example" {
       group_name = "GROUP1"
     }
   ]
+  bandwidth_groups = [
+    {
+      bandwidth_group_name = "BWG1"
+      bandwidth_ids = [
+        {
+          asn                 = 65001
+          bandwidth_id_number = 1
+          bandwidth_unit      = "gbps"
+          value               = 1000
+        }
+      ]
+    }
+  ]
   bfd_minimum_interval                 = 10
   bfd_multiplier                       = 4
   bgp_as_path_loopcheck                = true
@@ -83,6 +96,7 @@ resource "iosxr_router_bgp" "example" {
   bgp_maximum_neighbor                           = 5000
   bgp_multipath_as_path_ignore_onwards           = true
   bgp_multipath_use_cluster_list_length          = true
+  bgp_neighbor_down_fast_hold_timer              = 500
   bgp_origin_as_validation_signal_ibgp           = true
   bgp_origin_as_validation_time                  = 45
   bgp_redistribute_internal                      = true
@@ -93,6 +107,9 @@ resource "iosxr_router_bgp" "example" {
   bgp_update_delay_always                        = true
   default_information_originate                  = true
   default_metric                                 = 125
+  distance_bgp_external                          = 100
+  distance_bgp_internal                          = 150
+  distance_bgp_local                             = 200
   graceful_maintenance_activate_all_neighbors    = true
   graceful_maintenance_activate_interfaces = [
     {
@@ -170,6 +187,8 @@ resource "iosxr_router_bgp" "example" {
 - `as_league_peers` (Attributes List) AS League peers mode (see [below for nested schema](#nestedatt--as_league_peers))
 - `as_lists` (Attributes List) List of AS numbers (see [below for nested schema](#nestedatt--as_lists))
 - `attribute_filter_groups` (Attributes List) Attribute-filter group command mode (see [below for nested schema](#nestedatt--attribute_filter_groups))
+- `bandwidth_groups` (Attributes List) Enter Bandwidth Group command mode
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--bandwidth_groups))
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier
@@ -224,6 +243,9 @@ resource "iosxr_router_bgp" "example" {
   - Range: `1`-`15000`
 - `bgp_multipath_as_path_ignore_onwards` (Boolean) Ignore everything onwards as-path for multipath selection
 - `bgp_multipath_use_cluster_list_length` (Boolean) Use Cluster-List Length in BGP Multipath consideration
+- `bgp_neighbor_down_fast_hold_timer` (Number) Fast hold timer (in msec) when neighbors go down due to link down or BFD down
+  - Range: `100`-`1000`
+  - Supported from version: `25.4`
 - `bgp_origin_as_validation_signal_ibgp` (Boolean) Signal origin-AS validity towards iBGP peers
 - `bgp_origin_as_validation_time` (Number) Prefix validation time (in seconds)
   - Range: `5`-`60`
@@ -243,6 +265,15 @@ resource "iosxr_router_bgp" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `distance_bgp_external` (Number) Distance for routes external to the AS
+  - Range: `1`-`255`
+  - Supported from version: `25.4`
+- `distance_bgp_internal` (Number) Distance for routes internal to the AS
+  - Range: `1`-`255`
+  - Supported from version: `25.4`
+- `distance_bgp_local` (Number) Distance for routes that are locally generated
+  - Range: `1`-`255`
+  - Supported from version: `25.4`
 - `graceful_maintenance_activate_all_neighbors` (Boolean) Also neighbors without graceful-maintenance config
 - `graceful_maintenance_activate_interfaces` (Attributes List) Enable graceful-maintenance on all directly connected ebgp neighbors whose session is going over this interface (see [below for nested schema](#nestedatt--graceful_maintenance_activate_interfaces))
 - `graceful_maintenance_activate_locations` (Attributes List) Enable graceful-maintenance on all directly connected ebgp neighbors whose session is going over this line card location (see [below for nested schema](#nestedatt--graceful_maintenance_activate_locations))
@@ -349,6 +380,36 @@ Optional:
 
 - `discard` (Boolean) Discard this attribute
 - `treat_as_withdraw` (Boolean) Treat the update message as a Withdraw
+
+
+
+<a id="nestedatt--bandwidth_groups"></a>
+### Nested Schema for `bandwidth_groups`
+
+Optional:
+
+- `bandwidth_group_name` (String) bandwidth-group name
+  - Supported from version: `25.4`
+- `bandwidth_ids` (Attributes List) Bandwidth-Group Identifier
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--bandwidth_groups--bandwidth_ids))
+
+<a id="nestedatt--bandwidth_groups--bandwidth_ids"></a>
+### Nested Schema for `bandwidth_groups.bandwidth_ids`
+
+Optional:
+
+- `asn` (Number) Bandwidth Group encoding asn
+  - Range: `1`-`65534`
+  - Supported from version: `25.4`
+- `bandwidth_id_number` (Number) Identifier for the Bandwidth-Group
+  - Range: `1`-`8`
+  - Supported from version: `25.4`
+- `bandwidth_unit` (String) set bandwidth unit
+  - Choices: `bps`, `gbps`
+  - Supported from version: `25.4`
+- `value` (Number) set bandwidth id value
+  - Range: `0`-`9223372036854775807`
+  - Supported from version: `25.4`
 
 
 

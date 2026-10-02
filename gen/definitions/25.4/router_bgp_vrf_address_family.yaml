@@ -3,51 +3,91 @@ name: Router BGP VRF Address Family
 path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]
 doc_category: BGP
 attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
   - yang_name: redistribute/eigrps/eigrp
     tf_name: redistribute_eigrp
     type: List
     attributes:
       - yang_name: default-policy-action-in
-        tf_name: default_policy_action_in
-        description: "Set a default action if a route does not satify the policy definition"
-        type: String
-        enum_values:
-          - accept
-          - reject
         example: accept
   - yang_name: redistribute/isis-processes/isis-process
     tf_name: redistribute_isis
     type: List
     attributes:
       - yang_name: default-policy-action-in
-        tf_name: default_policy_action_in
-        description: "Set a default action if a route does not satify the policy definition"
-        type: String
-        enum_values:
-          - accept
-          - reject
         example: accept
   - yang_name: redistribute/ospfs/ospf
     tf_name: redistribute_ospf
     type: List
     attributes:
       - yang_name: default-policy-action-in
-        tf_name: default_policy_action_in
-        description: "Set a default action if a route does not satify the policy definition"
-        type: String
-        enum_values:
-          - accept
-          - reject
         example: accept
   - yang_name: redistribute/ospfv3s/ospfv3
     tf_name: redistribute_ospfv3
     type: List
     attributes:
       - yang_name: default-policy-action-in
-        tf_name: default_policy_action_in
-        description: "Set a default action if a route does not satify the policy definition"
-        type: String
-        enum_values:
-          - accept
-          - reject
         example: accept
+  - yang_name: redistribute/connected/default-policy-action-in
+    example: accept
+  - yang_name: redistribute/static/default-policy-action-in
+    example: accept
+  - yang_name: redistribute/rip/default-policy-action-in
+    example: accept
+  - yang_name: maximum-paths/ebgp/bestpath-only
+    delete_parent: true
+    example: true
+  - yang_name: update/out/quick-withdraw
+    example: enable
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]
+    attributes:
+      - name: vrf-name
+        value: VRF2
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
+    attributes:
+      - name: two-byte-as-number
+        value: 65001
+      - name: asn2-index
+        value: 2
+    dependencies: [1]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001
+      - name: bgp/router-id
+        value: 22.22.22.22
+    dependencies: [2]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001
+    lists:
+      - name: address-families/address-family
+        key: af-name
+        items:
+          - attributes:
+              - name: af-name
+                value: vpnv4-unicast
+    dependencies: [3]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001
+    lists:
+      - name: address-families/address-family
+        key: af-name
+        items:
+          - attributes:
+              - name: af-name
+                value: vpnv6-unicast
+    dependencies: [3]

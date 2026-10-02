@@ -35,8 +35,6 @@ resource "iosxr_router_bgp_address_family" "example" {
     }
   ]
   allocate_label_all_unlabeled_path    = true
-  as_based_as_list                     = "ECMP_PEER_AS_LIST"
-  as_based_delay                       = 200
   as_number                            = "65001"
   as_path_loopcheck_out_disable        = true
   bgp_attribute_download               = true
@@ -65,6 +63,7 @@ resource "iosxr_router_bgp_address_family" "example" {
   bgp_origin_as_validation_signal_ibgp          = true
   bgp_scan_time                                 = 60
   default_martian_check_disable                 = true
+  delay_route_inbound                           = 100
   distance_bgp_external_route                   = 200
   distance_bgp_internal_route                   = 195
   distance_bgp_local_route                      = 190
@@ -73,8 +72,8 @@ resource "iosxr_router_bgp_address_family" "example" {
   event_prefix_route_policy                     = "ROUTE_POLICY_1"
   export_to_vrf_allow_backup                    = true
   export_to_vrf_allow_best_external             = true
-  fixed_delay                                   = 200
   import_from_bridge_domain                     = true
+  maximum_paths_ebgp_bestpath_only              = true
   maximum_paths_ebgp_multipath                  = 10
   maximum_paths_ebgp_route_policy               = "ROUTE_POLICY_1"
   maximum_paths_ebgp_selective                  = true
@@ -101,15 +100,12 @@ resource "iosxr_router_bgp_address_family" "example" {
       peer_sid_index = 101
     }
   ]
-  permanent_network_route_policy      = "ROUTE_POLICY_1"
-  platform_oor_based_delay            = 500
-  platform_oor_based_threshold        = 80
-  prefix_ecmp_delay                   = 1000
-  prefix_ecmp_delay_oor_threshold     = 90
-  redistribute_connected              = true
-  redistribute_connected_metric       = 100
-  redistribute_connected_multipath    = true
-  redistribute_connected_route_policy = "ROUTE_POLICY_1"
+  permanent_network_route_policy                  = "ROUTE_POLICY_1"
+  redistribute_connected                          = true
+  redistribute_connected_default_policy_action_in = "accept"
+  redistribute_connected_metric                   = 100
+  redistribute_connected_multipath                = true
+  redistribute_connected_route_policy             = "ROUTE_POLICY_1"
   redistribute_eigrp = [
     {
       default_policy_action_in = "accept"
@@ -140,10 +136,12 @@ resource "iosxr_router_bgp_address_family" "example" {
     }
   ]
   redistribute_rip                                         = true
+  redistribute_rip_default_policy_action_in                = "accept"
   redistribute_rip_metric                                  = 100
   redistribute_rip_multipath                               = true
   redistribute_rip_route_policy                            = "ROUTE_POLICY_1"
   redistribute_static                                      = true
+  redistribute_static_default_policy_action_in             = "accept"
   redistribute_static_metric                               = 100
   redistribute_static_multipath                            = true
   redistribute_static_route_policy                         = "ROUTE_POLICY_1"
@@ -157,6 +155,7 @@ resource "iosxr_router_bgp_address_family" "example" {
   update_limit_address_family                              = 10
   update_limit_sub_group_ebgp                              = 10
   update_limit_sub_group_ibgp                              = 10
+  update_out_quick_withdraw_disable                        = true
   update_wait_install                                      = true
   update_wait_install_delay_startup                        = 300
   weight_reset_on_import                                   = true
@@ -191,11 +190,6 @@ resource "iosxr_router_bgp_address_family" "example" {
 - `allocate_label_all_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
 - `allocate_label_route_policy` (String) Allocate label route policy
 - `allocate_label_route_policy_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
-- `as_based_as_list` (String) Enable ECMP delay for neighbor AS'es included in the AS list
-  - Supported from version: `25.4`
-- `as_based_delay` (Number) Provide a delay interval in msecs
-  - Range: `10`-`300000`
-  - Supported from version: `25.4`
 - `as_path_loopcheck_out_disable` (Boolean) Disable
 - `bgp_attribute_download` (Boolean) Configure attribute download for this address-family
 - `bgp_bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
@@ -225,6 +219,9 @@ resource "iosxr_router_bgp_address_family" "example" {
 - `bgp_scan_time` (Number) Configure background scanner interval for this address-family
   - Range: `5`-`3600`
 - `default_martian_check_disable` (Boolean) Disable
+- `delay_route_inbound` (Number) Delay the advertisement of the inbound routes by delaying the best path calculation
+  - Range: `100`-`900000`
+  - Supported from version: `25.4`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
@@ -239,12 +236,25 @@ resource "iosxr_router_bgp_address_family" "example" {
 - `domain_distinguisher_router_id` (String) 4 octet router-id
 - `dynamic_med_interval` (Number) Update generation delay (in minutes) after a MED change
   - Range: `0`-`10`
+- `ecmp_delay_as_based_as_list` (String) Enable ECMP delay for neighbor AS'es included in the AS list
+  - Supported from version: `25.4`
+- `ecmp_delay_as_based_delay` (Number) Provide a delay interval in msecs
+  - Range: `10`-`300000`
+  - Supported from version: `25.4`
+- `ecmp_delay_fixed_delay` (Number) Provide a delay interval in msecs
+  - Range: `10`-`300000`
+  - Supported from version: `25.4`
+- `ecmp_delay_platform_oor_based_delay` (Number) Provide a delay interval in msecs
+  - Range: `10`-`300000`
+  - Supported from version: `25.4`
+- `ecmp_delay_platform_oor_based_threshold` (Number) Delay only when platform resource usage is above specified threshold
+  - Range: `10`-`90`
+  - Supported from version: `25.4`
 - `epe_backup_enable` (Boolean) Enable the EPE backup under current AFI
 - `event_prefix_route_policy` (String) Policy for per-prefix tracing
 - `export_to_vrf_allow_backup` (Boolean) Allow Export of backup path
 - `export_to_vrf_allow_best_external` (Boolean) Allow Export of best-external
-- `fixed_delay` (Number) Provide a delay interval in msecs
-  - Range: `10`-`300000`
+- `fast_reroute_per_link` (Boolean) Enable fast reroute per-link
   - Supported from version: `25.4`
 - `global_table_multicast` (Boolean) Enable global table multicast
 - `import_from_bridge_domain` (Boolean) Import IP hosts from EVPN bridge-domain
@@ -257,6 +267,8 @@ resource "iosxr_router_bgp_address_family" "example" {
 - `label_mode_per_vrf_46` (Boolean) Set per VRF 46 label mode
 - `label_mode_route_policy` (String) Use a route policy to select prefixes for label allocation mode
 - `label_security_asbr_rpf` (Boolean) RPF Label Security for Option-B
+- `maximum_paths_ebgp_bestpath_only` (Boolean) Apply policy only for bestpath. This is needed if user doesnt want to deprefer any paths and apply certain attributes to bestpath only
+  - Supported from version: `25.4`
 - `maximum_paths_ebgp_multipath` (Number) Number of paths (limit includes backup path)
   - Range: `2`-`1024`
 - `maximum_paths_ebgp_route_policy` (String) Route policy to specify ORF and inbound filter
@@ -285,17 +297,14 @@ resource "iosxr_router_bgp_address_family" "example" {
   - Range: `0`-`4294967295`
 - `peer_set_ids` (Attributes List) configuration for a single EPE Peer Set (see [below for nested schema](#nestedatt--peer_set_ids))
 - `permanent_network_route_policy` (String) Route policy to read the prefixes from
-- `platform_oor_based_delay` (Number) Provide a delay interval in msecs
-  - Range: `10`-`300000`
-  - Supported from version: `25.4`
-- `platform_oor_based_threshold` (Number) Delay only when platform resource usage is above specified threshold
-  - Range: `10`-`90`
-  - Supported from version: `25.4`
 - `prefix_ecmp_delay` (Number) Interval(ms)
   - Range: `10`-`60000`
 - `prefix_ecmp_delay_oor_threshold` (Number) Delay only when platform resource usage is above threshold
   - Range: `10`-`90`
 - `redistribute_connected` (Boolean) Redistribute connected routes
+- `redistribute_connected_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.4`
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
 - `redistribute_connected_multipath` (Boolean) Enable installation of multiple paths from RIB
@@ -305,11 +314,17 @@ resource "iosxr_router_bgp_address_family" "example" {
 - `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
 - `redistribute_ospfv3` (Attributes List) IPv6 Open Shortest Path First (OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospfv3))
 - `redistribute_rip` (Boolean) Redistribute RIP routes
+- `redistribute_rip_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.4`
 - `redistribute_rip_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
 - `redistribute_rip_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_rip_route_policy` (String) Route policy reference
 - `redistribute_static` (Boolean) Redistribute static routes
+- `redistribute_static_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.4`
 - `redistribute_static_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
 - `redistribute_static_multipath` (Boolean) Enable installation of multiple paths from RIB
@@ -335,6 +350,8 @@ resource "iosxr_router_bgp_address_family" "example" {
   - Range: `1`-`512`
 - `update_limit_sub_group_ibgp` (Number) Update limit for iBGP sub-groups
   - Range: `1`-`512`
+- `update_out_quick_withdraw_disable` (Boolean) Disable
+  - Supported from version: `25.4`
 - `update_wait_install` (Boolean) Wait for route install
 - `update_wait_install_delay_startup` (Number) Configure a delay for the startup phase
   - Range: `1`-`600`
@@ -351,6 +368,8 @@ resource "iosxr_router_bgp_address_family" "example" {
 - `vrf_all_segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Wide LIB allocation
 - `vrf_all_source_rt_import_policy` (Boolean) Source import route-targets from import-policy
 - `vrf_all_table_policy` (String) Configure policy for installation of routes to RIB
+- `vrf_all_update_out_quick_withdraw_disable` (Boolean) Generation of quick withdraw messages
+  - Supported from version: `25.4`
 - `weight_reset_on_import` (Boolean) Reset weight of paths on import
 
 ### Read-Only

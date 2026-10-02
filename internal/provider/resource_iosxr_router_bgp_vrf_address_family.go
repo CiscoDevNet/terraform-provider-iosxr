@@ -1095,6 +1095,38 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				MarkdownDescription: helpers.NewAttributeDescription("Disable").String,
 				Optional:            true,
 			},
+			"redistribute_connected_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
+			"redistribute_static_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
+			"redistribute_rip_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
+			"maximum_paths_ebgp_bestpath_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply policy only for bestpath. This is needed if user doesnt want to deprefer any paths and apply certain attributes to bestpath only").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"update_out_quick_withdraw": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Generation of quick withdraw messages").AddStringEnumDescription("disable", "enable").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
 		},
 	}
 }

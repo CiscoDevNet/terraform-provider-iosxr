@@ -154,11 +154,78 @@ resource "iosxr_yang" "PreReq3" {
 }
 
 `
+const testAccDataSourceIosxrRouterBGPAFGroupPrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv6-unicast"
+				},
+			]
+		},
+	]
+	depends_on = [iosxr_yang.PreReq0, ]
+}
+
+resource "iosxr_yang" "PreReq2" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/af-groups/af-group[af-group-name=AFGROUP1]"
+	attributes = {
+		"af-group-name" = "AFGROUP1"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			]
+		},
+	]
+	depends_on = [iosxr_yang.PreReq1, ]
+}
+
+resource "iosxr_yang" "PreReq3" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrRouterBGPAFGroupPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccDataSourceIosxrRouterBGPAFGroupPrerequisitesConfig_V24_4,
+			"25.4": testAccDataSourceIosxrRouterBGPAFGroupPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -215,6 +282,7 @@ func testAccDataSourceIosxrRouterBGPAFGroupConfig() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

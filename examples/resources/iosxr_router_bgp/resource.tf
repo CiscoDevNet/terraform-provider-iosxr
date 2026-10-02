@@ -27,6 +27,19 @@ resource "iosxr_router_bgp" "example" {
       group_name = "GROUP1"
     }
   ]
+  bandwidth_groups = [
+    {
+      bandwidth_group_name = "BWG1"
+      bandwidth_ids = [
+        {
+          asn                 = 65001
+          bandwidth_id_number = 1
+          bandwidth_unit      = "gbps"
+          value               = 1000
+        }
+      ]
+    }
+  ]
   bfd_minimum_interval                 = 10
   bfd_multiplier                       = 4
   bgp_as_path_loopcheck                = true
@@ -68,6 +81,7 @@ resource "iosxr_router_bgp" "example" {
   bgp_maximum_neighbor                           = 5000
   bgp_multipath_as_path_ignore_onwards           = true
   bgp_multipath_use_cluster_list_length          = true
+  bgp_neighbor_down_fast_hold_timer              = 500
   bgp_origin_as_validation_signal_ibgp           = true
   bgp_origin_as_validation_time                  = 45
   bgp_redistribute_internal                      = true
@@ -78,6 +92,9 @@ resource "iosxr_router_bgp" "example" {
   bgp_update_delay_always                        = true
   default_information_originate                  = true
   default_metric                                 = 125
+  distance_bgp_external                          = 100
+  distance_bgp_internal                          = 150
+  distance_bgp_local                             = 200
   graceful_maintenance_activate_all_neighbors    = true
   graceful_maintenance_activate_interfaces = [
     {

@@ -781,6 +781,86 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 				},
 			},
+			"bandwidth_groups": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter Bandwidth Group command mode").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"bandwidth_group_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("bandwidth-group name").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"bandwidth_ids": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bandwidth-Group Identifier").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"bandwidth_id_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Identifier for the Bandwidth-Group").AddIntegerRangeDescription(1, 8).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 8),
+										},
+									},
+									"value": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("set bandwidth id value").AddIntegerRangeDescription(0, 9223372036854775807).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 9223372036854775807),
+										},
+									},
+									"bandwidth_unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("set bandwidth unit").AddStringEnumDescription("bps", "gbps").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("bps", "gbps"),
+										},
+									},
+									"asn": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Bandwidth Group encoding asn").AddIntegerRangeDescription(1, 65534).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65534),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"bgp_neighbor_down_fast_hold_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Fast hold timer (in msec) when neighbors go down due to link down or BFD down").AddIntegerRangeDescription(100, 1000).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(100, 1000),
+				},
+			},
+			"distance_bgp_external": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distance for routes external to the AS").AddIntegerRangeDescription(1, 255).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"distance_bgp_internal": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distance for routes internal to the AS").AddIntegerRangeDescription(1, 255).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"distance_bgp_local": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distance for routes that are locally generated").AddIntegerRangeDescription(1, 255).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
 		},
 	}
 }
@@ -810,6 +890,10 @@ func (r *RouterBGPResource) Create(ctx context.Context, req resource.CreateReque
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -1028,6 +1112,10 @@ func (r *RouterBGPResource) Update(ctx context.Context, req resource.UpdateReque
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -1121,6 +1209,14 @@ func (r *RouterBGPResource) Delete(ctx context.Context, req resource.DeleteReque
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

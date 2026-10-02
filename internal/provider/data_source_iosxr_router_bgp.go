@@ -618,6 +618,58 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 					},
 				},
 			},
+			"bandwidth_groups": schema.ListNestedAttribute{
+				MarkdownDescription: "Enter Bandwidth Group command mode" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"bandwidth_group_name": schema.StringAttribute{
+							MarkdownDescription: "bandwidth-group name" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"bandwidth_ids": schema.ListNestedAttribute{
+							MarkdownDescription: "Bandwidth-Group Identifier" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"bandwidth_id_number": schema.Int64Attribute{
+										MarkdownDescription: "Identifier for the Bandwidth-Group" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"value": schema.Int64Attribute{
+										MarkdownDescription: "set bandwidth id value" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"bandwidth_unit": schema.StringAttribute{
+										MarkdownDescription: "set bandwidth unit" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"asn": schema.Int64Attribute{
+										MarkdownDescription: "Bandwidth Group encoding asn" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"bgp_neighbor_down_fast_hold_timer": schema.Int64Attribute{
+				MarkdownDescription: "Fast hold timer (in msec) when neighbors go down due to link down or BFD down" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"distance_bgp_external": schema.Int64Attribute{
+				MarkdownDescription: "Distance for routes external to the AS" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"distance_bgp_internal": schema.Int64Attribute{
+				MarkdownDescription: "Distance for routes internal to the AS" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"distance_bgp_local": schema.Int64Attribute{
+				MarkdownDescription: "Distance for routes that are locally generated" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }

@@ -40,6 +40,9 @@ resource "iosxr_router_bgp_vrf" "example" {
   bgp_unsafe_ebgp_policy                = true
   default_information_originate         = true
   default_metric                        = 125
+  distance_bgp_external                 = 100
+  distance_bgp_internal                 = 150
+  distance_bgp_local                    = 200
   mpls_activate_interfaces = [
     {
       interface_name = "GigabitEthernet0/0/0/1"
@@ -106,6 +109,15 @@ resource "iosxr_router_bgp_vrf" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `distance_bgp_external` (Number) Distance for routes external to the AS
+  - Range: `1`-`255`
+  - Supported from version: `25.4`
+- `distance_bgp_internal` (Number) Distance for routes internal to the AS
+  - Range: `1`-`255`
+  - Supported from version: `25.4`
+- `distance_bgp_local` (Number) Distance for routes that are locally generated
+  - Range: `1`-`255`
+  - Supported from version: `25.4`
 - `mpls_activate_interfaces` (Attributes List) Interface to enable mpls (see [below for nested schema](#nestedatt--mpls_activate_interfaces))
 - `nexthop_mpls_forwarding_ibgp` (Boolean) Enable mpls forwarding path for ibgp learnt nexthops
 - `nexthop_resolution_allow_default` (Boolean) Enable nexthops resolution using default route

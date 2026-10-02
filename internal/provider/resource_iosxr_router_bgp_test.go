@@ -131,14 +131,45 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_servers.0.transport_tcp_port", "3323"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_servers.0.bind_source_interface", "Loopback0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "rpki_servers.0.shutdown", "false"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bandwidth_groups.0.bandwidth_group_name", "BWG1"))
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bandwidth_groups.0.bandwidth_ids.0.bandwidth_id_number", "1"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bandwidth_groups.0.bandwidth_ids.0.value", "1000"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bandwidth_groups.0.bandwidth_ids.0.bandwidth_unit", "gbps"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bandwidth_groups.0.bandwidth_ids.0.asn", "65001"))
+			}
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_neighbor_down_fast_hold_timer", "500"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "distance_bgp_external", "100"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "distance_bgp_internal", "150"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "distance_bgp_local", "200"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterBGPPrerequisitesConfig + testAccIosxrRouterBGPConfig_minimum(),
+			Config: testAccIosxrRouterBGPPrerequisitesConfig() + testAccIosxrRouterBGPConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterBGPPrerequisitesConfig + testAccIosxrRouterBGPConfig_all(),
+		Config: testAccIosxrRouterBGPPrerequisitesConfig() + testAccIosxrRouterBGPConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -170,7 +201,65 @@ func iosxrRouterBGPImportStateIdFunc(resourceName string) resource.ImportStateId
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrRouterBGPPrerequisitesConfig = `
+const testAccIosxrRouterBGPPrerequisitesConfig_V24_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "neighbor-groups/neighbor-group"
+			key = "neighbor-group-name"
+			items = [
+				{
+					"neighbor-group-name" = "GROUP1"
+					"remote-as" = "65002"
+				},
+			]
+		},
+		{
+			name = "session-groups/session-group"
+			key = "session-group-name"
+			items = [
+				{
+					"session-group-name" = "SGROUP1"
+				},
+			]
+		},
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "ipv4-unicast"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
+	attributes = {
+	}
+	lists = [
+		{
+			name = "server"
+			key = "server-number"
+			items = [
+				{
+					"server-number" = "1"
+					"host/host-name" = "192.168.1.100"
+					"host/port" = "5000"
+				},
+			]
+		},
+	]
+}
+
+`
+const testAccIosxrRouterBGPPrerequisitesConfig_V25_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
@@ -229,6 +318,15 @@ resource "iosxr_yang" "PreReq1" {
 
 `
 
+func testAccIosxrRouterBGPPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrRouterBGPPrerequisitesConfig_V24_4,
+			"25.4": testAccIosxrRouterBGPPrerequisitesConfig_V25_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -236,7 +334,10 @@ resource "iosxr_yang" "PreReq1" {
 func testAccIosxrRouterBGPConfig_minimum() string {
 	config := `resource "iosxr_router_bgp" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -366,7 +467,45 @@ func testAccIosxrRouterBGPConfig_all() string {
 	config += `		bind_source_interface = "Loopback0"` + "\n"
 	config += `		shutdown = false` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	bandwidth_groups = [{` + "\n"
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `		bandwidth_group_name = "BWG1"` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `		bandwidth_ids = [{` + "\n"
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			bandwidth_id_number = 1` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			value = 1000` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			bandwidth_unit = "gbps"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			asn = 65001` + "\n"
+			}
+			config += `		}]` + "\n"
+		}
+		config += `		}]` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	bgp_neighbor_down_fast_hold_timer = 500` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	distance_bgp_external = 100` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	distance_bgp_internal = 150` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	distance_bgp_local = 200` + "\n"
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

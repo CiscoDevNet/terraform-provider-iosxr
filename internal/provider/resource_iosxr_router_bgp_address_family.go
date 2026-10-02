@@ -1330,40 +1330,84 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					},
 				},
 			},
-			"as_based_as_list": schema.StringAttribute{
+			"ecmp_delay_as_based_as_list": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable ECMP delay for neighbor AS'es included in the AS list").String + "\n  - Supported from version: `25.4`",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 1024),
 				},
 			},
-			"as_based_delay": schema.Int64Attribute{
+			"ecmp_delay_as_based_delay": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Provide a delay interval in msecs").AddIntegerRangeDescription(10, 300000).String + "\n  - Supported from version: `25.4`",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(10, 300000),
 				},
 			},
-			"fixed_delay": schema.Int64Attribute{
+			"ecmp_delay_fixed_delay": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Provide a delay interval in msecs").AddIntegerRangeDescription(10, 300000).String + "\n  - Supported from version: `25.4`",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(10, 300000),
 				},
 			},
-			"platform_oor_based_delay": schema.Int64Attribute{
+			"ecmp_delay_platform_oor_based_delay": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Provide a delay interval in msecs").AddIntegerRangeDescription(10, 300000).String + "\n  - Supported from version: `25.4`",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(10, 300000),
 				},
 			},
-			"platform_oor_based_threshold": schema.Int64Attribute{
+			"ecmp_delay_platform_oor_based_threshold": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Delay only when platform resource usage is above specified threshold").AddIntegerRangeDescription(10, 90).String + "\n  - Supported from version: `25.4`",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(10, 90),
 				},
+			},
+			"redistribute_connected_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
+			"redistribute_static_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
+			"redistribute_rip_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set a default action if a route does not satify the policy definition").AddStringEnumDescription("accept", "reject").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("accept", "reject"),
+				},
+			},
+			"vrf_all_update_out_quick_withdraw_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Generation of quick withdraw messages").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"update_out_quick_withdraw_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"maximum_paths_ebgp_bestpath_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply policy only for bestpath. This is needed if user doesnt want to deprefer any paths and apply certain attributes to bestpath only").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"delay_route_inbound": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay the advertisement of the inbound routes by delaying the best path calculation").AddIntegerRangeDescription(100, 900000).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(100, 900000),
+				},
+			},
+			"fast_reroute_per_link": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable fast reroute per-link").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
 			},
 		},
 	}

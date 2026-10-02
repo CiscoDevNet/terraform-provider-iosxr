@@ -384,6 +384,27 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 					int64planmodifier.RequiresReplace(),
 				},
 			},
+			"distance_bgp_external": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distance for routes external to the AS").AddIntegerRangeDescription(1, 255).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"distance_bgp_internal": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distance for routes internal to the AS").AddIntegerRangeDescription(1, 255).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"distance_bgp_local": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distance for routes that are locally generated").AddIntegerRangeDescription(1, 255).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
 		},
 	}
 }
@@ -413,6 +434,10 @@ func (r *RouterBGPVRFResource) Create(ctx context.Context, req resource.CreateRe
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -631,6 +656,10 @@ func (r *RouterBGPVRFResource) Update(ctx context.Context, req resource.UpdateRe
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -724,6 +753,14 @@ func (r *RouterBGPVRFResource) Delete(ctx context.Context, req resource.DeleteRe
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

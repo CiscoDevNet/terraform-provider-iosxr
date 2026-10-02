@@ -106,8 +106,6 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "retain_local_label", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "allocate_label_all_unlabeled_path", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "rnh_install_extcomm_only", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "prefix_ecmp_delay", "1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "prefix_ecmp_delay_oor_threshold", "90"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "bgp_origin_as_validation_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "bgp_origin_as_validation_signal_ibgp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "bgp_bestpath_origin_as_use_validity", "true"))
@@ -150,19 +148,27 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "peer_set_ids.0.peer_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "peer_set_ids.0.peer_sid_index", "101"))
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "as_based_as_list", "ECMP_PEER_AS_LIST"))
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "ecmp_delay_fixed_delay", "200"))
+		}
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "as_based_delay", "200"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_connected_default_policy_action_in", "accept"))
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "fixed_delay", "200"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_static_default_policy_action_in", "accept"))
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "platform_oor_based_delay", "500"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_rip_default_policy_action_in", "accept"))
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "platform_oor_based_threshold", "80"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "update_out_quick_withdraw_disable", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ebgp_bestpath_only", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "delay_route_inbound", "100"))
 	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
@@ -231,11 +237,39 @@ resource "iosxr_yang" "PreReq1" {
 }
 
 `
+const testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
+	attributes = {
+	}
+	lists = [
+		{
+			name = "route-policy"
+			key = "route-policy-name"
+			items = [
+				{
+					"route-policy-name" = "ROUTE_POLICY_1"
+					"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+}
+
+`
 
 func testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig_V24_4,
+			"25.4": testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -250,6 +284,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_minimum() string {
 	config += `	af_name = "ipv4-unicast"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -343,8 +378,6 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `	retain_local_label = 30` + "\n"
 	config += `	allocate_label_all_unlabeled_path = true` + "\n"
 	config += `	rnh_install_extcomm_only = true` + "\n"
-	config += `	prefix_ecmp_delay = 1000` + "\n"
-	config += `	prefix_ecmp_delay_oor_threshold = 90` + "\n"
 	config += `	bgp_origin_as_validation_enable = true` + "\n"
 	config += `	bgp_origin_as_validation_signal_ibgp = true` + "\n"
 	config += `	bgp_bestpath_origin_as_use_validity = true` + "\n"
@@ -393,22 +426,31 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `		peer_sid_index = 101` + "\n"
 	config += `		}]` + "\n"
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	as_based_as_list = "ECMP_PEER_AS_LIST"` + "\n"
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			config += `	ecmp_delay_fixed_delay = 200` + "\n"
+		}
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	as_based_delay = 200` + "\n"
+		config += `	redistribute_connected_default_policy_action_in = "accept"` + "\n"
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	fixed_delay = 200` + "\n"
+		config += `	redistribute_static_default_policy_action_in = "accept"` + "\n"
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	platform_oor_based_delay = 500` + "\n"
+		config += `	redistribute_rip_default_policy_action_in = "accept"` + "\n"
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	platform_oor_based_threshold = 80` + "\n"
+		config += `	update_out_quick_withdraw_disable = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	maximum_paths_ebgp_bestpath_only = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	delay_route_inbound = 100` + "\n"
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

@@ -96,6 +96,9 @@ type RouterBGPVRF struct {
 	RdFourByteAsIndex                              types.Int64                          `tfsdk:"rd_four_byte_as_index"`
 	RdIpv4AddressAddress                           types.String                         `tfsdk:"rd_ipv4_address_address"`
 	RdIpv4AddressIndex                             types.Int64                          `tfsdk:"rd_ipv4_address_index"`
+	DistanceBgpExternal                            types.Int64                          `tfsdk:"distance_bgp_external"`
+	DistanceBgpInternal                            types.Int64                          `tfsdk:"distance_bgp_internal"`
+	DistanceBgpLocal                               types.Int64                          `tfsdk:"distance_bgp_local"`
 }
 
 type RouterBGPVRFData struct {
@@ -152,6 +155,9 @@ type RouterBGPVRFData struct {
 	RdFourByteAsIndex                              types.Int64                          `tfsdk:"rd_four_byte_as_index"`
 	RdIpv4AddressAddress                           types.String                         `tfsdk:"rd_ipv4_address_address"`
 	RdIpv4AddressIndex                             types.Int64                          `tfsdk:"rd_ipv4_address_index"`
+	DistanceBgpExternal                            types.Int64                          `tfsdk:"distance_bgp_external"`
+	DistanceBgpInternal                            types.Int64                          `tfsdk:"distance_bgp_internal"`
+	DistanceBgpLocal                               types.Int64                          `tfsdk:"distance_bgp_local"`
 }
 type RouterBGPVRFMplsActivateInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -391,6 +397,21 @@ func (data RouterBGPVRF) toBody(ctx context.Context, providerVersion string) str
 	if !data.RdIpv4AddressIndex.IsNull() && !data.RdIpv4AddressIndex.IsUnknown() {
 		body, _ = sjson.Set(body, "rd.ipv4-address.ipv4address-index", strconv.FormatInt(data.RdIpv4AddressIndex.ValueInt64(), 10))
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.DistanceBgpExternal.IsNull() && !data.DistanceBgpExternal.IsUnknown() {
+			body, _ = sjson.Set(body, "distance.bgp.external", strconv.FormatInt(data.DistanceBgpExternal.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.DistanceBgpInternal.IsNull() && !data.DistanceBgpInternal.IsUnknown() {
+			body, _ = sjson.Set(body, "distance.bgp.internal", strconv.FormatInt(data.DistanceBgpInternal.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.DistanceBgpLocal.IsNull() && !data.DistanceBgpLocal.IsUnknown() {
+			body, _ = sjson.Set(body, "distance.bgp.local", strconv.FormatInt(data.DistanceBgpLocal.ValueInt64(), 10))
+		}
+	}
 	if len(data.MplsActivateInterfaces) > 0 {
 		body, _ = sjson.Set(body, "mpls.activate.interfaces.interface", []interface{}{})
 		for index, item := range data.MplsActivateInterfaces {
@@ -410,6 +431,20 @@ func (data RouterBGPVRF) toBody(ctx context.Context, providerVersion string) str
 func (data RouterBGPVRF) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "distance_bgp_external",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "distance_bgp_internal",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "distance_bgp_local",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -868,6 +903,21 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte, versio
 	} else if data.RdIpv4AddressIndex.IsNull() {
 		data.RdIpv4AddressIndex = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "distance.bgp.external"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.DistanceBgpExternal.IsNull() {
+		data.DistanceBgpExternal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpExternal.IsNull() {
+		data.DistanceBgpExternal = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "distance.bgp.internal"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.DistanceBgpInternal.IsNull() {
+		data.DistanceBgpInternal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpInternal.IsNull() {
+		data.DistanceBgpInternal = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "distance.bgp.local"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.DistanceBgpLocal.IsNull() {
+		data.DistanceBgpLocal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpLocal.IsNull() {
+		data.DistanceBgpLocal = types.Int64Null()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1114,6 +1164,27 @@ func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte, version stri
 	if value := gjson.GetBytes(res, "rd.ipv4-address.ipv4address-index"); value.Exists() {
 		data.RdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.external"); value.Exists() {
+			data.DistanceBgpExternal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpExternal = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.internal"); value.Exists() {
+			data.DistanceBgpInternal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpInternal = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.local"); value.Exists() {
+			data.DistanceBgpLocal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpLocal = types.Int64Null()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -1332,6 +1403,27 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte, version 
 	if value := gjson.GetBytes(res, "rd.ipv4-address.ipv4address-index"); value.Exists() {
 		data.RdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.external"); value.Exists() {
+			data.DistanceBgpExternal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpExternal = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.internal"); value.Exists() {
+			data.DistanceBgpInternal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpInternal = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "distance.bgp.local"); value.Exists() {
+			data.DistanceBgpLocal = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DistanceBgpLocal = types.Int64Null()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1340,6 +1432,15 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte, version 
 
 func (data *RouterBGPVRF) getDeletedItems(ctx context.Context, state RouterBGPVRF, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.DistanceBgpLocal.IsNull() && data.DistanceBgpLocal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distance/bgp/local"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.DistanceBgpInternal.IsNull() && data.DistanceBgpInternal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distance/bgp/internal"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.DistanceBgpExternal.IsNull() && data.DistanceBgpExternal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distance/bgp/external"))
+	}
 	if !state.RdIpv4AddressIndex.IsNull() && data.RdIpv4AddressIndex.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "rd/ipv4-address"))
 	}
@@ -1679,6 +1780,15 @@ func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context, state *Router
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *RouterBGPVRF) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.DistanceBgpLocal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distance/bgp/local"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.DistanceBgpInternal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distance/bgp/internal"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.DistanceBgpExternal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distance/bgp/external"))
+	}
 	if !data.RdIpv4AddressIndex.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "rd/ipv4-address"))
 	}
@@ -2062,6 +2172,15 @@ func (data RouterBGPVRF) toBodyXML(ctx context.Context, stateArg ...*RouterBGPVR
 	}
 	if !data.RdIpv4AddressIndex.IsNull() && !data.RdIpv4AddressIndex.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/rd/ipv4-address/ipv4address-index", strconv.FormatInt(data.RdIpv4AddressIndex.ValueInt64(), 10))
+	}
+	if !data.DistanceBgpExternal.IsNull() && !data.DistanceBgpExternal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/distance/bgp/external", strconv.FormatInt(data.DistanceBgpExternal.ValueInt64(), 10))
+	}
+	if !data.DistanceBgpInternal.IsNull() && !data.DistanceBgpInternal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/distance/bgp/internal", strconv.FormatInt(data.DistanceBgpInternal.ValueInt64(), 10))
+	}
+	if !data.DistanceBgpLocal.IsNull() && !data.DistanceBgpLocal.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/distance/bgp/local", strconv.FormatInt(data.DistanceBgpLocal.ValueInt64(), 10))
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -2534,6 +2653,21 @@ func (data *RouterBGPVRF) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 	} else if data.RdIpv4AddressIndex.IsNull() {
 		data.RdIpv4AddressIndex = types.Int64Null()
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/external"); value.Exists() && !data.DistanceBgpExternal.IsNull() {
+		data.DistanceBgpExternal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpExternal.IsNull() {
+		data.DistanceBgpExternal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/internal"); value.Exists() && !data.DistanceBgpInternal.IsNull() {
+		data.DistanceBgpInternal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpInternal.IsNull() {
+		data.DistanceBgpInternal = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/local"); value.Exists() && !data.DistanceBgpLocal.IsNull() {
+		data.DistanceBgpLocal = types.Int64Value(value.Int())
+	} else if data.DistanceBgpLocal.IsNull() {
+		data.DistanceBgpLocal = types.Int64Null()
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -2751,6 +2885,15 @@ func (data *RouterBGPVRF) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rd/ipv4-address/ipv4address-index"); value.Exists() {
 		data.RdIpv4AddressIndex = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/external"); value.Exists() {
+		data.DistanceBgpExternal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/internal"); value.Exists() {
+		data.DistanceBgpInternal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/local"); value.Exists() {
+		data.DistanceBgpLocal = types.Int64Value(value.Int())
 	}
 }
 
@@ -2970,6 +3113,15 @@ func (data *RouterBGPVRFData) fromBodyXML(ctx context.Context, res xmldot.Result
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rd/ipv4-address/ipv4address-index"); value.Exists() {
 		data.RdIpv4AddressIndex = types.Int64Value(value.Int())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/external"); value.Exists() {
+		data.DistanceBgpExternal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/internal"); value.Exists() {
+		data.DistanceBgpInternal = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/distance/bgp/local"); value.Exists() {
+		data.DistanceBgpLocal = types.Int64Value(value.Int())
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -2981,6 +3133,51 @@ func (data *RouterBGPVRF) addDeletedItemsXML(ctx context.Context, state RouterBG
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.DistanceBgpLocal.IsNull() && data.DistanceBgpLocal.IsNull() {
+		deletePath := state.getXPath() + "/distance/bgp/local"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DistanceBgpInternal.IsNull() && data.DistanceBgpInternal.IsNull() {
+		deletePath := state.getXPath() + "/distance/bgp/internal"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DistanceBgpExternal.IsNull() && data.DistanceBgpExternal.IsNull() {
+		deletePath := state.getXPath() + "/distance/bgp/external"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.RdIpv4AddressIndex.IsNull() && data.RdIpv4AddressIndex.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
 		deletePath := state.getXPath() + "/rd/ipv4-address"
@@ -3882,6 +4079,15 @@ func (data *RouterBGPVRF) addDeletedItemsXML(ctx context.Context, state RouterBG
 
 func (data *RouterBGPVRF) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.DistanceBgpLocal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/distance/bgp/local")
+	}
+	if !data.DistanceBgpInternal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/distance/bgp/internal")
+	}
+	if !data.DistanceBgpExternal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/distance/bgp/external")
+	}
 	if !data.RdIpv4AddressIndex.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/rd/ipv4-address")
 	}

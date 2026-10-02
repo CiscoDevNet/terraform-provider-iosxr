@@ -62,6 +62,12 @@ data "iosxr_router_bgp_vrf" "example" {
 - `bgp_unsafe_ebgp_policy` (Boolean) Make eBGP neighbors with no policy pass all routes
 - `default_information_originate` (Boolean) Distribute a default route
 - `default_metric` (Number) default redistributed metric
+- `distance_bgp_external` (Number) Distance for routes external to the AS
+  - Supported from version: `25.4`
+- `distance_bgp_internal` (Number) Distance for routes internal to the AS
+  - Supported from version: `25.4`
+- `distance_bgp_local` (Number) Distance for routes that are locally generated
+  - Supported from version: `25.4`
 - `id` (String) The path of the retrieved object.
 - `mpls_activate_interfaces` (Attributes List) Interface to enable mpls (see [below for nested schema](#nestedatt--mpls_activate_interfaces))
 - `nexthop_mpls_forwarding_ibgp` (Boolean) Enable mpls forwarding path for ibgp learnt nexthops

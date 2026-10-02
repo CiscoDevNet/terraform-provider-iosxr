@@ -175,11 +175,19 @@ type RouterBGPAddressFamily struct {
 	SegmentRoutingSrv6AllocModePerVrf46                    types.Bool                                                               `tfsdk:"segment_routing_srv6_alloc_mode_per_vrf_46"`
 	SegmentRoutingSrv6AllocModeRoutePolicy                 types.String                                                             `tfsdk:"segment_routing_srv6_alloc_mode_route_policy"`
 	PeerSetIds                                             []RouterBGPAddressFamilyPeerSetIds                                       `tfsdk:"peer_set_ids"`
-	AsBasedAsList                                          types.String                                                             `tfsdk:"as_based_as_list"`
-	AsBasedDelay                                           types.Int64                                                              `tfsdk:"as_based_delay"`
-	FixedDelay                                             types.Int64                                                              `tfsdk:"fixed_delay"`
-	PlatformOorBasedDelay                                  types.Int64                                                              `tfsdk:"platform_oor_based_delay"`
-	PlatformOorBasedThreshold                              types.Int64                                                              `tfsdk:"platform_oor_based_threshold"`
+	EcmpDelayAsBasedAsList                                 types.String                                                             `tfsdk:"ecmp_delay_as_based_as_list"`
+	EcmpDelayAsBasedDelay                                  types.Int64                                                              `tfsdk:"ecmp_delay_as_based_delay"`
+	EcmpDelayFixedDelay                                    types.Int64                                                              `tfsdk:"ecmp_delay_fixed_delay"`
+	EcmpDelayPlatformOorBasedDelay                         types.Int64                                                              `tfsdk:"ecmp_delay_platform_oor_based_delay"`
+	EcmpDelayPlatformOorBasedThreshold                     types.Int64                                                              `tfsdk:"ecmp_delay_platform_oor_based_threshold"`
+	RedistributeConnectedDefaultPolicyActionIn             types.String                                                             `tfsdk:"redistribute_connected_default_policy_action_in"`
+	RedistributeStaticDefaultPolicyActionIn                types.String                                                             `tfsdk:"redistribute_static_default_policy_action_in"`
+	RedistributeRipDefaultPolicyActionIn                   types.String                                                             `tfsdk:"redistribute_rip_default_policy_action_in"`
+	VrfAllUpdateOutQuickWithdrawDisable                    types.Bool                                                               `tfsdk:"vrf_all_update_out_quick_withdraw_disable"`
+	UpdateOutQuickWithdrawDisable                          types.Bool                                                               `tfsdk:"update_out_quick_withdraw_disable"`
+	MaximumPathsEbgpBestpathOnly                           types.Bool                                                               `tfsdk:"maximum_paths_ebgp_bestpath_only"`
+	DelayRouteInbound                                      types.Int64                                                              `tfsdk:"delay_route_inbound"`
+	FastReroutePerLink                                     types.Bool                                                               `tfsdk:"fast_reroute_per_link"`
 }
 
 type RouterBGPAddressFamilyData struct {
@@ -315,11 +323,19 @@ type RouterBGPAddressFamilyData struct {
 	SegmentRoutingSrv6AllocModePerVrf46                    types.Bool                                                               `tfsdk:"segment_routing_srv6_alloc_mode_per_vrf_46"`
 	SegmentRoutingSrv6AllocModeRoutePolicy                 types.String                                                             `tfsdk:"segment_routing_srv6_alloc_mode_route_policy"`
 	PeerSetIds                                             []RouterBGPAddressFamilyPeerSetIds                                       `tfsdk:"peer_set_ids"`
-	AsBasedAsList                                          types.String                                                             `tfsdk:"as_based_as_list"`
-	AsBasedDelay                                           types.Int64                                                              `tfsdk:"as_based_delay"`
-	FixedDelay                                             types.Int64                                                              `tfsdk:"fixed_delay"`
-	PlatformOorBasedDelay                                  types.Int64                                                              `tfsdk:"platform_oor_based_delay"`
-	PlatformOorBasedThreshold                              types.Int64                                                              `tfsdk:"platform_oor_based_threshold"`
+	EcmpDelayAsBasedAsList                                 types.String                                                             `tfsdk:"ecmp_delay_as_based_as_list"`
+	EcmpDelayAsBasedDelay                                  types.Int64                                                              `tfsdk:"ecmp_delay_as_based_delay"`
+	EcmpDelayFixedDelay                                    types.Int64                                                              `tfsdk:"ecmp_delay_fixed_delay"`
+	EcmpDelayPlatformOorBasedDelay                         types.Int64                                                              `tfsdk:"ecmp_delay_platform_oor_based_delay"`
+	EcmpDelayPlatformOorBasedThreshold                     types.Int64                                                              `tfsdk:"ecmp_delay_platform_oor_based_threshold"`
+	RedistributeConnectedDefaultPolicyActionIn             types.String                                                             `tfsdk:"redistribute_connected_default_policy_action_in"`
+	RedistributeStaticDefaultPolicyActionIn                types.String                                                             `tfsdk:"redistribute_static_default_policy_action_in"`
+	RedistributeRipDefaultPolicyActionIn                   types.String                                                             `tfsdk:"redistribute_rip_default_policy_action_in"`
+	VrfAllUpdateOutQuickWithdrawDisable                    types.Bool                                                               `tfsdk:"vrf_all_update_out_quick_withdraw_disable"`
+	UpdateOutQuickWithdrawDisable                          types.Bool                                                               `tfsdk:"update_out_quick_withdraw_disable"`
+	MaximumPathsEbgpBestpathOnly                           types.Bool                                                               `tfsdk:"maximum_paths_ebgp_bestpath_only"`
+	DelayRouteInbound                                      types.Int64                                                              `tfsdk:"delay_route_inbound"`
+	FastReroutePerLink                                     types.Bool                                                               `tfsdk:"fast_reroute_per_link"`
 }
 type RouterBGPAddressFamilyNetworks struct {
 	Address     types.String `tfsdk:"address"`
@@ -973,28 +989,76 @@ func (data RouterBGPAddressFamily) toBody(ctx context.Context, providerVersion s
 		body, _ = sjson.Set(body, "segment-routing.srv6.alloc.mode.route-policy", data.SegmentRoutingSrv6AllocModeRoutePolicy.ValueString())
 	}
 	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.AsBasedAsList.IsNull() && !data.AsBasedAsList.IsUnknown() {
-			body, _ = sjson.Set(body, "ecmp-delay.as-based.as-list", data.AsBasedAsList.ValueString())
+		if !data.EcmpDelayAsBasedAsList.IsNull() && !data.EcmpDelayAsBasedAsList.IsUnknown() {
+			body, _ = sjson.Set(body, "ecmp-delay.as-based.as-list", data.EcmpDelayAsBasedAsList.ValueString())
 		}
 	}
 	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.AsBasedDelay.IsNull() && !data.AsBasedDelay.IsUnknown() {
-			body, _ = sjson.Set(body, "ecmp-delay.as-based.delay", strconv.FormatInt(data.AsBasedDelay.ValueInt64(), 10))
+		if !data.EcmpDelayAsBasedDelay.IsNull() && !data.EcmpDelayAsBasedDelay.IsUnknown() {
+			body, _ = sjson.Set(body, "ecmp-delay.as-based.delay", strconv.FormatInt(data.EcmpDelayAsBasedDelay.ValueInt64(), 10))
 		}
 	}
 	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.FixedDelay.IsNull() && !data.FixedDelay.IsUnknown() {
-			body, _ = sjson.Set(body, "ecmp-delay.fixed.delay", strconv.FormatInt(data.FixedDelay.ValueInt64(), 10))
+		if !data.EcmpDelayFixedDelay.IsNull() && !data.EcmpDelayFixedDelay.IsUnknown() {
+			body, _ = sjson.Set(body, "ecmp-delay.fixed.delay", strconv.FormatInt(data.EcmpDelayFixedDelay.ValueInt64(), 10))
 		}
 	}
 	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.PlatformOorBasedDelay.IsNull() && !data.PlatformOorBasedDelay.IsUnknown() {
-			body, _ = sjson.Set(body, "ecmp-delay.platform-oor-based.delay", strconv.FormatInt(data.PlatformOorBasedDelay.ValueInt64(), 10))
+		if !data.EcmpDelayPlatformOorBasedDelay.IsNull() && !data.EcmpDelayPlatformOorBasedDelay.IsUnknown() {
+			body, _ = sjson.Set(body, "ecmp-delay.platform-oor-based.delay", strconv.FormatInt(data.EcmpDelayPlatformOorBasedDelay.ValueInt64(), 10))
 		}
 	}
 	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.PlatformOorBasedThreshold.IsNull() && !data.PlatformOorBasedThreshold.IsUnknown() {
-			body, _ = sjson.Set(body, "ecmp-delay.platform-oor-based.threshold", strconv.FormatInt(data.PlatformOorBasedThreshold.ValueInt64(), 10))
+		if !data.EcmpDelayPlatformOorBasedThreshold.IsNull() && !data.EcmpDelayPlatformOorBasedThreshold.IsUnknown() {
+			body, _ = sjson.Set(body, "ecmp-delay.platform-oor-based.threshold", strconv.FormatInt(data.EcmpDelayPlatformOorBasedThreshold.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() && !data.RedistributeConnectedDefaultPolicyActionIn.IsUnknown() {
+			body, _ = sjson.Set(body, "redistribute.connected.default-policy-action-in", data.RedistributeConnectedDefaultPolicyActionIn.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.RedistributeStaticDefaultPolicyActionIn.IsNull() && !data.RedistributeStaticDefaultPolicyActionIn.IsUnknown() {
+			body, _ = sjson.Set(body, "redistribute.static.default-policy-action-in", data.RedistributeStaticDefaultPolicyActionIn.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.RedistributeRipDefaultPolicyActionIn.IsNull() && !data.RedistributeRipDefaultPolicyActionIn.IsUnknown() {
+			body, _ = sjson.Set(body, "redistribute.rip.default-policy-action-in", data.RedistributeRipDefaultPolicyActionIn.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() && !data.VrfAllUpdateOutQuickWithdrawDisable.IsUnknown() {
+			if data.VrfAllUpdateOutQuickWithdrawDisable.ValueBool() {
+				body, _ = sjson.Set(body, "vrf.all.update.out.quick-withdraw.disable", []interface{}{nil})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.UpdateOutQuickWithdrawDisable.IsNull() && !data.UpdateOutQuickWithdrawDisable.IsUnknown() {
+			if data.UpdateOutQuickWithdrawDisable.ValueBool() {
+				body, _ = sjson.Set(body, "update.out.quick-withdraw.disable", []interface{}{nil})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.MaximumPathsEbgpBestpathOnly.IsNull() && !data.MaximumPathsEbgpBestpathOnly.IsUnknown() {
+			if data.MaximumPathsEbgpBestpathOnly.ValueBool() {
+				body, _ = sjson.Set(body, "maximum-paths.ebgp.bestpath-only", []interface{}{nil})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.DelayRouteInbound.IsNull() && !data.DelayRouteInbound.IsUnknown() {
+			body, _ = sjson.Set(body, "delay-route.inbound", strconv.FormatInt(data.DelayRouteInbound.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.FastReroutePerLink.IsNull() && !data.FastReroutePerLink.IsUnknown() {
+			if data.FastReroutePerLink.ValueBool() {
+				body, _ = sjson.Set(body, "fast-reroute.per-link", []interface{}{nil})
+			}
 		}
 	}
 	if len(data.Networks) > 0 {
@@ -1578,23 +1642,55 @@ func (data RouterBGPAddressFamily) GetVersionConstraints() []helpers.FieldVersio
 			AddedInVersion: "25.4",
 		},
 		{
-			FieldPath:      "as_based_as_list",
+			FieldPath:      "ecmp_delay_as_based_as_list",
 			AddedInVersion: "25.4",
 		},
 		{
-			FieldPath:      "as_based_delay",
+			FieldPath:      "ecmp_delay_as_based_delay",
 			AddedInVersion: "25.4",
 		},
 		{
-			FieldPath:      "fixed_delay",
+			FieldPath:      "ecmp_delay_fixed_delay",
 			AddedInVersion: "25.4",
 		},
 		{
-			FieldPath:      "platform_oor_based_delay",
+			FieldPath:      "ecmp_delay_platform_oor_based_delay",
 			AddedInVersion: "25.4",
 		},
 		{
-			FieldPath:      "platform_oor_based_threshold",
+			FieldPath:      "ecmp_delay_platform_oor_based_threshold",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "redistribute_connected_default_policy_action_in",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "redistribute_static_default_policy_action_in",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "redistribute_rip_default_policy_action_in",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "vrf_all_update_out_quick_withdraw_disable",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "update_out_quick_withdraw_disable",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "maximum_paths_ebgp_bestpath_only",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "delay_route_inbound",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "fast_reroute_per_link",
 			AddedInVersion: "25.4",
 		},
 	}...)
@@ -3919,30 +4015,90 @@ func (data *RouterBGPAddressFamily) updateFromBody(ctx context.Context, res []by
 			data.PeerSetIds[i].PeerSidIndex = types.Int64Null()
 		}
 	}
-	if value := gjson.GetBytes(res, "ecmp-delay.as-based.as-list"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AsBasedAsList.IsNull() {
-		data.AsBasedAsList = types.StringValue(value.String())
-	} else if data.AsBasedAsList.IsNull() {
-		data.AsBasedAsList = types.StringNull()
+	if value := gjson.GetBytes(res, "ecmp-delay.as-based.as-list"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EcmpDelayAsBasedAsList.IsNull() {
+		data.EcmpDelayAsBasedAsList = types.StringValue(value.String())
+	} else if data.EcmpDelayAsBasedAsList.IsNull() {
+		data.EcmpDelayAsBasedAsList = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ecmp-delay.as-based.delay"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.AsBasedDelay.IsNull() {
-		data.AsBasedDelay = types.Int64Value(value.Int())
-	} else if data.AsBasedDelay.IsNull() {
-		data.AsBasedDelay = types.Int64Null()
+	if value := gjson.GetBytes(res, "ecmp-delay.as-based.delay"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.EcmpDelayAsBasedDelay.IsNull() {
+		data.EcmpDelayAsBasedDelay = types.Int64Value(value.Int())
+	} else if data.EcmpDelayAsBasedDelay.IsNull() {
+		data.EcmpDelayAsBasedDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ecmp-delay.fixed.delay"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.FixedDelay.IsNull() {
-		data.FixedDelay = types.Int64Value(value.Int())
-	} else if data.FixedDelay.IsNull() {
-		data.FixedDelay = types.Int64Null()
+	if value := gjson.GetBytes(res, "ecmp-delay.fixed.delay"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.EcmpDelayFixedDelay.IsNull() {
+		data.EcmpDelayFixedDelay = types.Int64Value(value.Int())
+	} else if data.EcmpDelayFixedDelay.IsNull() {
+		data.EcmpDelayFixedDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ecmp-delay.platform-oor-based.delay"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.PlatformOorBasedDelay.IsNull() {
-		data.PlatformOorBasedDelay = types.Int64Value(value.Int())
-	} else if data.PlatformOorBasedDelay.IsNull() {
-		data.PlatformOorBasedDelay = types.Int64Null()
+	if value := gjson.GetBytes(res, "ecmp-delay.platform-oor-based.delay"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.EcmpDelayPlatformOorBasedDelay.IsNull() {
+		data.EcmpDelayPlatformOorBasedDelay = types.Int64Value(value.Int())
+	} else if data.EcmpDelayPlatformOorBasedDelay.IsNull() {
+		data.EcmpDelayPlatformOorBasedDelay = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ecmp-delay.platform-oor-based.threshold"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.PlatformOorBasedThreshold.IsNull() {
-		data.PlatformOorBasedThreshold = types.Int64Value(value.Int())
-	} else if data.PlatformOorBasedThreshold.IsNull() {
-		data.PlatformOorBasedThreshold = types.Int64Null()
+	if value := gjson.GetBytes(res, "ecmp-delay.platform-oor-based.threshold"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.EcmpDelayPlatformOorBasedThreshold.IsNull() {
+		data.EcmpDelayPlatformOorBasedThreshold = types.Int64Value(value.Int())
+	} else if data.EcmpDelayPlatformOorBasedThreshold.IsNull() {
+		data.EcmpDelayPlatformOorBasedThreshold = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.default-policy-action-in"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.default-policy-action-in"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.rip.default-policy-action-in"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "vrf.all.update.out.quick-withdraw.disable"); helpers.VersionAtLeast(version, "25.4") && !data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() {
+		if value.Exists() {
+			data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(false)
+		}
+	} else if data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() {
+		data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "update.out.quick-withdraw.disable"); helpers.VersionAtLeast(version, "25.4") && !data.UpdateOutQuickWithdrawDisable.IsNull() {
+		if value.Exists() {
+			data.UpdateOutQuickWithdrawDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.UpdateOutQuickWithdrawDisable = types.BoolValue(false)
+		}
+	} else if data.UpdateOutQuickWithdrawDisable.IsNull() {
+		data.UpdateOutQuickWithdrawDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "maximum-paths.ebgp.bestpath-only"); helpers.VersionAtLeast(version, "25.4") && !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		if value.Exists() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+		}
+	} else if data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "delay-route.inbound"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.DelayRouteInbound.IsNull() {
+		data.DelayRouteInbound = types.Int64Value(value.Int())
+	} else if data.DelayRouteInbound.IsNull() {
+		data.DelayRouteInbound = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link"); helpers.VersionAtLeast(version, "25.4") && !data.FastReroutePerLink.IsNull() {
+		if value.Exists() {
+			data.FastReroutePerLink = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.FastReroutePerLink = types.BoolValue(false)
+		}
+	} else if data.FastReroutePerLink.IsNull() {
+		data.FastReroutePerLink = types.BoolNull()
 	}
 }
 
@@ -5175,38 +5331,106 @@ func (data *RouterBGPAddressFamily) fromBody(ctx context.Context, res []byte, ve
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.as-based.as-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-			data.AsBasedAsList = types.StringValue(value.String())
+			data.EcmpDelayAsBasedAsList = types.StringValue(value.String())
 		}
 	} else {
-		data.AsBasedAsList = types.StringNull()
+		data.EcmpDelayAsBasedAsList = types.StringNull()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.as-based.delay"); value.Exists() {
-			data.AsBasedDelay = types.Int64Value(value.Int())
+			data.EcmpDelayAsBasedDelay = types.Int64Value(value.Int())
 		}
 	} else {
-		data.AsBasedDelay = types.Int64Null()
+		data.EcmpDelayAsBasedDelay = types.Int64Null()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.fixed.delay"); value.Exists() {
-			data.FixedDelay = types.Int64Value(value.Int())
+			data.EcmpDelayFixedDelay = types.Int64Value(value.Int())
 		}
 	} else {
-		data.FixedDelay = types.Int64Null()
+		data.EcmpDelayFixedDelay = types.Int64Null()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.platform-oor-based.delay"); value.Exists() {
-			data.PlatformOorBasedDelay = types.Int64Value(value.Int())
+			data.EcmpDelayPlatformOorBasedDelay = types.Int64Value(value.Int())
 		}
 	} else {
-		data.PlatformOorBasedDelay = types.Int64Null()
+		data.EcmpDelayPlatformOorBasedDelay = types.Int64Null()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.platform-oor-based.threshold"); value.Exists() {
-			data.PlatformOorBasedThreshold = types.Int64Value(value.Int())
+			data.EcmpDelayPlatformOorBasedThreshold = types.Int64Value(value.Int())
 		}
 	} else {
-		data.PlatformOorBasedThreshold = types.Int64Null()
+		data.EcmpDelayPlatformOorBasedThreshold = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.connected.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.static.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.rip.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "vrf.all.update.out.quick-withdraw.disable"); value.Exists() {
+			data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(true)
+		} else if !data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() {
+			// Only set to false if it was previously set in state
+			data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(false)
+		}
+	} else {
+		data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "update.out.quick-withdraw.disable"); value.Exists() {
+			data.UpdateOutQuickWithdrawDisable = types.BoolValue(true)
+		} else if !data.UpdateOutQuickWithdrawDisable.IsNull() {
+			// Only set to false if it was previously set in state
+			data.UpdateOutQuickWithdrawDisable = types.BoolValue(false)
+		}
+	} else {
+		data.UpdateOutQuickWithdrawDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "maximum-paths.ebgp.bestpath-only"); value.Exists() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+		} else if !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+			// Only set to false if it was previously set in state
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+		}
+	} else {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "delay-route.inbound"); value.Exists() {
+			data.DelayRouteInbound = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DelayRouteInbound = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "fast-reroute.per-link"); value.Exists() {
+			data.FastReroutePerLink = types.BoolValue(true)
+		} else if !data.FastReroutePerLink.IsNull() {
+			// Only set to false if it was previously set in state
+			data.FastReroutePerLink = types.BoolValue(false)
+		}
+	} else {
+		data.FastReroutePerLink = types.BoolNull()
 	}
 }
 
@@ -6291,38 +6515,102 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.as-based.as-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-			data.AsBasedAsList = types.StringValue(value.String())
+			data.EcmpDelayAsBasedAsList = types.StringValue(value.String())
 		}
 	} else {
-		data.AsBasedAsList = types.StringNull()
+		data.EcmpDelayAsBasedAsList = types.StringNull()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.as-based.delay"); value.Exists() {
-			data.AsBasedDelay = types.Int64Value(value.Int())
+			data.EcmpDelayAsBasedDelay = types.Int64Value(value.Int())
 		}
 	} else {
-		data.AsBasedDelay = types.Int64Null()
+		data.EcmpDelayAsBasedDelay = types.Int64Null()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.fixed.delay"); value.Exists() {
-			data.FixedDelay = types.Int64Value(value.Int())
+			data.EcmpDelayFixedDelay = types.Int64Value(value.Int())
 		}
 	} else {
-		data.FixedDelay = types.Int64Null()
+		data.EcmpDelayFixedDelay = types.Int64Null()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.platform-oor-based.delay"); value.Exists() {
-			data.PlatformOorBasedDelay = types.Int64Value(value.Int())
+			data.EcmpDelayPlatformOorBasedDelay = types.Int64Value(value.Int())
 		}
 	} else {
-		data.PlatformOorBasedDelay = types.Int64Null()
+		data.EcmpDelayPlatformOorBasedDelay = types.Int64Null()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "ecmp-delay.platform-oor-based.threshold"); value.Exists() {
-			data.PlatformOorBasedThreshold = types.Int64Value(value.Int())
+			data.EcmpDelayPlatformOorBasedThreshold = types.Int64Value(value.Int())
 		}
 	} else {
-		data.PlatformOorBasedThreshold = types.Int64Null()
+		data.EcmpDelayPlatformOorBasedThreshold = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.connected.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.static.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.rip.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "vrf.all.update.out.quick-withdraw.disable"); value.Exists() {
+			data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(true)
+		} else {
+			data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(false)
+		}
+	} else {
+		data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "update.out.quick-withdraw.disable"); value.Exists() {
+			data.UpdateOutQuickWithdrawDisable = types.BoolValue(true)
+		} else {
+			data.UpdateOutQuickWithdrawDisable = types.BoolValue(false)
+		}
+	} else {
+		data.UpdateOutQuickWithdrawDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "maximum-paths.ebgp.bestpath-only"); value.Exists() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+		} else {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+		}
+	} else {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "delay-route.inbound"); value.Exists() {
+			data.DelayRouteInbound = types.Int64Value(value.Int())
+		}
+	} else {
+		data.DelayRouteInbound = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "fast-reroute.per-link"); value.Exists() {
+			data.FastReroutePerLink = types.BoolValue(true)
+		} else {
+			data.FastReroutePerLink = types.BoolValue(false)
+		}
+	} else {
+		data.FastReroutePerLink = types.BoolNull()
 	}
 }
 
@@ -6332,19 +6620,43 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 
 func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPAddressFamily, version string) []string {
 	deletedItems := make([]string, 0)
-	if helpers.VersionAtLeast(version, "25.4") && !state.PlatformOorBasedThreshold.IsNull() && data.PlatformOorBasedThreshold.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !state.FastReroutePerLink.IsNull() && data.FastReroutePerLink.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-link"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.DelayRouteInbound.IsNull() && data.DelayRouteInbound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "delay-route/inbound"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.MaximumPathsEbgpBestpathOnly.IsNull() && data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "maximum-paths/ebgp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.UpdateOutQuickWithdrawDisable.IsNull() && data.UpdateOutQuickWithdrawDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "update/out/quick-withdraw/disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.VrfAllUpdateOutQuickWithdrawDisable.IsNull() && data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "vrf/all/update/out/quick-withdraw/disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.RedistributeRipDefaultPolicyActionIn.IsNull() && data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/rip/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.RedistributeStaticDefaultPolicyActionIn.IsNull() && data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/static/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.RedistributeConnectedDefaultPolicyActionIn.IsNull() && data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/connected/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.EcmpDelayPlatformOorBasedThreshold.IsNull() && data.EcmpDelayPlatformOorBasedThreshold.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "ecmp-delay/platform-oor-based/threshold"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.PlatformOorBasedDelay.IsNull() && data.PlatformOorBasedDelay.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !state.EcmpDelayPlatformOorBasedDelay.IsNull() && data.EcmpDelayPlatformOorBasedDelay.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "ecmp-delay/platform-oor-based/delay"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.FixedDelay.IsNull() && data.FixedDelay.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !state.EcmpDelayFixedDelay.IsNull() && data.EcmpDelayFixedDelay.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "ecmp-delay/fixed/delay"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.AsBasedDelay.IsNull() && data.AsBasedDelay.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !state.EcmpDelayAsBasedDelay.IsNull() && data.EcmpDelayAsBasedDelay.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "ecmp-delay/as-based/delay"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.AsBasedAsList.IsNull() && data.AsBasedAsList.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !state.EcmpDelayAsBasedAsList.IsNull() && data.EcmpDelayAsBasedAsList.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "ecmp-delay/as-based/as-list"))
 	}
 	for i := range state.PeerSetIds {
@@ -7295,6 +7607,26 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 
 func (data *RouterBGPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state *RouterBGPAddressFamily, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.FastReroutePerLink.IsNull() && !data.FastReroutePerLink.ValueBool() {
+		if state != nil && !state.FastReroutePerLink.IsNull() && state.FastReroutePerLink.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/per-link"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.MaximumPathsEbgpBestpathOnly.IsNull() && !data.MaximumPathsEbgpBestpathOnly.ValueBool() {
+		if state != nil && !state.MaximumPathsEbgpBestpathOnly.IsNull() && state.MaximumPathsEbgpBestpathOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "maximum-paths/ebgp"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.UpdateOutQuickWithdrawDisable.IsNull() && !data.UpdateOutQuickWithdrawDisable.ValueBool() {
+		if state != nil && !state.UpdateOutQuickWithdrawDisable.IsNull() && state.UpdateOutQuickWithdrawDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "update/out/quick-withdraw/disable"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() && !data.VrfAllUpdateOutQuickWithdrawDisable.ValueBool() {
+		if state != nil && !state.VrfAllUpdateOutQuickWithdrawDisable.IsNull() && state.VrfAllUpdateOutQuickWithdrawDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "vrf/all/update/out/quick-withdraw/disable"))
+		}
+	}
 	for i := range data.PeerSetIds {
 		keys := [...]string{"peer-set-id-number"}
 		keyValues := [...]string{strconv.FormatInt(data.PeerSetIds[i].PeerId.ValueInt64(), 10)}
@@ -8115,19 +8447,43 @@ func (data *RouterBGPAddressFamily) getEmptyLeafsDelete(ctx context.Context, sta
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *RouterBGPAddressFamily) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
-	if helpers.VersionAtLeast(version, "25.4") && !data.PlatformOorBasedThreshold.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !data.FastReroutePerLink.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-link"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.DelayRouteInbound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "delay-route/inbound"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "maximum-paths/ebgp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.UpdateOutQuickWithdrawDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "update/out/quick-withdraw/disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "vrf/all/update/out/quick-withdraw/disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/rip/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/static/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/connected/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.EcmpDelayPlatformOorBasedThreshold.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "ecmp-delay/platform-oor-based/threshold"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.PlatformOorBasedDelay.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !data.EcmpDelayPlatformOorBasedDelay.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "ecmp-delay/platform-oor-based/delay"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.FixedDelay.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !data.EcmpDelayFixedDelay.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "ecmp-delay/fixed/delay"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.AsBasedDelay.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !data.EcmpDelayAsBasedDelay.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "ecmp-delay/as-based/delay"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.AsBasedAsList.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !data.EcmpDelayAsBasedAsList.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "ecmp-delay/as-based/as-list"))
 	}
 	for i := range data.PeerSetIds {
@@ -9700,20 +10056,52 @@ func (data RouterBGPAddressFamily) toBodyXML(ctx context.Context, stateArg ...*R
 			}
 		}
 	}
-	if !data.AsBasedAsList.IsNull() && !data.AsBasedAsList.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/as-based/as-list", data.AsBasedAsList.ValueString())
+	if !data.EcmpDelayAsBasedAsList.IsNull() && !data.EcmpDelayAsBasedAsList.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/as-based/as-list", data.EcmpDelayAsBasedAsList.ValueString())
 	}
-	if !data.AsBasedDelay.IsNull() && !data.AsBasedDelay.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/as-based/delay", strconv.FormatInt(data.AsBasedDelay.ValueInt64(), 10))
+	if !data.EcmpDelayAsBasedDelay.IsNull() && !data.EcmpDelayAsBasedDelay.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/as-based/delay", strconv.FormatInt(data.EcmpDelayAsBasedDelay.ValueInt64(), 10))
 	}
-	if !data.FixedDelay.IsNull() && !data.FixedDelay.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/fixed/delay", strconv.FormatInt(data.FixedDelay.ValueInt64(), 10))
+	if !data.EcmpDelayFixedDelay.IsNull() && !data.EcmpDelayFixedDelay.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/fixed/delay", strconv.FormatInt(data.EcmpDelayFixedDelay.ValueInt64(), 10))
 	}
-	if !data.PlatformOorBasedDelay.IsNull() && !data.PlatformOorBasedDelay.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/platform-oor-based/delay", strconv.FormatInt(data.PlatformOorBasedDelay.ValueInt64(), 10))
+	if !data.EcmpDelayPlatformOorBasedDelay.IsNull() && !data.EcmpDelayPlatformOorBasedDelay.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/platform-oor-based/delay", strconv.FormatInt(data.EcmpDelayPlatformOorBasedDelay.ValueInt64(), 10))
 	}
-	if !data.PlatformOorBasedThreshold.IsNull() && !data.PlatformOorBasedThreshold.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/platform-oor-based/threshold", strconv.FormatInt(data.PlatformOorBasedThreshold.ValueInt64(), 10))
+	if !data.EcmpDelayPlatformOorBasedThreshold.IsNull() && !data.EcmpDelayPlatformOorBasedThreshold.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ecmp-delay/platform-oor-based/threshold", strconv.FormatInt(data.EcmpDelayPlatformOorBasedThreshold.ValueInt64(), 10))
+	}
+	if !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() && !data.RedistributeConnectedDefaultPolicyActionIn.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/connected/default-policy-action-in", data.RedistributeConnectedDefaultPolicyActionIn.ValueString())
+	}
+	if !data.RedistributeStaticDefaultPolicyActionIn.IsNull() && !data.RedistributeStaticDefaultPolicyActionIn.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/static/default-policy-action-in", data.RedistributeStaticDefaultPolicyActionIn.ValueString())
+	}
+	if !data.RedistributeRipDefaultPolicyActionIn.IsNull() && !data.RedistributeRipDefaultPolicyActionIn.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/rip/default-policy-action-in", data.RedistributeRipDefaultPolicyActionIn.ValueString())
+	}
+	if !data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() && !data.VrfAllUpdateOutQuickWithdrawDisable.IsUnknown() {
+		if data.VrfAllUpdateOutQuickWithdrawDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/vrf/all/update/out/quick-withdraw/disable", "")
+		}
+	}
+	if !data.UpdateOutQuickWithdrawDisable.IsNull() && !data.UpdateOutQuickWithdrawDisable.IsUnknown() {
+		if data.UpdateOutQuickWithdrawDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/update/out/quick-withdraw/disable", "")
+		}
+	}
+	if !data.MaximumPathsEbgpBestpathOnly.IsNull() && !data.MaximumPathsEbgpBestpathOnly.IsUnknown() {
+		if data.MaximumPathsEbgpBestpathOnly.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/maximum-paths/ebgp/bestpath-only", "")
+		}
+	}
+	if !data.DelayRouteInbound.IsNull() && !data.DelayRouteInbound.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/delay-route/inbound", strconv.FormatInt(data.DelayRouteInbound.ValueInt64(), 10))
+	}
+	if !data.FastReroutePerLink.IsNull() && !data.FastReroutePerLink.IsUnknown() {
+		if data.FastReroutePerLink.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/fast-reroute/per-link", "")
+		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -12086,30 +12474,94 @@ func (data *RouterBGPAddressFamily) updateFromBodyXML(ctx context.Context, res x
 			data.PeerSetIds[i].PeerSidIndex = types.Int64Null()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/as-based/as-list"); value.Exists() && !data.AsBasedAsList.IsNull() {
-		data.AsBasedAsList = types.StringValue(value.String())
-	} else if data.AsBasedAsList.IsNull() {
-		data.AsBasedAsList = types.StringNull()
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/as-based/as-list"); value.Exists() && !data.EcmpDelayAsBasedAsList.IsNull() {
+		data.EcmpDelayAsBasedAsList = types.StringValue(value.String())
+	} else if data.EcmpDelayAsBasedAsList.IsNull() {
+		data.EcmpDelayAsBasedAsList = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/as-based/delay"); value.Exists() && !data.AsBasedDelay.IsNull() {
-		data.AsBasedDelay = types.Int64Value(value.Int())
-	} else if data.AsBasedDelay.IsNull() {
-		data.AsBasedDelay = types.Int64Null()
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/as-based/delay"); value.Exists() && !data.EcmpDelayAsBasedDelay.IsNull() {
+		data.EcmpDelayAsBasedDelay = types.Int64Value(value.Int())
+	} else if data.EcmpDelayAsBasedDelay.IsNull() {
+		data.EcmpDelayAsBasedDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/fixed/delay"); value.Exists() && !data.FixedDelay.IsNull() {
-		data.FixedDelay = types.Int64Value(value.Int())
-	} else if data.FixedDelay.IsNull() {
-		data.FixedDelay = types.Int64Null()
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/fixed/delay"); value.Exists() && !data.EcmpDelayFixedDelay.IsNull() {
+		data.EcmpDelayFixedDelay = types.Int64Value(value.Int())
+	} else if data.EcmpDelayFixedDelay.IsNull() {
+		data.EcmpDelayFixedDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/platform-oor-based/delay"); value.Exists() && !data.PlatformOorBasedDelay.IsNull() {
-		data.PlatformOorBasedDelay = types.Int64Value(value.Int())
-	} else if data.PlatformOorBasedDelay.IsNull() {
-		data.PlatformOorBasedDelay = types.Int64Null()
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/platform-oor-based/delay"); value.Exists() && !data.EcmpDelayPlatformOorBasedDelay.IsNull() {
+		data.EcmpDelayPlatformOorBasedDelay = types.Int64Value(value.Int())
+	} else if data.EcmpDelayPlatformOorBasedDelay.IsNull() {
+		data.EcmpDelayPlatformOorBasedDelay = types.Int64Null()
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/platform-oor-based/threshold"); value.Exists() && !data.PlatformOorBasedThreshold.IsNull() {
-		data.PlatformOorBasedThreshold = types.Int64Value(value.Int())
-	} else if data.PlatformOorBasedThreshold.IsNull() {
-		data.PlatformOorBasedThreshold = types.Int64Null()
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/platform-oor-based/threshold"); value.Exists() && !data.EcmpDelayPlatformOorBasedThreshold.IsNull() {
+		data.EcmpDelayPlatformOorBasedThreshold = types.Int64Value(value.Int())
+	} else if data.EcmpDelayPlatformOorBasedThreshold.IsNull() {
+		data.EcmpDelayPlatformOorBasedThreshold = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/connected/default-policy-action-in"); value.Exists() && !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/static/default-policy-action-in"); value.Exists() && !data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/rip/default-policy-action-in"); value.Exists() && !data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrf/all/update/out/quick-withdraw/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() {
+			data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() {
+			data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/out/quick-withdraw/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.UpdateOutQuickWithdrawDisable.IsNull() {
+			data.UpdateOutQuickWithdrawDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.UpdateOutQuickWithdrawDisable.IsNull() {
+			data.UpdateOutQuickWithdrawDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum-paths/ebgp/bestpath-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MaximumPathsEbgpBestpathOnly.IsNull() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-route/inbound"); value.Exists() && !data.DelayRouteInbound.IsNull() {
+		data.DelayRouteInbound = types.Int64Value(value.Int())
+	} else if data.DelayRouteInbound.IsNull() {
+		data.DelayRouteInbound = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-link"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FastReroutePerLink.IsNull() {
+			data.FastReroutePerLink = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.FastReroutePerLink.IsNull() {
+			data.FastReroutePerLink = types.BoolNull()
+		}
 	}
 }
 
@@ -13177,19 +13629,51 @@ func (data *RouterBGPAddressFamily) fromBodyXML(ctx context.Context, res xmldot.
 		})
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/as-based/as-list"); value.Exists() {
-		data.AsBasedAsList = types.StringValue(value.String())
+		data.EcmpDelayAsBasedAsList = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/as-based/delay"); value.Exists() {
-		data.AsBasedDelay = types.Int64Value(value.Int())
+		data.EcmpDelayAsBasedDelay = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/fixed/delay"); value.Exists() {
-		data.FixedDelay = types.Int64Value(value.Int())
+		data.EcmpDelayFixedDelay = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/platform-oor-based/delay"); value.Exists() {
-		data.PlatformOorBasedDelay = types.Int64Value(value.Int())
+		data.EcmpDelayPlatformOorBasedDelay = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/platform-oor-based/threshold"); value.Exists() {
-		data.PlatformOorBasedThreshold = types.Int64Value(value.Int())
+		data.EcmpDelayPlatformOorBasedThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/connected/default-policy-action-in"); value.Exists() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/static/default-policy-action-in"); value.Exists() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/rip/default-policy-action-in"); value.Exists() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrf/all/update/out/quick-withdraw/disable"); value.Exists() {
+		data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(true)
+	} else {
+		data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/out/quick-withdraw/disable"); value.Exists() {
+		data.UpdateOutQuickWithdrawDisable = types.BoolValue(true)
+	} else {
+		data.UpdateOutQuickWithdrawDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum-paths/ebgp/bestpath-only"); value.Exists() {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+	} else {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-route/inbound"); value.Exists() {
+		data.DelayRouteInbound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-link"); value.Exists() {
+		data.FastReroutePerLink = types.BoolValue(true)
+	} else {
+		data.FastReroutePerLink = types.BoolValue(false)
 	}
 }
 
@@ -14257,19 +14741,51 @@ func (data *RouterBGPAddressFamilyData) fromBodyXML(ctx context.Context, res xml
 		})
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/as-based/as-list"); value.Exists() {
-		data.AsBasedAsList = types.StringValue(value.String())
+		data.EcmpDelayAsBasedAsList = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/as-based/delay"); value.Exists() {
-		data.AsBasedDelay = types.Int64Value(value.Int())
+		data.EcmpDelayAsBasedDelay = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/fixed/delay"); value.Exists() {
-		data.FixedDelay = types.Int64Value(value.Int())
+		data.EcmpDelayFixedDelay = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/platform-oor-based/delay"); value.Exists() {
-		data.PlatformOorBasedDelay = types.Int64Value(value.Int())
+		data.EcmpDelayPlatformOorBasedDelay = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ecmp-delay/platform-oor-based/threshold"); value.Exists() {
-		data.PlatformOorBasedThreshold = types.Int64Value(value.Int())
+		data.EcmpDelayPlatformOorBasedThreshold = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/connected/default-policy-action-in"); value.Exists() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/static/default-policy-action-in"); value.Exists() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/rip/default-policy-action-in"); value.Exists() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/vrf/all/update/out/quick-withdraw/disable"); value.Exists() {
+		data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(true)
+	} else {
+		data.VrfAllUpdateOutQuickWithdrawDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/out/quick-withdraw/disable"); value.Exists() {
+		data.UpdateOutQuickWithdrawDisable = types.BoolValue(true)
+	} else {
+		data.UpdateOutQuickWithdrawDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum-paths/ebgp/bestpath-only"); value.Exists() {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+	} else {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/delay-route/inbound"); value.Exists() {
+		data.DelayRouteInbound = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fast-reroute/per-link"); value.Exists() {
+		data.FastReroutePerLink = types.BoolValue(true)
+	} else {
+		data.FastReroutePerLink = types.BoolValue(false)
 	}
 }
 
@@ -14282,7 +14798,144 @@ func (data *RouterBGPAddressFamily) addDeletedItemsXML(ctx context.Context, stat
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
-	if !state.PlatformOorBasedThreshold.IsNull() && data.PlatformOorBasedThreshold.IsNull() {
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.FastReroutePerLink.IsNull() && state.FastReroutePerLink.ValueBool() && data.FastReroutePerLink.IsNull() {
+		deletePath := state.getXPath() + "/fast-reroute/per-link"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.DelayRouteInbound.IsNull() && data.DelayRouteInbound.IsNull() {
+		deletePath := state.getXPath() + "/delay-route/inbound"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MaximumPathsEbgpBestpathOnly.IsNull() && state.MaximumPathsEbgpBestpathOnly.ValueBool() && data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/maximum-paths/ebgp"
+		predicates := make(map[string]string)
+		if !state.MaximumPathsEbgpMultipath.IsNull() {
+			predicates["ebgp-number"] = fmt.Sprintf("%v", state.MaximumPathsEbgpMultipath.ValueInt64())
+		}
+		if !state.MaximumPathsEbgpSelective.IsNull() {
+			predicates["selective"] = fmt.Sprintf("%v", state.MaximumPathsEbgpSelective.ValueBool())
+		}
+		if !state.MaximumPathsEbgpRoutePolicy.IsNull() {
+			predicates["route-policy"] = fmt.Sprintf("%v", state.MaximumPathsEbgpRoutePolicy.ValueString())
+		}
+		predicates["bestpath-only"] = fmt.Sprintf("%v", state.MaximumPathsEbgpBestpathOnly.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.UpdateOutQuickWithdrawDisable.IsNull() && state.UpdateOutQuickWithdrawDisable.ValueBool() && data.UpdateOutQuickWithdrawDisable.IsNull() {
+		deletePath := state.getXPath() + "/update/out/quick-withdraw/disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.VrfAllUpdateOutQuickWithdrawDisable.IsNull() && state.VrfAllUpdateOutQuickWithdrawDisable.ValueBool() && data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() {
+		deletePath := state.getXPath() + "/vrf/all/update/out/quick-withdraw/disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeRipDefaultPolicyActionIn.IsNull() && data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/rip/default-policy-action-in"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeStaticDefaultPolicyActionIn.IsNull() && data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/static/default-policy-action-in"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeConnectedDefaultPolicyActionIn.IsNull() && data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/connected/default-policy-action-in"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EcmpDelayPlatformOorBasedThreshold.IsNull() && data.EcmpDelayPlatformOorBasedThreshold.IsNull() {
 		deletePath := state.getXPath() + "/ecmp-delay/platform-oor-based/threshold"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -14297,7 +14950,7 @@ func (data *RouterBGPAddressFamily) addDeletedItemsXML(ctx context.Context, stat
 			deletedPaths[deletePath] = true
 		}
 	}
-	if !state.PlatformOorBasedDelay.IsNull() && data.PlatformOorBasedDelay.IsNull() {
+	if !state.EcmpDelayPlatformOorBasedDelay.IsNull() && data.EcmpDelayPlatformOorBasedDelay.IsNull() {
 		deletePath := state.getXPath() + "/ecmp-delay/platform-oor-based/delay"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -14312,7 +14965,7 @@ func (data *RouterBGPAddressFamily) addDeletedItemsXML(ctx context.Context, stat
 			deletedPaths[deletePath] = true
 		}
 	}
-	if !state.FixedDelay.IsNull() && data.FixedDelay.IsNull() {
+	if !state.EcmpDelayFixedDelay.IsNull() && data.EcmpDelayFixedDelay.IsNull() {
 		deletePath := state.getXPath() + "/ecmp-delay/fixed/delay"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -14327,7 +14980,7 @@ func (data *RouterBGPAddressFamily) addDeletedItemsXML(ctx context.Context, stat
 			deletedPaths[deletePath] = true
 		}
 	}
-	if !state.AsBasedDelay.IsNull() && data.AsBasedDelay.IsNull() {
+	if !state.EcmpDelayAsBasedDelay.IsNull() && data.EcmpDelayAsBasedDelay.IsNull() {
 		deletePath := state.getXPath() + "/ecmp-delay/as-based/delay"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -14342,7 +14995,7 @@ func (data *RouterBGPAddressFamily) addDeletedItemsXML(ctx context.Context, stat
 			deletedPaths[deletePath] = true
 		}
 	}
-	if !state.AsBasedAsList.IsNull() && data.AsBasedAsList.IsNull() {
+	if !state.EcmpDelayAsBasedAsList.IsNull() && data.EcmpDelayAsBasedAsList.IsNull() {
 		deletePath := state.getXPath() + "/ecmp-delay/as-based/as-list"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -16930,6 +17583,9 @@ func (data *RouterBGPAddressFamily) addDeletedItemsXML(ctx context.Context, stat
 		if !state.MaximumPathsEbgpSelective.IsNull() {
 			predicates["selective"] = fmt.Sprintf("%v", state.MaximumPathsEbgpSelective.ValueBool())
 		}
+		if !state.MaximumPathsEbgpBestpathOnly.IsNull() {
+			predicates["bestpath-only"] = fmt.Sprintf("%v", state.MaximumPathsEbgpBestpathOnly.ValueBool())
+		}
 		predicates["route-policy"] = fmt.Sprintf("%v", state.MaximumPathsEbgpRoutePolicy.ValueString())
 		// Sort keys to ensure consistent ordering
 		keys := make([]string, 0, len(predicates))
@@ -16956,6 +17612,9 @@ func (data *RouterBGPAddressFamily) addDeletedItemsXML(ctx context.Context, stat
 		if !state.MaximumPathsEbgpRoutePolicy.IsNull() {
 			predicates["route-policy"] = fmt.Sprintf("%v", state.MaximumPathsEbgpRoutePolicy.ValueString())
 		}
+		if !state.MaximumPathsEbgpBestpathOnly.IsNull() {
+			predicates["bestpath-only"] = fmt.Sprintf("%v", state.MaximumPathsEbgpBestpathOnly.ValueBool())
+		}
 		predicates["selective"] = fmt.Sprintf("%v", state.MaximumPathsEbgpSelective.ValueBool())
 		// Sort keys to ensure consistent ordering
 		keys := make([]string, 0, len(predicates))
@@ -16980,6 +17639,9 @@ func (data *RouterBGPAddressFamily) addDeletedItemsXML(ctx context.Context, stat
 		}
 		if !state.MaximumPathsEbgpRoutePolicy.IsNull() {
 			predicates["route-policy"] = fmt.Sprintf("%v", state.MaximumPathsEbgpRoutePolicy.ValueString())
+		}
+		if !state.MaximumPathsEbgpBestpathOnly.IsNull() {
+			predicates["bestpath-only"] = fmt.Sprintf("%v", state.MaximumPathsEbgpBestpathOnly.ValueBool())
 		}
 		predicates["ebgp-number"] = fmt.Sprintf("%v", state.MaximumPathsEbgpMultipath.ValueInt64())
 		// Sort keys to ensure consistent ordering
@@ -17351,19 +18013,43 @@ func (data *RouterBGPAddressFamily) addDeletedItemsXML(ctx context.Context, stat
 
 func (data *RouterBGPAddressFamily) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
-	if !data.PlatformOorBasedThreshold.IsNull() {
+	if !data.FastReroutePerLink.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/fast-reroute/per-link")
+	}
+	if !data.DelayRouteInbound.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/delay-route/inbound")
+	}
+	if !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/maximum-paths/ebgp")
+	}
+	if !data.UpdateOutQuickWithdrawDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/update/out/quick-withdraw/disable")
+	}
+	if !data.VrfAllUpdateOutQuickWithdrawDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/vrf/all/update/out/quick-withdraw/disable")
+	}
+	if !data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/rip/default-policy-action-in")
+	}
+	if !data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/static/default-policy-action-in")
+	}
+	if !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/connected/default-policy-action-in")
+	}
+	if !data.EcmpDelayPlatformOorBasedThreshold.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ecmp-delay/platform-oor-based/threshold")
 	}
-	if !data.PlatformOorBasedDelay.IsNull() {
+	if !data.EcmpDelayPlatformOorBasedDelay.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ecmp-delay/platform-oor-based/delay")
 	}
-	if !data.FixedDelay.IsNull() {
+	if !data.EcmpDelayFixedDelay.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ecmp-delay/fixed/delay")
 	}
-	if !data.AsBasedDelay.IsNull() {
+	if !data.EcmpDelayAsBasedDelay.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ecmp-delay/as-based/delay")
 	}
-	if !data.AsBasedAsList.IsNull() {
+	if !data.EcmpDelayAsBasedAsList.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ecmp-delay/as-based/as-list")
 	}
 	for i := range data.PeerSetIds {

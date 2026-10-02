@@ -536,6 +536,36 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 					stringvalidator.OneOf("accept", "reject"),
 				},
 			},
+			"bandwidth_grp_outbound_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth group name").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"bandwidth_grp_outbound_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent item being inherited from a parent group").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"bandwidth_grp_inbound_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth group name").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"bandwidth_grp_inbound_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent item being inherited from a parent group").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"fast_reroute_per_link_multipath_backup_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Backup IP address").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"fast_reroute_per_link_multipath_backup_address_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent fast-reroute-per-link from being inherited from the parent").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
 		},
 	}
 }

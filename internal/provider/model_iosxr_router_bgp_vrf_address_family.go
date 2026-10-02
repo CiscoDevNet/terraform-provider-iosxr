@@ -139,6 +139,11 @@ type RouterBGPVRFAddressFamily struct {
 	OriginatorPeId                                         types.String                                  `tfsdk:"originator_pe_id"`
 	OptionBAsbrOnly                                        types.Bool                                    `tfsdk:"option_b_asbr_only"`
 	DefaultMartianCheckDisable                             types.Bool                                    `tfsdk:"default_martian_check_disable"`
+	RedistributeConnectedDefaultPolicyActionIn             types.String                                  `tfsdk:"redistribute_connected_default_policy_action_in"`
+	RedistributeStaticDefaultPolicyActionIn                types.String                                  `tfsdk:"redistribute_static_default_policy_action_in"`
+	RedistributeRipDefaultPolicyActionIn                   types.String                                  `tfsdk:"redistribute_rip_default_policy_action_in"`
+	MaximumPathsEbgpBestpathOnly                           types.Bool                                    `tfsdk:"maximum_paths_ebgp_bestpath_only"`
+	UpdateOutQuickWithdraw                                 types.String                                  `tfsdk:"update_out_quick_withdraw"`
 }
 
 type RouterBGPVRFAddressFamilyData struct {
@@ -238,6 +243,11 @@ type RouterBGPVRFAddressFamilyData struct {
 	OriginatorPeId                                         types.String                                  `tfsdk:"originator_pe_id"`
 	OptionBAsbrOnly                                        types.Bool                                    `tfsdk:"option_b_asbr_only"`
 	DefaultMartianCheckDisable                             types.Bool                                    `tfsdk:"default_martian_check_disable"`
+	RedistributeConnectedDefaultPolicyActionIn             types.String                                  `tfsdk:"redistribute_connected_default_policy_action_in"`
+	RedistributeStaticDefaultPolicyActionIn                types.String                                  `tfsdk:"redistribute_static_default_policy_action_in"`
+	RedistributeRipDefaultPolicyActionIn                   types.String                                  `tfsdk:"redistribute_rip_default_policy_action_in"`
+	MaximumPathsEbgpBestpathOnly                           types.Bool                                    `tfsdk:"maximum_paths_ebgp_bestpath_only"`
+	UpdateOutQuickWithdraw                                 types.String                                  `tfsdk:"update_out_quick_withdraw"`
 }
 type RouterBGPVRFAddressFamilyNetworks struct {
 	Address     types.String `tfsdk:"address"`
@@ -744,6 +754,33 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context, providerVersio
 	if !data.DefaultMartianCheckDisable.IsNull() && !data.DefaultMartianCheckDisable.IsUnknown() {
 		if data.DefaultMartianCheckDisable.ValueBool() {
 			body, _ = sjson.Set(body, "default-martian-check.disable", []interface{}{nil})
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() && !data.RedistributeConnectedDefaultPolicyActionIn.IsUnknown() {
+			body, _ = sjson.Set(body, "redistribute.connected.default-policy-action-in", data.RedistributeConnectedDefaultPolicyActionIn.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.RedistributeStaticDefaultPolicyActionIn.IsNull() && !data.RedistributeStaticDefaultPolicyActionIn.IsUnknown() {
+			body, _ = sjson.Set(body, "redistribute.static.default-policy-action-in", data.RedistributeStaticDefaultPolicyActionIn.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.RedistributeRipDefaultPolicyActionIn.IsNull() && !data.RedistributeRipDefaultPolicyActionIn.IsUnknown() {
+			body, _ = sjson.Set(body, "redistribute.rip.default-policy-action-in", data.RedistributeRipDefaultPolicyActionIn.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.MaximumPathsEbgpBestpathOnly.IsNull() && !data.MaximumPathsEbgpBestpathOnly.IsUnknown() {
+			if data.MaximumPathsEbgpBestpathOnly.ValueBool() {
+				body, _ = sjson.Set(body, "maximum-paths.ebgp.bestpath-only", []interface{}{nil})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.UpdateOutQuickWithdraw.IsNull() && !data.UpdateOutQuickWithdraw.IsUnknown() {
+			body, _ = sjson.Set(body, "update.out.quick-withdraw", data.UpdateOutQuickWithdraw.ValueString())
 		}
 	}
 	if len(data.Networks) > 0 {
@@ -1287,6 +1324,26 @@ func (data RouterBGPVRFAddressFamily) GetVersionConstraints() []helpers.FieldVer
 		},
 		{
 			FieldPath:      "redistribute_isis.default_policy_action_in",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "redistribute_connected_default_policy_action_in",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "redistribute_static_default_policy_action_in",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "redistribute_rip_default_policy_action_in",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "maximum_paths_ebgp_bestpath_only",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "update_out_quick_withdraw",
 			AddedInVersion: "25.4",
 		},
 	}...)
@@ -3250,6 +3307,36 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 	} else if data.DefaultMartianCheckDisable.IsNull() {
 		data.DefaultMartianCheckDisable = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "redistribute.connected.default-policy-action-in"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.default-policy-action-in"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "redistribute.rip.default-policy-action-in"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "maximum-paths.ebgp.bestpath-only"); helpers.VersionAtLeast(version, "25.4") && !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		if value.Exists() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+		}
+	} else if data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "update.out.quick-withdraw"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.UpdateOutQuickWithdraw.IsNull() {
+		data.UpdateOutQuickWithdraw = types.StringValue(value.String())
+	} else if data.UpdateOutQuickWithdraw.IsNull() {
+		data.UpdateOutQuickWithdraw = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -4284,6 +4371,44 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte,
 		// Only set to false if it was previously set in state
 		data.DefaultMartianCheckDisable = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.connected.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.static.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.rip.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "maximum-paths.ebgp.bestpath-only"); value.Exists() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+		} else if !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+			// Only set to false if it was previously set in state
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+		}
+	} else {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "update.out.quick-withdraw"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.UpdateOutQuickWithdraw = types.StringValue(value.String())
+		}
+	} else {
+		data.UpdateOutQuickWithdraw = types.StringNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -5187,6 +5312,43 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 	} else {
 		data.DefaultMartianCheckDisable = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.connected.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.static.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "redistribute.rip.default-policy-action-in"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+		}
+	} else {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "maximum-paths.ebgp.bestpath-only"); value.Exists() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+		} else {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+		}
+	} else {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "update.out.quick-withdraw"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.UpdateOutQuickWithdraw = types.StringValue(value.String())
+		}
+	} else {
+		data.UpdateOutQuickWithdraw = types.StringNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -5195,6 +5357,21 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 
 func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPVRFAddressFamily, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.UpdateOutQuickWithdraw.IsNull() && data.UpdateOutQuickWithdraw.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "update/out/quick-withdraw"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.MaximumPathsEbgpBestpathOnly.IsNull() && data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "maximum-paths/ebgp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.RedistributeRipDefaultPolicyActionIn.IsNull() && data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/rip/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.RedistributeStaticDefaultPolicyActionIn.IsNull() && data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/static/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.RedistributeConnectedDefaultPolicyActionIn.IsNull() && data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/connected/default-policy-action-in"))
+	}
 	if !state.DefaultMartianCheckDisable.IsNull() && data.DefaultMartianCheckDisable.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "default-martian-check/disable"))
 	}
@@ -5942,6 +6119,11 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 
 func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context, state *RouterBGPVRFAddressFamily, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.MaximumPathsEbgpBestpathOnly.IsNull() && !data.MaximumPathsEbgpBestpathOnly.ValueBool() {
+		if state != nil && !state.MaximumPathsEbgpBestpathOnly.IsNull() && state.MaximumPathsEbgpBestpathOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "maximum-paths/ebgp"))
+		}
+	}
 	if !data.DefaultMartianCheckDisable.IsNull() && !data.DefaultMartianCheckDisable.ValueBool() {
 		if state != nil && !state.DefaultMartianCheckDisable.IsNull() && state.DefaultMartianCheckDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "default-martian-check/disable"))
@@ -6653,6 +6835,21 @@ func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context, 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *RouterBGPVRFAddressFamily) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.UpdateOutQuickWithdraw.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "update/out/quick-withdraw"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "maximum-paths/ebgp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/rip/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/static/default-policy-action-in"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/connected/default-policy-action-in"))
+	}
 	if !data.DefaultMartianCheckDisable.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "default-martian-check/disable"))
 	}
@@ -7897,6 +8094,23 @@ func (data RouterBGPVRFAddressFamily) toBodyXML(ctx context.Context, stateArg ..
 		if data.DefaultMartianCheckDisable.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/default-martian-check/disable", "")
 		}
+	}
+	if !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() && !data.RedistributeConnectedDefaultPolicyActionIn.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/connected/default-policy-action-in", data.RedistributeConnectedDefaultPolicyActionIn.ValueString())
+	}
+	if !data.RedistributeStaticDefaultPolicyActionIn.IsNull() && !data.RedistributeStaticDefaultPolicyActionIn.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/static/default-policy-action-in", data.RedistributeStaticDefaultPolicyActionIn.ValueString())
+	}
+	if !data.RedistributeRipDefaultPolicyActionIn.IsNull() && !data.RedistributeRipDefaultPolicyActionIn.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/redistribute/rip/default-policy-action-in", data.RedistributeRipDefaultPolicyActionIn.ValueString())
+	}
+	if !data.MaximumPathsEbgpBestpathOnly.IsNull() && !data.MaximumPathsEbgpBestpathOnly.IsUnknown() {
+		if data.MaximumPathsEbgpBestpathOnly.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/maximum-paths/ebgp/bestpath-only", "")
+		}
+	}
+	if !data.UpdateOutQuickWithdraw.IsNull() && !data.UpdateOutQuickWithdraw.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/update/out/quick-withdraw", data.UpdateOutQuickWithdraw.ValueString())
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -9893,6 +10107,37 @@ func (data *RouterBGPVRFAddressFamily) updateFromBodyXML(ctx context.Context, re
 			data.DefaultMartianCheckDisable = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/connected/default-policy-action-in"); value.Exists() && !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/static/default-policy-action-in"); value.Exists() && !data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/rip/default-policy-action-in"); value.Exists() && !data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+	} else if data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum-paths/ebgp/bestpath-only"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MaximumPathsEbgpBestpathOnly.IsNull() {
+			data.MaximumPathsEbgpBestpathOnly = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/out/quick-withdraw"); value.Exists() && !data.UpdateOutQuickWithdraw.IsNull() {
+		data.UpdateOutQuickWithdraw = types.StringValue(value.String())
+	} else if data.UpdateOutQuickWithdraw.IsNull() {
+		data.UpdateOutQuickWithdraw = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -10779,6 +11024,23 @@ func (data *RouterBGPVRFAddressFamily) fromBodyXML(ctx context.Context, res xmld
 		data.DefaultMartianCheckDisable = types.BoolValue(true)
 	} else {
 		data.DefaultMartianCheckDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/connected/default-policy-action-in"); value.Exists() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/static/default-policy-action-in"); value.Exists() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/rip/default-policy-action-in"); value.Exists() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum-paths/ebgp/bestpath-only"); value.Exists() {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+	} else {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/out/quick-withdraw"); value.Exists() {
+		data.UpdateOutQuickWithdraw = types.StringValue(value.String())
 	}
 }
 
@@ -11667,6 +11929,23 @@ func (data *RouterBGPVRFAddressFamilyData) fromBodyXML(ctx context.Context, res 
 	} else {
 		data.DefaultMartianCheckDisable = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/connected/default-policy-action-in"); value.Exists() {
+		data.RedistributeConnectedDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/static/default-policy-action-in"); value.Exists() {
+		data.RedistributeStaticDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/redistribute/rip/default-policy-action-in"); value.Exists() {
+		data.RedistributeRipDefaultPolicyActionIn = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/maximum-paths/ebgp/bestpath-only"); value.Exists() {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolValue(true)
+	} else {
+		data.MaximumPathsEbgpBestpathOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/update/out/quick-withdraw"); value.Exists() {
+		data.UpdateOutQuickWithdraw = types.StringValue(value.String())
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -11678,6 +11957,95 @@ func (data *RouterBGPVRFAddressFamily) addDeletedItemsXML(ctx context.Context, s
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.UpdateOutQuickWithdraw.IsNull() && data.UpdateOutQuickWithdraw.IsNull() {
+		deletePath := state.getXPath() + "/update/out/quick-withdraw"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MaximumPathsEbgpBestpathOnly.IsNull() && state.MaximumPathsEbgpBestpathOnly.ValueBool() && data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/maximum-paths/ebgp"
+		predicates := make(map[string]string)
+		if !state.MaximumPathsEbgpMultipath.IsNull() {
+			predicates["ebgp-number"] = fmt.Sprintf("%v", state.MaximumPathsEbgpMultipath.ValueInt64())
+		}
+		if !state.MaximumPathsEbgpSelective.IsNull() {
+			predicates["selective"] = fmt.Sprintf("%v", state.MaximumPathsEbgpSelective.ValueBool())
+		}
+		if !state.MaximumPathsEbgpRoutePolicy.IsNull() {
+			predicates["route-policy"] = fmt.Sprintf("%v", state.MaximumPathsEbgpRoutePolicy.ValueString())
+		}
+		predicates["bestpath-only"] = fmt.Sprintf("%v", state.MaximumPathsEbgpBestpathOnly.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeRipDefaultPolicyActionIn.IsNull() && data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/rip/default-policy-action-in"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeStaticDefaultPolicyActionIn.IsNull() && data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/static/default-policy-action-in"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.RedistributeConnectedDefaultPolicyActionIn.IsNull() && data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		deletePath := state.getXPath() + "/redistribute/connected/default-policy-action-in"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.DefaultMartianCheckDisable.IsNull() && state.DefaultMartianCheckDisable.ValueBool() && data.DefaultMartianCheckDisable.IsNull() {
 		deletePath := state.getXPath() + "/default-martian-check/disable"
@@ -13714,6 +14082,9 @@ func (data *RouterBGPVRFAddressFamily) addDeletedItemsXML(ctx context.Context, s
 		if !state.MaximumPathsEbgpSelective.IsNull() {
 			predicates["selective"] = fmt.Sprintf("%v", state.MaximumPathsEbgpSelective.ValueBool())
 		}
+		if !state.MaximumPathsEbgpBestpathOnly.IsNull() {
+			predicates["bestpath-only"] = fmt.Sprintf("%v", state.MaximumPathsEbgpBestpathOnly.ValueBool())
+		}
 		predicates["route-policy"] = fmt.Sprintf("%v", state.MaximumPathsEbgpRoutePolicy.ValueString())
 		// Sort keys to ensure consistent ordering
 		keys := make([]string, 0, len(predicates))
@@ -13740,6 +14111,9 @@ func (data *RouterBGPVRFAddressFamily) addDeletedItemsXML(ctx context.Context, s
 		if !state.MaximumPathsEbgpRoutePolicy.IsNull() {
 			predicates["route-policy"] = fmt.Sprintf("%v", state.MaximumPathsEbgpRoutePolicy.ValueString())
 		}
+		if !state.MaximumPathsEbgpBestpathOnly.IsNull() {
+			predicates["bestpath-only"] = fmt.Sprintf("%v", state.MaximumPathsEbgpBestpathOnly.ValueBool())
+		}
 		predicates["selective"] = fmt.Sprintf("%v", state.MaximumPathsEbgpSelective.ValueBool())
 		// Sort keys to ensure consistent ordering
 		keys := make([]string, 0, len(predicates))
@@ -13764,6 +14138,9 @@ func (data *RouterBGPVRFAddressFamily) addDeletedItemsXML(ctx context.Context, s
 		}
 		if !state.MaximumPathsEbgpRoutePolicy.IsNull() {
 			predicates["route-policy"] = fmt.Sprintf("%v", state.MaximumPathsEbgpRoutePolicy.ValueString())
+		}
+		if !state.MaximumPathsEbgpBestpathOnly.IsNull() {
+			predicates["bestpath-only"] = fmt.Sprintf("%v", state.MaximumPathsEbgpBestpathOnly.ValueBool())
 		}
 		predicates["ebgp-number"] = fmt.Sprintf("%v", state.MaximumPathsEbgpMultipath.ValueInt64())
 		// Sort keys to ensure consistent ordering
@@ -14044,6 +14421,21 @@ func (data *RouterBGPVRFAddressFamily) addDeletedItemsXML(ctx context.Context, s
 
 func (data *RouterBGPVRFAddressFamily) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.UpdateOutQuickWithdraw.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/update/out/quick-withdraw")
+	}
+	if !data.MaximumPathsEbgpBestpathOnly.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/maximum-paths/ebgp")
+	}
+	if !data.RedistributeRipDefaultPolicyActionIn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/rip/default-policy-action-in")
+	}
+	if !data.RedistributeStaticDefaultPolicyActionIn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/static/default-policy-action-in")
+	}
+	if !data.RedistributeConnectedDefaultPolicyActionIn.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/redistribute/connected/default-policy-action-in")
+	}
 	if !data.DefaultMartianCheckDisable.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default-martian-check/disable")
 	}

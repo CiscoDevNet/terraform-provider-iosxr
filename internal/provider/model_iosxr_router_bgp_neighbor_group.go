@@ -318,99 +318,105 @@ type RouterBGPNeighborGroupPeerSets struct {
 	Peer types.Int64 `tfsdk:"peer"`
 }
 type RouterBGPNeighborGroupAddressFamily struct {
-	AfName                                          types.String `tfsdk:"af_name"`
-	EncapsulationType                               types.String `tfsdk:"encapsulation_type"`
-	Weight                                          types.Int64  `tfsdk:"weight"`
-	Multipath                                       types.Bool   `tfsdk:"multipath"`
-	UseAfGroup                                      types.String `tfsdk:"use_af_group"`
-	CapabilityOrfPrefix                             types.String `tfsdk:"capability_orf_prefix"`
-	AdditionalPathsSend                             types.Bool   `tfsdk:"additional_paths_send"`
-	AdditionalPathsSendDisable                      types.Bool   `tfsdk:"additional_paths_send_disable"`
-	AdditionalPathsReceive                          types.Bool   `tfsdk:"additional_paths_receive"`
-	AdditionalPathsReceiveDisable                   types.Bool   `tfsdk:"additional_paths_receive_disable"`
-	DefaultOriginate                                types.Bool   `tfsdk:"default_originate"`
-	DefaultOriginateRoutePolicy                     types.String `tfsdk:"default_originate_route_policy"`
-	DefaultOriginateInheritanceDisable              types.Bool   `tfsdk:"default_originate_inheritance_disable"`
-	MaximumPrefixLimit                              types.Int64  `tfsdk:"maximum_prefix_limit"`
-	MaximumPrefixThreshold                          types.Int64  `tfsdk:"maximum_prefix_threshold"`
-	MaximumPrefixRestart                            types.Int64  `tfsdk:"maximum_prefix_restart"`
-	MaximumPrefixDiscardExtraPaths                  types.Bool   `tfsdk:"maximum_prefix_discard_extra_paths"`
-	MaximumPrefixWarningOnly                        types.Bool   `tfsdk:"maximum_prefix_warning_only"`
-	NextHopSelf                                     types.Bool   `tfsdk:"next_hop_self"`
-	NextHopSelfInheritanceDisable                   types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
-	NextHopUnchanged                                types.Bool   `tfsdk:"next_hop_unchanged"`
-	NextHopUnchangedMultipath                       types.Bool   `tfsdk:"next_hop_unchanged_multipath"`
-	NextHopUnchangedInheritanceDisable              types.Bool   `tfsdk:"next_hop_unchanged_inheritance_disable"`
-	RoutePolicyIn                                   types.String `tfsdk:"route_policy_in"`
-	RoutePolicyOut                                  types.String `tfsdk:"route_policy_out"`
-	OrfRoutePolicy                                  types.String `tfsdk:"orf_route_policy"`
-	ClusterIdAllowEqual                             types.Bool   `tfsdk:"cluster_id_allow_equal"`
-	ClusterIdAllowEqualDisable                      types.Bool   `tfsdk:"cluster_id_allow_equal_disable"`
-	ReplacePrivateAs                                types.Bool   `tfsdk:"replace_private_as"`
-	ReplacePrivateAsInternal                        types.Bool   `tfsdk:"replace_private_as_internal"`
-	RemovePrivateAsInbound                          types.Bool   `tfsdk:"remove_private_as_inbound"`
-	RemovePrivateAsInboundEntireAspath              types.Bool   `tfsdk:"remove_private_as_inbound_entire_aspath"`
-	RemovePrivateAsInboundInheritanceDisable        types.Bool   `tfsdk:"remove_private_as_inbound_inheritance_disable"`
-	RemovePrivateAs                                 types.Bool   `tfsdk:"remove_private_as"`
-	RemovePrivateAsEntireAspath                     types.Bool   `tfsdk:"remove_private_as_entire_aspath"`
-	RemovePrivateAsInternal                         types.Bool   `tfsdk:"remove_private_as_internal"`
-	RouteReflectorClient                            types.Bool   `tfsdk:"route_reflector_client"`
-	RouteReflectorClientInheritanceDisable          types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
-	SendCommunityEbgp                               types.Bool   `tfsdk:"send_community_ebgp"`
-	SendCommunityEbgpInheritanceDisable             types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
-	SendCommunityGshutEbgp                          types.Bool   `tfsdk:"send_community_gshut_ebgp"`
-	SendCommunityGshutEbgpInheritanceDisable        types.Bool   `tfsdk:"send_community_gshut_ebgp_inheritance_disable"`
-	SendExtendedCommunityEbgp                       types.Bool   `tfsdk:"send_extended_community_ebgp"`
-	SendExtendedCommunityEbgpInheritanceDisable     types.Bool   `tfsdk:"send_extended_community_ebgp_inheritance_disable"`
-	SoftReconfigurationInbound                      types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
-	SoftReconfigurationInboundAlways                types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
-	UpdateOutOriginatorLoopcheck                    types.Bool   `tfsdk:"update_out_originator_loopcheck"`
-	UpdateOutOriginatorLoopcheckDisable             types.Bool   `tfsdk:"update_out_originator_loopcheck_disable"`
-	AdvertiseVpnv4Unicast                           types.Bool   `tfsdk:"advertise_vpnv4_unicast"`
-	AdvertiseVpnv4UnicastReOriginated               types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated"`
-	AdvertiseVpnv4UnicastReOriginatedStitchingRt    types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated_stitching_rt"`
-	AdvertiseVpnv6Unicast                           types.Bool   `tfsdk:"advertise_vpnv6_unicast"`
-	AdvertiseVpnv6UnicastReOriginated               types.Bool   `tfsdk:"advertise_vpnv6_unicast_re_originated"`
-	AdvertiseVpnv6UnicastReOriginatedStitchingRt    types.Bool   `tfsdk:"advertise_vpnv6_unicast_re_originated_stitching_rt"`
-	AdvertiseL2vpnEvpnReOriginated                  types.Bool   `tfsdk:"advertise_l2vpn_evpn_re_originated"`
-	AdvertiseL2vpnEvpnReOriginatedStitchingRt       types.Bool   `tfsdk:"advertise_l2vpn_evpn_re_originated_stitching_rt"`
-	SegmentRoutingSrv6PrefixSidType4                types.Bool   `tfsdk:"segment_routing_srv6_prefix_sid_type4"`
-	ImportStitchingRt                               types.Bool   `tfsdk:"import_stitching_rt"`
-	ImportStitchingRtReOriginate                    types.Bool   `tfsdk:"import_stitching_rt_re_originate"`
-	ImportStitchingRtReOriginateStitchingRt         types.Bool   `tfsdk:"import_stitching_rt_re_originate_stitching_rt"`
-	ImportReOriginate                               types.Bool   `tfsdk:"import_re_originate"`
-	AllowasIn                                       types.Int64  `tfsdk:"allowas_in"`
-	AllowconfedasIn                                 types.Int64  `tfsdk:"allowconfedas_in"`
-	SiteOfOriginTwoByteAsNumber                     types.String `tfsdk:"site_of_origin_two_byte_as_number"`
-	SiteOfOriginTwoByteAsIndex                      types.Int64  `tfsdk:"site_of_origin_two_byte_as_index"`
-	SiteOfOriginFourByteAsNumber                    types.String `tfsdk:"site_of_origin_four_byte_as_number"`
-	SiteOfOriginFourByteAsIndex                     types.Int64  `tfsdk:"site_of_origin_four_byte_as_index"`
-	SiteOfOriginIpv4Address                         types.String `tfsdk:"site_of_origin_ipv4_address"`
-	SiteOfOriginIpv4AddressIndex                    types.Int64  `tfsdk:"site_of_origin_ipv4_address_index"`
-	AsOverride                                      types.Bool   `tfsdk:"as_override"`
-	AsOverrideInheritanceDisable                    types.Bool   `tfsdk:"as_override_inheritance_disable"`
-	Aigp                                            types.Bool   `tfsdk:"aigp"`
-	AigpDisable                                     types.Bool   `tfsdk:"aigp_disable"`
-	AigpSendMed                                     types.Bool   `tfsdk:"aigp_send_med"`
-	AigpSendMedDisable                              types.Bool   `tfsdk:"aigp_send_med_disable"`
-	AigpSendCostCommunityDisable                    types.Bool   `tfsdk:"aigp_send_cost_community_disable"`
-	AigpSendCostCommunityId                         types.Int64  `tfsdk:"aigp_send_cost_community_id"`
-	AigpSendCostCommunityIdPoiIgpCost               types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_igp_cost"`
-	AigpSendCostCommunityIdPoiIgpCostTransitive     types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_igp_cost_transitive"`
-	AigpSendCostCommunityIdPoiPreBestpath           types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_pre_bestpath"`
-	AigpSendCostCommunityIdPoiPreBestpathTransitive types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_pre_bestpath_transitive"`
-	SendMulticastAttributes                         types.Bool   `tfsdk:"send_multicast_attributes"`
-	SendMulticastAttributesDisable                  types.Bool   `tfsdk:"send_multicast_attributes_disable"`
-	AcceptOwn                                       types.Bool   `tfsdk:"accept_own"`
-	AcceptOwnInheritanceDisable                     types.Bool   `tfsdk:"accept_own_inheritance_disable"`
-	SlowPeerDynamic                                 types.Bool   `tfsdk:"slow_peer_dynamic"`
-	SlowPeerDynamicThreshold                        types.Int64  `tfsdk:"slow_peer_dynamic_threshold"`
-	SlowPeerDynamicDisable                          types.Bool   `tfsdk:"slow_peer_dynamic_disable"`
-	SlowPeerStatic                                  types.Bool   `tfsdk:"slow_peer_static"`
-	OriginAsValidationDisable                       types.Bool   `tfsdk:"origin_as_validation_disable"`
-	BestpathOriginAsAllowInvalid                    types.Bool   `tfsdk:"bestpath_origin_as_allow_invalid"`
-	DefaultPolicyActionIn                           types.String `tfsdk:"default_policy_action_in"`
-	DefaultPolicyActionOut                          types.String `tfsdk:"default_policy_action_out"`
+	AfName                                                     types.String `tfsdk:"af_name"`
+	EncapsulationType                                          types.String `tfsdk:"encapsulation_type"`
+	Weight                                                     types.Int64  `tfsdk:"weight"`
+	Multipath                                                  types.Bool   `tfsdk:"multipath"`
+	UseAfGroup                                                 types.String `tfsdk:"use_af_group"`
+	CapabilityOrfPrefix                                        types.String `tfsdk:"capability_orf_prefix"`
+	AdditionalPathsSend                                        types.Bool   `tfsdk:"additional_paths_send"`
+	AdditionalPathsSendDisable                                 types.Bool   `tfsdk:"additional_paths_send_disable"`
+	AdditionalPathsReceive                                     types.Bool   `tfsdk:"additional_paths_receive"`
+	AdditionalPathsReceiveDisable                              types.Bool   `tfsdk:"additional_paths_receive_disable"`
+	DefaultOriginate                                           types.Bool   `tfsdk:"default_originate"`
+	DefaultOriginateRoutePolicy                                types.String `tfsdk:"default_originate_route_policy"`
+	DefaultOriginateInheritanceDisable                         types.Bool   `tfsdk:"default_originate_inheritance_disable"`
+	MaximumPrefixLimit                                         types.Int64  `tfsdk:"maximum_prefix_limit"`
+	MaximumPrefixThreshold                                     types.Int64  `tfsdk:"maximum_prefix_threshold"`
+	MaximumPrefixRestart                                       types.Int64  `tfsdk:"maximum_prefix_restart"`
+	MaximumPrefixDiscardExtraPaths                             types.Bool   `tfsdk:"maximum_prefix_discard_extra_paths"`
+	MaximumPrefixWarningOnly                                   types.Bool   `tfsdk:"maximum_prefix_warning_only"`
+	NextHopSelf                                                types.Bool   `tfsdk:"next_hop_self"`
+	NextHopSelfInheritanceDisable                              types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
+	NextHopUnchanged                                           types.Bool   `tfsdk:"next_hop_unchanged"`
+	NextHopUnchangedMultipath                                  types.Bool   `tfsdk:"next_hop_unchanged_multipath"`
+	NextHopUnchangedInheritanceDisable                         types.Bool   `tfsdk:"next_hop_unchanged_inheritance_disable"`
+	RoutePolicyIn                                              types.String `tfsdk:"route_policy_in"`
+	RoutePolicyOut                                             types.String `tfsdk:"route_policy_out"`
+	OrfRoutePolicy                                             types.String `tfsdk:"orf_route_policy"`
+	ClusterIdAllowEqual                                        types.Bool   `tfsdk:"cluster_id_allow_equal"`
+	ClusterIdAllowEqualDisable                                 types.Bool   `tfsdk:"cluster_id_allow_equal_disable"`
+	ReplacePrivateAs                                           types.Bool   `tfsdk:"replace_private_as"`
+	ReplacePrivateAsInternal                                   types.Bool   `tfsdk:"replace_private_as_internal"`
+	RemovePrivateAsInbound                                     types.Bool   `tfsdk:"remove_private_as_inbound"`
+	RemovePrivateAsInboundEntireAspath                         types.Bool   `tfsdk:"remove_private_as_inbound_entire_aspath"`
+	RemovePrivateAsInboundInheritanceDisable                   types.Bool   `tfsdk:"remove_private_as_inbound_inheritance_disable"`
+	RemovePrivateAs                                            types.Bool   `tfsdk:"remove_private_as"`
+	RemovePrivateAsEntireAspath                                types.Bool   `tfsdk:"remove_private_as_entire_aspath"`
+	RemovePrivateAsInternal                                    types.Bool   `tfsdk:"remove_private_as_internal"`
+	RouteReflectorClient                                       types.Bool   `tfsdk:"route_reflector_client"`
+	RouteReflectorClientInheritanceDisable                     types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
+	SendCommunityEbgp                                          types.Bool   `tfsdk:"send_community_ebgp"`
+	SendCommunityEbgpInheritanceDisable                        types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
+	SendCommunityGshutEbgp                                     types.Bool   `tfsdk:"send_community_gshut_ebgp"`
+	SendCommunityGshutEbgpInheritanceDisable                   types.Bool   `tfsdk:"send_community_gshut_ebgp_inheritance_disable"`
+	SendExtendedCommunityEbgp                                  types.Bool   `tfsdk:"send_extended_community_ebgp"`
+	SendExtendedCommunityEbgpInheritanceDisable                types.Bool   `tfsdk:"send_extended_community_ebgp_inheritance_disable"`
+	SoftReconfigurationInbound                                 types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
+	SoftReconfigurationInboundAlways                           types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	UpdateOutOriginatorLoopcheck                               types.Bool   `tfsdk:"update_out_originator_loopcheck"`
+	UpdateOutOriginatorLoopcheckDisable                        types.Bool   `tfsdk:"update_out_originator_loopcheck_disable"`
+	AdvertiseVpnv4Unicast                                      types.Bool   `tfsdk:"advertise_vpnv4_unicast"`
+	AdvertiseVpnv4UnicastReOriginated                          types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated"`
+	AdvertiseVpnv4UnicastReOriginatedStitchingRt               types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated_stitching_rt"`
+	AdvertiseVpnv6Unicast                                      types.Bool   `tfsdk:"advertise_vpnv6_unicast"`
+	AdvertiseVpnv6UnicastReOriginated                          types.Bool   `tfsdk:"advertise_vpnv6_unicast_re_originated"`
+	AdvertiseVpnv6UnicastReOriginatedStitchingRt               types.Bool   `tfsdk:"advertise_vpnv6_unicast_re_originated_stitching_rt"`
+	AdvertiseL2vpnEvpnReOriginated                             types.Bool   `tfsdk:"advertise_l2vpn_evpn_re_originated"`
+	AdvertiseL2vpnEvpnReOriginatedStitchingRt                  types.Bool   `tfsdk:"advertise_l2vpn_evpn_re_originated_stitching_rt"`
+	SegmentRoutingSrv6PrefixSidType4                           types.Bool   `tfsdk:"segment_routing_srv6_prefix_sid_type4"`
+	ImportStitchingRt                                          types.Bool   `tfsdk:"import_stitching_rt"`
+	ImportStitchingRtReOriginate                               types.Bool   `tfsdk:"import_stitching_rt_re_originate"`
+	ImportStitchingRtReOriginateStitchingRt                    types.Bool   `tfsdk:"import_stitching_rt_re_originate_stitching_rt"`
+	ImportReOriginate                                          types.Bool   `tfsdk:"import_re_originate"`
+	AllowasIn                                                  types.Int64  `tfsdk:"allowas_in"`
+	AllowconfedasIn                                            types.Int64  `tfsdk:"allowconfedas_in"`
+	SiteOfOriginTwoByteAsNumber                                types.String `tfsdk:"site_of_origin_two_byte_as_number"`
+	SiteOfOriginTwoByteAsIndex                                 types.Int64  `tfsdk:"site_of_origin_two_byte_as_index"`
+	SiteOfOriginFourByteAsNumber                               types.String `tfsdk:"site_of_origin_four_byte_as_number"`
+	SiteOfOriginFourByteAsIndex                                types.Int64  `tfsdk:"site_of_origin_four_byte_as_index"`
+	SiteOfOriginIpv4Address                                    types.String `tfsdk:"site_of_origin_ipv4_address"`
+	SiteOfOriginIpv4AddressIndex                               types.Int64  `tfsdk:"site_of_origin_ipv4_address_index"`
+	AsOverride                                                 types.Bool   `tfsdk:"as_override"`
+	AsOverrideInheritanceDisable                               types.Bool   `tfsdk:"as_override_inheritance_disable"`
+	Aigp                                                       types.Bool   `tfsdk:"aigp"`
+	AigpDisable                                                types.Bool   `tfsdk:"aigp_disable"`
+	AigpSendMed                                                types.Bool   `tfsdk:"aigp_send_med"`
+	AigpSendMedDisable                                         types.Bool   `tfsdk:"aigp_send_med_disable"`
+	AigpSendCostCommunityDisable                               types.Bool   `tfsdk:"aigp_send_cost_community_disable"`
+	AigpSendCostCommunityId                                    types.Int64  `tfsdk:"aigp_send_cost_community_id"`
+	AigpSendCostCommunityIdPoiIgpCost                          types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_igp_cost"`
+	AigpSendCostCommunityIdPoiIgpCostTransitive                types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_igp_cost_transitive"`
+	AigpSendCostCommunityIdPoiPreBestpath                      types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_pre_bestpath"`
+	AigpSendCostCommunityIdPoiPreBestpathTransitive            types.Bool   `tfsdk:"aigp_send_cost_community_id_poi_pre_bestpath_transitive"`
+	SendMulticastAttributes                                    types.Bool   `tfsdk:"send_multicast_attributes"`
+	SendMulticastAttributesDisable                             types.Bool   `tfsdk:"send_multicast_attributes_disable"`
+	AcceptOwn                                                  types.Bool   `tfsdk:"accept_own"`
+	AcceptOwnInheritanceDisable                                types.Bool   `tfsdk:"accept_own_inheritance_disable"`
+	SlowPeerDynamic                                            types.Bool   `tfsdk:"slow_peer_dynamic"`
+	SlowPeerDynamicThreshold                                   types.Int64  `tfsdk:"slow_peer_dynamic_threshold"`
+	SlowPeerDynamicDisable                                     types.Bool   `tfsdk:"slow_peer_dynamic_disable"`
+	SlowPeerStatic                                             types.Bool   `tfsdk:"slow_peer_static"`
+	OriginAsValidationDisable                                  types.Bool   `tfsdk:"origin_as_validation_disable"`
+	BestpathOriginAsAllowInvalid                               types.Bool   `tfsdk:"bestpath_origin_as_allow_invalid"`
+	DefaultPolicyActionIn                                      types.String `tfsdk:"default_policy_action_in"`
+	DefaultPolicyActionOut                                     types.String `tfsdk:"default_policy_action_out"`
+	BandwidthGrpOutboundName                                   types.String `tfsdk:"bandwidth_grp_outbound_name"`
+	BandwidthGrpOutboundInheritanceDisable                     types.Bool   `tfsdk:"bandwidth_grp_outbound_inheritance_disable"`
+	BandwidthGrpInboundName                                    types.String `tfsdk:"bandwidth_grp_inbound_name"`
+	BandwidthGrpInboundInheritanceDisable                      types.Bool   `tfsdk:"bandwidth_grp_inbound_inheritance_disable"`
+	FastReroutePerLinkMultipathBackupAddress                   types.String `tfsdk:"fast_reroute_per_link_multipath_backup_address"`
+	FastReroutePerLinkMultipathBackupAddressInheritanceDisable types.Bool   `tfsdk:"fast_reroute_per_link_multipath_backup_address_inheritance_disable"`
 }
 
 // End of section. //template:end types
@@ -1398,6 +1404,42 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context, providerVersion s
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"default-policy-action.out", item.DefaultPolicyActionOut.ValueString())
 				}
 			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.BandwidthGrpOutboundName.IsNull() && !item.BandwidthGrpOutboundName.IsUnknown() {
+					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"bandwidth-grp.outbound.bandwidth-group-name", item.BandwidthGrpOutboundName.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.BandwidthGrpOutboundInheritanceDisable.IsNull() && !item.BandwidthGrpOutboundInheritanceDisable.IsUnknown() {
+					if item.BandwidthGrpOutboundInheritanceDisable.ValueBool() {
+						body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"bandwidth-grp.outbound.inheritance-disable", []interface{}{nil})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.BandwidthGrpInboundName.IsNull() && !item.BandwidthGrpInboundName.IsUnknown() {
+					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"bandwidth-grp.inbound.bandwidth-group-name", item.BandwidthGrpInboundName.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.BandwidthGrpInboundInheritanceDisable.IsNull() && !item.BandwidthGrpInboundInheritanceDisable.IsUnknown() {
+					if item.BandwidthGrpInboundInheritanceDisable.ValueBool() {
+						body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"bandwidth-grp.inbound.inheritance-disable", []interface{}{nil})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.FastReroutePerLinkMultipathBackupAddress.IsNull() && !item.FastReroutePerLinkMultipathBackupAddress.IsUnknown() {
+					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.multipath-backup.address.ip-address", item.FastReroutePerLinkMultipathBackupAddress.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() && !item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsUnknown() {
+					if item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable.ValueBool() {
+						body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"fast-reroute.per-link.multipath-backup.address.inheritance-disable", []interface{}{nil})
+					}
+				}
+			}
 		}
 	}
 	return body
@@ -1418,6 +1460,30 @@ func (data RouterBGPNeighborGroup) GetVersionConstraints() []helpers.FieldVersio
 		},
 		{
 			FieldPath:      "address_family.default_policy_action_out",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "address_family.bandwidth_grp_outbound_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "address_family.bandwidth_grp_outbound_inheritance_disable",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "address_family.bandwidth_grp_inbound_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "address_family.bandwidth_grp_inbound_inheritance_disable",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "address_family.fast_reroute_per_link_multipath_backup_address",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "address_family.fast_reroute_per_link_multipath_backup_address_inheritance_disable",
 			AddedInVersion: "25.4",
 		},
 	}...)
@@ -3459,6 +3525,57 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.AddressFamily[i].DefaultPolicyActionOut = types.StringNull()
 		}
+		if value := r.Get("bandwidth-grp.outbound.bandwidth-group-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].BandwidthGrpOutboundName.IsNull() {
+			data.AddressFamily[i].BandwidthGrpOutboundName = types.StringValue(value.String())
+		} else {
+			data.AddressFamily[i].BandwidthGrpOutboundName = types.StringNull()
+		}
+		if value := r.Get("bandwidth-grp.outbound.inheritance-disable"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.IsNull() {
+				data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.IsNull() {
+				data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable = types.BoolNull()
+			}
+		}
+		if value := r.Get("bandwidth-grp.inbound.bandwidth-group-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].BandwidthGrpInboundName.IsNull() {
+			data.AddressFamily[i].BandwidthGrpInboundName = types.StringValue(value.String())
+		} else {
+			data.AddressFamily[i].BandwidthGrpInboundName = types.StringNull()
+		}
+		if value := r.Get("bandwidth-grp.inbound.inheritance-disable"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.IsNull() {
+				data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.IsNull() {
+				data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable = types.BoolNull()
+			}
+		}
+		if value := r.Get("fast-reroute.per-link.multipath-backup.address.ip-address"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddress.IsNull() {
+			data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddress = types.StringValue(value.String())
+		} else {
+			data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddress = types.StringNull()
+		}
+		if value := r.Get("fast-reroute.per-link.multipath-backup.address.inheritance-disable"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() {
+				data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() {
+				data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolNull()
+			}
+		}
 	}
 }
 
@@ -4563,6 +4680,57 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte, ve
 			} else {
 				item.DefaultPolicyActionOut = types.StringNull()
 			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-grp.outbound.bandwidth-group-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.BandwidthGrpOutboundName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.BandwidthGrpOutboundName = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-grp.outbound.inheritance-disable"); cValue.Exists() {
+					item.BandwidthGrpOutboundInheritanceDisable = types.BoolValue(true)
+				} else if !item.BandwidthGrpOutboundInheritanceDisable.IsNull() {
+					// Only set to false if it was previously set
+					item.BandwidthGrpOutboundInheritanceDisable = types.BoolValue(false)
+				}
+			} else {
+				item.BandwidthGrpOutboundInheritanceDisable = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-grp.inbound.bandwidth-group-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.BandwidthGrpInboundName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.BandwidthGrpInboundName = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-grp.inbound.inheritance-disable"); cValue.Exists() {
+					item.BandwidthGrpInboundInheritanceDisable = types.BoolValue(true)
+				} else if !item.BandwidthGrpInboundInheritanceDisable.IsNull() {
+					// Only set to false if it was previously set
+					item.BandwidthGrpInboundInheritanceDisable = types.BoolValue(false)
+				}
+			} else {
+				item.BandwidthGrpInboundInheritanceDisable = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("fast-reroute.per-link.multipath-backup.address.ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.FastReroutePerLinkMultipathBackupAddress = types.StringValue(cValue.String())
+				}
+			} else {
+				item.FastReroutePerLinkMultipathBackupAddress = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("fast-reroute.per-link.multipath-backup.address.inheritance-disable"); cValue.Exists() {
+					item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(true)
+				} else if !item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() {
+					// Only set to false if it was previously set
+					item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(false)
+				}
+			} else {
+				item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolNull()
+			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true
 		})
@@ -5533,6 +5701,54 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 			} else {
 				item.DefaultPolicyActionOut = types.StringNull()
 			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-grp.outbound.bandwidth-group-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.BandwidthGrpOutboundName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.BandwidthGrpOutboundName = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-grp.outbound.inheritance-disable"); cValue.Exists() {
+					item.BandwidthGrpOutboundInheritanceDisable = types.BoolValue(true)
+				} else {
+					item.BandwidthGrpOutboundInheritanceDisable = types.BoolValue(false)
+				}
+			} else {
+				item.BandwidthGrpOutboundInheritanceDisable = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-grp.inbound.bandwidth-group-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.BandwidthGrpInboundName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.BandwidthGrpInboundName = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("bandwidth-grp.inbound.inheritance-disable"); cValue.Exists() {
+					item.BandwidthGrpInboundInheritanceDisable = types.BoolValue(true)
+				} else {
+					item.BandwidthGrpInboundInheritanceDisable = types.BoolValue(false)
+				}
+			} else {
+				item.BandwidthGrpInboundInheritanceDisable = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("fast-reroute.per-link.multipath-backup.address.ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.FastReroutePerLinkMultipathBackupAddress = types.StringValue(cValue.String())
+				}
+			} else {
+				item.FastReroutePerLinkMultipathBackupAddress = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("fast-reroute.per-link.multipath-backup.address.inheritance-disable"); cValue.Exists() {
+					item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(true)
+				} else {
+					item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(false)
+				}
+			} else {
+				item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolNull()
+			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true
 		})
@@ -5568,6 +5784,24 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 				found = false
 			}
 			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() && data.AddressFamily[j].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "fast-reroute/per-link/multipath-backup/address"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.AddressFamily[i].FastReroutePerLinkMultipathBackupAddress.IsNull() && data.AddressFamily[j].FastReroutePerLinkMultipathBackupAddress.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "fast-reroute/per-link/multipath-backup/address"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.IsNull() && data.AddressFamily[j].BandwidthGrpInboundInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "bandwidth-grp/inbound"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.AddressFamily[i].BandwidthGrpInboundName.IsNull() && data.AddressFamily[j].BandwidthGrpInboundName.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "bandwidth-grp/inbound"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.IsNull() && data.AddressFamily[j].BandwidthGrpOutboundInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "bandwidth-grp/outbound"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.AddressFamily[i].BandwidthGrpOutboundName.IsNull() && data.AddressFamily[j].BandwidthGrpOutboundName.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "bandwidth-grp/outbound"))
+				}
 				if helpers.VersionAtLeast(version, "25.4") && !state.AddressFamily[i].DefaultPolicyActionOut.IsNull() && data.AddressFamily[j].DefaultPolicyActionOut.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "default-policy-action/out"))
 				}
@@ -6301,6 +6535,21 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context, sta
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() && !data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.ValueBool() {
+			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() && state.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "fast-reroute/per-link/multipath-backup/address"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.IsNull() && !data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.ValueBool() {
+			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.IsNull() && state.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "bandwidth-grp/inbound"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.IsNull() && !data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.ValueBool() {
+			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.IsNull() && state.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "bandwidth-grp/outbound"))
+			}
 		}
 		if !data.AddressFamily[i].BestpathOriginAsAllowInvalid.IsNull() && !data.AddressFamily[i].BestpathOriginAsAllowInvalid.ValueBool() {
 			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].BestpathOriginAsAllowInvalid.IsNull() && state.AddressFamily[i].BestpathOriginAsAllowInvalid.ValueBool() {
@@ -8402,6 +8651,30 @@ func (data RouterBGPNeighborGroup) toBodyXML(ctx context.Context, stateArg ...*R
 			if !item.DefaultPolicyActionOut.IsNull() && !item.DefaultPolicyActionOut.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/default-policy-action/out", item.DefaultPolicyActionOut.ValueString())
 			}
+			if !item.BandwidthGrpOutboundName.IsNull() && !item.BandwidthGrpOutboundName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/bandwidth-grp/outbound/bandwidth-group-name", item.BandwidthGrpOutboundName.ValueString())
+			}
+			if !item.BandwidthGrpOutboundInheritanceDisable.IsNull() && !item.BandwidthGrpOutboundInheritanceDisable.IsUnknown() {
+				if item.BandwidthGrpOutboundInheritanceDisable.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/bandwidth-grp/outbound/inheritance-disable", "")
+				}
+			}
+			if !item.BandwidthGrpInboundName.IsNull() && !item.BandwidthGrpInboundName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/bandwidth-grp/inbound/bandwidth-group-name", item.BandwidthGrpInboundName.ValueString())
+			}
+			if !item.BandwidthGrpInboundInheritanceDisable.IsNull() && !item.BandwidthGrpInboundInheritanceDisable.IsUnknown() {
+				if item.BandwidthGrpInboundInheritanceDisable.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/bandwidth-grp/inbound/inheritance-disable", "")
+				}
+			}
+			if !item.FastReroutePerLinkMultipathBackupAddress.IsNull() && !item.FastReroutePerLinkMultipathBackupAddress.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/fast-reroute/per-link/multipath-backup/address/ip-address", item.FastReroutePerLinkMultipathBackupAddress.ValueString())
+			}
+			if !item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() && !item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsUnknown() {
+				if item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/fast-reroute/per-link/multipath-backup/address/inheritance-disable", "")
+				}
+			}
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -10495,6 +10768,57 @@ func (data *RouterBGPNeighborGroup) updateFromBodyXML(ctx context.Context, res x
 		} else if data.AddressFamily[i].DefaultPolicyActionOut.IsNull() {
 			data.AddressFamily[i].DefaultPolicyActionOut = types.StringNull()
 		}
+		if value := helpers.GetFromXPath(r, "bandwidth-grp/outbound/bandwidth-group-name"); value.Exists() && !data.AddressFamily[i].BandwidthGrpOutboundName.IsNull() {
+			data.AddressFamily[i].BandwidthGrpOutboundName = types.StringValue(value.String())
+		} else if data.AddressFamily[i].BandwidthGrpOutboundName.IsNull() {
+			data.AddressFamily[i].BandwidthGrpOutboundName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "bandwidth-grp/outbound/inheritance-disable"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.IsNull() {
+				data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.IsNull() {
+				data.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "bandwidth-grp/inbound/bandwidth-group-name"); value.Exists() && !data.AddressFamily[i].BandwidthGrpInboundName.IsNull() {
+			data.AddressFamily[i].BandwidthGrpInboundName = types.StringValue(value.String())
+		} else if data.AddressFamily[i].BandwidthGrpInboundName.IsNull() {
+			data.AddressFamily[i].BandwidthGrpInboundName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "bandwidth-grp/inbound/inheritance-disable"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.IsNull() {
+				data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.IsNull() {
+				data.AddressFamily[i].BandwidthGrpInboundInheritanceDisable = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "fast-reroute/per-link/multipath-backup/address/ip-address"); value.Exists() && !data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddress.IsNull() {
+			data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddress = types.StringValue(value.String())
+		} else if data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddress.IsNull() {
+			data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddress = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "fast-reroute/per-link/multipath-backup/address/inheritance-disable"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() {
+				data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() {
+				data.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolNull()
+			}
+		}
 	}
 }
 
@@ -11456,6 +11780,30 @@ func (data *RouterBGPNeighborGroup) fromBodyXML(ctx context.Context, res xmldot.
 			}
 			if cValue := helpers.GetFromXPath(v, "default-policy-action/out"); cValue.Exists() {
 				item.DefaultPolicyActionOut = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-grp/outbound/bandwidth-group-name"); cValue.Exists() {
+				item.BandwidthGrpOutboundName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-grp/outbound/inheritance-disable"); cValue.Exists() {
+				item.BandwidthGrpOutboundInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.BandwidthGrpOutboundInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-grp/inbound/bandwidth-group-name"); cValue.Exists() {
+				item.BandwidthGrpInboundName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-grp/inbound/inheritance-disable"); cValue.Exists() {
+				item.BandwidthGrpInboundInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.BandwidthGrpInboundInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "fast-reroute/per-link/multipath-backup/address/ip-address"); cValue.Exists() {
+				item.FastReroutePerLinkMultipathBackupAddress = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "fast-reroute/per-link/multipath-backup/address/inheritance-disable"); cValue.Exists() {
+				item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(false)
 			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true
@@ -12422,6 +12770,30 @@ func (data *RouterBGPNeighborGroupData) fromBodyXML(ctx context.Context, res xml
 			if cValue := helpers.GetFromXPath(v, "default-policy-action/out"); cValue.Exists() {
 				item.DefaultPolicyActionOut = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-grp/outbound/bandwidth-group-name"); cValue.Exists() {
+				item.BandwidthGrpOutboundName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-grp/outbound/inheritance-disable"); cValue.Exists() {
+				item.BandwidthGrpOutboundInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.BandwidthGrpOutboundInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-grp/inbound/bandwidth-group-name"); cValue.Exists() {
+				item.BandwidthGrpInboundName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "bandwidth-grp/inbound/inheritance-disable"); cValue.Exists() {
+				item.BandwidthGrpInboundInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.BandwidthGrpInboundInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "fast-reroute/per-link/multipath-backup/address/ip-address"); cValue.Exists() {
+				item.FastReroutePerLinkMultipathBackupAddress = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "fast-reroute/per-link/multipath-backup/address/inheritance-disable"); cValue.Exists() {
+				item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.FastReroutePerLinkMultipathBackupAddressInheritanceDisable = types.BoolValue(false)
+			}
 			data.AddressFamily = append(data.AddressFamily, item)
 			return true
 		})
@@ -12460,6 +12832,27 @@ func (data *RouterBGPNeighborGroup) addDeletedItemsXML(ctx context.Context, stat
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() && state.AddressFamily[i].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.ValueBool() && data.AddressFamily[j].FastReroutePerLinkMultipathBackupAddressInheritanceDisable.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/fast-reroute/per-link/multipath-backup/address", predicates))
+				}
+				if !state.AddressFamily[i].FastReroutePerLinkMultipathBackupAddress.IsNull() && data.AddressFamily[j].FastReroutePerLinkMultipathBackupAddress.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/fast-reroute/per-link/multipath-backup/address", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.IsNull() && state.AddressFamily[i].BandwidthGrpInboundInheritanceDisable.ValueBool() && data.AddressFamily[j].BandwidthGrpInboundInheritanceDisable.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/bandwidth-grp/inbound", predicates))
+				}
+				if !state.AddressFamily[i].BandwidthGrpInboundName.IsNull() && data.AddressFamily[j].BandwidthGrpInboundName.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/bandwidth-grp/inbound", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.IsNull() && state.AddressFamily[i].BandwidthGrpOutboundInheritanceDisable.ValueBool() && data.AddressFamily[j].BandwidthGrpOutboundInheritanceDisable.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/bandwidth-grp/outbound", predicates))
+				}
+				if !state.AddressFamily[i].BandwidthGrpOutboundName.IsNull() && data.AddressFamily[j].BandwidthGrpOutboundName.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/bandwidth-grp/outbound", predicates))
+				}
 				if !state.AddressFamily[i].DefaultPolicyActionOut.IsNull() && data.AddressFamily[j].DefaultPolicyActionOut.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/address-families/address-family%v/default-policy-action/out", predicates))
 				}

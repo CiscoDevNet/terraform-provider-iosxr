@@ -1,0 +1,43 @@
+---
+name: Segment Routing TE
+path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering
+doc_category: Segment Routing
+attributes:
+  # ===========================================================
+  # REMOVALS — profiles list moved from pcc/profiles to profiles
+  # ===========================================================
+  - yang_name: pcc/profiles/profile
+    legacy: true
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: profiles/profile
+    tf_name: pcc_profile
+    type: List
+    attributes:
+      - yang_name: profile-id
+        id: true
+        example: 10
+      - yang_name: steering/invalidation-drop
+        example: true
+      - yang_name: profile-auto-route/include-all
+        tf_name: auto_route_include_all_ipv4
+        example: true
+      - yang_name: profile-auto-route/include-ipv6-all
+        tf_name: auto_route_include_all_ipv6
+        example: true
+      - yang_name: profile-auto-route/force-sr-include
+        tf_name: auto_route_force_sr_include
+        example: true
+      - yang_name: profile-auto-route/forward-class
+        tf_name: auto_route_forward_class
+        example: 1
+      - yang_name: profile-auto-route/auto-route-metric/autoroute-metric-type
+        tf_name: auto_route_metric_type
+        example: relative
+      - yang_name: profile-auto-route/auto-route-metric/metric-relative-value
+        tf_name: auto_route_metric_relative_value
+        example: -10
+      - yang_name: profile-auto-route/auto-route-metric/metric-constant-value
+        tf_name: auto_route_metric_constant_value
+        example: 100

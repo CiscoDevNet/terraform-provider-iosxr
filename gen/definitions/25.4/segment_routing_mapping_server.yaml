@@ -1,0 +1,38 @@
+---
+name: Segment Routing Mapping Server
+path: Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing/mapping-server
+doc_category: Segment Routing
+attributes:
+  - yang_name: prefix-sid-map/address-families/address-family
+    tf_name: mapping_prefix_sid_address_family
+    type: List
+    attributes:
+      # ===========================================================
+      # REMOVALS — prefix-address list (keys address, length) replaced by
+      # addresses/address (keys ip-address, prefix)
+      # ===========================================================
+      - yang_name: prefix-address
+        legacy: true
+      # ===========================================================
+      # ADDITIONS — new in 25.4
+      # ===========================================================
+      - yang_name: addresses/address
+        tf_name: addresses
+        minimum_test_value: '["10.1.1.0"]'
+        type: List
+        attributes:
+          - yang_name: ip-address
+            id: true
+            example: 10.1.1.0
+          - yang_name: prefix
+            id: true
+            minimum_test_value: 24
+            example: 24
+          - yang_name: start-sid-index-range
+            minimum_test_value: 500
+            example: 500
+          - yang_name: range
+            minimum_test_value: 10
+            example: 10
+          - yang_name: attached
+            example: true

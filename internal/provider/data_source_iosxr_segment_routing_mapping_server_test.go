@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,11 +34,30 @@ import (
 func TestAccDataSourceIosxrSegmentRoutingMappingServer(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.af_name", "ipv4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.address", "10.1.1.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.length", "24"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.sid_index", "500"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.range", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.attached", "true"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.address", "10.1.1.0"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.length", "24"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.sid_index", "500"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.range", "10"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.prefix_addresses.0.attached", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.addresses.0.ip_address", "10.1.1.0"))
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.addresses.0.prefix", "24"))
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.addresses.0.start_sid_index_range", "500"))
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.addresses.0.range", "10"))
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_mapping_server.test", "mapping_prefix_sid_address_family.0.addresses.0.attached", "true"))
+		}
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -63,13 +83,34 @@ func testAccDataSourceIosxrSegmentRoutingMappingServerConfig() string {
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	mapping_prefix_sid_address_family = [{` + "\n"
 	config += `		af_name = "ipv4"` + "\n"
-	config += `		prefix_addresses = [{` + "\n"
-	config += `			address = "10.1.1.0"` + "\n"
-	config += `			length = "24"` + "\n"
-	config += `			sid_index = 500` + "\n"
-	config += `			range = 10` + "\n"
-	config += `			attached = true` + "\n"
-	config += `		}]` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		prefix_addresses = [{` + "\n"
+		config += `			address = "10.1.1.0"` + "\n"
+		config += `			length = "24"` + "\n"
+		config += `			sid_index = 500` + "\n"
+		config += `			range = 10` + "\n"
+		config += `			attached = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		addresses = [{` + "\n"
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `			ip_address = "10.1.1.0"` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `			prefix = 24` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `			start_sid_index_range = 500` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `			range = 10` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `			attached = true` + "\n"
+		}
+		config += `		}]` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 

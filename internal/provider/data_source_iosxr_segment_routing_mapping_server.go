@@ -79,7 +79,7 @@ func (d *SegmentRoutingMappingServerDataSource) Schema(ctx context.Context, req 
 							Computed:            true,
 						},
 						"prefix_addresses": schema.ListNestedAttribute{
-							MarkdownDescription: "SID index range",
+							MarkdownDescription: "SID index range" + "\n  - **Not supported from version `25.4` and above**",
 							Computed:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -101,6 +101,34 @@ func (d *SegmentRoutingMappingServerDataSource) Schema(ctx context.Context, req 
 									},
 									"attached": schema.BoolAttribute{
 										MarkdownDescription: "Attached entry advertised via the A-flag",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "IPaddress" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ip_address": schema.StringAttribute{
+										MarkdownDescription: "IPaddress" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"prefix": schema.Int64Attribute{
+										MarkdownDescription: "IP address prefix" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"start_sid_index_range": schema.Int64Attribute{
+										MarkdownDescription: "Start of SID index range" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"range": schema.Int64Attribute{
+										MarkdownDescription: "Number of allocated SIDs" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"attached": schema.BoolAttribute{
+										MarkdownDescription: "Attached entry advertised via the A-flag" + "\n  - Supported from version: `25.4`",
 										Computed:            true,
 									},
 								},

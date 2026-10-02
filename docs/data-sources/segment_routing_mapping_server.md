@@ -10,6 +10,14 @@ description: |-
 
 This data source can read the Segment Routing Mapping Server configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `mapping_prefix_sid_address_family.prefix_addresses` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -34,8 +42,28 @@ data "iosxr_segment_routing_mapping_server" "example" {
 
 Read-Only:
 
+- `addresses` (Attributes List) IPaddress
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family--addresses))
 - `af_name` (String) Address Family
-- `prefix_addresses` (Attributes List) SID index range (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family--prefix_addresses))
+- `prefix_addresses` (Attributes List) SID index range
+  - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family--prefix_addresses))
+
+<a id="nestedatt--mapping_prefix_sid_address_family--addresses"></a>
+### Nested Schema for `mapping_prefix_sid_address_family.addresses`
+
+Read-Only:
+
+- `attached` (Boolean) Attached entry advertised via the A-flag
+  - Supported from version: `25.4`
+- `ip_address` (String) IPaddress
+  - Supported from version: `25.4`
+- `prefix` (Number) IP address prefix
+  - Supported from version: `25.4`
+- `range` (Number) Number of allocated SIDs
+  - Supported from version: `25.4`
+- `start_sid_index_range` (Number) Start of SID index range
+  - Supported from version: `25.4`
+
 
 <a id="nestedatt--mapping_prefix_sid_address_family--prefix_addresses"></a>
 ### Nested Schema for `mapping_prefix_sid_address_family.prefix_addresses`

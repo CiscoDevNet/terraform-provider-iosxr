@@ -60,7 +60,7 @@ resource "iosxr_segment_routing_te" "example" {
   pcc_initiated_orphan   = 120
   pcc_initiated_state    = 120
   pcc_keepalive_timer    = 60
-  pcc_profiles = [
+  pcc_profile = [
     {
       auto_route_force_sr_include      = true
       auto_route_forward_class         = 1

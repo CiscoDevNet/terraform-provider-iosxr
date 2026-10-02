@@ -350,6 +350,22 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Unit of Excess burst size",
 							Computed:            true,
 						},
+						"police_conform_action_set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set the IP encapsulation class-of-service." + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"police_exceed_action_set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set the IP encapsulation class-of-service." + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"police_violate_action_set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set the IP encapsulation class-of-service." + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set the IP encapsulation class-of-service." + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},

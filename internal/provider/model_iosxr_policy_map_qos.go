@@ -115,6 +115,10 @@ type PolicyMapQoSClasses struct {
 	ShapeAverageRateUnit                             types.String                      `tfsdk:"shape_average_rate_unit"`
 	ShapeAverageExcessBurstSize                      types.Int64                       `tfsdk:"shape_average_excess_burst_size"`
 	ShapeAverageExcessBurstUnit                      types.String                      `tfsdk:"shape_average_excess_burst_unit"`
+	PoliceConformActionSetIpencapCos                 types.Int64                       `tfsdk:"police_conform_action_set_ipencap_cos"`
+	PoliceExceedActionSetIpencapCos                  types.Int64                       `tfsdk:"police_exceed_action_set_ipencap_cos"`
+	PoliceViolateActionSetIpencapCos                 types.Int64                       `tfsdk:"police_violate_action_set_ipencap_cos"`
+	SetIpencapCos                                    types.Int64                       `tfsdk:"set_ipencap_cos"`
 }
 type PolicyMapQoSClassesQueueLimits struct {
 	Value types.String `tfsdk:"value"`
@@ -354,6 +358,26 @@ func (data PolicyMapQoS) toBody(ctx context.Context, providerVersion string) str
 			if !item.ShapeAverageExcessBurstUnit.IsNull() && !item.ShapeAverageExcessBurstUnit.IsUnknown() {
 				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"shape.average.excess-burst.unit", item.ShapeAverageExcessBurstUnit.ValueString())
 			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.PoliceConformActionSetIpencapCos.IsNull() && !item.PoliceConformActionSetIpencapCos.IsUnknown() {
+					body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"police.conform-action.set.ipencap-cos", strconv.FormatInt(item.PoliceConformActionSetIpencapCos.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.PoliceExceedActionSetIpencapCos.IsNull() && !item.PoliceExceedActionSetIpencapCos.IsUnknown() {
+					body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"police.exceed-action.set.ipencap-cos", strconv.FormatInt(item.PoliceExceedActionSetIpencapCos.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.PoliceViolateActionSetIpencapCos.IsNull() && !item.PoliceViolateActionSetIpencapCos.IsUnknown() {
+					body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"police.violate-action.set.ipencap-cos", strconv.FormatInt(item.PoliceViolateActionSetIpencapCos.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.SetIpencapCos.IsNull() && !item.SetIpencapCos.IsUnknown() {
+					body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"set.ipencap-cos", strconv.FormatInt(item.SetIpencapCos.ValueInt64(), 10))
+				}
+			}
 			if len(item.QueueLimits) > 0 {
 				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"queue-limits.queue-limit", []interface{}{})
 				for cindex, citem := range item.QueueLimits {
@@ -395,6 +419,24 @@ func (data PolicyMapQoS) toBody(ctx context.Context, providerVersion string) str
 func (data PolicyMapQoS) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "classes.police_conform_action_set_ipencap_cos",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "classes.police_exceed_action_set_ipencap_cos",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "classes.police_violate_action_set_ipencap_cos",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "classes.set_ipencap_cos",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -891,6 +933,26 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte, versio
 		} else {
 			data.Classes[i].ShapeAverageExcessBurstUnit = types.StringNull()
 		}
+		if value := r.Get("police.conform-action.set.ipencap-cos"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.Classes[i].PoliceConformActionSetIpencapCos.IsNull() {
+			data.Classes[i].PoliceConformActionSetIpencapCos = types.Int64Value(value.Int())
+		} else {
+			data.Classes[i].PoliceConformActionSetIpencapCos = types.Int64Null()
+		}
+		if value := r.Get("police.exceed-action.set.ipencap-cos"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.Classes[i].PoliceExceedActionSetIpencapCos.IsNull() {
+			data.Classes[i].PoliceExceedActionSetIpencapCos = types.Int64Value(value.Int())
+		} else {
+			data.Classes[i].PoliceExceedActionSetIpencapCos = types.Int64Null()
+		}
+		if value := r.Get("police.violate-action.set.ipencap-cos"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.Classes[i].PoliceViolateActionSetIpencapCos.IsNull() {
+			data.Classes[i].PoliceViolateActionSetIpencapCos = types.Int64Value(value.Int())
+		} else {
+			data.Classes[i].PoliceViolateActionSetIpencapCos = types.Int64Null()
+		}
+		if value := r.Get("set.ipencap-cos"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.Classes[i].SetIpencapCos.IsNull() {
+			data.Classes[i].SetIpencapCos = types.Int64Value(value.Int())
+		} else {
+			data.Classes[i].SetIpencapCos = types.Int64Null()
+		}
 	}
 }
 
@@ -1135,6 +1197,34 @@ func (data *PolicyMapQoS) fromBody(ctx context.Context, res []byte, version stri
 			if cValue := v.Get("shape.average.excess-burst.unit"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.ShapeAverageExcessBurstUnit = types.StringValue(cValue.String())
 			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("police.conform-action.set.ipencap-cos"); cValue.Exists() {
+					item.PoliceConformActionSetIpencapCos = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.PoliceConformActionSetIpencapCos = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("police.exceed-action.set.ipencap-cos"); cValue.Exists() {
+					item.PoliceExceedActionSetIpencapCos = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.PoliceExceedActionSetIpencapCos = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("police.violate-action.set.ipencap-cos"); cValue.Exists() {
+					item.PoliceViolateActionSetIpencapCos = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.PoliceViolateActionSetIpencapCos = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("set.ipencap-cos"); cValue.Exists() {
+					item.SetIpencapCos = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.SetIpencapCos = types.Int64Null()
+			}
 			data.Classes = append(data.Classes, item)
 			return true
 		})
@@ -1374,6 +1464,34 @@ func (data *PolicyMapQoSData) fromBody(ctx context.Context, res []byte, version 
 			if cValue := v.Get("shape.average.excess-burst.unit"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.ShapeAverageExcessBurstUnit = types.StringValue(cValue.String())
 			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("police.conform-action.set.ipencap-cos"); cValue.Exists() {
+					item.PoliceConformActionSetIpencapCos = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.PoliceConformActionSetIpencapCos = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("police.exceed-action.set.ipencap-cos"); cValue.Exists() {
+					item.PoliceExceedActionSetIpencapCos = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.PoliceExceedActionSetIpencapCos = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("police.violate-action.set.ipencap-cos"); cValue.Exists() {
+					item.PoliceViolateActionSetIpencapCos = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.PoliceViolateActionSetIpencapCos = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("set.ipencap-cos"); cValue.Exists() {
+					item.SetIpencapCos = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.SetIpencapCos = types.Int64Null()
+			}
 			data.Classes = append(data.Classes, item)
 			return true
 		})
@@ -1415,6 +1533,18 @@ func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQo
 				found = false
 			}
 			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.Classes[i].SetIpencapCos.IsNull() && data.Classes[j].SetIpencapCos.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "set/ipencap-cos"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.Classes[i].PoliceViolateActionSetIpencapCos.IsNull() && data.Classes[j].PoliceViolateActionSetIpencapCos.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "police/violate-action/set/ipencap-cos"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.Classes[i].PoliceExceedActionSetIpencapCos.IsNull() && data.Classes[j].PoliceExceedActionSetIpencapCos.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "police/exceed-action/set/ipencap-cos"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.Classes[i].PoliceConformActionSetIpencapCos.IsNull() && data.Classes[j].PoliceConformActionSetIpencapCos.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "police/conform-action/set/ipencap-cos"))
+				}
 				if !state.Classes[i].ShapeAverageExcessBurstUnit.IsNull() && data.Classes[j].ShapeAverageExcessBurstUnit.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "shape/average/excess-burst/unit"))
 				}
@@ -2014,6 +2144,18 @@ func (data PolicyMapQoS) toBodyXML(ctx context.Context, stateArg ...*PolicyMapQo
 			if !item.ShapeAverageExcessBurstUnit.IsNull() && !item.ShapeAverageExcessBurstUnit.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/shape/average/excess-burst/unit", item.ShapeAverageExcessBurstUnit.ValueString())
 			}
+			if !item.PoliceConformActionSetIpencapCos.IsNull() && !item.PoliceConformActionSetIpencapCos.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/police/conform-action/set/ipencap-cos", strconv.FormatInt(item.PoliceConformActionSetIpencapCos.ValueInt64(), 10))
+			}
+			if !item.PoliceExceedActionSetIpencapCos.IsNull() && !item.PoliceExceedActionSetIpencapCos.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/police/exceed-action/set/ipencap-cos", strconv.FormatInt(item.PoliceExceedActionSetIpencapCos.ValueInt64(), 10))
+			}
+			if !item.PoliceViolateActionSetIpencapCos.IsNull() && !item.PoliceViolateActionSetIpencapCos.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/police/violate-action/set/ipencap-cos", strconv.FormatInt(item.PoliceViolateActionSetIpencapCos.ValueInt64(), 10))
+			}
+			if !item.SetIpencapCos.IsNull() && !item.SetIpencapCos.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/set/ipencap-cos", strconv.FormatInt(item.SetIpencapCos.ValueInt64(), 10))
+			}
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -2497,6 +2639,26 @@ func (data *PolicyMapQoS) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 		} else if data.Classes[i].ShapeAverageExcessBurstUnit.IsNull() {
 			data.Classes[i].ShapeAverageExcessBurstUnit = types.StringNull()
 		}
+		if value := helpers.GetFromXPath(r, "police/conform-action/set/ipencap-cos"); value.Exists() && !data.Classes[i].PoliceConformActionSetIpencapCos.IsNull() {
+			data.Classes[i].PoliceConformActionSetIpencapCos = types.Int64Value(value.Int())
+		} else if data.Classes[i].PoliceConformActionSetIpencapCos.IsNull() {
+			data.Classes[i].PoliceConformActionSetIpencapCos = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "police/exceed-action/set/ipencap-cos"); value.Exists() && !data.Classes[i].PoliceExceedActionSetIpencapCos.IsNull() {
+			data.Classes[i].PoliceExceedActionSetIpencapCos = types.Int64Value(value.Int())
+		} else if data.Classes[i].PoliceExceedActionSetIpencapCos.IsNull() {
+			data.Classes[i].PoliceExceedActionSetIpencapCos = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "police/violate-action/set/ipencap-cos"); value.Exists() && !data.Classes[i].PoliceViolateActionSetIpencapCos.IsNull() {
+			data.Classes[i].PoliceViolateActionSetIpencapCos = types.Int64Value(value.Int())
+		} else if data.Classes[i].PoliceViolateActionSetIpencapCos.IsNull() {
+			data.Classes[i].PoliceViolateActionSetIpencapCos = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "set/ipencap-cos"); value.Exists() && !data.Classes[i].SetIpencapCos.IsNull() {
+			data.Classes[i].SetIpencapCos = types.Int64Value(value.Int())
+		} else if data.Classes[i].SetIpencapCos.IsNull() {
+			data.Classes[i].SetIpencapCos = types.Int64Null()
+		}
 	}
 }
 
@@ -2732,6 +2894,18 @@ func (data *PolicyMapQoS) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 			if cValue := helpers.GetFromXPath(v, "shape/average/excess-burst/unit"); cValue.Exists() {
 				item.ShapeAverageExcessBurstUnit = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "police/conform-action/set/ipencap-cos"); cValue.Exists() {
+				item.PoliceConformActionSetIpencapCos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "police/exceed-action/set/ipencap-cos"); cValue.Exists() {
+				item.PoliceExceedActionSetIpencapCos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "police/violate-action/set/ipencap-cos"); cValue.Exists() {
+				item.PoliceViolateActionSetIpencapCos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "set/ipencap-cos"); cValue.Exists() {
+				item.SetIpencapCos = types.Int64Value(cValue.Int())
 			}
 			data.Classes = append(data.Classes, item)
 			return true
@@ -2972,6 +3146,18 @@ func (data *PolicyMapQoSData) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "shape/average/excess-burst/unit"); cValue.Exists() {
 				item.ShapeAverageExcessBurstUnit = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "police/conform-action/set/ipencap-cos"); cValue.Exists() {
+				item.PoliceConformActionSetIpencapCos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "police/exceed-action/set/ipencap-cos"); cValue.Exists() {
+				item.PoliceExceedActionSetIpencapCos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "police/violate-action/set/ipencap-cos"); cValue.Exists() {
+				item.PoliceViolateActionSetIpencapCos = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "set/ipencap-cos"); cValue.Exists() {
+				item.SetIpencapCos = types.Int64Value(cValue.Int())
+			}
 			data.Classes = append(data.Classes, item)
 			return true
 		})
@@ -3016,6 +3202,18 @@ func (data *PolicyMapQoS) addDeletedItemsXML(ctx context.Context, state PolicyMa
 				found = false
 			}
 			if found {
+				if !state.Classes[i].SetIpencapCos.IsNull() && data.Classes[j].SetIpencapCos.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/class%v/set/ipencap-cos", predicates))
+				}
+				if !state.Classes[i].PoliceViolateActionSetIpencapCos.IsNull() && data.Classes[j].PoliceViolateActionSetIpencapCos.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/class%v/police/violate-action/set/ipencap-cos", predicates))
+				}
+				if !state.Classes[i].PoliceExceedActionSetIpencapCos.IsNull() && data.Classes[j].PoliceExceedActionSetIpencapCos.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/class%v/police/exceed-action/set/ipencap-cos", predicates))
+				}
+				if !state.Classes[i].PoliceConformActionSetIpencapCos.IsNull() && data.Classes[j].PoliceConformActionSetIpencapCos.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/class%v/police/conform-action/set/ipencap-cos", predicates))
+				}
 				if !state.Classes[i].ShapeAverageExcessBurstUnit.IsNull() && data.Classes[j].ShapeAverageExcessBurstUnit.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/class%v/shape/average/excess-burst/unit", predicates))
 				}

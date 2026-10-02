@@ -480,6 +480,34 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 								stringvalidator.OneOf("bytes", "cells", "gbytes", "kbytes", "mbytes", "ms", "packets", "us"),
 							},
 						},
+						"police_conform_action_set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the IP encapsulation class-of-service.").AddIntegerRangeDescription(0, 63).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 63),
+							},
+						},
+						"police_exceed_action_set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the IP encapsulation class-of-service.").AddIntegerRangeDescription(0, 63).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 63),
+							},
+						},
+						"police_violate_action_set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the IP encapsulation class-of-service.").AddIntegerRangeDescription(0, 63).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 63),
+							},
+						},
+						"set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the IP encapsulation class-of-service.").AddIntegerRangeDescription(0, 63).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 63),
+							},
+						},
 					},
 				},
 			},
@@ -512,6 +540,10 @@ func (r *PolicyMapQoSResource) Create(ctx context.Context, req resource.CreateRe
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -730,6 +762,10 @@ func (r *PolicyMapQoSResource) Update(ctx context.Context, req resource.UpdateRe
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -823,6 +859,14 @@ func (r *PolicyMapQoSResource) Delete(ctx context.Context, req resource.DeleteRe
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

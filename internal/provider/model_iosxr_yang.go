@@ -524,7 +524,7 @@ func (data *Yang) fromBody(ctx context.Context, res []byte) {
 			value := gjson.GetBytes(res, attrPath)
 
 			if !value.Exists() ||
-				value.Raw == "[null]" {
+				attributes[attr] == "<EMPTY>" {
 				// Value doesn't exist in device response
 				// Preserve the planned value instead of setting to empty string
 				// This handles optional/default attributes that device may not return

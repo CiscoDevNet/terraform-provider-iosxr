@@ -225,18 +225,82 @@ func (r *MonitorSessionResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"rate_limit_rx": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Rate limit mirroring in the rx direction").AddIntegerRangeDescription(0, 4294967295).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Rate limit mirroring in the rx direction").AddIntegerRangeDescription(0, 4294967295).String + "\n  - **Not supported from version `25.4` and above**",
 							Optional:            true,
+							// Field removed in version 25.4 - keep base range validation + runtime check
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
 						"rate_limit_tx": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Rate limit mirroring in the tx direction").AddIntegerRangeDescription(0, 4294967295).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Rate limit mirroring in the tx direction").AddIntegerRangeDescription(0, 4294967295).String + "\n  - **Not supported from version `25.4` and above**",
 							Optional:            true,
+							// Field removed in version 25.4 - keep base range validation + runtime check
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
+						},
+						"destination_application": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify an application destination").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"destination_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the maximum mirroring rate").AddIntegerRangeDescription(1, 4294967295).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"destination_rate_limit_units": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the units for the maximum mirror rate").AddStringEnumDescription("kbps", "pps").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("kbps", "pps"),
+							},
+						},
+						"rx_application": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify an application destination").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"rx_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the maximum mirroring rate").AddIntegerRangeDescription(1, 4294967295).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"rx_rate_limit_units": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the units for the maximum mirror rate").AddStringEnumDescription("kbps", "pps").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("kbps", "pps"),
+							},
+						},
+						"tx_application": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify an application destination").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"tx_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the maximum mirroring rate").AddIntegerRangeDescription(1, 4294967295).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"tx_rate_limit_units": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the units for the maximum mirror rate").AddStringEnumDescription("kbps", "pps").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("kbps", "pps"),
+							},
+						},
+						"drops_unique_punt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Only mirror the first packet for a given drop reason").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"drops_unique_port": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Only mirror the first packet for a given port").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
 						},
 					},
 				},
@@ -300,6 +364,10 @@ func (r *MonitorSessionResource) Create(ctx context.Context, req resource.Create
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -518,6 +586,10 @@ func (r *MonitorSessionResource) Update(ctx context.Context, req resource.Update
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -611,6 +683,14 @@ func (r *MonitorSessionResource) Delete(ctx context.Context, req resource.Delete
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

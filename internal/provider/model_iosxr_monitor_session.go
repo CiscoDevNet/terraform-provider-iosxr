@@ -92,6 +92,17 @@ type MonitorSessionMonitorSessions struct {
 	ProtocolCaptureFilter           types.String `tfsdk:"protocol_capture_filter"`
 	RateLimitRx                     types.Int64  `tfsdk:"rate_limit_rx"`
 	RateLimitTx                     types.Int64  `tfsdk:"rate_limit_tx"`
+	DestinationApplication          types.Bool   `tfsdk:"destination_application"`
+	DestinationRateLimit            types.Int64  `tfsdk:"destination_rate_limit"`
+	DestinationRateLimitUnits       types.String `tfsdk:"destination_rate_limit_units"`
+	RxApplication                   types.Bool   `tfsdk:"rx_application"`
+	RxRateLimit                     types.Int64  `tfsdk:"rx_rate_limit"`
+	RxRateLimitUnits                types.String `tfsdk:"rx_rate_limit_units"`
+	TxApplication                   types.Bool   `tfsdk:"tx_application"`
+	TxRateLimit                     types.Int64  `tfsdk:"tx_rate_limit"`
+	TxRateLimitUnits                types.String `tfsdk:"tx_rate_limit_units"`
+	DropsUniquePunt                 types.Bool   `tfsdk:"drops_unique_punt"`
+	DropsUniquePort                 types.Bool   `tfsdk:"drops_unique_port"`
 }
 
 // End of section. //template:end types
@@ -254,11 +265,80 @@ func (data MonitorSession) toBody(ctx context.Context, providerVersion string) s
 			if !item.ProtocolCaptureFilter.IsNull() && !item.ProtocolCaptureFilter.IsUnknown() {
 				body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"protocol-capture.filter", item.ProtocolCaptureFilter.ValueString())
 			}
-			if !item.RateLimitRx.IsNull() && !item.RateLimitRx.IsUnknown() {
-				body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rate-limit.rx", strconv.FormatInt(item.RateLimitRx.ValueInt64(), 10))
+			if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RateLimitRx.IsNull() && !item.RateLimitRx.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rate-limit.rx", strconv.FormatInt(item.RateLimitRx.ValueInt64(), 10))
+				}
 			}
-			if !item.RateLimitTx.IsNull() && !item.RateLimitTx.IsUnknown() {
-				body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rate-limit.tx", strconv.FormatInt(item.RateLimitTx.ValueInt64(), 10))
+			if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RateLimitTx.IsNull() && !item.RateLimitTx.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rate-limit.tx", strconv.FormatInt(item.RateLimitTx.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DestinationApplication.IsNull() && !item.DestinationApplication.IsUnknown() {
+					if item.DestinationApplication.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"destination.application", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DestinationRateLimit.IsNull() && !item.DestinationRateLimit.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"destination.rate-limit", strconv.FormatInt(item.DestinationRateLimit.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DestinationRateLimitUnits.IsNull() && !item.DestinationRateLimitUnits.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"destination.rate-limit-units", item.DestinationRateLimitUnits.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RxApplication.IsNull() && !item.RxApplication.IsUnknown() {
+					if item.RxApplication.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rx.application", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RxRateLimit.IsNull() && !item.RxRateLimit.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rx.rate-limit", strconv.FormatInt(item.RxRateLimit.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RxRateLimitUnits.IsNull() && !item.RxRateLimitUnits.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rx.rate-limit-units", item.RxRateLimitUnits.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TxApplication.IsNull() && !item.TxApplication.IsUnknown() {
+					if item.TxApplication.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"tx.application", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TxRateLimit.IsNull() && !item.TxRateLimit.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"tx.rate-limit", strconv.FormatInt(item.TxRateLimit.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TxRateLimitUnits.IsNull() && !item.TxRateLimitUnits.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"tx.rate-limit-units", item.TxRateLimitUnits.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DropsUniquePunt.IsNull() && !item.DropsUniquePunt.IsUnknown() {
+					if item.DropsUniquePunt.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"drops.unique-punt", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DropsUniquePort.IsNull() && !item.DropsUniquePort.IsUnknown() {
+					if item.DropsUniquePort.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"drops.unique-port", map[string]string{})
+					}
+				}
 			}
 		}
 	}
@@ -273,6 +353,62 @@ func (data MonitorSession) toBody(ctx context.Context, providerVersion string) s
 func (data MonitorSession) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "monitor_sessions.rate_limit_rx",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "monitor_sessions.rate_limit_tx",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.destination_application",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.destination_rate_limit",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.destination_rate_limit_units",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.rx_application",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.rx_rate_limit",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.rx_rate_limit_units",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.tx_application",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.tx_rate_limit",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.tx_rate_limit_units",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.drops_unique_punt",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.drops_unique_port",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -559,15 +695,105 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte, vers
 		} else {
 			data.MonitorSessions[i].ProtocolCaptureFilter = types.StringNull()
 		}
-		if value := r.Get("rate-limit.rx"); value.Exists() && !data.MonitorSessions[i].RateLimitRx.IsNull() {
+		if value := r.Get("rate-limit.rx"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.MonitorSessions[i].RateLimitRx.IsNull() {
 			data.MonitorSessions[i].RateLimitRx = types.Int64Value(value.Int())
 		} else {
 			data.MonitorSessions[i].RateLimitRx = types.Int64Null()
 		}
-		if value := r.Get("rate-limit.tx"); value.Exists() && !data.MonitorSessions[i].RateLimitTx.IsNull() {
+		if value := r.Get("rate-limit.tx"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.MonitorSessions[i].RateLimitTx.IsNull() {
 			data.MonitorSessions[i].RateLimitTx = types.Int64Value(value.Int())
 		} else {
 			data.MonitorSessions[i].RateLimitTx = types.Int64Null()
+		}
+		if value := r.Get("destination.application"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DestinationApplication.IsNull() {
+				data.MonitorSessions[i].DestinationApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DestinationApplication.IsNull() {
+				data.MonitorSessions[i].DestinationApplication = types.BoolNull()
+			}
+		}
+		if value := r.Get("destination.rate-limit"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.MonitorSessions[i].DestinationRateLimit.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimit = types.Int64Value(value.Int())
+		} else {
+			data.MonitorSessions[i].DestinationRateLimit = types.Int64Null()
+		}
+		if value := r.Get("destination.rate-limit-units"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].DestinationRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimitUnits = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].DestinationRateLimitUnits = types.StringNull()
+		}
+		if value := r.Get("rx.application"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].RxApplication.IsNull() {
+				data.MonitorSessions[i].RxApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].RxApplication.IsNull() {
+				data.MonitorSessions[i].RxApplication = types.BoolNull()
+			}
+		}
+		if value := r.Get("rx.rate-limit"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.MonitorSessions[i].RxRateLimit.IsNull() {
+			data.MonitorSessions[i].RxRateLimit = types.Int64Value(value.Int())
+		} else {
+			data.MonitorSessions[i].RxRateLimit = types.Int64Null()
+		}
+		if value := r.Get("rx.rate-limit-units"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].RxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].RxRateLimitUnits = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].RxRateLimitUnits = types.StringNull()
+		}
+		if value := r.Get("tx.application"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].TxApplication.IsNull() {
+				data.MonitorSessions[i].TxApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].TxApplication.IsNull() {
+				data.MonitorSessions[i].TxApplication = types.BoolNull()
+			}
+		}
+		if value := r.Get("tx.rate-limit"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.MonitorSessions[i].TxRateLimit.IsNull() {
+			data.MonitorSessions[i].TxRateLimit = types.Int64Value(value.Int())
+		} else {
+			data.MonitorSessions[i].TxRateLimit = types.Int64Null()
+		}
+		if value := r.Get("tx.rate-limit-units"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].TxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].TxRateLimitUnits = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].TxRateLimitUnits = types.StringNull()
+		}
+		if value := r.Get("drops.unique-punt"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsUniquePunt.IsNull() {
+				data.MonitorSessions[i].DropsUniquePunt = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DropsUniquePunt.IsNull() {
+				data.MonitorSessions[i].DropsUniquePunt = types.BoolNull()
+			}
+		}
+		if value := r.Get("drops.unique-port"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsUniquePort.IsNull() {
+				data.MonitorSessions[i].DropsUniquePort = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DropsUniquePort.IsNull() {
+				data.MonitorSessions[i].DropsUniquePort = types.BoolNull()
+			}
 		}
 	}
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() && !data.RouterId.IsNull() {
@@ -745,11 +971,111 @@ func (data *MonitorSession) fromBody(ctx context.Context, res []byte, version st
 			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("rate-limit.rx"); cValue.Exists() {
-				item.RateLimitRx = types.Int64Value(cValue.Int())
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rate-limit.rx"); cValue.Exists() {
+					item.RateLimitRx = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RateLimitRx = types.Int64Null()
 			}
-			if cValue := v.Get("rate-limit.tx"); cValue.Exists() {
-				item.RateLimitTx = types.Int64Value(cValue.Int())
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rate-limit.tx"); cValue.Exists() {
+					item.RateLimitTx = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RateLimitTx = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.application"); cValue.Exists() {
+					item.DestinationApplication = types.BoolValue(true)
+				} else if !item.DestinationApplication.IsNull() {
+					// Only set to false if it was previously set
+					item.DestinationApplication = types.BoolValue(false)
+				}
+			} else {
+				item.DestinationApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.rate-limit"); cValue.Exists() {
+					item.DestinationRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.DestinationRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.DestinationRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.DestinationRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.application"); cValue.Exists() {
+					item.RxApplication = types.BoolValue(true)
+				} else if !item.RxApplication.IsNull() {
+					// Only set to false if it was previously set
+					item.RxApplication = types.BoolValue(false)
+				}
+			} else {
+				item.RxApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.rate-limit"); cValue.Exists() {
+					item.RxRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RxRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.RxRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.RxRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.application"); cValue.Exists() {
+					item.TxApplication = types.BoolValue(true)
+				} else if !item.TxApplication.IsNull() {
+					// Only set to false if it was previously set
+					item.TxApplication = types.BoolValue(false)
+				}
+			} else {
+				item.TxApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.rate-limit"); cValue.Exists() {
+					item.TxRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.TxRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TxRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TxRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("drops.unique-punt"); cValue.Exists() {
+					item.DropsUniquePunt = types.BoolValue(true)
+				} else if !item.DropsUniquePunt.IsNull() {
+					// Only set to false if it was previously set
+					item.DropsUniquePunt = types.BoolValue(false)
+				}
+			} else {
+				item.DropsUniquePunt = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("drops.unique-port"); cValue.Exists() {
+					item.DropsUniquePort = types.BoolValue(true)
+				} else if !item.DropsUniquePort.IsNull() {
+					// Only set to false if it was previously set
+					item.DropsUniquePort = types.BoolValue(false)
+				}
+			} else {
+				item.DropsUniquePort = types.BoolNull()
 			}
 			data.MonitorSessions = append(data.MonitorSessions, item)
 			return true
@@ -898,11 +1224,106 @@ func (data *MonitorSessionData) fromBody(ctx context.Context, res []byte, versio
 			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("rate-limit.rx"); cValue.Exists() {
-				item.RateLimitRx = types.Int64Value(cValue.Int())
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rate-limit.rx"); cValue.Exists() {
+					item.RateLimitRx = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RateLimitRx = types.Int64Null()
 			}
-			if cValue := v.Get("rate-limit.tx"); cValue.Exists() {
-				item.RateLimitTx = types.Int64Value(cValue.Int())
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rate-limit.tx"); cValue.Exists() {
+					item.RateLimitTx = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RateLimitTx = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.application"); cValue.Exists() {
+					item.DestinationApplication = types.BoolValue(true)
+				} else {
+					item.DestinationApplication = types.BoolValue(false)
+				}
+			} else {
+				item.DestinationApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.rate-limit"); cValue.Exists() {
+					item.DestinationRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.DestinationRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.DestinationRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.DestinationRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.application"); cValue.Exists() {
+					item.RxApplication = types.BoolValue(true)
+				} else {
+					item.RxApplication = types.BoolValue(false)
+				}
+			} else {
+				item.RxApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.rate-limit"); cValue.Exists() {
+					item.RxRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RxRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.RxRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.RxRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.application"); cValue.Exists() {
+					item.TxApplication = types.BoolValue(true)
+				} else {
+					item.TxApplication = types.BoolValue(false)
+				}
+			} else {
+				item.TxApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.rate-limit"); cValue.Exists() {
+					item.TxRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.TxRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TxRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TxRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("drops.unique-punt"); cValue.Exists() {
+					item.DropsUniquePunt = types.BoolValue(true)
+				} else {
+					item.DropsUniquePunt = types.BoolValue(false)
+				}
+			} else {
+				item.DropsUniquePunt = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("drops.unique-port"); cValue.Exists() {
+					item.DropsUniquePort = types.BoolValue(true)
+				} else {
+					item.DropsUniquePort = types.BoolValue(false)
+				}
+			} else {
+				item.DropsUniquePort = types.BoolNull()
 			}
 			data.MonitorSessions = append(data.MonitorSessions, item)
 			return true
@@ -983,10 +1404,43 @@ func (data *MonitorSession) getDeletedItems(ctx context.Context, state MonitorSe
 				found = false
 			}
 			if found {
-				if !state.MonitorSessions[i].RateLimitTx.IsNull() && data.MonitorSessions[j].RateLimitTx.IsNull() {
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DropsUniquePort.IsNull() && data.MonitorSessions[j].DropsUniquePort.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "drops/unique-port"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DropsUniquePunt.IsNull() && data.MonitorSessions[j].DropsUniquePunt.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "drops/unique-punt"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].TxRateLimitUnits.IsNull() && data.MonitorSessions[j].TxRateLimitUnits.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "tx/rate-limit-units"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].TxRateLimit.IsNull() && data.MonitorSessions[j].TxRateLimit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "tx/rate-limit"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].TxApplication.IsNull() && data.MonitorSessions[j].TxApplication.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "tx/application"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].RxRateLimitUnits.IsNull() && data.MonitorSessions[j].RxRateLimitUnits.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rx/rate-limit-units"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].RxRateLimit.IsNull() && data.MonitorSessions[j].RxRateLimit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rx/rate-limit"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].RxApplication.IsNull() && data.MonitorSessions[j].RxApplication.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rx/application"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DestinationRateLimitUnits.IsNull() && data.MonitorSessions[j].DestinationRateLimitUnits.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/rate-limit-units"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DestinationRateLimit.IsNull() && data.MonitorSessions[j].DestinationRateLimit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/rate-limit"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DestinationApplication.IsNull() && data.MonitorSessions[j].DestinationApplication.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/application"))
+				}
+				if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.MonitorSessions[i].RateLimitTx.IsNull() && data.MonitorSessions[j].RateLimitTx.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rate-limit/tx"))
 				}
-				if !state.MonitorSessions[i].RateLimitRx.IsNull() && data.MonitorSessions[j].RateLimitRx.IsNull() {
+				if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.MonitorSessions[i].RateLimitRx.IsNull() && data.MonitorSessions[j].RateLimitRx.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rate-limit/rx"))
 				}
 				if !state.MonitorSessions[i].ProtocolCaptureFilter.IsNull() && data.MonitorSessions[j].ProtocolCaptureFilter.IsNull() {
@@ -1106,6 +1560,31 @@ func (data *MonitorSession) getEmptyLeafsDelete(ctx context.Context, state *Moni
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].DropsUniquePort.IsNull() && !data.MonitorSessions[i].DropsUniquePort.ValueBool() {
+			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsUniquePort.IsNull() && state.MonitorSessions[i].DropsUniquePort.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/unique-port"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].DropsUniquePunt.IsNull() && !data.MonitorSessions[i].DropsUniquePunt.ValueBool() {
+			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsUniquePunt.IsNull() && state.MonitorSessions[i].DropsUniquePunt.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/unique-punt"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].TxApplication.IsNull() && !data.MonitorSessions[i].TxApplication.ValueBool() {
+			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].TxApplication.IsNull() && state.MonitorSessions[i].TxApplication.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "tx/application"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].RxApplication.IsNull() && !data.MonitorSessions[i].RxApplication.ValueBool() {
+			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].RxApplication.IsNull() && state.MonitorSessions[i].RxApplication.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "rx/application"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].DestinationApplication.IsNull() && !data.MonitorSessions[i].DestinationApplication.ValueBool() {
+			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationApplication.IsNull() && state.MonitorSessions[i].DestinationApplication.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/application"))
+			}
 		}
 		if !data.MonitorSessions[i].ProtocolCaptureTx.IsNull() && !data.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
 			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].ProtocolCaptureTx.IsNull() && state.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
@@ -1336,6 +1815,49 @@ func (data MonitorSession) toBodyXML(ctx context.Context, stateArg ...*MonitorSe
 			}
 			if !item.RateLimitTx.IsNull() && !item.RateLimitTx.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/rate-limit/tx", strconv.FormatInt(item.RateLimitTx.ValueInt64(), 10))
+			}
+			if !item.DestinationApplication.IsNull() && !item.DestinationApplication.IsUnknown() {
+				if item.DestinationApplication.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/destination/application", "")
+				}
+			}
+			if !item.DestinationRateLimit.IsNull() && !item.DestinationRateLimit.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/destination/rate-limit", strconv.FormatInt(item.DestinationRateLimit.ValueInt64(), 10))
+			}
+			if !item.DestinationRateLimitUnits.IsNull() && !item.DestinationRateLimitUnits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/destination/rate-limit-units", item.DestinationRateLimitUnits.ValueString())
+			}
+			if !item.RxApplication.IsNull() && !item.RxApplication.IsUnknown() {
+				if item.RxApplication.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/rx/application", "")
+				}
+			}
+			if !item.RxRateLimit.IsNull() && !item.RxRateLimit.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/rx/rate-limit", strconv.FormatInt(item.RxRateLimit.ValueInt64(), 10))
+			}
+			if !item.RxRateLimitUnits.IsNull() && !item.RxRateLimitUnits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/rx/rate-limit-units", item.RxRateLimitUnits.ValueString())
+			}
+			if !item.TxApplication.IsNull() && !item.TxApplication.IsUnknown() {
+				if item.TxApplication.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/tx/application", "")
+				}
+			}
+			if !item.TxRateLimit.IsNull() && !item.TxRateLimit.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/tx/rate-limit", strconv.FormatInt(item.TxRateLimit.ValueInt64(), 10))
+			}
+			if !item.TxRateLimitUnits.IsNull() && !item.TxRateLimitUnits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/tx/rate-limit-units", item.TxRateLimitUnits.ValueString())
+			}
+			if !item.DropsUniquePunt.IsNull() && !item.DropsUniquePunt.IsUnknown() {
+				if item.DropsUniquePunt.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/drops/unique-punt", "")
+				}
+			}
+			if !item.DropsUniquePort.IsNull() && !item.DropsUniquePort.IsUnknown() {
+				if item.DropsUniquePort.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/drops/unique-port", "")
+				}
 			}
 		}
 	}
@@ -1646,6 +2168,96 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 		} else if data.MonitorSessions[i].RateLimitTx.IsNull() {
 			data.MonitorSessions[i].RateLimitTx = types.Int64Null()
 		}
+		if value := helpers.GetFromXPath(r, "destination/application"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DestinationApplication.IsNull() {
+				data.MonitorSessions[i].DestinationApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DestinationApplication.IsNull() {
+				data.MonitorSessions[i].DestinationApplication = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "destination/rate-limit"); value.Exists() && !data.MonitorSessions[i].DestinationRateLimit.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimit = types.Int64Value(value.Int())
+		} else if data.MonitorSessions[i].DestinationRateLimit.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimit = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "destination/rate-limit-units"); value.Exists() && !data.MonitorSessions[i].DestinationRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimitUnits = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].DestinationRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimitUnits = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "rx/application"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].RxApplication.IsNull() {
+				data.MonitorSessions[i].RxApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].RxApplication.IsNull() {
+				data.MonitorSessions[i].RxApplication = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "rx/rate-limit"); value.Exists() && !data.MonitorSessions[i].RxRateLimit.IsNull() {
+			data.MonitorSessions[i].RxRateLimit = types.Int64Value(value.Int())
+		} else if data.MonitorSessions[i].RxRateLimit.IsNull() {
+			data.MonitorSessions[i].RxRateLimit = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "rx/rate-limit-units"); value.Exists() && !data.MonitorSessions[i].RxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].RxRateLimitUnits = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].RxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].RxRateLimitUnits = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "tx/application"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].TxApplication.IsNull() {
+				data.MonitorSessions[i].TxApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].TxApplication.IsNull() {
+				data.MonitorSessions[i].TxApplication = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "tx/rate-limit"); value.Exists() && !data.MonitorSessions[i].TxRateLimit.IsNull() {
+			data.MonitorSessions[i].TxRateLimit = types.Int64Value(value.Int())
+		} else if data.MonitorSessions[i].TxRateLimit.IsNull() {
+			data.MonitorSessions[i].TxRateLimit = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "tx/rate-limit-units"); value.Exists() && !data.MonitorSessions[i].TxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].TxRateLimitUnits = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].TxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].TxRateLimitUnits = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "drops/unique-punt"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsUniquePunt.IsNull() {
+				data.MonitorSessions[i].DropsUniquePunt = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DropsUniquePunt.IsNull() {
+				data.MonitorSessions[i].DropsUniquePunt = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "drops/unique-port"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsUniquePort.IsNull() {
+				data.MonitorSessions[i].DropsUniquePort = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DropsUniquePort.IsNull() {
+				data.MonitorSessions[i].DropsUniquePort = types.BoolNull()
+			}
+		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.Int64Value(value.Int())
@@ -1820,6 +2432,49 @@ func (data *MonitorSession) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "rate-limit/tx"); cValue.Exists() {
 				item.RateLimitTx = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "destination/application"); cValue.Exists() {
+				item.DestinationApplication = types.BoolValue(true)
+			} else {
+				item.DestinationApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/rate-limit"); cValue.Exists() {
+				item.DestinationRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/rate-limit-units"); cValue.Exists() {
+				item.DestinationRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/application"); cValue.Exists() {
+				item.RxApplication = types.BoolValue(true)
+			} else {
+				item.RxApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/rate-limit"); cValue.Exists() {
+				item.RxRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/rate-limit-units"); cValue.Exists() {
+				item.RxRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/application"); cValue.Exists() {
+				item.TxApplication = types.BoolValue(true)
+			} else {
+				item.TxApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/rate-limit"); cValue.Exists() {
+				item.TxRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/rate-limit-units"); cValue.Exists() {
+				item.TxRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/unique-punt"); cValue.Exists() {
+				item.DropsUniquePunt = types.BoolValue(true)
+			} else {
+				item.DropsUniquePunt = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/unique-port"); cValue.Exists() {
+				item.DropsUniquePort = types.BoolValue(true)
+			} else {
+				item.DropsUniquePort = types.BoolValue(false)
+			}
 			data.MonitorSessions = append(data.MonitorSessions, item)
 			return true
 		})
@@ -1968,6 +2623,49 @@ func (data *MonitorSessionData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			}
 			if cValue := helpers.GetFromXPath(v, "rate-limit/tx"); cValue.Exists() {
 				item.RateLimitTx = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/application"); cValue.Exists() {
+				item.DestinationApplication = types.BoolValue(true)
+			} else {
+				item.DestinationApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/rate-limit"); cValue.Exists() {
+				item.DestinationRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/rate-limit-units"); cValue.Exists() {
+				item.DestinationRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/application"); cValue.Exists() {
+				item.RxApplication = types.BoolValue(true)
+			} else {
+				item.RxApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/rate-limit"); cValue.Exists() {
+				item.RxRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/rate-limit-units"); cValue.Exists() {
+				item.RxRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/application"); cValue.Exists() {
+				item.TxApplication = types.BoolValue(true)
+			} else {
+				item.TxApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/rate-limit"); cValue.Exists() {
+				item.TxRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/rate-limit-units"); cValue.Exists() {
+				item.TxRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/unique-punt"); cValue.Exists() {
+				item.DropsUniquePunt = types.BoolValue(true)
+			} else {
+				item.DropsUniquePunt = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/unique-port"); cValue.Exists() {
+				item.DropsUniquePort = types.BoolValue(true)
+			} else {
+				item.DropsUniquePort = types.BoolValue(false)
 			}
 			data.MonitorSessions = append(data.MonitorSessions, item)
 			return true
@@ -2127,6 +2825,44 @@ func (data *MonitorSession) addDeletedItemsXML(ctx context.Context, state Monito
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].DropsUniquePort.IsNull() && state.MonitorSessions[i].DropsUniquePort.ValueBool() && data.MonitorSessions[j].DropsUniquePort.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/unique-port", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].DropsUniquePunt.IsNull() && state.MonitorSessions[i].DropsUniquePunt.ValueBool() && data.MonitorSessions[j].DropsUniquePunt.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/unique-punt", predicates))
+				}
+				if !state.MonitorSessions[i].TxRateLimitUnits.IsNull() && data.MonitorSessions[j].TxRateLimitUnits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/rate-limit-units", predicates))
+				}
+				if !state.MonitorSessions[i].TxRateLimit.IsNull() && data.MonitorSessions[j].TxRateLimit.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/rate-limit", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].TxApplication.IsNull() && state.MonitorSessions[i].TxApplication.ValueBool() && data.MonitorSessions[j].TxApplication.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/application", predicates))
+				}
+				if !state.MonitorSessions[i].RxRateLimitUnits.IsNull() && data.MonitorSessions[j].RxRateLimitUnits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/rate-limit-units", predicates))
+				}
+				if !state.MonitorSessions[i].RxRateLimit.IsNull() && data.MonitorSessions[j].RxRateLimit.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/rate-limit", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].RxApplication.IsNull() && state.MonitorSessions[i].RxApplication.ValueBool() && data.MonitorSessions[j].RxApplication.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/application", predicates))
+				}
+				if !state.MonitorSessions[i].DestinationRateLimitUnits.IsNull() && data.MonitorSessions[j].DestinationRateLimitUnits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/rate-limit-units", predicates))
+				}
+				if !state.MonitorSessions[i].DestinationRateLimit.IsNull() && data.MonitorSessions[j].DestinationRateLimit.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/rate-limit", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].DestinationApplication.IsNull() && state.MonitorSessions[i].DestinationApplication.ValueBool() && data.MonitorSessions[j].DestinationApplication.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/application", predicates))
+				}
 				if !state.MonitorSessions[i].RateLimitTx.IsNull() && data.MonitorSessions[j].RateLimitTx.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rate-limit/tx", predicates))
 				}

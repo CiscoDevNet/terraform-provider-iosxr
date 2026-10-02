@@ -10,6 +10,15 @@ description: |-
 
 This data source can read the Monitor Session configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `monitor_sessions.rate_limit_rx` | `25.4` |
+| `monitor_sessions.rate_limit_tx` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -40,6 +49,8 @@ data "iosxr_monitor_session" "example" {
 
 Read-Only:
 
+- `destination_application` (Boolean) Specify an application destination
+  - Supported from version: `25.4`
 - `destination_file_always_on` (Boolean) Start packet capture immediately if configured
 - `destination_file_buffer_type_linear` (Boolean) Specify a linear buffer
 - `destination_file_filter` (String) Specify a pcap filter to apply
@@ -47,12 +58,20 @@ Read-Only:
 - `destination_file_size` (Number) Specify the packet buffer size
 - `destination_interface` (String) Specify a destination interface
 - `destination_pseudowire` (Boolean) Specify a pseudowire
+- `destination_rate_limit` (Number) Specify the maximum mirroring rate
+  - Supported from version: `25.4`
+- `destination_rate_limit_units` (String) Specify the units for the maximum mirror rate
+  - Supported from version: `25.4`
 - `discard_class` (Number) Specify the discard class value to be set on all traffic mirrored to the destination
 - `drops_filter` (String) Specify a pcap filter to apply
 - `drops_packet_processing` (Boolean) Mirror packet-processing dropped packets only
 - `drops_rx` (Boolean) Mirror dropped packets in the Rx direction only
 - `drops_traffic_management` (Boolean) Mirror traffic-management dropped packets only
 - `drops_tx` (Boolean) Mirror dropped packets in the Tx direction only
+- `drops_unique_port` (Boolean) Only mirror the first packet for a given port
+  - Supported from version: `25.4`
+- `drops_unique_punt` (Boolean) Only mirror the first packet for a given drop reason
+  - Supported from version: `25.4`
 - `inject_interface` (String) Specify the attachment interface into which traffic may be injected from the SPAN session's destination
 - `mirror_first` (Number) Enable mirroring on the first portion of a packet
 - `mirror_interval` (String) Enable mirroring of every Nth packet for this session
@@ -60,11 +79,25 @@ Read-Only:
 - `protocol_capture_rx` (Boolean) Mirror Rx protocol-captured packets
 - `protocol_capture_tx` (Boolean) Mirror Tx protocol-captured packets
 - `rate_limit_rx` (Number) Rate limit mirroring in the rx direction
+  - **Not supported from version `25.4` and above**
 - `rate_limit_tx` (Number) Rate limit mirroring in the tx direction
+  - **Not supported from version `25.4` and above**
+- `rx_application` (Boolean) Specify an application destination
+  - Supported from version: `25.4`
 - `rx_interface` (String) Specify a destination interface
 - `rx_pseudowire` (Boolean) Specify a pseudowire
+- `rx_rate_limit` (Number) Specify the maximum mirroring rate
+  - Supported from version: `25.4`
+- `rx_rate_limit_units` (String) Specify the units for the maximum mirror rate
+  - Supported from version: `25.4`
 - `session_name` (String) Session Name
 - `traffic_class` (Number) Specify the traffic class value to be set on all traffic mirrored to the destination
 - `traffic_type` (String) Type of traffic to replicate
+- `tx_application` (Boolean) Specify an application destination
+  - Supported from version: `25.4`
 - `tx_interface` (String) Specify a destination interface
 - `tx_pseudowire` (Boolean) Specify a pseudowire
+- `tx_rate_limit` (Number) Specify the maximum mirroring rate
+  - Supported from version: `25.4`
+- `tx_rate_limit_units` (String) Specify the units for the maximum mirror rate
+  - Supported from version: `25.4`

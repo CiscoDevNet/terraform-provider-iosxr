@@ -1,0 +1,48 @@
+---
+name: ICMP
+path: Cisco-IOS-XR-um-icmp-cfg:/icmp
+doc_category: System
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: ipv4/mpls/extended-diagnostics
+    tf_name: ipv4_mpls_extended_diagnostics
+    example: true
+  - yang_name: ipv6/mpls/extended-diagnostics
+    tf_name: ipv6_mpls_extended_diagnostics
+    example: true
+  - yang_name: ipv4/vrfs/vrf
+    tf_name: ipv4_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: VRF1
+      - yang_name: extended-diagnostics/permitted-remote-address/ip-addresses/ip-address
+        tf_name: extended_diagnostics_permitted_remote_addresses
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 10.0.0.0
+          - yang_name: length
+            id: true
+            example: 24
+  - yang_name: ipv6/vrfs/vrf
+    tf_name: ipv6_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: VRF1
+      - yang_name: extended-diagnostics/permitted-remote-address/ip-addresses/ip-address
+        tf_name: extended_diagnostics_permitted_remote_addresses
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: "2001:db8::"
+          - yang_name: length
+            id: true
+            example: 64

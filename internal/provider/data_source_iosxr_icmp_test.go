@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -36,6 +37,38 @@ func TestAccDataSourceIosxrICMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv4_rate_limit_unreachable_rate", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv4_rate_limit_unreachable_df_rate", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv6_source_vrf", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv4_mpls_extended_diagnostics", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv6_mpls_extended_diagnostics", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv4_vrfs.0.vrf_name", "VRF1"))
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv4_vrfs.0.extended_diagnostics_permitted_remote_addresses.0.address", "10.0.0.0"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv4_vrfs.0.extended_diagnostics_permitted_remote_addresses.0.length", "24"))
+			}
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv6_vrfs.0.vrf_name", "VRF1"))
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv6_vrfs.0.extended_diagnostics_permitted_remote_addresses.0.address", "2001:db8::"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_icmp.test", "ipv6_vrfs.0.extended_diagnostics_permitted_remote_addresses.0.length", "64"))
+			}
+		}
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -63,6 +96,46 @@ func testAccDataSourceIosxrICMPConfig() string {
 	config += `	ipv4_rate_limit_unreachable_rate = 1000` + "\n"
 	config += `	ipv4_rate_limit_unreachable_df_rate = 1000` + "\n"
 	config += `	ipv6_source_vrf = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	ipv4_mpls_extended_diagnostics = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	ipv6_mpls_extended_diagnostics = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	ipv4_vrfs = [{` + "\n"
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `		vrf_name = "VRF1"` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `		extended_diagnostics_permitted_remote_addresses = [{` + "\n"
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			address = "10.0.0.0"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			length = 24` + "\n"
+			}
+			config += `		}]` + "\n"
+		}
+		config += `	}]` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	ipv6_vrfs = [{` + "\n"
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `		vrf_name = "VRF1"` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `		extended_diagnostics_permitted_remote_addresses = [{` + "\n"
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			address = "2001:db8::"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			length = 64` + "\n"
+			}
+			config += `		}]` + "\n"
+		}
+		config += `	}]` + "\n"
+	}
 	config += `}` + "\n"
 
 	config += `

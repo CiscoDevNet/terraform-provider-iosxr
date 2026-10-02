@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -117,6 +118,89 @@ func (r *ICMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: helpers.NewAttributeDescription("Enable RFC compliance for source address selection").String,
 				Optional:            true,
 			},
+			"ipv4_mpls_extended_diagnostics": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter the extended diagnostics submode").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"ipv6_mpls_extended_diagnostics": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter the extended diagnostics submode").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"ipv4_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configuration for a particular VRF").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configuration for a particular VRF").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"extended_diagnostics_permitted_remote_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Permitted remote IPv4 prefix").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Permitted remote IPv4 prefix").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+									},
+									"length": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Permitted remote IPv4 prefix").AddIntegerRangeDescription(0, 32).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 32),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ipv6_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configuration for a particular VRF").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configuration for a particular VRF").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"extended_diagnostics_permitted_remote_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Permitted remote IPv6 prefix").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Permitted remote IPv6 prefix").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+										},
+									},
+									"length": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Permitted remote IPv6 prefix").AddIntegerRangeDescription(0, 128).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 128),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -146,6 +230,10 @@ func (r *ICMPResource) Create(ctx context.Context, req resource.CreateRequest, r
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -364,6 +452,10 @@ func (r *ICMPResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -457,6 +549,14 @@ func (r *ICMPResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

@@ -101,6 +101,70 @@ func (d *ICMPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Enable RFC compliance for source address selection",
 				Computed:            true,
 			},
+			"ipv4_mpls_extended_diagnostics": schema.BoolAttribute{
+				MarkdownDescription: "Enter the extended diagnostics submode" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ipv6_mpls_extended_diagnostics": schema.BoolAttribute{
+				MarkdownDescription: "Enter the extended diagnostics submode" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ipv4_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Configuration for a particular VRF" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Configuration for a particular VRF" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"extended_diagnostics_permitted_remote_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Permitted remote IPv4 prefix" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Permitted remote IPv4 prefix" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"length": schema.Int64Attribute{
+										MarkdownDescription: "Permitted remote IPv4 prefix" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ipv6_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Configuration for a particular VRF" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Configuration for a particular VRF" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"extended_diagnostics_permitted_remote_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Permitted remote IPv6 prefix" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Permitted remote IPv6 prefix" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"length": schema.Int64Attribute{
+										MarkdownDescription: "Permitted remote IPv6 prefix" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

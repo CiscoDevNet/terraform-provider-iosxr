@@ -18,17 +18,18 @@ resource "iosxr_aaa" "example" {
       load_balance_method_least_outstanding_ignore_preferred_server = true
       server_privates = [
         {
-          acct_port        = 1813
-          address          = "10.1.1.2"
-          auth_port        = 1812
-          idle_time        = 30
-          ignore_acct_port = true
-          ignore_auth_port = true
-          key_type_7       = "045802150C2E0C"
-          order            = 1
-          retransmit       = 5
-          test_username    = "cisco"
-          timeout          = 120
+          acct_port                               = 1813
+          address                                 = "10.1.1.2"
+          attribute_message_authenticator_mandate = true
+          auth_port                               = 1812
+          idle_time                               = 30
+          ignore_acct_port                        = true
+          ignore_auth_port                        = true
+          key_type_7                              = "045802150C2E0C"
+          order                                   = 1
+          retransmit                              = 5
+          test_username                           = "cisco"
+          timeout                                 = 120
         }
       ]
       servers = [
@@ -48,9 +49,10 @@ resource "iosxr_aaa" "example" {
   ]
   server_radius_dynamic_author_clients = [
     {
-      address           = "10.1.1.10"
-      server_key_type_7 = "03075218050061"
-      vrf               = "VRF1"
+      address                                 = "10.1.1.10"
+      attribute_message_authenticator_mandate = true
+      server_key_type_7                       = "03075218050061"
+      vrf                                     = "VRF1"
     }
   ]
   server_radius_dynamic_author_ignore_server_key = true
@@ -70,6 +72,7 @@ resource "iosxr_aaa" "example" {
           single_connection              = true
           single_connection_idle_timeout = 1000
           timeout                        = 10
+          tls_server_name_indicator      = "tacacs.example.com"
         }
       ]
       servers = [

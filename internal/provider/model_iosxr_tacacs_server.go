@@ -74,6 +74,8 @@ type TACACSServerHosts struct {
 	KeyType6                    types.String `tfsdk:"key_type_6"`
 	SingleConnection            types.Bool   `tfsdk:"single_connection"`
 	SingleConnectionIdleTimeout types.Int64  `tfsdk:"single_connection_idle_timeout"`
+	TlsTrustpoint               types.String `tfsdk:"tls_trustpoint"`
+	TlsServerNameIndicator      types.String `tfsdk:"tls_server_name_indicator"`
 }
 
 // End of section. //template:end types
@@ -155,6 +157,16 @@ func (data TACACSServer) toBody(ctx context.Context, providerVersion string) str
 			if !item.SingleConnectionIdleTimeout.IsNull() && !item.SingleConnectionIdleTimeout.IsUnknown() {
 				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"single-connection-idle-timeout", strconv.FormatInt(item.SingleConnectionIdleTimeout.ValueInt64(), 10))
 			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TlsTrustpoint.IsNull() && !item.TlsTrustpoint.IsUnknown() {
+					body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"tls.trustpoint", item.TlsTrustpoint.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TlsServerNameIndicator.IsNull() && !item.TlsServerNameIndicator.IsUnknown() {
+					body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"tls.server-name-indicator", item.TlsServerNameIndicator.ValueString())
+				}
+			}
 		}
 	}
 	return body
@@ -168,6 +180,16 @@ func (data TACACSServer) toBody(ctx context.Context, providerVersion string) str
 func (data TACACSServer) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "hosts.tls_trustpoint",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "hosts.tls_server_name_indicator",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -282,6 +304,16 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte, versio
 		} else {
 			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Null()
 		}
+		if value := r.Get("tls.trustpoint"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Hosts[i].TlsTrustpoint.IsNull() {
+			data.Hosts[i].TlsTrustpoint = types.StringValue(value.String())
+		} else {
+			data.Hosts[i].TlsTrustpoint = types.StringNull()
+		}
+		if value := r.Get("tls.server-name-indicator"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Hosts[i].TlsServerNameIndicator.IsNull() {
+			data.Hosts[i].TlsServerNameIndicator = types.StringValue(value.String())
+		} else {
+			data.Hosts[i].TlsServerNameIndicator = types.StringNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
@@ -338,6 +370,20 @@ func (data *TACACSServer) fromBody(ctx context.Context, res []byte, version stri
 			if cValue := v.Get("single-connection-idle-timeout"); cValue.Exists() {
 				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
 			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tls.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TlsTrustpoint = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TlsTrustpoint = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tls.server-name-indicator"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TlsServerNameIndicator = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TlsServerNameIndicator = types.StringNull()
+			}
 			data.Hosts = append(data.Hosts, item)
 			return true
 		})
@@ -387,6 +433,20 @@ func (data *TACACSServerData) fromBody(ctx context.Context, res []byte, version 
 			}
 			if cValue := v.Get("single-connection-idle-timeout"); cValue.Exists() {
 				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tls.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TlsTrustpoint = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TlsTrustpoint = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tls.server-name-indicator"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TlsServerNameIndicator = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TlsServerNameIndicator = types.StringNull()
 			}
 			data.Hosts = append(data.Hosts, item)
 			return true
@@ -465,6 +525,12 @@ func (data *TACACSServer) getDeletedItems(ctx context.Context, state TACACSServe
 				found = false
 			}
 			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.Hosts[i].TlsServerNameIndicator.IsNull() && data.Hosts[j].TlsServerNameIndicator.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "tls/server-name-indicator"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.Hosts[i].TlsTrustpoint.IsNull() && data.Hosts[j].TlsTrustpoint.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "tls/trustpoint"))
+				}
 				if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "single-connection-idle-timeout"))
 				}
@@ -608,6 +674,12 @@ func (data TACACSServer) toBodyXML(ctx context.Context, stateArg ...*TACACSServe
 			if !item.SingleConnectionIdleTimeout.IsNull() && !item.SingleConnectionIdleTimeout.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/single-connection-idle-timeout", strconv.FormatInt(item.SingleConnectionIdleTimeout.ValueInt64(), 10))
 			}
+			if !item.TlsTrustpoint.IsNull() && !item.TlsTrustpoint.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/tls/trustpoint", item.TlsTrustpoint.ValueString())
+			}
+			if !item.TlsServerNameIndicator.IsNull() && !item.TlsServerNameIndicator.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/tls/server-name-indicator", item.TlsServerNameIndicator.ValueString())
+			}
 		}
 	}
 	if !data.KeyType7.IsNull() && !data.KeyType7.IsUnknown() {
@@ -727,6 +799,16 @@ func (data *TACACSServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 		} else if data.Hosts[i].SingleConnectionIdleTimeout.IsNull() {
 			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Null()
 		}
+		if value := helpers.GetFromXPath(r, "tls/trustpoint"); value.Exists() && !data.Hosts[i].TlsTrustpoint.IsNull() {
+			data.Hosts[i].TlsTrustpoint = types.StringValue(value.String())
+		} else if data.Hosts[i].TlsTrustpoint.IsNull() {
+			data.Hosts[i].TlsTrustpoint = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "tls/server-name-indicator"); value.Exists() && !data.Hosts[i].TlsServerNameIndicator.IsNull() {
+			data.Hosts[i].TlsServerNameIndicator = types.StringValue(value.String())
+		} else if data.Hosts[i].TlsServerNameIndicator.IsNull() {
+			data.Hosts[i].TlsServerNameIndicator = types.StringNull()
+		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
@@ -787,6 +869,12 @@ func (data *TACACSServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 			if cValue := helpers.GetFromXPath(v, "single-connection-idle-timeout"); cValue.Exists() {
 				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "tls/trustpoint"); cValue.Exists() {
+				item.TlsTrustpoint = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tls/server-name-indicator"); cValue.Exists() {
+				item.TlsServerNameIndicator = types.StringValue(cValue.String())
 			}
 			data.Hosts = append(data.Hosts, item)
 			return true
@@ -849,6 +937,12 @@ func (data *TACACSServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 			}
 			if cValue := helpers.GetFromXPath(v, "single-connection-idle-timeout"); cValue.Exists() {
 				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "tls/trustpoint"); cValue.Exists() {
+				item.TlsTrustpoint = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tls/server-name-indicator"); cValue.Exists() {
+				item.TlsServerNameIndicator = types.StringValue(cValue.String())
 			}
 			data.Hosts = append(data.Hosts, item)
 			return true
@@ -1008,6 +1102,12 @@ func (data *TACACSServer) addDeletedItemsXML(ctx context.Context, state TACACSSe
 				found = false
 			}
 			if found {
+				if !state.Hosts[i].TlsServerNameIndicator.IsNull() && data.Hosts[j].TlsServerNameIndicator.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/tls/server-name-indicator", predicates))
+				}
+				if !state.Hosts[i].TlsTrustpoint.IsNull() && data.Hosts[j].TlsTrustpoint.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/tls/trustpoint", predicates))
+				}
 				if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/single-connection-idle-timeout", predicates))
 				}

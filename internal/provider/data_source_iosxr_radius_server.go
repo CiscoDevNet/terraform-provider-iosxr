@@ -132,6 +132,14 @@ func (d *RadiusServerDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Trustpoint to be used for RADIUS over TLS",
 							Computed:            true,
 						},
+						"attribute_message_authenticator_mandate": schema.BoolAttribute{
+							MarkdownDescription: "Enforce message-authenticator attribute validation mandatorily in all radius packets received" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"attribute_message_authenticator_optional": schema.BoolAttribute{
+							MarkdownDescription: "Enforce message-authenticator attribute validation optional in all radius packets received (Default)" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -259,6 +267,10 @@ func (d *RadiusServerDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"attribute_filter_id_11_default_direction": schema.StringAttribute{
 				MarkdownDescription: "Set the attribute default direction",
+				Computed:            true,
+			},
+			"attribute_message_authenticator": schema.BoolAttribute{
+				MarkdownDescription: "Enable Message-authenticator attribute(80) validation in all radius packets" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
 		},

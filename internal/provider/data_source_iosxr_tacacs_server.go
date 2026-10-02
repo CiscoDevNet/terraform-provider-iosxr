@@ -112,6 +112,14 @@ func (d *TACACSServerDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Idle timeout for a single-connection to the server",
 							Computed:            true,
 						},
+						"tls_trustpoint": schema.StringAttribute{
+							MarkdownDescription: "Trustpoint to be used for TACACS over TLS" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"tls_server_name_indicator": schema.StringAttribute{
+							MarkdownDescription: "SNI extension to include in client hello" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},

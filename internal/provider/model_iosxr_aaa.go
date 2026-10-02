@@ -101,10 +101,12 @@ type AAARadiusServerGroups struct {
 	AccountingReplyRadiusAttributeList                     types.String                          `tfsdk:"accounting_reply_radius_attribute_list"`
 }
 type AAAServerRadiusDynamicAuthorClients struct {
-	Address        types.String `tfsdk:"address"`
-	Vrf            types.String `tfsdk:"vrf"`
-	ServerKeyType7 types.String `tfsdk:"server_key_type_7"`
-	ServerKeyType6 types.String `tfsdk:"server_key_type_6"`
+	Address                               types.String `tfsdk:"address"`
+	Vrf                                   types.String `tfsdk:"vrf"`
+	ServerKeyType7                        types.String `tfsdk:"server_key_type_7"`
+	ServerKeyType6                        types.String `tfsdk:"server_key_type_6"`
+	AttributeMessageAuthenticatorMandate  types.Bool   `tfsdk:"attribute_message_authenticator_mandate"`
+	AttributeMessageAuthenticatorOptional types.Bool   `tfsdk:"attribute_message_authenticator_optional"`
 }
 type AAATacacsServerGroups struct {
 	GroupName      types.String                          `tfsdk:"group_name"`
@@ -510,18 +512,20 @@ type AAARadiusServerGroupsServers struct {
 	AcctPort types.Int64  `tfsdk:"acct_port"`
 }
 type AAARadiusServerGroupsServerPrivates struct {
-	Order          types.Int64  `tfsdk:"order"`
-	Address        types.String `tfsdk:"address"`
-	AuthPort       types.Int64  `tfsdk:"auth_port"`
-	AcctPort       types.Int64  `tfsdk:"acct_port"`
-	KeyType7       types.String `tfsdk:"key_type_7"`
-	KeyType6       types.String `tfsdk:"key_type_6"`
-	Timeout        types.Int64  `tfsdk:"timeout"`
-	Retransmit     types.Int64  `tfsdk:"retransmit"`
-	TestUsername   types.String `tfsdk:"test_username"`
-	IdleTime       types.Int64  `tfsdk:"idle_time"`
-	IgnoreAuthPort types.Bool   `tfsdk:"ignore_auth_port"`
-	IgnoreAcctPort types.Bool   `tfsdk:"ignore_acct_port"`
+	Order                                 types.Int64  `tfsdk:"order"`
+	Address                               types.String `tfsdk:"address"`
+	AuthPort                              types.Int64  `tfsdk:"auth_port"`
+	AcctPort                              types.Int64  `tfsdk:"acct_port"`
+	KeyType7                              types.String `tfsdk:"key_type_7"`
+	KeyType6                              types.String `tfsdk:"key_type_6"`
+	Timeout                               types.Int64  `tfsdk:"timeout"`
+	Retransmit                            types.Int64  `tfsdk:"retransmit"`
+	TestUsername                          types.String `tfsdk:"test_username"`
+	IdleTime                              types.Int64  `tfsdk:"idle_time"`
+	IgnoreAuthPort                        types.Bool   `tfsdk:"ignore_auth_port"`
+	IgnoreAcctPort                        types.Bool   `tfsdk:"ignore_acct_port"`
+	AttributeMessageAuthenticatorMandate  types.Bool   `tfsdk:"attribute_message_authenticator_mandate"`
+	AttributeMessageAuthenticatorOptional types.Bool   `tfsdk:"attribute_message_authenticator_optional"`
 }
 type AAATacacsServerGroupsServers struct {
 	Order   types.Int64  `tfsdk:"order"`
@@ -537,6 +541,8 @@ type AAATacacsServerGroupsServerPrivates struct {
 	SingleConnectionIdleTimeout types.Int64  `tfsdk:"single_connection_idle_timeout"`
 	Timeout                     types.Int64  `tfsdk:"timeout"`
 	HolddownTime                types.Int64  `tfsdk:"holddown_time"`
+	TlsTrustpoint               types.String `tfsdk:"tls_trustpoint"`
+	TlsServerNameIndicator      types.String `tfsdk:"tls_server_name_indicator"`
 }
 type AAAUsernamesUserGroups struct {
 	GroupName types.String `tfsdk:"group_name"`
@@ -749,6 +755,20 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 							body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"ignore-acct-port", map[string]string{})
 						}
 					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.AttributeMessageAuthenticatorMandate.IsNull() && !citem.AttributeMessageAuthenticatorMandate.IsUnknown() {
+							if citem.AttributeMessageAuthenticatorMandate.ValueBool() {
+								body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"attribute.message-authenticator.mandate", map[string]string{})
+							}
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.AttributeMessageAuthenticatorOptional.IsNull() && !citem.AttributeMessageAuthenticatorOptional.IsUnknown() {
+							if citem.AttributeMessageAuthenticatorOptional.ValueBool() {
+								body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:group.server.radius.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"attribute.message-authenticator.optional", map[string]string{})
+							}
+						}
+					}
 				}
 			}
 		}
@@ -767,6 +787,20 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 			}
 			if !item.ServerKeyType6.IsNull() && !item.ServerKeyType6.IsUnknown() {
 				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.clients.client"+"."+strconv.Itoa(index)+"."+"server-key.six", item.ServerKeyType6.ValueString())
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.AttributeMessageAuthenticatorMandate.IsNull() && !item.AttributeMessageAuthenticatorMandate.IsUnknown() {
+					if item.AttributeMessageAuthenticatorMandate.ValueBool() {
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.clients.client"+"."+strconv.Itoa(index)+"."+"attribute.message-authenticator.mandate", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.AttributeMessageAuthenticatorOptional.IsNull() && !item.AttributeMessageAuthenticatorOptional.IsUnknown() {
+					if item.AttributeMessageAuthenticatorOptional.ValueBool() {
+						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-radius-server-cfg:server.radius.dynamic-author.clients.client"+"."+strconv.Itoa(index)+"."+"attribute.message-authenticator.optional", map[string]string{})
+					}
+				}
 			}
 		}
 	}
@@ -824,6 +858,16 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 					}
 					if !citem.HolddownTime.IsNull() && !citem.HolddownTime.IsUnknown() {
 						body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"holddown-time", strconv.FormatInt(citem.HolddownTime.ValueInt64(), 10))
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.TlsTrustpoint.IsNull() && !citem.TlsTrustpoint.IsUnknown() {
+							body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"tls.trustpoint", citem.TlsTrustpoint.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.TlsServerNameIndicator.IsNull() && !citem.TlsServerNameIndicator.IsUnknown() {
+							body, _ = sjson.Set(body, "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group.server.tacacs.server-groups.server-group"+"."+strconv.Itoa(index)+"."+"server-privates.server-private"+"."+strconv.Itoa(cindex)+"."+"tls.server-name-indicator", citem.TlsServerNameIndicator.ValueString())
+						}
 					}
 				}
 			}
@@ -2763,6 +2807,32 @@ func (data AAA) toBody(ctx context.Context, providerVersion string) string {
 func (data AAA) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "radius_server_groups.server_privates.attribute_message_authenticator_mandate",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "radius_server_groups.server_privates.attribute_message_authenticator_optional",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "server_radius_dynamic_author_clients.attribute_message_authenticator_mandate",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "server_radius_dynamic_author_clients.attribute_message_authenticator_optional",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "tacacs_server_groups.server_privates.tls_trustpoint",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "tacacs_server_groups.server_privates.tls_server_name_indicator",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -3026,6 +3096,26 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte, version string)
 					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolNull()
 				}
 			}
+			if value := cr.Get("attribute.message-authenticator.mandate"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+				if !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate = types.BoolNull()
+				}
+			}
+			if value := cr.Get("attribute.message-authenticator.optional"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+				if !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional = types.BoolNull()
+				}
+			}
 		}
 		if value := r.Get("vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RadiusServerGroups[i].Vrf.IsNull() {
 			data.RadiusServerGroups[i].Vrf = types.StringValue(value.String())
@@ -3202,6 +3292,30 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte, version string)
 		} else {
 			data.ServerRadiusDynamicAuthorClients[i].Vrf = types.StringNull()
 		}
+		if value := r.Get("attribute.message-authenticator.mandate"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+		}
+		if value := r.Get("attribute.message-authenticator.optional"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
+		}
 	}
 	for i := range data.TacacsServerGroups {
 		keys := [...]string{"server-group-name"}
@@ -3337,6 +3451,16 @@ func (data *AAA) updateFromBody(ctx context.Context, res []byte, version string)
 				data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime = types.Int64Value(value.Int())
 			} else {
 				data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime = types.Int64Null()
+			}
+			if value := cr.Get("tls.trustpoint"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TacacsServerGroups[i].ServerPrivates[ci].TlsTrustpoint.IsNull() {
+				data.TacacsServerGroups[i].ServerPrivates[ci].TlsTrustpoint = types.StringValue(value.String())
+			} else {
+				data.TacacsServerGroups[i].ServerPrivates[ci].TlsTrustpoint = types.StringNull()
+			}
+			if value := cr.Get("tls.server-name-indicator"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TacacsServerGroups[i].ServerPrivates[ci].TlsServerNameIndicator.IsNull() {
+				data.TacacsServerGroups[i].ServerPrivates[ci].TlsServerNameIndicator = types.StringValue(value.String())
+			} else {
+				data.TacacsServerGroups[i].ServerPrivates[ci].TlsServerNameIndicator = types.StringNull()
 			}
 		}
 	}
@@ -8094,6 +8218,24 @@ func (data *AAA) fromBody(ctx context.Context, res []byte, version string) {
 					} else {
 						cItem.IgnoreAcctPort = types.BoolValue(false)
 					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("attribute.message-authenticator.mandate"); ccValue.Exists() {
+							cItem.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+						} else {
+							cItem.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+						}
+					} else {
+						cItem.AttributeMessageAuthenticatorMandate = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("attribute.message-authenticator.optional"); ccValue.Exists() {
+							cItem.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+						} else {
+							cItem.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+						}
+					} else {
+						cItem.AttributeMessageAuthenticatorOptional = types.BoolNull()
+					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
 				})
@@ -8187,6 +8329,26 @@ func (data *AAA) fromBody(ctx context.Context, res []byte, version string) {
 			if cValue := v.Get("vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Vrf = types.StringValue(cValue.String())
 			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.mandate"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+				} else if !item.AttributeMessageAuthenticatorMandate.IsNull() {
+					// Only set to false if it was previously set
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.optional"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+				} else if !item.AttributeMessageAuthenticatorOptional.IsNull() {
+					// Only set to false if it was previously set
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
 			data.ServerRadiusDynamicAuthorClients = append(data.ServerRadiusDynamicAuthorClients, item)
 			return true
 		})
@@ -8244,6 +8406,20 @@ func (data *AAA) fromBody(ctx context.Context, res []byte, version string) {
 					}
 					if ccValue := cv.Get("holddown-time"); ccValue.Exists() {
 						cItem.HolddownTime = types.Int64Value(ccValue.Int())
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("tls.trustpoint"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.TlsTrustpoint = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.TlsTrustpoint = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("tls.server-name-indicator"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.TlsServerNameIndicator = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.TlsServerNameIndicator = types.StringNull()
 					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
@@ -10659,6 +10835,24 @@ func (data *AAAData) fromBody(ctx context.Context, res []byte, version string) {
 					} else {
 						cItem.IgnoreAcctPort = types.BoolValue(false)
 					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("attribute.message-authenticator.mandate"); ccValue.Exists() {
+							cItem.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+						} else {
+							cItem.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+						}
+					} else {
+						cItem.AttributeMessageAuthenticatorMandate = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("attribute.message-authenticator.optional"); ccValue.Exists() {
+							cItem.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+						} else {
+							cItem.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+						}
+					} else {
+						cItem.AttributeMessageAuthenticatorOptional = types.BoolNull()
+					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
 				})
@@ -10743,6 +10937,24 @@ func (data *AAAData) fromBody(ctx context.Context, res []byte, version string) {
 			if cValue := v.Get("vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Vrf = types.StringValue(cValue.String())
 			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.mandate"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+				} else {
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.optional"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+				} else {
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
 			data.ServerRadiusDynamicAuthorClients = append(data.ServerRadiusDynamicAuthorClients, item)
 			return true
 		})
@@ -10800,6 +11012,20 @@ func (data *AAAData) fromBody(ctx context.Context, res []byte, version string) {
 					}
 					if ccValue := cv.Get("holddown-time"); ccValue.Exists() {
 						cItem.HolddownTime = types.Int64Value(ccValue.Int())
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("tls.trustpoint"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.TlsTrustpoint = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.TlsTrustpoint = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("tls.server-name-indicator"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.TlsServerNameIndicator = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.TlsServerNameIndicator = types.StringNull()
 					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
@@ -14154,6 +14380,12 @@ func (data *AAA) getDeletedItems(ctx context.Context, state AAA, version string)
 							found = false
 						}
 						if found {
+							if helpers.VersionAtLeast(version, "25.4") && !state.TacacsServerGroups[i].ServerPrivates[ci].TlsServerNameIndicator.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].TlsServerNameIndicator.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "tls/server-name-indicator"))
+							}
+							if helpers.VersionAtLeast(version, "25.4") && !state.TacacsServerGroups[i].ServerPrivates[ci].TlsTrustpoint.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].TlsTrustpoint.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "tls/trustpoint"))
+							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].HolddownTime.IsNull() {
 								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "holddown-time"))
 							}
@@ -14257,6 +14489,12 @@ func (data *AAA) getDeletedItems(ctx context.Context, state AAA, version string)
 				found = false
 			}
 			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() && data.ServerRadiusDynamicAuthorClients[j].AttributeMessageAuthenticatorOptional.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client", keyString), "attribute/message-authenticator/optional"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() && data.ServerRadiusDynamicAuthorClients[j].AttributeMessageAuthenticatorMandate.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client", keyString), "attribute/message-authenticator/mandate"))
+				}
 				if !state.ServerRadiusDynamicAuthorClients[i].ServerKeyType6.IsNull() && data.ServerRadiusDynamicAuthorClients[j].ServerKeyType6.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client", keyString), "server-key/six"))
 				}
@@ -14388,6 +14626,12 @@ func (data *AAA) getDeletedItems(ctx context.Context, state AAA, version string)
 							found = false
 						}
 						if found {
+							if helpers.VersionAtLeast(version, "25.4") && !state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].AttributeMessageAuthenticatorOptional.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "attribute/message-authenticator/optional"))
+							}
+							if helpers.VersionAtLeast(version, "25.4") && !state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].AttributeMessageAuthenticatorMandate.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "attribute/message-authenticator/mandate"))
+							}
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && data.RadiusServerGroups[j].ServerPrivates[cj].IgnoreAcctPort.IsNull() {
 								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "ignore-acct-port"))
 							}
@@ -16442,6 +16686,16 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA, version st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() && !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.ValueBool() {
+			if state != nil && i < len(state.ServerRadiusDynamicAuthorClients) && !state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() && state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client", keyString), "attribute/message-authenticator/optional"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() && !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.ValueBool() {
+			if state != nil && i < len(state.ServerRadiusDynamicAuthorClients) && !state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() && state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client", keyString), "attribute/message-authenticator/mandate"))
+			}
+		}
 	}
 	if !data.ServerRadiusDynamicAuthorIgnoreServerKey.IsNull() && !data.ServerRadiusDynamicAuthorIgnoreServerKey.ValueBool() {
 		if state != nil && !state.ServerRadiusDynamicAuthorIgnoreServerKey.IsNull() && state.ServerRadiusDynamicAuthorIgnoreServerKey.ValueBool() {
@@ -16501,6 +16755,16 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA, version st
 			ckeyString := ""
 			for cki := range ckeys {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if helpers.VersionAtLeast(version, "25.4") && !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.ValueBool() {
+				if state != nil && i < len(state.RadiusServerGroups) && ci < len(state.RadiusServerGroups[i].ServerPrivates) && !state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "attribute/message-authenticator/optional"))
+				}
+			}
+			if helpers.VersionAtLeast(version, "25.4") && !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.ValueBool() {
+				if state != nil && i < len(state.RadiusServerGroups) && ci < len(state.RadiusServerGroups[i].ServerPrivates) && !state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "attribute/message-authenticator/mandate"))
+				}
 			}
 			if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() {
 				if state != nil && i < len(state.RadiusServerGroups) && ci < len(state.RadiusServerGroups[i].ServerPrivates) && !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() {
@@ -18719,6 +18983,16 @@ func (data AAA) toBodyXML(ctx context.Context, stateArg ...*AAA) string {
 								nsBody = helpers.SetFromXPath(nsBody, cbasePath+"/ignore-acct-port", "")
 							}
 						}
+						if !citem.AttributeMessageAuthenticatorMandate.IsNull() && !citem.AttributeMessageAuthenticatorMandate.IsUnknown() {
+							if citem.AttributeMessageAuthenticatorMandate.ValueBool() {
+								nsBody = helpers.SetFromXPath(nsBody, cbasePath+"/attribute/message-authenticator/mandate", "")
+							}
+						}
+						if !citem.AttributeMessageAuthenticatorOptional.IsNull() && !citem.AttributeMessageAuthenticatorOptional.IsUnknown() {
+							if citem.AttributeMessageAuthenticatorOptional.ValueBool() {
+								nsBody = helpers.SetFromXPath(nsBody, cbasePath+"/attribute/message-authenticator/optional", "")
+							}
+						}
 					}
 				}
 				if !item.Vrf.IsNull() && !item.Vrf.IsUnknown() {
@@ -18825,6 +19099,16 @@ func (data AAA) toBodyXML(ctx context.Context, stateArg ...*AAA) string {
 				if !item.ServerKeyType6.IsNull() && !item.ServerKeyType6.IsUnknown() {
 					nsBody = helpers.SetFromXPath(nsBody, basePath+"/server-key/six", item.ServerKeyType6.ValueString())
 				}
+				if !item.AttributeMessageAuthenticatorMandate.IsNull() && !item.AttributeMessageAuthenticatorMandate.IsUnknown() {
+					if item.AttributeMessageAuthenticatorMandate.ValueBool() {
+						nsBody = helpers.SetFromXPath(nsBody, basePath+"/attribute/message-authenticator/mandate", "")
+					}
+				}
+				if !item.AttributeMessageAuthenticatorOptional.IsNull() && !item.AttributeMessageAuthenticatorOptional.IsUnknown() {
+					if item.AttributeMessageAuthenticatorOptional.ValueBool() {
+						nsBody = helpers.SetFromXPath(nsBody, basePath+"/attribute/message-authenticator/optional", "")
+					}
+				}
 			}
 		}
 		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
@@ -18896,6 +19180,12 @@ func (data AAA) toBodyXML(ctx context.Context, stateArg ...*AAA) string {
 						}
 						if !citem.HolddownTime.IsNull() && !citem.HolddownTime.IsUnknown() {
 							nsBody = helpers.SetFromXPath(nsBody, cbasePath+"/holddown-time", strconv.FormatInt(citem.HolddownTime.ValueInt64(), 10))
+						}
+						if !citem.TlsTrustpoint.IsNull() && !citem.TlsTrustpoint.IsUnknown() {
+							nsBody = helpers.SetFromXPath(nsBody, cbasePath+"/tls/trustpoint", citem.TlsTrustpoint.ValueString())
+						}
+						if !citem.TlsServerNameIndicator.IsNull() && !citem.TlsServerNameIndicator.IsUnknown() {
+							nsBody = helpers.SetFromXPath(nsBody, cbasePath+"/tls/server-name-indicator", citem.TlsServerNameIndicator.ValueString())
 						}
 					}
 				}
@@ -19155,6 +19445,26 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 					data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort = types.BoolNull()
 				}
 			}
+			if value := helpers.GetFromXPath(cr, "attribute/message-authenticator/mandate"); value.Exists() {
+				if !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "attribute/message-authenticator/optional"); value.Exists() {
+				if !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() {
+					data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional = types.BoolNull()
+				}
+			}
 		}
 		if value := helpers.GetFromXPath(r, "vrf"); value.Exists() && !data.RadiusServerGroups[i].Vrf.IsNull() {
 			data.RadiusServerGroups[i].Vrf = types.StringValue(value.String())
@@ -19332,6 +19642,30 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.ServerRadiusDynamicAuthorClients[i].Vrf.IsNull() {
 			data.ServerRadiusDynamicAuthorClients[i].Vrf = types.StringNull()
 		}
+		if value := helpers.GetFromXPath(r, "attribute/message-authenticator/mandate"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "attribute/message-authenticator/optional"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
+		}
 	}
 	for i := range data.TacacsServerGroups {
 		keys := [...]string{"server-group-name"}
@@ -19467,6 +19801,16 @@ func (data *AAA) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime = types.Int64Value(value.Int())
 			} else if data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime.IsNull() {
 				data.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "tls/trustpoint"); value.Exists() && !data.TacacsServerGroups[i].ServerPrivates[ci].TlsTrustpoint.IsNull() {
+				data.TacacsServerGroups[i].ServerPrivates[ci].TlsTrustpoint = types.StringValue(value.String())
+			} else if data.TacacsServerGroups[i].ServerPrivates[ci].TlsTrustpoint.IsNull() {
+				data.TacacsServerGroups[i].ServerPrivates[ci].TlsTrustpoint = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "tls/server-name-indicator"); value.Exists() && !data.TacacsServerGroups[i].ServerPrivates[ci].TlsServerNameIndicator.IsNull() {
+				data.TacacsServerGroups[i].ServerPrivates[ci].TlsServerNameIndicator = types.StringValue(value.String())
+			} else if data.TacacsServerGroups[i].ServerPrivates[ci].TlsServerNameIndicator.IsNull() {
+				data.TacacsServerGroups[i].ServerPrivates[ci].TlsServerNameIndicator = types.StringNull()
 			}
 		}
 	}
@@ -24228,6 +24572,16 @@ func (data *AAA) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					} else {
 						cItem.IgnoreAcctPort = types.BoolValue(false)
 					}
+					if ccValue := helpers.GetFromXPath(cv, "attribute/message-authenticator/mandate"); ccValue.Exists() {
+						cItem.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+					} else {
+						cItem.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "attribute/message-authenticator/optional"); ccValue.Exists() {
+						cItem.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+					} else {
+						cItem.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
 				})
@@ -24324,6 +24678,16 @@ func (data *AAA) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "server-key/six"); cValue.Exists() {
 				item.ServerKeyType6 = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/mandate"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/optional"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+			}
 			data.ServerRadiusDynamicAuthorClients = append(data.ServerRadiusDynamicAuthorClients, item)
 			return true
 		})
@@ -24387,6 +24751,12 @@ func (data *AAA) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					}
 					if ccValue := helpers.GetFromXPath(cv, "holddown-time"); ccValue.Exists() {
 						cItem.HolddownTime = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "tls/trustpoint"); ccValue.Exists() {
+						cItem.TlsTrustpoint = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "tls/server-name-indicator"); ccValue.Exists() {
+						cItem.TlsServerNameIndicator = types.StringValue(ccValue.String())
 					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
@@ -26449,6 +26819,16 @@ func (data *AAAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					} else {
 						cItem.IgnoreAcctPort = types.BoolValue(false)
 					}
+					if ccValue := helpers.GetFromXPath(cv, "attribute/message-authenticator/mandate"); ccValue.Exists() {
+						cItem.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+					} else {
+						cItem.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "attribute/message-authenticator/optional"); ccValue.Exists() {
+						cItem.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+					} else {
+						cItem.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
 				})
@@ -26545,6 +26925,16 @@ func (data *AAAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "server-key/six"); cValue.Exists() {
 				item.ServerKeyType6 = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/mandate"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/optional"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+			}
 			data.ServerRadiusDynamicAuthorClients = append(data.ServerRadiusDynamicAuthorClients, item)
 			return true
 		})
@@ -26608,6 +26998,12 @@ func (data *AAAData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					}
 					if ccValue := helpers.GetFromXPath(cv, "holddown-time"); ccValue.Exists() {
 						cItem.HolddownTime = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "tls/trustpoint"); ccValue.Exists() {
+						cItem.TlsTrustpoint = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "tls/server-name-indicator"); ccValue.Exists() {
+						cItem.TlsServerNameIndicator = types.StringValue(ccValue.String())
 					}
 					item.ServerPrivates = append(item.ServerPrivates, cItem)
 					return true
@@ -30342,6 +30738,12 @@ func (data *AAA) addDeletedItemsXML(ctx context.Context, state AAA, body string)
 							found = false
 						}
 						if found {
+							if !state.TacacsServerGroups[i].ServerPrivates[ci].TlsServerNameIndicator.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].TlsServerNameIndicator.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/server-privates/server-private%v/tls/server-name-indicator", predicates, cpredicates))
+							}
+							if !state.TacacsServerGroups[i].ServerPrivates[ci].TlsTrustpoint.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].TlsTrustpoint.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/server-privates/server-private%v/tls/trustpoint", predicates, cpredicates))
+							}
 							if !state.TacacsServerGroups[i].ServerPrivates[ci].HolddownTime.IsNull() && data.TacacsServerGroups[j].ServerPrivates[cj].HolddownTime.IsNull() {
 								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group%v/server-privates/server-private%v/holddown-time", predicates, cpredicates))
 							}
@@ -30446,6 +30848,14 @@ func (data *AAA) addDeletedItemsXML(ctx context.Context, state AAA, body string)
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() && state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.ValueBool() && data.ServerRadiusDynamicAuthorClients[j].AttributeMessageAuthenticatorOptional.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client%v/attribute/message-authenticator/optional", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() && state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.ValueBool() && data.ServerRadiusDynamicAuthorClients[j].AttributeMessageAuthenticatorMandate.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client%v/attribute/message-authenticator/mandate", predicates))
+				}
 				if !state.ServerRadiusDynamicAuthorClients[i].ServerKeyType6.IsNull() && data.ServerRadiusDynamicAuthorClients[j].ServerKeyType6.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client%v/server-key/six", predicates))
 				}
@@ -30634,6 +31044,14 @@ func (data *AAA) addDeletedItemsXML(ctx context.Context, state AAA, body string)
 							found = false
 						}
 						if found {
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.ValueBool() && data.RadiusServerGroups[j].ServerPrivates[cj].AttributeMessageAuthenticatorOptional.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/server-privates/server-private%v/attribute/message-authenticator/optional", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.ValueBool() && data.RadiusServerGroups[j].ServerPrivates[cj].AttributeMessageAuthenticatorMandate.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/server-privates/server-private%v/attribute/message-authenticator/mandate", predicates, cpredicates))
+							}
 							// For boolean fields, only delete if state was true (presence container was set)
 							if !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() && data.RadiusServerGroups[j].ServerPrivates[cj].IgnoreAcctPort.IsNull() {
 								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group%v/server-privates/server-private%v/ignore-acct-port", predicates, cpredicates))

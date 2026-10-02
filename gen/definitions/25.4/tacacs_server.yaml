@@ -1,0 +1,20 @@
+---
+name: TACACS Server
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server
+doc_category: AAA
+test_tags: [AAA]
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: hosts/host
+    tf_name: hosts
+    type: List
+    attributes:
+      - yang_name: tls/trustpoint
+        tf_name: tls_trustpoint
+        exclude_test: true
+        example: TLS-TRUST
+      - yang_name: tls/server-name-indicator
+        tf_name: tls_server_name_indicator
+        example: tacacs.example.com

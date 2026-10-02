@@ -1,0 +1,95 @@
+---
+name: AAA
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa
+doc_category: AAA
+default_delete_attributes: true
+test_tags: [AAA]
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group
+    tf_name: radius_server_groups
+    type: List
+    no_augment_config: true
+    attributes:
+      - yang_name: server-privates/server-private
+        tf_name: server_privates
+        type: List
+        no_augment_config: true
+        attributes:
+          - yang_name: attribute/message-authenticator/mandate
+            tf_name: attribute_message_authenticator_mandate
+            type: Bool
+            type_yang_bool: presence
+            description: "Enforce message-authenticator attribute validation mandatorily in all radius packets received"
+            example: true
+          - yang_name: attribute/message-authenticator/optional
+            tf_name: attribute_message_authenticator_optional
+            type: Bool
+            type_yang_bool: presence
+            description: "Enforce message-authenticator attribute validation optional in all radius packets received (Default)"
+            exclude_test: true
+            example: true
+  - yang_name: Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client
+    tf_name: server_radius_dynamic_author_clients
+    type: List
+    attributes:
+      - yang_name: attribute/message-authenticator/mandate
+        tf_name: attribute_message_authenticator_mandate
+        example: true
+      - yang_name: attribute/message-authenticator/optional
+        tf_name: attribute_message_authenticator_optional
+        exclude_test: true
+        example: true
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group
+    tf_name: tacacs_server_groups
+    type: List
+    no_augment_config: true
+    attributes:
+      - yang_name: server-privates/server-private
+        tf_name: server_privates
+        type: List
+        no_augment_config: true
+        attributes:
+          - yang_name: tls/trustpoint
+            tf_name: tls_trustpoint
+            type: String
+            description: "Trustpoint to be used for TACACS over TLS"
+            exclude_test: true
+            example: TLS-TRUST
+          - yang_name: tls/server-name-indicator
+            tf_name: tls_server_name_indicator
+            type: String
+            description: "SNI extension to include in client hello"
+            example: tacacs.example.com
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1
+  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius-server/hosts/host[ordering-index=1][address=10.1.1.1][auth-port=1812][acct-port=1813]
+    attributes:
+      - name: ordering-index
+        value: 1
+      - name: address
+        value: 10.1.1.1
+      - name: auth-port
+        value: 1812
+      - name: acct-port
+        value: 1813
+      - name: key/seven
+        value: 060506324F41584B
+    dependencies: [0]
+  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/hosts/host[ordering-index=1][address=9.0.1.68][port=49]
+    attributes:
+      - name: ordering-index
+        value: 1
+      - name: address
+        value: 9.0.1.68
+      - name: port
+        value: 49
+      - name: key/seven
+        value: 0235347225301B204F4F0A0A
+    dependencies: [1]

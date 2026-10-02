@@ -43,6 +43,9 @@ func TestAccDataSourceIosxrTACACSServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_server.test", "hosts.0.holddown_time", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_server.test", "hosts.0.single_connection", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_server.test", "hosts.0.single_connection_idle_timeout", "1000"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_server.test", "hosts.0.tls_server_name_indicator", "tacacs.example.com"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_server.test", "timeout", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_server.test", "holddown_time", "600"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tacacs_server.test", "ipv4_dscp", "cs6"))
@@ -79,6 +82,9 @@ func testAccDataSourceIosxrTACACSServerConfig() string {
 	config += `		key_type_7 = "0235347225301B204F4F0A0A"` + "\n"
 	config += `		single_connection = true` + "\n"
 	config += `		single_connection_idle_timeout = 1000` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		tls_server_name_indicator = "tacacs.example.com"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	key_type_7 = "0235347225301B204F4F0A0A"` + "\n"
 	config += `	timeout = 5` + "\n"

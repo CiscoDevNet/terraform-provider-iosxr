@@ -60,6 +60,9 @@ func TestAccDataSourceIosxrAAA(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "radius_server_groups.0.server_privates.0.idle_time", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "radius_server_groups.0.server_privates.0.ignore_auth_port", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "radius_server_groups.0.server_privates.0.ignore_acct_port", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "radius_server_groups.0.server_privates.0.attribute_message_authenticator_mandate", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "radius_server_groups.0.vrf", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "radius_server_groups.0.source_interface", "Loopback0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "radius_server_groups.0.authorization_request_accept", "true"))
@@ -74,6 +77,9 @@ func TestAccDataSourceIosxrAAA(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "server_radius_dynamic_author_ignore_server_key", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "server_radius_dynamic_author_clients.0.address", "10.1.1.10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "server_radius_dynamic_author_clients.0.vrf", "VRF1"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "server_radius_dynamic_author_clients.0.attribute_message_authenticator_mandate", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "tacacs_server_groups.0.group_name", "TACACS-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "tacacs_server_groups.0.servers.0.order", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "tacacs_server_groups.0.servers.0.address", "9.0.1.68"))
@@ -86,6 +92,9 @@ func TestAccDataSourceIosxrAAA(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "tacacs_server_groups.0.server_privates.0.single_connection_idle_timeout", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "tacacs_server_groups.0.server_privates.0.timeout", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "tacacs_server_groups.0.server_privates.0.holddown_time", "300"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "tacacs_server_groups.0.server_privates.0.tls_server_name_indicator", "tacacs.example.com"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "usernames.0.order", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "usernames.0.name", "terraform-user"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_aaa.test", "usernames.0.login_history_enable", "true"))
@@ -455,7 +464,7 @@ func TestAccDataSourceIosxrAAA(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrAAAPrerequisitesConfig + testAccDataSourceIosxrAAAConfig(),
+				Config: testAccDataSourceIosxrAAAPrerequisitesConfig() + testAccDataSourceIosxrAAAConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -465,7 +474,7 @@ func TestAccDataSourceIosxrAAA(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrAAAPrerequisitesConfig = `
+const testAccDataSourceIosxrAAAPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
@@ -497,6 +506,47 @@ resource "iosxr_yang" "PreReq2" {
 }
 
 `
+const testAccDataSourceIosxrAAAPrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius-server/hosts/host[ordering-index=1][address=10.1.1.1][auth-port=1812][acct-port=1813]"
+	attributes = {
+		"ordering-index" = "1"
+		"address" = "10.1.1.1"
+		"auth-port" = "1812"
+		"acct-port" = "1813"
+		"key/seven" = "060506324F41584B"
+	}
+	depends_on = [iosxr_yang.PreReq0, ]
+}
+
+resource "iosxr_yang" "PreReq2" {
+	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/hosts/host[ordering-index=1][address=9.0.1.68][port=49]"
+	attributes = {
+		"ordering-index" = "1"
+		"address" = "9.0.1.68"
+		"port" = "49"
+		"key/seven" = "0235347225301B204F4F0A0A"
+	}
+	depends_on = [iosxr_yang.PreReq1, ]
+}
+
+`
+
+func testAccDataSourceIosxrAAAPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrAAAPrerequisitesConfig_V24_4,
+			"25.4": testAccDataSourceIosxrAAAPrerequisitesConfig_V25_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -533,6 +583,9 @@ func testAccDataSourceIosxrAAAConfig() string {
 	config += `			idle_time = 30` + "\n"
 	config += `			ignore_auth_port = true` + "\n"
 	config += `			ignore_acct_port = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `			attribute_message_authenticator_mandate = true` + "\n"
+	}
 	config += `		}]` + "\n"
 	config += `		vrf = "VRF1"` + "\n"
 	config += `		source_interface = "Loopback0"` + "\n"
@@ -552,6 +605,9 @@ func testAccDataSourceIosxrAAAConfig() string {
 	config += `		address = "10.1.1.10"` + "\n"
 	config += `		vrf = "VRF1"` + "\n"
 	config += `		server_key_type_7 = "03075218050061"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		attribute_message_authenticator_mandate = true` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	tacacs_server_groups = [{` + "\n"
 	config += `		group_name = "TACACS-1"` + "\n"
@@ -570,6 +626,9 @@ func testAccDataSourceIosxrAAAConfig() string {
 	config += `			single_connection_idle_timeout = 1000` + "\n"
 	config += `			timeout = 10` + "\n"
 	config += `			holddown_time = 300` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `			tls_server_name_indicator = "tacacs.example.com"` + "\n"
+	}
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
 	config += `	usernames = [{` + "\n"
@@ -945,7 +1004,10 @@ func testAccDataSourceIosxrAAAConfig() string {
 	config += `			group_name = "FULL-TGRP"` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

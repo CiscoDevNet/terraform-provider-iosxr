@@ -77,6 +77,10 @@ Read-Only:
 
 - `acct_port` (Number) Accounting port
 - `address` (String) IP address or hostname
+- `attribute_message_authenticator_mandate` (Boolean) Enforce message-authenticator attribute validation mandatorily in all radius packets received
+  - Supported from version: `25.4`
+- `attribute_message_authenticator_optional` (Boolean) Enforce message-authenticator attribute validation optional in all radius packets received (Default)
+  - Supported from version: `25.4`
 - `auth_port` (Number) Authentication port
 - `idle_time` (Number) Idle time in minutes
 - `ignore_acct_port` (Boolean) Ignore accounting port
@@ -107,6 +111,10 @@ Read-Only:
 Read-Only:
 
 - `address` (String) COA client configuration
+- `attribute_message_authenticator_mandate` (Boolean) Make message-authenticator attribute mandatory
+  - Supported from version: `25.4`
+- `attribute_message_authenticator_optional` (Boolean) Make message-authenticator attribute optional (Default)
+  - Supported from version: `25.4`
 - `server_key_type_6` (String, Sensitive) Specifies that an encrypted type 6 key will follow
 - `server_key_type_7` (String, Sensitive) Specifies that an encrypted key will follow
 - `vrf` (String) VRF to which COA Client belongs
@@ -137,6 +145,10 @@ Read-Only:
 - `single_connection` (Boolean) Use single connection
 - `single_connection_idle_timeout` (Number) Single connection idle timeout in seconds
 - `timeout` (Number) Timeout in seconds
+- `tls_server_name_indicator` (String) SNI extension to include in client hello
+  - Supported from version: `25.4`
+- `tls_trustpoint` (String) Trustpoint to be used for TACACS over TLS
+  - Supported from version: `25.4`
 
 
 <a id="nestedatt--tacacs_server_groups--servers"></a>

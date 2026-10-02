@@ -9,6 +9,7 @@ resource "iosxr_tacacs_server" "example" {
       single_connection              = true
       single_connection_idle_timeout = 1000
       timeout                        = 10
+      tls_server_name_indicator      = "tacacs.example.com"
     }
   ]
   ipv4_dscp  = "cs6"

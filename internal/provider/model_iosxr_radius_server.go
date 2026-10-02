@@ -68,6 +68,7 @@ type RadiusServer struct {
 	AttributeAcctSessionIdPrependNasPortId                 types.Bool                   `tfsdk:"attribute_acct_session_id_prepend_nas_port_id"`
 	AttributeAcctMultiSessionIdIncludeParentSessionId      types.Bool                   `tfsdk:"attribute_acct_multi_session_id_include_parent_session_id"`
 	AttributeFilterId11DefaultDirection                    types.String                 `tfsdk:"attribute_filter_id_11_default_direction"`
+	AttributeMessageAuthenticator                          types.Bool                   `tfsdk:"attribute_message_authenticator"`
 }
 
 type RadiusServerData struct {
@@ -96,22 +97,25 @@ type RadiusServerData struct {
 	AttributeAcctSessionIdPrependNasPortId                 types.Bool                   `tfsdk:"attribute_acct_session_id_prepend_nas_port_id"`
 	AttributeAcctMultiSessionIdIncludeParentSessionId      types.Bool                   `tfsdk:"attribute_acct_multi_session_id_include_parent_session_id"`
 	AttributeFilterId11DefaultDirection                    types.String                 `tfsdk:"attribute_filter_id_11_default_direction"`
+	AttributeMessageAuthenticator                          types.Bool                   `tfsdk:"attribute_message_authenticator"`
 }
 type RadiusServerHosts struct {
-	Order                  types.Int64  `tfsdk:"order"`
-	Address                types.String `tfsdk:"address"`
-	AuthPort               types.Int64  `tfsdk:"auth_port"`
-	AcctPort               types.Int64  `tfsdk:"acct_port"`
-	Timeout                types.Int64  `tfsdk:"timeout"`
-	Retransmit             types.Int64  `tfsdk:"retransmit"`
-	KeyType7               types.String `tfsdk:"key_type_7"`
-	KeyType6               types.String `tfsdk:"key_type_6"`
-	TestUsername           types.String `tfsdk:"test_username"`
-	IdleTime               types.Int64  `tfsdk:"idle_time"`
-	IgnoreAuthPort         types.Bool   `tfsdk:"ignore_auth_port"`
-	IgnoreAcctPort         types.Bool   `tfsdk:"ignore_acct_port"`
-	DtlsServerTrustpoint   types.String `tfsdk:"dtls_server_trustpoint"`
-	RadsecServerTrustpoint types.String `tfsdk:"radsec_server_trustpoint"`
+	Order                                 types.Int64  `tfsdk:"order"`
+	Address                               types.String `tfsdk:"address"`
+	AuthPort                              types.Int64  `tfsdk:"auth_port"`
+	AcctPort                              types.Int64  `tfsdk:"acct_port"`
+	Timeout                               types.Int64  `tfsdk:"timeout"`
+	Retransmit                            types.Int64  `tfsdk:"retransmit"`
+	KeyType7                              types.String `tfsdk:"key_type_7"`
+	KeyType6                              types.String `tfsdk:"key_type_6"`
+	TestUsername                          types.String `tfsdk:"test_username"`
+	IdleTime                              types.Int64  `tfsdk:"idle_time"`
+	IgnoreAuthPort                        types.Bool   `tfsdk:"ignore_auth_port"`
+	IgnoreAcctPort                        types.Bool   `tfsdk:"ignore_acct_port"`
+	DtlsServerTrustpoint                  types.String `tfsdk:"dtls_server_trustpoint"`
+	RadsecServerTrustpoint                types.String `tfsdk:"radsec_server_trustpoint"`
+	AttributeMessageAuthenticatorMandate  types.Bool   `tfsdk:"attribute_message_authenticator_mandate"`
+	AttributeMessageAuthenticatorOptional types.Bool   `tfsdk:"attribute_message_authenticator_optional"`
 }
 type RadiusServerAttributeLists struct {
 	Name               types.String                                   `tfsdk:"name"`
@@ -232,6 +236,13 @@ func (data RadiusServer) toBody(ctx context.Context, providerVersion string) str
 	if !data.AttributeFilterId11DefaultDirection.IsNull() && !data.AttributeFilterId11DefaultDirection.IsUnknown() {
 		body, _ = sjson.Set(body, "attribute.filter-id-11.default.direction", data.AttributeFilterId11DefaultDirection.ValueString())
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.AttributeMessageAuthenticator.IsNull() && !data.AttributeMessageAuthenticator.IsUnknown() {
+			if data.AttributeMessageAuthenticator.ValueBool() {
+				body, _ = sjson.Set(body, "attribute.message-authenticator", map[string]string{})
+			}
+		}
+	}
 	if len(data.Hosts) > 0 {
 		body, _ = sjson.Set(body, "hosts.host", []interface{}{})
 		for index, item := range data.Hosts {
@@ -281,6 +292,20 @@ func (data RadiusServer) toBody(ctx context.Context, providerVersion string) str
 			if !item.RadsecServerTrustpoint.IsNull() && !item.RadsecServerTrustpoint.IsUnknown() {
 				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"radsec-server.trustpoint", item.RadsecServerTrustpoint.ValueString())
 			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.AttributeMessageAuthenticatorMandate.IsNull() && !item.AttributeMessageAuthenticatorMandate.IsUnknown() {
+					if item.AttributeMessageAuthenticatorMandate.ValueBool() {
+						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"attribute.message-authenticator.mandate", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.AttributeMessageAuthenticatorOptional.IsNull() && !item.AttributeMessageAuthenticatorOptional.IsUnknown() {
+					if item.AttributeMessageAuthenticatorOptional.ValueBool() {
+						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"attribute.message-authenticator.optional", map[string]string{})
+					}
+				}
+			}
 		}
 	}
 	if len(data.AttributeLists) > 0 {
@@ -321,6 +346,20 @@ func (data RadiusServer) toBody(ctx context.Context, providerVersion string) str
 func (data RadiusServer) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "hosts.attribute_message_authenticator_mandate",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "hosts.attribute_message_authenticator_optional",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "attribute_message_authenticator",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -466,6 +505,30 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte, versio
 			data.Hosts[i].RadsecServerTrustpoint = types.StringValue(value.String())
 		} else {
 			data.Hosts[i].RadsecServerTrustpoint = types.StringNull()
+		}
+		if value := r.Get("attribute.message-authenticator.mandate"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+		}
+		if value := r.Get("attribute.message-authenticator.optional"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
 		}
 	}
 	if value := gjson.GetBytes(res, "timeout"); value.Exists() && !data.Timeout.IsNull() {
@@ -690,6 +753,16 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte, versio
 	} else if data.AttributeFilterId11DefaultDirection.IsNull() {
 		data.AttributeFilterId11DefaultDirection = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "attribute.message-authenticator"); helpers.VersionAtLeast(version, "25.4") && !data.AttributeMessageAuthenticator.IsNull() {
+		if value.Exists() {
+			data.AttributeMessageAuthenticator = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AttributeMessageAuthenticator = types.BoolValue(false)
+		}
+	} else if data.AttributeMessageAuthenticator.IsNull() {
+		data.AttributeMessageAuthenticator = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -742,6 +815,26 @@ func (data *RadiusServer) fromBody(ctx context.Context, res []byte, version stri
 			}
 			if cValue := v.Get("radsec-server.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.mandate"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+				} else if !item.AttributeMessageAuthenticatorMandate.IsNull() {
+					// Only set to false if it was previously set
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.optional"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+				} else if !item.AttributeMessageAuthenticatorOptional.IsNull() {
+					// Only set to false if it was previously set
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolNull()
 			}
 			data.Hosts = append(data.Hosts, item)
 			return true
@@ -861,6 +954,16 @@ func (data *RadiusServer) fromBody(ctx context.Context, res []byte, version stri
 	if value := gjson.GetBytes(res, "attribute.filter-id-11.default.direction"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "attribute.message-authenticator"); value.Exists() {
+			data.AttributeMessageAuthenticator = types.BoolValue(true)
+		} else if !data.AttributeMessageAuthenticator.IsNull() {
+			// Only set to false if it was previously set in state
+			data.AttributeMessageAuthenticator = types.BoolValue(false)
+		}
+	} else {
+		data.AttributeMessageAuthenticator = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -911,6 +1014,24 @@ func (data *RadiusServerData) fromBody(ctx context.Context, res []byte, version 
 			}
 			if cValue := v.Get("radsec-server.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.mandate"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+				} else {
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.optional"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+				} else {
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolNull()
 			}
 			data.Hosts = append(data.Hosts, item)
 			return true
@@ -1023,6 +1144,15 @@ func (data *RadiusServerData) fromBody(ctx context.Context, res []byte, version 
 	if value := gjson.GetBytes(res, "attribute.filter-id-11.default.direction"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "attribute.message-authenticator"); value.Exists() {
+			data.AttributeMessageAuthenticator = types.BoolValue(true)
+		} else {
+			data.AttributeMessageAuthenticator = types.BoolValue(false)
+		}
+	} else {
+		data.AttributeMessageAuthenticator = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1031,6 +1161,9 @@ func (data *RadiusServerData) fromBody(ctx context.Context, res []byte, version 
 
 func (data *RadiusServer) getDeletedItems(ctx context.Context, state RadiusServer, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.AttributeMessageAuthenticator.IsNull() && data.AttributeMessageAuthenticator.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "attribute/message-authenticator"))
+	}
 	if !state.AttributeFilterId11DefaultDirection.IsNull() && data.AttributeFilterId11DefaultDirection.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "attribute/filter-id-11/default/direction"))
 	}
@@ -1228,6 +1361,12 @@ func (data *RadiusServer) getDeletedItems(ctx context.Context, state RadiusServe
 				found = false
 			}
 			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() && data.Hosts[j].AttributeMessageAuthenticatorOptional.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "attribute/message-authenticator/optional"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() && data.Hosts[j].AttributeMessageAuthenticatorMandate.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "attribute/message-authenticator/mandate"))
+				}
 				if !state.Hosts[i].RadsecServerTrustpoint.IsNull() && data.Hosts[j].RadsecServerTrustpoint.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "radsec-server/trustpoint"))
 				}
@@ -1274,6 +1413,11 @@ func (data *RadiusServer) getDeletedItems(ctx context.Context, state RadiusServe
 
 func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *RadiusServer, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.AttributeMessageAuthenticator.IsNull() && !data.AttributeMessageAuthenticator.ValueBool() {
+		if state != nil && !state.AttributeMessageAuthenticator.IsNull() && state.AttributeMessageAuthenticator.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "attribute/message-authenticator"))
+		}
+	}
 	if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() && !data.AttributeAcctMultiSessionIdIncludeParentSessionId.ValueBool() {
 		if state != nil && !state.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() && state.AttributeAcctMultiSessionIdIncludeParentSessionId.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "attribute/acct-multi-session-id/include-parent-session-id"))
@@ -1340,6 +1484,16 @@ func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *Radius
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() && !data.Hosts[i].AttributeMessageAuthenticatorOptional.ValueBool() {
+			if state != nil && i < len(state.Hosts) && !state.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() && state.Hosts[i].AttributeMessageAuthenticatorOptional.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "attribute/message-authenticator/optional"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() && !data.Hosts[i].AttributeMessageAuthenticatorMandate.ValueBool() {
+			if state != nil && i < len(state.Hosts) && !state.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() && state.Hosts[i].AttributeMessageAuthenticatorMandate.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "attribute/message-authenticator/mandate"))
+			}
+		}
 		if !data.Hosts[i].IgnoreAcctPort.IsNull() && !data.Hosts[i].IgnoreAcctPort.ValueBool() {
 			if state != nil && i < len(state.Hosts) && !state.Hosts[i].IgnoreAcctPort.IsNull() && state.Hosts[i].IgnoreAcctPort.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "ignore-acct-port"))
@@ -1359,6 +1513,9 @@ func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *Radius
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *RadiusServer) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.AttributeMessageAuthenticator.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "attribute/message-authenticator"))
+	}
 	if !data.AttributeFilterId11DefaultDirection.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "attribute/filter-id-11/default/direction"))
 	}
@@ -1530,6 +1687,16 @@ func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServe
 			if !item.RadsecServerTrustpoint.IsNull() && !item.RadsecServerTrustpoint.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/radsec-server/trustpoint", item.RadsecServerTrustpoint.ValueString())
 			}
+			if !item.AttributeMessageAuthenticatorMandate.IsNull() && !item.AttributeMessageAuthenticatorMandate.IsUnknown() {
+				if item.AttributeMessageAuthenticatorMandate.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/attribute/message-authenticator/mandate", "")
+				}
+			}
+			if !item.AttributeMessageAuthenticatorOptional.IsNull() && !item.AttributeMessageAuthenticatorOptional.IsUnknown() {
+				if item.AttributeMessageAuthenticatorOptional.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/attribute/message-authenticator/optional", "")
+				}
+			}
 		}
 	}
 	if !data.KeyType7.IsNull() && !data.KeyType7.IsUnknown() {
@@ -1635,6 +1802,11 @@ func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServe
 	}
 	if !data.AttributeFilterId11DefaultDirection.IsNull() && !data.AttributeFilterId11DefaultDirection.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/attribute/filter-id-11/default/direction", data.AttributeFilterId11DefaultDirection.ValueString())
+	}
+	if !data.AttributeMessageAuthenticator.IsNull() && !data.AttributeMessageAuthenticator.IsUnknown() {
+		if data.AttributeMessageAuthenticator.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/attribute/message-authenticator", "")
+		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -1766,6 +1938,30 @@ func (data *RadiusServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.Hosts[i].RadsecServerTrustpoint = types.StringValue(value.String())
 		} else if data.Hosts[i].RadsecServerTrustpoint.IsNull() {
 			data.Hosts[i].RadsecServerTrustpoint = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "attribute/message-authenticator/mandate"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "attribute/message-authenticator/optional"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() && !data.Timeout.IsNull() {
@@ -1968,6 +2164,17 @@ func (data *RadiusServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 	} else if data.AttributeFilterId11DefaultDirection.IsNull() {
 		data.AttributeFilterId11DefaultDirection = types.StringNull()
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/message-authenticator"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AttributeMessageAuthenticator.IsNull() {
+			data.AttributeMessageAuthenticator = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AttributeMessageAuthenticator.IsNull() {
+			data.AttributeMessageAuthenticator = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -2024,6 +2231,16 @@ func (data *RadiusServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 			if cValue := helpers.GetFromXPath(v, "radsec-server/trustpoint"); cValue.Exists() {
 				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/mandate"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/optional"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
 			}
 			data.Hosts = append(data.Hosts, item)
 			return true
@@ -2141,6 +2358,11 @@ func (data *RadiusServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/filter-id-11/default/direction"); value.Exists() {
 		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/message-authenticator"); value.Exists() {
+		data.AttributeMessageAuthenticator = types.BoolValue(true)
+	} else {
+		data.AttributeMessageAuthenticator = types.BoolValue(false)
 	}
 }
 
@@ -2199,6 +2421,16 @@ func (data *RadiusServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "radsec-server/trustpoint"); cValue.Exists() {
 				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/mandate"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/optional"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+			}
 			data.Hosts = append(data.Hosts, item)
 			return true
 		})
@@ -2316,6 +2548,11 @@ func (data *RadiusServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/filter-id-11/default/direction"); value.Exists() {
 		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/message-authenticator"); value.Exists() {
+		data.AttributeMessageAuthenticator = types.BoolValue(true)
+	} else {
+		data.AttributeMessageAuthenticator = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -2327,6 +2564,22 @@ func (data *RadiusServer) addDeletedItemsXML(ctx context.Context, state RadiusSe
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AttributeMessageAuthenticator.IsNull() && state.AttributeMessageAuthenticator.ValueBool() && data.AttributeMessageAuthenticator.IsNull() {
+		deletePath := state.getXPath() + "/attribute/message-authenticator"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.AttributeFilterId11DefaultDirection.IsNull() && data.AttributeFilterId11DefaultDirection.IsNull() {
 		deletePath := state.getXPath() + "/attribute/filter-id-11/default/direction"
 		// Check if a parent path is already marked for deletion
@@ -2767,6 +3020,14 @@ func (data *RadiusServer) addDeletedItemsXML(ctx context.Context, state RadiusSe
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() && state.Hosts[i].AttributeMessageAuthenticatorOptional.ValueBool() && data.Hosts[j].AttributeMessageAuthenticatorOptional.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/attribute/message-authenticator/optional", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() && state.Hosts[i].AttributeMessageAuthenticatorMandate.ValueBool() && data.Hosts[j].AttributeMessageAuthenticatorMandate.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/attribute/message-authenticator/mandate", predicates))
+				}
 				if !state.Hosts[i].RadsecServerTrustpoint.IsNull() && data.Hosts[j].RadsecServerTrustpoint.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/radsec-server/trustpoint", predicates))
 				}
@@ -2817,6 +3078,9 @@ func (data *RadiusServer) addDeletedItemsXML(ctx context.Context, state RadiusSe
 
 func (data *RadiusServer) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.AttributeMessageAuthenticator.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/attribute/message-authenticator")
+	}
 	if !data.AttributeFilterId11DefaultDirection.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/attribute/filter-id-11/default/direction")
 	}

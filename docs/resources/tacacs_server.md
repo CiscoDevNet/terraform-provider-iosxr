@@ -24,6 +24,7 @@ resource "iosxr_tacacs_server" "example" {
       single_connection              = true
       single_connection_idle_timeout = 1000
       timeout                        = 10
+      tls_server_name_indicator      = "tacacs.example.com"
     }
   ]
   ipv4_dscp  = "cs6"
@@ -77,6 +78,10 @@ Optional:
   - Range: `500`-`7200`
 - `timeout` (Number) Time to wait for this TACACS server to reply (overrides default)
   - Range: `1`-`1000`
+- `tls_server_name_indicator` (String) SNI extension to include in client hello
+  - Supported from version: `25.4`
+- `tls_trustpoint` (String) Trustpoint to be used for TACACS over TLS
+  - Supported from version: `25.4`
 
 ## Import
 

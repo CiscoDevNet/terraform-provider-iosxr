@@ -208,6 +208,14 @@ func (r *AAAResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										MarkdownDescription: helpers.NewAttributeDescription("Ignore accounting port").String,
 										Optional:            true,
 									},
+									"attribute_message_authenticator_mandate": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enforce message-authenticator attribute validation mandatorily in all radius packets received").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+									},
+									"attribute_message_authenticator_optional": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enforce message-authenticator attribute validation optional in all radius packets received (Default)").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+									},
 								},
 							},
 						},
@@ -326,6 +334,14 @@ func (r *AAAResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 							},
 						},
+						"attribute_message_authenticator_mandate": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Make message-authenticator attribute mandatory").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"attribute_message_authenticator_optional": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Make message-authenticator attribute optional (Default)").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
 					},
 				},
 			},
@@ -403,6 +419,14 @@ func (r *AAAResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 									},
 									"holddown_time": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Holddown time in minutes").String,
+										Optional:            true,
+									},
+									"tls_trustpoint": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Trustpoint to be used for TACACS over TLS").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+									},
+									"tls_server_name_indicator": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("SNI extension to include in client hello").String + "\n  - Supported from version: `25.4`",
 										Optional:            true,
 									},
 								},
@@ -2087,6 +2111,10 @@ func (r *AAAResource) Create(ctx context.Context, req resource.CreateRequest, re
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -2303,6 +2331,10 @@ func (r *AAAResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -2396,6 +2428,14 @@ func (r *AAAResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

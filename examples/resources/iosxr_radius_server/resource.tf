@@ -18,22 +18,24 @@ resource "iosxr_radius_server" "example" {
       radius_attributes = "1,2,3,4,5"
     }
   ]
-  dead_criteria_time     = 10
-  dead_criteria_tries    = 5
-  deadtime               = 10
-  disallow_null_username = true
+  attribute_message_authenticator = true
+  dead_criteria_time              = 10
+  dead_criteria_tries             = 5
+  deadtime                        = 10
+  disallow_null_username          = true
   hosts = [
     {
-      acct_port        = 1813
-      address          = "10.1.1.1"
-      auth_port        = 1812
-      idle_time        = 30
-      ignore_acct_port = true
-      ignore_auth_port = true
-      key_type_7       = "060506324F41584B"
-      retransmit       = 5
-      test_username    = "cisco"
-      timeout          = 120
+      acct_port                               = 1813
+      address                                 = "10.1.1.1"
+      attribute_message_authenticator_mandate = true
+      auth_port                               = 1812
+      idle_time                               = 30
+      ignore_acct_port                        = true
+      ignore_auth_port                        = true
+      key_type_7                              = "060506324F41584B"
+      retransmit                              = 5
+      test_username                           = "cisco"
+      timeout                                 = 120
     }
   ]
   ipv4_dscp                                                     = "cs6"

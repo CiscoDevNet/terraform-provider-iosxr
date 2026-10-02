@@ -242,7 +242,7 @@ func (d *EthernetSLADataSource) Schema(ctx context.Context, req datasource.Schem
 							MarkdownDescription: "Specify the width of the first bin in milliseconds (or optionally microseconds), independent of the width of the other bins" + "\n  - Supported from version: `25.4`",
 							Computed:            true,
 						},
-						"usec_minimum_delay": schema.BoolAttribute{
+						"aggregate_usec_minimum_delay": schema.BoolAttribute{
 							MarkdownDescription: "Interpret the minimum-delay in microseconds" + "\n  - Supported from version: `25.4`",
 							Computed:            true,
 						},

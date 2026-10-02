@@ -130,7 +130,7 @@ type EthernetSLAStatisticsMeasure struct {
 	ThresholdsStatelessLogOnSampleCount   types.Int64  `tfsdk:"thresholds_stateless_log_on_sample_count"`
 	ThresholdsStatelessLogOnInAndAboveBin types.Int64  `tfsdk:"thresholds_stateless_log_on_in_and_above_bin"`
 	AggregateMinimumDelay                 types.Int64  `tfsdk:"aggregate_minimum_delay"`
-	UsecMinimumDelay                      types.Bool   `tfsdk:"usec_minimum_delay"`
+	AggregateUsecMinimumDelay             types.Bool   `tfsdk:"aggregate_usec_minimum_delay"`
 }
 
 // End of section. //template:end types
@@ -346,8 +346,8 @@ func (data EthernetSLA) toBody(ctx context.Context, providerVersion string) stri
 				}
 			}
 			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.UsecMinimumDelay.IsNull() && !item.UsecMinimumDelay.IsUnknown() {
-					if item.UsecMinimumDelay.ValueBool() {
+				if !item.AggregateUsecMinimumDelay.IsNull() && !item.AggregateUsecMinimumDelay.IsUnknown() {
+					if item.AggregateUsecMinimumDelay.ValueBool() {
 						body, _ = sjson.Set(body, "statistics.measures.measure"+"."+strconv.Itoa(index)+"."+"aggregate.usec-minimum-delay", map[string]string{})
 					}
 				}
@@ -371,7 +371,7 @@ func (data EthernetSLA) GetVersionConstraints() []helpers.FieldVersionConstraint
 			AddedInVersion: "25.4",
 		},
 		{
-			FieldPath:      "statistics_measure.usec_minimum_delay",
+			FieldPath:      "statistics_measure.aggregate_usec_minimum_delay",
 			AddedInVersion: "25.4",
 		},
 	}...)
@@ -720,14 +720,14 @@ func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte, version
 		}
 		if value := r.Get("aggregate.usec-minimum-delay"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
 			// Only set to true if it was already in the plan (not null)
-			if !data.StatisticsMeasure[i].UsecMinimumDelay.IsNull() {
-				data.StatisticsMeasure[i].UsecMinimumDelay = types.BoolValue(true)
+			if !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsecMinimumDelay = types.BoolValue(true)
 			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
-			if data.StatisticsMeasure[i].UsecMinimumDelay.IsNull() {
-				data.StatisticsMeasure[i].UsecMinimumDelay = types.BoolNull()
+			if data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsecMinimumDelay = types.BoolNull()
 			}
 		}
 	}
@@ -952,13 +952,13 @@ func (data *EthernetSLA) fromBody(ctx context.Context, res []byte, version strin
 			}
 			if helpers.VersionAtLeast(version, "25.4") {
 				if cValue := v.Get("aggregate.usec-minimum-delay"); cValue.Exists() {
-					item.UsecMinimumDelay = types.BoolValue(true)
-				} else if !item.UsecMinimumDelay.IsNull() {
+					item.AggregateUsecMinimumDelay = types.BoolValue(true)
+				} else if !item.AggregateUsecMinimumDelay.IsNull() {
 					// Only set to false if it was previously set
-					item.UsecMinimumDelay = types.BoolValue(false)
+					item.AggregateUsecMinimumDelay = types.BoolValue(false)
 				}
 			} else {
-				item.UsecMinimumDelay = types.BoolNull()
+				item.AggregateUsecMinimumDelay = types.BoolNull()
 			}
 			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
 			return true
@@ -1155,12 +1155,12 @@ func (data *EthernetSLAData) fromBody(ctx context.Context, res []byte, version s
 			}
 			if helpers.VersionAtLeast(version, "25.4") {
 				if cValue := v.Get("aggregate.usec-minimum-delay"); cValue.Exists() {
-					item.UsecMinimumDelay = types.BoolValue(true)
+					item.AggregateUsecMinimumDelay = types.BoolValue(true)
 				} else {
-					item.UsecMinimumDelay = types.BoolValue(false)
+					item.AggregateUsecMinimumDelay = types.BoolValue(false)
 				}
 			} else {
-				item.UsecMinimumDelay = types.BoolNull()
+				item.AggregateUsecMinimumDelay = types.BoolNull()
 			}
 			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
 			return true
@@ -1247,7 +1247,7 @@ func (data *EthernetSLA) getDeletedItems(ctx context.Context, state EthernetSLA,
 				found = false
 			}
 			if found {
-				if helpers.VersionAtLeast(version, "25.4") && !state.StatisticsMeasure[i].UsecMinimumDelay.IsNull() && data.StatisticsMeasure[j].UsecMinimumDelay.IsNull() {
+				if helpers.VersionAtLeast(version, "25.4") && !state.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() && data.StatisticsMeasure[j].AggregateUsecMinimumDelay.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "aggregate/usec-minimum-delay"))
 				}
 				if helpers.VersionAtLeast(version, "25.4") && !state.StatisticsMeasure[i].AggregateMinimumDelay.IsNull() && data.StatisticsMeasure[j].AggregateMinimumDelay.IsNull() {
@@ -1398,8 +1398,8 @@ func (data *EthernetSLA) getEmptyLeafsDelete(ctx context.Context, state *Etherne
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if helpers.VersionAtLeast(version, "25.4") && !data.StatisticsMeasure[i].UsecMinimumDelay.IsNull() && !data.StatisticsMeasure[i].UsecMinimumDelay.ValueBool() {
-			if state != nil && i < len(state.StatisticsMeasure) && !state.StatisticsMeasure[i].UsecMinimumDelay.IsNull() && state.StatisticsMeasure[i].UsecMinimumDelay.ValueBool() {
+		if helpers.VersionAtLeast(version, "25.4") && !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() && !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.ValueBool() {
+			if state != nil && i < len(state.StatisticsMeasure) && !state.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() && state.StatisticsMeasure[i].AggregateUsecMinimumDelay.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString), "aggregate/usec-minimum-delay"))
 			}
 		}
@@ -1735,8 +1735,8 @@ func (data EthernetSLA) toBodyXML(ctx context.Context, stateArg ...*EthernetSLA)
 			if !item.AggregateMinimumDelay.IsNull() && !item.AggregateMinimumDelay.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/aggregate/minimum-delay", strconv.FormatInt(item.AggregateMinimumDelay.ValueInt64(), 10))
 			}
-			if !item.UsecMinimumDelay.IsNull() && !item.UsecMinimumDelay.IsUnknown() {
-				if item.UsecMinimumDelay.ValueBool() {
+			if !item.AggregateUsecMinimumDelay.IsNull() && !item.AggregateUsecMinimumDelay.IsUnknown() {
+				if item.AggregateUsecMinimumDelay.ValueBool() {
 					body = helpers.SetFromXPath(body, basePath+"/aggregate/usec-minimum-delay", "")
 				}
 			}
@@ -2107,14 +2107,14 @@ func (data *EthernetSLA) updateFromBodyXML(ctx context.Context, res xmldot.Resul
 		}
 		if value := helpers.GetFromXPath(r, "aggregate/usec-minimum-delay"); value.Exists() {
 			// Only set to true if it was already in the plan (not null)
-			if !data.StatisticsMeasure[i].UsecMinimumDelay.IsNull() {
-				data.StatisticsMeasure[i].UsecMinimumDelay = types.BoolValue(true)
+			if !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsecMinimumDelay = types.BoolValue(true)
 			}
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
 			// Only set to null if it was already null
-			if data.StatisticsMeasure[i].UsecMinimumDelay.IsNull() {
-				data.StatisticsMeasure[i].UsecMinimumDelay = types.BoolNull()
+			if data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsecMinimumDelay = types.BoolNull()
 			}
 		}
 	}
@@ -2323,9 +2323,9 @@ func (data *EthernetSLA) fromBodyXML(ctx context.Context, res xmldot.Result) {
 				item.AggregateMinimumDelay = types.Int64Value(cValue.Int())
 			}
 			if cValue := helpers.GetFromXPath(v, "aggregate/usec-minimum-delay"); cValue.Exists() {
-				item.UsecMinimumDelay = types.BoolValue(true)
+				item.AggregateUsecMinimumDelay = types.BoolValue(true)
 			} else {
-				item.UsecMinimumDelay = types.BoolValue(false)
+				item.AggregateUsecMinimumDelay = types.BoolValue(false)
 			}
 			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
 			return true
@@ -2516,9 +2516,9 @@ func (data *EthernetSLAData) fromBodyXML(ctx context.Context, res xmldot.Result)
 				item.AggregateMinimumDelay = types.Int64Value(cValue.Int())
 			}
 			if cValue := helpers.GetFromXPath(v, "aggregate/usec-minimum-delay"); cValue.Exists() {
-				item.UsecMinimumDelay = types.BoolValue(true)
+				item.AggregateUsecMinimumDelay = types.BoolValue(true)
 			} else {
-				item.UsecMinimumDelay = types.BoolValue(false)
+				item.AggregateUsecMinimumDelay = types.BoolValue(false)
 			}
 			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
 			return true
@@ -2706,7 +2706,7 @@ func (data *EthernetSLA) addDeletedItemsXML(ctx context.Context, state EthernetS
 			}
 			if found {
 				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.StatisticsMeasure[i].UsecMinimumDelay.IsNull() && state.StatisticsMeasure[i].UsecMinimumDelay.ValueBool() && data.StatisticsMeasure[j].UsecMinimumDelay.IsNull() {
+				if !state.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() && state.StatisticsMeasure[i].AggregateUsecMinimumDelay.ValueBool() && data.StatisticsMeasure[j].AggregateUsecMinimumDelay.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/statistics/measures/measure%v/aggregate/usec-minimum-delay", predicates))
 				}
 				if !state.StatisticsMeasure[i].AggregateMinimumDelay.IsNull() && data.StatisticsMeasure[j].AggregateMinimumDelay.IsNull() {

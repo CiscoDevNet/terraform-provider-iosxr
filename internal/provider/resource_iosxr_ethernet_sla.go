@@ -343,7 +343,7 @@ func (r *EthernetSLAResource) Schema(ctx context.Context, req resource.SchemaReq
 								int64validator.Between(1, 10000000),
 							},
 						},
-						"usec_minimum_delay": schema.BoolAttribute{
+						"aggregate_usec_minimum_delay": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Interpret the minimum-delay in microseconds").String + "\n  - Supported from version: `25.4`",
 							Optional:            true,
 						},

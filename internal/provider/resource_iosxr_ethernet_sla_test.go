@@ -70,7 +70,7 @@ func TestAccIosxrEthernetSLA(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_ethernet_sla.test", "statistics_measure.0.aggregate_minimum_delay", "100"))
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_ethernet_sla.test", "statistics_measure.0.usec_minimum_delay", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_ethernet_sla.test", "statistics_measure.0.aggregate_usec_minimum_delay", "true"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ethernet_sla.test", "schedule_every_minutes", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ethernet_sla.test", "schedule_every_for_time", "1"))
@@ -166,7 +166,7 @@ func testAccIosxrEthernetSLAConfig_all() string {
 		config += `		aggregate_minimum_delay = 100` + "\n"
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `		usec_minimum_delay = true` + "\n"
+		config += `		aggregate_usec_minimum_delay = true` + "\n"
 	}
 	config += `		}]` + "\n"
 	config += `	schedule_every_minutes = 1` + "\n"

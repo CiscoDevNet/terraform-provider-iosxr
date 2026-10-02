@@ -30,6 +30,7 @@ resource "iosxr_ethernet_sla" "example" {
       aggregate_bins                               = 5
       aggregate_minimum_delay                      = 100
       aggregate_usec                               = true
+      aggregate_usec_minimum_delay                 = true
       aggregate_width                              = 1000
       buckets_archive                              = 10
       buckets_probes                               = true
@@ -47,7 +48,6 @@ resource "iosxr_ethernet_sla" "example" {
       thresholds_stateless_log_on_mean_value       = 2000
       thresholds_stateless_log_on_sample_count     = 10
       type                                         = "round-trip-delay"
-      usec_minimum_delay                           = true
     }
   ]
   type = "cfm-delay-measurement"
@@ -130,6 +130,8 @@ Optional:
   - Supported from version: `25.4`
 - `aggregate_none` (Boolean) Perform no aggregation
 - `aggregate_usec` (Boolean) Interpret the width in microseconds
+- `aggregate_usec_minimum_delay` (Boolean) Interpret the minimum-delay in microseconds
+  - Supported from version: `25.4`
 - `aggregate_width` (Number) Width in percentage points, to an accuracy of one percentage point
   - Range: `1`-`10000000`
 - `aggregate_width_percentage` (Number) Tenths of a percentage point
@@ -163,8 +165,6 @@ Optional:
   - Range: `1`-`2147483647`
 - `thresholds_stateless_log_on_sample_count` (Number) Threshold is breached when the sample count in bins in and above a certain bin number crosses the configured sample count
   - Range: `1`-`2147483647`
-- `usec_minimum_delay` (Boolean) Interpret the minimum-delay in microseconds
-  - Supported from version: `25.4`
 
 ## Import
 

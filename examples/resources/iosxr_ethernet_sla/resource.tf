@@ -15,6 +15,7 @@ resource "iosxr_ethernet_sla" "example" {
       aggregate_bins                               = 5
       aggregate_minimum_delay                      = 100
       aggregate_usec                               = true
+      aggregate_usec_minimum_delay                 = true
       aggregate_width                              = 1000
       buckets_archive                              = 10
       buckets_probes                               = true
@@ -32,7 +33,6 @@ resource "iosxr_ethernet_sla" "example" {
       thresholds_stateless_log_on_mean_value       = 2000
       thresholds_stateless_log_on_sample_count     = 10
       type                                         = "round-trip-delay"
-      usec_minimum_delay                           = true
     }
   ]
   type = "cfm-delay-measurement"

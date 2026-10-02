@@ -45,6 +45,7 @@ attributes:
     example: "200-201,203"
   - yang_name: ethernet-segment/service-carving/hrw
     tf_name: ethernet_segment_service_carving_hrw
+    exclude_test: true
     example: true
   - yang_name: ethernet-segment/service-carving/multicast/hrw-s-g
     tf_name: ethernet_segment_service_carving_multicast_hrw_s_g
@@ -62,6 +63,7 @@ attributes:
   - yang_name: ethernet-segment/service-carving/preference-based/access-driven
     tf_name: ethernet_segment_service_carving_preference_based_access_driven
     delete_parent: true
+    exclude_test: true
     example: true
   - yang_name: ethernet-segment/bgp/route-target
     tf_name: ethernet_segment_bgp_rt

@@ -433,7 +433,7 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Schema(ctx context.Context, req reso
 				Optional:            true,
 			},
 			"locators": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("EVI locator to use for EVPN SID allocation").String,
+				MarkdownDescription: helpers.NewAttributeDescription("EVI locator to use for EVPN SID allocation").String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -452,6 +452,19 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Schema(ctx context.Context, req reso
 						},
 					},
 				},
+			},
+			"locator_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("EVI locator to use for EVPN SID allocation").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 58),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][a-z0-9A-Z_.:]*`), ""),
+				},
+			},
+			"locator_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable uSID wide function knob for the locator").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
 			},
 		},
 	}
@@ -482,6 +495,10 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Create(ctx context.Context, req reso
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -700,6 +717,10 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Update(ctx context.Context, req reso
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -793,6 +814,14 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Delete(ctx context.Context, req reso
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

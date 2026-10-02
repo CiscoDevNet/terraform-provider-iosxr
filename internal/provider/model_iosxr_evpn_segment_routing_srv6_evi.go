@@ -82,6 +82,8 @@ type EVPNSegmentRoutingSRv6EVI struct {
 	EtreeRtLeaf                           types.Bool                                                       `tfsdk:"etree_rt_leaf"`
 	BviCoupledMode                        types.Bool                                                       `tfsdk:"bvi_coupled_mode"`
 	Locators                              []EVPNSegmentRoutingSRv6EVILocators                              `tfsdk:"locators"`
+	LocatorName                           types.String                                                     `tfsdk:"locator_name"`
+	LocatorUsidAllocationWideLocalIdBlock types.Bool                                                       `tfsdk:"locator_usid_allocation_wide_local_id_block"`
 }
 
 type EVPNSegmentRoutingSRv6EVIData struct {
@@ -125,6 +127,8 @@ type EVPNSegmentRoutingSRv6EVIData struct {
 	EtreeRtLeaf                           types.Bool                                                       `tfsdk:"etree_rt_leaf"`
 	BviCoupledMode                        types.Bool                                                       `tfsdk:"bvi_coupled_mode"`
 	Locators                              []EVPNSegmentRoutingSRv6EVILocators                              `tfsdk:"locators"`
+	LocatorName                           types.String                                                     `tfsdk:"locator_name"`
+	LocatorUsidAllocationWideLocalIdBlock types.Bool                                                       `tfsdk:"locator_usid_allocation_wide_local_id_block"`
 }
 type EVPNSegmentRoutingSRv6EVIBgpRouteTargetTwoByteAsFormat struct {
 	AsNumber       types.Int64 `tfsdk:"as_number"`
@@ -316,6 +320,18 @@ func (data EVPNSegmentRoutingSRv6EVI) toBody(ctx context.Context, providerVersio
 			body, _ = sjson.Set(body, "bvi-coupled-mode", map[string]string{})
 		}
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.LocatorName.IsNull() && !data.LocatorName.IsUnknown() {
+			body, _ = sjson.Set(body, "locator.locator-name", data.LocatorName.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.LocatorUsidAllocationWideLocalIdBlock.IsNull() && !data.LocatorUsidAllocationWideLocalIdBlock.IsUnknown() {
+			if data.LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+				body, _ = sjson.Set(body, "locator.usid.allocation.wide-local-id-block", map[string]string{})
+			}
+		}
+	}
 	if len(data.BgpRouteTargetTwoByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "bgp.route-target.export.two-byte-as-rts.two-byte-as-rt", []interface{}{})
 		for index, item := range data.BgpRouteTargetTwoByteAsFormat {
@@ -415,7 +431,7 @@ func (data EVPNSegmentRoutingSRv6EVI) toBody(ctx context.Context, providerVersio
 			}
 		}
 	}
-	if len(data.Locators) > 0 {
+	if (providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.Locators) > 0 {
 		body, _ = sjson.Set(body, "locators.locator", []interface{}{})
 		for index, item := range data.Locators {
 			if !item.LocatorName.IsNull() && !item.LocatorName.IsUnknown() {
@@ -439,6 +455,21 @@ func (data EVPNSegmentRoutingSRv6EVI) toBody(ctx context.Context, providerVersio
 func (data EVPNSegmentRoutingSRv6EVI) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "locators",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "locator_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "locator_usid_allocation_wide_local_id_block",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -1055,6 +1086,21 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 			}
 		}
 	}
+	if value := gjson.GetBytes(res, "locator.locator-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.LocatorName.IsNull() {
+		data.LocatorName = types.StringValue(value.String())
+	} else if data.LocatorName.IsNull() {
+		data.LocatorName = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "locator.usid.allocation.wide-local-id-block"); helpers.VersionAtLeast(version, "25.4") && !data.LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		if value.Exists() {
+			data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		}
+	} else if data.LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		data.LocatorUsidAllocationWideLocalIdBlock = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1337,6 +1383,23 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res []byte,
 			return true
 		})
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "locator.locator-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.LocatorName = types.StringValue(value.String())
+		}
+	} else {
+		data.LocatorName = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "locator.usid.allocation.wide-local-id-block"); value.Exists() {
+			data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		} else if !data.LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+			// Only set to false if it was previously set in state
+			data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		}
+	} else {
+		data.LocatorUsidAllocationWideLocalIdBlock = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -1601,6 +1664,22 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res []b
 			return true
 		})
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "locator.locator-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.LocatorName = types.StringValue(value.String())
+		}
+	} else {
+		data.LocatorName = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "locator.usid.allocation.wide-local-id-block"); value.Exists() {
+			data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		} else {
+			data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		}
+	} else {
+		data.LocatorUsidAllocationWideLocalIdBlock = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1609,37 +1688,45 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res []b
 
 func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, state EVPNSegmentRoutingSRv6EVI, version string) []string {
 	deletedItems := make([]string, 0)
-	for i := range state.Locators {
-		keys := [...]string{"locator-name"}
-		stateKeyValues := [...]string{state.Locators[i].LocatorName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Locators[i].LocatorName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Locators {
-			found = true
-			if state.Locators[i].LocatorName.ValueString() != data.Locators[j].LocatorName.ValueString() {
-				found = false
+	if helpers.VersionAtLeast(version, "25.4") && !state.LocatorUsidAllocationWideLocalIdBlock.IsNull() && data.LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "locator/usid/allocation/wide-local-id-block"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.LocatorName.IsNull() && data.LocatorName.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "locator/locator-name"))
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		for i := range state.Locators {
+			keys := [...]string{"locator-name"}
+			stateKeyValues := [...]string{state.Locators[i].LocatorName.ValueString()}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			if found {
-				if !state.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && data.Locators[j].UsidAllocationWideLocalIdBlock.IsNull() {
-					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "locators/locator", keyString), "usid/allocation/wide-local-id-block"))
+
+			emptyKeys := true
+			if !reflect.ValueOf(state.Locators[i].LocatorName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+
+			found := false
+			for j := range data.Locators {
+				found = true
+				if state.Locators[i].LocatorName.ValueString() != data.Locators[j].LocatorName.ValueString() {
+					found = false
 				}
-				break
+				if found {
+					if !state.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && data.Locators[j].UsidAllocationWideLocalIdBlock.IsNull() {
+						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "locators/locator", keyString), "usid/allocation/wide-local-id-block"))
+					}
+					break
+				}
 			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "locators/locator", keyString))
+			if !found {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "locators/locator", keyString))
+			}
 		}
 	}
 	if !state.BviCoupledMode.IsNull() && data.BviCoupledMode.IsNull() {
@@ -2056,16 +2143,23 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 
 func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context, state *EVPNSegmentRoutingSRv6EVI, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Locators {
-		keys := [...]string{"locator-name"}
-		keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+	if helpers.VersionAtLeast(version, "25.4") && !data.LocatorUsidAllocationWideLocalIdBlock.IsNull() && !data.LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+		if state != nil && !state.LocatorUsidAllocationWideLocalIdBlock.IsNull() && state.LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "locator/usid/allocation/wide-local-id-block"))
 		}
-		if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
-			if state != nil && i < len(state.Locators) && !state.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "locators/locator", keyString), "usid/allocation/wide-local-id-block"))
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.Locators {
+			keys := [...]string{"locator-name"}
+			keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+			if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+				if state != nil && i < len(state.Locators) && !state.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "locators/locator", keyString), "usid/allocation/wide-local-id-block"))
+				}
 			}
 		}
 	}
@@ -2234,23 +2328,31 @@ func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context, 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *EVPNSegmentRoutingSRv6EVI) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
-	for i := range data.Locators {
-		keys := [...]string{"locator-name"}
-		keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
+	if helpers.VersionAtLeast(version, "25.4") && !data.LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "locator/usid/allocation/wide-local-id-block"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.LocatorName.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "locator/locator-name"))
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.Locators {
+			keys := [...]string{"locator-name"}
+			keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
 
-		emptyKeys := true
-		if !reflect.ValueOf(data.Locators[i].LocatorName.ValueString()).IsZero() {
-			emptyKeys = false
+			emptyKeys := true
+			if !reflect.ValueOf(data.Locators[i].LocatorName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "locators/locator", keyString))
 		}
-		if emptyKeys {
-			continue
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "locators/locator", keyString))
 	}
 	if !data.BviCoupledMode.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "bvi-coupled-mode"))
@@ -2761,6 +2863,14 @@ func (data EVPNSegmentRoutingSRv6EVI) toBodyXML(ctx context.Context, stateArg ..
 					body = helpers.SetFromXPath(body, basePath+"/usid/allocation/wide-local-id-block", "")
 				}
 			}
+		}
+	}
+	if !data.LocatorName.IsNull() && !data.LocatorName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/locator/locator-name", data.LocatorName.ValueString())
+	}
+	if !data.LocatorUsidAllocationWideLocalIdBlock.IsNull() && !data.LocatorUsidAllocationWideLocalIdBlock.IsUnknown() {
+		if data.LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/locator/usid/allocation/wide-local-id-block", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -3381,6 +3491,22 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBodyXML(ctx context.Context, re
 			}
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locator/locator-name"); value.Exists() && !data.LocatorName.IsNull() {
+		data.LocatorName = types.StringValue(value.String())
+	} else if data.LocatorName.IsNull() {
+		data.LocatorName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locator/usid/allocation/wide-local-id-block"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+			data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+			data.LocatorUsidAllocationWideLocalIdBlock = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -3644,6 +3770,14 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBodyXML(ctx context.Context, res xmld
 			data.Locators = append(data.Locators, item)
 			return true
 		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locator/locator-name"); value.Exists() {
+		data.LocatorName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locator/usid/allocation/wide-local-id-block"); value.Exists() {
+		data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else {
+		data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 }
 
@@ -3909,6 +4043,14 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBodyXML(ctx context.Context, res 
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locator/locator-name"); value.Exists() {
+		data.LocatorName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/locator/usid/allocation/wide-local-id-block"); value.Exists() {
+		data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else {
+		data.LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -3920,6 +4062,37 @@ func (data *EVPNSegmentRoutingSRv6EVI) addDeletedItemsXML(ctx context.Context, s
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.LocatorUsidAllocationWideLocalIdBlock.IsNull() && state.LocatorUsidAllocationWideLocalIdBlock.ValueBool() && data.LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		deletePath := state.getXPath() + "/locator/usid/allocation/wide-local-id-block"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.LocatorName.IsNull() && data.LocatorName.IsNull() {
+		deletePath := state.getXPath() + "/locator/locator-name"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	for i := range state.Locators {
 		stateKeys := [...]string{"locator-name"}
 		stateKeyValues := [...]string{state.Locators[i].LocatorName.ValueString()}
@@ -4711,6 +4884,12 @@ func (data *EVPNSegmentRoutingSRv6EVI) addDeletedItemsXML(ctx context.Context, s
 
 func (data *EVPNSegmentRoutingSRv6EVI) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/locator/usid/allocation/wide-local-id-block")
+	}
+	if !data.LocatorName.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/locator/locator-name")
+	}
 	for i := range data.Locators {
 		keys := [...]string{"locator-name"}
 		keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}

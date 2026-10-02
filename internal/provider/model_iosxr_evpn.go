@@ -42,100 +42,106 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type EVPN struct {
-	Device                                             types.String           `tfsdk:"device"`
-	Id                                                 types.String           `tfsdk:"id"`
-	DeleteMode                                         types.String           `tfsdk:"delete_mode"`
-	BgpRdTwoByteAsNumber                               types.Int64            `tfsdk:"bgp_rd_two_byte_as_number"`
-	BgpRdTwoByteAsIndex                                types.Int64            `tfsdk:"bgp_rd_two_byte_as_index"`
-	BgpRdFourByteAsNumber                              types.Int64            `tfsdk:"bgp_rd_four_byte_as_number"`
-	BgpRdFourByteAsIndex                               types.Int64            `tfsdk:"bgp_rd_four_byte_as_index"`
-	BgpRdIpv4Address                                   types.String           `tfsdk:"bgp_rd_ipv4_address"`
-	BgpRdIpv4AddressIndex                              types.Int64            `tfsdk:"bgp_rd_ipv4_address_index"`
-	TimersRecovery                                     types.Int64            `tfsdk:"timers_recovery"`
-	TimersPeering                                      types.Int64            `tfsdk:"timers_peering"`
-	TimersCarving                                      types.Int64            `tfsdk:"timers_carving"`
-	TimersAcDebounce                                   types.Int64            `tfsdk:"timers_ac_debounce"`
-	TimersBackupReplacementDelay                       types.Int64            `tfsdk:"timers_backup_replacement_delay"`
-	TimersMacPostpone                                  types.Int64            `tfsdk:"timers_mac_postpone"`
-	LoadBalancingFlowLabelStatic                       types.Bool             `tfsdk:"load_balancing_flow_label_static"`
-	SourceInterface                                    types.String           `tfsdk:"source_interface"`
-	CostOut                                            types.Bool             `tfsdk:"cost_out"`
-	StartupCostIn                                      types.Int64            `tfsdk:"startup_cost_in"`
-	StaggeredBringupTimer                              types.Int64            `tfsdk:"staggered_bringup_timer"`
-	LoggingDfElection                                  types.Bool             `tfsdk:"logging_df_election"`
-	EthernetSegmentTypeOneAutoGenerationDisable        types.Bool             `tfsdk:"ethernet_segment_type_one_auto_generation_disable"`
-	Groups                                             []EVPNGroups           `tfsdk:"groups"`
-	Srv6                                               types.Bool             `tfsdk:"srv6"`
-	Srv6Locators                                       []EVPNSrv6Locators     `tfsdk:"srv6_locators"`
-	Srv6UsidAllocationWideLocalIdBlock                 types.Bool             `tfsdk:"srv6_usid_allocation_wide_local_id_block"`
-	IgnoreMtuMismatch                                  types.Bool             `tfsdk:"ignore_mtu_mismatch"`
-	EnforceMtuMatch                                    types.Bool             `tfsdk:"enforce_mtu_match"`
-	TransmitMtuZero                                    types.Bool             `tfsdk:"transmit_mtu_zero"`
-	TransmitL2Mtu                                      types.Bool             `tfsdk:"transmit_l2_mtu"`
-	HostIpv4DuplicateDetectionMoveCount                types.Int64            `tfsdk:"host_ipv4_duplicate_detection_move_count"`
-	HostIpv4DuplicateDetectionMoveInterval             types.Int64            `tfsdk:"host_ipv4_duplicate_detection_move_interval"`
-	HostIpv4DuplicateDetectionFreezeTime               types.Int64            `tfsdk:"host_ipv4_duplicate_detection_freeze_time"`
-	HostIpv4DuplicateDetectionRetryCount               types.String           `tfsdk:"host_ipv4_duplicate_detection_retry_count"`
-	HostIpv4DuplicateDetectionDisable                  types.Bool             `tfsdk:"host_ipv4_duplicate_detection_disable"`
-	HostIpv4DuplicateDetectionResetFreezeCountInterval types.Int64            `tfsdk:"host_ipv4_duplicate_detection_reset_freeze_count_interval"`
-	HostIpv6DuplicateDetectionMoveCount                types.Int64            `tfsdk:"host_ipv6_duplicate_detection_move_count"`
-	HostIpv6DuplicateDetectionMoveInterval             types.Int64            `tfsdk:"host_ipv6_duplicate_detection_move_interval"`
-	HostIpv6DuplicateDetectionFreezeTime               types.Int64            `tfsdk:"host_ipv6_duplicate_detection_freeze_time"`
-	HostIpv6DuplicateDetectionRetryCount               types.String           `tfsdk:"host_ipv6_duplicate_detection_retry_count"`
-	HostIpv6DuplicateDetectionDisable                  types.Bool             `tfsdk:"host_ipv6_duplicate_detection_disable"`
-	HostIpv6DuplicateDetectionResetFreezeCountInterval types.Int64            `tfsdk:"host_ipv6_duplicate_detection_reset_freeze_count_interval"`
-	VirtualNeighbors                                   []EVPNVirtualNeighbors `tfsdk:"virtual_neighbors"`
-	VirtualVfis                                        []EVPNVirtualVfis      `tfsdk:"virtual_vfis"`
-	VirtualAccessEviEthernetSegmentEsiZero             types.String           `tfsdk:"virtual_access_evi_ethernet_segment_esi_zero"`
-	VirtualAccessEviEthernetSegmentBgpRt               types.String           `tfsdk:"virtual_access_evi_ethernet_segment_bgp_rt"`
+	Device                                             types.String            `tfsdk:"device"`
+	Id                                                 types.String            `tfsdk:"id"`
+	DeleteMode                                         types.String            `tfsdk:"delete_mode"`
+	BgpRdTwoByteAsNumber                               types.Int64             `tfsdk:"bgp_rd_two_byte_as_number"`
+	BgpRdTwoByteAsIndex                                types.Int64             `tfsdk:"bgp_rd_two_byte_as_index"`
+	BgpRdFourByteAsNumber                              types.Int64             `tfsdk:"bgp_rd_four_byte_as_number"`
+	BgpRdFourByteAsIndex                               types.Int64             `tfsdk:"bgp_rd_four_byte_as_index"`
+	BgpRdIpv4Address                                   types.String            `tfsdk:"bgp_rd_ipv4_address"`
+	BgpRdIpv4AddressIndex                              types.Int64             `tfsdk:"bgp_rd_ipv4_address_index"`
+	TimersRecovery                                     types.Int64             `tfsdk:"timers_recovery"`
+	TimersPeering                                      types.Int64             `tfsdk:"timers_peering"`
+	TimersCarving                                      types.Int64             `tfsdk:"timers_carving"`
+	TimersAcDebounce                                   types.Int64             `tfsdk:"timers_ac_debounce"`
+	TimersBackupReplacementDelay                       types.Int64             `tfsdk:"timers_backup_replacement_delay"`
+	TimersMacPostpone                                  types.Int64             `tfsdk:"timers_mac_postpone"`
+	LoadBalancingFlowLabelStatic                       types.Bool              `tfsdk:"load_balancing_flow_label_static"`
+	SourceInterface                                    types.String            `tfsdk:"source_interface"`
+	CostOut                                            types.Bool              `tfsdk:"cost_out"`
+	StartupCostIn                                      types.Int64             `tfsdk:"startup_cost_in"`
+	StaggeredBringupTimer                              types.Int64             `tfsdk:"staggered_bringup_timer"`
+	LoggingDfElection                                  types.Bool              `tfsdk:"logging_df_election"`
+	EthernetSegmentTypeOneAutoGenerationDisable        types.Bool              `tfsdk:"ethernet_segment_type_one_auto_generation_disable"`
+	Groups                                             []EVPNGroups            `tfsdk:"groups"`
+	Srv6                                               types.Bool              `tfsdk:"srv6"`
+	Srv6Locators                                       []EVPNSrv6Locators      `tfsdk:"srv6_locators"`
+	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock   types.Bool              `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
+	IgnoreMtuMismatch                                  types.Bool              `tfsdk:"ignore_mtu_mismatch"`
+	EnforceMtuMatch                                    types.Bool              `tfsdk:"enforce_mtu_match"`
+	TransmitMtuZero                                    types.Bool              `tfsdk:"transmit_mtu_zero"`
+	TransmitL2Mtu                                      types.Bool              `tfsdk:"transmit_l2_mtu"`
+	HostIpv4DuplicateDetectionMoveCount                types.Int64             `tfsdk:"host_ipv4_duplicate_detection_move_count"`
+	HostIpv4DuplicateDetectionMoveInterval             types.Int64             `tfsdk:"host_ipv4_duplicate_detection_move_interval"`
+	HostIpv4DuplicateDetectionFreezeTime               types.Int64             `tfsdk:"host_ipv4_duplicate_detection_freeze_time"`
+	HostIpv4DuplicateDetectionRetryCount               types.String            `tfsdk:"host_ipv4_duplicate_detection_retry_count"`
+	HostIpv4DuplicateDetectionDisable                  types.Bool              `tfsdk:"host_ipv4_duplicate_detection_disable"`
+	HostIpv4DuplicateDetectionResetFreezeCountInterval types.Int64             `tfsdk:"host_ipv4_duplicate_detection_reset_freeze_count_interval"`
+	HostIpv6DuplicateDetectionMoveCount                types.Int64             `tfsdk:"host_ipv6_duplicate_detection_move_count"`
+	HostIpv6DuplicateDetectionMoveInterval             types.Int64             `tfsdk:"host_ipv6_duplicate_detection_move_interval"`
+	HostIpv6DuplicateDetectionFreezeTime               types.Int64             `tfsdk:"host_ipv6_duplicate_detection_freeze_time"`
+	HostIpv6DuplicateDetectionRetryCount               types.String            `tfsdk:"host_ipv6_duplicate_detection_retry_count"`
+	HostIpv6DuplicateDetectionDisable                  types.Bool              `tfsdk:"host_ipv6_duplicate_detection_disable"`
+	HostIpv6DuplicateDetectionResetFreezeCountInterval types.Int64             `tfsdk:"host_ipv6_duplicate_detection_reset_freeze_count_interval"`
+	VirtualNeighbors                                   []EVPNVirtualNeighbors  `tfsdk:"virtual_neighbors"`
+	VirtualVfis                                        []EVPNVirtualVfis       `tfsdk:"virtual_vfis"`
+	VirtualAccessEviEthernetSegmentEsiZero             types.String            `tfsdk:"virtual_access_evi_ethernet_segment_esi_zero"`
+	VirtualAccessEviEthernetSegmentBgpRt               types.String            `tfsdk:"virtual_access_evi_ethernet_segment_bgp_rt"`
+	Srv6LocatorName                                    types.String            `tfsdk:"srv6_locator_name"`
+	Srv6LocatorUsidAllocationWideLocalIdBlock          types.Bool              `tfsdk:"srv6_locator_usid_allocation_wide_local_id_block"`
+	VirtualInterfaces                                  []EVPNVirtualInterfaces `tfsdk:"virtual_interfaces"`
 }
 
 type EVPNData struct {
-	Device                                             types.String           `tfsdk:"device"`
-	Id                                                 types.String           `tfsdk:"id"`
-	BgpRdTwoByteAsNumber                               types.Int64            `tfsdk:"bgp_rd_two_byte_as_number"`
-	BgpRdTwoByteAsIndex                                types.Int64            `tfsdk:"bgp_rd_two_byte_as_index"`
-	BgpRdFourByteAsNumber                              types.Int64            `tfsdk:"bgp_rd_four_byte_as_number"`
-	BgpRdFourByteAsIndex                               types.Int64            `tfsdk:"bgp_rd_four_byte_as_index"`
-	BgpRdIpv4Address                                   types.String           `tfsdk:"bgp_rd_ipv4_address"`
-	BgpRdIpv4AddressIndex                              types.Int64            `tfsdk:"bgp_rd_ipv4_address_index"`
-	TimersRecovery                                     types.Int64            `tfsdk:"timers_recovery"`
-	TimersPeering                                      types.Int64            `tfsdk:"timers_peering"`
-	TimersCarving                                      types.Int64            `tfsdk:"timers_carving"`
-	TimersAcDebounce                                   types.Int64            `tfsdk:"timers_ac_debounce"`
-	TimersBackupReplacementDelay                       types.Int64            `tfsdk:"timers_backup_replacement_delay"`
-	TimersMacPostpone                                  types.Int64            `tfsdk:"timers_mac_postpone"`
-	LoadBalancingFlowLabelStatic                       types.Bool             `tfsdk:"load_balancing_flow_label_static"`
-	SourceInterface                                    types.String           `tfsdk:"source_interface"`
-	CostOut                                            types.Bool             `tfsdk:"cost_out"`
-	StartupCostIn                                      types.Int64            `tfsdk:"startup_cost_in"`
-	StaggeredBringupTimer                              types.Int64            `tfsdk:"staggered_bringup_timer"`
-	LoggingDfElection                                  types.Bool             `tfsdk:"logging_df_election"`
-	EthernetSegmentTypeOneAutoGenerationDisable        types.Bool             `tfsdk:"ethernet_segment_type_one_auto_generation_disable"`
-	Groups                                             []EVPNGroups           `tfsdk:"groups"`
-	Srv6                                               types.Bool             `tfsdk:"srv6"`
-	Srv6Locators                                       []EVPNSrv6Locators     `tfsdk:"srv6_locators"`
-	Srv6UsidAllocationWideLocalIdBlock                 types.Bool             `tfsdk:"srv6_usid_allocation_wide_local_id_block"`
-	IgnoreMtuMismatch                                  types.Bool             `tfsdk:"ignore_mtu_mismatch"`
-	EnforceMtuMatch                                    types.Bool             `tfsdk:"enforce_mtu_match"`
-	TransmitMtuZero                                    types.Bool             `tfsdk:"transmit_mtu_zero"`
-	TransmitL2Mtu                                      types.Bool             `tfsdk:"transmit_l2_mtu"`
-	HostIpv4DuplicateDetectionMoveCount                types.Int64            `tfsdk:"host_ipv4_duplicate_detection_move_count"`
-	HostIpv4DuplicateDetectionMoveInterval             types.Int64            `tfsdk:"host_ipv4_duplicate_detection_move_interval"`
-	HostIpv4DuplicateDetectionFreezeTime               types.Int64            `tfsdk:"host_ipv4_duplicate_detection_freeze_time"`
-	HostIpv4DuplicateDetectionRetryCount               types.String           `tfsdk:"host_ipv4_duplicate_detection_retry_count"`
-	HostIpv4DuplicateDetectionDisable                  types.Bool             `tfsdk:"host_ipv4_duplicate_detection_disable"`
-	HostIpv4DuplicateDetectionResetFreezeCountInterval types.Int64            `tfsdk:"host_ipv4_duplicate_detection_reset_freeze_count_interval"`
-	HostIpv6DuplicateDetectionMoveCount                types.Int64            `tfsdk:"host_ipv6_duplicate_detection_move_count"`
-	HostIpv6DuplicateDetectionMoveInterval             types.Int64            `tfsdk:"host_ipv6_duplicate_detection_move_interval"`
-	HostIpv6DuplicateDetectionFreezeTime               types.Int64            `tfsdk:"host_ipv6_duplicate_detection_freeze_time"`
-	HostIpv6DuplicateDetectionRetryCount               types.String           `tfsdk:"host_ipv6_duplicate_detection_retry_count"`
-	HostIpv6DuplicateDetectionDisable                  types.Bool             `tfsdk:"host_ipv6_duplicate_detection_disable"`
-	HostIpv6DuplicateDetectionResetFreezeCountInterval types.Int64            `tfsdk:"host_ipv6_duplicate_detection_reset_freeze_count_interval"`
-	VirtualNeighbors                                   []EVPNVirtualNeighbors `tfsdk:"virtual_neighbors"`
-	VirtualVfis                                        []EVPNVirtualVfis      `tfsdk:"virtual_vfis"`
-	VirtualAccessEviEthernetSegmentEsiZero             types.String           `tfsdk:"virtual_access_evi_ethernet_segment_esi_zero"`
-	VirtualAccessEviEthernetSegmentBgpRt               types.String           `tfsdk:"virtual_access_evi_ethernet_segment_bgp_rt"`
+	Device                                             types.String            `tfsdk:"device"`
+	Id                                                 types.String            `tfsdk:"id"`
+	BgpRdTwoByteAsNumber                               types.Int64             `tfsdk:"bgp_rd_two_byte_as_number"`
+	BgpRdTwoByteAsIndex                                types.Int64             `tfsdk:"bgp_rd_two_byte_as_index"`
+	BgpRdFourByteAsNumber                              types.Int64             `tfsdk:"bgp_rd_four_byte_as_number"`
+	BgpRdFourByteAsIndex                               types.Int64             `tfsdk:"bgp_rd_four_byte_as_index"`
+	BgpRdIpv4Address                                   types.String            `tfsdk:"bgp_rd_ipv4_address"`
+	BgpRdIpv4AddressIndex                              types.Int64             `tfsdk:"bgp_rd_ipv4_address_index"`
+	TimersRecovery                                     types.Int64             `tfsdk:"timers_recovery"`
+	TimersPeering                                      types.Int64             `tfsdk:"timers_peering"`
+	TimersCarving                                      types.Int64             `tfsdk:"timers_carving"`
+	TimersAcDebounce                                   types.Int64             `tfsdk:"timers_ac_debounce"`
+	TimersBackupReplacementDelay                       types.Int64             `tfsdk:"timers_backup_replacement_delay"`
+	TimersMacPostpone                                  types.Int64             `tfsdk:"timers_mac_postpone"`
+	LoadBalancingFlowLabelStatic                       types.Bool              `tfsdk:"load_balancing_flow_label_static"`
+	SourceInterface                                    types.String            `tfsdk:"source_interface"`
+	CostOut                                            types.Bool              `tfsdk:"cost_out"`
+	StartupCostIn                                      types.Int64             `tfsdk:"startup_cost_in"`
+	StaggeredBringupTimer                              types.Int64             `tfsdk:"staggered_bringup_timer"`
+	LoggingDfElection                                  types.Bool              `tfsdk:"logging_df_election"`
+	EthernetSegmentTypeOneAutoGenerationDisable        types.Bool              `tfsdk:"ethernet_segment_type_one_auto_generation_disable"`
+	Groups                                             []EVPNGroups            `tfsdk:"groups"`
+	Srv6                                               types.Bool              `tfsdk:"srv6"`
+	Srv6Locators                                       []EVPNSrv6Locators      `tfsdk:"srv6_locators"`
+	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock   types.Bool              `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
+	IgnoreMtuMismatch                                  types.Bool              `tfsdk:"ignore_mtu_mismatch"`
+	EnforceMtuMatch                                    types.Bool              `tfsdk:"enforce_mtu_match"`
+	TransmitMtuZero                                    types.Bool              `tfsdk:"transmit_mtu_zero"`
+	TransmitL2Mtu                                      types.Bool              `tfsdk:"transmit_l2_mtu"`
+	HostIpv4DuplicateDetectionMoveCount                types.Int64             `tfsdk:"host_ipv4_duplicate_detection_move_count"`
+	HostIpv4DuplicateDetectionMoveInterval             types.Int64             `tfsdk:"host_ipv4_duplicate_detection_move_interval"`
+	HostIpv4DuplicateDetectionFreezeTime               types.Int64             `tfsdk:"host_ipv4_duplicate_detection_freeze_time"`
+	HostIpv4DuplicateDetectionRetryCount               types.String            `tfsdk:"host_ipv4_duplicate_detection_retry_count"`
+	HostIpv4DuplicateDetectionDisable                  types.Bool              `tfsdk:"host_ipv4_duplicate_detection_disable"`
+	HostIpv4DuplicateDetectionResetFreezeCountInterval types.Int64             `tfsdk:"host_ipv4_duplicate_detection_reset_freeze_count_interval"`
+	HostIpv6DuplicateDetectionMoveCount                types.Int64             `tfsdk:"host_ipv6_duplicate_detection_move_count"`
+	HostIpv6DuplicateDetectionMoveInterval             types.Int64             `tfsdk:"host_ipv6_duplicate_detection_move_interval"`
+	HostIpv6DuplicateDetectionFreezeTime               types.Int64             `tfsdk:"host_ipv6_duplicate_detection_freeze_time"`
+	HostIpv6DuplicateDetectionRetryCount               types.String            `tfsdk:"host_ipv6_duplicate_detection_retry_count"`
+	HostIpv6DuplicateDetectionDisable                  types.Bool              `tfsdk:"host_ipv6_duplicate_detection_disable"`
+	HostIpv6DuplicateDetectionResetFreezeCountInterval types.Int64             `tfsdk:"host_ipv6_duplicate_detection_reset_freeze_count_interval"`
+	VirtualNeighbors                                   []EVPNVirtualNeighbors  `tfsdk:"virtual_neighbors"`
+	VirtualVfis                                        []EVPNVirtualVfis       `tfsdk:"virtual_vfis"`
+	VirtualAccessEviEthernetSegmentEsiZero             types.String            `tfsdk:"virtual_access_evi_ethernet_segment_esi_zero"`
+	VirtualAccessEviEthernetSegmentBgpRt               types.String            `tfsdk:"virtual_access_evi_ethernet_segment_bgp_rt"`
+	Srv6LocatorName                                    types.String            `tfsdk:"srv6_locator_name"`
+	Srv6LocatorUsidAllocationWideLocalIdBlock          types.Bool              `tfsdk:"srv6_locator_usid_allocation_wide_local_id_block"`
+	VirtualInterfaces                                  []EVPNVirtualInterfaces `tfsdk:"virtual_interfaces"`
 }
 type EVPNGroups struct {
 	GroupId        types.Int64                `tfsdk:"group_id"`
@@ -175,6 +181,15 @@ type EVPNVirtualVfis struct {
 	EthernetSegmentServiceCarvingPreferenceBasedWeight       types.Int64  `tfsdk:"ethernet_segment_service_carving_preference_based_weight"`
 	EthernetSegmentServiceCarvingPreferenceBasedAccessDriven types.Bool   `tfsdk:"ethernet_segment_service_carving_preference_based_access_driven"`
 	EthernetSegmentBgpRt                                     types.String `tfsdk:"ethernet_segment_bgp_rt"`
+}
+type EVPNVirtualInterfaces struct {
+	InterfaceName                             types.String `tfsdk:"interface_name"`
+	EthernetSegmentEsiZero                    types.String `tfsdk:"ethernet_segment_esi_zero"`
+	EthernetSegmentServiceCarvingHrw          types.Bool   `tfsdk:"ethernet_segment_service_carving_hrw"`
+	EthernetSegmentBgpRt                      types.String `tfsdk:"ethernet_segment_bgp_rt"`
+	EthernetSegmentConvergenceReroute         types.Bool   `tfsdk:"ethernet_segment_convergence_reroute"`
+	EthernetSegmentConvergenceMacMobility     types.Bool   `tfsdk:"ethernet_segment_convergence_mac_mobility"`
+	EthernetSegmentConvergenceNexthopTracking types.Bool   `tfsdk:"ethernet_segment_convergence_nexthop_tracking"`
 }
 type EVPNGroupsCoreInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -279,8 +294,8 @@ func (data EVPN) toBody(ctx context.Context, providerVersion string) string {
 			body, _ = sjson.Set(body, "segment-routing.srv6", map[string]string{})
 		}
 	}
-	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.IsUnknown() {
-		if data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsUnknown() {
+		if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
 			body, _ = sjson.Set(body, "segment-routing.srv6.usid.allocation.wide-local-id-block", map[string]string{})
 		}
 	}
@@ -350,6 +365,18 @@ func (data EVPN) toBody(ctx context.Context, providerVersion string) string {
 	if !data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() && !data.VirtualAccessEviEthernetSegmentBgpRt.IsUnknown() {
 		body, _ = sjson.Set(body, "virtual.access-evi.ethernet-segment.bgp.route-target", data.VirtualAccessEviEthernetSegmentBgpRt.ValueString())
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.Srv6LocatorName.IsNull() && !data.Srv6LocatorName.IsUnknown() {
+			body, _ = sjson.Set(body, "segment-routing.srv6.locator.locator-name", data.Srv6LocatorName.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsUnknown() {
+			if data.Srv6LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+				body, _ = sjson.Set(body, "segment-routing.srv6.locator.usid.allocation.wide-local-id-block", map[string]string{})
+			}
+		}
+	}
 	if len(data.Groups) > 0 {
 		body, _ = sjson.Set(body, "groups.group", []interface{}{})
 		for index, item := range data.Groups {
@@ -366,7 +393,7 @@ func (data EVPN) toBody(ctx context.Context, providerVersion string) string {
 			}
 		}
 	}
-	if len(data.Srv6Locators) > 0 {
+	if (providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.Srv6Locators) > 0 {
 		body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator", []interface{}{})
 		for index, item := range data.Srv6Locators {
 			if !item.LocatorName.IsNull() && !item.LocatorName.IsUnknown() {
@@ -482,6 +509,54 @@ func (data EVPN) toBody(ctx context.Context, providerVersion string) string {
 			}
 		}
 	}
+	if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.VirtualInterfaces) > 0 {
+		body, _ = sjson.Set(body, "virtual.interface.interface", []interface{}{})
+		for index, item := range data.VirtualInterfaces {
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+					body, _ = sjson.Set(body, "virtual.interface.interface"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.EthernetSegmentEsiZero.IsNull() && !item.EthernetSegmentEsiZero.IsUnknown() {
+					body, _ = sjson.Set(body, "virtual.interface.interface"+"."+strconv.Itoa(index)+"."+"ethernet-segment.identifier.type.zero.esi", item.EthernetSegmentEsiZero.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.EthernetSegmentServiceCarvingHrw.IsNull() && !item.EthernetSegmentServiceCarvingHrw.IsUnknown() {
+					if item.EthernetSegmentServiceCarvingHrw.ValueBool() {
+						body, _ = sjson.Set(body, "virtual.interface.interface"+"."+strconv.Itoa(index)+"."+"ethernet-segment.service-carving.hrw", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.EthernetSegmentBgpRt.IsNull() && !item.EthernetSegmentBgpRt.IsUnknown() {
+					body, _ = sjson.Set(body, "virtual.interface.interface"+"."+strconv.Itoa(index)+"."+"ethernet-segment.bgp.route-target", item.EthernetSegmentBgpRt.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.EthernetSegmentConvergenceReroute.IsNull() && !item.EthernetSegmentConvergenceReroute.IsUnknown() {
+					if item.EthernetSegmentConvergenceReroute.ValueBool() {
+						body, _ = sjson.Set(body, "virtual.interface.interface"+"."+strconv.Itoa(index)+"."+"ethernet-segment.convergence.reroute", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.EthernetSegmentConvergenceMacMobility.IsNull() && !item.EthernetSegmentConvergenceMacMobility.IsUnknown() {
+					if item.EthernetSegmentConvergenceMacMobility.ValueBool() {
+						body, _ = sjson.Set(body, "virtual.interface.interface"+"."+strconv.Itoa(index)+"."+"ethernet-segment.convergence.mac-mobility", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.EthernetSegmentConvergenceNexthopTracking.IsNull() && !item.EthernetSegmentConvergenceNexthopTracking.IsUnknown() {
+					if item.EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+						body, _ = sjson.Set(body, "virtual.interface.interface"+"."+strconv.Itoa(index)+"."+"ethernet-segment.convergence.nexthop-tracking", map[string]string{})
+					}
+				}
+			}
+		}
+	}
 	return body
 }
 
@@ -493,6 +568,53 @@ func (data EVPN) toBody(ctx context.Context, providerVersion string) string {
 func (data EVPN) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "srv6_locators",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "srv6_locator_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "srv6_locator_usid_allocation_wide_local_id_block",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "virtual_interfaces",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "virtual_interfaces.interface_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "virtual_interfaces.ethernet_segment_esi_zero",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "virtual_interfaces.ethernet_segment_service_carving_hrw",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "virtual_interfaces.ethernet_segment_bgp_rt",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "virtual_interfaces.ethernet_segment_convergence_reroute",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "virtual_interfaces.ethernet_segment_convergence_mac_mobility",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "virtual_interfaces.ethernet_segment_convergence_nexthop_tracking",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -766,15 +888,15 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte, version string
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
 		if value.Exists() {
-			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
-			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 		}
-	} else if data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolNull()
+	} else if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); !data.IgnoreMtuMismatch.IsNull() {
 		if value.Exists() {
@@ -1121,6 +1243,112 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte, version string
 	} else if data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() {
 		data.VirtualAccessEviEthernetSegmentBgpRt = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locator.locator-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Srv6LocatorName.IsNull() {
+		data.Srv6LocatorName = types.StringValue(value.String())
+	} else if data.Srv6LocatorName.IsNull() {
+		data.Srv6LocatorName = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locator.usid.allocation.wide-local-id-block"); helpers.VersionAtLeast(version, "25.4") && !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		if value.Exists() {
+			data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		}
+	} else if data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolNull()
+	}
+	for i := range data.VirtualInterfaces {
+		var keys []string
+		var keyValues []string
+		if helpers.VersionAtLeast(version, "25.4") {
+			keys = append(keys, "interface-name")
+			keyValues = append(keyValues, data.VirtualInterfaces[i].InterfaceName.ValueString())
+		}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "virtual.interface.interface").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("interface-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.VirtualInterfaces[i].InterfaceName.IsNull() {
+			data.VirtualInterfaces[i].InterfaceName = types.StringValue(value.String())
+		} else {
+			data.VirtualInterfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := r.Get("ethernet-segment.identifier.type.zero.esi"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.VirtualInterfaces[i].EthernetSegmentEsiZero.IsNull() {
+			data.VirtualInterfaces[i].EthernetSegmentEsiZero = types.StringValue(value.String())
+		} else {
+			data.VirtualInterfaces[i].EthernetSegmentEsiZero = types.StringNull()
+		}
+		if value := r.Get("ethernet-segment.service-carving.hrw"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw = types.BoolNull()
+			}
+		}
+		if value := r.Get("ethernet-segment.bgp.route-target"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.VirtualInterfaces[i].EthernetSegmentBgpRt.IsNull() {
+			data.VirtualInterfaces[i].EthernetSegmentBgpRt = types.StringValue(value.String())
+		} else {
+			data.VirtualInterfaces[i].EthernetSegmentBgpRt = types.StringNull()
+		}
+		if value := r.Get("ethernet-segment.convergence.reroute"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute = types.BoolNull()
+			}
+		}
+		if value := r.Get("ethernet-segment.convergence.mac-mobility"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility = types.BoolNull()
+			}
+		}
+		if value := r.Get("ethernet-segment.convergence.nexthop-tracking"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking = types.BoolNull()
+			}
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1243,10 +1471,10 @@ func (data *EVPN) fromBody(ctx context.Context, res []byte, version string) {
 		})
 	}
 	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
-	} else if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
 		// Only set to false if it was previously set in state
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -1435,6 +1663,92 @@ func (data *EVPN) fromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "virtual.access-evi.ethernet-segment.bgp.route-target"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.VirtualAccessEviEthernetSegmentBgpRt = types.StringValue(value.String())
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "segment-routing.srv6.locator.locator-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.Srv6LocatorName = types.StringValue(value.String())
+		}
+	} else {
+		data.Srv6LocatorName = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "segment-routing.srv6.locator.usid.allocation.wide-local-id-block"); value.Exists() {
+			data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		} else if !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+			// Only set to false if it was previously set in state
+			data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		}
+	} else {
+		data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "virtual.interface.interface"); value.Exists() {
+		data.VirtualInterfaces = make([]EVPNVirtualInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNVirtualInterfaces{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.InterfaceName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.InterfaceName = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.identifier.type.zero.esi"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.EthernetSegmentEsiZero = types.StringValue(cValue.String())
+				}
+			} else {
+				item.EthernetSegmentEsiZero = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.service-carving.hrw"); cValue.Exists() {
+					item.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+				} else if !item.EthernetSegmentServiceCarvingHrw.IsNull() {
+					// Only set to false if it was previously set
+					item.EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
+				}
+			} else {
+				item.EthernetSegmentServiceCarvingHrw = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.bgp.route-target"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.EthernetSegmentBgpRt = types.StringValue(cValue.String())
+				}
+			} else {
+				item.EthernetSegmentBgpRt = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.convergence.reroute"); cValue.Exists() {
+					item.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+				} else if !item.EthernetSegmentConvergenceReroute.IsNull() {
+					// Only set to false if it was previously set
+					item.EthernetSegmentConvergenceReroute = types.BoolValue(false)
+				}
+			} else {
+				item.EthernetSegmentConvergenceReroute = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.convergence.mac-mobility"); cValue.Exists() {
+					item.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+				} else if !item.EthernetSegmentConvergenceMacMobility.IsNull() {
+					// Only set to false if it was previously set
+					item.EthernetSegmentConvergenceMacMobility = types.BoolValue(false)
+				}
+			} else {
+				item.EthernetSegmentConvergenceMacMobility = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.convergence.nexthop-tracking"); cValue.Exists() {
+					item.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+				} else if !item.EthernetSegmentConvergenceNexthopTracking.IsNull() {
+					// Only set to false if it was previously set
+					item.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(false)
+				}
+			} else {
+				item.EthernetSegmentConvergenceNexthopTracking = types.BoolNull()
+			}
+			data.VirtualInterfaces = append(data.VirtualInterfaces, item)
+			return true
+		})
+	}
 }
 
 // End of section. //template:end fromBody
@@ -1551,9 +1865,9 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte, version string) 
 		})
 	}
 	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -1730,6 +2044,87 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte, version string) 
 	if value := gjson.GetBytes(res, "virtual.access-evi.ethernet-segment.bgp.route-target"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.VirtualAccessEviEthernetSegmentBgpRt = types.StringValue(value.String())
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "segment-routing.srv6.locator.locator-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.Srv6LocatorName = types.StringValue(value.String())
+		}
+	} else {
+		data.Srv6LocatorName = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "segment-routing.srv6.locator.usid.allocation.wide-local-id-block"); value.Exists() {
+			data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		} else {
+			data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		}
+	} else {
+		data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "virtual.interface.interface"); value.Exists() {
+		data.VirtualInterfaces = make([]EVPNVirtualInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNVirtualInterfaces{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.InterfaceName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.InterfaceName = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.identifier.type.zero.esi"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.EthernetSegmentEsiZero = types.StringValue(cValue.String())
+				}
+			} else {
+				item.EthernetSegmentEsiZero = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.service-carving.hrw"); cValue.Exists() {
+					item.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+				} else {
+					item.EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
+				}
+			} else {
+				item.EthernetSegmentServiceCarvingHrw = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.bgp.route-target"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.EthernetSegmentBgpRt = types.StringValue(cValue.String())
+				}
+			} else {
+				item.EthernetSegmentBgpRt = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.convergence.reroute"); cValue.Exists() {
+					item.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+				} else {
+					item.EthernetSegmentConvergenceReroute = types.BoolValue(false)
+				}
+			} else {
+				item.EthernetSegmentConvergenceReroute = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.convergence.mac-mobility"); cValue.Exists() {
+					item.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+				} else {
+					item.EthernetSegmentConvergenceMacMobility = types.BoolValue(false)
+				}
+			} else {
+				item.EthernetSegmentConvergenceMacMobility = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ethernet-segment.convergence.nexthop-tracking"); cValue.Exists() {
+					item.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+				} else {
+					item.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(false)
+				}
+			} else {
+				item.EthernetSegmentConvergenceNexthopTracking = types.BoolNull()
+			}
+			data.VirtualInterfaces = append(data.VirtualInterfaces, item)
+			return true
+		})
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1738,6 +2133,66 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte, version string) 
 
 func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range state.VirtualInterfaces {
+			var keys []string
+			var stateKeyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "interface-name")
+				stateKeyValues = append(stateKeyValues, state.VirtualInterfaces[i].InterfaceName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(state.VirtualInterfaces[i].InterfaceName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+
+			found := false
+			for j := range data.VirtualInterfaces {
+				found = true
+				if state.VirtualInterfaces[i].InterfaceName.ValueString() != data.VirtualInterfaces[j].InterfaceName.ValueString() {
+					found = false
+				}
+				if found {
+					if helpers.VersionAtLeast(version, "25.4") && !state.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() && data.VirtualInterfaces[j].EthernetSegmentConvergenceNexthopTracking.IsNull() {
+						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/convergence/nexthop-tracking"))
+					}
+					if helpers.VersionAtLeast(version, "25.4") && !state.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() && data.VirtualInterfaces[j].EthernetSegmentConvergenceMacMobility.IsNull() {
+						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/convergence/mac-mobility"))
+					}
+					if helpers.VersionAtLeast(version, "25.4") && !state.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() && data.VirtualInterfaces[j].EthernetSegmentConvergenceReroute.IsNull() {
+						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/convergence/reroute"))
+					}
+					if helpers.VersionAtLeast(version, "25.4") && !state.VirtualInterfaces[i].EthernetSegmentBgpRt.IsNull() && data.VirtualInterfaces[j].EthernetSegmentBgpRt.IsNull() {
+						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/bgp"))
+					}
+					if helpers.VersionAtLeast(version, "25.4") && !state.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() && data.VirtualInterfaces[j].EthernetSegmentServiceCarvingHrw.IsNull() {
+						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/service-carving/hrw"))
+					}
+					if helpers.VersionAtLeast(version, "25.4") && !state.VirtualInterfaces[i].EthernetSegmentEsiZero.IsNull() && data.VirtualInterfaces[j].EthernetSegmentEsiZero.IsNull() {
+						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/identifier/type/zero"))
+					}
+					break
+				}
+			}
+			if !found {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "virtual/interface/interface", keyString))
+			}
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() && data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/srv6/locator/usid/allocation/wide-local-id-block"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.Srv6LocatorName.IsNull() && data.Srv6LocatorName.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/srv6/locator/locator-name"))
+	}
 	if !state.VirtualAccessEviEthernetSegmentBgpRt.IsNull() && data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "virtual/access-evi/ethernet-segment/bgp"))
 	}
@@ -1930,40 +2385,42 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN, version strin
 	if !state.IgnoreMtuMismatch.IsNull() && data.IgnoreMtuMismatch.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "ignore-mtu-mismatch"))
 	}
-	if !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if !state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/srv6/usid/allocation/wide-local-id-block"))
 	}
-	for i := range state.Srv6Locators {
-		keys := [...]string{"locator-name"}
-		stateKeyValues := [...]string{state.Srv6Locators[i].LocatorName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Srv6Locators[i].LocatorName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Srv6Locators {
-			found = true
-			if state.Srv6Locators[i].LocatorName.ValueString() != data.Srv6Locators[j].LocatorName.ValueString() {
-				found = false
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		for i := range state.Srv6Locators {
+			keys := [...]string{"locator-name"}
+			stateKeyValues := [...]string{state.Srv6Locators[i].LocatorName.ValueString()}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			if found {
-				if !state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && data.Srv6Locators[j].UsidAllocationWideLocalIdBlock.IsNull() {
-					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString), "usid/allocation/wide-local-id-block"))
+
+			emptyKeys := true
+			if !reflect.ValueOf(state.Srv6Locators[i].LocatorName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+
+			found := false
+			for j := range data.Srv6Locators {
+				found = true
+				if state.Srv6Locators[i].LocatorName.ValueString() != data.Srv6Locators[j].LocatorName.ValueString() {
+					found = false
 				}
-				break
+				if found {
+					if !state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && data.Srv6Locators[j].UsidAllocationWideLocalIdBlock.IsNull() {
+						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString), "usid/allocation/wide-local-id-block"))
+					}
+					break
+				}
 			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString))
+			if !found {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString))
+			}
 		}
 	}
 	if !state.Srv6.IsNull() && data.Srv6.IsNull() {
@@ -2095,6 +2552,45 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN, version strin
 
 func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.VirtualInterfaces {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "interface-name")
+				keyValues = append(keyValues, data.VirtualInterfaces[i].InterfaceName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+			if helpers.VersionAtLeast(version, "25.4") && !data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() && !data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+				if state != nil && i < len(state.VirtualInterfaces) && !state.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() && state.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/convergence/nexthop-tracking"))
+				}
+			}
+			if helpers.VersionAtLeast(version, "25.4") && !data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() && !data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.ValueBool() {
+				if state != nil && i < len(state.VirtualInterfaces) && !state.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() && state.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/convergence/mac-mobility"))
+				}
+			}
+			if helpers.VersionAtLeast(version, "25.4") && !data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() && !data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.ValueBool() {
+				if state != nil && i < len(state.VirtualInterfaces) && !state.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() && state.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/convergence/reroute"))
+				}
+			}
+			if helpers.VersionAtLeast(version, "25.4") && !data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() && !data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
+				if state != nil && i < len(state.VirtualInterfaces) && !state.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() && state.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/service-carving/hrw"))
+				}
+			}
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+		if state != nil && !state.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() && state.Srv6LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/srv6/locator/usid/allocation/wide-local-id-block"))
+		}
+	}
 	for i := range data.VirtualVfis {
 		keys := [...]string{"vfi-name"}
 		keyValues := [...]string{data.VirtualVfis[i].VfiName.ValueString()}
@@ -2171,21 +2667,23 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN, version 
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ignore-mtu-mismatch"))
 		}
 	}
-	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
-		if state != nil && !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
+		if state != nil && !state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/srv6/usid/allocation/wide-local-id-block"))
 		}
 	}
-	for i := range data.Srv6Locators {
-		keys := [...]string{"locator-name"}
-		keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		if !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
-			if state != nil && i < len(state.Srv6Locators) && !state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/srv6/locators/locator", keyString), "usid/allocation/wide-local-id-block"))
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.Srv6Locators {
+			keys := [...]string{"locator-name"}
+			keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+			if !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+				if state != nil && i < len(state.Srv6Locators) && !state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/srv6/locators/locator", keyString), "usid/allocation/wide-local-id-block"))
+				}
 			}
 		}
 	}
@@ -2238,6 +2736,36 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN, version 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *EVPN) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.VirtualInterfaces {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "interface-name")
+				keyValues = append(keyValues, data.VirtualInterfaces[i].InterfaceName.ValueString())
+			}
+
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(data.VirtualInterfaces[i].InterfaceName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/interface/interface", keyString))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/srv6/locator/usid/allocation/wide-local-id-block"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Srv6LocatorName.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/srv6/locator/locator-name"))
+	}
 	if !data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "virtual/access-evi/ethernet-segment/bgp"))
 	}
@@ -2331,26 +2859,28 @@ func (data *EVPN) getDeletePaths(ctx context.Context, version string) []string {
 	if !data.IgnoreMtuMismatch.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "ignore-mtu-mismatch"))
 	}
-	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/srv6/usid/allocation/wide-local-id-block"))
 	}
-	for i := range data.Srv6Locators {
-		keys := [...]string{"locator-name"}
-		keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.Srv6Locators {
+			keys := [...]string{"locator-name"}
+			keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
 
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
 
-		emptyKeys := true
-		if !reflect.ValueOf(data.Srv6Locators[i].LocatorName.ValueString()).IsZero() {
-			emptyKeys = false
+			emptyKeys := true
+			if !reflect.ValueOf(data.Srv6Locators[i].LocatorName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/srv6/locators/locator", keyString))
 		}
-		if emptyKeys {
-			continue
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/srv6/locators/locator", keyString))
 	}
 	if !data.Srv6.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/srv6"))
@@ -2543,8 +3073,8 @@ func (data EVPN) toBodyXML(ctx context.Context, stateArg ...*EVPN) string {
 			}
 		}
 	}
-	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.IsUnknown() {
-		if data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsUnknown() {
+		if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block", "")
 		}
 	}
@@ -2676,6 +3206,48 @@ func (data EVPN) toBodyXML(ctx context.Context, stateArg ...*EVPN) string {
 	}
 	if !data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() && !data.VirtualAccessEviEthernetSegmentBgpRt.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/virtual/access-evi/ethernet-segment/bgp/route-target", data.VirtualAccessEviEthernetSegmentBgpRt.ValueString())
+	}
+	if !data.Srv6LocatorName.IsNull() && !data.Srv6LocatorName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/srv6/locator/locator-name", data.Srv6LocatorName.ValueString())
+	}
+	if !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsUnknown() {
+		if data.Srv6LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/srv6/locator/usid/allocation/wide-local-id-block", "")
+		}
+	}
+	if len(data.VirtualInterfaces) > 0 {
+		for _, item := range data.VirtualInterfaces {
+			basePath := data.getXPath() + "/virtual/interface/interface[interface-name='" + item.InterfaceName.ValueString() + "']"
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/interface-name", item.InterfaceName.ValueString())
+			}
+			if !item.EthernetSegmentEsiZero.IsNull() && !item.EthernetSegmentEsiZero.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/ethernet-segment/identifier/type/zero/esi", item.EthernetSegmentEsiZero.ValueString())
+			}
+			if !item.EthernetSegmentServiceCarvingHrw.IsNull() && !item.EthernetSegmentServiceCarvingHrw.IsUnknown() {
+				if item.EthernetSegmentServiceCarvingHrw.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/ethernet-segment/service-carving/hrw", "")
+				}
+			}
+			if !item.EthernetSegmentBgpRt.IsNull() && !item.EthernetSegmentBgpRt.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/ethernet-segment/bgp/route-target", item.EthernetSegmentBgpRt.ValueString())
+			}
+			if !item.EthernetSegmentConvergenceReroute.IsNull() && !item.EthernetSegmentConvergenceReroute.IsUnknown() {
+				if item.EthernetSegmentConvergenceReroute.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/ethernet-segment/convergence/reroute", "")
+				}
+			}
+			if !item.EthernetSegmentConvergenceMacMobility.IsNull() && !item.EthernetSegmentConvergenceMacMobility.IsUnknown() {
+				if item.EthernetSegmentConvergenceMacMobility.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/ethernet-segment/convergence/mac-mobility", "")
+				}
+			}
+			if !item.EthernetSegmentConvergenceNexthopTracking.IsNull() && !item.EthernetSegmentConvergenceNexthopTracking.IsUnknown() {
+				if item.EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/ethernet-segment/convergence/nexthop-tracking", "")
+				}
+			}
+		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -3001,13 +3573,13 @@ func (data *EVPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
-		if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
-			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
-		if data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
-			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolNull()
+		if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolNull()
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
@@ -3361,6 +3933,109 @@ func (data *EVPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else if data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() {
 		data.VirtualAccessEviEthernetSegmentBgpRt = types.StringNull()
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/locator/locator-name"); value.Exists() && !data.Srv6LocatorName.IsNull() {
+		data.Srv6LocatorName = types.StringValue(value.String())
+	} else if data.Srv6LocatorName.IsNull() {
+		data.Srv6LocatorName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/locator/usid/allocation/wide-local-id-block"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+			data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+			data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolNull()
+		}
+	}
+	for i := range data.VirtualInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.VirtualInterfaces[i].InterfaceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual/interface/interface").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "interface-name"); value.Exists() && !data.VirtualInterfaces[i].InterfaceName.IsNull() {
+			data.VirtualInterfaces[i].InterfaceName = types.StringValue(value.String())
+		} else if data.VirtualInterfaces[i].InterfaceName.IsNull() {
+			data.VirtualInterfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ethernet-segment/identifier/type/zero/esi"); value.Exists() && !data.VirtualInterfaces[i].EthernetSegmentEsiZero.IsNull() {
+			data.VirtualInterfaces[i].EthernetSegmentEsiZero = types.StringValue(value.String())
+		} else if data.VirtualInterfaces[i].EthernetSegmentEsiZero.IsNull() {
+			data.VirtualInterfaces[i].EthernetSegmentEsiZero = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ethernet-segment/service-carving/hrw"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "ethernet-segment/bgp/route-target"); value.Exists() && !data.VirtualInterfaces[i].EthernetSegmentBgpRt.IsNull() {
+			data.VirtualInterfaces[i].EthernetSegmentBgpRt = types.StringValue(value.String())
+		} else if data.VirtualInterfaces[i].EthernetSegmentBgpRt.IsNull() {
+			data.VirtualInterfaces[i].EthernetSegmentBgpRt = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ethernet-segment/convergence/reroute"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "ethernet-segment/convergence/mac-mobility"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "ethernet-segment/convergence/nexthop-tracking"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() {
+				data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking = types.BoolNull()
+			}
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -3477,9 +4152,9 @@ func (data *EVPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		})
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -3655,6 +4330,51 @@ func (data *EVPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual/access-evi/ethernet-segment/bgp/route-target"); value.Exists() {
 		data.VirtualAccessEviEthernetSegmentBgpRt = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/locator/locator-name"); value.Exists() {
+		data.Srv6LocatorName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/locator/usid/allocation/wide-local-id-block"); value.Exists() {
+		data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else {
+		data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual/interface/interface"); value.Exists() {
+		data.VirtualInterfaces = make([]EVPNVirtualInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNVirtualInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/identifier/type/zero/esi"); cValue.Exists() {
+				item.EthernetSegmentEsiZero = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/service-carving/hrw"); cValue.Exists() {
+				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/bgp/route-target"); cValue.Exists() {
+				item.EthernetSegmentBgpRt = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/convergence/reroute"); cValue.Exists() {
+				item.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentConvergenceReroute = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/convergence/mac-mobility"); cValue.Exists() {
+				item.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentConvergenceMacMobility = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/convergence/nexthop-tracking"); cValue.Exists() {
+				item.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(false)
+			}
+			data.VirtualInterfaces = append(data.VirtualInterfaces, item)
+			return true
+		})
 	}
 }
 
@@ -3772,9 +4492,9 @@ func (data *EVPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		})
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
-		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -3951,6 +4671,51 @@ func (data *EVPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual/access-evi/ethernet-segment/bgp/route-target"); value.Exists() {
 		data.VirtualAccessEviEthernetSegmentBgpRt = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/locator/locator-name"); value.Exists() {
+		data.Srv6LocatorName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/locator/usid/allocation/wide-local-id-block"); value.Exists() {
+		data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else {
+		data.Srv6LocatorUsidAllocationWideLocalIdBlock = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/virtual/interface/interface"); value.Exists() {
+		data.VirtualInterfaces = make([]EVPNVirtualInterfaces, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := EVPNVirtualInterfaces{}
+			if cValue := helpers.GetFromXPath(v, "interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/identifier/type/zero/esi"); cValue.Exists() {
+				item.EthernetSegmentEsiZero = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/service-carving/hrw"); cValue.Exists() {
+				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentServiceCarvingHrw = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/bgp/route-target"); cValue.Exists() {
+				item.EthernetSegmentBgpRt = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/convergence/reroute"); cValue.Exists() {
+				item.EthernetSegmentConvergenceReroute = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentConvergenceReroute = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/convergence/mac-mobility"); cValue.Exists() {
+				item.EthernetSegmentConvergenceMacMobility = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentConvergenceMacMobility = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "ethernet-segment/convergence/nexthop-tracking"); cValue.Exists() {
+				item.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentConvergenceNexthopTracking = types.BoolValue(false)
+			}
+			data.VirtualInterfaces = append(data.VirtualInterfaces, item)
+			return true
+		})
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -3962,6 +4727,89 @@ func (data *EVPN) addDeletedItemsXML(ctx context.Context, state EVPN, body strin
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.VirtualInterfaces {
+		stateKeys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.VirtualInterfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.VirtualInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.VirtualInterfaces {
+			found = true
+			if state.VirtualInterfaces[i].InterfaceName.ValueString() != data.VirtualInterfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() && state.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.ValueBool() && data.VirtualInterfaces[j].EthernetSegmentConvergenceNexthopTracking.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/virtual/interface/interface%v/ethernet-segment/convergence/nexthop-tracking", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() && state.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.ValueBool() && data.VirtualInterfaces[j].EthernetSegmentConvergenceMacMobility.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/virtual/interface/interface%v/ethernet-segment/convergence/mac-mobility", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() && state.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.ValueBool() && data.VirtualInterfaces[j].EthernetSegmentConvergenceReroute.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/virtual/interface/interface%v/ethernet-segment/convergence/reroute", predicates))
+				}
+				if !state.VirtualInterfaces[i].EthernetSegmentBgpRt.IsNull() && data.VirtualInterfaces[j].EthernetSegmentBgpRt.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/virtual/interface/interface%v/ethernet-segment/bgp", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() && state.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.ValueBool() && data.VirtualInterfaces[j].EthernetSegmentServiceCarvingHrw.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/virtual/interface/interface%v/ethernet-segment/service-carving/hrw", predicates))
+				}
+				if !state.VirtualInterfaces[i].EthernetSegmentEsiZero.IsNull() && data.VirtualInterfaces[j].EthernetSegmentEsiZero.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/virtual/interface/interface%v/ethernet-segment/identifier/type/zero", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/virtual/interface/interface%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() && state.Srv6LocatorUsidAllocationWideLocalIdBlock.ValueBool() && data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing/srv6/locator/usid/allocation/wide-local-id-block"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Srv6LocatorName.IsNull() && data.Srv6LocatorName.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing/srv6/locator/locator-name"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.VirtualAccessEviEthernetSegmentBgpRt.IsNull() && data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
 		deletePath := state.getXPath() + "/virtual/access-evi/ethernet-segment/bgp"
@@ -4391,7 +5239,7 @@ func (data *EVPN) addDeletedItemsXML(ctx context.Context, state EVPN, body strin
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
-	if !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6UsidAllocationWideLocalIdBlock.ValueBool() && data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if !state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() && data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
 		deletePath := state.getXPath() + "/segment-routing/srv6/usid/allocation/wide-local-id-block"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -4816,6 +5664,22 @@ func (data *EVPN) addDeletedItemsXML(ctx context.Context, state EVPN, body strin
 
 func (data *EVPN) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	for i := range data.VirtualInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.VirtualInterfaces[i].InterfaceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/virtual/interface/interface%v", predicates))
+	}
+	if !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/srv6/locator/usid/allocation/wide-local-id-block")
+	}
+	if !data.Srv6LocatorName.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/srv6/locator/locator-name")
+	}
 	if !data.VirtualAccessEviEthernetSegmentBgpRt.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/virtual/access-evi/ethernet-segment/bgp")
 	}
@@ -4890,7 +5754,7 @@ func (data *EVPN) addDeletePathsXML(ctx context.Context, body string) string {
 	if !data.IgnoreMtuMismatch.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ignore-mtu-mismatch")
 	}
-	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block")
 	}
 	for i := range data.Srv6Locators {

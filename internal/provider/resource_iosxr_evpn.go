@@ -237,7 +237,7 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 			},
 			"srv6_locators": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Default locator to use for EVPN SID allocation").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Default locator to use for EVPN SID allocation").String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -257,7 +257,7 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					},
 				},
 			},
-			"srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable uSID wide function global knob").String,
 				Optional:            true,
 			},
@@ -552,6 +552,64 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
 				},
 			},
+			"srv6_locator_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default locator to use for EVPN SID allocation").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 58),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][a-z0-9A-Z_.:]*`), ""),
+				},
+			},
+			"srv6_locator_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable uSID wide function knob for the locator").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"virtual_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ESI value").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 254),
+							},
+						},
+						"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("HRW mode of carving services").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"ethernet_segment_bgp_rt": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set ES-Import Route Target").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+							},
+						},
+						"ethernet_segment_convergence_reroute": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redirect unicast traffic to backup peer").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"ethernet_segment_convergence_mac_mobility": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MAC-Mobility triggered reconvergence").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"ethernet_segment_convergence_nexthop_tracking": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable EVPN procedures to be influenced by BGP nexthop reachability").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -581,6 +639,10 @@ func (r *EVPNResource) Create(ctx context.Context, req resource.CreateRequest, r
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -799,6 +861,10 @@ func (r *EVPNResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -892,6 +958,14 @@ func (r *EVPNResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

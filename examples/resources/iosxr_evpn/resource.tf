@@ -28,24 +28,19 @@ resource "iosxr_evpn" "example" {
   logging_df_election                                       = true
   source_interface                                          = "Loopback0"
   srv6                                                      = true
-  srv6_locators = [
-    {
-      locator_name                        = "LOC1"
-      usid_allocation_wide_local_id_block = true
-    }
-  ]
-  srv6_usid_allocation_wide_local_id_block     = true
-  staggered_bringup_timer                      = 3000
-  startup_cost_in                              = 60
-  timers_ac_debounce                           = 2000
-  timers_backup_replacement_delay              = 3000
-  timers_carving                               = 5
-  timers_mac_postpone                          = 240
-  timers_peering                               = 60
-  timers_recovery                              = 120
-  transmit_mtu_zero                            = true
-  virtual_access_evi_ethernet_segment_bgp_rt   = "01:01:01:01:01:03"
-  virtual_access_evi_ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.03"
+  srv6_locator_name                                         = "LOC1"
+  srv6_locator_usid_allocation_wide_local_id_block          = true
+  staggered_bringup_timer                                   = 3000
+  startup_cost_in                                           = 60
+  timers_ac_debounce                                        = 2000
+  timers_backup_replacement_delay                           = 3000
+  timers_carving                                            = 5
+  timers_mac_postpone                                       = 240
+  timers_peering                                            = 60
+  timers_recovery                                           = 120
+  transmit_mtu_zero                                         = true
+  virtual_access_evi_ethernet_segment_bgp_rt                = "01:01:01:01:01:03"
+  virtual_access_evi_ethernet_segment_esi_zero              = "01.01.01.01.01.01.01.01.03"
   virtual_neighbors = [
     {
       address                                            = "192.168.1.1"

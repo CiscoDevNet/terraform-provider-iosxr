@@ -20,15 +20,11 @@ resource "iosxr_evpn_segment_routing_srv6_evi" "example" {
   etree_rt_leaf                          = true
   ignore_mtu_mismatch                    = true
   ignore_mtu_mismatch_disable_deprecated = true
-  locators = [
-    {
-      locator_name = "LOC12"
-    }
-  ]
-  preferred_nexthop_modulo             = true
-  re_origination_disable               = true
-  transmit_mtu_zero                    = true
-  transmit_mtu_zero_disable_deprecated = true
-  unknown_unicast_suppression          = true
-  vpn_id                               = 103
+  locator_name                           = "LOC12"
+  preferred_nexthop_modulo               = true
+  re_origination_disable                 = true
+  transmit_mtu_zero                      = true
+  transmit_mtu_zero_disable_deprecated   = true
+  unknown_unicast_suppression            = true
+  vpn_id                                 = 103
 }

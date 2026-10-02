@@ -40,7 +40,6 @@ resource "iosxr_l2vpn" "example" {
   mac_limit_threshold                            = 50
   neighbors_all_ldp_flap                         = true
   pw_grouping                                    = true
-  pw_oam_refresh_transmit                        = 20
   pw_routing_bgp_rd_four_byte_as_assigned_number = 1
   pw_routing_bgp_rd_four_byte_as_number          = 65536
   pw_routing_global_id                           = 100

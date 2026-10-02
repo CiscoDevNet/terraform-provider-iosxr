@@ -174,7 +174,7 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"srv6_locators": schema.ListNestedAttribute{
-				MarkdownDescription: "Default locator to use for EVPN SID allocation",
+				MarkdownDescription: "Default locator to use for EVPN SID allocation" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -189,7 +189,7 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 					},
 				},
 			},
-			"srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
 				MarkdownDescription: "Enable uSID wide function global knob",
 				Computed:            true,
 			},
@@ -388,6 +388,50 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			"virtual_access_evi_ethernet_segment_bgp_rt": schema.StringAttribute{
 				MarkdownDescription: "Set ES-Import Route Target",
 				Computed:            true,
+			},
+			"srv6_locator_name": schema.StringAttribute{
+				MarkdownDescription: "Default locator to use for EVPN SID allocation" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"srv6_locator_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: "Enable uSID wide function knob for the locator" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"virtual_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify interface name" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Specify interface name" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: "ESI value" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+							MarkdownDescription: "HRW mode of carving services" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_bgp_rt": schema.StringAttribute{
+							MarkdownDescription: "Set ES-Import Route Target" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_convergence_reroute": schema.BoolAttribute{
+							MarkdownDescription: "Redirect unicast traffic to backup peer" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_convergence_mac_mobility": schema.BoolAttribute{
+							MarkdownDescription: "MAC-Mobility triggered reconvergence" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_convergence_nexthop_tracking": schema.BoolAttribute{
+							MarkdownDescription: "Enable EVPN procedures to be influenced by BGP nexthop reachability" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}

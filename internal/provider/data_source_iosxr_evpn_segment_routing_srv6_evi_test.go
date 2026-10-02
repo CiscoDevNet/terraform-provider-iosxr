@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -50,13 +51,18 @@ func TestAccDataSourceIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "re_origination_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "etree", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "etree_rt_leaf", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "locators.0.locator_name", "LOC12"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "locators.0.locator_name", "LOC12"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "locator_name", "LOC12"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig + testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig(),
+				Config: testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig() + testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -66,7 +72,7 @@ func TestAccDataSourceIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig = `
+const testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
@@ -77,9 +83,36 @@ resource "iosxr_yang" "PreReq0" {
 
 resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
 }
 
 `
+const testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "EVI_POLICY_1"
+		"rpl-route-policy" = "route-policy EVI_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
+}
+
+`
+
+func testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V24_4,
+			"25.4": testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V25_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -111,10 +144,18 @@ func testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig() string {
 	config += `	re_origination_disable = true` + "\n"
 	config += `	etree = true` + "\n"
 	config += `	etree_rt_leaf = true` + "\n"
-	config += `	locators = [{` + "\n"
-	config += `		locator_name = "LOC12"` + "\n"
-	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	locators = [{` + "\n"
+		config += `		locator_name = "LOC12"` + "\n"
+		config += `	}]` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	locator_name = "LOC12"` + "\n"
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

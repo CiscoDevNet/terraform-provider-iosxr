@@ -216,8 +216,10 @@ func (data L2VPN) toBody(ctx context.Context, providerVersion string) string {
 			body, _ = sjson.Set(body, "capability.high-mode", map[string]string{})
 		}
 	}
-	if !data.PwOamRefreshTransmit.IsNull() && !data.PwOamRefreshTransmit.IsUnknown() {
-		body, _ = sjson.Set(body, "pw-oam.refresh.transmit", strconv.FormatInt(data.PwOamRefreshTransmit.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.PwOamRefreshTransmit.IsNull() && !data.PwOamRefreshTransmit.IsUnknown() {
+			body, _ = sjson.Set(body, "pw-oam.refresh.transmit", strconv.FormatInt(data.PwOamRefreshTransmit.ValueInt64(), 10))
+		}
 	}
 	if !data.TcnPropagation.IsNull() && !data.TcnPropagation.IsUnknown() {
 		if data.TcnPropagation.ValueBool() {
@@ -385,6 +387,13 @@ func (data L2VPN) toBody(ctx context.Context, providerVersion string) string {
 func (data L2VPN) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "pw_oam_refresh_transmit",
+
+			RemovedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -752,7 +761,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte, version strin
 	} else if data.CapabilityHighMode.IsNull() {
 		data.CapabilityHighMode = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); value.Exists() && !data.PwOamRefreshTransmit.IsNull() {
+	if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.PwOamRefreshTransmit.IsNull() {
 		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
 	} else if data.PwOamRefreshTransmit.IsNull() {
 		data.PwOamRefreshTransmit = types.Int64Null()
@@ -1059,8 +1068,12 @@ func (data *L2VPN) fromBody(ctx context.Context, res []byte, version string) {
 		// Only set to false if it was previously set in state
 		data.CapabilityHighMode = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); value.Exists() {
-		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); value.Exists() {
+			data.PwOamRefreshTransmit = types.Int64Value(value.Int())
+		}
+	} else {
+		data.PwOamRefreshTransmit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "tcn-propagation"); value.Exists() {
 		data.TcnPropagation = types.BoolValue(true)
@@ -1297,8 +1310,12 @@ func (data *L2VPNData) fromBody(ctx context.Context, res []byte, version string)
 	} else {
 		data.CapabilityHighMode = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); value.Exists() {
-		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); value.Exists() {
+			data.PwOamRefreshTransmit = types.Int64Value(value.Int())
+		}
+	} else {
+		data.PwOamRefreshTransmit = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "tcn-propagation"); value.Exists() {
 		data.TcnPropagation = types.BoolValue(true)
@@ -1444,7 +1461,7 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN, version str
 	if !state.TcnPropagation.IsNull() && data.TcnPropagation.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "tcn-propagation"))
 	}
-	if !state.PwOamRefreshTransmit.IsNull() && data.PwOamRefreshTransmit.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.PwOamRefreshTransmit.IsNull() && data.PwOamRefreshTransmit.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-oam/refresh/transmit"))
 	}
 	if !state.CapabilityHighMode.IsNull() && data.CapabilityHighMode.IsNull() {
@@ -1930,7 +1947,7 @@ func (data *L2VPN) getDeletePaths(ctx context.Context, version string) []string 
 	if !data.TcnPropagation.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "tcn-propagation"))
 	}
-	if !data.PwOamRefreshTransmit.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.PwOamRefreshTransmit.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-oam/refresh/transmit"))
 	}
 	if !data.CapabilityHighMode.IsNull() {

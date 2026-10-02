@@ -10,6 +10,14 @@ description: |-
 
 This resource can manage the EVPN configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `srv6_locators` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -43,24 +51,19 @@ resource "iosxr_evpn" "example" {
   logging_df_election                                       = true
   source_interface                                          = "Loopback0"
   srv6                                                      = true
-  srv6_locators = [
-    {
-      locator_name                        = "LOC1"
-      usid_allocation_wide_local_id_block = true
-    }
-  ]
-  srv6_usid_allocation_wide_local_id_block     = true
-  staggered_bringup_timer                      = 3000
-  startup_cost_in                              = 60
-  timers_ac_debounce                           = 2000
-  timers_backup_replacement_delay              = 3000
-  timers_carving                               = 5
-  timers_mac_postpone                          = 240
-  timers_peering                               = 60
-  timers_recovery                              = 120
-  transmit_mtu_zero                            = true
-  virtual_access_evi_ethernet_segment_bgp_rt   = "01:01:01:01:01:03"
-  virtual_access_evi_ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.03"
+  srv6_locator_name                                         = "LOC1"
+  srv6_locator_usid_allocation_wide_local_id_block          = true
+  staggered_bringup_timer                                   = 3000
+  startup_cost_in                                           = 60
+  timers_ac_debounce                                        = 2000
+  timers_backup_replacement_delay                           = 3000
+  timers_carving                                            = 5
+  timers_mac_postpone                                       = 240
+  timers_peering                                            = 60
+  timers_recovery                                           = 120
+  transmit_mtu_zero                                         = true
+  virtual_access_evi_ethernet_segment_bgp_rt                = "01:01:01:01:01:03"
+  virtual_access_evi_ethernet_segment_esi_zero              = "01.01.01.01.01.01.01.01.03"
   virtual_neighbors = [
     {
       address                                            = "192.168.1.1"
@@ -138,10 +141,15 @@ resource "iosxr_evpn" "example" {
 - `ignore_mtu_mismatch` (Boolean) Ignore mismatch of local and remote MTUs
 - `load_balancing_flow_label_static` (Boolean) Static configuration of Flow Label
 - `logging_df_election` (Boolean) Enable Designated Forwarder election logging
+- `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function global knob
 - `source_interface` (String) Configure EVPN router-id implicitly through Loopback Interface
 - `srv6` (Boolean) SRv6 configuration for EVPN
-- `srv6_locators` (Attributes List) Default locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--srv6_locators))
-- `srv6_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function global knob
+- `srv6_locator_name` (String) Default locator to use for EVPN SID allocation
+  - Supported from version: `25.4`
+- `srv6_locator_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator
+  - Supported from version: `25.4`
+- `srv6_locators` (Attributes List) Default locator to use for EVPN SID allocation
+  - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--srv6_locators))
 - `staggered_bringup_timer` (Number) Staggered bringup timer delay timer
   - Range: `0`-`300000`
 - `startup_cost_in` (Number) Cost-in after reload timer
@@ -162,6 +170,8 @@ resource "iosxr_evpn" "example" {
 - `transmit_mtu_zero` (Boolean) Transmit MTU zero to remote instead of actual local MTU
 - `virtual_access_evi_ethernet_segment_bgp_rt` (String) Set ES-Import Route Target
 - `virtual_access_evi_ethernet_segment_esi_zero` (String) ESI value
+- `virtual_interfaces` (Attributes List) Specify interface name
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--virtual_interfaces))
 - `virtual_neighbors` (Attributes List) Specify the peer to cross connect (see [below for nested schema](#nestedatt--virtual_neighbors))
 - `virtual_vfis` (Attributes List) Specify the virtual forwarding interface name (see [below for nested schema](#nestedatt--virtual_vfis))
 
@@ -200,6 +210,27 @@ Required:
 Optional:
 
 - `usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator
+
+
+<a id="nestedatt--virtual_interfaces"></a>
+### Nested Schema for `virtual_interfaces`
+
+Optional:
+
+- `ethernet_segment_bgp_rt` (String) Set ES-Import Route Target
+  - Supported from version: `25.4`
+- `ethernet_segment_convergence_mac_mobility` (Boolean) MAC-Mobility triggered reconvergence
+  - Supported from version: `25.4`
+- `ethernet_segment_convergence_nexthop_tracking` (Boolean) Enable EVPN procedures to be influenced by BGP nexthop reachability
+  - Supported from version: `25.4`
+- `ethernet_segment_convergence_reroute` (Boolean) Redirect unicast traffic to backup peer
+  - Supported from version: `25.4`
+- `ethernet_segment_esi_zero` (String) ESI value
+  - Supported from version: `25.4`
+- `ethernet_segment_service_carving_hrw` (Boolean) HRW mode of carving services
+  - Supported from version: `25.4`
+- `interface_name` (String) Specify interface name
+  - Supported from version: `25.4`
 
 
 <a id="nestedatt--virtual_neighbors"></a>

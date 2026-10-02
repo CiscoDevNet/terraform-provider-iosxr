@@ -326,7 +326,7 @@ func (d *EVPNSegmentRoutingSRv6EVIDataSource) Schema(ctx context.Context, req da
 				Computed:            true,
 			},
 			"locators": schema.ListNestedAttribute{
-				MarkdownDescription: "EVI locator to use for EVPN SID allocation",
+				MarkdownDescription: "EVI locator to use for EVPN SID allocation" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -340,6 +340,14 @@ func (d *EVPNSegmentRoutingSRv6EVIDataSource) Schema(ctx context.Context, req da
 						},
 					},
 				},
+			},
+			"locator_name": schema.StringAttribute{
+				MarkdownDescription: "EVI locator to use for EVPN SID allocation" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"locator_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: "Enable uSID wide function knob for the locator" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
 			},
 		},
 	}

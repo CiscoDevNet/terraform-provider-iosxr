@@ -10,6 +10,14 @@ description: |-
 
 This resource can manage the L2VPN configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `pw_oam_refresh_transmit` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -55,7 +63,6 @@ resource "iosxr_l2vpn" "example" {
   mac_limit_threshold                            = 50
   neighbors_all_ldp_flap                         = true
   pw_grouping                                    = true
-  pw_oam_refresh_transmit                        = 20
   pw_routing_bgp_rd_four_byte_as_assigned_number = 1
   pw_routing_bgp_rd_four_byte_as_number          = 65536
   pw_routing_global_id                           = 100
@@ -111,6 +118,7 @@ resource "iosxr_l2vpn" "example" {
 - `pw_grouping` (Boolean) Enable PW-Grouping
 - `pw_oam_refresh_transmit` (Number) Transmit
   - Range: `1`-`4095`
+  - **Not supported from version `25.4` and above**
 - `pw_routing_bgp_rd_four_byte_as_assigned_number` (Number) AS:nn (hex or decimal format)
   - Range: `0`-`65535`
 - `pw_routing_bgp_rd_four_byte_as_number` (Number) Four Byte AS number

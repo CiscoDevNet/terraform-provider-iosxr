@@ -1,0 +1,50 @@
+---
+name: EVPN Segment Routing SRv6 EVI
+path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=%v]
+doc_category: EVPN
+attributes:
+  # ===========================================================
+  # REMOVALS — locators list replaced by a single locator container
+  # ===========================================================
+  - yang_name: locators/locator
+    legacy: true
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: locator/locator-name
+    tf_name: locator_name
+    example: LOC12
+  - yang_name: locator/usid/allocation/wide-local-id-block
+    tf_name: locator_usid_allocation_wide_local_id_block
+    exclude_test: true
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: EVI_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy EVI_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn
+
+# test_prerequisites:
+#   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn
+#   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6
+#     dependencies: [0]
+#   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6/locator
+#     attributes:
+#       - name: locator-name
+#         value: LOC1
+#     dependencies: [1]
+#   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=GigabitEthernet0/0/0/1]
+#     attributes:
+#       - name: ethernet-segment/identifier/type/zero/esi
+#         value: 01.02.03.04.05.06.07.08.09
+#     dependencies: [2]
+#   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]
+#     attributes:
+#       - name: route-policy-name
+#         value: EVI_POLICY_1
+#       - name: rpl-route-policy
+#         value: "route-policy EVI_POLICY_1\\n  pass\\nend-policy\\n"

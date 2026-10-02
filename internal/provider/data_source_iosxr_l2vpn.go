@@ -214,7 +214,7 @@ func (d *L2VPNDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Computed:            true,
 			},
 			"pw_oam_refresh_transmit": schema.Int64Attribute{
-				MarkdownDescription: "Transmit",
+				MarkdownDescription: "Transmit" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"tcn_propagation": schema.BoolAttribute{

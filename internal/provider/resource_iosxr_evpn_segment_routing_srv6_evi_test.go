@@ -54,15 +54,20 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "re_origination_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "etree", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "etree_rt_leaf", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "locators.0.locator_name", "LOC12"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "locators.0.locator_name", "LOC12"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "locator_name", "LOC12"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig + testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum(),
+			Config: testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig() + testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig + testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all(),
+		Config: testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig() + testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -94,7 +99,23 @@ func iosxrEVPNSegmentRoutingSRv6EVIImportStateIdFunc(resourceName string) resour
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig = `
+const testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V24_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "EVI_POLICY_1"
+		"rpl-route-policy" = "route-policy EVI_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
+}
+
+`
+const testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V25_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
@@ -111,6 +132,15 @@ resource "iosxr_yang" "PreReq1" {
 
 `
 
+func testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V24_4,
+			"25.4": testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V25_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -118,7 +148,10 @@ resource "iosxr_yang" "PreReq1" {
 func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
 	config += `	vpn_id = 103` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -152,10 +185,18 @@ func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all() string {
 	config += `	re_origination_disable = true` + "\n"
 	config += `	etree = true` + "\n"
 	config += `	etree_rt_leaf = true` + "\n"
-	config += `	locators = [{` + "\n"
-	config += `		locator_name = "LOC12"` + "\n"
-	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	locators = [{` + "\n"
+		config += `		locator_name = "LOC12"` + "\n"
+		config += `		}]` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	locator_name = "LOC12"` + "\n"
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

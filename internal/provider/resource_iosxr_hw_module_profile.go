@@ -479,6 +479,63 @@ func (r *HWModuleProfileResource) Schema(ctx context.Context, req resource.Schem
 				MarkdownDescription: helpers.NewAttributeDescription("Enable pic core in forwarding chain").String,
 				Optional:            true,
 			},
+			"profile_qos_ingress_fadt_set": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Change the adaptive drop threshold parameter for VoQs (specific to Jericho/Jericho+ ASIC only").AddStringEnumDescription("disable", "high", "low", "medium").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "high", "low", "medium"),
+				},
+			},
+			"profile_qos_ingress_fadt_set_locations": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Location of QoS config").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"location_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Location of QoS config").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`([a-zA-Z0-9_]*\d+/){1,2}([a-zA-Z0-9_]*\d*)`), ""),
+							},
+						},
+						"ingress_fadt_set": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("set ingress fadt").AddStringEnumDescription("disable", "high", "low", "medium").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "high", "low", "medium"),
+							},
+						},
+					},
+				},
+			},
+			"profile_qos_egress_exp_mark_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable egress EXP marking").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"fib_bgp_pic_level_3_l2services": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP-PIC for l2services over BGP Labelled Unicast (only EVPN is supported)").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"fib_mpls_php_dscp_preserve": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Preserve IPv4.DSCP and IPv6.TC in MPLS PHP flow with TTL being propagated").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_mdb_l3max_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l3max-srv6 profile for router containing non-TCAM cards").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_mdb_l3max_se_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l3max-se-srv6 profile for router containing only TCAM cards").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_mdb_l2max_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l2max-srv6 profile for router containing non-TCAM cards").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_mdb_l2max_se_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l2max-se-srv6 profile for router containing only TCAM cards").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -508,6 +565,10 @@ func (r *HWModuleProfileResource) Create(ctx context.Context, req resource.Creat
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -726,6 +787,10 @@ func (r *HWModuleProfileResource) Update(ctx context.Context, req resource.Updat
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -819,6 +884,14 @@ func (r *HWModuleProfileResource) Delete(ctx context.Context, req resource.Delet
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

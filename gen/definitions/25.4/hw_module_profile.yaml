@@ -1,0 +1,64 @@
+---
+name: HW Module Profile
+path: Cisco-IOS-XR-um-hw-module-profile-cfg:/hw-module
+doc_category: System
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: profile-qos/ingress-fadt-sets/ingress-fadt-set
+    tf_name: profile_qos_ingress_fadt_set
+    test_tags: [NCS]
+    include_example: true
+    example: high
+  - yang_name: profile-qos/locations/location
+    tf_name: profile_qos_ingress_fadt_set_locations
+    test_tags: [NCS]
+    include_example: true
+    type: List
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/0/CPU0
+      - yang_name: ingress-fadt-set
+        example: high
+  - yang_name: profile-qos/egress-exp-mark-disable
+    tf_name: profile_qos_egress_exp_mark_disable
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: fib-bgp-pic/level-3/l2services
+    tf_name: fib_bgp_pic_level_3_l2services
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  - yang_name: fib/mpls/php/dscp-preserve
+    tf_name: fib_mpls_php_dscp_preserve
+    test_tags: [NCS]
+    include_example: true
+    example: true
+  # mutually exclusive MDB scale profiles; change needs a reload
+  - yang_name: profile-mdb/l3max-srv6
+    tf_name: profile_mdb_l3max_srv6
+    test_tags: [NCS]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: profile-mdb/l3max-se-srv6
+    tf_name: profile_mdb_l3max_se_srv6
+    test_tags: [NCS]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: profile-mdb/l2max-srv6
+    tf_name: profile_mdb_l2max_srv6
+    test_tags: [NCS]
+    include_example: true
+    exclude_test: true
+    example: true
+  - yang_name: profile-mdb/l2max-se-srv6
+    tf_name: profile_mdb_l2max_se_srv6
+    test_tags: [NCS]
+    include_example: true
+    exclude_test: true
+    example: true

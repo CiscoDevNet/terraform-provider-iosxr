@@ -113,6 +113,15 @@ type HWModuleProfile struct {
 	OamFour8byteCfmMaidEnable                             types.Bool                                           `tfsdk:"oam_four8byte_cfm_maid_enable"`
 	FibBgpPicMultipathCoreEnable                          types.Bool                                           `tfsdk:"fib_bgp_pic_multipath_core_enable"`
 	BgpMpPicAutoProtectEnable                             types.Bool                                           `tfsdk:"bgp_mp_pic_auto_protect_enable"`
+	ProfileQosIngressFadtSet                              types.String                                         `tfsdk:"profile_qos_ingress_fadt_set"`
+	ProfileQosIngressFadtSetLocations                     []HWModuleProfileProfileQosIngressFadtSetLocations   `tfsdk:"profile_qos_ingress_fadt_set_locations"`
+	ProfileQosEgressExpMarkDisable                        types.Bool                                           `tfsdk:"profile_qos_egress_exp_mark_disable"`
+	FibBgpPicLevel3L2services                             types.Bool                                           `tfsdk:"fib_bgp_pic_level_3_l2services"`
+	FibMplsPhpDscpPreserve                                types.Bool                                           `tfsdk:"fib_mpls_php_dscp_preserve"`
+	ProfileMdbL3maxSrv6                                   types.Bool                                           `tfsdk:"profile_mdb_l3max_srv6"`
+	ProfileMdbL3maxSeSrv6                                 types.Bool                                           `tfsdk:"profile_mdb_l3max_se_srv6"`
+	ProfileMdbL2maxSrv6                                   types.Bool                                           `tfsdk:"profile_mdb_l2max_srv6"`
+	ProfileMdbL2maxSeSrv6                                 types.Bool                                           `tfsdk:"profile_mdb_l2max_se_srv6"`
 }
 
 type HWModuleProfileData struct {
@@ -186,6 +195,15 @@ type HWModuleProfileData struct {
 	OamFour8byteCfmMaidEnable                             types.Bool                                           `tfsdk:"oam_four8byte_cfm_maid_enable"`
 	FibBgpPicMultipathCoreEnable                          types.Bool                                           `tfsdk:"fib_bgp_pic_multipath_core_enable"`
 	BgpMpPicAutoProtectEnable                             types.Bool                                           `tfsdk:"bgp_mp_pic_auto_protect_enable"`
+	ProfileQosIngressFadtSet                              types.String                                         `tfsdk:"profile_qos_ingress_fadt_set"`
+	ProfileQosIngressFadtSetLocations                     []HWModuleProfileProfileQosIngressFadtSetLocations   `tfsdk:"profile_qos_ingress_fadt_set_locations"`
+	ProfileQosEgressExpMarkDisable                        types.Bool                                           `tfsdk:"profile_qos_egress_exp_mark_disable"`
+	FibBgpPicLevel3L2services                             types.Bool                                           `tfsdk:"fib_bgp_pic_level_3_l2services"`
+	FibMplsPhpDscpPreserve                                types.Bool                                           `tfsdk:"fib_mpls_php_dscp_preserve"`
+	ProfileMdbL3maxSrv6                                   types.Bool                                           `tfsdk:"profile_mdb_l3max_srv6"`
+	ProfileMdbL3maxSeSrv6                                 types.Bool                                           `tfsdk:"profile_mdb_l3max_se_srv6"`
+	ProfileMdbL2maxSrv6                                   types.Bool                                           `tfsdk:"profile_mdb_l2max_srv6"`
+	ProfileMdbL2maxSeSrv6                                 types.Bool                                           `tfsdk:"profile_mdb_l2max_se_srv6"`
 }
 type HWModuleProfileProfileBundleHashIndexLocations struct {
 	LocationName  types.String `tfsdk:"location_name"`
@@ -207,6 +225,10 @@ type HWModuleProfileNetflowIpfix315EnableLocations struct {
 type HWModuleProfileNetflowSflowEnableLocations struct {
 	LocationName  types.String `tfsdk:"location_name"`
 	LocationName2 types.String `tfsdk:"location_name2"`
+}
+type HWModuleProfileProfileQosIngressFadtSetLocations struct {
+	LocationName   types.String `tfsdk:"location_name"`
+	IngressFadtSet types.String `tfsdk:"ingress_fadt_set"`
 }
 
 // End of section. //template:end types
@@ -533,6 +555,60 @@ func (data HWModuleProfile) toBody(ctx context.Context, providerVersion string) 
 			body, _ = sjson.Set(body, "bgp-mp-pic.auto-protect.enable", map[string]string{})
 		}
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileQosIngressFadtSet.IsNull() && !data.ProfileQosIngressFadtSet.IsUnknown() {
+			body, _ = sjson.Set(body, "profile-qos.ingress-fadt-sets.ingress-fadt-set", data.ProfileQosIngressFadtSet.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileQosEgressExpMarkDisable.IsNull() && !data.ProfileQosEgressExpMarkDisable.IsUnknown() {
+			if data.ProfileQosEgressExpMarkDisable.ValueBool() {
+				body, _ = sjson.Set(body, "profile-qos.egress-exp-mark-disable", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.FibBgpPicLevel3L2services.IsNull() && !data.FibBgpPicLevel3L2services.IsUnknown() {
+			if data.FibBgpPicLevel3L2services.ValueBool() {
+				body, _ = sjson.Set(body, "fib-bgp-pic.level-3.l2services", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.FibMplsPhpDscpPreserve.IsNull() && !data.FibMplsPhpDscpPreserve.IsUnknown() {
+			if data.FibMplsPhpDscpPreserve.ValueBool() {
+				body, _ = sjson.Set(body, "fib.mpls.php.dscp-preserve", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileMdbL3maxSrv6.IsNull() && !data.ProfileMdbL3maxSrv6.IsUnknown() {
+			if data.ProfileMdbL3maxSrv6.ValueBool() {
+				body, _ = sjson.Set(body, "profile-mdb.l3max-srv6", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileMdbL3maxSeSrv6.IsNull() && !data.ProfileMdbL3maxSeSrv6.IsUnknown() {
+			if data.ProfileMdbL3maxSeSrv6.ValueBool() {
+				body, _ = sjson.Set(body, "profile-mdb.l3max-se-srv6", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileMdbL2maxSrv6.IsNull() && !data.ProfileMdbL2maxSrv6.IsUnknown() {
+			if data.ProfileMdbL2maxSrv6.ValueBool() {
+				body, _ = sjson.Set(body, "profile-mdb.l2max-srv6", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileMdbL2maxSeSrv6.IsNull() && !data.ProfileMdbL2maxSeSrv6.IsUnknown() {
+			if data.ProfileMdbL2maxSeSrv6.ValueBool() {
+				body, _ = sjson.Set(body, "profile-mdb.l2max-se-srv6", map[string]string{})
+			}
+		}
+	}
 	if len(data.ProfileBundleHashIndexLocations) > 0 {
 		body, _ = sjson.Set(body, "profile-bundle-hash.hash-index.locations.location", []interface{}{})
 		for index, item := range data.ProfileBundleHashIndexLocations {
@@ -591,6 +667,21 @@ func (data HWModuleProfile) toBody(ctx context.Context, providerVersion string) 
 			}
 		}
 	}
+	if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.ProfileQosIngressFadtSetLocations) > 0 {
+		body, _ = sjson.Set(body, "profile-qos.locations.location", []interface{}{})
+		for index, item := range data.ProfileQosIngressFadtSetLocations {
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
+					body, _ = sjson.Set(body, "profile-qos.locations.location"+"."+strconv.Itoa(index)+"."+"location-name", item.LocationName.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.IngressFadtSet.IsNull() && !item.IngressFadtSet.IsUnknown() {
+					body, _ = sjson.Set(body, "profile-qos.locations.location"+"."+strconv.Itoa(index)+"."+"ingress-fadt-set", item.IngressFadtSet.ValueString())
+				}
+			}
+		}
+	}
 	return body
 }
 
@@ -602,6 +693,52 @@ func (data HWModuleProfile) toBody(ctx context.Context, providerVersion string) 
 func (data HWModuleProfile) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "profile_qos_ingress_fadt_set",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_qos_ingress_fadt_set_locations",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_qos_ingress_fadt_set_locations.location_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_qos_ingress_fadt_set_locations.ingress_fadt_set",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_qos_egress_exp_mark_disable",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "fib_bgp_pic_level_3_l2services",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "fib_mpls_php_dscp_preserve",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_mdb_l3max_srv6",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_mdb_l3max_se_srv6",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_mdb_l2max_srv6",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_mdb_l2max_se_srv6",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -1406,6 +1543,119 @@ func (data *HWModuleProfile) updateFromBody(ctx context.Context, res []byte, ver
 	} else if data.BgpMpPicAutoProtectEnable.IsNull() {
 		data.BgpMpPicAutoProtectEnable = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "profile-qos.ingress-fadt-sets.ingress-fadt-set"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileQosIngressFadtSet.IsNull() {
+		data.ProfileQosIngressFadtSet = types.StringValue(value.String())
+	} else if data.ProfileQosIngressFadtSet.IsNull() {
+		data.ProfileQosIngressFadtSet = types.StringNull()
+	}
+	for i := range data.ProfileQosIngressFadtSetLocations {
+		var keys []string
+		var keyValues []string
+		if helpers.VersionAtLeast(version, "25.4") {
+			keys = append(keys, "location-name")
+			keyValues = append(keyValues, data.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString())
+		}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "profile-qos.locations.location").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("location-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileQosIngressFadtSetLocations[i].LocationName.IsNull() {
+			data.ProfileQosIngressFadtSetLocations[i].LocationName = types.StringValue(value.String())
+		} else {
+			data.ProfileQosIngressFadtSetLocations[i].LocationName = types.StringNull()
+		}
+		if value := r.Get("ingress-fadt-set"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileQosIngressFadtSetLocations[i].IngressFadtSet.IsNull() {
+			data.ProfileQosIngressFadtSetLocations[i].IngressFadtSet = types.StringValue(value.String())
+		} else {
+			data.ProfileQosIngressFadtSetLocations[i].IngressFadtSet = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "profile-qos.egress-exp-mark-disable"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileQosEgressExpMarkDisable.IsNull() {
+		if value.Exists() {
+			data.ProfileQosEgressExpMarkDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileQosEgressExpMarkDisable = types.BoolValue(false)
+		}
+	} else if data.ProfileQosEgressExpMarkDisable.IsNull() {
+		data.ProfileQosEgressExpMarkDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "fib-bgp-pic.level-3.l2services"); helpers.VersionAtLeast(version, "25.4") && !data.FibBgpPicLevel3L2services.IsNull() {
+		if value.Exists() {
+			data.FibBgpPicLevel3L2services = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.FibBgpPicLevel3L2services = types.BoolValue(false)
+		}
+	} else if data.FibBgpPicLevel3L2services.IsNull() {
+		data.FibBgpPicLevel3L2services = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "fib.mpls.php.dscp-preserve"); helpers.VersionAtLeast(version, "25.4") && !data.FibMplsPhpDscpPreserve.IsNull() {
+		if value.Exists() {
+			data.FibMplsPhpDscpPreserve = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.FibMplsPhpDscpPreserve = types.BoolValue(false)
+		}
+	} else if data.FibMplsPhpDscpPreserve.IsNull() {
+		data.FibMplsPhpDscpPreserve = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile-mdb.l3max-srv6"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL3maxSrv6.IsNull() {
+		if value.Exists() {
+			data.ProfileMdbL3maxSrv6 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileMdbL3maxSrv6 = types.BoolValue(false)
+		}
+	} else if data.ProfileMdbL3maxSrv6.IsNull() {
+		data.ProfileMdbL3maxSrv6 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile-mdb.l3max-se-srv6"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL3maxSeSrv6.IsNull() {
+		if value.Exists() {
+			data.ProfileMdbL3maxSeSrv6 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileMdbL3maxSeSrv6 = types.BoolValue(false)
+		}
+	} else if data.ProfileMdbL3maxSeSrv6.IsNull() {
+		data.ProfileMdbL3maxSeSrv6 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile-mdb.l2max-srv6"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL2maxSrv6.IsNull() {
+		if value.Exists() {
+			data.ProfileMdbL2maxSrv6 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileMdbL2maxSrv6 = types.BoolValue(false)
+		}
+	} else if data.ProfileMdbL2maxSrv6.IsNull() {
+		data.ProfileMdbL2maxSrv6 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile-mdb.l2max-se-srv6"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL2maxSeSrv6.IsNull() {
+		if value.Exists() {
+			data.ProfileMdbL2maxSeSrv6 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileMdbL2maxSeSrv6 = types.BoolValue(false)
+		}
+	} else if data.ProfileMdbL2maxSeSrv6.IsNull() {
+		data.ProfileMdbL2maxSeSrv6 = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1834,6 +2084,105 @@ func (data *HWModuleProfile) fromBody(ctx context.Context, res []byte, version s
 		// Only set to false if it was previously set in state
 		data.BgpMpPicAutoProtectEnable = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-qos.ingress-fadt-sets.ingress-fadt-set"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ProfileQosIngressFadtSet = types.StringValue(value.String())
+		}
+	} else {
+		data.ProfileQosIngressFadtSet = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "profile-qos.locations.location"); value.Exists() {
+		data.ProfileQosIngressFadtSetLocations = make([]HWModuleProfileProfileQosIngressFadtSetLocations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfileProfileQosIngressFadtSetLocations{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("location-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.LocationName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.LocationName = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ingress-fadt-set"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.IngressFadtSet = types.StringValue(cValue.String())
+				}
+			} else {
+				item.IngressFadtSet = types.StringNull()
+			}
+			data.ProfileQosIngressFadtSetLocations = append(data.ProfileQosIngressFadtSetLocations, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-qos.egress-exp-mark-disable"); value.Exists() {
+			data.ProfileQosEgressExpMarkDisable = types.BoolValue(true)
+		} else if !data.ProfileQosEgressExpMarkDisable.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileQosEgressExpMarkDisable = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileQosEgressExpMarkDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "fib-bgp-pic.level-3.l2services"); value.Exists() {
+			data.FibBgpPicLevel3L2services = types.BoolValue(true)
+		} else if !data.FibBgpPicLevel3L2services.IsNull() {
+			// Only set to false if it was previously set in state
+			data.FibBgpPicLevel3L2services = types.BoolValue(false)
+		}
+	} else {
+		data.FibBgpPicLevel3L2services = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "fib.mpls.php.dscp-preserve"); value.Exists() {
+			data.FibMplsPhpDscpPreserve = types.BoolValue(true)
+		} else if !data.FibMplsPhpDscpPreserve.IsNull() {
+			// Only set to false if it was previously set in state
+			data.FibMplsPhpDscpPreserve = types.BoolValue(false)
+		}
+	} else {
+		data.FibMplsPhpDscpPreserve = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-mdb.l3max-srv6"); value.Exists() {
+			data.ProfileMdbL3maxSrv6 = types.BoolValue(true)
+		} else if !data.ProfileMdbL3maxSrv6.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileMdbL3maxSrv6 = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileMdbL3maxSrv6 = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-mdb.l3max-se-srv6"); value.Exists() {
+			data.ProfileMdbL3maxSeSrv6 = types.BoolValue(true)
+		} else if !data.ProfileMdbL3maxSeSrv6.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileMdbL3maxSeSrv6 = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileMdbL3maxSeSrv6 = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-mdb.l2max-srv6"); value.Exists() {
+			data.ProfileMdbL2maxSrv6 = types.BoolValue(true)
+		} else if !data.ProfileMdbL2maxSrv6.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileMdbL2maxSrv6 = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileMdbL2maxSrv6 = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-mdb.l2max-se-srv6"); value.Exists() {
+			data.ProfileMdbL2maxSeSrv6 = types.BoolValue(true)
+		} else if !data.ProfileMdbL2maxSeSrv6.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileMdbL2maxSeSrv6 = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileMdbL2maxSeSrv6 = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -2209,6 +2558,98 @@ func (data *HWModuleProfileData) fromBody(ctx context.Context, res []byte, versi
 	} else {
 		data.BgpMpPicAutoProtectEnable = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-qos.ingress-fadt-sets.ingress-fadt-set"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ProfileQosIngressFadtSet = types.StringValue(value.String())
+		}
+	} else {
+		data.ProfileQosIngressFadtSet = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "profile-qos.locations.location"); value.Exists() {
+		data.ProfileQosIngressFadtSetLocations = make([]HWModuleProfileProfileQosIngressFadtSetLocations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfileProfileQosIngressFadtSetLocations{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("location-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.LocationName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.LocationName = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ingress-fadt-set"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.IngressFadtSet = types.StringValue(cValue.String())
+				}
+			} else {
+				item.IngressFadtSet = types.StringNull()
+			}
+			data.ProfileQosIngressFadtSetLocations = append(data.ProfileQosIngressFadtSetLocations, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-qos.egress-exp-mark-disable"); value.Exists() {
+			data.ProfileQosEgressExpMarkDisable = types.BoolValue(true)
+		} else {
+			data.ProfileQosEgressExpMarkDisable = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileQosEgressExpMarkDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "fib-bgp-pic.level-3.l2services"); value.Exists() {
+			data.FibBgpPicLevel3L2services = types.BoolValue(true)
+		} else {
+			data.FibBgpPicLevel3L2services = types.BoolValue(false)
+		}
+	} else {
+		data.FibBgpPicLevel3L2services = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "fib.mpls.php.dscp-preserve"); value.Exists() {
+			data.FibMplsPhpDscpPreserve = types.BoolValue(true)
+		} else {
+			data.FibMplsPhpDscpPreserve = types.BoolValue(false)
+		}
+	} else {
+		data.FibMplsPhpDscpPreserve = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-mdb.l3max-srv6"); value.Exists() {
+			data.ProfileMdbL3maxSrv6 = types.BoolValue(true)
+		} else {
+			data.ProfileMdbL3maxSrv6 = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileMdbL3maxSrv6 = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-mdb.l3max-se-srv6"); value.Exists() {
+			data.ProfileMdbL3maxSeSrv6 = types.BoolValue(true)
+		} else {
+			data.ProfileMdbL3maxSeSrv6 = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileMdbL3maxSeSrv6 = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-mdb.l2max-srv6"); value.Exists() {
+			data.ProfileMdbL2maxSrv6 = types.BoolValue(true)
+		} else {
+			data.ProfileMdbL2maxSrv6 = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileMdbL2maxSrv6 = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile-mdb.l2max-se-srv6"); value.Exists() {
+			data.ProfileMdbL2maxSeSrv6 = types.BoolValue(true)
+		} else {
+			data.ProfileMdbL2maxSeSrv6 = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileMdbL2maxSeSrv6 = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -2217,6 +2658,69 @@ func (data *HWModuleProfileData) fromBody(ctx context.Context, res []byte, versi
 
 func (data *HWModuleProfile) getDeletedItems(ctx context.Context, state HWModuleProfile, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileMdbL2maxSeSrv6.IsNull() && data.ProfileMdbL2maxSeSrv6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile-mdb/l2max-se-srv6"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileMdbL2maxSrv6.IsNull() && data.ProfileMdbL2maxSrv6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile-mdb/l2max-srv6"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileMdbL3maxSeSrv6.IsNull() && data.ProfileMdbL3maxSeSrv6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile-mdb/l3max-se-srv6"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileMdbL3maxSrv6.IsNull() && data.ProfileMdbL3maxSrv6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile-mdb/l3max-srv6"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.FibMplsPhpDscpPreserve.IsNull() && data.FibMplsPhpDscpPreserve.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fib/mpls/php/dscp-preserve"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.FibBgpPicLevel3L2services.IsNull() && data.FibBgpPicLevel3L2services.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fib-bgp-pic/level-3/l2services"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileQosEgressExpMarkDisable.IsNull() && data.ProfileQosEgressExpMarkDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile-qos/egress-exp-mark-disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range state.ProfileQosIngressFadtSetLocations {
+			var keys []string
+			var stateKeyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "location-name")
+				stateKeyValues = append(stateKeyValues, state.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(state.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+
+			found := false
+			for j := range data.ProfileQosIngressFadtSetLocations {
+				found = true
+				if state.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString() != data.ProfileQosIngressFadtSetLocations[j].LocationName.ValueString() {
+					found = false
+				}
+				if found {
+					if helpers.VersionAtLeast(version, "25.4") && !state.ProfileQosIngressFadtSetLocations[i].IngressFadtSet.IsNull() && data.ProfileQosIngressFadtSetLocations[j].IngressFadtSet.IsNull() {
+						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profile-qos/locations/location", keyString), "ingress-fadt-set"))
+					}
+					break
+				}
+			}
+			if !found {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "profile-qos/locations/location", keyString))
+			}
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileQosIngressFadtSet.IsNull() && data.ProfileQosIngressFadtSet.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile-qos/ingress-fadt-sets/ingress-fadt-set"))
+	}
 	if !state.BgpMpPicAutoProtectEnable.IsNull() && data.BgpMpPicAutoProtectEnable.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "bgp-mp-pic/auto-protect/enable"))
 	}
@@ -2592,6 +3096,55 @@ func (data *HWModuleProfile) getDeletedItems(ctx context.Context, state HWModule
 
 func (data *HWModuleProfile) getEmptyLeafsDelete(ctx context.Context, state *HWModuleProfile, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL2maxSeSrv6.IsNull() && !data.ProfileMdbL2maxSeSrv6.ValueBool() {
+		if state != nil && !state.ProfileMdbL2maxSeSrv6.IsNull() && state.ProfileMdbL2maxSeSrv6.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile-mdb/l2max-se-srv6"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL2maxSrv6.IsNull() && !data.ProfileMdbL2maxSrv6.ValueBool() {
+		if state != nil && !state.ProfileMdbL2maxSrv6.IsNull() && state.ProfileMdbL2maxSrv6.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile-mdb/l2max-srv6"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL3maxSeSrv6.IsNull() && !data.ProfileMdbL3maxSeSrv6.ValueBool() {
+		if state != nil && !state.ProfileMdbL3maxSeSrv6.IsNull() && state.ProfileMdbL3maxSeSrv6.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile-mdb/l3max-se-srv6"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL3maxSrv6.IsNull() && !data.ProfileMdbL3maxSrv6.ValueBool() {
+		if state != nil && !state.ProfileMdbL3maxSrv6.IsNull() && state.ProfileMdbL3maxSrv6.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile-mdb/l3max-srv6"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.FibMplsPhpDscpPreserve.IsNull() && !data.FibMplsPhpDscpPreserve.ValueBool() {
+		if state != nil && !state.FibMplsPhpDscpPreserve.IsNull() && state.FibMplsPhpDscpPreserve.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fib/mpls/php/dscp-preserve"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.FibBgpPicLevel3L2services.IsNull() && !data.FibBgpPicLevel3L2services.ValueBool() {
+		if state != nil && !state.FibBgpPicLevel3L2services.IsNull() && state.FibBgpPicLevel3L2services.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fib-bgp-pic/level-3/l2services"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileQosEgressExpMarkDisable.IsNull() && !data.ProfileQosEgressExpMarkDisable.ValueBool() {
+		if state != nil && !state.ProfileQosEgressExpMarkDisable.IsNull() && state.ProfileQosEgressExpMarkDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile-qos/egress-exp-mark-disable"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.ProfileQosIngressFadtSetLocations {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "location-name")
+				keyValues = append(keyValues, data.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+		}
+	}
 	if !data.BgpMpPicAutoProtectEnable.IsNull() && !data.BgpMpPicAutoProtectEnable.ValueBool() {
 		if state != nil && !state.BgpMpPicAutoProtectEnable.IsNull() && state.BgpMpPicAutoProtectEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bgp-mp-pic/auto-protect/enable"))
@@ -2905,6 +3458,54 @@ func (data *HWModuleProfile) getEmptyLeafsDelete(ctx context.Context, state *HWM
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *HWModuleProfile) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL2maxSeSrv6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile-mdb/l2max-se-srv6"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL2maxSrv6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile-mdb/l2max-srv6"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL3maxSeSrv6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile-mdb/l3max-se-srv6"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileMdbL3maxSrv6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile-mdb/l3max-srv6"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.FibMplsPhpDscpPreserve.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fib/mpls/php/dscp-preserve"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.FibBgpPicLevel3L2services.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fib-bgp-pic/level-3/l2services"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileQosEgressExpMarkDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile-qos/egress-exp-mark-disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.ProfileQosIngressFadtSetLocations {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "location-name")
+				keyValues = append(keyValues, data.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString())
+			}
+
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(data.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "profile-qos/locations/location", keyString))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileQosIngressFadtSet.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile-qos/ingress-fadt-sets/ingress-fadt-set"))
+	}
 	if !data.BgpMpPicAutoProtectEnable.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "bgp-mp-pic/auto-protect/enable"))
 	}
@@ -3558,6 +4159,55 @@ func (data HWModuleProfile) toBodyXML(ctx context.Context, stateArg ...*HWModule
 	if !data.BgpMpPicAutoProtectEnable.IsNull() && !data.BgpMpPicAutoProtectEnable.IsUnknown() {
 		if data.BgpMpPicAutoProtectEnable.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/bgp-mp-pic/auto-protect/enable", "")
+		}
+	}
+	if !data.ProfileQosIngressFadtSet.IsNull() && !data.ProfileQosIngressFadtSet.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/ingress-fadt-sets/ingress-fadt-set", data.ProfileQosIngressFadtSet.ValueString())
+	}
+	if len(data.ProfileQosIngressFadtSetLocations) > 0 {
+		for _, item := range data.ProfileQosIngressFadtSetLocations {
+			basePath := data.getXPath() + "/profile-qos/locations/location[location-name='" + item.LocationName.ValueString() + "']"
+			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/location-name", item.LocationName.ValueString())
+			}
+			if !item.IngressFadtSet.IsNull() && !item.IngressFadtSet.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/ingress-fadt-set", item.IngressFadtSet.ValueString())
+			}
+		}
+	}
+	if !data.ProfileQosEgressExpMarkDisable.IsNull() && !data.ProfileQosEgressExpMarkDisable.IsUnknown() {
+		if data.ProfileQosEgressExpMarkDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-qos/egress-exp-mark-disable", "")
+		}
+	}
+	if !data.FibBgpPicLevel3L2services.IsNull() && !data.FibBgpPicLevel3L2services.IsUnknown() {
+		if data.FibBgpPicLevel3L2services.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/fib-bgp-pic/level-3/l2services", "")
+		}
+	}
+	if !data.FibMplsPhpDscpPreserve.IsNull() && !data.FibMplsPhpDscpPreserve.IsUnknown() {
+		if data.FibMplsPhpDscpPreserve.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/fib/mpls/php/dscp-preserve", "")
+		}
+	}
+	if !data.ProfileMdbL3maxSrv6.IsNull() && !data.ProfileMdbL3maxSrv6.IsUnknown() {
+		if data.ProfileMdbL3maxSrv6.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-mdb/l3max-srv6", "")
+		}
+	}
+	if !data.ProfileMdbL3maxSeSrv6.IsNull() && !data.ProfileMdbL3maxSeSrv6.IsUnknown() {
+		if data.ProfileMdbL3maxSeSrv6.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-mdb/l3max-se-srv6", "")
+		}
+	}
+	if !data.ProfileMdbL2maxSrv6.IsNull() && !data.ProfileMdbL2maxSrv6.IsUnknown() {
+		if data.ProfileMdbL2maxSrv6.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-mdb/l2max-srv6", "")
+		}
+	}
+	if !data.ProfileMdbL2maxSeSrv6.IsNull() && !data.ProfileMdbL2maxSeSrv6.IsUnknown() {
+		if data.ProfileMdbL2maxSeSrv6.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile-mdb/l2max-se-srv6", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -4402,6 +5052,122 @@ func (data *HWModuleProfile) updateFromBodyXML(ctx context.Context, res xmldot.R
 			data.BgpMpPicAutoProtectEnable = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/ingress-fadt-sets/ingress-fadt-set"); value.Exists() && !data.ProfileQosIngressFadtSet.IsNull() {
+		data.ProfileQosIngressFadtSet = types.StringValue(value.String())
+	} else if data.ProfileQosIngressFadtSet.IsNull() {
+		data.ProfileQosIngressFadtSet = types.StringNull()
+	}
+	for i := range data.ProfileQosIngressFadtSetLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/locations/location").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "location-name"); value.Exists() && !data.ProfileQosIngressFadtSetLocations[i].LocationName.IsNull() {
+			data.ProfileQosIngressFadtSetLocations[i].LocationName = types.StringValue(value.String())
+		} else if data.ProfileQosIngressFadtSetLocations[i].LocationName.IsNull() {
+			data.ProfileQosIngressFadtSetLocations[i].LocationName = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ingress-fadt-set"); value.Exists() && !data.ProfileQosIngressFadtSetLocations[i].IngressFadtSet.IsNull() {
+			data.ProfileQosIngressFadtSetLocations[i].IngressFadtSet = types.StringValue(value.String())
+		} else if data.ProfileQosIngressFadtSetLocations[i].IngressFadtSet.IsNull() {
+			data.ProfileQosIngressFadtSetLocations[i].IngressFadtSet = types.StringNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/egress-exp-mark-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileQosEgressExpMarkDisable.IsNull() {
+			data.ProfileQosEgressExpMarkDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileQosEgressExpMarkDisable.IsNull() {
+			data.ProfileQosEgressExpMarkDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fib-bgp-pic/level-3/l2services"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FibBgpPicLevel3L2services.IsNull() {
+			data.FibBgpPicLevel3L2services = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.FibBgpPicLevel3L2services.IsNull() {
+			data.FibBgpPicLevel3L2services = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fib/mpls/php/dscp-preserve"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.FibMplsPhpDscpPreserve.IsNull() {
+			data.FibMplsPhpDscpPreserve = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.FibMplsPhpDscpPreserve.IsNull() {
+			data.FibMplsPhpDscpPreserve = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l3max-srv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileMdbL3maxSrv6.IsNull() {
+			data.ProfileMdbL3maxSrv6 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileMdbL3maxSrv6.IsNull() {
+			data.ProfileMdbL3maxSrv6 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l3max-se-srv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileMdbL3maxSeSrv6.IsNull() {
+			data.ProfileMdbL3maxSeSrv6 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileMdbL3maxSeSrv6.IsNull() {
+			data.ProfileMdbL3maxSeSrv6 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l2max-srv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileMdbL2maxSrv6.IsNull() {
+			data.ProfileMdbL2maxSrv6 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileMdbL2maxSrv6.IsNull() {
+			data.ProfileMdbL2maxSrv6 = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l2max-se-srv6"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileMdbL2maxSeSrv6.IsNull() {
+			data.ProfileMdbL2maxSeSrv6 = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileMdbL2maxSeSrv6.IsNull() {
+			data.ProfileMdbL2maxSeSrv6 = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -4776,6 +5542,58 @@ func (data *HWModuleProfile) fromBodyXML(ctx context.Context, res xmldot.Result)
 		data.BgpMpPicAutoProtectEnable = types.BoolValue(true)
 	} else {
 		data.BgpMpPicAutoProtectEnable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/ingress-fadt-sets/ingress-fadt-set"); value.Exists() {
+		data.ProfileQosIngressFadtSet = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/locations/location"); value.Exists() {
+		data.ProfileQosIngressFadtSetLocations = make([]HWModuleProfileProfileQosIngressFadtSetLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileProfileQosIngressFadtSetLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ingress-fadt-set"); cValue.Exists() {
+				item.IngressFadtSet = types.StringValue(cValue.String())
+			}
+			data.ProfileQosIngressFadtSetLocations = append(data.ProfileQosIngressFadtSetLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/egress-exp-mark-disable"); value.Exists() {
+		data.ProfileQosEgressExpMarkDisable = types.BoolValue(true)
+	} else {
+		data.ProfileQosEgressExpMarkDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fib-bgp-pic/level-3/l2services"); value.Exists() {
+		data.FibBgpPicLevel3L2services = types.BoolValue(true)
+	} else {
+		data.FibBgpPicLevel3L2services = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fib/mpls/php/dscp-preserve"); value.Exists() {
+		data.FibMplsPhpDscpPreserve = types.BoolValue(true)
+	} else {
+		data.FibMplsPhpDscpPreserve = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l3max-srv6"); value.Exists() {
+		data.ProfileMdbL3maxSrv6 = types.BoolValue(true)
+	} else {
+		data.ProfileMdbL3maxSrv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l3max-se-srv6"); value.Exists() {
+		data.ProfileMdbL3maxSeSrv6 = types.BoolValue(true)
+	} else {
+		data.ProfileMdbL3maxSeSrv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l2max-srv6"); value.Exists() {
+		data.ProfileMdbL2maxSrv6 = types.BoolValue(true)
+	} else {
+		data.ProfileMdbL2maxSrv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l2max-se-srv6"); value.Exists() {
+		data.ProfileMdbL2maxSeSrv6 = types.BoolValue(true)
+	} else {
+		data.ProfileMdbL2maxSeSrv6 = types.BoolValue(false)
 	}
 }
 
@@ -5152,6 +5970,58 @@ func (data *HWModuleProfileData) fromBodyXML(ctx context.Context, res xmldot.Res
 	} else {
 		data.BgpMpPicAutoProtectEnable = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/ingress-fadt-sets/ingress-fadt-set"); value.Exists() {
+		data.ProfileQosIngressFadtSet = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/locations/location"); value.Exists() {
+		data.ProfileQosIngressFadtSetLocations = make([]HWModuleProfileProfileQosIngressFadtSetLocations, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := HWModuleProfileProfileQosIngressFadtSetLocations{}
+			if cValue := helpers.GetFromXPath(v, "location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ingress-fadt-set"); cValue.Exists() {
+				item.IngressFadtSet = types.StringValue(cValue.String())
+			}
+			data.ProfileQosIngressFadtSetLocations = append(data.ProfileQosIngressFadtSetLocations, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-qos/egress-exp-mark-disable"); value.Exists() {
+		data.ProfileQosEgressExpMarkDisable = types.BoolValue(true)
+	} else {
+		data.ProfileQosEgressExpMarkDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fib-bgp-pic/level-3/l2services"); value.Exists() {
+		data.FibBgpPicLevel3L2services = types.BoolValue(true)
+	} else {
+		data.FibBgpPicLevel3L2services = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/fib/mpls/php/dscp-preserve"); value.Exists() {
+		data.FibMplsPhpDscpPreserve = types.BoolValue(true)
+	} else {
+		data.FibMplsPhpDscpPreserve = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l3max-srv6"); value.Exists() {
+		data.ProfileMdbL3maxSrv6 = types.BoolValue(true)
+	} else {
+		data.ProfileMdbL3maxSrv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l3max-se-srv6"); value.Exists() {
+		data.ProfileMdbL3maxSeSrv6 = types.BoolValue(true)
+	} else {
+		data.ProfileMdbL3maxSeSrv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l2max-srv6"); value.Exists() {
+		data.ProfileMdbL2maxSrv6 = types.BoolValue(true)
+	} else {
+		data.ProfileMdbL2maxSrv6 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile-mdb/l2max-se-srv6"); value.Exists() {
+		data.ProfileMdbL2maxSeSrv6 = types.BoolValue(true)
+	} else {
+		data.ProfileMdbL2maxSeSrv6 = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -5163,6 +6033,166 @@ func (data *HWModuleProfile) addDeletedItemsXML(ctx context.Context, state HWMod
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileMdbL2maxSeSrv6.IsNull() && state.ProfileMdbL2maxSeSrv6.ValueBool() && data.ProfileMdbL2maxSeSrv6.IsNull() {
+		deletePath := state.getXPath() + "/profile-mdb/l2max-se-srv6"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileMdbL2maxSrv6.IsNull() && state.ProfileMdbL2maxSrv6.ValueBool() && data.ProfileMdbL2maxSrv6.IsNull() {
+		deletePath := state.getXPath() + "/profile-mdb/l2max-srv6"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileMdbL3maxSeSrv6.IsNull() && state.ProfileMdbL3maxSeSrv6.ValueBool() && data.ProfileMdbL3maxSeSrv6.IsNull() {
+		deletePath := state.getXPath() + "/profile-mdb/l3max-se-srv6"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileMdbL3maxSrv6.IsNull() && state.ProfileMdbL3maxSrv6.ValueBool() && data.ProfileMdbL3maxSrv6.IsNull() {
+		deletePath := state.getXPath() + "/profile-mdb/l3max-srv6"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.FibMplsPhpDscpPreserve.IsNull() && state.FibMplsPhpDscpPreserve.ValueBool() && data.FibMplsPhpDscpPreserve.IsNull() {
+		deletePath := state.getXPath() + "/fib/mpls/php/dscp-preserve"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.FibBgpPicLevel3L2services.IsNull() && state.FibBgpPicLevel3L2services.ValueBool() && data.FibBgpPicLevel3L2services.IsNull() {
+		deletePath := state.getXPath() + "/fib-bgp-pic/level-3/l2services"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileQosEgressExpMarkDisable.IsNull() && state.ProfileQosEgressExpMarkDisable.ValueBool() && data.ProfileQosEgressExpMarkDisable.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/egress-exp-mark-disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	for i := range state.ProfileQosIngressFadtSetLocations {
+		stateKeys := [...]string{"location-name"}
+		stateKeyValues := [...]string{state.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ProfileQosIngressFadtSetLocations {
+			found = true
+			if state.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString() != data.ProfileQosIngressFadtSetLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ProfileQosIngressFadtSetLocations[i].IngressFadtSet.IsNull() && data.ProfileQosIngressFadtSetLocations[j].IngressFadtSet.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profile-qos/locations/location%v/ingress-fadt-set", predicates))
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profile-qos/locations/location%v", predicates))
+		}
+	}
+	if !state.ProfileQosIngressFadtSet.IsNull() && data.ProfileQosIngressFadtSet.IsNull() {
+		deletePath := state.getXPath() + "/profile-qos/ingress-fadt-sets/ingress-fadt-set"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.BgpMpPicAutoProtectEnable.IsNull() && state.BgpMpPicAutoProtectEnable.ValueBool() && data.BgpMpPicAutoProtectEnable.IsNull() {
 		deletePath := state.getXPath() + "/bgp-mp-pic/auto-protect/enable"
@@ -6353,6 +7383,40 @@ func (data *HWModuleProfile) addDeletedItemsXML(ctx context.Context, state HWMod
 
 func (data *HWModuleProfile) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.ProfileMdbL2maxSeSrv6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-mdb/l2max-se-srv6")
+	}
+	if !data.ProfileMdbL2maxSrv6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-mdb/l2max-srv6")
+	}
+	if !data.ProfileMdbL3maxSeSrv6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-mdb/l3max-se-srv6")
+	}
+	if !data.ProfileMdbL3maxSrv6.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-mdb/l3max-srv6")
+	}
+	if !data.FibMplsPhpDscpPreserve.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/fib/mpls/php/dscp-preserve")
+	}
+	if !data.FibBgpPicLevel3L2services.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/fib-bgp-pic/level-3/l2services")
+	}
+	if !data.ProfileQosEgressExpMarkDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/egress-exp-mark-disable")
+	}
+	for i := range data.ProfileQosIngressFadtSetLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileQosIngressFadtSetLocations[i].LocationName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profile-qos/locations/location%v", predicates))
+	}
+	if !data.ProfileQosIngressFadtSet.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile-qos/ingress-fadt-sets/ingress-fadt-set")
+	}
 	if !data.BgpMpPicAutoProtectEnable.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/bgp-mp-pic/auto-protect/enable")
 	}

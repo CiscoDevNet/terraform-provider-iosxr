@@ -405,6 +405,54 @@ func (d *HWModuleProfileDataSource) Schema(ctx context.Context, req datasource.S
 				MarkdownDescription: "Enable pic core in forwarding chain",
 				Computed:            true,
 			},
+			"profile_qos_ingress_fadt_set": schema.StringAttribute{
+				MarkdownDescription: "Change the adaptive drop threshold parameter for VoQs (specific to Jericho/Jericho+ ASIC only" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_qos_ingress_fadt_set_locations": schema.ListNestedAttribute{
+				MarkdownDescription: "Location of QoS config" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"location_name": schema.StringAttribute{
+							MarkdownDescription: "Location of QoS config" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ingress_fadt_set": schema.StringAttribute{
+							MarkdownDescription: "set ingress fadt" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"profile_qos_egress_exp_mark_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable egress EXP marking" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"fib_bgp_pic_level_3_l2services": schema.BoolAttribute{
+				MarkdownDescription: "Enable BGP-PIC for l2services over BGP Labelled Unicast (only EVPN is supported)" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"fib_mpls_php_dscp_preserve": schema.BoolAttribute{
+				MarkdownDescription: "Preserve IPv4.DSCP and IPv6.TC in MPLS PHP flow with TTL being propagated" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_mdb_l3max_srv6": schema.BoolAttribute{
+				MarkdownDescription: "l3max-srv6 profile for router containing non-TCAM cards" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_mdb_l3max_se_srv6": schema.BoolAttribute{
+				MarkdownDescription: "l3max-se-srv6 profile for router containing only TCAM cards" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_mdb_l2max_srv6": schema.BoolAttribute{
+				MarkdownDescription: "l2max-srv6 profile for router containing non-TCAM cards" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_mdb_l2max_se_srv6": schema.BoolAttribute{
+				MarkdownDescription: "l2max-se-srv6 profile for router containing only TCAM cards" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }

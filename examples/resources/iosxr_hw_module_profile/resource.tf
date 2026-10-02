@@ -1,6 +1,8 @@
 resource "iosxr_hw_module_profile" "example" {
   bgp_mp_pic_auto_protect_enable    = true
+  fib_bgp_pic_level_3_l2services    = true
   fib_bgp_pic_multipath_core_enable = true
+  fib_mpls_php_dscp_preserve        = true
   netflow_ipfix315_enable_locations = [
     {
       location_name  = "0/0/CPU0"
@@ -19,12 +21,20 @@ resource "iosxr_hw_module_profile" "example" {
   profile_qos_conform_aware_policer                    = true
   profile_qos_ecn_marking_stats                        = true
   profile_qos_egress_compensation_setting_force        = true
+  profile_qos_egress_exp_mark_disable                  = true
   profile_qos_free_buffer_int_threshold_clear          = 75
   profile_qos_free_buffer_int_threshold_set            = 50
   profile_qos_gre_exp_classification_enable            = true
   profile_qos_hqos_enable                              = true
-  profile_qos_lag_scheduler                            = true
-  profile_qos_max_classmap_size                        = "8"
+  profile_qos_ingress_fadt_set                         = "high"
+  profile_qos_ingress_fadt_set_locations = [
+    {
+      ingress_fadt_set = "high"
+      location_name    = "0/0/CPU0"
+    }
+  ]
+  profile_qos_lag_scheduler     = true
+  profile_qos_max_classmap_size = "8"
   profile_qos_max_classmap_size_locations = [
     {
       location_name     = "0/0/CPU0"

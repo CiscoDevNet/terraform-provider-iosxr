@@ -132,6 +132,36 @@ func TestAccIosxrHWModuleProfile(t *testing.T) {
 	if os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "bgp_mp_pic_auto_protect_enable", "true"))
 	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "profile_qos_ingress_fadt_set", "high"))
+		}
+	}
+	if os.Getenv("NCS") != "" {
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "profile_qos_ingress_fadt_set_locations.0.location_name", "0/0/CPU0"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "profile_qos_ingress_fadt_set_locations.0.ingress_fadt_set", "high"))
+			}
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "profile_qos_egress_exp_mark_disable", "true"))
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "fib_bgp_pic_level_3_l2services", "true"))
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "fib_mpls_php_dscp_preserve", "true"))
+		}
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -290,6 +320,38 @@ func testAccIosxrHWModuleProfileConfig_all() string {
 	}
 	if os.Getenv("NCS") != "" {
 		config += `	bgp_mp_pic_auto_protect_enable = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			config += `	profile_qos_ingress_fadt_set = "high"` + "\n"
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			config += `	profile_qos_ingress_fadt_set_locations = [{` + "\n"
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `		location_name = "0/0/CPU0"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `		ingress_fadt_set = "high"` + "\n"
+			}
+			config += `		}]` + "\n"
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			config += `	profile_qos_egress_exp_mark_disable = true` + "\n"
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			config += `	fib_bgp_pic_level_3_l2services = true` + "\n"
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			config += `	fib_mpls_php_dscp_preserve = true` + "\n"
+		}
 	}
 	config += `}` + "\n"
 	return config

@@ -27,7 +27,11 @@ data "iosxr_hw_module_profile" "example" {
 ### Read-Only
 
 - `bgp_mp_pic_auto_protect_enable` (Boolean) Enable pic core in forwarding chain
+- `fib_bgp_pic_level_3_l2services` (Boolean) Enable BGP-PIC for l2services over BGP Labelled Unicast (only EVPN is supported)
+  - Supported from version: `25.4`
 - `fib_bgp_pic_multipath_core_enable` (Boolean) Enable pic core in forwarding chain
+- `fib_mpls_php_dscp_preserve` (Boolean) Preserve IPv4.DSCP and IPv6.TC in MPLS PHP flow with TTL being propagated
+  - Supported from version: `25.4`
 - `id` (String) The path of the retrieved object.
 - `netflow_ipfix315_enable` (Boolean) IPFIX 315 enable
 - `netflow_ipfix315_enable_locations` (Attributes List) Location of NETFLOW config (see [below for nested schema](#nestedatt--netflow_ipfix315_enable_locations))
@@ -56,14 +60,28 @@ data "iosxr_hw_module_profile" "example" {
 - `profile_load_balance_algorithm_mpls_safe_speculative_parsing` (Boolean) MPLS safe Speculative parsing.
 - `profile_load_balance_algorithm_pppoe` (Boolean) PPPoE session based optimized hash. Reload is required for this option
 - `profile_load_balance_algorithm_pppoe_decap_fatbased_hashing` (Boolean) PPPoE session based optimized hash with FAT label based hash. Reload is required for this option
+- `profile_mdb_l2max_se_srv6` (Boolean) l2max-se-srv6 profile for router containing only TCAM cards
+  - Supported from version: `25.4`
+- `profile_mdb_l2max_srv6` (Boolean) l2max-srv6 profile for router containing non-TCAM cards
+  - Supported from version: `25.4`
+- `profile_mdb_l3max_se_srv6` (Boolean) l3max-se-srv6 profile for router containing only TCAM cards
+  - Supported from version: `25.4`
+- `profile_mdb_l3max_srv6` (Boolean) l3max-srv6 profile for router containing non-TCAM cards
+  - Supported from version: `25.4`
 - `profile_qos_arp_isis_priority_enable` (Boolean) Prioritize ISIS and ARP packets
 - `profile_qos_conform_aware_policer` (Boolean) Configure Conform Aware Policer mode
 - `profile_qos_ecn_marking_stats` (Boolean) Enable ECN marking stats mode
 - `profile_qos_egress_compensation_setting_force` (Boolean) Forcefully allows to configure non-unique egress compensation values ignoring ASIC limitation (not recommended).
+- `profile_qos_egress_exp_mark_disable` (Boolean) Disable egress EXP marking
+  - Supported from version: `25.4`
 - `profile_qos_free_buffer_int_threshold_clear` (Number) clear value in percent (must be more than set value)
 - `profile_qos_free_buffer_int_threshold_set` (Number) Configure free buffer interrupt threshold
 - `profile_qos_gre_exp_classification_enable` (Boolean) Enable Ingress EXP classification for MPLSoGRE
 - `profile_qos_hqos_enable` (Boolean) Enable Hierarchical QoS
+- `profile_qos_ingress_fadt_set` (String) Change the adaptive drop threshold parameter for VoQs (specific to Jericho/Jericho+ ASIC only
+  - Supported from version: `25.4`
+- `profile_qos_ingress_fadt_set_locations` (Attributes List) Location of QoS config
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--profile_qos_ingress_fadt_set_locations))
 - `profile_qos_lag_scheduler` (Boolean) Enable QoS Lag Scheduler
 - `profile_qos_max_classmap_size` (String) max class map size
 - `profile_qos_max_classmap_size_locations` (Attributes List) Location of QoS config (see [below for nested schema](#nestedatt--profile_qos_max_classmap_size_locations))
@@ -122,6 +140,17 @@ Read-Only:
 - `index` (String) Configure hash index
 - `location_name` (String) Location of bundle-hash polynomial config
 - `location_name2` (String) Location of bundle-hash polynomial config
+
+
+<a id="nestedatt--profile_qos_ingress_fadt_set_locations"></a>
+### Nested Schema for `profile_qos_ingress_fadt_set_locations`
+
+Read-Only:
+
+- `ingress_fadt_set` (String) set ingress fadt
+  - Supported from version: `25.4`
+- `location_name` (String) Location of QoS config
+  - Supported from version: `25.4`
 
 
 <a id="nestedatt--profile_qos_max_classmap_size_locations"></a>

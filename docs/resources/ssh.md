@@ -48,6 +48,7 @@ resource "iosxr_ssh" "example" {
   server_enable_cipher_aes_cbc              = true
   server_logging                            = true
   server_max_auth_limit                     = 10
+  server_netconf_disable_ssh_port           = true
   server_netconf_port                       = 830
   server_netconf_vrfs = [
     {
@@ -56,14 +57,17 @@ resource "iosxr_ssh" "example" {
       vrf_name         = "VRF2"
     }
   ]
-  server_netconf_xml           = true
-  server_port                  = 5522
-  server_port_forwarding_local = true
-  server_rate_limit            = 60
-  server_rekey_time            = 60
-  server_rekey_volume          = 2048
-  server_session_limit         = 10
-  server_tcp_window_scale      = 7
+  server_netconf_xml               = true
+  server_packet_flow_netio_ingress = true
+  server_port                      = 5522
+  server_port_forwarding_local     = true
+  server_rate_limit                = 60
+  server_rekey_time                = 60
+  server_rekey_volume              = 2048
+  server_session_limit             = 10
+  server_tcp_window_scale          = 7
+  server_timeout_channel           = 3600
+  server_timeout_connection        = 3600
   server_usernames = [
     {
       keystring = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCv60WjxoM39LgPDbiW7ne3gu18q0NIVv0RE6rDLNal1quXZ6k5I9nV0WbPSqJLRm4Q2aHEGQ3NG2dJ5ZZ3xYDOm5X9JtMSjLFCJhSHVnGz6w+s8zPKiLmBjBD4VmxBKGMj0C/4LlZJ1F3yJfPTCzDwIMAMF8fJBJ8PqFKfvMTMqLkBfjB7xhXIx5N3jAZJdmxPkzdPPLnqLOKUjGKHRgmLWbynKZwRkjqvNJPQd3pf9Yb/HGqhWLvXc0z2xGlqODBhC3vLg0tlSKFpSdcJqj6eZLmKQ5BLHhZkJHDVdKzKNw5r0dBbLqFzF7nHiJ3uD+fUgPNzKOc7vF/TzLmNDlWr"
@@ -111,7 +115,7 @@ resource "iosxr_ssh" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `server_algorithms_ciphers` (List of String) cipher algorithms
-- `server_algorithms_host_key_dsa` (Boolean) dsa
+- `server_algorithms_host_key_dsa` (Boolean) dsa. This is deprecated in 25.3.1
 - `server_algorithms_host_key_ecdsa_nistp256` (Boolean) ecdsa-nistp256
 - `server_algorithms_host_key_ecdsa_nistp384` (Boolean) ecdsa-nistp384
 - `server_algorithms_host_key_ecdsa_nistp521` (Boolean) ecdsa-nistp521
@@ -132,10 +136,14 @@ resource "iosxr_ssh" "example" {
 - `server_logging` (Boolean) Enable ssh server logging
 - `server_max_auth_limit` (Number) User Configurable max authentication attempts
   - Range: `3`-`20`
+- `server_netconf_disable_ssh_port` (Boolean) SSH-port (Netconf will not work on SSH port)
+  - Supported from version: `25.4`
 - `server_netconf_port` (Number) Port to start ssh netconf subsystem service (Default 830)
   - Range: `1`-`65535`
 - `server_netconf_vrfs` (Attributes List) Cisco netconf VRF name (see [below for nested schema](#nestedatt--server_netconf_vrfs))
 - `server_netconf_xml` (Boolean) Use Netconf XML stack
+- `server_packet_flow_netio_ingress` (Boolean) incoming Packets
+  - Supported from version: `25.4`
 - `server_port` (Number) User Configurable ssh port (Default 22)
   - Range: `5520`-`5529`
 - `server_port_forwarding_local` (Boolean) Enable local port forwarding for ssh server
@@ -149,8 +157,14 @@ resource "iosxr_ssh" "example" {
   - Range: `1`-`150`
 - `server_tcp_window_scale` (Number) Set tcp window-scale factor for High Latency links
   - Range: `1`-`14`
+- `server_timeout_channel` (Number) Idle timeout to close ssh channel
+  - Range: `1`-`86400`
+  - Supported from version: `25.4`
+- `server_timeout_connection` (Number) Idle timeout to close ssh connection
+  - Range: `1`-`86400`
+  - Supported from version: `25.4`
 - `server_usernames` (Attributes List) ssh user (see [below for nested schema](#nestedatt--server_usernames))
-- `server_v1` (Boolean) Cisco sshd protocol version 1
+- `server_v1` (Boolean) Cisco sshd protocol version 1. This is deprecated in 25.3.1
 - `server_v2` (Boolean) Cisco sshd protocol version 2
 - `server_vrfs` (Attributes List) Cisco sshd VRF name (see [below for nested schema](#nestedatt--server_vrfs))
 - `timeout` (Number) Set timeout value for SSH

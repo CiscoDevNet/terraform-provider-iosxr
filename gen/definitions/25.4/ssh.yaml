@@ -1,0 +1,28 @@
+---
+name: SSH
+path: Cisco-IOS-XR-um-ssh-cfg:/ssh
+doc_category: Management
+default_delete_attributes: true
+attributes:
+  # ===========================================================
+  # server/v1, server/algorithms/host-key/dsa: descriptions updated
+  # ===========================================================
+  - yang_name: server/v1
+  - yang_name: server/algorithms/host-key/dsa
+    tf_name: server_algorithms_host_key_dsa
+
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: server/netconf/disable/ssh-port
+    tf_name: server_netconf_disable_ssh_port
+    example: true
+  - yang_name: server/packet-flow-netio/ingress
+    tf_name: server_packet_flow_netio_ingress
+    example: true
+  - yang_name: server/timeout/channel
+    tf_name: server_timeout_channel
+    example: 3600
+  - yang_name: server/timeout/connection
+    tf_name: server_timeout_connection
+    example: 3600

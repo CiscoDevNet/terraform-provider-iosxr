@@ -95,6 +95,10 @@ type SSH struct {
 	ClientTcpWindowScale                 types.Int64            `tfsdk:"client_tcp_window_scale"`
 	ClientV2                             types.Bool             `tfsdk:"client_v2"`
 	ClientV1                             types.Bool             `tfsdk:"client_v1"`
+	ServerNetconfDisableSshPort          types.Bool             `tfsdk:"server_netconf_disable_ssh_port"`
+	ServerPacketFlowNetioIngress         types.Bool             `tfsdk:"server_packet_flow_netio_ingress"`
+	ServerTimeoutChannel                 types.Int64            `tfsdk:"server_timeout_channel"`
+	ServerTimeoutConnection              types.Int64            `tfsdk:"server_timeout_connection"`
 }
 
 type SSHData struct {
@@ -151,6 +155,10 @@ type SSHData struct {
 	ClientTcpWindowScale                 types.Int64            `tfsdk:"client_tcp_window_scale"`
 	ClientV2                             types.Bool             `tfsdk:"client_v2"`
 	ClientV1                             types.Bool             `tfsdk:"client_v1"`
+	ServerNetconfDisableSshPort          types.Bool             `tfsdk:"server_netconf_disable_ssh_port"`
+	ServerPacketFlowNetioIngress         types.Bool             `tfsdk:"server_packet_flow_netio_ingress"`
+	ServerTimeoutChannel                 types.Int64            `tfsdk:"server_timeout_channel"`
+	ServerTimeoutConnection              types.Int64            `tfsdk:"server_timeout_connection"`
 }
 type SSHServerVrfs struct {
 	VrfName        types.String `tfsdk:"vrf_name"`
@@ -402,6 +410,30 @@ func (data SSH) toBody(ctx context.Context, providerVersion string) string {
 			body, _ = sjson.Set(body, "client.v1", map[string]string{})
 		}
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ServerNetconfDisableSshPort.IsNull() && !data.ServerNetconfDisableSshPort.IsUnknown() {
+			if data.ServerNetconfDisableSshPort.ValueBool() {
+				body, _ = sjson.Set(body, "server.netconf.disable.ssh-port", []interface{}{nil})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ServerPacketFlowNetioIngress.IsNull() && !data.ServerPacketFlowNetioIngress.IsUnknown() {
+			if data.ServerPacketFlowNetioIngress.ValueBool() {
+				body, _ = sjson.Set(body, "server.packet-flow-netio.ingress", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ServerTimeoutChannel.IsNull() && !data.ServerTimeoutChannel.IsUnknown() {
+			body, _ = sjson.Set(body, "server.timeout.channel", strconv.FormatInt(data.ServerTimeoutChannel.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ServerTimeoutConnection.IsNull() && !data.ServerTimeoutConnection.IsUnknown() {
+			body, _ = sjson.Set(body, "server.timeout.connection", strconv.FormatInt(data.ServerTimeoutConnection.ValueInt64(), 10))
+		}
+	}
 	if len(data.ServerVrfs) > 0 {
 		body, _ = sjson.Set(body, "server.vrfs.vrf", []interface{}{})
 		for index, item := range data.ServerVrfs {
@@ -452,6 +484,24 @@ func (data SSH) toBody(ctx context.Context, providerVersion string) string {
 func (data SSH) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "server_netconf_disable_ssh_port",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "server_packet_flow_netio_ingress",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "server_timeout_channel",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "server_timeout_connection",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -983,6 +1033,36 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte, version string)
 	} else if data.ClientV1.IsNull() {
 		data.ClientV1 = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "server.netconf.disable.ssh-port"); helpers.VersionAtLeast(version, "25.4") && !data.ServerNetconfDisableSshPort.IsNull() {
+		if value.Exists() {
+			data.ServerNetconfDisableSshPort = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ServerNetconfDisableSshPort = types.BoolValue(false)
+		}
+	} else if data.ServerNetconfDisableSshPort.IsNull() {
+		data.ServerNetconfDisableSshPort = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "server.packet-flow-netio.ingress"); helpers.VersionAtLeast(version, "25.4") && !data.ServerPacketFlowNetioIngress.IsNull() {
+		if value.Exists() {
+			data.ServerPacketFlowNetioIngress = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ServerPacketFlowNetioIngress = types.BoolValue(false)
+		}
+	} else if data.ServerPacketFlowNetioIngress.IsNull() {
+		data.ServerPacketFlowNetioIngress = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "server.timeout.channel"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.ServerTimeoutChannel.IsNull() {
+		data.ServerTimeoutChannel = types.Int64Value(value.Int())
+	} else if data.ServerTimeoutChannel.IsNull() {
+		data.ServerTimeoutChannel = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "server.timeout.connection"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.ServerTimeoutConnection.IsNull() {
+		data.ServerTimeoutConnection = types.Int64Value(value.Int())
+	} else if data.ServerTimeoutConnection.IsNull() {
+		data.ServerTimeoutConnection = types.Int64Null()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1268,6 +1348,40 @@ func (data *SSH) fromBody(ctx context.Context, res []byte, version string) {
 		// Only set to false if it was previously set in state
 		data.ClientV1 = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "server.netconf.disable.ssh-port"); value.Exists() {
+			data.ServerNetconfDisableSshPort = types.BoolValue(true)
+		} else if !data.ServerNetconfDisableSshPort.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ServerNetconfDisableSshPort = types.BoolValue(false)
+		}
+	} else {
+		data.ServerNetconfDisableSshPort = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "server.packet-flow-netio.ingress"); value.Exists() {
+			data.ServerPacketFlowNetioIngress = types.BoolValue(true)
+		} else if !data.ServerPacketFlowNetioIngress.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ServerPacketFlowNetioIngress = types.BoolValue(false)
+		}
+	} else {
+		data.ServerPacketFlowNetioIngress = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "server.timeout.channel"); value.Exists() {
+			data.ServerTimeoutChannel = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ServerTimeoutChannel = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "server.timeout.connection"); value.Exists() {
+			data.ServerTimeoutConnection = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ServerTimeoutConnection = types.Int64Null()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -1526,6 +1640,38 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte, version string) {
 	} else {
 		data.ClientV1 = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "server.netconf.disable.ssh-port"); value.Exists() {
+			data.ServerNetconfDisableSshPort = types.BoolValue(true)
+		} else {
+			data.ServerNetconfDisableSshPort = types.BoolValue(false)
+		}
+	} else {
+		data.ServerNetconfDisableSshPort = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "server.packet-flow-netio.ingress"); value.Exists() {
+			data.ServerPacketFlowNetioIngress = types.BoolValue(true)
+		} else {
+			data.ServerPacketFlowNetioIngress = types.BoolValue(false)
+		}
+	} else {
+		data.ServerPacketFlowNetioIngress = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "server.timeout.channel"); value.Exists() {
+			data.ServerTimeoutChannel = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ServerTimeoutChannel = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "server.timeout.connection"); value.Exists() {
+			data.ServerTimeoutConnection = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ServerTimeoutConnection = types.Int64Null()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1534,6 +1680,18 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte, version string) {
 
 func (data *SSH) getDeletedItems(ctx context.Context, state SSH, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.ServerTimeoutConnection.IsNull() && data.ServerTimeoutConnection.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "server/timeout/connection"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ServerTimeoutChannel.IsNull() && data.ServerTimeoutChannel.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "server/timeout/channel"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ServerPacketFlowNetioIngress.IsNull() && data.ServerPacketFlowNetioIngress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "server/packet-flow-netio/ingress"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ServerNetconfDisableSshPort.IsNull() && data.ServerNetconfDisableSshPort.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "server/netconf/disable/ssh-port"))
+	}
 	if !state.ClientV1.IsNull() && data.ClientV1.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "client/v1"))
 	}
@@ -1792,6 +1950,16 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH, version string)
 
 func (data *SSH) getEmptyLeafsDelete(ctx context.Context, state *SSH, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.ServerPacketFlowNetioIngress.IsNull() && !data.ServerPacketFlowNetioIngress.ValueBool() {
+		if state != nil && !state.ServerPacketFlowNetioIngress.IsNull() && state.ServerPacketFlowNetioIngress.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/packet-flow-netio/ingress"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ServerNetconfDisableSshPort.IsNull() && !data.ServerNetconfDisableSshPort.ValueBool() {
+		if state != nil && !state.ServerNetconfDisableSshPort.IsNull() && state.ServerNetconfDisableSshPort.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/netconf/disable/ssh-port"))
+		}
+	}
 	if !data.ClientV1.IsNull() && !data.ClientV1.ValueBool() {
 		if state != nil && !state.ClientV1.IsNull() && state.ClientV1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "client/v1"))
@@ -1959,6 +2127,18 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context, state *SSH, version st
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *SSH) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.ServerTimeoutConnection.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "server/timeout/connection"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ServerTimeoutChannel.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "server/timeout/channel"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ServerPacketFlowNetioIngress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "server/packet-flow-netio/ingress"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ServerNetconfDisableSshPort.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "server/netconf/disable/ssh-port"))
+	}
 	if !data.ClientV1.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "client/v1"))
 	}
@@ -2423,6 +2603,22 @@ func (data SSH) toBodyXML(ctx context.Context, stateArg ...*SSH) string {
 		if data.ClientV1.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/client/v1", "")
 		}
+	}
+	if !data.ServerNetconfDisableSshPort.IsNull() && !data.ServerNetconfDisableSshPort.IsUnknown() {
+		if data.ServerNetconfDisableSshPort.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/netconf/disable/ssh-port", "")
+		}
+	}
+	if !data.ServerPacketFlowNetioIngress.IsNull() && !data.ServerPacketFlowNetioIngress.IsUnknown() {
+		if data.ServerPacketFlowNetioIngress.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/server/packet-flow-netio/ingress", "")
+		}
+	}
+	if !data.ServerTimeoutChannel.IsNull() && !data.ServerTimeoutChannel.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/timeout/channel", strconv.FormatInt(data.ServerTimeoutChannel.ValueInt64(), 10))
+	}
+	if !data.ServerTimeoutConnection.IsNull() && !data.ServerTimeoutConnection.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/server/timeout/connection", strconv.FormatInt(data.ServerTimeoutConnection.ValueInt64(), 10))
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -2967,6 +3163,38 @@ func (data *SSH) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ClientV1 = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/netconf/disable/ssh-port"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerNetconfDisableSshPort.IsNull() {
+			data.ServerNetconfDisableSshPort = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerNetconfDisableSshPort.IsNull() {
+			data.ServerNetconfDisableSshPort = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/packet-flow-netio/ingress"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServerPacketFlowNetioIngress.IsNull() {
+			data.ServerPacketFlowNetioIngress = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServerPacketFlowNetioIngress.IsNull() {
+			data.ServerPacketFlowNetioIngress = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/timeout/channel"); value.Exists() && !data.ServerTimeoutChannel.IsNull() {
+		data.ServerTimeoutChannel = types.Int64Value(value.Int())
+	} else if data.ServerTimeoutChannel.IsNull() {
+		data.ServerTimeoutChannel = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/timeout/connection"); value.Exists() && !data.ServerTimeoutConnection.IsNull() {
+		data.ServerTimeoutConnection = types.Int64Value(value.Int())
+	} else if data.ServerTimeoutConnection.IsNull() {
+		data.ServerTimeoutConnection = types.Int64Null()
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -3227,6 +3455,22 @@ func (data *SSH) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		data.ClientV1 = types.BoolValue(true)
 	} else {
 		data.ClientV1 = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/netconf/disable/ssh-port"); value.Exists() {
+		data.ServerNetconfDisableSshPort = types.BoolValue(true)
+	} else {
+		data.ServerNetconfDisableSshPort = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/packet-flow-netio/ingress"); value.Exists() {
+		data.ServerPacketFlowNetioIngress = types.BoolValue(true)
+	} else {
+		data.ServerPacketFlowNetioIngress = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/timeout/channel"); value.Exists() {
+		data.ServerTimeoutChannel = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/timeout/connection"); value.Exists() {
+		data.ServerTimeoutConnection = types.Int64Value(value.Int())
 	}
 }
 
@@ -3489,6 +3733,22 @@ func (data *SSHData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else {
 		data.ClientV1 = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/netconf/disable/ssh-port"); value.Exists() {
+		data.ServerNetconfDisableSshPort = types.BoolValue(true)
+	} else {
+		data.ServerNetconfDisableSshPort = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/packet-flow-netio/ingress"); value.Exists() {
+		data.ServerPacketFlowNetioIngress = types.BoolValue(true)
+	} else {
+		data.ServerPacketFlowNetioIngress = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/timeout/channel"); value.Exists() {
+		data.ServerTimeoutChannel = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/server/timeout/connection"); value.Exists() {
+		data.ServerTimeoutConnection = types.Int64Value(value.Int())
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -3500,6 +3760,68 @@ func (data *SSH) addDeletedItemsXML(ctx context.Context, state SSH, body string)
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.ServerTimeoutConnection.IsNull() && data.ServerTimeoutConnection.IsNull() {
+		deletePath := state.getXPath() + "/server/timeout/connection"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ServerTimeoutChannel.IsNull() && data.ServerTimeoutChannel.IsNull() {
+		deletePath := state.getXPath() + "/server/timeout/channel"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerPacketFlowNetioIngress.IsNull() && state.ServerPacketFlowNetioIngress.ValueBool() && data.ServerPacketFlowNetioIngress.IsNull() {
+		deletePath := state.getXPath() + "/server/packet-flow-netio/ingress"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServerNetconfDisableSshPort.IsNull() && state.ServerNetconfDisableSshPort.ValueBool() && data.ServerNetconfDisableSshPort.IsNull() {
+		deletePath := state.getXPath() + "/server/netconf/disable/ssh-port"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ClientV1.IsNull() && state.ClientV1.ValueBool() && data.ClientV1.IsNull() {
 		deletePath := state.getXPath() + "/client/v1"
@@ -4403,6 +4725,18 @@ func (data *SSH) addDeletedItemsXML(ctx context.Context, state SSH, body string)
 
 func (data *SSH) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.ServerTimeoutConnection.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/timeout/connection")
+	}
+	if !data.ServerTimeoutChannel.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/timeout/channel")
+	}
+	if !data.ServerPacketFlowNetioIngress.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/packet-flow-netio/ingress")
+	}
+	if !data.ServerNetconfDisableSshPort.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/server/netconf/disable/ssh-port")
+	}
 	if !data.ClientV1.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/client/v1")
 	}

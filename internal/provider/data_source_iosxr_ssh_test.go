@@ -88,6 +88,18 @@ func TestAccDataSourceIosxrSSH(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_algorithms_ciphers.0", "aes128-ctr"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_tcp_window_scale", "7"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "client_v2", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_netconf_disable_ssh_port", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_packet_flow_netio_ingress", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_timeout_channel", "3600"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_timeout_connection", "3600"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -169,6 +181,18 @@ func testAccDataSourceIosxrSSHConfig() string {
 	config += `	client_algorithms_ciphers = ["aes128-ctr"]` + "\n"
 	config += `	client_tcp_window_scale = 7` + "\n"
 	config += `	client_v2 = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	server_netconf_disable_ssh_port = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	server_packet_flow_netio_ingress = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	server_timeout_channel = 3600` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	server_timeout_connection = 3600` + "\n"
+	}
 	config += `}` + "\n"
 
 	config += `

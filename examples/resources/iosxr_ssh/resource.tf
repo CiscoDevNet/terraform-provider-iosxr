@@ -33,6 +33,7 @@ resource "iosxr_ssh" "example" {
   server_enable_cipher_aes_cbc              = true
   server_logging                            = true
   server_max_auth_limit                     = 10
+  server_netconf_disable_ssh_port           = true
   server_netconf_port                       = 830
   server_netconf_vrfs = [
     {
@@ -41,14 +42,17 @@ resource "iosxr_ssh" "example" {
       vrf_name         = "VRF2"
     }
   ]
-  server_netconf_xml           = true
-  server_port                  = 5522
-  server_port_forwarding_local = true
-  server_rate_limit            = 60
-  server_rekey_time            = 60
-  server_rekey_volume          = 2048
-  server_session_limit         = 10
-  server_tcp_window_scale      = 7
+  server_netconf_xml               = true
+  server_packet_flow_netio_ingress = true
+  server_port                      = 5522
+  server_port_forwarding_local     = true
+  server_rate_limit                = 60
+  server_rekey_time                = 60
+  server_rekey_volume              = 2048
+  server_session_limit             = 10
+  server_tcp_window_scale          = 7
+  server_timeout_channel           = 3600
+  server_timeout_connection        = 3600
   server_usernames = [
     {
       keystring = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCv60WjxoM39LgPDbiW7ne3gu18q0NIVv0RE6rDLNal1quXZ6k5I9nV0WbPSqJLRm4Q2aHEGQ3NG2dJ5ZZ3xYDOm5X9JtMSjLFCJhSHVnGz6w+s8zPKiLmBjBD4VmxBKGMj0C/4LlZJ1F3yJfPTCzDwIMAMF8fJBJ8PqFKfvMTMqLkBfjB7xhXIx5N3jAZJdmxPkzdPPLnqLOKUjGKHRgmLWbynKZwRkjqvNJPQd3pf9Yb/HGqhWLvXc0z2xGlqODBhC3vLg0tlSKFpSdcJqj6eZLmKQ5BLHhZkJHDVdKzKNw5r0dBbLqFzF7nHiJ3uD+fUgPNzKOc7vF/TzLmNDlWr"

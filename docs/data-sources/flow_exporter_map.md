@@ -36,6 +36,8 @@ data "iosxr_flow_exporter_map" "example" {
 - `destination_vrf` (String) Configure VRF to be used for reaching export destination
 - `dfbit_set` (Boolean) Set Export Packet Do Not Fragment Flag
 - `dscp` (Number) Specify DSCP value for ipv4 export packets or traffic-class for ipv6 export packets
+- `export_protocol` (String) Specify optional encapsulating protocol
+  - Supported from version: `25.4`
 - `id` (String) The path of the retrieved object.
 - `packet_length` (Number) Export Packet maximum L3 length, should conform to outgoing interface mtu
 - `router_id_ipv4_address` (String) router-id in IPv4 address format

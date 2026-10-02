@@ -54,14 +54,17 @@ func TestAccIosxrFlowExporterMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_options_sampler_table_timeout", "4096"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_options_class_table_timeout", "255"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_options_vrf_table_timeout", "122"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "export_protocol", "gnpsi"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrFlowExporterMapPrerequisitesConfig + testAccIosxrFlowExporterMapConfig_minimum(),
+			Config: testAccIosxrFlowExporterMapPrerequisitesConfig() + testAccIosxrFlowExporterMapConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrFlowExporterMapPrerequisitesConfig + testAccIosxrFlowExporterMapConfig_all(),
+		Config: testAccIosxrFlowExporterMapPrerequisitesConfig() + testAccIosxrFlowExporterMapConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -93,7 +96,16 @@ func iosxrFlowExporterMapImportStateIdFunc(resourceName string) resource.ImportS
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrFlowExporterMapPrerequisitesConfig = `
+const testAccIosxrFlowExporterMapPrerequisitesConfig_V24_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+`
+const testAccIosxrFlowExporterMapPrerequisitesConfig_V25_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
@@ -103,6 +115,15 @@ resource "iosxr_yang" "PreReq0" {
 
 `
 
+func testAccIosxrFlowExporterMapPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrFlowExporterMapPrerequisitesConfig_V24_4,
+			"25.4": testAccIosxrFlowExporterMapPrerequisitesConfig_V25_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -111,7 +132,10 @@ func testAccIosxrFlowExporterMapConfig_minimum() string {
 	config := `resource "iosxr_flow_exporter_map" "test" {` + "\n"
 	config += `	name = "exporter_map1"` + "\n"
 	config += `	version_export_format = "v9"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -138,7 +162,13 @@ func testAccIosxrFlowExporterMapConfig_all() string {
 	config += `	version_options_sampler_table_timeout = 4096` + "\n"
 	config += `	version_options_class_table_timeout = 255` + "\n"
 	config += `	version_options_vrf_table_timeout = 122` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	export_protocol = "gnpsi"` + "\n"
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

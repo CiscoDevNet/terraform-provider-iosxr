@@ -51,12 +51,15 @@ func TestAccDataSourceIosxrFlowExporterMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_options_sampler_table_timeout", "4096"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_options_class_table_timeout", "255"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_options_vrf_table_timeout", "122"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "export_protocol", "gnpsi"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig + testAccDataSourceIosxrFlowExporterMapConfig(),
+				Config: testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig() + testAccDataSourceIosxrFlowExporterMapConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -66,7 +69,7 @@ func TestAccDataSourceIosxrFlowExporterMap(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig = `
+const testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
@@ -75,6 +78,24 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
+const testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+`
+
+func testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig_V24_4,
+			"25.4": testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig_V25_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -98,7 +119,13 @@ func testAccDataSourceIosxrFlowExporterMapConfig() string {
 	config += `	version_options_sampler_table_timeout = 4096` + "\n"
 	config += `	version_options_class_table_timeout = 255` + "\n"
 	config += `	version_options_vrf_table_timeout = 122` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	export_protocol = "gnpsi"` + "\n"
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -153,6 +153,10 @@ func (d *FlowExporterMapDataSource) Schema(ctx context.Context, req datasource.S
 				MarkdownDescription: "Specify export timeout",
 				Computed:            true,
 			},
+			"export_protocol": schema.StringAttribute{
+				MarkdownDescription: "Specify optional encapsulating protocol" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }

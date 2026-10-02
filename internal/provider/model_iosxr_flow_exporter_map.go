@@ -63,6 +63,7 @@ type FlowExporterMap struct {
 	VersionOptionsSamplerTableTimeout   types.Int64  `tfsdk:"version_options_sampler_table_timeout"`
 	VersionOptionsClassTableTimeout     types.Int64  `tfsdk:"version_options_class_table_timeout"`
 	VersionOptionsVrfTableTimeout       types.Int64  `tfsdk:"version_options_vrf_table_timeout"`
+	ExportProtocol                      types.String `tfsdk:"export_protocol"`
 }
 
 type FlowExporterMapData struct {
@@ -89,6 +90,7 @@ type FlowExporterMapData struct {
 	VersionOptionsSamplerTableTimeout   types.Int64  `tfsdk:"version_options_sampler_table_timeout"`
 	VersionOptionsClassTableTimeout     types.Int64  `tfsdk:"version_options_class_table_timeout"`
 	VersionOptionsVrfTableTimeout       types.Int64  `tfsdk:"version_options_vrf_table_timeout"`
+	ExportProtocol                      types.String `tfsdk:"export_protocol"`
 }
 
 // End of section. //template:end types
@@ -187,6 +189,11 @@ func (data FlowExporterMap) toBody(ctx context.Context, providerVersion string) 
 	if !data.VersionOptionsVrfTableTimeout.IsNull() && !data.VersionOptionsVrfTableTimeout.IsUnknown() {
 		body, _ = sjson.Set(body, "version.options.vrf-table.timeout", strconv.FormatInt(data.VersionOptionsVrfTableTimeout.ValueInt64(), 10))
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ExportProtocol.IsNull() && !data.ExportProtocol.IsUnknown() {
+			body, _ = sjson.Set(body, "export.protocol", data.ExportProtocol.ValueString())
+		}
+	}
 	return body
 }
 
@@ -198,6 +205,12 @@ func (data FlowExporterMap) toBody(ctx context.Context, providerVersion string) 
 func (data FlowExporterMap) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "export_protocol",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -352,6 +365,11 @@ func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte, ver
 	} else if data.VersionOptionsVrfTableTimeout.IsNull() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "export.protocol"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ExportProtocol.IsNull() {
+		data.ExportProtocol = types.StringValue(value.String())
+	} else if data.ExportProtocol.IsNull() {
+		data.ExportProtocol = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -422,6 +440,13 @@ func (data *FlowExporterMap) fromBody(ctx context.Context, res []byte, version s
 	if value := gjson.GetBytes(res, "version.options.vrf-table.timeout"); value.Exists() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "export.protocol"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ExportProtocol = types.StringValue(value.String())
+		}
+	} else {
+		data.ExportProtocol = types.StringNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -491,6 +516,13 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte, versi
 	if value := gjson.GetBytes(res, "version.options.vrf-table.timeout"); value.Exists() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "export.protocol"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ExportProtocol = types.StringValue(value.String())
+		}
+	} else {
+		data.ExportProtocol = types.StringNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -499,6 +531,9 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte, versi
 
 func (data *FlowExporterMap) getDeletedItems(ctx context.Context, state FlowExporterMap, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.ExportProtocol.IsNull() && data.ExportProtocol.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "export/protocol"))
+	}
 	if !state.VersionOptionsVrfTableTimeout.IsNull() && data.VersionOptionsVrfTableTimeout.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "version/options/vrf-table/timeout"))
 	}
@@ -581,6 +616,9 @@ func (data *FlowExporterMap) getEmptyLeafsDelete(ctx context.Context, state *Flo
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *FlowExporterMap) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.ExportProtocol.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "export/protocol"))
+	}
 	if !data.VersionOptionsVrfTableTimeout.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "version/options/vrf-table/timeout"))
 	}
@@ -716,6 +754,9 @@ func (data FlowExporterMap) toBodyXML(ctx context.Context, stateArg ...*FlowExpo
 	}
 	if !data.VersionOptionsVrfTableTimeout.IsNull() && !data.VersionOptionsVrfTableTimeout.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/version/options/vrf-table/timeout", strconv.FormatInt(data.VersionOptionsVrfTableTimeout.ValueInt64(), 10))
+	}
+	if !data.ExportProtocol.IsNull() && !data.ExportProtocol.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/export/protocol", data.ExportProtocol.ValueString())
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -857,6 +898,11 @@ func (data *FlowExporterMap) updateFromBodyXML(ctx context.Context, res xmldot.R
 	} else if data.VersionOptionsVrfTableTimeout.IsNull() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Null()
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/export/protocol"); value.Exists() && !data.ExportProtocol.IsNull() {
+		data.ExportProtocol = types.StringValue(value.String())
+	} else if data.ExportProtocol.IsNull() {
+		data.ExportProtocol = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -925,6 +971,9 @@ func (data *FlowExporterMap) fromBodyXML(ctx context.Context, res xmldot.Result)
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/vrf-table/timeout"); value.Exists() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/export/protocol"); value.Exists() {
+		data.ExportProtocol = types.StringValue(value.String())
 	}
 }
 
@@ -995,6 +1044,9 @@ func (data *FlowExporterMapData) fromBodyXML(ctx context.Context, res xmldot.Res
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/version/options/vrf-table/timeout"); value.Exists() {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/export/protocol"); value.Exists() {
+		data.ExportProtocol = types.StringValue(value.String())
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -1006,6 +1058,21 @@ func (data *FlowExporterMap) addDeletedItemsXML(ctx context.Context, state FlowE
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.ExportProtocol.IsNull() && data.ExportProtocol.IsNull() {
+		deletePath := state.getXPath() + "/export/protocol"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.VersionOptionsVrfTableTimeout.IsNull() && data.VersionOptionsVrfTableTimeout.IsNull() {
 		deletePath := state.getXPath() + "/version/options/vrf-table/timeout"
 		// Check if a parent path is already marked for deletion
@@ -1318,6 +1385,9 @@ func (data *FlowExporterMap) addDeletedItemsXML(ctx context.Context, state FlowE
 
 func (data *FlowExporterMap) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.ExportProtocol.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/export/protocol")
+	}
 	if !data.VersionOptionsVrfTableTimeout.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/version/options/vrf-table/timeout")
 	}

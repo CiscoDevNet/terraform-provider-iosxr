@@ -1,0 +1,17 @@
+---
+name: Flow Exporter Map
+path: Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]
+doc_category: Flow
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: export/protocol
+    tf_name: export_protocol
+    example: gnpsi
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1

@@ -284,7 +284,8 @@ func (r *ServiceTimestampsResource) Read(ctx context.Context, req resource.ReadR
 			}
 
 			// Use GetWithRetry to handle device sync delays
-			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
+			readPath := state.getPathForVersion(device.Version)
+			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{readPath}, readPath)
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return

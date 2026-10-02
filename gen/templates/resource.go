@@ -700,7 +700,12 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Read(ctx context.Context
 			}
 
 			// Use GetWithRetry to handle device sync delays
+			{{- if .HasPathVersion}}
+			readPath := state.getPathForVersion(device.Version)
+			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{readPath}, readPath)
+			{{- else}}
 			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
+			{{- end}}
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return

@@ -26,11 +26,5 @@ data "iosxr_mpls_traffic_eng" "example" {
 
 ### Read-Only
 
-- `disable` (Boolean) disable reoptimization
-  - Supported from version: `25.4`
 - `id` (String) The path of the retrieved object.
-- `reoptimize_reoptimization_period_in` (Number) Reoptimization period in seconds
-  - Supported from version: `25.4`
-- `server_ipv4` (String) IPv4 address of PCE server
-  - Supported from version: `25.4`
 - `traffic_eng` (Boolean) Go into the MPLS-TE submode

@@ -36,15 +36,6 @@ import (
 func TestAccIosxrMPLSTrafficEng(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_traffic_eng.test", "traffic_eng", "true"))
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_traffic_eng.test", "disable", "true"))
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_traffic_eng.test", "reoptimize_reoptimization_period_in", "3600"))
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_traffic_eng.test", "server_ipv4", "192.0.2.1"))
-	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -101,15 +92,6 @@ func testAccIosxrMPLSTrafficEngConfig_minimum() string {
 func testAccIosxrMPLSTrafficEngConfig_all() string {
 	config := `resource "iosxr_mpls_traffic_eng" "test" {` + "\n"
 	config += `	traffic_eng = true` + "\n"
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	disable = true` + "\n"
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	reoptimize_reoptimization_period_in = 3600` + "\n"
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	server_ipv4 = "192.0.2.1"` + "\n"
-	}
 	config += `}` + "\n"
 	return config
 }

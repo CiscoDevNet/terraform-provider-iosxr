@@ -73,18 +73,6 @@ func (d *MPLSTrafficEngDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "Go into the MPLS-TE submode",
 				Computed:            true,
 			},
-			"disable": schema.BoolAttribute{
-				MarkdownDescription: "disable reoptimization" + "\n  - Supported from version: `25.4`",
-				Computed:            true,
-			},
-			"reoptimize_reoptimization_period_in": schema.Int64Attribute{
-				MarkdownDescription: "Reoptimization period in seconds" + "\n  - Supported from version: `25.4`",
-				Computed:            true,
-			},
-			"server_ipv4": schema.StringAttribute{
-				MarkdownDescription: "IPv4 address of PCE server" + "\n  - Supported from version: `25.4`",
-				Computed:            true,
-			},
 		},
 	}
 }

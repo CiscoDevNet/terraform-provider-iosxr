@@ -24,7 +24,6 @@ import (
 	"context"
 	"fmt"
 	"path"
-	"strconv"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -40,22 +39,16 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type MPLSTrafficEng struct {
-	Device                           types.String `tfsdk:"device"`
-	Id                               types.String `tfsdk:"id"`
-	DeleteMode                       types.String `tfsdk:"delete_mode"`
-	TrafficEng                       types.Bool   `tfsdk:"traffic_eng"`
-	Disable                          types.Bool   `tfsdk:"disable"`
-	ReoptimizeReoptimizationPeriodIn types.Int64  `tfsdk:"reoptimize_reoptimization_period_in"`
-	ServerIpv4                       types.String `tfsdk:"server_ipv4"`
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	TrafficEng types.Bool   `tfsdk:"traffic_eng"`
 }
 
 type MPLSTrafficEngData struct {
-	Device                           types.String `tfsdk:"device"`
-	Id                               types.String `tfsdk:"id"`
-	TrafficEng                       types.Bool   `tfsdk:"traffic_eng"`
-	Disable                          types.Bool   `tfsdk:"disable"`
-	ReoptimizeReoptimizationPeriodIn types.Int64  `tfsdk:"reoptimize_reoptimization_period_in"`
-	ServerIpv4                       types.String `tfsdk:"server_ipv4"`
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
+	TrafficEng types.Bool   `tfsdk:"traffic_eng"`
 }
 
 // End of section. //template:end types
@@ -92,23 +85,6 @@ func (data MPLSTrafficEng) toBody(ctx context.Context, providerVersion string) s
 			body, _ = sjson.Set(body, "traffic-eng", map[string]string{})
 		}
 	}
-	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.Disable.IsNull() && !data.Disable.IsUnknown() {
-			if data.Disable.ValueBool() {
-				body, _ = sjson.Set(body, "traffic-eng.pce.reoptimize.disable", map[string]string{})
-			}
-		}
-	}
-	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.ReoptimizeReoptimizationPeriodIn.IsNull() && !data.ReoptimizeReoptimizationPeriodIn.IsUnknown() {
-			body, _ = sjson.Set(body, "traffic-eng.pce.reoptimize.reoptimization-period-in", strconv.FormatInt(data.ReoptimizeReoptimizationPeriodIn.ValueInt64(), 10))
-		}
-	}
-	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.ServerIpv4.IsNull() && !data.ServerIpv4.IsUnknown() {
-			body, _ = sjson.Set(body, "traffic-eng.pce.server.ipv4", data.ServerIpv4.ValueString())
-		}
-	}
 	return body
 }
 
@@ -120,20 +96,6 @@ func (data MPLSTrafficEng) toBody(ctx context.Context, providerVersion string) s
 func (data MPLSTrafficEng) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
-	constraints = append(constraints, []helpers.FieldVersionConstraint{
-		{
-			FieldPath:      "disable",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "reoptimize_reoptimization_period_in",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "server_ipv4",
-			AddedInVersion: "25.4",
-		},
-	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -193,26 +155,6 @@ func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte, vers
 	} else if data.TrafficEng.IsNull() {
 		data.TrafficEng = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traffic-eng.pce.reoptimize.disable"); helpers.VersionAtLeast(version, "25.4") && !data.Disable.IsNull() {
-		if value.Exists() {
-			data.Disable = types.BoolValue(true)
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			data.Disable = types.BoolValue(false)
-		}
-	} else if data.Disable.IsNull() {
-		data.Disable = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "traffic-eng.pce.reoptimize.reoptimization-period-in"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.ReoptimizeReoptimizationPeriodIn.IsNull() {
-		data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
-	} else if data.ReoptimizeReoptimizationPeriodIn.IsNull() {
-		data.ReoptimizeReoptimizationPeriodIn = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "traffic-eng.pce.server.ipv4"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ServerIpv4.IsNull() {
-		data.ServerIpv4 = types.StringValue(value.String())
-	} else if data.ServerIpv4.IsNull() {
-		data.ServerIpv4 = types.StringNull()
-	}
 }
 
 // End of section. //template:end updateFromBody
@@ -226,30 +168,6 @@ func (data *MPLSTrafficEng) fromBody(ctx context.Context, res []byte, version st
 		// Only set to false if it was previously set in state
 		data.TrafficEng = types.BoolValue(false)
 	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "traffic-eng.pce.reoptimize.disable"); value.Exists() {
-			data.Disable = types.BoolValue(true)
-		} else if !data.Disable.IsNull() {
-			// Only set to false if it was previously set in state
-			data.Disable = types.BoolValue(false)
-		}
-	} else {
-		data.Disable = types.BoolNull()
-	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "traffic-eng.pce.reoptimize.reoptimization-period-in"); value.Exists() {
-			data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
-		}
-	} else {
-		data.ReoptimizeReoptimizationPeriodIn = types.Int64Null()
-	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "traffic-eng.pce.server.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-			data.ServerIpv4 = types.StringValue(value.String())
-		}
-	} else {
-		data.ServerIpv4 = types.StringNull()
-	}
 }
 
 // End of section. //template:end fromBody
@@ -262,29 +180,6 @@ func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res []byte, versio
 	} else {
 		data.TrafficEng = types.BoolValue(false)
 	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "traffic-eng.pce.reoptimize.disable"); value.Exists() {
-			data.Disable = types.BoolValue(true)
-		} else {
-			data.Disable = types.BoolValue(false)
-		}
-	} else {
-		data.Disable = types.BoolNull()
-	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "traffic-eng.pce.reoptimize.reoptimization-period-in"); value.Exists() {
-			data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
-		}
-	} else {
-		data.ReoptimizeReoptimizationPeriodIn = types.Int64Null()
-	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "traffic-eng.pce.server.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-			data.ServerIpv4 = types.StringValue(value.String())
-		}
-	} else {
-		data.ServerIpv4 = types.StringNull()
-	}
 }
 
 // End of section. //template:end fromBodyData
@@ -293,15 +188,6 @@ func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res []byte, versio
 
 func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTrafficEng, version string) []string {
 	deletedItems := make([]string, 0)
-	if helpers.VersionAtLeast(version, "25.4") && !state.ServerIpv4.IsNull() && data.ServerIpv4.IsNull() {
-		deletedItems = append(deletedItems, path.Join(state.getPath(), "traffic-eng/pce/server/ipv4"))
-	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.ReoptimizeReoptimizationPeriodIn.IsNull() && data.ReoptimizeReoptimizationPeriodIn.IsNull() {
-		deletedItems = append(deletedItems, path.Join(state.getPath(), "traffic-eng/pce/reoptimize/reoptimization-period-in"))
-	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.Disable.IsNull() && data.Disable.IsNull() {
-		deletedItems = append(deletedItems, path.Join(state.getPath(), "traffic-eng/pce/reoptimize/disable"))
-	}
 	if !state.TrafficEng.IsNull() && data.TrafficEng.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "traffic-eng"))
 	}
@@ -314,11 +200,6 @@ func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTraff
 
 func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context, state *MPLSTrafficEng, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if helpers.VersionAtLeast(version, "25.4") && !data.Disable.IsNull() && !data.Disable.ValueBool() {
-		if state != nil && !state.Disable.IsNull() && state.Disable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "traffic-eng/pce/reoptimize/disable"))
-		}
-	}
 	if !data.TrafficEng.IsNull() && !data.TrafficEng.ValueBool() {
 		if state != nil && !state.TrafficEng.IsNull() && state.TrafficEng.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "traffic-eng"))
@@ -332,15 +213,6 @@ func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context, state *MPLS
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *MPLSTrafficEng) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
-	if helpers.VersionAtLeast(version, "25.4") && !data.ServerIpv4.IsNull() {
-		deletePaths = append(deletePaths, path.Join(data.getPath(), "traffic-eng/pce/server/ipv4"))
-	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.ReoptimizeReoptimizationPeriodIn.IsNull() {
-		deletePaths = append(deletePaths, path.Join(data.getPath(), "traffic-eng/pce/reoptimize/reoptimization-period-in"))
-	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.Disable.IsNull() {
-		deletePaths = append(deletePaths, path.Join(data.getPath(), "traffic-eng/pce/reoptimize/disable"))
-	}
 	if !data.TrafficEng.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "traffic-eng"))
 	}
@@ -362,17 +234,6 @@ func (data MPLSTrafficEng) toBodyXML(ctx context.Context, stateArg ...*MPLSTraff
 		if data.TrafficEng.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng", "")
 		}
-	}
-	if !data.Disable.IsNull() && !data.Disable.IsUnknown() {
-		if data.Disable.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng/pce/reoptimize/disable", "")
-		}
-	}
-	if !data.ReoptimizeReoptimizationPeriodIn.IsNull() && !data.ReoptimizeReoptimizationPeriodIn.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in", strconv.FormatInt(data.ReoptimizeReoptimizationPeriodIn.ValueInt64(), 10))
-	}
-	if !data.ServerIpv4.IsNull() && !data.ServerIpv4.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/traffic-eng/pce/server/ipv4", data.ServerIpv4.ValueString())
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -419,27 +280,6 @@ func (data *MPLSTrafficEng) updateFromBodyXML(ctx context.Context, res xmldot.Re
 			data.TrafficEng = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Disable.IsNull() {
-			data.Disable = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Disable.IsNull() {
-			data.Disable = types.BoolNull()
-		}
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in"); value.Exists() && !data.ReoptimizeReoptimizationPeriodIn.IsNull() {
-		data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
-	} else if data.ReoptimizeReoptimizationPeriodIn.IsNull() {
-		data.ReoptimizeReoptimizationPeriodIn = types.Int64Null()
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/server/ipv4"); value.Exists() && !data.ServerIpv4.IsNull() {
-		data.ServerIpv4 = types.StringValue(value.String())
-	} else if data.ServerIpv4.IsNull() {
-		data.ServerIpv4 = types.StringNull()
-	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -451,17 +291,6 @@ func (data *MPLSTrafficEng) fromBodyXML(ctx context.Context, res xmldot.Result) 
 		data.TrafficEng = types.BoolValue(true)
 	} else {
 		data.TrafficEng = types.BoolValue(false)
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/disable"); value.Exists() {
-		data.Disable = types.BoolValue(true)
-	} else {
-		data.Disable = types.BoolValue(false)
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in"); value.Exists() {
-		data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/server/ipv4"); value.Exists() {
-		data.ServerIpv4 = types.StringValue(value.String())
 	}
 }
 
@@ -475,17 +304,6 @@ func (data *MPLSTrafficEngData) fromBodyXML(ctx context.Context, res xmldot.Resu
 	} else {
 		data.TrafficEng = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/disable"); value.Exists() {
-		data.Disable = types.BoolValue(true)
-	} else {
-		data.Disable = types.BoolValue(false)
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in"); value.Exists() {
-		data.ReoptimizeReoptimizationPeriodIn = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/traffic-eng/pce/server/ipv4"); value.Exists() {
-		data.ServerIpv4 = types.StringValue(value.String())
-	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -497,52 +315,6 @@ func (data *MPLSTrafficEng) addDeletedItemsXML(ctx context.Context, state MPLSTr
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
-	if !state.ServerIpv4.IsNull() && data.ServerIpv4.IsNull() {
-		deletePath := state.getXPath() + "/traffic-eng/pce/server/ipv4"
-		// Check if a parent path is already marked for deletion
-		parentAlreadyDeleted := false
-		for dp := range deletedPaths {
-			if strings.HasPrefix(deletePath, dp+"/") {
-				parentAlreadyDeleted = true
-				break
-			}
-		}
-		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
-			b = helpers.RemoveFromXPath(b, deletePath)
-			deletedPaths[deletePath] = true
-		}
-	}
-	if !state.ReoptimizeReoptimizationPeriodIn.IsNull() && data.ReoptimizeReoptimizationPeriodIn.IsNull() {
-		deletePath := state.getXPath() + "/traffic-eng/pce/reoptimize/reoptimization-period-in"
-		// Check if a parent path is already marked for deletion
-		parentAlreadyDeleted := false
-		for dp := range deletedPaths {
-			if strings.HasPrefix(deletePath, dp+"/") {
-				parentAlreadyDeleted = true
-				break
-			}
-		}
-		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
-			b = helpers.RemoveFromXPath(b, deletePath)
-			deletedPaths[deletePath] = true
-		}
-	}
-	// For boolean fields, only delete if state was true (presence container was set)
-	if !state.Disable.IsNull() && state.Disable.ValueBool() && data.Disable.IsNull() {
-		deletePath := state.getXPath() + "/traffic-eng/pce/reoptimize/disable"
-		// Check if a parent path is already marked for deletion
-		parentAlreadyDeleted := false
-		for dp := range deletedPaths {
-			if strings.HasPrefix(deletePath, dp+"/") {
-				parentAlreadyDeleted = true
-				break
-			}
-		}
-		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
-			b = helpers.RemoveFromXPath(b, deletePath)
-			deletedPaths[deletePath] = true
-		}
-	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.TrafficEng.IsNull() && state.TrafficEng.ValueBool() && data.TrafficEng.IsNull() {
 		deletePath := state.getXPath() + "/traffic-eng"
@@ -570,15 +342,6 @@ func (data *MPLSTrafficEng) addDeletedItemsXML(ctx context.Context, state MPLSTr
 
 func (data *MPLSTrafficEng) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
-	if !data.ServerIpv4.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/traffic-eng/pce/server/ipv4")
-	}
-	if !data.ReoptimizeReoptimizationPeriodIn.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/traffic-eng/pce/reoptimize/reoptimization-period-in")
-	}
-	if !data.Disable.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/traffic-eng/pce/reoptimize/disable")
-	}
 	if !data.TrafficEng.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/traffic-eng")
 	}

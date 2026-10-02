@@ -9,7 +9,6 @@ resource "iosxr_hw_module_profile_8000" "example" {
   profile_cef_iptunnel_scale                                  = true
   profile_cef_ipv6_hop_limit                                  = "punt"
   profile_cef_lpts_acl                                        = true
-  profile_cef_lpts_pifib_entry_counters                       = 256
   profile_cef_source_rtbh_enable                              = true
   profile_cef_sropt                                           = "enable"
   profile_cef_stats_label_app_default                         = "dynamic"
@@ -41,18 +40,6 @@ resource "iosxr_hw_module_profile_8000" "example" {
       bandwidth_congestion_detection_enable = true
       bandwidth_congestion_protect_enable   = true
       location_name                         = "0/RP0/CPU0"
-    }
-  ]
-  profile_priority_flow_control_locations = [
-    {
-      buffer_extended_traffic_class = [
-        {
-          ms               = true
-          pause_threshold  = 10
-          traffic_class_id = 5
-        }
-      ]
-      location_name = "0/RP0/CPU0"
     }
   ]
   profile_qos_high_water_marks                           = true

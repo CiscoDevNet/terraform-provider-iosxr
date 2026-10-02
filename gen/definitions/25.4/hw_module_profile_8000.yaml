@@ -67,6 +67,7 @@ attributes:
     example: true
   - yang_name: profile/l2fib/evpn-aging
     example: true
+    # 25.4.2 does not return value in GET
   - yang_name: profile/route/scale/host-route
     exclude_test: true
     example: true

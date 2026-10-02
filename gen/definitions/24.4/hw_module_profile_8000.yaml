@@ -179,7 +179,9 @@ attributes:
     example: punt
   - yang_name: profile/cef/lpts/acl
     example: true
+    # 25.4.2 does not return value in GET
   - yang_name: profile/cef/lpts/pifib-entry-counters
+    exclude_test: true
     example: 256
   - yang_name: profile/cef/vxlan/ipv6-tnl-scale
     example: true
@@ -229,10 +231,11 @@ attributes:
     example: true
   - yang_name: profile/bw-threshold
     example: "80"
+    # Not supported in v24.4.2
   - yang_name: profile/priority-flow-control/locations/location
     tf_name: profile_priority_flow_control_locations
     type: List
-    # exclude_test: true
+    exclude_test: true
     attributes:
       - yang_name: location-name
         id: true

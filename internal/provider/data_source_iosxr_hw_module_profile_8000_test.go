@@ -74,7 +74,6 @@ func TestAccDataSourceIosxrHWModuleProfile8000(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_cef_cbf_forward_class_list.0", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_cef_ipv6_hop_limit", "punt"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_cef_lpts_acl", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_cef_lpts_pifib_entry_counters", "256"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_cef_vxlan_ipv6_tnl_scale", "true"))
 	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_cef_mplsoudp_scale", "true"))
@@ -95,10 +94,6 @@ func TestAccDataSourceIosxrHWModuleProfile8000(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_stats_no_bvi_ingress", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_stats_acl_permit", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_bw_threshold", "80"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_priority_flow_control_locations.0.location_name", "0/RP0/CPU0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_priority_flow_control_locations.0.buffer_extended_traffic_class.0.traffic_class_id", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_priority_flow_control_locations.0.buffer_extended_traffic_class.0.pause_threshold", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_priority_flow_control_locations.0.buffer_extended_traffic_class.0.ms", "true"))
 	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile_8000.test", "profile_gue_udp_dest_port_ipv4", "7000"))
 	}
@@ -189,7 +184,6 @@ func testAccDataSourceIosxrHWModuleProfile8000Config() string {
 	config += `	profile_cef_cbf_forward_class_list = [0]` + "\n"
 	config += `	profile_cef_ipv6_hop_limit = "punt"` + "\n"
 	config += `	profile_cef_lpts_acl = true` + "\n"
-	config += `	profile_cef_lpts_pifib_entry_counters = 256` + "\n"
 	config += `	profile_cef_vxlan_ipv6_tnl_scale = true` + "\n"
 	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		config += `	profile_cef_mplsoudp_scale = true` + "\n"
@@ -214,14 +208,6 @@ func testAccDataSourceIosxrHWModuleProfile8000Config() string {
 	config += `	profile_stats_no_bvi_ingress = true` + "\n"
 	config += `	profile_stats_acl_permit = true` + "\n"
 	config += `	profile_bw_threshold = "80"` + "\n"
-	config += `	profile_priority_flow_control_locations = [{` + "\n"
-	config += `		location_name = "0/RP0/CPU0"` + "\n"
-	config += `		buffer_extended_traffic_class = [{` + "\n"
-	config += `			traffic_class_id = 5` + "\n"
-	config += `			pause_threshold = 10` + "\n"
-	config += `			ms = true` + "\n"
-	config += `		}]` + "\n"
-	config += `	}]` + "\n"
 	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		config += `	profile_gue_udp_dest_port_ipv4 = 7000` + "\n"
 	}

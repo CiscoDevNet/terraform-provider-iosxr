@@ -410,6 +410,7 @@ var models254 = []string{
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2542/Cisco-IOS-XR-um-evpn-host-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2542/Cisco-IOS-XR-8000-fib-platform-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2542/Cisco-IOS-XR-um-ethernet-sla-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2542/Cisco-IOS-XR-um-http-client-cfg.yang",
 }
 
 // models262 contains the YANG model URLs for IOS-XR 26.2.1 (delta from 25.4.2).

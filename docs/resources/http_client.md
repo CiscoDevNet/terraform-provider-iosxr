@@ -45,8 +45,8 @@ resource "iosxr_http_client" "example" {
 - `secure_verify_peer_disable` (Boolean) Disable verifying peer's certificate
 - `source_interface_ipv4` (String) Select an soucre interface
 - `source_interface_ipv6` (String) Select an soucre interface
-- `ssl_version_tls10` (Boolean) Force TLSv1.0 to be used for HTTPS requests
-- `ssl_version_tls11` (Boolean) Force TLSv1.1 to be used for HTTPS requests
+- `ssl_version_tls10` (Boolean) Force TLSv1.0 to be used for HTTPS requests, TLSv1.0 is deprecated from 25.3.1
+- `ssl_version_tls11` (Boolean) Force TLSv1.1 to be used for HTTPS requests, TLSv1.1 is deprecated from 25.3.1
 - `ssl_version_tls12` (Boolean) Force TLSv1.2 to be used for HTTPS requests
 - `ssl_version_tls13` (Boolean) Force TLSv1.3 to be used for HTTPS requests
 - `tcp_window_scale` (Number) Set tcp window-scale factor for High Latency links

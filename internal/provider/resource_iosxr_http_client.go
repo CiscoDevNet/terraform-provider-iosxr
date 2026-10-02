@@ -152,11 +152,11 @@ func (r *HTTPClientResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"ssl_version_tls10": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Force TLSv1.0 to be used for HTTPS requests").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Force TLSv1.0 to be used for HTTPS requests, TLSv1.0 is deprecated from 25.3.1").String,
 				Optional:            true,
 			},
 			"ssl_version_tls11": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Force TLSv1.1 to be used for HTTPS requests").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Force TLSv1.1 to be used for HTTPS requests, TLSv1.1 is deprecated from 25.3.1").String,
 				Optional:            true,
 			},
 			"ssl_version_tls12": schema.BoolAttribute{

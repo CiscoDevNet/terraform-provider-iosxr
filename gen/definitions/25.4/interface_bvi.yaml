@@ -1,0 +1,91 @@
+---
+name: Interface BVI
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=BVI%s]
+doc_category: Interface
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra
+    tf_name: ipv6_nd_solicited_ra
+    example: unicast
+  - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable
+    tf_name: ipv6_nd_unsolicited_ra_disable
+    example: true
+  # ptp monitor-sender/receiver — new in 25.4
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender
+    tf_name: ptp_monitor_sender
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver
+    tf_name: ptp_monitor_receiver
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]
+    attributes:
+      - name: policy-map-name
+        value: PMAP-IN
+    lists:
+      - name: class
+        key: name,type
+        items:
+          - attributes:
+              - name: name
+                value: class-default
+              - name: type
+                value: qos
+              - name: set/qos-group
+                value: 0
+  - path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-OUT]
+    attributes:
+      - name: policy-map-name
+        value: PMAP-OUT
+    lists:
+      - name: class
+        key: name,type
+        items:
+          - attributes:
+              - name: name
+                value: class-default
+              - name: type
+                value: qos
+              - name: set/dscp
+                value: 0
+  - path: Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]
+    attributes:
+      - name: access-list-name
+        value: ACL1
+    lists:
+      - name: sequences/sequence
+        key: sequence-number
+        items:
+          - attributes:
+              - name: sequence-number
+                value: 10
+              - name: permit/protocol
+                value: ipv4
+              - name: permit/source/host
+                value: 10.1.1.1
+              - name: permit/destination/host
+                value: 10.1.1.2
+  - path: Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]
+    attributes:
+      - name: access-list-name
+        value: ACL2
+    lists:
+      - name: sequences/sequence
+        key: sequence-number
+        items:
+          - attributes:
+              - name: sequence-number
+                value: 10
+              - name: permit/protocol
+                value: ipv6
+              - name: permit/source/host
+                value: 2001::1
+              - name: permit/destination/host
+                value: 2001::2

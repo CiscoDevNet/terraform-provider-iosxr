@@ -21,6 +21,7 @@ attributes:
       - FourHundredGigE
       - EightHundredGigE
     example: GigabitEthernet
+    # example: TenGigE
   - tf_name: name
     description: Ethernet interface ID
     type: String

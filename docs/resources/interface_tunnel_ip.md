@@ -104,6 +104,7 @@ resource "iosxr_interface_tunnel_ip" "example" {
 - `tunnel_destination_ipv4` (String) IPV4 address of the tunnel destination
 - `tunnel_destination_ipv6` (String) IPV6 address of the tunnel destination
 - `tunnel_destination_prefix_list` (String) Prefix-list to validate destination's resolving prefix
+  - Length: `1`-`64` (v24.4), `1`-`128` (v25.4)
 - `tunnel_df_disable` (Boolean) Disable DF bit (i.e. allow fragmentation)
 - `tunnel_key` (Number) Enter the Key value
   - Range: `0`-`4294967295`

@@ -371,12 +371,28 @@ func TestAccDataSourceIosxrInterfaceBundleEtherSubinterface(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
 	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "ipv6_nd_solicited_ra", "unicast"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "ipv6_nd_unsolicited_ra_disable", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "ptp_monitor_sender", "true"))
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface_bundle_ether_subinterface.test", "ptp_monitor_receiver", "true"))
+		}
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig + testAccDataSourceIosxrInterfaceBundleEtherSubinterfaceConfig(),
+				Config: testAccDataSourceIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig() + testAccDataSourceIosxrInterfaceBundleEtherSubinterfaceConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -386,7 +402,7 @@ func TestAccDataSourceIosxrInterfaceBundleEtherSubinterface(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig = `
+const testAccDataSourceIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Bundle-Ether100]"
 	delete = false
@@ -478,6 +494,107 @@ resource "iosxr_yang" "PreReq4" {
 }
 
 `
+const testAccDataSourceIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Bundle-Ether100]"
+	delete = false
+	attributes = {
+		"interface-name" = "Bundle-Ether100"
+	}
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]"
+	attributes = {
+		"policy-map-name" = "PMAP-IN"
+	}
+	lists = [
+		{
+			name = "class"
+			key = "name,type"
+			items = [
+				{
+					"name" = "class-default"
+					"type" = "qos"
+					"set/qos-group" = "0"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_yang" "PreReq2" {
+	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-OUT]"
+	attributes = {
+		"policy-map-name" = "PMAP-OUT"
+	}
+	lists = [
+		{
+			name = "class"
+			key = "name,type"
+			items = [
+				{
+					"name" = "class-default"
+					"type" = "qos"
+					"set/dscp" = "0"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_yang" "PreReq3" {
+	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
+	attributes = {
+		"access-list-name" = "ACL1"
+	}
+	lists = [
+		{
+			name = "sequences/sequence"
+			key = "sequence-number"
+			items = [
+				{
+					"sequence-number" = "10"
+					"permit/protocol" = "ipv4"
+					"permit/source/host" = "10.1.1.1"
+					"permit/destination/host" = "10.1.1.2"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_yang" "PreReq4" {
+	path = "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]"
+	attributes = {
+		"access-list-name" = "ACL2"
+	}
+	lists = [
+		{
+			name = "sequences/sequence"
+			key = "sequence-number"
+			items = [
+				{
+					"sequence-number" = "10"
+					"permit/protocol" = "ipv6"
+					"permit/source/host" = "2001::1"
+					"permit/destination/host" = "2001::2"
+				},
+			]
+		},
+	]
+}
+
+`
+
+func testAccDataSourceIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig_V24_4,
+			"25.4": testAccDataSourceIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig_V25_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -863,7 +980,26 @@ func testAccDataSourceIosxrInterfaceBundleEtherSubinterfaceConfig() string {
 		config += `		clock_class_to_map_to = 6` + "\n"
 		config += `	}]` + "\n"
 	}
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	ipv6_nd_solicited_ra = "unicast"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	ipv6_nd_unsolicited_ra_disable = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			config += `	ptp_monitor_sender = true` + "\n"
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			config += `	ptp_monitor_receiver = true` + "\n"
+		}
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

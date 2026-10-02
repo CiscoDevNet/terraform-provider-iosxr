@@ -296,11 +296,10 @@ func (r *InterfaceTunnelIPResource) Schema(ctx context.Context, req resource.Sch
 				},
 			},
 			"tunnel_destination_prefix_list": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Prefix-list to validate destination's resolving prefix").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Prefix-list to validate destination's resolving prefix").String + "\n  - Length: `1`-`64` (v24.4), `1`-`128` (v25.4)",
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 64),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+					stringvalidator.LengthBetween(1, 128),
 				},
 			},
 			"tunnel_bfd_destination_ipv4": schema.StringAttribute{
@@ -437,6 +436,10 @@ func (r *InterfaceTunnelIPResource) Create(ctx context.Context, req resource.Cre
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -655,6 +658,10 @@ func (r *InterfaceTunnelIPResource) Update(ctx context.Context, req resource.Upd
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -748,6 +755,14 @@ func (r *InterfaceTunnelIPResource) Delete(ctx context.Context, req resource.Del
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

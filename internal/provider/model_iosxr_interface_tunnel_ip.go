@@ -437,7 +437,15 @@ func (data InterfaceTunnelIP) GetEnumConstraints() []helpers.FieldEnumConstraint
 
 // GetStringLengthConstraints returns the version-specific string length constraints
 func (data InterfaceTunnelIP) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
-	return nil
+	return []helpers.FieldStringLengthConstraint{
+		{
+			FieldPath: "tunnel_destination_prefix_list",
+			VersionStringLengths: map[string]helpers.StringLengthConstraint{
+				"24.4": {Min: 1, Max: 64},
+				"25.4": {Min: 1, Max: 128},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getStringLengthConstraints

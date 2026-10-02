@@ -610,6 +610,10 @@ func (d *InterfaceEthernetDataSource) Schema(ctx context.Context, req datasource
 								},
 							},
 						},
+						"propagate_remote_status_restore_timer": schema.Int64Attribute{
+							MarkdownDescription: "Specify restore timer value" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -1480,6 +1484,22 @@ func (d *InterfaceEthernetDataSource) Schema(ctx context.Context, req datasource
 						},
 					},
 				},
+			},
+			"ipv6_nd_solicited_ra": schema.StringAttribute{
+				MarkdownDescription: "Modify solicited Router Advertisement behaviour" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ipv6_nd_unsolicited_ra_disable": schema.BoolAttribute{
+				MarkdownDescription: "Do not send unsolicited Router Advertisement message" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ptp_monitor_sender": schema.BoolAttribute{
+				MarkdownDescription: "Enable monitor-sender packet exchange" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ptp_monitor_receiver": schema.BoolAttribute{
+				MarkdownDescription: "Enable monitor-receiver packet exchange" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
 			},
 		},
 	}

@@ -88,7 +88,9 @@ resource "iosxr_interface_bvi" "example" {
   ipv6_nd_ra_lifetime                               = 3600
   ipv6_nd_reachable_time                            = 1800
   ipv6_nd_redirects                                 = true
+  ipv6_nd_solicited_ra                              = "unicast"
   ipv6_nd_unicast_ra                                = true
+  ipv6_nd_unsolicited_ra_disable                    = true
   ipv6_unreachables_disable                         = true
   load_interval                                     = 30
   logging_events_link_status                        = true
@@ -141,6 +143,8 @@ resource "iosxr_interface_bvi" "example" {
   ptp_ipv4_ttl                                              = 10
   ptp_ipv6_hop_limit                                        = 10
   ptp_local_priority                                        = 128
+  ptp_monitor_receiver                                      = true
+  ptp_monitor_sender                                        = true
   ptp_multicast                                             = true
   ptp_multicast_mixed                                       = true
   ptp_multicast_target_address_mac_forwardable              = true
@@ -286,8 +290,13 @@ resource "iosxr_interface_bvi" "example" {
 - `ipv6_nd_reachable_time` (Number) Set advertised reachability time
   - Range: `0`-`3600000`
 - `ipv6_nd_redirects` (Boolean) Enable sending of ICMP Redirect messages
+- `ipv6_nd_solicited_ra` (String) Modify solicited Router Advertisement behaviour
+  - Choices: `disable`, `unicast`
+  - Supported from version: `25.4`
 - `ipv6_nd_suppress_ra` (Boolean) Suppress IPv6 Router Advertisements
 - `ipv6_nd_unicast_ra` (Boolean) Send Unicast Solicited IPv6 Router Advertisements
+- `ipv6_nd_unsolicited_ra_disable` (Boolean) Do not send unsolicited Router Advertisement message
+  - Supported from version: `25.4`
 - `ipv6_tcp_mss_adjust` (Boolean) Enable tcp mss adjust on this interface
 - `ipv6_ttl_propagate_disable` (Boolean) Disable ipv6 ttl propagation on this interface
 - `ipv6_unreachables_disable` (Boolean) Override sending of ICMP Unreachable messages
@@ -377,6 +386,10 @@ resource "iosxr_interface_bvi" "example" {
 - `ptp_master_ethernets` (Attributes List) Ethernet address (see [below for nested schema](#nestedatt--ptp_master_ethernets))
 - `ptp_master_ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--ptp_master_ipv4s))
 - `ptp_master_ipv6s` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ptp_master_ipv6s))
+- `ptp_monitor_receiver` (Boolean) Enable monitor-receiver packet exchange
+  - Supported from version: `25.4`
+- `ptp_monitor_sender` (Boolean) Enable monitor-sender packet exchange
+  - Supported from version: `25.4`
 - `ptp_multicast` (Boolean) Allow multicast messages to be sent
 - `ptp_multicast_disable` (Boolean) Disable multicast transport
 - `ptp_multicast_mixed` (Boolean) Mixed-mode multicast

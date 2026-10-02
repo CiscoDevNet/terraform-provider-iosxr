@@ -229,6 +229,10 @@ type InterfaceBundleEtherSubinterface struct {
 	PtpInteropIngressConversionOffsetScaledLogVariance types.Int64                                                                     `tfsdk:"ptp_interop_ingress_conversion_offset_scaled_log_variance"`
 	PtpInteropIngressConversionClockClassDefault       types.Int64                                                                     `tfsdk:"ptp_interop_ingress_conversion_clock_class_default"`
 	PtpInteropIngressConversionClockClassMappings      []InterfaceBundleEtherSubinterfacePtpInteropIngressConversionClockClassMappings `tfsdk:"ptp_interop_ingress_conversion_clock_class_mappings"`
+	Ipv6NdSolicitedRa                                  types.String                                                                    `tfsdk:"ipv6_nd_solicited_ra"`
+	Ipv6NdUnsolicitedRaDisable                         types.Bool                                                                      `tfsdk:"ipv6_nd_unsolicited_ra_disable"`
+	PtpMonitorSender                                   types.Bool                                                                      `tfsdk:"ptp_monitor_sender"`
+	PtpMonitorReceiver                                 types.Bool                                                                      `tfsdk:"ptp_monitor_receiver"`
 }
 
 type InterfaceBundleEtherSubinterfaceData struct {
@@ -418,6 +422,10 @@ type InterfaceBundleEtherSubinterfaceData struct {
 	PtpInteropIngressConversionOffsetScaledLogVariance types.Int64                                                                     `tfsdk:"ptp_interop_ingress_conversion_offset_scaled_log_variance"`
 	PtpInteropIngressConversionClockClassDefault       types.Int64                                                                     `tfsdk:"ptp_interop_ingress_conversion_clock_class_default"`
 	PtpInteropIngressConversionClockClassMappings      []InterfaceBundleEtherSubinterfacePtpInteropIngressConversionClockClassMappings `tfsdk:"ptp_interop_ingress_conversion_clock_class_mappings"`
+	Ipv6NdSolicitedRa                                  types.String                                                                    `tfsdk:"ipv6_nd_solicited_ra"`
+	Ipv6NdUnsolicitedRaDisable                         types.Bool                                                                      `tfsdk:"ipv6_nd_unsolicited_ra_disable"`
+	PtpMonitorSender                                   types.Bool                                                                      `tfsdk:"ptp_monitor_sender"`
+	PtpMonitorReceiver                                 types.Bool                                                                      `tfsdk:"ptp_monitor_receiver"`
 }
 type InterfaceBundleEtherSubinterfaceServicePolicyInput struct {
 	Name types.String `tfsdk:"name"`
@@ -1216,6 +1224,32 @@ func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context, provide
 	if !data.PtpInteropIngressConversionClockClassDefault.IsNull() && !data.PtpInteropIngressConversionClockClassDefault.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ptp-cfg:ptp.interop.ingress-conversion.clock-class.default", strconv.FormatInt(data.PtpInteropIngressConversionClockClassDefault.ValueInt64(), 10))
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.Ipv6NdSolicitedRa.IsNull() && !data.Ipv6NdSolicitedRa.IsUnknown() {
+			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-ipv6-nd-cfg:nd.solicited-ra", data.Ipv6NdSolicitedRa.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.Ipv6NdUnsolicitedRaDisable.IsNull() && !data.Ipv6NdUnsolicitedRaDisable.IsUnknown() {
+			if data.Ipv6NdUnsolicitedRaDisable.ValueBool() {
+				body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-ipv6-nd-cfg:nd.unsolicited-ra.disable", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.PtpMonitorSender.IsNull() && !data.PtpMonitorSender.IsUnknown() {
+			if data.PtpMonitorSender.ValueBool() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ptp-cfg:ptp.monitor-sender", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.PtpMonitorReceiver.IsNull() && !data.PtpMonitorReceiver.IsUnknown() {
+			if data.PtpMonitorReceiver.ValueBool() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-ptp-cfg:ptp.monitor-receiver", map[string]string{})
+			}
+		}
+	}
 	if len(data.ServicePolicyInput) > 0 {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input", []interface{}{})
 		for index, item := range data.ServicePolicyInput {
@@ -1700,6 +1734,24 @@ func (data InterfaceBundleEtherSubinterface) toBody(ctx context.Context, provide
 func (data InterfaceBundleEtherSubinterface) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "ipv6_nd_solicited_ra",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv6_nd_unsolicited_ra_disable",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ptp_monitor_sender",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ptp_monitor_receiver",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -4178,6 +4230,41 @@ func (data *InterfaceBundleEtherSubinterface) updateFromBody(ctx context.Context
 			data.PtpInteropIngressConversionClockClassMappings[i].ClockClassToMapTo = types.Int64Null()
 		}
 	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-ipv6-nd-cfg:nd.solicited-ra"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv6NdSolicitedRa.IsNull() {
+		data.Ipv6NdSolicitedRa = types.StringValue(value.String())
+	} else if data.Ipv6NdSolicitedRa.IsNull() {
+		data.Ipv6NdSolicitedRa = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-ipv6-nd-cfg:nd.unsolicited-ra.disable"); helpers.VersionAtLeast(version, "25.4") && !data.Ipv6NdUnsolicitedRaDisable.IsNull() {
+		if value.Exists() {
+			data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(false)
+		}
+	} else if data.Ipv6NdUnsolicitedRaDisable.IsNull() {
+		data.Ipv6NdUnsolicitedRaDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ptp-cfg:ptp.monitor-sender"); helpers.VersionAtLeast(version, "25.4") && !data.PtpMonitorSender.IsNull() {
+		if value.Exists() {
+			data.PtpMonitorSender = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PtpMonitorSender = types.BoolValue(false)
+		}
+	} else if data.PtpMonitorSender.IsNull() {
+		data.PtpMonitorSender = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ptp-cfg:ptp.monitor-receiver"); helpers.VersionAtLeast(version, "25.4") && !data.PtpMonitorReceiver.IsNull() {
+		if value.Exists() {
+			data.PtpMonitorReceiver = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PtpMonitorReceiver = types.BoolValue(false)
+		}
+	} else if data.PtpMonitorReceiver.IsNull() {
+		data.PtpMonitorReceiver = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -5451,6 +5538,43 @@ func (data *InterfaceBundleEtherSubinterface) fromBody(ctx context.Context, res 
 			return true
 		})
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-ipv6-nd-cfg:nd.solicited-ra"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.Ipv6NdSolicitedRa = types.StringValue(value.String())
+		}
+	} else {
+		data.Ipv6NdSolicitedRa = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-ipv6-nd-cfg:nd.unsolicited-ra.disable"); value.Exists() {
+			data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(true)
+		} else if !data.Ipv6NdUnsolicitedRaDisable.IsNull() {
+			// Only set to false if it was previously set in state
+			data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6NdUnsolicitedRaDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ptp-cfg:ptp.monitor-sender"); value.Exists() {
+			data.PtpMonitorSender = types.BoolValue(true)
+		} else if !data.PtpMonitorSender.IsNull() {
+			// Only set to false if it was previously set in state
+			data.PtpMonitorSender = types.BoolValue(false)
+		}
+	} else {
+		data.PtpMonitorSender = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ptp-cfg:ptp.monitor-receiver"); value.Exists() {
+			data.PtpMonitorReceiver = types.BoolValue(true)
+		} else if !data.PtpMonitorReceiver.IsNull() {
+			// Only set to false if it was previously set in state
+			data.PtpMonitorReceiver = types.BoolValue(false)
+		}
+	} else {
+		data.PtpMonitorReceiver = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -6628,6 +6752,40 @@ func (data *InterfaceBundleEtherSubinterfaceData) fromBody(ctx context.Context, 
 			return true
 		})
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-ipv6-nd-cfg:nd.solicited-ra"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.Ipv6NdSolicitedRa = types.StringValue(value.String())
+		}
+	} else {
+		data.Ipv6NdSolicitedRa = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-ipv6-nd-cfg:nd.unsolicited-ra.disable"); value.Exists() {
+			data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(true)
+		} else {
+			data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6NdUnsolicitedRaDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ptp-cfg:ptp.monitor-sender"); value.Exists() {
+			data.PtpMonitorSender = types.BoolValue(true)
+		} else {
+			data.PtpMonitorSender = types.BoolValue(false)
+		}
+	} else {
+		data.PtpMonitorSender = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-ptp-cfg:ptp.monitor-receiver"); value.Exists() {
+			data.PtpMonitorReceiver = types.BoolValue(true)
+		} else {
+			data.PtpMonitorReceiver = types.BoolValue(false)
+		}
+	} else {
+		data.PtpMonitorReceiver = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -6636,6 +6794,18 @@ func (data *InterfaceBundleEtherSubinterfaceData) fromBody(ctx context.Context, 
 
 func (data *InterfaceBundleEtherSubinterface) getDeletedItems(ctx context.Context, state InterfaceBundleEtherSubinterface, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.PtpMonitorReceiver.IsNull() && data.PtpMonitorReceiver.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.PtpMonitorSender.IsNull() && data.PtpMonitorSender.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.Ipv6NdUnsolicitedRaDisable.IsNull() && data.Ipv6NdUnsolicitedRaDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.Ipv6NdSolicitedRa.IsNull() && data.Ipv6NdSolicitedRa.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra"))
+	}
 	for i := range state.PtpInteropIngressConversionClockClassMappings {
 		keys := [...]string{"clock-class-to-map-from"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.PtpInteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
@@ -8127,6 +8297,21 @@ func (data *InterfaceBundleEtherSubinterface) getDeletedItems(ctx context.Contex
 
 func (data *InterfaceBundleEtherSubinterface) getEmptyLeafsDelete(ctx context.Context, state *InterfaceBundleEtherSubinterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.PtpMonitorReceiver.IsNull() && !data.PtpMonitorReceiver.ValueBool() {
+		if state != nil && !state.PtpMonitorReceiver.IsNull() && state.PtpMonitorReceiver.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.PtpMonitorSender.IsNull() && !data.PtpMonitorSender.ValueBool() {
+		if state != nil && !state.PtpMonitorSender.IsNull() && state.PtpMonitorSender.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv6NdUnsolicitedRaDisable.IsNull() && !data.Ipv6NdUnsolicitedRaDisable.ValueBool() {
+		if state != nil && !state.Ipv6NdUnsolicitedRaDisable.IsNull() && state.Ipv6NdUnsolicitedRaDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable"))
+		}
+	}
 	for i := range data.PtpInteropIngressConversionClockClassMappings {
 		keys := [...]string{"clock-class-to-map-from"}
 		keyValues := [...]string{strconv.FormatInt(data.PtpInteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
@@ -8808,6 +8993,18 @@ func (data *InterfaceBundleEtherSubinterface) getEmptyLeafsDelete(ctx context.Co
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *InterfaceBundleEtherSubinterface) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.PtpMonitorReceiver.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.PtpMonitorSender.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv6NdUnsolicitedRaDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv6NdSolicitedRa.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra"))
+	}
 	for i := range data.PtpInteropIngressConversionClockClassMappings {
 		keys := [...]string{"clock-class-to-map-from"}
 		keyValues := [...]string{strconv.FormatInt(data.PtpInteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
@@ -10262,6 +10459,14 @@ func (data InterfaceBundleEtherSubinterface) toBodyXML(ctx context.Context, stat
 				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/prefix/default/no-autoconfig", "")
 			}
 		}
+		if !data.Ipv6NdSolicitedRa.IsNull() && !data.Ipv6NdSolicitedRa.IsUnknown() {
+			nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra", data.Ipv6NdSolicitedRa.ValueString())
+		}
+		if !data.Ipv6NdUnsolicitedRaDisable.IsNull() && !data.Ipv6NdUnsolicitedRaDisable.IsUnknown() {
+			if data.Ipv6NdUnsolicitedRaDisable.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable", "")
+			}
+		}
 		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
 		if nsErr != nil {
 			// Check if the error is due to invalid path syntax (e.g., xmlns attributes)
@@ -10997,6 +11202,16 @@ func (data InterfaceBundleEtherSubinterface) toBodyXML(ctx context.Context, stat
 				if !item.ClockClassToMapTo.IsNull() && !item.ClockClassToMapTo.IsUnknown() {
 					nsBody = helpers.SetFromXPath(nsBody, basePath+"/clock-class-to-map-to", strconv.FormatInt(item.ClockClassToMapTo.ValueInt64(), 10))
 				}
+			}
+		}
+		if !data.PtpMonitorSender.IsNull() && !data.PtpMonitorSender.IsUnknown() {
+			if data.PtpMonitorSender.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender", "")
+			}
+		}
+		if !data.PtpMonitorReceiver.IsNull() && !data.PtpMonitorReceiver.IsUnknown() {
+			if data.PtpMonitorReceiver.ValueBool() {
+				nsBody = helpers.SetFromXPath(nsBody, data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver", "")
 			}
 		}
 		nsBodyXML, nsErr := helpers.BodyToNestedXML(nsBody)
@@ -13527,6 +13742,44 @@ func (data *InterfaceBundleEtherSubinterface) updateFromBodyXML(ctx context.Cont
 			data.PtpInteropIngressConversionClockClassMappings[i].ClockClassToMapTo = types.Int64Null()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra"); value.Exists() && !data.Ipv6NdSolicitedRa.IsNull() {
+		data.Ipv6NdSolicitedRa = types.StringValue(value.String())
+	} else if data.Ipv6NdSolicitedRa.IsNull() {
+		data.Ipv6NdSolicitedRa = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6NdUnsolicitedRaDisable.IsNull() {
+			data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv6NdUnsolicitedRaDisable.IsNull() {
+			data.Ipv6NdUnsolicitedRaDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PtpMonitorSender.IsNull() {
+			data.PtpMonitorSender = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PtpMonitorSender.IsNull() {
+			data.PtpMonitorSender = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PtpMonitorReceiver.IsNull() {
+			data.PtpMonitorReceiver = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PtpMonitorReceiver.IsNull() {
+			data.PtpMonitorReceiver = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -14703,6 +14956,24 @@ func (data *InterfaceBundleEtherSubinterface) fromBodyXML(ctx context.Context, r
 			data.PtpInteropIngressConversionClockClassMappings = append(data.PtpInteropIngressConversionClockClassMappings, item)
 			return true
 		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra"); value.Exists() {
+		data.Ipv6NdSolicitedRa = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable"); value.Exists() {
+		data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(true)
+	} else {
+		data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender"); value.Exists() {
+		data.PtpMonitorSender = types.BoolValue(true)
+	} else {
+		data.PtpMonitorSender = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver"); value.Exists() {
+		data.PtpMonitorReceiver = types.BoolValue(true)
+	} else {
+		data.PtpMonitorReceiver = types.BoolValue(false)
 	}
 }
 
@@ -15881,6 +16152,24 @@ func (data *InterfaceBundleEtherSubinterfaceData) fromBodyXML(ctx context.Contex
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra"); value.Exists() {
+		data.Ipv6NdSolicitedRa = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable"); value.Exists() {
+		data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(true)
+	} else {
+		data.Ipv6NdUnsolicitedRaDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender"); value.Exists() {
+		data.PtpMonitorSender = types.BoolValue(true)
+	} else {
+		data.PtpMonitorSender = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver"); value.Exists() {
+		data.PtpMonitorReceiver = types.BoolValue(true)
+	} else {
+		data.PtpMonitorReceiver = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -15892,6 +16181,69 @@ func (data *InterfaceBundleEtherSubinterface) addDeletedItemsXML(ctx context.Con
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PtpMonitorReceiver.IsNull() && state.PtpMonitorReceiver.ValueBool() && data.PtpMonitorReceiver.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PtpMonitorSender.IsNull() && state.PtpMonitorSender.ValueBool() && data.PtpMonitorSender.IsNull() {
+		deletePath := state.getXPath() + "/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ipv6NdUnsolicitedRaDisable.IsNull() && state.Ipv6NdUnsolicitedRaDisable.ValueBool() && data.Ipv6NdUnsolicitedRaDisable.IsNull() {
+		deletePath := state.getXPath() + "/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ipv6NdSolicitedRa.IsNull() && data.Ipv6NdSolicitedRa.IsNull() {
+		deletePath := state.getXPath() + "/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	for i := range state.PtpInteropIngressConversionClockClassMappings {
 		stateKeys := [...]string{"clock-class-to-map-from"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.PtpInteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
@@ -19670,6 +20022,18 @@ func (data *InterfaceBundleEtherSubinterface) addDeletedItemsXML(ctx context.Con
 
 func (data *InterfaceBundleEtherSubinterface) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.PtpMonitorReceiver.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver")
+	}
+	if !data.PtpMonitorSender.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender")
+	}
+	if !data.Ipv6NdUnsolicitedRaDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable")
+	}
+	if !data.Ipv6NdSolicitedRa.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra")
+	}
 	for i := range data.PtpInteropIngressConversionClockClassMappings {
 		keys := [...]string{"clock-class-to-map-from"}
 		keyValues := [...]string{strconv.FormatInt(data.PtpInteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}

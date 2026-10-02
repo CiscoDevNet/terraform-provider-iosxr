@@ -1391,6 +1391,25 @@ func (r *InterfaceBVIResource) Schema(ctx context.Context, req resource.SchemaRe
 					},
 				},
 			},
+			"ipv6_nd_solicited_ra": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Modify solicited Router Advertisement behaviour").AddStringEnumDescription("disable", "unicast").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "unicast"),
+				},
+			},
+			"ipv6_nd_unsolicited_ra_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not send unsolicited Router Advertisement message").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"ptp_monitor_sender": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable monitor-sender packet exchange").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"ptp_monitor_receiver": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable monitor-receiver packet exchange").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -1420,6 +1439,10 @@ func (r *InterfaceBVIResource) Create(ctx context.Context, req resource.CreateRe
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -1638,6 +1661,10 @@ func (r *InterfaceBVIResource) Update(ctx context.Context, req resource.UpdateRe
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -1731,6 +1758,14 @@ func (r *InterfaceBVIResource) Delete(ctx context.Context, req resource.DeleteRe
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

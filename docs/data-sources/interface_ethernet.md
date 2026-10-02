@@ -150,8 +150,12 @@ data "iosxr_interface_ethernet" "example" {
 - `ipv6_nd_ra_lifetime` (Number) Set IPv6 Router Advertisement Lifetime
 - `ipv6_nd_reachable_time` (Number) Set advertised reachability time
 - `ipv6_nd_redirects` (Boolean) Enable sending of ICMP Redirect messages
+- `ipv6_nd_solicited_ra` (String) Modify solicited Router Advertisement behaviour
+  - Supported from version: `25.4`
 - `ipv6_nd_suppress_ra` (Boolean) Suppress IPv6 Router Advertisements
 - `ipv6_nd_unicast_ra` (Boolean) Send Unicast Solicited IPv6 Router Advertisements
+- `ipv6_nd_unsolicited_ra_disable` (Boolean) Do not send unsolicited Router Advertisement message
+  - Supported from version: `25.4`
 - `ipv6_tcp_mss_adjust` (Boolean) Enable tcp mss adjust on this interface
 - `ipv6_ttl_propagate_disable` (Boolean) Disable ipv6 ttl propagation on this interface
 - `ipv6_unreachables_disable` (Boolean) Override sending of ICMP Unreachable messages
@@ -226,6 +230,10 @@ data "iosxr_interface_ethernet" "example" {
 - `ptp_master_ethernets` (Attributes List) Ethernet address (see [below for nested schema](#nestedatt--ptp_master_ethernets))
 - `ptp_master_ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--ptp_master_ipv4s))
 - `ptp_master_ipv6s` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ptp_master_ipv6s))
+- `ptp_monitor_receiver` (Boolean) Enable monitor-receiver packet exchange
+  - Supported from version: `25.4`
+- `ptp_monitor_sender` (Boolean) Enable monitor-sender packet exchange
+  - Supported from version: `25.4`
 - `ptp_multicast` (Boolean) Allow multicast messages to be sent
 - `ptp_multicast_disable` (Boolean) Disable multicast transport
 - `ptp_multicast_mixed` (Boolean) Mixed-mode multicast
@@ -278,6 +286,8 @@ Read-Only:
 - `loss_measurement_counters_priority_cos_value_7` (Number) CoS value 7
 - `mep_id` (Number) MEP ID
 - `propagate_remote_status` (Boolean) Propagate remote status
+- `propagate_remote_status_restore_timer` (Number) Specify restore timer value
+  - Supported from version: `25.4`
 - `service` (String) Service name
 - `sla_operation_profile_target_mac_addresses` (Attributes List) SLA operation profile target MAC addresses (see [below for nested schema](#nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mac_addresses))
 - `sla_operation_profile_target_mep_ids` (Attributes List) SLA operation profile target MEP IDs (see [below for nested schema](#nestedatt--ethernet_cfm_mep_domains--sla_operation_profile_target_mep_ids))

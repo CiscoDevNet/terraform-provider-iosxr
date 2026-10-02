@@ -73,7 +73,9 @@ resource "iosxr_interface_bvi" "example" {
   ipv6_nd_ra_lifetime                               = 3600
   ipv6_nd_reachable_time                            = 1800
   ipv6_nd_redirects                                 = true
+  ipv6_nd_solicited_ra                              = "unicast"
   ipv6_nd_unicast_ra                                = true
+  ipv6_nd_unsolicited_ra_disable                    = true
   ipv6_unreachables_disable                         = true
   load_interval                                     = 30
   logging_events_link_status                        = true
@@ -126,6 +128,8 @@ resource "iosxr_interface_bvi" "example" {
   ptp_ipv4_ttl                                              = 10
   ptp_ipv6_hop_limit                                        = 10
   ptp_local_priority                                        = 128
+  ptp_monitor_receiver                                      = true
+  ptp_monitor_sender                                        = true
   ptp_multicast                                             = true
   ptp_multicast_mixed                                       = true
   ptp_multicast_target_address_mac_forwardable              = true

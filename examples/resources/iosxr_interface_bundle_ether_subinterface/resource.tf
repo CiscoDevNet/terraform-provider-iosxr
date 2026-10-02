@@ -102,7 +102,9 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
   ipv6_nd_ra_lifetime                               = 3600
   ipv6_nd_reachable_time                            = 1800
   ipv6_nd_redirects                                 = true
+  ipv6_nd_solicited_ra                              = "unicast"
   ipv6_nd_unicast_ra                                = true
+  ipv6_nd_unsolicited_ra_disable                    = true
   ipv6_unreachables_disable                         = true
   l2transport                                       = false
   lldp                                              = true
@@ -194,6 +196,8 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
       priority        = 100
     }
   ]
+  ptp_monitor_receiver                         = true
+  ptp_monitor_sender                           = true
   ptp_multicast                                = true
   ptp_multicast_mixed                          = true
   ptp_multicast_target_address_mac_forwardable = true

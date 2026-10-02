@@ -43,6 +43,7 @@ resource "iosxr_interface_bundle_ether" "example" {
       loss_measurement_counters_priority_cos_range_start = 1
       mep_id                                             = 1
       propagate_remote_status                            = true
+      propagate_remote_status_restore_timer              = 100
       service                                            = "SERVICE1"
       sla_operation_profile_target_mac_addresses = [
         {
@@ -121,7 +122,9 @@ resource "iosxr_interface_bundle_ether" "example" {
   ipv6_nd_ra_lifetime                               = 3600
   ipv6_nd_reachable_time                            = 1800
   ipv6_nd_redirects                                 = true
+  ipv6_nd_solicited_ra                              = "unicast"
   ipv6_nd_unicast_ra                                = true
+  ipv6_nd_unsolicited_ra_disable                    = true
   ipv6_unreachables_disable                         = true
   lacp_churn_logging                                = "both"
   lacp_cisco_enable                                 = true
@@ -223,6 +226,8 @@ resource "iosxr_interface_bundle_ether" "example" {
       priority        = 100
     }
   ]
+  ptp_monitor_receiver                         = true
+  ptp_monitor_sender                           = true
   ptp_multicast                                = true
   ptp_multicast_mixed                          = true
   ptp_multicast_target_address_mac_forwardable = true

@@ -3,5 +3,16 @@ name: Performance Measurement Endpoint IPv4
 path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/endpoint/ipv4s/ipv4[address=%s]/vrf[vrf-name=%s]
 doc_category: Performance Monitoring
 attributes:
+  # ===========================================================
+  # REMOVALS — removed in 25.4
+  # ===========================================================
   - yang_name: liveness-detection/collect-hbh
     legacy: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1
+  - path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement
+    dependencies: [0]

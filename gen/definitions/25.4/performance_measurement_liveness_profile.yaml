@@ -1,0 +1,20 @@
+---
+name: Performance Measurement Liveness Profile
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/liveness-profile
+doc_category: Performance Monitoring
+attributes:
+  # ===========================================================
+  #  CHANGE — probe tx-interval lower bound 30000 -> 3300
+  # ===========================================================
+  - yang_name: endpoint/default/probe/tx-interval
+    tf_name: endpoint_default_probe_tx_interval
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: endpoint/default/liveness-detection/npu-offload
+    tf_name: endpoint_default_liveness_detection_npu_offload
+    exclude_test: true
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement

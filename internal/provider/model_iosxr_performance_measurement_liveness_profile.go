@@ -69,6 +69,7 @@ type PerformanceMeasurementLivenessProfile struct {
 	EndpointDefaultLivenessDetectionMultiplier         types.Int64                                     `tfsdk:"endpoint_default_liveness_detection_multiplier"`
 	EndpointDefaultLivenessDetectionLoggingStateChange types.Bool                                      `tfsdk:"endpoint_default_liveness_detection_logging_state_change"`
 	Profiles                                           []PerformanceMeasurementLivenessProfileProfiles `tfsdk:"profiles"`
+	EndpointDefaultLivenessDetectionNpuOffload         types.Bool                                      `tfsdk:"endpoint_default_liveness_detection_npu_offload"`
 }
 
 type PerformanceMeasurementLivenessProfileData struct {
@@ -99,6 +100,7 @@ type PerformanceMeasurementLivenessProfileData struct {
 	EndpointDefaultLivenessDetectionMultiplier         types.Int64                                     `tfsdk:"endpoint_default_liveness_detection_multiplier"`
 	EndpointDefaultLivenessDetectionLoggingStateChange types.Bool                                      `tfsdk:"endpoint_default_liveness_detection_logging_state_change"`
 	Profiles                                           []PerformanceMeasurementLivenessProfileProfiles `tfsdk:"profiles"`
+	EndpointDefaultLivenessDetectionNpuOffload         types.Bool                                      `tfsdk:"endpoint_default_liveness_detection_npu_offload"`
 }
 type PerformanceMeasurementLivenessProfileProfiles struct {
 	ProfileName                         types.String `tfsdk:"profile_name"`
@@ -233,6 +235,13 @@ func (data PerformanceMeasurementLivenessProfile) toBody(ctx context.Context, pr
 			body, _ = sjson.Set(body, "endpoint.default.liveness-detection.logging.state-change", map[string]string{})
 		}
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && !data.EndpointDefaultLivenessDetectionNpuOffload.IsUnknown() {
+			if data.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
+				body, _ = sjson.Set(body, "endpoint.default.liveness-detection.npu-offload", map[string]string{})
+			}
+		}
+	}
 	if len(data.Profiles) > 0 {
 		body, _ = sjson.Set(body, "names.name", []interface{}{})
 		for index, item := range data.Profiles {
@@ -296,6 +305,12 @@ func (data PerformanceMeasurementLivenessProfile) toBody(ctx context.Context, pr
 func (data PerformanceMeasurementLivenessProfile) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "endpoint_default_liveness_detection_npu_offload",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -308,7 +323,15 @@ func (data PerformanceMeasurementLivenessProfile) GetVersionConstraints() []help
 
 // GetRangeConstraints returns the version-specific range constraints for integer fields
 func (data PerformanceMeasurementLivenessProfile) GetRangeConstraints() []helpers.FieldRangeConstraint {
-	return nil
+	return []helpers.FieldRangeConstraint{
+		{
+			FieldPath: "endpoint_default_probe_tx_interval",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 30000, Max: 15000000},
+				"25.4": {Min: 3300, Max: 15000000},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getRangeConstraints
@@ -605,6 +628,16 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 			}
 		}
 	}
+	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.npu-offload"); helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		if value.Exists() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
+		}
+	} else if data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -764,6 +797,16 @@ func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context,
 			return true
 		})
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.npu-offload"); value.Exists() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+		} else if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+			// Only set to false if it was previously set in state
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -914,6 +957,15 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 			return true
 		})
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.npu-offload"); value.Exists() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+		} else {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -922,6 +974,9 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Cont
 
 func (data *PerformanceMeasurementLivenessProfile) getDeletedItems(ctx context.Context, state PerformanceMeasurementLivenessProfile, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/liveness-detection/npu-offload"))
+	}
 	for i := range state.Profiles {
 		keys := [...]string{"profile-name"}
 		stateKeyValues := [...]string{state.Profiles[i].ProfileName.ValueString()}
@@ -1069,6 +1124,11 @@ func (data *PerformanceMeasurementLivenessProfile) getDeletedItems(ctx context.C
 
 func (data *PerformanceMeasurementLivenessProfile) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementLivenessProfile, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && !data.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
+		if state != nil && !state.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && state.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/liveness-detection/npu-offload"))
+		}
+	}
 	for i := range data.Profiles {
 		keys := [...]string{"profile-name"}
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
@@ -1130,6 +1190,9 @@ func (data *PerformanceMeasurementLivenessProfile) getEmptyLeafsDelete(ctx conte
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *PerformanceMeasurementLivenessProfile) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/liveness-detection/npu-offload"))
+	}
 	for i := range data.Profiles {
 		keys := [...]string{"profile-name"}
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
@@ -1378,6 +1441,11 @@ func (data PerformanceMeasurementLivenessProfile) toBodyXML(ctx context.Context,
 					body = helpers.SetFromXPath(body, basePath+"/npu-offload", "")
 				}
 			}
+		}
+	}
+	if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && !data.EndpointDefaultLivenessDetectionNpuOffload.IsUnknown() {
+		if data.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/endpoint/default/liveness-detection/npu-offload", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -1680,6 +1748,17 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBodyXML(ctx context
 			}
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/npu-offload"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -1829,6 +1908,11 @@ func (data *PerformanceMeasurementLivenessProfile) fromBodyXML(ctx context.Conte
 			data.Profiles = append(data.Profiles, item)
 			return true
 		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/npu-offload"); value.Exists() {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
 	}
 }
 
@@ -1980,6 +2064,11 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBodyXML(ctx context.C
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/npu-offload"); value.Exists() {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -1991,6 +2080,22 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && state.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() && data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		deletePath := state.getXPath() + "/endpoint/default/liveness-detection/npu-offload"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	for i := range state.Profiles {
 		stateKeys := [...]string{"profile-name"}
 		stateKeyValues := [...]string{state.Profiles[i].ProfileName.ValueString()}
@@ -2479,6 +2584,9 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 
 func (data *PerformanceMeasurementLivenessProfile) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/endpoint/default/liveness-detection/npu-offload")
+	}
 	for i := range data.Profiles {
 		keys := [...]string{"profile-name"}
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}

@@ -228,6 +228,10 @@ func (d *PerformanceMeasurementLivenessProfileDataSource) Schema(ctx context.Con
 					},
 				},
 			},
+			"endpoint_default_liveness_detection_npu_offload": schema.BoolAttribute{
+				MarkdownDescription: "Enable offloading sessions to NPU" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }

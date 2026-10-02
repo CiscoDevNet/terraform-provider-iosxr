@@ -14,15 +14,12 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
   endpoint_default_advertisement_threshold_check_average_delay = true
   endpoint_default_advertisement_threshold_check_maximum_delay = false
   endpoint_default_advertisement_threshold_check_minimum_delay = false
-  endpoint_default_histogram_delay_bins_explicit               = [100]
-  endpoint_default_probe_collect_hbh                           = true
   endpoint_default_probe_computation_interval                  = 60
   endpoint_default_probe_flow_label_from                       = 100
   endpoint_default_probe_flow_label_increment                  = 50
   endpoint_default_probe_flow_label_to                         = 500
   endpoint_default_probe_measurement_mode_loopback             = false
   endpoint_default_probe_measurement_mode_one_way              = true
-  endpoint_default_probe_measurement_mode_timestamp_format_ntp = true
   endpoint_default_probe_measurement_mode_two_way              = false
   endpoint_default_probe_sweep_destination_ipv4                = "127.0.0.1"
   endpoint_default_probe_sweep_destination_range               = 10
@@ -63,7 +60,6 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
       advertise_threshold_check_average_delay = true
       advertise_threshold_check_maximum_delay = false
       advertise_threshold_check_minimum_delay = false
-      probe_collect_hbh                       = true
       probe_computation_interval              = 60
       probe_flow_label_from                   = 100
       probe_flow_label_increment              = 50
@@ -98,7 +94,6 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
   sr_policy_default_advertisement_threshold_check_average_delay = true
   sr_policy_default_advertisement_threshold_check_maximum_delay = false
   sr_policy_default_advertisement_threshold_check_minimum_delay = false
-  sr_policy_default_probe_collect_hbh                           = true
   sr_policy_default_probe_computation_interval                  = 120
   sr_policy_default_probe_measurement_mode_loopback             = false
   sr_policy_default_probe_measurement_mode_one_way              = true

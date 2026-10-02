@@ -122,10 +122,10 @@ type PerformanceMeasurementDelayProfile struct {
 	Profiles                                               []PerformanceMeasurementDelayProfileProfiles `tfsdk:"profiles"`
 	EndpointDefaultHistogramDelayBinsExplicit              types.List                                   `tfsdk:"endpoint_default_histogram_delay_bins_explicit"`
 	EndpointDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"endpoint_default_probe_collect_hbh"`
-	EndpointDefaultProbeMeasurementModeTimestampFormatNtp  types.Bool                                   `tfsdk:"endpoint_default_probe_measurement_mode_timestamp_format_ntp"`
+	SrPolicyDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"sr_policy_default_probe_collect_hbh"`
+	EndpointDefaultProbeTimestampFormatNtp                 types.Bool                                   `tfsdk:"endpoint_default_probe_timestamp_format_ntp"`
 	InterfacesDefaultProbeTimestampFormatNtp               types.Bool                                   `tfsdk:"interfaces_default_probe_timestamp_format_ntp"`
 	RsvpTeDefaultProbeTimestampFormatNtp                   types.Bool                                   `tfsdk:"rsvp_te_default_probe_timestamp_format_ntp"`
-	SrPolicyDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"sr_policy_default_probe_collect_hbh"`
 	SrPolicyDefaultProbeTimestampFormatNtp                 types.Bool                                   `tfsdk:"sr_policy_default_probe_timestamp_format_ntp"`
 }
 
@@ -210,10 +210,10 @@ type PerformanceMeasurementDelayProfileData struct {
 	Profiles                                               []PerformanceMeasurementDelayProfileProfiles `tfsdk:"profiles"`
 	EndpointDefaultHistogramDelayBinsExplicit              types.List                                   `tfsdk:"endpoint_default_histogram_delay_bins_explicit"`
 	EndpointDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"endpoint_default_probe_collect_hbh"`
-	EndpointDefaultProbeMeasurementModeTimestampFormatNtp  types.Bool                                   `tfsdk:"endpoint_default_probe_measurement_mode_timestamp_format_ntp"`
+	SrPolicyDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"sr_policy_default_probe_collect_hbh"`
+	EndpointDefaultProbeTimestampFormatNtp                 types.Bool                                   `tfsdk:"endpoint_default_probe_timestamp_format_ntp"`
 	InterfacesDefaultProbeTimestampFormatNtp               types.Bool                                   `tfsdk:"interfaces_default_probe_timestamp_format_ntp"`
 	RsvpTeDefaultProbeTimestampFormatNtp                   types.Bool                                   `tfsdk:"rsvp_te_default_probe_timestamp_format_ntp"`
-	SrPolicyDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"sr_policy_default_probe_collect_hbh"`
 	SrPolicyDefaultProbeTimestampFormatNtp                 types.Bool                                   `tfsdk:"sr_policy_default_probe_timestamp_format_ntp"`
 }
 type PerformanceMeasurementDelayProfileProfiles struct {
@@ -587,8 +587,15 @@ func (data PerformanceMeasurementDelayProfile) toBody(ctx context.Context, provi
 		}
 	}
 	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsUnknown() {
-			if data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.ValueBool() {
+		if !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.IsUnknown() {
+			if data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
+				body, _ = sjson.Set(body, "sr-policy.default.probe.collect-hbh", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeTimestampFormatNtp.IsUnknown() {
+			if data.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
 				body, _ = sjson.Set(body, "endpoint.default.probe.measurement-mode.timestamp-format.ntp", map[string]string{})
 			}
 		}
@@ -604,13 +611,6 @@ func (data PerformanceMeasurementDelayProfile) toBody(ctx context.Context, provi
 		if !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsUnknown() {
 			if data.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
 				body, _ = sjson.Set(body, "rsvp-te.default.probe.timestamp-format.ntp", map[string]string{})
-			}
-		}
-	}
-	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.IsUnknown() {
-			if data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
-				body, _ = sjson.Set(body, "sr-policy.default.probe.collect-hbh", map[string]string{})
 			}
 		}
 	}
@@ -794,7 +794,11 @@ func (data PerformanceMeasurementDelayProfile) GetVersionConstraints() []helpers
 			AddedInVersion: "25.4",
 		},
 		{
-			FieldPath:      "endpoint_default_probe_measurement_mode_timestamp_format_ntp",
+			FieldPath:      "sr_policy_default_probe_collect_hbh",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "endpoint_default_probe_timestamp_format_ntp",
 			AddedInVersion: "25.4",
 		},
 		{
@@ -803,10 +807,6 @@ func (data PerformanceMeasurementDelayProfile) GetVersionConstraints() []helpers
 		},
 		{
 			FieldPath:      "rsvp_te_default_probe_timestamp_format_ntp",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "sr_policy_default_probe_collect_hbh",
 			AddedInVersion: "25.4",
 		},
 		{
@@ -1705,15 +1705,25 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 	} else if data.EndpointDefaultProbeCollectHbh.IsNull() {
 		data.EndpointDefaultProbeCollectHbh = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.timestamp-format.ntp"); helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.collect-hbh"); helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
 		if value.Exists() {
-			data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(true)
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
-			data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(false)
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
 		}
-	} else if data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() {
-		data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolNull()
+	} else if data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.timestamp-format.ntp"); helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+		if value.Exists() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else if data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "interfaces.default.probe.timestamp-format.ntp"); helpers.VersionAtLeast(version, "25.4") && !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
 		if value.Exists() {
@@ -1734,16 +1744,6 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 		}
 	} else if data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
 		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "sr-policy.default.probe.collect-hbh"); helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
-		if value.Exists() {
-			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
-		}
-	} else if data.SrPolicyDefaultProbeCollectHbh.IsNull() {
-		data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "sr-policy.default.probe.timestamp-format.ntp"); helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
 		if value.Exists() {
@@ -2267,14 +2267,24 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 		data.EndpointDefaultProbeCollectHbh = types.BoolNull()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.timestamp-format.ntp"); value.Exists() {
-			data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(true)
-		} else if !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() {
+		if value := gjson.GetBytes(res, "sr-policy.default.probe.collect-hbh"); value.Exists() {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
+		} else if !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
 			// Only set to false if it was previously set in state
-			data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(false)
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
 		}
 	} else {
-		data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolNull()
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.timestamp-format.ntp"); value.Exists() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+			// Only set to false if it was previously set in state
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolNull()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "interfaces.default.probe.timestamp-format.ntp"); value.Exists() {
@@ -2295,16 +2305,6 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 		}
 	} else {
 		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolNull()
-	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "sr-policy.default.probe.collect-hbh"); value.Exists() {
-			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
-		} else if !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
-			// Only set to false if it was previously set in state
-			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
-		}
-	} else {
-		data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "sr-policy.default.probe.timestamp-format.ntp"); value.Exists() {
@@ -2782,13 +2782,22 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 		data.EndpointDefaultProbeCollectHbh = types.BoolNull()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.timestamp-format.ntp"); value.Exists() {
-			data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(true)
+		if value := gjson.GetBytes(res, "sr-policy.default.probe.collect-hbh"); value.Exists() {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
 		} else {
-			data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(false)
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
 		}
 	} else {
-		data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolNull()
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.timestamp-format.ntp"); value.Exists() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolNull()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "interfaces.default.probe.timestamp-format.ntp"); value.Exists() {
@@ -2807,15 +2816,6 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 		}
 	} else {
 		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolNull()
-	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "sr-policy.default.probe.collect-hbh"); value.Exists() {
-			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
-		} else {
-			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
-		}
-	} else {
-		data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
 	}
 	if helpers.VersionAtLeast(version, "25.4") {
 		if value := gjson.GetBytes(res, "sr-policy.default.probe.timestamp-format.ntp"); value.Exists() {
@@ -2837,17 +2837,17 @@ func (data *PerformanceMeasurementDelayProfile) getDeletedItems(ctx context.Cont
 	if helpers.VersionAtLeast(version, "25.4") && !state.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/timestamp-format/ntp"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.SrPolicyDefaultProbeCollectHbh.IsNull() && data.SrPolicyDefaultProbeCollectHbh.IsNull() {
-		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/collect-hbh"))
-	}
 	if helpers.VersionAtLeast(version, "25.4") && !state.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "rsvp-te/default/probe/timestamp-format/ntp"))
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !state.InterfacesDefaultProbeTimestampFormatNtp.IsNull() && data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/timestamp-format/ntp"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() && data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !state.EndpointDefaultProbeTimestampFormatNtp.IsNull() && data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/measurement-mode/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.SrPolicyDefaultProbeCollectHbh.IsNull() && data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/collect-hbh"))
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !state.EndpointDefaultProbeCollectHbh.IsNull() && data.EndpointDefaultProbeCollectHbh.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/collect-hbh"))
@@ -3226,11 +3226,6 @@ func (data *PerformanceMeasurementDelayProfile) getEmptyLeafsDelete(ctx context.
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/timestamp-format/ntp"))
 		}
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeCollectHbh.IsNull() && state.SrPolicyDefaultProbeCollectHbh.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/collect-hbh"))
-		}
-	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && !data.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
 		if state != nil && !state.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && state.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "rsvp-te/default/probe/timestamp-format/ntp"))
@@ -3241,9 +3236,14 @@ func (data *PerformanceMeasurementDelayProfile) getEmptyLeafsDelete(ctx context.
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/timestamp-format/ntp"))
 		}
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() && state.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.ValueBool() {
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
+		if state != nil && !state.EndpointDefaultProbeTimestampFormatNtp.IsNull() && state.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/timestamp-format/ntp"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
+		if state != nil && !state.SrPolicyDefaultProbeCollectHbh.IsNull() && state.SrPolicyDefaultProbeCollectHbh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/collect-hbh"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeCollectHbh.IsNull() && !data.EndpointDefaultProbeCollectHbh.ValueBool() {
@@ -3495,17 +3495,17 @@ func (data *PerformanceMeasurementDelayProfile) getDeletePaths(ctx context.Conte
 	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/timestamp-format/ntp"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
-		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/collect-hbh"))
-	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "rsvp-te/default/probe/timestamp-format/ntp"))
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/timestamp-format/ntp"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/collect-hbh"))
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeCollectHbh.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/collect-hbh"))
@@ -4215,8 +4215,13 @@ func (data PerformanceMeasurementDelayProfile) toBodyXML(ctx context.Context, st
 			body = helpers.SetFromXPath(body, data.getXPath()+"/endpoint/default/probe/collect-hbh", "")
 		}
 	}
-	if !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsUnknown() {
-		if data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.ValueBool() {
+	if !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.IsUnknown() {
+		if data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/sr-policy/default/probe/collect-hbh", "")
+		}
+	}
+	if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeTimestampFormatNtp.IsUnknown() {
+		if data.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp", "")
 		}
 	}
@@ -4228,11 +4233,6 @@ func (data PerformanceMeasurementDelayProfile) toBodyXML(ctx context.Context, st
 	if !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsUnknown() {
 		if data.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/rsvp-te/default/probe/timestamp-format/ntp", "")
-		}
-	}
-	if !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.IsUnknown() {
-		if data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/sr-policy/default/probe/collect-hbh", "")
 		}
 	}
 	if !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && !data.SrPolicyDefaultProbeTimestampFormatNtp.IsUnknown() {
@@ -5148,15 +5148,26 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 			data.EndpointDefaultProbeCollectHbh = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/collect-hbh"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() {
-			data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(true)
+		if !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
 		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() {
-			data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolNull()
+		if data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolNull()
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/timestamp-format/ntp"); value.Exists() {
@@ -5179,17 +5190,6 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 		// For presence-based booleans, only set to null if it's already null
 		if data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
 			data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolNull()
-		}
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/collect-hbh"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
-			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultProbeCollectHbh.IsNull() {
-			data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/timestamp-format/ntp"); value.Exists() {
@@ -5652,10 +5652,15 @@ func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context,
 	} else {
 		data.EndpointDefaultProbeCollectHbh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/collect-hbh"); value.Exists() {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(false)
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp"); value.Exists() {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/timestamp-format/ntp"); value.Exists() {
 		data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(true)
@@ -5666,11 +5671,6 @@ func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context,
 		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(true)
 	} else {
 		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(false)
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/collect-hbh"); value.Exists() {
-		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/timestamp-format/ntp"); value.Exists() {
 		data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(true)
@@ -6126,10 +6126,15 @@ func (data *PerformanceMeasurementDelayProfileData) fromBodyXML(ctx context.Cont
 	} else {
 		data.EndpointDefaultProbeCollectHbh = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(true)
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/collect-hbh"); value.Exists() {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
 	} else {
-		data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp = types.BoolValue(false)
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp"); value.Exists() {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/timestamp-format/ntp"); value.Exists() {
 		data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(true)
@@ -6140,11 +6145,6 @@ func (data *PerformanceMeasurementDelayProfileData) fromBodyXML(ctx context.Cont
 		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(true)
 	} else {
 		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(false)
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/collect-hbh"); value.Exists() {
-		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/timestamp-format/ntp"); value.Exists() {
 		data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(true)
@@ -6165,22 +6165,6 @@ func (data *PerformanceMeasurementDelayProfile) addDeletedItemsXML(ctx context.C
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && state.SrPolicyDefaultProbeTimestampFormatNtp.ValueBool() && data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
 		deletePath := state.getXPath() + "/sr-policy/default/probe/timestamp-format/ntp"
-		// Check if a parent path is already marked for deletion
-		parentAlreadyDeleted := false
-		for dp := range deletedPaths {
-			if strings.HasPrefix(deletePath, dp+"/") {
-				parentAlreadyDeleted = true
-				break
-			}
-		}
-		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
-			b = helpers.RemoveFromXPath(b, deletePath)
-			deletedPaths[deletePath] = true
-		}
-	}
-	// For boolean fields, only delete if state was true (presence container was set)
-	if !state.SrPolicyDefaultProbeCollectHbh.IsNull() && state.SrPolicyDefaultProbeCollectHbh.ValueBool() && data.SrPolicyDefaultProbeCollectHbh.IsNull() {
-		deletePath := state.getXPath() + "/sr-policy/default/probe/collect-hbh"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
 		for dp := range deletedPaths {
@@ -6227,8 +6211,24 @@ func (data *PerformanceMeasurementDelayProfile) addDeletedItemsXML(ctx context.C
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
-	if !state.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() && state.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.ValueBool() && data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() {
+	if !state.EndpointDefaultProbeTimestampFormatNtp.IsNull() && state.EndpointDefaultProbeTimestampFormatNtp.ValueBool() && data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
 		deletePath := state.getXPath() + "/endpoint/default/probe/measurement-mode/timestamp-format/ntp"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SrPolicyDefaultProbeCollectHbh.IsNull() && state.SrPolicyDefaultProbeCollectHbh.ValueBool() && data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		deletePath := state.getXPath() + "/sr-policy/default/probe/collect-hbh"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
 		for dp := range deletedPaths {
@@ -7631,17 +7631,17 @@ func (data *PerformanceMeasurementDelayProfile) addDeletePathsXML(ctx context.Co
 	if !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sr-policy/default/probe/timestamp-format/ntp")
 	}
-	if !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sr-policy/default/probe/collect-hbh")
-	}
 	if !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/rsvp-te/default/probe/timestamp-format/ntp")
 	}
 	if !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/interfaces/default/probe/timestamp-format/ntp")
 	}
-	if !data.EndpointDefaultProbeMeasurementModeTimestampFormatNtp.IsNull() {
+	if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp")
+	}
+	if !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sr-policy/default/probe/collect-hbh")
 	}
 	if !data.EndpointDefaultProbeCollectHbh.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/endpoint/default/probe/collect-hbh")

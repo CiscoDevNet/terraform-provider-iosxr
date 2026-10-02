@@ -53,11 +53,11 @@ data "iosxr_performance_measurement_delay_profile" "example" {
 - `endpoint_default_probe_flow_label_to` (Number) Upper bound
 - `endpoint_default_probe_measurement_mode_loopback` (Boolean) Loopback the probe packet collecting only timestamp 1 and 4
 - `endpoint_default_probe_measurement_mode_one_way` (Boolean) Measure one way delay with timestamp 1 and 2
-- `endpoint_default_probe_measurement_mode_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
-  - Supported from version: `25.4`
 - `endpoint_default_probe_measurement_mode_two_way` (Boolean) Measure one way delay with timestamp 1, 2, 3 and 4 without clock synchronization
 - `endpoint_default_probe_sweep_destination_ipv4` (String) Start of the IPv4 address range
 - `endpoint_default_probe_sweep_destination_range` (Number) Number of IP addresses to sweep
+- `endpoint_default_probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `endpoint_default_probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
 - `endpoint_default_probe_tx_interval` (Number) TX interval
 - `id` (String) The path of the retrieved object.

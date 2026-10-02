@@ -132,28 +132,13 @@ func TestAccDataSourceIosxrPerformanceMeasurementDelayProfile(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "profiles.0.advertise_anomaly_loss_upper_bound", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "profiles.0.advertise_anomaly_loss_lower_bound", "10"))
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "profiles.0.probe_collect_hbh", "true"))
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "profiles.0.probe_timestamp_format_ntp", "true"))
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "endpoint_default_histogram_delay_bins_explicit.0", "100"))
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "endpoint_default_probe_collect_hbh", "true"))
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "endpoint_default_probe_measurement_mode_timestamp_format_ntp", "true"))
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "interfaces_default_probe_timestamp_format_ntp", "true"))
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "rsvp_te_default_probe_timestamp_format_ntp", "true"))
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "sr_policy_default_probe_collect_hbh", "true"))
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_performance_measurement_delay_profile.test", "sr_policy_default_probe_timestamp_format_ntp", "true"))
@@ -181,11 +166,20 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
+const testAccDataSourceIosxrPerformanceMeasurementDelayProfilePrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
+	attributes = {
+	}
+}
+
+`
 
 func testAccDataSourceIosxrPerformanceMeasurementDelayProfilePrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccDataSourceIosxrPerformanceMeasurementDelayProfilePrerequisitesConfig_V24_4,
+			"25.4": testAccDataSourceIosxrPerformanceMeasurementDelayProfilePrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -297,21 +291,9 @@ func testAccDataSourceIosxrPerformanceMeasurementDelayProfileConfig() string {
 	config += `		advertise_anomaly_loss_upper_bound = 50` + "\n"
 	config += `		advertise_anomaly_loss_lower_bound = 10` + "\n"
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `		probe_collect_hbh = true` + "\n"
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		config += `		probe_timestamp_format_ntp = true` + "\n"
 	}
 	config += `	}]` + "\n"
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	endpoint_default_histogram_delay_bins_explicit = [100]` + "\n"
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	endpoint_default_probe_collect_hbh = true` + "\n"
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	endpoint_default_probe_measurement_mode_timestamp_format_ntp = true` + "\n"
-	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		config += `	interfaces_default_probe_timestamp_format_ntp = true` + "\n"
 	}
@@ -319,13 +301,11 @@ func testAccDataSourceIosxrPerformanceMeasurementDelayProfileConfig() string {
 		config += `	rsvp_te_default_probe_timestamp_format_ntp = true` + "\n"
 	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	sr_policy_default_probe_collect_hbh = true` + "\n"
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		config += `	sr_policy_default_probe_timestamp_format_ntp = true` + "\n"
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

@@ -62,6 +62,8 @@ resource "iosxr_performance_measurement_liveness_profile" "example" {
 - `endpoint_default_liveness_detection_logging_state_change` (Boolean) Emit syslog when the liveness state change detected
 - `endpoint_default_liveness_detection_multiplier` (Number) Configure detect multiplier
   - Range: `2`-`10`
+- `endpoint_default_liveness_detection_npu_offload` (Boolean) Enable offloading sessions to NPU
+  - Supported from version: `25.4`
 - `endpoint_default_probe_flow_label_explicit` (Boolean) explicit list of flow labels
 - `endpoint_default_probe_flow_label_explicit_list` (List of Number) explicit list of flow labels
 - `endpoint_default_probe_flow_label_from` (Number) Lower bound
@@ -76,7 +78,7 @@ resource "iosxr_performance_measurement_liveness_profile" "example" {
 - `endpoint_default_probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
   - Range: `0`-`63`
 - `endpoint_default_probe_tx_interval` (Number) TX interval
-  - Range: `30000`-`15000000`
+  - Range: `30000`-`15000000` (v24.4), `3300`-`15000000` (v25.4)
 - `profiles` (Attributes List) liveness-profile name (see [below for nested schema](#nestedatt--profiles))
 - `sr_policy_default` (Boolean) Default profile
 - `sr_policy_default_liveness_detection_multiplier` (Number) Configure detect multiplier

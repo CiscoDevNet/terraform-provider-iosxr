@@ -528,7 +528,11 @@ func (d *PerformanceMeasurementDelayProfileDataSource) Schema(ctx context.Contex
 				MarkdownDescription: "Collect hop by hop data for delay sessions" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
-			"endpoint_default_probe_measurement_mode_timestamp_format_ntp": schema.BoolAttribute{
+			"sr_policy_default_probe_collect_hbh": schema.BoolAttribute{
+				MarkdownDescription: "Collect hop by hop data for delay sessions" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"endpoint_default_probe_timestamp_format_ntp": schema.BoolAttribute{
 				MarkdownDescription: "Network Time Protocol timestamp format" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
@@ -538,10 +542,6 @@ func (d *PerformanceMeasurementDelayProfileDataSource) Schema(ctx context.Contex
 			},
 			"rsvp_te_default_probe_timestamp_format_ntp": schema.BoolAttribute{
 				MarkdownDescription: "Network Time Protocol timestamp format" + "\n  - Supported from version: `25.4`",
-				Computed:            true,
-			},
-			"sr_policy_default_probe_collect_hbh": schema.BoolAttribute{
-				MarkdownDescription: "Collect hop by hop data for delay sessions" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
 			"sr_policy_default_probe_timestamp_format_ntp": schema.BoolAttribute{

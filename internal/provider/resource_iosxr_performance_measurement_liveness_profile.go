@@ -159,11 +159,12 @@ func (r *PerformanceMeasurementLivenessProfileResource) Schema(ctx context.Conte
 				Optional:            true,
 			},
 			"endpoint_default_probe_tx_interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("TX interval").AddIntegerRangeDescription(30000, 15000000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("TX interval").String + "\n  - Range: `30000`-`15000000` (v24.4), `3300`-`15000000` (v25.4)",
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(30000, 15000000),
+					int64validator.Between(3300, 15000000),
 				},
+				// Precise per-version range validation still done at runtime in Create/Update.
 			},
 			"endpoint_default_probe_flow_label_explicit": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("explicit list of flow labels").String,
@@ -317,6 +318,10 @@ func (r *PerformanceMeasurementLivenessProfileResource) Schema(ctx context.Conte
 					},
 				},
 			},
+			"endpoint_default_liveness_detection_npu_offload": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable offloading sessions to NPU").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -346,6 +351,10 @@ func (r *PerformanceMeasurementLivenessProfileResource) Create(ctx context.Conte
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -564,6 +573,10 @@ func (r *PerformanceMeasurementLivenessProfileResource) Update(ctx context.Conte
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -657,6 +670,14 @@ func (r *PerformanceMeasurementLivenessProfileResource) Delete(ctx context.Conte
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

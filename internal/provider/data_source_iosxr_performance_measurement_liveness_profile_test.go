@@ -66,7 +66,7 @@ func TestAccDataSourceIosxrPerformanceMeasurementLivenessProfile(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig + testAccDataSourceIosxrPerformanceMeasurementLivenessProfileConfig(),
+				Config: testAccDataSourceIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig() + testAccDataSourceIosxrPerformanceMeasurementLivenessProfileConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -76,12 +76,31 @@ func TestAccDataSourceIosxrPerformanceMeasurementLivenessProfile(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig = `
+const testAccDataSourceIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
+	attributes = {
+	}
 }
 
 `
+const testAccDataSourceIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
+	attributes = {
+	}
+}
+
+`
+
+func testAccDataSourceIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V24_4,
+			"25.4": testAccDataSourceIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V25_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -121,7 +140,10 @@ func testAccDataSourceIosxrPerformanceMeasurementLivenessProfileConfig() string 
 	config += `		probe_sweep_destination_range = 10` + "\n"
 	config += `		probe_tos_dscp = 48` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

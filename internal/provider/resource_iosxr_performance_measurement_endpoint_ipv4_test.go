@@ -102,11 +102,28 @@ resource "iosxr_yang" "PreReq1" {
 }
 
 `
+const testAccIosxrPerformanceMeasurementEndpointIPv4PrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+resource "iosxr_yang" "PreReq1" {
+	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
+	attributes = {
+	}
+	depends_on = [iosxr_yang.PreReq0, ]
+}
+
+`
 
 func testAccIosxrPerformanceMeasurementEndpointIPv4PrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrPerformanceMeasurementEndpointIPv4PrerequisitesConfig_V24_4,
+			"25.4": testAccIosxrPerformanceMeasurementEndpointIPv4PrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -121,6 +138,7 @@ func testAccIosxrPerformanceMeasurementEndpointIPv4Config_minimum() string {
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -150,6 +168,7 @@ func testAccIosxrPerformanceMeasurementEndpointIPv4Config_all() string {
 	config += `	segment_routing_te_explicit_reverse_path_list = "SEG_LIST_GLOBAL_REVERSE"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

@@ -67,11 +67,11 @@ func TestAccIosxrPerformanceMeasurementLivenessProfile(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig + testAccIosxrPerformanceMeasurementLivenessProfileConfig_minimum(),
+			Config: testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig() + testAccIosxrPerformanceMeasurementLivenessProfileConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig + testAccIosxrPerformanceMeasurementLivenessProfileConfig_all(),
+		Config: testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig() + testAccIosxrPerformanceMeasurementLivenessProfileConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -101,7 +101,15 @@ func iosxrPerformanceMeasurementLivenessProfileImportStateIdFunc(resourceName st
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig = `
+const testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V24_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
+	attributes = {
+	}
+}
+
+`
+const testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V25_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
 	attributes = {
@@ -110,6 +118,15 @@ resource "iosxr_yang" "PreReq0" {
 
 `
 
+func testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V24_4,
+			"25.4": testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V25_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -117,7 +134,10 @@ resource "iosxr_yang" "PreReq0" {
 func testAccIosxrPerformanceMeasurementLivenessProfileConfig_minimum() string {
 	config := `resource "iosxr_performance_measurement_liveness_profile" "test" {` + "\n"
 	config += `	sr_policy_default_probe_tx_interval = "30000"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -159,7 +179,10 @@ func testAccIosxrPerformanceMeasurementLivenessProfileConfig_all() string {
 	config += `		probe_sweep_destination_range = 10` + "\n"
 	config += `		probe_tos_dscp = 48` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -72,6 +72,7 @@ type providerData struct {
 	CaCertificate      types.String         `tfsdk:"ca_certificate"`
 	Retries            types.Int64          `tfsdk:"retries"`
 	LockReleaseTimeout types.Int64          `tfsdk:"lock_release_timeout"`
+	Timeout            types.Int64          `tfsdk:"timeout"`
 	ReuseConnection    types.Bool           `tfsdk:"reuse_connection"`
 	ClientCache        types.Bool           `tfsdk:"client_cache"`
 	IosxrVersion       types.String         `tfsdk:"iosxr_version"`
@@ -189,6 +190,13 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 600),
+				},
+			},
+			"timeout": schema.Int64Attribute{
+				MarkdownDescription: "Operation timeout in seconds for gNMI calls. The total deadline per call is this value plus the retry backoff time. This can also be set as the IOSXR_TIMEOUT environment variable. Only applies to the `gnmi` protocol. Defaults to `30`.",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600),
 				},
 			},
 			"reuse_connection": schema.BoolAttribute{
@@ -498,6 +506,27 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		lockReleaseTimeout = config.LockReleaseTimeout.ValueInt64()
 	}
 
+	var timeout int64
+	if config.Timeout.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as timeout",
+		)
+		return
+	}
+
+	if config.Timeout.IsNull() {
+		timeoutStr := os.Getenv("IOSXR_TIMEOUT")
+		if timeoutStr == "" {
+			timeout = 30
+		} else {
+			timeout, _ = strconv.ParseInt(timeoutStr, 0, 64)
+		}
+	} else {
+		timeout = config.Timeout.ValueInt64()
+	}
+
 	var reuseConnection bool
 	if config.ReuseConnection.IsUnknown() {
 		// Cannot connect to client with an unknown value
@@ -681,6 +710,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				gnmi.TLS(tls),
 				gnmi.VerifyCertificate(verifyCertificate),
 				gnmi.MaxRetries(int(retries)),
+				gnmi.OperationTimeout(time.Duration(timeout) * time.Second),
 				gnmi.WithLogger(logger),
 			}
 
@@ -850,6 +880,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					gnmi.TLS(tls),
 					gnmi.VerifyCertificate(verifyCertificate),
 					gnmi.MaxRetries(int(retries)),
+					gnmi.OperationTimeout(time.Duration(timeout) * time.Second),
 					gnmi.WithLogger(logger),
 				}
 
@@ -1028,8 +1059,6 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewControlPlaneResource,
 		NewControllerOpticsResource,
 		NewCryptoResource,
-		NewCryptoClientAuthenticationResource,
-		NewCryptoSSLResource,
 		NewDomainResource,
 		NewDomainVRFResource,
 		NewESISetResource,
@@ -1240,8 +1269,6 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewControlPlaneDataSource,
 		NewControllerOpticsDataSource,
 		NewCryptoDataSource,
-		NewCryptoClientAuthenticationDataSource,
-		NewCryptoSSLDataSource,
 		NewDomainDataSource,
 		NewDomainVRFDataSource,
 		NewESISetDataSource,

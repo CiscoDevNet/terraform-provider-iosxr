@@ -92,6 +92,7 @@ type Crypto struct {
 	CaFqdnCheckIpAddressAllow                      types.Bool                   `tfsdk:"ca_fqdn_check_ip_address_allow"`
 	CaCrlCurlTimeout                               types.Int64                  `tfsdk:"ca_crl_curl_timeout"`
 	FipsMode                                       types.Bool                   `tfsdk:"fips_mode"`
+	CaTrustpointSystemEnrollmentLocal              types.Bool                   `tfsdk:"ca_trustpoint_system_enrollment_local"`
 }
 
 type CryptoData struct {
@@ -145,6 +146,7 @@ type CryptoData struct {
 	CaFqdnCheckIpAddressAllow                      types.Bool                   `tfsdk:"ca_fqdn_check_ip_address_allow"`
 	CaCrlCurlTimeout                               types.Int64                  `tfsdk:"ca_crl_curl_timeout"`
 	FipsMode                                       types.Bool                   `tfsdk:"fips_mode"`
+	CaTrustpointSystemEnrollmentLocal              types.Bool                   `tfsdk:"ca_trustpoint_system_enrollment_local"`
 }
 type CryptoCaTrustpoints struct {
 	TrustpointName                    types.String `tfsdk:"trustpoint_name"`
@@ -174,6 +176,7 @@ type CryptoCaTrustpoints struct {
 	EnrollmentAuthenticationProfile   types.String `tfsdk:"enrollment_authentication_profile"`
 	ReEnrollmentAuthenticationProfile types.String `tfsdk:"re_enrollment_authentication_profile"`
 	SslProfile                        types.String `tfsdk:"ssl_profile"`
+	EnrollmentLocal                   types.Bool   `tfsdk:"enrollment_local"`
 }
 type CryptoCaOpensshTrustpoints struct {
 	TrustpointName types.String `tfsdk:"trustpoint_name"`
@@ -371,6 +374,13 @@ func (data Crypto) toBody(ctx context.Context, providerVersion string) string {
 			body, _ = sjson.Set(body, "fips-mode", map[string]string{})
 		}
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.CaTrustpointSystemEnrollmentLocal.IsNull() && !data.CaTrustpointSystemEnrollmentLocal.IsUnknown() {
+			if data.CaTrustpointSystemEnrollmentLocal.ValueBool() {
+				body, _ = sjson.Set(body, "ca.trustpoint.system-trustpoint.enrollment.local", map[string]string{})
+			}
+		}
+	}
 	if len(data.CaTrustpoints) > 0 {
 		body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint", []interface{}{})
 		for index, item := range data.CaTrustpoints {
@@ -459,8 +469,10 @@ func (data Crypto) toBody(ctx context.Context, providerVersion string) string {
 			if !item.MessageDigest.IsNull() && !item.MessageDigest.IsUnknown() {
 				body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"message-digest", item.MessageDigest.ValueString())
 			}
-			if !item.MethodEstCredentialCertificate.IsNull() && !item.MethodEstCredentialCertificate.IsUnknown() {
-				body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"method.est.credential.certificate", item.MethodEstCredentialCertificate.ValueString())
+			if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.MethodEstCredentialCertificate.IsNull() && !item.MethodEstCredentialCertificate.IsUnknown() {
+					body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"method.est.credential.certificate", item.MethodEstCredentialCertificate.ValueString())
+				}
 			}
 			if helpers.VersionAtLeast(providerVersion, "25.4") {
 				if !item.EnrollmentAuthenticationProfile.IsNull() && !item.EnrollmentAuthenticationProfile.IsUnknown() {
@@ -475,6 +487,13 @@ func (data Crypto) toBody(ctx context.Context, providerVersion string) string {
 			if helpers.VersionAtLeast(providerVersion, "25.4") {
 				if !item.SslProfile.IsNull() && !item.SslProfile.IsUnknown() {
 					body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"ssl-profile", item.SslProfile.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.EnrollmentLocal.IsNull() && !item.EnrollmentLocal.IsUnknown() {
+					if item.EnrollmentLocal.ValueBool() {
+						body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"enrollment.local", map[string]string{})
+					}
 				}
 			}
 		}
@@ -503,6 +522,11 @@ func (data Crypto) GetVersionConstraints() []helpers.FieldVersionConstraint {
 
 	constraints = append(constraints, []helpers.FieldVersionConstraint{
 		{
+			FieldPath: "ca_trustpoints.method_est_credential_certificate",
+
+			RemovedInVersion: "25.4",
+		},
+		{
 			FieldPath:      "ca_trustpoints.enrollment_authentication_profile",
 			AddedInVersion: "25.4",
 		},
@@ -512,6 +536,14 @@ func (data Crypto) GetVersionConstraints() []helpers.FieldVersionConstraint {
 		},
 		{
 			FieldPath:      "ca_trustpoints.ssl_profile",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ca_trustpoints.enrollment_local",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ca_trustpoint_system_enrollment_local",
 			AddedInVersion: "25.4",
 		},
 	}...)
@@ -993,7 +1025,7 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte, version stri
 		} else {
 			data.CaTrustpoints[i].MessageDigest = types.StringNull()
 		}
-		if value := r.Get("method.est.credential.certificate"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() {
+		if value := r.Get("method.est.credential.certificate"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() {
 			data.CaTrustpoints[i].MethodEstCredentialCertificate = types.StringValue(value.String())
 		} else {
 			data.CaTrustpoints[i].MethodEstCredentialCertificate = types.StringNull()
@@ -1012,6 +1044,18 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte, version stri
 			data.CaTrustpoints[i].SslProfile = types.StringValue(value.String())
 		} else {
 			data.CaTrustpoints[i].SslProfile = types.StringNull()
+		}
+		if value := r.Get("enrollment.local"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].EnrollmentLocal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentLocal = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].EnrollmentLocal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentLocal = types.BoolNull()
+			}
 		}
 	}
 	for i := range data.CaOpensshTrustpoints {
@@ -1102,6 +1146,16 @@ func (data *Crypto) updateFromBody(ctx context.Context, res []byte, version stri
 		}
 	} else if data.FipsMode.IsNull() {
 		data.FipsMode = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.local"); helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolNull()
 	}
 }
 
@@ -1348,8 +1402,12 @@ func (data *Crypto) fromBody(ctx context.Context, res []byte, version string) {
 			if cValue := v.Get("message-digest"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MessageDigest = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
-				item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
+				}
+			} else {
+				item.MethodEstCredentialCertificate = types.StringNull()
 			}
 			if helpers.VersionAtLeast(version, "25.4") {
 				if cValue := v.Get("enrollment.authentication-profile"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
@@ -1371,6 +1429,16 @@ func (data *Crypto) fromBody(ctx context.Context, res []byte, version string) {
 				}
 			} else {
 				item.SslProfile = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("enrollment.local"); cValue.Exists() {
+					item.EnrollmentLocal = types.BoolValue(true)
+				} else if !item.EnrollmentLocal.IsNull() {
+					// Only set to false if it was previously set
+					item.EnrollmentLocal = types.BoolValue(false)
+				}
+			} else {
+				item.EnrollmentLocal = types.BoolNull()
 			}
 			data.CaTrustpoints = append(data.CaTrustpoints, item)
 			return true
@@ -1422,6 +1490,16 @@ func (data *Crypto) fromBody(ctx context.Context, res []byte, version string) {
 	} else if !data.FipsMode.IsNull() {
 		// Only set to false if it was previously set in state
 		data.FipsMode = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.local"); value.Exists() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+		} else if !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+			// Only set to false if it was previously set in state
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
+		}
+	} else {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolNull()
 	}
 }
 
@@ -1651,8 +1729,12 @@ func (data *CryptoData) fromBody(ctx context.Context, res []byte, version string
 			if cValue := v.Get("message-digest"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MessageDigest = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
-				item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
+				}
+			} else {
+				item.MethodEstCredentialCertificate = types.StringNull()
 			}
 			if helpers.VersionAtLeast(version, "25.4") {
 				if cValue := v.Get("enrollment.authentication-profile"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
@@ -1674,6 +1756,15 @@ func (data *CryptoData) fromBody(ctx context.Context, res []byte, version string
 				}
 			} else {
 				item.SslProfile = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("enrollment.local"); cValue.Exists() {
+					item.EnrollmentLocal = types.BoolValue(true)
+				} else {
+					item.EnrollmentLocal = types.BoolValue(false)
+				}
+			} else {
+				item.EnrollmentLocal = types.BoolNull()
 			}
 			data.CaTrustpoints = append(data.CaTrustpoints, item)
 			return true
@@ -1723,6 +1814,15 @@ func (data *CryptoData) fromBody(ctx context.Context, res []byte, version string
 	} else {
 		data.FipsMode = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.local"); value.Exists() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+		} else {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
+		}
+	} else {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1731,6 +1831,9 @@ func (data *CryptoData) fromBody(ctx context.Context, res []byte, version string
 
 func (data *Crypto) getDeletedItems(ctx context.Context, state Crypto, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.CaTrustpointSystemEnrollmentLocal.IsNull() && data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/enrollment/local"))
+	}
 	if !state.FipsMode.IsNull() && data.FipsMode.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "fips-mode"))
 	}
@@ -1811,6 +1914,9 @@ func (data *Crypto) getDeletedItems(ctx context.Context, state Crypto, version s
 				found = false
 			}
 			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.CaTrustpoints[i].EnrollmentLocal.IsNull() && data.CaTrustpoints[j].EnrollmentLocal.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/local"))
+				}
 				if helpers.VersionAtLeast(version, "25.4") && !state.CaTrustpoints[i].SslProfile.IsNull() && data.CaTrustpoints[j].SslProfile.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "ssl-profile"))
 				}
@@ -1820,7 +1926,7 @@ func (data *Crypto) getDeletedItems(ctx context.Context, state Crypto, version s
 				if helpers.VersionAtLeast(version, "25.4") && !state.CaTrustpoints[i].EnrollmentAuthenticationProfile.IsNull() && data.CaTrustpoints[j].EnrollmentAuthenticationProfile.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/authentication-profile"))
 				}
-				if !state.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() && data.CaTrustpoints[j].MethodEstCredentialCertificate.IsNull() {
+				if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() && data.CaTrustpoints[j].MethodEstCredentialCertificate.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "method/est/credential/certificate"))
 				}
 				if !state.CaTrustpoints[i].MessageDigest.IsNull() && data.CaTrustpoints[j].MessageDigest.IsNull() {
@@ -2019,6 +2125,11 @@ func (data *Crypto) getDeletedItems(ctx context.Context, state Crypto, version s
 
 func (data *Crypto) getEmptyLeafsDelete(ctx context.Context, state *Crypto, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpointSystemEnrollmentLocal.IsNull() && !data.CaTrustpointSystemEnrollmentLocal.ValueBool() {
+		if state != nil && !state.CaTrustpointSystemEnrollmentLocal.IsNull() && state.CaTrustpointSystemEnrollmentLocal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/local"))
+		}
+	}
 	if !data.FipsMode.IsNull() && !data.FipsMode.ValueBool() {
 		if state != nil && !state.FipsMode.IsNull() && state.FipsMode.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fips-mode"))
@@ -2048,6 +2159,11 @@ func (data *Crypto) getEmptyLeafsDelete(ctx context.Context, state *Crypto, vers
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpoints[i].EnrollmentLocal.IsNull() && !data.CaTrustpoints[i].EnrollmentLocal.ValueBool() {
+			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].EnrollmentLocal.IsNull() && state.CaTrustpoints[i].EnrollmentLocal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/local"))
+			}
 		}
 		if !data.CaTrustpoints[i].SerialNumberNone.IsNull() && !data.CaTrustpoints[i].SerialNumberNone.ValueBool() {
 			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].SerialNumberNone.IsNull() && state.CaTrustpoints[i].SerialNumberNone.ValueBool() {
@@ -2143,6 +2259,9 @@ func (data *Crypto) getEmptyLeafsDelete(ctx context.Context, state *Crypto, vers
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *Crypto) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/local"))
+	}
 	if !data.FipsMode.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "fips-mode"))
 	}
@@ -2563,6 +2682,11 @@ func (data Crypto) toBodyXML(ctx context.Context, stateArg ...*Crypto) string {
 			if !item.SslProfile.IsNull() && !item.SslProfile.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/ssl-profile", item.SslProfile.ValueString())
 			}
+			if !item.EnrollmentLocal.IsNull() && !item.EnrollmentLocal.IsUnknown() {
+				if item.EnrollmentLocal.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/enrollment/local", "")
+				}
+			}
 		}
 	}
 	if len(data.CaOpensshTrustpoints) > 0 {
@@ -2604,6 +2728,11 @@ func (data Crypto) toBodyXML(ctx context.Context, stateArg ...*Crypto) string {
 	if !data.FipsMode.IsNull() && !data.FipsMode.IsUnknown() {
 		if data.FipsMode.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/fips-mode", "")
+		}
+	}
+	if !data.CaTrustpointSystemEnrollmentLocal.IsNull() && !data.CaTrustpointSystemEnrollmentLocal.IsUnknown() {
+		if data.CaTrustpointSystemEnrollmentLocal.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -3098,6 +3227,18 @@ func (data *Crypto) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.CaTrustpoints[i].SslProfile.IsNull() {
 			data.CaTrustpoints[i].SslProfile = types.StringNull()
 		}
+		if value := helpers.GetFromXPath(r, "enrollment/local"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].EnrollmentLocal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentLocal = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].EnrollmentLocal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentLocal = types.BoolNull()
+			}
+		}
 	}
 	for i := range data.CaOpensshTrustpoints {
 		keys := [...]string{"trustpoint-name"}
@@ -3189,6 +3330,17 @@ func (data *Crypto) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		// For presence-based booleans, only set to null if it's already null
 		if data.FipsMode.IsNull() {
 			data.FipsMode = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolNull()
 		}
 	}
 }
@@ -3431,6 +3583,11 @@ func (data *Crypto) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "ssl-profile"); cValue.Exists() {
 				item.SslProfile = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "enrollment/local"); cValue.Exists() {
+				item.EnrollmentLocal = types.BoolValue(true)
+			} else {
+				item.EnrollmentLocal = types.BoolValue(false)
+			}
 			data.CaTrustpoints = append(data.CaTrustpoints, item)
 			return true
 		})
@@ -3478,6 +3635,11 @@ func (data *Crypto) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		data.FipsMode = types.BoolValue(true)
 	} else {
 		data.FipsMode = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
 	}
 }
 
@@ -3719,6 +3881,11 @@ func (data *CryptoData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "ssl-profile"); cValue.Exists() {
 				item.SslProfile = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "enrollment/local"); cValue.Exists() {
+				item.EnrollmentLocal = types.BoolValue(true)
+			} else {
+				item.EnrollmentLocal = types.BoolValue(false)
+			}
 			data.CaTrustpoints = append(data.CaTrustpoints, item)
 			return true
 		})
@@ -3767,6 +3934,11 @@ func (data *CryptoData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else {
 		data.FipsMode = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -3778,6 +3950,22 @@ func (data *Crypto) addDeletedItemsXML(ctx context.Context, state Crypto, body s
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.CaTrustpointSystemEnrollmentLocal.IsNull() && state.CaTrustpointSystemEnrollmentLocal.ValueBool() && data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		deletePath := state.getXPath() + "/ca/trustpoint/system-trustpoint/enrollment/local"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FipsMode.IsNull() && state.FipsMode.ValueBool() && data.FipsMode.IsNull() {
 		deletePath := state.getXPath() + "/fips-mode"
@@ -3957,6 +4145,10 @@ func (data *Crypto) addDeletedItemsXML(ctx context.Context, state Crypto, body s
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.CaTrustpoints[i].EnrollmentLocal.IsNull() && state.CaTrustpoints[i].EnrollmentLocal.ValueBool() && data.CaTrustpoints[j].EnrollmentLocal.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ca/trustpoint/trustpoints/trustpoint%v/enrollment/local", predicates))
+				}
 				if !state.CaTrustpoints[i].SslProfile.IsNull() && data.CaTrustpoints[j].SslProfile.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ca/trustpoint/trustpoints/trustpoint%v/ssl-profile", predicates))
 				}
@@ -4640,6 +4832,9 @@ func (data *Crypto) addDeletedItemsXML(ctx context.Context, state Crypto, body s
 
 func (data *Crypto) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local")
+	}
 	if !data.FipsMode.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/fips-mode")
 	}

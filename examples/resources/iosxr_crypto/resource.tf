@@ -44,7 +44,6 @@ resource "iosxr_crypto" "example" {
       enrollment_url                       = "http://ca.example.com"
       ip_address                           = "10.1.1.2"
       message_digest                       = "sha256"
-      method_est_credential_certificate    = "EST-BOOTSTRAP"
       query_url                            = "ldap://ca.example.com/certsrv"
       re_enrollment_authentication_profile = "EAP_PROFILE"
       renewal_message_type_renewalreq      = true

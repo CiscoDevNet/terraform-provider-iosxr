@@ -76,7 +76,9 @@ func TestAccIosxrCrypto(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.serial_number", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.vrf", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.message_digest", "sha256"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.method_est_credential_certificate", "EST-BOOTSTRAP"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.method_est_credential_certificate", "EST-BOOTSTRAP"))
+	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.enrollment_authentication_profile", "EAP_PROFILE"))
 	}
@@ -148,11 +150,28 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
+const testAccIosxrCryptoPrerequisitesConfig_V25_4 = `
+resource "iosxr_yang" "PreReq0" {
+	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=proxy.example.com]"
+	attributes = {
+		"host-name" = "proxy.example.com"
+	}
+	lists = [
+		{
+			name = "ip-address"
+			
+			values = ["1.1.1.1", ]
+		},
+	]
+}
+
+`
 
 func testAccIosxrCryptoPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrCryptoPrerequisitesConfig_V24_4,
+			"25.4": testAccIosxrCryptoPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -173,6 +192,7 @@ func testAccIosxrCryptoConfig_minimum() string {
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -226,7 +246,9 @@ func testAccIosxrCryptoConfig_all() string {
 	config += `		serial_number = true` + "\n"
 	config += `		vrf = "VRF1"` + "\n"
 	config += `		message_digest = "sha256"` + "\n"
-	config += `		method_est_credential_certificate = "EST-BOOTSTRAP"` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		method_est_credential_certificate = "EST-BOOTSTRAP"` + "\n"
+	}
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		config += `		enrollment_authentication_profile = "EAP_PROFILE"` + "\n"
 	}
@@ -250,6 +272,7 @@ func testAccIosxrCryptoConfig_all() string {
 	config += `	fips_mode = true` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
+		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

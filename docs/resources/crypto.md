@@ -10,6 +10,14 @@ description: |-
 
 This resource can manage the Crypto configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `ca_trustpoints.method_est_credential_certificate` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -59,7 +67,6 @@ resource "iosxr_crypto" "example" {
       enrollment_url                       = "http://ca.example.com"
       ip_address                           = "10.1.1.2"
       message_digest                       = "sha256"
-      method_est_credential_certificate    = "EST-BOOTSTRAP"
       query_url                            = "ldap://ca.example.com/certsrv"
       re_enrollment_authentication_profile = "EAP_PROFILE"
       renewal_message_type_renewalreq      = true
@@ -104,6 +111,8 @@ resource "iosxr_crypto" "example" {
 - `ca_trustpoint_system_ca_keypair_rsa` (String) Self enrollment, rsa key pair
 - `ca_trustpoint_system_crl_optional` (Boolean) CRL verification as optional
 - `ca_trustpoint_system_description` (String) Description for the trustpoint
+- `ca_trustpoint_system_enrollment_local` (Boolean) Enroll via file present on local filesystem
+  - Supported from version: `25.4`
 - `ca_trustpoint_system_enrollment_retry_count` (Number) How many times to poll CA for our certificate
   - Range: `1`-`100`
 - `ca_trustpoint_system_enrollment_retry_period` (Number) How long to wait between requests to CA for our certificate
@@ -175,6 +184,8 @@ Optional:
 - `description` (String) Description for the trustpoint
 - `enrollment_authentication_profile` (String) Authentication profile used during certificate enrollment
   - Supported from version: `25.4`
+- `enrollment_local` (Boolean) Enroll via file present on local filesystem
+  - Supported from version: `25.4`
 - `enrollment_retry_count` (Number) How many times to poll CA for our certificate
   - Range: `1`-`100`
 - `enrollment_retry_period` (Number) How long to wait between requests to CA for our certificate
@@ -186,6 +197,7 @@ Optional:
 - `message_digest` (String) Certificate message digesti self enrollment
   - Choices: `md5`, `sha1`, `sha256`, `sha384`, `sha512`
 - `method_est_credential_certificate` (String) Certificate based authentication in TLS handshake during bootstrap
+  - **Not supported from version `25.4` and above**
 - `query_url` (String) CA server query URL
 - `re_enrollment_authentication_profile` (String) Authentication profile used during certificate re-enrollment
   - Supported from version: `25.4`

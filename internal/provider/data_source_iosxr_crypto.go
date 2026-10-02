@@ -320,7 +320,7 @@ func (d *CryptoDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							Computed:            true,
 						},
 						"method_est_credential_certificate": schema.StringAttribute{
-							MarkdownDescription: "Certificate based authentication in TLS handshake during bootstrap",
+							MarkdownDescription: "Certificate based authentication in TLS handshake during bootstrap" + "\n  - **Not supported from version `25.4` and above**",
 							Computed:            true,
 						},
 						"enrollment_authentication_profile": schema.StringAttribute{
@@ -333,6 +333,10 @@ func (d *CryptoDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						},
 						"ssl_profile": schema.StringAttribute{
 							MarkdownDescription: "SSL profile parameters used during TLS/mTLS handshake" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"enrollment_local": schema.BoolAttribute{
+							MarkdownDescription: "Enroll via file present on local filesystem" + "\n  - Supported from version: `25.4`",
 							Computed:            true,
 						},
 					},
@@ -384,6 +388,10 @@ func (d *CryptoDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			},
 			"fips_mode": schema.BoolAttribute{
 				MarkdownDescription: "Enable FIPS mode",
+				Computed:            true,
+			},
+			"ca_trustpoint_system_enrollment_local": schema.BoolAttribute{
+				MarkdownDescription: "Enroll via file present on local filesystem" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
 		},

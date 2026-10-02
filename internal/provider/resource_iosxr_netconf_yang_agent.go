@@ -102,7 +102,7 @@ func (r *NetconfYangAgentResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"session_absolute_timeout": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Absolute timeout in minutes").AddIntegerRangeDescription(1, 1440).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Absolute timeout in minutes").AddIntegerRangeDescription(1, 1440).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 1440),
@@ -148,6 +148,10 @@ func (r *NetconfYangAgentResource) Create(ctx context.Context, req resource.Crea
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -366,6 +370,10 @@ func (r *NetconfYangAgentResource) Update(ctx context.Context, req resource.Upda
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -459,6 +467,14 @@ func (r *NetconfYangAgentResource) Delete(ctx context.Context, req resource.Dele
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

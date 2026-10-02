@@ -1,0 +1,10 @@
+---
+name: Netconf Yang Agent
+path: Cisco-IOS-XR-um-netconf-yang-cfg:/netconf-yang/agent
+doc_category: Management
+attributes:
+  # ===========================================================
+  # REMOVALS — removed in 25.4
+  # ===========================================================
+  - yang_name: session/absolute-timeout
+    legacy: true

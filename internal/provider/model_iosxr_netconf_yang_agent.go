@@ -114,8 +114,10 @@ func (data NetconfYangAgent) toBody(ctx context.Context, providerVersion string)
 	if !data.SessionIdleTimeout.IsNull() && !data.SessionIdleTimeout.IsUnknown() {
 		body, _ = sjson.Set(body, "session.idle-timeout", strconv.FormatInt(data.SessionIdleTimeout.ValueInt64(), 10))
 	}
-	if !data.SessionAbsoluteTimeout.IsNull() && !data.SessionAbsoluteTimeout.IsUnknown() {
-		body, _ = sjson.Set(body, "session.absolute-timeout", strconv.FormatInt(data.SessionAbsoluteTimeout.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.SessionAbsoluteTimeout.IsNull() && !data.SessionAbsoluteTimeout.IsUnknown() {
+			body, _ = sjson.Set(body, "session.absolute-timeout", strconv.FormatInt(data.SessionAbsoluteTimeout.ValueInt64(), 10))
+		}
 	}
 	if !data.NetconfV1.IsNull() && !data.NetconfV1.IsUnknown() {
 		body, _ = sjson.Set(body, "netconf1\\.0.support", data.NetconfV1.ValueString())
@@ -136,6 +138,13 @@ func (data NetconfYangAgent) toBody(ctx context.Context, providerVersion string)
 func (data NetconfYangAgent) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "session_absolute_timeout",
+
+			RemovedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -220,7 +229,7 @@ func (data *NetconfYangAgent) updateFromBody(ctx context.Context, res []byte, ve
 	} else if data.SessionIdleTimeout.IsNull() {
 		data.SessionIdleTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() && !data.SessionAbsoluteTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "session.absolute-timeout"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.SessionAbsoluteTimeout.IsNull() {
 		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
 	} else if data.SessionAbsoluteTimeout.IsNull() {
 		data.SessionAbsoluteTimeout = types.Int64Null()
@@ -268,8 +277,12 @@ func (data *NetconfYangAgent) fromBody(ctx context.Context, res []byte, version 
 	if value := gjson.GetBytes(res, "session.idle-timeout"); value.Exists() {
 		data.SessionIdleTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() {
-		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() {
+			data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
+		}
+	} else {
+		data.SessionAbsoluteTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "netconf1\\.0.support"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.NetconfV1 = types.StringValue(value.String())
@@ -306,8 +319,12 @@ func (data *NetconfYangAgentData) fromBody(ctx context.Context, res []byte, vers
 	if value := gjson.GetBytes(res, "session.idle-timeout"); value.Exists() {
 		data.SessionIdleTimeout = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() {
-		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() {
+			data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
+		}
+	} else {
+		data.SessionAbsoluteTimeout = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "netconf1\\.0.support"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.NetconfV1 = types.StringValue(value.String())
@@ -331,7 +348,7 @@ func (data *NetconfYangAgent) getDeletedItems(ctx context.Context, state Netconf
 	if !state.NetconfV1.IsNull() && data.NetconfV1.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "netconf1.0"))
 	}
-	if !state.SessionAbsoluteTimeout.IsNull() && data.SessionAbsoluteTimeout.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.SessionAbsoluteTimeout.IsNull() && data.SessionAbsoluteTimeout.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "session/absolute-timeout"))
 	}
 	if !state.SessionIdleTimeout.IsNull() && data.SessionIdleTimeout.IsNull() {
@@ -387,7 +404,7 @@ func (data *NetconfYangAgent) getDeletePaths(ctx context.Context, version string
 	if !data.NetconfV1.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "netconf1.0"))
 	}
-	if !data.SessionAbsoluteTimeout.IsNull() {
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.SessionAbsoluteTimeout.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "session/absolute-timeout"))
 	}
 	if !data.SessionIdleTimeout.IsNull() {

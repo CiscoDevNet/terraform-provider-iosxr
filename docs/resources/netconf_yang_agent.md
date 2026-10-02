@@ -10,14 +10,21 @@ description: |-
 
 This resource can manage the Netconf Yang Agent configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `session_absolute_timeout` | `25.4` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_netconf_yang_agent" "example" {
-  session_absolute_timeout = 1440
-  session_idle_timeout     = 30
-  session_limit            = 50
-  with_defaults_support    = true
+  session_idle_timeout  = 30
+  session_limit         = 50
+  with_defaults_support = true
 }
 ```
 
@@ -34,6 +41,7 @@ resource "iosxr_netconf_yang_agent" "example" {
   - Range: `4096`-`4294967295`
 - `session_absolute_timeout` (Number) Absolute timeout in minutes
   - Range: `1`-`1440`
+  - **Not supported from version `25.4` and above**
 - `session_idle_timeout` (Number) Idle timeout in minutes
   - Range: `1`-`1440`
 - `session_limit` (Number) Maximum count of concurrent sessions (default = 50)

@@ -38,7 +38,9 @@ func TestAccIosxrNetconfYangAgent(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "with_defaults_support", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_limit", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_idle_timeout", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_absolute_timeout", "1440"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_netconf_yang_agent.test", "session_absolute_timeout", "1440"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -96,7 +98,9 @@ func testAccIosxrNetconfYangAgentConfig_all() string {
 	config += `	with_defaults_support = true` + "\n"
 	config += `	session_limit = 50` + "\n"
 	config += `	session_idle_timeout = 30` + "\n"
-	config += `	session_absolute_timeout = 1440` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	session_absolute_timeout = 1440` + "\n"
+	}
 	config += `}` + "\n"
 	return config
 }

@@ -90,7 +90,7 @@ func (d *NetconfYangAgentDataSource) Schema(ctx context.Context, req datasource.
 				Computed:            true,
 			},
 			"session_absolute_timeout": schema.Int64Attribute{
-				MarkdownDescription: "Absolute timeout in minutes",
+				MarkdownDescription: "Absolute timeout in minutes" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"netconf_v1": schema.StringAttribute{

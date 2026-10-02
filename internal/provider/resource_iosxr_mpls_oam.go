@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -125,6 +126,31 @@ func (r *MPLSOAMResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("Report downstream mismatches").String,
 				Optional:            true,
 			},
+			"oam_echo_revision_five": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rfc8029 (initial)").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"oam_address_family_ipv4_reply_ip_header_source": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the IPv4 header source address").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"oam_address_family_ipv6_reply_ip_header_source": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the IPv6 header source address").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+				},
+			},
+			"oam_dpm_shutdown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Shutdown DPM operations").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -154,6 +180,10 @@ func (r *MPLSOAMResource) Create(ctx context.Context, req resource.CreateRequest
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -372,6 +402,10 @@ func (r *MPLSOAMResource) Update(ctx context.Context, req resource.UpdateRequest
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -465,6 +499,14 @@ func (r *MPLSOAMResource) Delete(ctx context.Context, req resource.DeleteRequest
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

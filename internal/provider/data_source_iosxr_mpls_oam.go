@@ -109,6 +109,22 @@ func (d *MPLSOAMDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Report downstream mismatches",
 				Computed:            true,
 			},
+			"oam_echo_revision_five": schema.BoolAttribute{
+				MarkdownDescription: "rfc8029 (initial)" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"oam_address_family_ipv4_reply_ip_header_source": schema.StringAttribute{
+				MarkdownDescription: "Set the IPv4 header source address" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"oam_address_family_ipv6_reply_ip_header_source": schema.StringAttribute{
+				MarkdownDescription: "Set the IPv6 header source address" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"oam_dpm_shutdown": schema.BoolAttribute{
+				MarkdownDescription: "Shutdown DPM operations" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }

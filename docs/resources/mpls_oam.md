@@ -15,9 +15,12 @@ This resource can manage the MPLS OAM configuration.
 ```terraform
 resource "iosxr_mpls_oam" "example" {
   oam                                                   = true
+  oam_address_family_ipv4_reply_ip_header_source        = "1.1.1.1"
+  oam_address_family_ipv6_reply_ip_header_source        = "2001:db8::1"
   oam_dpm_downstream_ecmp_faults                        = true
   oam_dpm_interval                                      = 60
   oam_dpm_pps                                           = 10
+  oam_dpm_shutdown                                      = true
   oam_echo_disable_vendor_extension                     = true
   oam_echo_reply_mode_control_channel_allow_reverse_lsp = true
   oam_echo_revision_four                                = true
@@ -33,13 +36,21 @@ resource "iosxr_mpls_oam" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `oam` (Boolean) OAM configuration
+- `oam_address_family_ipv4_reply_ip_header_source` (String) Set the IPv4 header source address
+  - Supported from version: `25.4`
+- `oam_address_family_ipv6_reply_ip_header_source` (String) Set the IPv6 header source address
+  - Supported from version: `25.4`
 - `oam_dpm_downstream_ecmp_faults` (Boolean) Report downstream mismatches
 - `oam_dpm_interval` (Number) Wait time between each iteration of DPM - default is 30mins
   - Range: `1`-`3600`
 - `oam_dpm_pps` (Number) DPM packets per second rate - default is 50pps
   - Range: `1`-`250`
+- `oam_dpm_shutdown` (Boolean) Shutdown DPM operations
+  - Supported from version: `25.4`
 - `oam_echo_disable_vendor_extension` (Boolean) Disable sending vendor extension TLV with echo req
 - `oam_echo_reply_mode_control_channel_allow_reverse_lsp` (Boolean) Use Reverse LSP as the control channel
+- `oam_echo_revision_five` (Boolean) rfc8029 (initial)
+  - Supported from version: `25.4`
 - `oam_echo_revision_four` (Boolean) draft-ietf-mpls-lsp-ping-09 (initial)
 - `oam_echo_revision_one` (Boolean) draft-ietf-mpls-lsp-ping-03 (initial)
 - `oam_echo_revision_three` (Boolean) draft-ietf-mpls-lsp-ping-03 (rev 2)

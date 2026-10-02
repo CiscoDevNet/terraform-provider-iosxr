@@ -18,8 +18,6 @@ resource "iosxr_ptp" "example" {
   log_best_primary_clock_changes                = true
   log_servo_events                              = true
   min_clock_class                               = 128
-  monitor_receiver                              = true
-  monitor_sender                                = true
   network_type_high_pdv                         = true
   performance_monitoring                        = true
   physical_layer_frequency                      = true

@@ -1,0 +1,19 @@
+---
+name: PTP Profile
+path: Cisco-IOS-XR-um-ptp-cfg:/ptp/profiles/profile[profile-name=%s]
+doc_category: Timing
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: monitor-sender
+    tf_name: monitor_sender
+    test_tags: [C8000]
+    example: true
+  - yang_name: monitor-receiver
+    tf_name: monitor_receiver
+    test_tags: [C8000]
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-ptp-cfg:/ptp

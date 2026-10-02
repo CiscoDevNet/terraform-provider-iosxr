@@ -81,12 +81,6 @@ func TestAccDataSourceIosxrPTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp.test", "clock_timescale_ptp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp.test", "clock_time_source_gps", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp.test", "clock_profile_g_8275_1_clock_type_t_bc", "true"))
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp.test", "monitor_receiver", "true"))
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp.test", "monitor_sender", "true"))
-	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -157,12 +151,6 @@ func testAccDataSourceIosxrPTPConfig() string {
 	config += `	clock_timescale_ptp = true` + "\n"
 	config += `	clock_time_source_gps = true` + "\n"
 	config += `	clock_profile_g_8275_1_clock_type_t_bc = true` + "\n"
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	monitor_receiver = true` + "\n"
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	monitor_sender = true` + "\n"
-	}
 	config += `}` + "\n"
 
 	config += `

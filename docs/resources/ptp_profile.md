@@ -205,6 +205,10 @@ resource "iosxr_ptp_profile" "example" {
 - `master_ethernets` (Attributes List) Ethernet address (see [below for nested schema](#nestedatt--master_ethernets))
 - `master_ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--master_ipv4s))
 - `master_ipv6s` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--master_ipv6s))
+- `monitor_receiver` (Boolean) Enable monitor-receiver packet exchange
+  - Supported from version: `25.4`
+- `monitor_sender` (Boolean) Enable monitor-sender packet exchange
+  - Supported from version: `25.4`
 - `multicast` (Boolean) Allow multicast messages to be sent
 - `multicast_disable` (Boolean) Disable multicast transport
 - `multicast_mixed` (Boolean) Mixed-mode multicast

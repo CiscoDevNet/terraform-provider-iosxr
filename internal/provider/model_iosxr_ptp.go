@@ -104,8 +104,6 @@ type PTP struct {
 	ClockProfileG82752ClockTypeTBc           types.Bool      `tfsdk:"clock_profile_g_8275_2_clock_type_t_bc"`
 	ClockProfileG82752ClockTypeTGm           types.Bool      `tfsdk:"clock_profile_g_8275_2_clock_type_t_gm"`
 	ClockProfileG82752ClockTypeTTsc          types.Bool      `tfsdk:"clock_profile_g_8275_2_clock_type_t_tsc"`
-	MonitorReceiver                          types.Bool      `tfsdk:"monitor_receiver"`
-	MonitorSender                            types.Bool      `tfsdk:"monitor_sender"`
 }
 
 type PTPData struct {
@@ -170,8 +168,6 @@ type PTPData struct {
 	ClockProfileG82752ClockTypeTBc           types.Bool      `tfsdk:"clock_profile_g_8275_2_clock_type_t_bc"`
 	ClockProfileG82752ClockTypeTGm           types.Bool      `tfsdk:"clock_profile_g_8275_2_clock_type_t_gm"`
 	ClockProfileG82752ClockTypeTTsc          types.Bool      `tfsdk:"clock_profile_g_8275_2_clock_type_t_tsc"`
-	MonitorReceiver                          types.Bool      `tfsdk:"monitor_receiver"`
-	MonitorSender                            types.Bool      `tfsdk:"monitor_sender"`
 }
 type PTPUtcOffsets struct {
 	Date        types.String `tfsdk:"date"`
@@ -447,20 +443,6 @@ func (data PTP) toBody(ctx context.Context, providerVersion string) string {
 			body, _ = sjson.Set(body, "clock.profile.g-8275-2.clock-type.t-tsc", map[string]string{})
 		}
 	}
-	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.IsUnknown() {
-			if data.MonitorReceiver.ValueBool() {
-				body, _ = sjson.Set(body, "profiles.profile.monitor-receiver", map[string]string{})
-			}
-		}
-	}
-	if helpers.VersionAtLeast(providerVersion, "25.4") {
-		if !data.MonitorSender.IsNull() && !data.MonitorSender.IsUnknown() {
-			if data.MonitorSender.ValueBool() {
-				body, _ = sjson.Set(body, "profiles.profile.monitor-sender", map[string]string{})
-			}
-		}
-	}
 	if len(data.UtcOffsets) > 0 {
 		body, _ = sjson.Set(body, "utc-offset.offsets.offset", []interface{}{})
 		for index, item := range data.UtcOffsets {
@@ -483,16 +465,6 @@ func (data PTP) toBody(ctx context.Context, providerVersion string) string {
 func (data PTP) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
-	constraints = append(constraints, []helpers.FieldVersionConstraint{
-		{
-			FieldPath:      "monitor_receiver",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "monitor_sender",
-			AddedInVersion: "25.4",
-		},
-	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -1031,26 +1003,6 @@ func (data *PTP) updateFromBody(ctx context.Context, res []byte, version string)
 	} else if data.ClockProfileG82752ClockTypeTTsc.IsNull() {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "profiles.profile.monitor-receiver"); helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() {
-		if value.Exists() {
-			data.MonitorReceiver = types.BoolValue(true)
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			data.MonitorReceiver = types.BoolValue(false)
-		}
-	} else if data.MonitorReceiver.IsNull() {
-		data.MonitorReceiver = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "profiles.profile.monitor-sender"); helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() {
-		if value.Exists() {
-			data.MonitorSender = types.BoolValue(true)
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			data.MonitorSender = types.BoolValue(false)
-		}
-	} else if data.MonitorSender.IsNull() {
-		data.MonitorSender = types.BoolNull()
-	}
 }
 
 // End of section. //template:end updateFromBody
@@ -1345,26 +1297,6 @@ func (data *PTP) fromBody(ctx context.Context, res []byte, version string) {
 		// Only set to false if it was previously set in state
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(false)
 	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "profiles.profile.monitor-receiver"); value.Exists() {
-			data.MonitorReceiver = types.BoolValue(true)
-		} else if !data.MonitorReceiver.IsNull() {
-			// Only set to false if it was previously set in state
-			data.MonitorReceiver = types.BoolValue(false)
-		}
-	} else {
-		data.MonitorReceiver = types.BoolNull()
-	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "profiles.profile.monitor-sender"); value.Exists() {
-			data.MonitorSender = types.BoolValue(true)
-		} else if !data.MonitorSender.IsNull() {
-			// Only set to false if it was previously set in state
-			data.MonitorSender = types.BoolValue(false)
-		}
-	} else {
-		data.MonitorSender = types.BoolNull()
-	}
 }
 
 // End of section. //template:end fromBody
@@ -1626,24 +1558,6 @@ func (data *PTPData) fromBody(ctx context.Context, res []byte, version string) {
 	} else {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(false)
 	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "profiles.profile.monitor-receiver"); value.Exists() {
-			data.MonitorReceiver = types.BoolValue(true)
-		} else {
-			data.MonitorReceiver = types.BoolValue(false)
-		}
-	} else {
-		data.MonitorReceiver = types.BoolNull()
-	}
-	if helpers.VersionAtLeast(version, "25.4") {
-		if value := gjson.GetBytes(res, "profiles.profile.monitor-sender"); value.Exists() {
-			data.MonitorSender = types.BoolValue(true)
-		} else {
-			data.MonitorSender = types.BoolValue(false)
-		}
-	} else {
-		data.MonitorSender = types.BoolNull()
-	}
 }
 
 // End of section. //template:end fromBodyData
@@ -1652,12 +1566,6 @@ func (data *PTPData) fromBody(ctx context.Context, res []byte, version string) {
 
 func (data *PTP) getDeletedItems(ctx context.Context, state PTP, version string) []string {
 	deletedItems := make([]string, 0)
-	if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSender.IsNull() && data.MonitorSender.IsNull() {
-		deletedItems = append(deletedItems, path.Join(state.getPath(), "profiles/profile/monitor-sender"))
-	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.MonitorReceiver.IsNull() && data.MonitorReceiver.IsNull() {
-		deletedItems = append(deletedItems, path.Join(state.getPath(), "profiles/profile/monitor-receiver"))
-	}
 	if !state.ClockProfileG82752ClockTypeTTsc.IsNull() && data.ClockProfileG82752ClockTypeTTsc.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "clock/profile/g-8275-2/clock-type/t-tsc"))
 	}
@@ -1874,16 +1782,6 @@ func (data *PTP) getDeletedItems(ctx context.Context, state PTP, version string)
 
 func (data *PTP) getEmptyLeafsDelete(ctx context.Context, state *PTP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() && !data.MonitorSender.ValueBool() {
-		if state != nil && !state.MonitorSender.IsNull() && state.MonitorSender.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profiles/profile/monitor-sender"))
-		}
-	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.ValueBool() {
-		if state != nil && !state.MonitorReceiver.IsNull() && state.MonitorReceiver.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profiles/profile/monitor-receiver"))
-		}
-	}
 	if !data.ClockProfileG82752ClockTypeTTsc.IsNull() && !data.ClockProfileG82752ClockTypeTTsc.ValueBool() {
 		if state != nil && !state.ClockProfileG82752ClockTypeTTsc.IsNull() && state.ClockProfileG82752ClockTypeTTsc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8275-2/clock-type/t-tsc"))
@@ -2065,12 +1963,6 @@ func (data *PTP) getEmptyLeafsDelete(ctx context.Context, state *PTP, version st
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *PTP) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
-	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() {
-		deletePaths = append(deletePaths, path.Join(data.getPath(), "profiles/profile/monitor-sender"))
-	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() {
-		deletePaths = append(deletePaths, path.Join(data.getPath(), "profiles/profile/monitor-receiver"))
-	}
 	if !data.ClockProfileG82752ClockTypeTTsc.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "clock/profile/g-8275-2/clock-type/t-tsc"))
 	}
@@ -2521,16 +2413,6 @@ func (data PTP) toBodyXML(ctx context.Context, stateArg ...*PTP) string {
 	if !data.ClockProfileG82752ClockTypeTTsc.IsNull() && !data.ClockProfileG82752ClockTypeTTsc.IsUnknown() {
 		if data.ClockProfileG82752ClockTypeTTsc.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-tsc", "")
-		}
-	}
-	if !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.IsUnknown() {
-		if data.MonitorReceiver.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/profiles/profile/monitor-receiver", "")
-		}
-	}
-	if !data.MonitorSender.IsNull() && !data.MonitorSender.IsUnknown() {
-		if data.MonitorSender.ValueBool() {
-			body = helpers.SetFromXPath(body, data.getXPath()+"/profiles/profile/monitor-sender", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -3113,28 +2995,6 @@ func (data *PTP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.ClockProfileG82752ClockTypeTTsc = types.BoolNull()
 		}
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile/monitor-receiver"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MonitorReceiver.IsNull() {
-			data.MonitorReceiver = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MonitorReceiver.IsNull() {
-			data.MonitorReceiver = types.BoolNull()
-		}
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile/monitor-sender"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MonitorSender.IsNull() {
-			data.MonitorSender = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MonitorSender.IsNull() {
-			data.MonitorSender = types.BoolNull()
-		}
-	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -3395,16 +3255,6 @@ func (data *PTP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(true)
 	} else {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(false)
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile/monitor-receiver"); value.Exists() {
-		data.MonitorReceiver = types.BoolValue(true)
-	} else {
-		data.MonitorReceiver = types.BoolValue(false)
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile/monitor-sender"); value.Exists() {
-		data.MonitorSender = types.BoolValue(true)
-	} else {
-		data.MonitorSender = types.BoolValue(false)
 	}
 }
 
@@ -3667,16 +3517,6 @@ func (data *PTPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else {
 		data.ClockProfileG82752ClockTypeTTsc = types.BoolValue(false)
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile/monitor-receiver"); value.Exists() {
-		data.MonitorReceiver = types.BoolValue(true)
-	} else {
-		data.MonitorReceiver = types.BoolValue(false)
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile/monitor-sender"); value.Exists() {
-		data.MonitorSender = types.BoolValue(true)
-	} else {
-		data.MonitorSender = types.BoolValue(false)
-	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -3688,38 +3528,6 @@ func (data *PTP) addDeletedItemsXML(ctx context.Context, state PTP, body string)
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
-	// For boolean fields, only delete if state was true (presence container was set)
-	if !state.MonitorSender.IsNull() && state.MonitorSender.ValueBool() && data.MonitorSender.IsNull() {
-		deletePath := state.getXPath() + "/profiles/profile/monitor-sender"
-		// Check if a parent path is already marked for deletion
-		parentAlreadyDeleted := false
-		for dp := range deletedPaths {
-			if strings.HasPrefix(deletePath, dp+"/") {
-				parentAlreadyDeleted = true
-				break
-			}
-		}
-		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
-			b = helpers.RemoveFromXPath(b, deletePath)
-			deletedPaths[deletePath] = true
-		}
-	}
-	// For boolean fields, only delete if state was true (presence container was set)
-	if !state.MonitorReceiver.IsNull() && state.MonitorReceiver.ValueBool() && data.MonitorReceiver.IsNull() {
-		deletePath := state.getXPath() + "/profiles/profile/monitor-receiver"
-		// Check if a parent path is already marked for deletion
-		parentAlreadyDeleted := false
-		for dp := range deletedPaths {
-			if strings.HasPrefix(deletePath, dp+"/") {
-				parentAlreadyDeleted = true
-				break
-			}
-		}
-		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
-			b = helpers.RemoveFromXPath(b, deletePath)
-			deletedPaths[deletePath] = true
-		}
-	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ClockProfileG82752ClockTypeTTsc.IsNull() && state.ClockProfileG82752ClockTypeTTsc.ValueBool() && data.ClockProfileG82752ClockTypeTTsc.IsNull() {
 		deletePath := state.getXPath() + "/clock/profile/g-8275-2/clock-type/t-tsc"
@@ -4695,12 +4503,6 @@ func (data *PTP) addDeletedItemsXML(ctx context.Context, state PTP, body string)
 
 func (data *PTP) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
-	if !data.MonitorSender.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profiles/profile/monitor-sender")
-	}
-	if !data.MonitorReceiver.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profiles/profile/monitor-receiver")
-	}
 	if !data.ClockProfileG82752ClockTypeTTsc.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/clock/profile/g-8275-2/clock-type/t-tsc")
 	}

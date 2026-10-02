@@ -521,6 +521,14 @@ func (d *PTPProfileDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
+			"monitor_sender": schema.BoolAttribute{
+				MarkdownDescription: "Enable monitor-sender packet exchange" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"monitor_receiver": schema.BoolAttribute{
+				MarkdownDescription: "Enable monitor-receiver packet exchange" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }

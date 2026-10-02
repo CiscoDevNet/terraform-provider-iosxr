@@ -110,6 +110,8 @@ type PTPProfile struct {
 	InteropIngressConversionOffsetScaledLogVariance      types.Int64                                            `tfsdk:"interop_ingress_conversion_offset_scaled_log_variance"`
 	InteropIngressConversionClockClassDefault            types.Int64                                            `tfsdk:"interop_ingress_conversion_clock_class_default"`
 	InteropIngressConversionClockClassMappings           []PTPProfileInteropIngressConversionClockClassMappings `tfsdk:"interop_ingress_conversion_clock_class_mappings"`
+	MonitorSender                                        types.Bool                                             `tfsdk:"monitor_sender"`
+	MonitorReceiver                                      types.Bool                                             `tfsdk:"monitor_receiver"`
 }
 
 type PTPProfileData struct {
@@ -180,6 +182,8 @@ type PTPProfileData struct {
 	InteropIngressConversionOffsetScaledLogVariance      types.Int64                                            `tfsdk:"interop_ingress_conversion_offset_scaled_log_variance"`
 	InteropIngressConversionClockClassDefault            types.Int64                                            `tfsdk:"interop_ingress_conversion_clock_class_default"`
 	InteropIngressConversionClockClassMappings           []PTPProfileInteropIngressConversionClockClassMappings `tfsdk:"interop_ingress_conversion_clock_class_mappings"`
+	MonitorSender                                        types.Bool                                             `tfsdk:"monitor_sender"`
+	MonitorReceiver                                      types.Bool                                             `tfsdk:"monitor_receiver"`
 }
 type PTPProfileSlaveIpv4s struct {
 	Address       types.String `tfsdk:"address"`
@@ -484,6 +488,20 @@ func (data PTPProfile) toBody(ctx context.Context, providerVersion string) strin
 	if !data.InteropIngressConversionClockClassDefault.IsNull() && !data.InteropIngressConversionClockClassDefault.IsUnknown() {
 		body, _ = sjson.Set(body, "interop.ingress-conversion.clock-class.default", strconv.FormatInt(data.InteropIngressConversionClockClassDefault.ValueInt64(), 10))
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.MonitorSender.IsNull() && !data.MonitorSender.IsUnknown() {
+			if data.MonitorSender.ValueBool() {
+				body, _ = sjson.Set(body, "monitor-sender", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.IsUnknown() {
+			if data.MonitorReceiver.ValueBool() {
+				body, _ = sjson.Set(body, "monitor-receiver", map[string]string{})
+			}
+		}
+	}
 	if len(data.SlaveIpv4s) > 0 {
 		body, _ = sjson.Set(body, "subordinate.ipv4s.ipv4-non-negotiated", []interface{}{})
 		for index, item := range data.SlaveIpv4s {
@@ -697,6 +715,16 @@ func (data PTPProfile) toBody(ctx context.Context, providerVersion string) strin
 func (data PTPProfile) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "monitor_sender",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_receiver",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -1675,6 +1703,26 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte, version 
 			data.InteropIngressConversionClockClassMappings[i].ClockClassToMapTo = types.Int64Null()
 		}
 	}
+	if value := gjson.GetBytes(res, "monitor-sender"); helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() {
+		if value.Exists() {
+			data.MonitorSender = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MonitorSender = types.BoolValue(false)
+		}
+	} else if data.MonitorSender.IsNull() {
+		data.MonitorSender = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "monitor-receiver"); helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() {
+		if value.Exists() {
+			data.MonitorReceiver = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MonitorReceiver = types.BoolValue(false)
+		}
+	} else if data.MonitorReceiver.IsNull() {
+		data.MonitorReceiver = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -2163,6 +2211,26 @@ func (data *PTPProfile) fromBody(ctx context.Context, res []byte, version string
 			return true
 		})
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "monitor-sender"); value.Exists() {
+			data.MonitorSender = types.BoolValue(true)
+		} else if !data.MonitorSender.IsNull() {
+			// Only set to false if it was previously set in state
+			data.MonitorSender = types.BoolValue(false)
+		}
+	} else {
+		data.MonitorSender = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "monitor-receiver"); value.Exists() {
+			data.MonitorReceiver = types.BoolValue(true)
+		} else if !data.MonitorReceiver.IsNull() {
+			// Only set to false if it was previously set in state
+			data.MonitorReceiver = types.BoolValue(false)
+		}
+	} else {
+		data.MonitorReceiver = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -2608,6 +2676,24 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res []byte, version st
 			return true
 		})
 	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "monitor-sender"); value.Exists() {
+			data.MonitorSender = types.BoolValue(true)
+		} else {
+			data.MonitorSender = types.BoolValue(false)
+		}
+	} else {
+		data.MonitorSender = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "monitor-receiver"); value.Exists() {
+			data.MonitorReceiver = types.BoolValue(true)
+		} else {
+			data.MonitorReceiver = types.BoolValue(false)
+		}
+	} else {
+		data.MonitorReceiver = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -2616,6 +2702,12 @@ func (data *PTPProfileData) fromBody(ctx context.Context, res []byte, version st
 
 func (data *PTPProfile) getDeletedItems(ctx context.Context, state PTPProfile, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.MonitorReceiver.IsNull() && data.MonitorReceiver.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "monitor-receiver"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSender.IsNull() && data.MonitorSender.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "monitor-sender"))
+	}
 	for i := range state.InteropIngressConversionClockClassMappings {
 		keys := [...]string{"clock-class-to-map-from"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
@@ -3129,6 +3221,16 @@ func (data *PTPProfile) getDeletedItems(ctx context.Context, state PTPProfile, v
 
 func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfile, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.ValueBool() {
+		if state != nil && !state.MonitorReceiver.IsNull() && state.MonitorReceiver.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "monitor-receiver"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() && !data.MonitorSender.ValueBool() {
+		if state != nil && !state.MonitorSender.IsNull() && state.MonitorSender.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "monitor-sender"))
+		}
+	}
 	for i := range data.InteropIngressConversionClockClassMappings {
 		keys := [...]string{"clock-class-to-map-from"}
 		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
@@ -3416,6 +3518,12 @@ func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfi
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *PTPProfile) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "monitor-receiver"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "monitor-sender"))
+	}
 	for i := range data.InteropIngressConversionClockClassMappings {
 		keys := [...]string{"clock-class-to-map-from"}
 		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
@@ -4154,6 +4262,16 @@ func (data PTPProfile) toBodyXML(ctx context.Context, stateArg ...*PTPProfile) s
 			if !item.ClockClassToMapTo.IsNull() && !item.ClockClassToMapTo.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/clock-class-to-map-to", strconv.FormatInt(item.ClockClassToMapTo.ValueInt64(), 10))
 			}
+		}
+	}
+	if !data.MonitorSender.IsNull() && !data.MonitorSender.IsUnknown() {
+		if data.MonitorSender.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-sender", "")
+		}
+	}
+	if !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.IsUnknown() {
+		if data.MonitorReceiver.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-receiver", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -5141,6 +5259,28 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.InteropIngressConversionClockClassMappings[i].ClockClassToMapTo = types.Int64Null()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-sender"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MonitorSender.IsNull() {
+			data.MonitorSender = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MonitorSender.IsNull() {
+			data.MonitorSender = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-receiver"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MonitorReceiver.IsNull() {
+			data.MonitorReceiver = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MonitorReceiver.IsNull() {
+			data.MonitorReceiver = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -5585,6 +5725,16 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.InteropIngressConversionClockClassMappings = append(data.InteropIngressConversionClockClassMappings, item)
 			return true
 		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-sender"); value.Exists() {
+		data.MonitorSender = types.BoolValue(true)
+	} else {
+		data.MonitorSender = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-receiver"); value.Exists() {
+		data.MonitorReceiver = types.BoolValue(true)
+	} else {
+		data.MonitorReceiver = types.BoolValue(false)
 	}
 }
 
@@ -6031,6 +6181,16 @@ func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-sender"); value.Exists() {
+		data.MonitorSender = types.BoolValue(true)
+	} else {
+		data.MonitorSender = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-receiver"); value.Exists() {
+		data.MonitorReceiver = types.BoolValue(true)
+	} else {
+		data.MonitorReceiver = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -6042,6 +6202,38 @@ func (data *PTPProfile) addDeletedItemsXML(ctx context.Context, state PTPProfile
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MonitorReceiver.IsNull() && state.MonitorReceiver.ValueBool() && data.MonitorReceiver.IsNull() {
+		deletePath := state.getXPath() + "/monitor-receiver"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MonitorSender.IsNull() && state.MonitorSender.ValueBool() && data.MonitorSender.IsNull() {
+		deletePath := state.getXPath() + "/monitor-sender"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	for i := range state.InteropIngressConversionClockClassMappings {
 		stateKeys := [...]string{"clock-class-to-map-from"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
@@ -7300,6 +7492,12 @@ func (data *PTPProfile) addDeletedItemsXML(ctx context.Context, state PTPProfile
 
 func (data *PTPProfile) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.MonitorReceiver.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-receiver")
+	}
+	if !data.MonitorSender.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-sender")
+	}
 	for i := range data.InteropIngressConversionClockClassMappings {
 		keys := [...]string{"clock-class-to-map-from"}
 		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}

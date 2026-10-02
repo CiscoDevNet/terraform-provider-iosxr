@@ -411,14 +411,6 @@ func (r *PTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Configure telecom subordinate clock").String,
 				Optional:            true,
 			},
-			"monitor_receiver": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable monitor-receiver packet exchange").String + "\n  - Supported from version: `25.4`",
-				Optional:            true,
-			},
-			"monitor_sender": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable monitor-sender packet exchange").String + "\n  - Supported from version: `25.4`",
-				Optional:            true,
-			},
 		},
 	}
 }
@@ -448,10 +440,6 @@ func (r *PTPResource) Create(ctx context.Context, req resource.CreateRequest, re
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
-		return
-	}
-	// Validate version compatibility using device-specific version
-	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -670,10 +658,6 @@ func (r *PTPResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-	// Validate version compatibility using device-specific version
-	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
-		return
-	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -767,14 +751,6 @@ func (r *PTPResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
-	}
-
-	// Validate version compatibility (only check if resource/fields are supported)
-	if len(state.GetVersionConstraints()) > 0 {
-		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
-		if resp.Diagnostics.HasError() {
-			return
-		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

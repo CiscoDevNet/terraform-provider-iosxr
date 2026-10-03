@@ -102,7 +102,6 @@ type SegmentRoutingTE struct {
 	Srv6LocatorBindingSidType                       types.String                                                      `tfsdk:"srv6_locator_binding_sid_type"`
 	Srv6LocatorBehavior                             types.String                                                      `tfsdk:"srv6_locator_behavior"`
 	Srv6MaximumSidDepth                             types.Int64                                                       `tfsdk:"srv6_maximum_sid_depth"`
-	PccProfile                                      []SegmentRoutingTEPccProfile                                      `tfsdk:"pcc_profile"`
 }
 
 type SegmentRoutingTEData struct {
@@ -165,7 +164,6 @@ type SegmentRoutingTEData struct {
 	Srv6LocatorBindingSidType                       types.String                                                      `tfsdk:"srv6_locator_binding_sid_type"`
 	Srv6LocatorBehavior                             types.String                                                      `tfsdk:"srv6_locator_behavior"`
 	Srv6MaximumSidDepth                             types.Int64                                                       `tfsdk:"srv6_maximum_sid_depth"`
-	PccProfile                                      []SegmentRoutingTEPccProfile                                      `tfsdk:"pcc_profile"`
 }
 type SegmentRoutingTEEffectiveMetricAdminDistanceMetricTypes struct {
 	MetricType    types.String `tfsdk:"metric_type"`
@@ -237,17 +235,6 @@ type SegmentRoutingTECandidatePaths struct {
 	SourceAddressSelection types.Bool   `tfsdk:"source_address_selection"`
 	SourceAddressType      types.String `tfsdk:"source_address_type"`
 	SourceAddress          types.String `tfsdk:"source_address"`
-}
-type SegmentRoutingTEPccProfile struct {
-	ProfileId                    types.Int64  `tfsdk:"profile_id"`
-	SteeringInvalidationDrop     types.Bool   `tfsdk:"steering_invalidation_drop"`
-	AutoRouteIncludeAllIpv4      types.Bool   `tfsdk:"auto_route_include_all_ipv4"`
-	AutoRouteIncludeAllIpv6      types.Bool   `tfsdk:"auto_route_include_all_ipv6"`
-	AutoRouteForceSrInclude      types.Bool   `tfsdk:"auto_route_force_sr_include"`
-	AutoRouteForwardClass        types.Int64  `tfsdk:"auto_route_forward_class"`
-	AutoRouteMetricType          types.String `tfsdk:"auto_route_metric_type"`
-	AutoRouteMetricRelativeValue types.Int64  `tfsdk:"auto_route_metric_relative_value"`
-	AutoRouteMetricConstantValue types.Int64  `tfsdk:"auto_route_metric_constant_value"`
 }
 type SegmentRoutingTESegmentListsSrv6ExplicitSegmentsSrv6Segments struct {
 	Index   types.Int64  `tfsdk:"index"`
@@ -643,43 +630,43 @@ func (data SegmentRoutingTE) toBody(ctx context.Context, providerVersion string)
 			}
 		}
 	}
-	if (providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.PccProfiles) > 0 {
-		body, _ = sjson.Set(body, "pcc.profiles.profile", []interface{}{})
+	if len(data.PccProfiles) > 0 {
+		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile"), []interface{}{})
 		for index, item := range data.PccProfiles {
 			if !item.ProfileId.IsNull() && !item.ProfileId.IsUnknown() {
-				body, _ = sjson.Set(body, "pcc.profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-id", strconv.FormatInt(item.ProfileId.ValueInt64(), 10))
+				body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")+"."+strconv.Itoa(index)+"."+"profile-id", strconv.FormatInt(item.ProfileId.ValueInt64(), 10))
 			}
 			if !item.SteeringInvalidationDrop.IsNull() && !item.SteeringInvalidationDrop.IsUnknown() {
 				if item.SteeringInvalidationDrop.ValueBool() {
-					body, _ = sjson.Set(body, "pcc.profiles.profile"+"."+strconv.Itoa(index)+"."+"steering.invalidation-drop", []interface{}{nil})
+					body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")+"."+strconv.Itoa(index)+"."+"steering.invalidation-drop", []interface{}{nil})
 				}
 			}
 			if !item.AutoRouteIncludeAllIpv4.IsNull() && !item.AutoRouteIncludeAllIpv4.IsUnknown() {
 				if item.AutoRouteIncludeAllIpv4.ValueBool() {
-					body, _ = sjson.Set(body, "pcc.profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.include-all", []interface{}{nil})
+					body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")+"."+strconv.Itoa(index)+"."+"profile-auto-route.include-all", []interface{}{nil})
 				}
 			}
 			if !item.AutoRouteIncludeAllIpv6.IsNull() && !item.AutoRouteIncludeAllIpv6.IsUnknown() {
 				if item.AutoRouteIncludeAllIpv6.ValueBool() {
-					body, _ = sjson.Set(body, "pcc.profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.include-ipv6-all", []interface{}{nil})
+					body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")+"."+strconv.Itoa(index)+"."+"profile-auto-route.include-ipv6-all", []interface{}{nil})
 				}
 			}
 			if !item.AutoRouteForceSrInclude.IsNull() && !item.AutoRouteForceSrInclude.IsUnknown() {
 				if item.AutoRouteForceSrInclude.ValueBool() {
-					body, _ = sjson.Set(body, "pcc.profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.force-sr-include", []interface{}{nil})
+					body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")+"."+strconv.Itoa(index)+"."+"profile-auto-route.force-sr-include", []interface{}{nil})
 				}
 			}
 			if !item.AutoRouteForwardClass.IsNull() && !item.AutoRouteForwardClass.IsUnknown() {
-				body, _ = sjson.Set(body, "pcc.profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.forward-class", strconv.FormatInt(item.AutoRouteForwardClass.ValueInt64(), 10))
+				body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")+"."+strconv.Itoa(index)+"."+"profile-auto-route.forward-class", strconv.FormatInt(item.AutoRouteForwardClass.ValueInt64(), 10))
 			}
 			if !item.AutoRouteMetricType.IsNull() && !item.AutoRouteMetricType.IsUnknown() {
-				body, _ = sjson.Set(body, "pcc.profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.auto-route-metric.autoroute-metric-type", item.AutoRouteMetricType.ValueString())
+				body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")+"."+strconv.Itoa(index)+"."+"profile-auto-route.auto-route-metric.autoroute-metric-type", item.AutoRouteMetricType.ValueString())
 			}
 			if !item.AutoRouteMetricRelativeValue.IsNull() && !item.AutoRouteMetricRelativeValue.IsUnknown() {
-				body, _ = sjson.Set(body, "pcc.profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.auto-route-metric.metric-relative-value", strconv.FormatInt(item.AutoRouteMetricRelativeValue.ValueInt64(), 10))
+				body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")+"."+strconv.Itoa(index)+"."+"profile-auto-route.auto-route-metric.metric-relative-value", strconv.FormatInt(item.AutoRouteMetricRelativeValue.ValueInt64(), 10))
 			}
 			if !item.AutoRouteMetricConstantValue.IsNull() && !item.AutoRouteMetricConstantValue.IsUnknown() {
-				body, _ = sjson.Set(body, "pcc.profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.auto-route-metric.metric-constant-value", strconv.FormatInt(item.AutoRouteMetricConstantValue.ValueInt64(), 10))
+				body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")+"."+strconv.Itoa(index)+"."+"profile-auto-route.auto-route-metric.metric-constant-value", strconv.FormatInt(item.AutoRouteMetricConstantValue.ValueInt64(), 10))
 			}
 		}
 	}
@@ -735,64 +722,6 @@ func (data SegmentRoutingTE) toBody(ctx context.Context, providerVersion string)
 			}
 		}
 	}
-	if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.PccProfile) > 0 {
-		body, _ = sjson.Set(body, "profiles.profile", []interface{}{})
-		for index, item := range data.PccProfile {
-			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.ProfileId.IsNull() && !item.ProfileId.IsUnknown() {
-					body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-id", strconv.FormatInt(item.ProfileId.ValueInt64(), 10))
-				}
-			}
-			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.SteeringInvalidationDrop.IsNull() && !item.SteeringInvalidationDrop.IsUnknown() {
-					if item.SteeringInvalidationDrop.ValueBool() {
-						body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"steering.invalidation-drop", []interface{}{nil})
-					}
-				}
-			}
-			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.AutoRouteIncludeAllIpv4.IsNull() && !item.AutoRouteIncludeAllIpv4.IsUnknown() {
-					if item.AutoRouteIncludeAllIpv4.ValueBool() {
-						body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.include-all", []interface{}{nil})
-					}
-				}
-			}
-			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.AutoRouteIncludeAllIpv6.IsNull() && !item.AutoRouteIncludeAllIpv6.IsUnknown() {
-					if item.AutoRouteIncludeAllIpv6.ValueBool() {
-						body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.include-ipv6-all", []interface{}{nil})
-					}
-				}
-			}
-			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.AutoRouteForceSrInclude.IsNull() && !item.AutoRouteForceSrInclude.IsUnknown() {
-					if item.AutoRouteForceSrInclude.ValueBool() {
-						body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.force-sr-include", []interface{}{nil})
-					}
-				}
-			}
-			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.AutoRouteForwardClass.IsNull() && !item.AutoRouteForwardClass.IsUnknown() {
-					body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.forward-class", strconv.FormatInt(item.AutoRouteForwardClass.ValueInt64(), 10))
-				}
-			}
-			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.AutoRouteMetricType.IsNull() && !item.AutoRouteMetricType.IsUnknown() {
-					body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.auto-route-metric.autoroute-metric-type", item.AutoRouteMetricType.ValueString())
-				}
-			}
-			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.AutoRouteMetricRelativeValue.IsNull() && !item.AutoRouteMetricRelativeValue.IsUnknown() {
-					body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.auto-route-metric.metric-relative-value", strconv.FormatInt(item.AutoRouteMetricRelativeValue.ValueInt64(), 10))
-				}
-			}
-			if helpers.VersionAtLeast(providerVersion, "25.4") {
-				if !item.AutoRouteMetricConstantValue.IsNull() && !item.AutoRouteMetricConstantValue.IsUnknown() {
-					body, _ = sjson.Set(body, "profiles.profile"+"."+strconv.Itoa(index)+"."+"profile-auto-route.auto-route-metric.metric-constant-value", strconv.FormatInt(item.AutoRouteMetricConstantValue.ValueInt64(), 10))
-				}
-			}
-		}
-	}
 	return body
 }
 
@@ -804,53 +733,6 @@ func (data SegmentRoutingTE) toBody(ctx context.Context, providerVersion string)
 func (data SegmentRoutingTE) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
-	constraints = append(constraints, []helpers.FieldVersionConstraint{
-		{
-			FieldPath: "pcc_profiles",
-
-			RemovedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile.profile_id",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile.steering_invalidation_drop",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile.auto_route_include_all_ipv4",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile.auto_route_include_all_ipv6",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile.auto_route_force_sr_include",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile.auto_route_forward_class",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile.auto_route_metric_type",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile.auto_route_metric_relative_value",
-			AddedInVersion: "25.4",
-		},
-		{
-			FieldPath:      "pcc_profile.auto_route_metric_constant_value",
-			AddedInVersion: "25.4",
-		},
-	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -1593,7 +1475,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte, ve
 		keyValues := [...]string{strconv.FormatInt(data.PccProfiles[i].ProfileId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "pcc.profiles.profile").ForEach(
+		gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")).ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1932,107 +1814,6 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte, ve
 		data.Srv6MaximumSidDepth = types.Int64Value(value.Int())
 	} else if data.Srv6MaximumSidDepth.IsNull() {
 		data.Srv6MaximumSidDepth = types.Int64Null()
-	}
-	for i := range data.PccProfile {
-		var keys []string
-		var keyValues []string
-		if helpers.VersionAtLeast(version, "25.4") {
-			keys = append(keys, "profile-id")
-			keyValues = append(keyValues, strconv.FormatInt(data.PccProfile[i].ProfileId.ValueInt64(), 10))
-		}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "profiles.profile").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("profile-id"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.PccProfile[i].ProfileId.IsNull() {
-			data.PccProfile[i].ProfileId = types.Int64Value(value.Int())
-		} else {
-			data.PccProfile[i].ProfileId = types.Int64Null()
-		}
-		if value := r.Get("steering.invalidation-drop"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.PccProfile[i].SteeringInvalidationDrop.IsNull() {
-				data.PccProfile[i].SteeringInvalidationDrop = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.PccProfile[i].SteeringInvalidationDrop.IsNull() {
-				data.PccProfile[i].SteeringInvalidationDrop = types.BoolNull()
-			}
-		}
-		if value := r.Get("profile-auto-route.include-all"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.PccProfile[i].AutoRouteIncludeAllIpv4.IsNull() {
-				data.PccProfile[i].AutoRouteIncludeAllIpv4 = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.PccProfile[i].AutoRouteIncludeAllIpv4.IsNull() {
-				data.PccProfile[i].AutoRouteIncludeAllIpv4 = types.BoolNull()
-			}
-		}
-		if value := r.Get("profile-auto-route.include-ipv6-all"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.PccProfile[i].AutoRouteIncludeAllIpv6.IsNull() {
-				data.PccProfile[i].AutoRouteIncludeAllIpv6 = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.PccProfile[i].AutoRouteIncludeAllIpv6.IsNull() {
-				data.PccProfile[i].AutoRouteIncludeAllIpv6 = types.BoolNull()
-			}
-		}
-		if value := r.Get("profile-auto-route.force-sr-include"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.PccProfile[i].AutoRouteForceSrInclude.IsNull() {
-				data.PccProfile[i].AutoRouteForceSrInclude = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.PccProfile[i].AutoRouteForceSrInclude.IsNull() {
-				data.PccProfile[i].AutoRouteForceSrInclude = types.BoolNull()
-			}
-		}
-		if value := r.Get("profile-auto-route.forward-class"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.PccProfile[i].AutoRouteForwardClass.IsNull() {
-			data.PccProfile[i].AutoRouteForwardClass = types.Int64Value(value.Int())
-		} else {
-			data.PccProfile[i].AutoRouteForwardClass = types.Int64Null()
-		}
-		if value := r.Get("profile-auto-route.auto-route-metric.autoroute-metric-type"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PccProfile[i].AutoRouteMetricType.IsNull() {
-			data.PccProfile[i].AutoRouteMetricType = types.StringValue(value.String())
-		} else {
-			data.PccProfile[i].AutoRouteMetricType = types.StringNull()
-		}
-		if value := r.Get("profile-auto-route.auto-route-metric.metric-relative-value"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.PccProfile[i].AutoRouteMetricRelativeValue.IsNull() {
-			data.PccProfile[i].AutoRouteMetricRelativeValue = types.Int64Value(value.Int())
-		} else {
-			data.PccProfile[i].AutoRouteMetricRelativeValue = types.Int64Null()
-		}
-		if value := r.Get("profile-auto-route.auto-route-metric.metric-constant-value"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.PccProfile[i].AutoRouteMetricConstantValue.IsNull() {
-			data.PccProfile[i].AutoRouteMetricConstantValue = types.Int64Value(value.Int())
-		} else {
-			data.PccProfile[i].AutoRouteMetricConstantValue = types.Int64Null()
-		}
 	}
 }
 
@@ -2377,7 +2158,7 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res []byte, version 
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "pcc.profiles.profile"); value.Exists() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")); value.Exists() {
 		data.PccProfiles = make([]SegmentRoutingTEPccProfiles, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingTEPccProfiles{}
@@ -2545,89 +2326,6 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res []byte, version 
 	}
 	if value := gjson.GetBytes(res, "srv6.maximum-sid-depth"); value.Exists() {
 		data.Srv6MaximumSidDepth = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "profiles.profile"); value.Exists() {
-		data.PccProfile = make([]SegmentRoutingTEPccProfile, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := SegmentRoutingTEPccProfile{}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-id"); cValue.Exists() {
-					item.ProfileId = types.Int64Value(cValue.Int())
-				}
-			} else {
-				item.ProfileId = types.Int64Null()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("steering.invalidation-drop"); cValue.Exists() {
-					item.SteeringInvalidationDrop = types.BoolValue(true)
-				} else if !item.SteeringInvalidationDrop.IsNull() {
-					// Only set to false if it was previously set
-					item.SteeringInvalidationDrop = types.BoolValue(false)
-				}
-			} else {
-				item.SteeringInvalidationDrop = types.BoolNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.include-all"); cValue.Exists() {
-					item.AutoRouteIncludeAllIpv4 = types.BoolValue(true)
-				} else if !item.AutoRouteIncludeAllIpv4.IsNull() {
-					// Only set to false if it was previously set
-					item.AutoRouteIncludeAllIpv4 = types.BoolValue(false)
-				}
-			} else {
-				item.AutoRouteIncludeAllIpv4 = types.BoolNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.include-ipv6-all"); cValue.Exists() {
-					item.AutoRouteIncludeAllIpv6 = types.BoolValue(true)
-				} else if !item.AutoRouteIncludeAllIpv6.IsNull() {
-					// Only set to false if it was previously set
-					item.AutoRouteIncludeAllIpv6 = types.BoolValue(false)
-				}
-			} else {
-				item.AutoRouteIncludeAllIpv6 = types.BoolNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.force-sr-include"); cValue.Exists() {
-					item.AutoRouteForceSrInclude = types.BoolValue(true)
-				} else if !item.AutoRouteForceSrInclude.IsNull() {
-					// Only set to false if it was previously set
-					item.AutoRouteForceSrInclude = types.BoolValue(false)
-				}
-			} else {
-				item.AutoRouteForceSrInclude = types.BoolNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.forward-class"); cValue.Exists() {
-					item.AutoRouteForwardClass = types.Int64Value(cValue.Int())
-				}
-			} else {
-				item.AutoRouteForwardClass = types.Int64Null()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.auto-route-metric.autoroute-metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
-					item.AutoRouteMetricType = types.StringValue(cValue.String())
-				}
-			} else {
-				item.AutoRouteMetricType = types.StringNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.auto-route-metric.metric-relative-value"); cValue.Exists() {
-					item.AutoRouteMetricRelativeValue = types.Int64Value(cValue.Int())
-				}
-			} else {
-				item.AutoRouteMetricRelativeValue = types.Int64Null()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.auto-route-metric.metric-constant-value"); cValue.Exists() {
-					item.AutoRouteMetricConstantValue = types.Int64Value(cValue.Int())
-				}
-			} else {
-				item.AutoRouteMetricConstantValue = types.Int64Null()
-			}
-			data.PccProfile = append(data.PccProfile, item)
-			return true
-		})
 	}
 }
 
@@ -2957,7 +2655,7 @@ func (data *SegmentRoutingTEData) fromBody(ctx context.Context, res []byte, vers
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "pcc.profiles.profile"); value.Exists() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "pcc.profiles.profile", "25.4": "profiles.profile"}, "pcc.profiles.profile")); value.Exists() {
 		data.PccProfiles = make([]SegmentRoutingTEPccProfiles, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingTEPccProfiles{}
@@ -3117,85 +2815,6 @@ func (data *SegmentRoutingTEData) fromBody(ctx context.Context, res []byte, vers
 	if value := gjson.GetBytes(res, "srv6.maximum-sid-depth"); value.Exists() {
 		data.Srv6MaximumSidDepth = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "profiles.profile"); value.Exists() {
-		data.PccProfile = make([]SegmentRoutingTEPccProfile, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := SegmentRoutingTEPccProfile{}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-id"); cValue.Exists() {
-					item.ProfileId = types.Int64Value(cValue.Int())
-				}
-			} else {
-				item.ProfileId = types.Int64Null()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("steering.invalidation-drop"); cValue.Exists() {
-					item.SteeringInvalidationDrop = types.BoolValue(true)
-				} else {
-					item.SteeringInvalidationDrop = types.BoolValue(false)
-				}
-			} else {
-				item.SteeringInvalidationDrop = types.BoolNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.include-all"); cValue.Exists() {
-					item.AutoRouteIncludeAllIpv4 = types.BoolValue(true)
-				} else {
-					item.AutoRouteIncludeAllIpv4 = types.BoolValue(false)
-				}
-			} else {
-				item.AutoRouteIncludeAllIpv4 = types.BoolNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.include-ipv6-all"); cValue.Exists() {
-					item.AutoRouteIncludeAllIpv6 = types.BoolValue(true)
-				} else {
-					item.AutoRouteIncludeAllIpv6 = types.BoolValue(false)
-				}
-			} else {
-				item.AutoRouteIncludeAllIpv6 = types.BoolNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.force-sr-include"); cValue.Exists() {
-					item.AutoRouteForceSrInclude = types.BoolValue(true)
-				} else {
-					item.AutoRouteForceSrInclude = types.BoolValue(false)
-				}
-			} else {
-				item.AutoRouteForceSrInclude = types.BoolNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.forward-class"); cValue.Exists() {
-					item.AutoRouteForwardClass = types.Int64Value(cValue.Int())
-				}
-			} else {
-				item.AutoRouteForwardClass = types.Int64Null()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.auto-route-metric.autoroute-metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
-					item.AutoRouteMetricType = types.StringValue(cValue.String())
-				}
-			} else {
-				item.AutoRouteMetricType = types.StringNull()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.auto-route-metric.metric-relative-value"); cValue.Exists() {
-					item.AutoRouteMetricRelativeValue = types.Int64Value(cValue.Int())
-				}
-			} else {
-				item.AutoRouteMetricRelativeValue = types.Int64Null()
-			}
-			if helpers.VersionAtLeast(version, "25.4") {
-				if cValue := v.Get("profile-auto-route.auto-route-metric.metric-constant-value"); cValue.Exists() {
-					item.AutoRouteMetricConstantValue = types.Int64Value(cValue.Int())
-				}
-			} else {
-				item.AutoRouteMetricConstantValue = types.Int64Null()
-			}
-			data.PccProfile = append(data.PccProfile, item)
-			return true
-		})
-	}
 }
 
 // End of section. //template:end fromBodyData
@@ -3204,66 +2823,6 @@ func (data *SegmentRoutingTEData) fromBody(ctx context.Context, res []byte, vers
 
 func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state SegmentRoutingTE, version string) []string {
 	deletedItems := make([]string, 0)
-	if helpers.VersionAtLeast(version, "25.4") {
-		for i := range state.PccProfile {
-			var keys []string
-			var stateKeyValues []string
-			if helpers.VersionAtLeast(version, "25.4") {
-				keys = append(keys, "profile-id")
-				stateKeyValues = append(stateKeyValues, strconv.FormatInt(state.PccProfile[i].ProfileId.ValueInt64(), 10))
-			}
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
-
-			emptyKeys := true
-			if !reflect.ValueOf(state.PccProfile[i].ProfileId.ValueInt64()).IsZero() {
-				emptyKeys = false
-			}
-			if emptyKeys {
-				continue
-			}
-
-			found := false
-			for j := range data.PccProfile {
-				found = true
-				if state.PccProfile[i].ProfileId.ValueInt64() != data.PccProfile[j].ProfileId.ValueInt64() {
-					found = false
-				}
-				if found {
-					if helpers.VersionAtLeast(version, "25.4") && !state.PccProfile[i].AutoRouteMetricConstantValue.IsNull() && data.PccProfile[j].AutoRouteMetricConstantValue.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profiles/profile", keyString), "profile-auto-route/auto-route-metric/metric-constant-value"))
-					}
-					if helpers.VersionAtLeast(version, "25.4") && !state.PccProfile[i].AutoRouteMetricRelativeValue.IsNull() && data.PccProfile[j].AutoRouteMetricRelativeValue.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profiles/profile", keyString), "profile-auto-route/auto-route-metric/metric-relative-value"))
-					}
-					if helpers.VersionAtLeast(version, "25.4") && !state.PccProfile[i].AutoRouteMetricType.IsNull() && data.PccProfile[j].AutoRouteMetricType.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profiles/profile", keyString), "profile-auto-route/auto-route-metric/autoroute-metric-type"))
-					}
-					if helpers.VersionAtLeast(version, "25.4") && !state.PccProfile[i].AutoRouteForwardClass.IsNull() && data.PccProfile[j].AutoRouteForwardClass.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profiles/profile", keyString), "profile-auto-route/forward-class"))
-					}
-					if helpers.VersionAtLeast(version, "25.4") && !state.PccProfile[i].AutoRouteForceSrInclude.IsNull() && data.PccProfile[j].AutoRouteForceSrInclude.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profiles/profile", keyString), "profile-auto-route/force-sr-include"))
-					}
-					if helpers.VersionAtLeast(version, "25.4") && !state.PccProfile[i].AutoRouteIncludeAllIpv6.IsNull() && data.PccProfile[j].AutoRouteIncludeAllIpv6.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profiles/profile", keyString), "profile-auto-route/include-ipv6-all"))
-					}
-					if helpers.VersionAtLeast(version, "25.4") && !state.PccProfile[i].AutoRouteIncludeAllIpv4.IsNull() && data.PccProfile[j].AutoRouteIncludeAllIpv4.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profiles/profile", keyString), "profile-auto-route/include-all"))
-					}
-					if helpers.VersionAtLeast(version, "25.4") && !state.PccProfile[i].SteeringInvalidationDrop.IsNull() && data.PccProfile[j].SteeringInvalidationDrop.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profiles/profile", keyString), "steering/invalidation-drop"))
-					}
-					break
-				}
-			}
-			if !found {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "profiles/profile", keyString))
-			}
-		}
-	}
 	if !state.Srv6MaximumSidDepth.IsNull() && data.Srv6MaximumSidDepth.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "srv6/maximum-sid-depth"))
 	}
@@ -3450,60 +3009,58 @@ func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state Segment
 	if !state.PccRedundancyPccCentric.IsNull() && data.PccRedundancyPccCentric.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "pcc/pcc-centric"))
 	}
-	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
-		for i := range state.PccProfiles {
-			keys := [...]string{"profile-id"}
-			stateKeyValues := [...]string{strconv.FormatInt(state.PccProfiles[i].ProfileId.ValueInt64(), 10)}
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
+	for i := range state.PccProfiles {
+		keys := [...]string{"profile-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.PccProfiles[i].ProfileId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
-			emptyKeys := true
-			if !reflect.ValueOf(state.PccProfiles[i].ProfileId.ValueInt64()).IsZero() {
-				emptyKeys = false
-			}
-			if emptyKeys {
-				continue
-			}
+		emptyKeys := true
+		if !reflect.ValueOf(state.PccProfiles[i].ProfileId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
 
-			found := false
-			for j := range data.PccProfiles {
-				found = true
-				if state.PccProfiles[i].ProfileId.ValueInt64() != data.PccProfiles[j].ProfileId.ValueInt64() {
-					found = false
-				}
-				if found {
-					if !state.PccProfiles[i].AutoRouteMetricConstantValue.IsNull() && data.PccProfiles[j].AutoRouteMetricConstantValue.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/auto-route-metric/metric-constant-value"))
-					}
-					if !state.PccProfiles[i].AutoRouteMetricRelativeValue.IsNull() && data.PccProfiles[j].AutoRouteMetricRelativeValue.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/auto-route-metric/metric-relative-value"))
-					}
-					if !state.PccProfiles[i].AutoRouteMetricType.IsNull() && data.PccProfiles[j].AutoRouteMetricType.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/auto-route-metric/autoroute-metric-type"))
-					}
-					if !state.PccProfiles[i].AutoRouteForwardClass.IsNull() && data.PccProfiles[j].AutoRouteForwardClass.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/forward-class"))
-					}
-					if !state.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && data.PccProfiles[j].AutoRouteForceSrInclude.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/force-sr-include"))
-					}
-					if !state.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && data.PccProfiles[j].AutoRouteIncludeAllIpv6.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/include-ipv6-all"))
-					}
-					if !state.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && data.PccProfiles[j].AutoRouteIncludeAllIpv4.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/include-all"))
-					}
-					if !state.PccProfiles[i].SteeringInvalidationDrop.IsNull() && data.PccProfiles[j].SteeringInvalidationDrop.IsNull() {
-						deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pcc/profiles/profile", keyString), "steering/invalidation-drop"))
-					}
-					break
-				}
+		found := false
+		for j := range data.PccProfiles {
+			found = true
+			if state.PccProfiles[i].ProfileId.ValueInt64() != data.PccProfiles[j].ProfileId.ValueInt64() {
+				found = false
 			}
-			if !found {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "pcc/profiles/profile", keyString))
+			if found {
+				if !state.PccProfiles[i].AutoRouteMetricConstantValue.IsNull() && data.PccProfiles[j].AutoRouteMetricConstantValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/auto-route-metric/metric-constant-value"))
+				}
+				if !state.PccProfiles[i].AutoRouteMetricRelativeValue.IsNull() && data.PccProfiles[j].AutoRouteMetricRelativeValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/auto-route-metric/metric-relative-value"))
+				}
+				if !state.PccProfiles[i].AutoRouteMetricType.IsNull() && data.PccProfiles[j].AutoRouteMetricType.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/auto-route-metric/autoroute-metric-type"))
+				}
+				if !state.PccProfiles[i].AutoRouteForwardClass.IsNull() && data.PccProfiles[j].AutoRouteForwardClass.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/forward-class"))
+				}
+				if !state.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && data.PccProfiles[j].AutoRouteForceSrInclude.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/force-sr-include"))
+				}
+				if !state.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && data.PccProfiles[j].AutoRouteIncludeAllIpv6.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/include-ipv6-all"))
+				}
+				if !state.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && data.PccProfiles[j].AutoRouteIncludeAllIpv4.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/include-all"))
+				}
+				if !state.PccProfiles[i].SteeringInvalidationDrop.IsNull() && data.PccProfiles[j].SteeringInvalidationDrop.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "steering/invalidation-drop"))
+				}
+				break
 			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString))
 		}
 	}
 	for i := range state.PcePeersIpv6 {
@@ -4040,40 +3597,6 @@ func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state Segment
 
 func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *SegmentRoutingTE, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if helpers.VersionAtLeast(version, "25.4") {
-		for i := range data.PccProfile {
-			var keys []string
-			var keyValues []string
-			if helpers.VersionAtLeast(version, "25.4") {
-				keys = append(keys, "profile-id")
-				keyValues = append(keyValues, strconv.FormatInt(data.PccProfile[i].ProfileId.ValueInt64(), 10))
-			}
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-			}
-			if helpers.VersionAtLeast(version, "25.4") && !data.PccProfile[i].AutoRouteForceSrInclude.IsNull() && !data.PccProfile[i].AutoRouteForceSrInclude.ValueBool() {
-				if state != nil && i < len(state.PccProfile) && !state.PccProfile[i].AutoRouteForceSrInclude.IsNull() && state.PccProfile[i].AutoRouteForceSrInclude.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "profile-auto-route/force-sr-include"))
-				}
-			}
-			if helpers.VersionAtLeast(version, "25.4") && !data.PccProfile[i].AutoRouteIncludeAllIpv6.IsNull() && !data.PccProfile[i].AutoRouteIncludeAllIpv6.ValueBool() {
-				if state != nil && i < len(state.PccProfile) && !state.PccProfile[i].AutoRouteIncludeAllIpv6.IsNull() && state.PccProfile[i].AutoRouteIncludeAllIpv6.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "profile-auto-route/include-ipv6-all"))
-				}
-			}
-			if helpers.VersionAtLeast(version, "25.4") && !data.PccProfile[i].AutoRouteIncludeAllIpv4.IsNull() && !data.PccProfile[i].AutoRouteIncludeAllIpv4.ValueBool() {
-				if state != nil && i < len(state.PccProfile) && !state.PccProfile[i].AutoRouteIncludeAllIpv4.IsNull() && state.PccProfile[i].AutoRouteIncludeAllIpv4.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "profile-auto-route/include-all"))
-				}
-			}
-			if helpers.VersionAtLeast(version, "25.4") && !data.PccProfile[i].SteeringInvalidationDrop.IsNull() && !data.PccProfile[i].SteeringInvalidationDrop.ValueBool() {
-				if state != nil && i < len(state.PccProfile) && !state.PccProfile[i].SteeringInvalidationDrop.IsNull() && state.PccProfile[i].SteeringInvalidationDrop.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "steering/invalidation-drop"))
-				}
-			}
-		}
-	}
 	for i := range data.CandidatePaths {
 		keys := [...]string{"candidate-path-type"}
 		keyValues := [...]string{data.CandidatePaths[i].PathType.ValueString()}
@@ -4131,33 +3654,31 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "pcc/pcc-centric"))
 		}
 	}
-	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
-		for i := range data.PccProfiles {
-			keys := [...]string{"profile-id"}
-			keyValues := [...]string{strconv.FormatInt(data.PccProfiles[i].ProfileId.ValueInt64(), 10)}
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+	for i := range data.PccProfiles {
+		keys := [...]string{"profile-id"}
+		keyValues := [...]string{strconv.FormatInt(data.PccProfiles[i].ProfileId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && !data.PccProfiles[i].AutoRouteForceSrInclude.ValueBool() {
+			if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && state.PccProfiles[i].AutoRouteForceSrInclude.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/force-sr-include"))
 			}
-			if !data.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && !data.PccProfiles[i].AutoRouteForceSrInclude.ValueBool() {
-				if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && state.PccProfiles[i].AutoRouteForceSrInclude.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/force-sr-include"))
-				}
+		}
+		if !data.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && !data.PccProfiles[i].AutoRouteIncludeAllIpv6.ValueBool() {
+			if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && state.PccProfiles[i].AutoRouteIncludeAllIpv6.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/include-ipv6-all"))
 			}
-			if !data.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && !data.PccProfiles[i].AutoRouteIncludeAllIpv6.ValueBool() {
-				if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && state.PccProfiles[i].AutoRouteIncludeAllIpv6.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/include-ipv6-all"))
-				}
+		}
+		if !data.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && !data.PccProfiles[i].AutoRouteIncludeAllIpv4.ValueBool() {
+			if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && state.PccProfiles[i].AutoRouteIncludeAllIpv4.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/include-all"))
 			}
-			if !data.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && !data.PccProfiles[i].AutoRouteIncludeAllIpv4.ValueBool() {
-				if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && state.PccProfiles[i].AutoRouteIncludeAllIpv4.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "pcc/profiles/profile", keyString), "profile-auto-route/include-all"))
-				}
-			}
-			if !data.PccProfiles[i].SteeringInvalidationDrop.IsNull() && !data.PccProfiles[i].SteeringInvalidationDrop.ValueBool() {
-				if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].SteeringInvalidationDrop.IsNull() && state.PccProfiles[i].SteeringInvalidationDrop.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "pcc/profiles/profile", keyString), "steering/invalidation-drop"))
-				}
+		}
+		if !data.PccProfiles[i].SteeringInvalidationDrop.IsNull() && !data.PccProfiles[i].SteeringInvalidationDrop.ValueBool() {
+			if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].SteeringInvalidationDrop.IsNull() && state.PccProfiles[i].SteeringInvalidationDrop.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "steering/invalidation-drop"))
 			}
 		}
 	}
@@ -4330,30 +3851,6 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *SegmentRoutingTE) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
-	if helpers.VersionAtLeast(version, "25.4") {
-		for i := range data.PccProfile {
-			var keys []string
-			var keyValues []string
-			if helpers.VersionAtLeast(version, "25.4") {
-				keys = append(keys, "profile-id")
-				keyValues = append(keyValues, strconv.FormatInt(data.PccProfile[i].ProfileId.ValueInt64(), 10))
-			}
-
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-			}
-
-			emptyKeys := true
-			if !reflect.ValueOf(data.PccProfile[i].ProfileId.ValueInt64()).IsZero() {
-				emptyKeys = false
-			}
-			if emptyKeys {
-				continue
-			}
-			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString))
-		}
-	}
 	if !data.Srv6MaximumSidDepth.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "srv6/maximum-sid-depth"))
 	}
@@ -4474,25 +3971,23 @@ func (data *SegmentRoutingTE) getDeletePaths(ctx context.Context, version string
 	if !data.PccRedundancyPccCentric.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "pcc/pcc-centric"))
 	}
-	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
-		for i := range data.PccProfiles {
-			keys := [...]string{"profile-id"}
-			keyValues := [...]string{strconv.FormatInt(data.PccProfiles[i].ProfileId.ValueInt64(), 10)}
+	for i := range data.PccProfiles {
+		keys := [...]string{"profile-id"}
+		keyValues := [...]string{strconv.FormatInt(data.PccProfiles[i].ProfileId.ValueInt64(), 10)}
 
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-			}
-
-			emptyKeys := true
-			if !reflect.ValueOf(data.PccProfiles[i].ProfileId.ValueInt64()).IsZero() {
-				emptyKeys = false
-			}
-			if emptyKeys {
-				continue
-			}
-			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "pcc/profiles/profile", keyString))
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PccProfiles[i].ProfileId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString))
 	}
 	for i := range data.PcePeersIpv6 {
 		keys := [...]string{"pce-address"}
@@ -5028,7 +4523,7 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context, stateArg ...*Segment
 	}
 	if len(data.PccProfiles) > 0 {
 		for _, item := range data.PccProfiles {
-			basePath := data.getXPath() + "/pcc/profiles/profile[profile-id='" + strconv.FormatInt(item.ProfileId.ValueInt64(), 10) + "']"
+			basePath := data.getXPath() + "/profiles/profile[profile-id='" + strconv.FormatInt(item.ProfileId.ValueInt64(), 10) + "']"
 			if !item.ProfileId.IsNull() && !item.ProfileId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/profile-id", strconv.FormatInt(item.ProfileId.ValueInt64(), 10))
 			}
@@ -5170,46 +4665,6 @@ func (data SegmentRoutingTE) toBodyXML(ctx context.Context, stateArg ...*Segment
 	}
 	if !data.Srv6MaximumSidDepth.IsNull() && !data.Srv6MaximumSidDepth.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6/maximum-sid-depth", strconv.FormatInt(data.Srv6MaximumSidDepth.ValueInt64(), 10))
-	}
-	if len(data.PccProfile) > 0 {
-		for _, item := range data.PccProfile {
-			basePath := data.getXPath() + "/profiles/profile[profile-id='" + strconv.FormatInt(item.ProfileId.ValueInt64(), 10) + "']"
-			if !item.ProfileId.IsNull() && !item.ProfileId.IsUnknown() {
-				body = helpers.SetFromXPath(body, basePath+"/profile-id", strconv.FormatInt(item.ProfileId.ValueInt64(), 10))
-			}
-			if !item.SteeringInvalidationDrop.IsNull() && !item.SteeringInvalidationDrop.IsUnknown() {
-				if item.SteeringInvalidationDrop.ValueBool() {
-					body = helpers.SetFromXPath(body, basePath+"/steering/invalidation-drop", "")
-				}
-			}
-			if !item.AutoRouteIncludeAllIpv4.IsNull() && !item.AutoRouteIncludeAllIpv4.IsUnknown() {
-				if item.AutoRouteIncludeAllIpv4.ValueBool() {
-					body = helpers.SetFromXPath(body, basePath+"/profile-auto-route/include-all", "")
-				}
-			}
-			if !item.AutoRouteIncludeAllIpv6.IsNull() && !item.AutoRouteIncludeAllIpv6.IsUnknown() {
-				if item.AutoRouteIncludeAllIpv6.ValueBool() {
-					body = helpers.SetFromXPath(body, basePath+"/profile-auto-route/include-ipv6-all", "")
-				}
-			}
-			if !item.AutoRouteForceSrInclude.IsNull() && !item.AutoRouteForceSrInclude.IsUnknown() {
-				if item.AutoRouteForceSrInclude.ValueBool() {
-					body = helpers.SetFromXPath(body, basePath+"/profile-auto-route/force-sr-include", "")
-				}
-			}
-			if !item.AutoRouteForwardClass.IsNull() && !item.AutoRouteForwardClass.IsUnknown() {
-				body = helpers.SetFromXPath(body, basePath+"/profile-auto-route/forward-class", strconv.FormatInt(item.AutoRouteForwardClass.ValueInt64(), 10))
-			}
-			if !item.AutoRouteMetricType.IsNull() && !item.AutoRouteMetricType.IsUnknown() {
-				body = helpers.SetFromXPath(body, basePath+"/profile-auto-route/auto-route-metric/autoroute-metric-type", item.AutoRouteMetricType.ValueString())
-			}
-			if !item.AutoRouteMetricRelativeValue.IsNull() && !item.AutoRouteMetricRelativeValue.IsUnknown() {
-				body = helpers.SetFromXPath(body, basePath+"/profile-auto-route/auto-route-metric/metric-relative-value", strconv.FormatInt(item.AutoRouteMetricRelativeValue.ValueInt64(), 10))
-			}
-			if !item.AutoRouteMetricConstantValue.IsNull() && !item.AutoRouteMetricConstantValue.IsUnknown() {
-				body = helpers.SetFromXPath(body, basePath+"/profile-auto-route/auto-route-metric/metric-constant-value", strconv.FormatInt(item.AutoRouteMetricConstantValue.ValueInt64(), 10))
-			}
-		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -5950,7 +5405,7 @@ func (data *SegmentRoutingTE) updateFromBodyXML(ctx context.Context, res xmldot.
 		keyValues := [...]string{strconv.FormatInt(data.PccProfiles[i].ProfileId.ValueInt64(), 10)}
 
 		var r xmldot.Result
-		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pcc/profiles/profile").ForEach(
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile").ForEach(
 			func(_ int, v xmldot.Result) bool {
 				found := false
 				for ik := range keys {
@@ -6294,103 +5749,6 @@ func (data *SegmentRoutingTE) updateFromBodyXML(ctx context.Context, res xmldot.
 	} else if data.Srv6MaximumSidDepth.IsNull() {
 		data.Srv6MaximumSidDepth = types.Int64Null()
 	}
-	for i := range data.PccProfile {
-		keys := [...]string{"profile-id"}
-		keyValues := [...]string{strconv.FormatInt(data.PccProfile[i].ProfileId.ValueInt64(), 10)}
-
-		var r xmldot.Result
-		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile").ForEach(
-			func(_ int, v xmldot.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := helpers.GetFromXPath(r, "profile-id"); value.Exists() && !data.PccProfile[i].ProfileId.IsNull() {
-			data.PccProfile[i].ProfileId = types.Int64Value(value.Int())
-		} else if data.PccProfile[i].ProfileId.IsNull() {
-			data.PccProfile[i].ProfileId = types.Int64Null()
-		}
-		if value := helpers.GetFromXPath(r, "steering/invalidation-drop"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.PccProfile[i].SteeringInvalidationDrop.IsNull() {
-				data.PccProfile[i].SteeringInvalidationDrop = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.PccProfile[i].SteeringInvalidationDrop.IsNull() {
-				data.PccProfile[i].SteeringInvalidationDrop = types.BoolNull()
-			}
-		}
-		if value := helpers.GetFromXPath(r, "profile-auto-route/include-all"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.PccProfile[i].AutoRouteIncludeAllIpv4.IsNull() {
-				data.PccProfile[i].AutoRouteIncludeAllIpv4 = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.PccProfile[i].AutoRouteIncludeAllIpv4.IsNull() {
-				data.PccProfile[i].AutoRouteIncludeAllIpv4 = types.BoolNull()
-			}
-		}
-		if value := helpers.GetFromXPath(r, "profile-auto-route/include-ipv6-all"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.PccProfile[i].AutoRouteIncludeAllIpv6.IsNull() {
-				data.PccProfile[i].AutoRouteIncludeAllIpv6 = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.PccProfile[i].AutoRouteIncludeAllIpv6.IsNull() {
-				data.PccProfile[i].AutoRouteIncludeAllIpv6 = types.BoolNull()
-			}
-		}
-		if value := helpers.GetFromXPath(r, "profile-auto-route/force-sr-include"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.PccProfile[i].AutoRouteForceSrInclude.IsNull() {
-				data.PccProfile[i].AutoRouteForceSrInclude = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.PccProfile[i].AutoRouteForceSrInclude.IsNull() {
-				data.PccProfile[i].AutoRouteForceSrInclude = types.BoolNull()
-			}
-		}
-		if value := helpers.GetFromXPath(r, "profile-auto-route/forward-class"); value.Exists() && !data.PccProfile[i].AutoRouteForwardClass.IsNull() {
-			data.PccProfile[i].AutoRouteForwardClass = types.Int64Value(value.Int())
-		} else if data.PccProfile[i].AutoRouteForwardClass.IsNull() {
-			data.PccProfile[i].AutoRouteForwardClass = types.Int64Null()
-		}
-		if value := helpers.GetFromXPath(r, "profile-auto-route/auto-route-metric/autoroute-metric-type"); value.Exists() && !data.PccProfile[i].AutoRouteMetricType.IsNull() {
-			data.PccProfile[i].AutoRouteMetricType = types.StringValue(value.String())
-		} else if data.PccProfile[i].AutoRouteMetricType.IsNull() {
-			data.PccProfile[i].AutoRouteMetricType = types.StringNull()
-		}
-		if value := helpers.GetFromXPath(r, "profile-auto-route/auto-route-metric/metric-relative-value"); value.Exists() && !data.PccProfile[i].AutoRouteMetricRelativeValue.IsNull() {
-			data.PccProfile[i].AutoRouteMetricRelativeValue = types.Int64Value(value.Int())
-		} else if data.PccProfile[i].AutoRouteMetricRelativeValue.IsNull() {
-			data.PccProfile[i].AutoRouteMetricRelativeValue = types.Int64Null()
-		}
-		if value := helpers.GetFromXPath(r, "profile-auto-route/auto-route-metric/metric-constant-value"); value.Exists() && !data.PccProfile[i].AutoRouteMetricConstantValue.IsNull() {
-			data.PccProfile[i].AutoRouteMetricConstantValue = types.Int64Value(value.Int())
-		} else if data.PccProfile[i].AutoRouteMetricConstantValue.IsNull() {
-			data.PccProfile[i].AutoRouteMetricConstantValue = types.Int64Null()
-		}
-	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -6725,7 +6083,7 @@ func (data *SegmentRoutingTE) fromBodyXML(ctx context.Context, res xmldot.Result
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pcc/profiles/profile"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
 		data.PccProfiles = make([]SegmentRoutingTEPccProfiles, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingTEPccProfiles{}
@@ -6884,49 +6242,6 @@ func (data *SegmentRoutingTE) fromBodyXML(ctx context.Context, res xmldot.Result
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/maximum-sid-depth"); value.Exists() {
 		data.Srv6MaximumSidDepth = types.Int64Value(value.Int())
-	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
-		data.PccProfile = make([]SegmentRoutingTEPccProfile, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := SegmentRoutingTEPccProfile{}
-			if cValue := helpers.GetFromXPath(v, "profile-id"); cValue.Exists() {
-				item.ProfileId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "steering/invalidation-drop"); cValue.Exists() {
-				item.SteeringInvalidationDrop = types.BoolValue(true)
-			} else {
-				item.SteeringInvalidationDrop = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/include-all"); cValue.Exists() {
-				item.AutoRouteIncludeAllIpv4 = types.BoolValue(true)
-			} else {
-				item.AutoRouteIncludeAllIpv4 = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/include-ipv6-all"); cValue.Exists() {
-				item.AutoRouteIncludeAllIpv6 = types.BoolValue(true)
-			} else {
-				item.AutoRouteIncludeAllIpv6 = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/force-sr-include"); cValue.Exists() {
-				item.AutoRouteForceSrInclude = types.BoolValue(true)
-			} else {
-				item.AutoRouteForceSrInclude = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/forward-class"); cValue.Exists() {
-				item.AutoRouteForwardClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/auto-route-metric/autoroute-metric-type"); cValue.Exists() {
-				item.AutoRouteMetricType = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/auto-route-metric/metric-relative-value"); cValue.Exists() {
-				item.AutoRouteMetricRelativeValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/auto-route-metric/metric-constant-value"); cValue.Exists() {
-				item.AutoRouteMetricConstantValue = types.Int64Value(cValue.Int())
-			}
-			data.PccProfile = append(data.PccProfile, item)
-			return true
-		})
 	}
 }
 
@@ -7262,7 +6577,7 @@ func (data *SegmentRoutingTEData) fromBodyXML(ctx context.Context, res xmldot.Re
 			return true
 		})
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/pcc/profiles/profile"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
 		data.PccProfiles = make([]SegmentRoutingTEPccProfiles, 0)
 		value.ForEach(func(_ int, v xmldot.Result) bool {
 			item := SegmentRoutingTEPccProfiles{}
@@ -7422,49 +6737,6 @@ func (data *SegmentRoutingTEData) fromBodyXML(ctx context.Context, res xmldot.Re
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/maximum-sid-depth"); value.Exists() {
 		data.Srv6MaximumSidDepth = types.Int64Value(value.Int())
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profiles/profile"); value.Exists() {
-		data.PccProfile = make([]SegmentRoutingTEPccProfile, 0)
-		value.ForEach(func(_ int, v xmldot.Result) bool {
-			item := SegmentRoutingTEPccProfile{}
-			if cValue := helpers.GetFromXPath(v, "profile-id"); cValue.Exists() {
-				item.ProfileId = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "steering/invalidation-drop"); cValue.Exists() {
-				item.SteeringInvalidationDrop = types.BoolValue(true)
-			} else {
-				item.SteeringInvalidationDrop = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/include-all"); cValue.Exists() {
-				item.AutoRouteIncludeAllIpv4 = types.BoolValue(true)
-			} else {
-				item.AutoRouteIncludeAllIpv4 = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/include-ipv6-all"); cValue.Exists() {
-				item.AutoRouteIncludeAllIpv6 = types.BoolValue(true)
-			} else {
-				item.AutoRouteIncludeAllIpv6 = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/force-sr-include"); cValue.Exists() {
-				item.AutoRouteForceSrInclude = types.BoolValue(true)
-			} else {
-				item.AutoRouteForceSrInclude = types.BoolValue(false)
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/forward-class"); cValue.Exists() {
-				item.AutoRouteForwardClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/auto-route-metric/autoroute-metric-type"); cValue.Exists() {
-				item.AutoRouteMetricType = types.StringValue(cValue.String())
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/auto-route-metric/metric-relative-value"); cValue.Exists() {
-				item.AutoRouteMetricRelativeValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := helpers.GetFromXPath(v, "profile-auto-route/auto-route-metric/metric-constant-value"); cValue.Exists() {
-				item.AutoRouteMetricConstantValue = types.Int64Value(cValue.Int())
-			}
-			data.PccProfile = append(data.PccProfile, item)
-			return true
-		})
-	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -7476,64 +6748,6 @@ func (data *SegmentRoutingTE) addDeletedItemsXML(ctx context.Context, state Segm
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
-	for i := range state.PccProfile {
-		stateKeys := [...]string{"profile-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.PccProfile[i].ProfileId.ValueInt64(), 10)}
-		predicates := ""
-		for i := range stateKeys {
-			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.PccProfile[i].ProfileId.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.PccProfile {
-			found = true
-			if state.PccProfile[i].ProfileId.ValueInt64() != data.PccProfile[j].ProfileId.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.PccProfile[i].AutoRouteMetricConstantValue.IsNull() && data.PccProfile[j].AutoRouteMetricConstantValue.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/auto-route-metric/metric-constant-value", predicates))
-				}
-				if !state.PccProfile[i].AutoRouteMetricRelativeValue.IsNull() && data.PccProfile[j].AutoRouteMetricRelativeValue.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/auto-route-metric/metric-relative-value", predicates))
-				}
-				if !state.PccProfile[i].AutoRouteMetricType.IsNull() && data.PccProfile[j].AutoRouteMetricType.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/auto-route-metric/autoroute-metric-type", predicates))
-				}
-				if !state.PccProfile[i].AutoRouteForwardClass.IsNull() && data.PccProfile[j].AutoRouteForwardClass.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/forward-class", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.PccProfile[i].AutoRouteForceSrInclude.IsNull() && state.PccProfile[i].AutoRouteForceSrInclude.ValueBool() && data.PccProfile[j].AutoRouteForceSrInclude.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/force-sr-include", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.PccProfile[i].AutoRouteIncludeAllIpv6.IsNull() && state.PccProfile[i].AutoRouteIncludeAllIpv6.ValueBool() && data.PccProfile[j].AutoRouteIncludeAllIpv6.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/include-ipv6-all", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.PccProfile[i].AutoRouteIncludeAllIpv4.IsNull() && state.PccProfile[i].AutoRouteIncludeAllIpv4.ValueBool() && data.PccProfile[j].AutoRouteIncludeAllIpv4.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/include-all", predicates))
-				}
-				// For boolean fields, only delete if state was true (presence container was set)
-				if !state.PccProfile[i].SteeringInvalidationDrop.IsNull() && state.PccProfile[i].SteeringInvalidationDrop.ValueBool() && data.PccProfile[j].SteeringInvalidationDrop.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/steering/invalidation-drop", predicates))
-				}
-				break
-			}
-		}
-		if !found {
-			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v", predicates))
-		}
-	}
 	if !state.Srv6MaximumSidDepth.IsNull() && data.Srv6MaximumSidDepth.IsNull() {
 		deletePath := state.getXPath() + "/srv6/maximum-sid-depth"
 		// Check if a parent path is already marked for deletion
@@ -7959,38 +7173,38 @@ func (data *SegmentRoutingTE) addDeletedItemsXML(ctx context.Context, state Segm
 			}
 			if found {
 				if !state.PccProfiles[i].AutoRouteMetricConstantValue.IsNull() && data.PccProfiles[j].AutoRouteMetricConstantValue.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pcc/profiles/profile%v/profile-auto-route/auto-route-metric/metric-constant-value", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/auto-route-metric/metric-constant-value", predicates))
 				}
 				if !state.PccProfiles[i].AutoRouteMetricRelativeValue.IsNull() && data.PccProfiles[j].AutoRouteMetricRelativeValue.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pcc/profiles/profile%v/profile-auto-route/auto-route-metric/metric-relative-value", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/auto-route-metric/metric-relative-value", predicates))
 				}
 				if !state.PccProfiles[i].AutoRouteMetricType.IsNull() && data.PccProfiles[j].AutoRouteMetricType.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pcc/profiles/profile%v/profile-auto-route/auto-route-metric/autoroute-metric-type", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/auto-route-metric/autoroute-metric-type", predicates))
 				}
 				if !state.PccProfiles[i].AutoRouteForwardClass.IsNull() && data.PccProfiles[j].AutoRouteForwardClass.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pcc/profiles/profile%v/profile-auto-route/forward-class", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/forward-class", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && state.PccProfiles[i].AutoRouteForceSrInclude.ValueBool() && data.PccProfiles[j].AutoRouteForceSrInclude.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pcc/profiles/profile%v/profile-auto-route/force-sr-include", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/force-sr-include", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && state.PccProfiles[i].AutoRouteIncludeAllIpv6.ValueBool() && data.PccProfiles[j].AutoRouteIncludeAllIpv6.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pcc/profiles/profile%v/profile-auto-route/include-ipv6-all", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/include-ipv6-all", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && state.PccProfiles[i].AutoRouteIncludeAllIpv4.ValueBool() && data.PccProfiles[j].AutoRouteIncludeAllIpv4.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pcc/profiles/profile%v/profile-auto-route/include-all", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/profile-auto-route/include-all", predicates))
 				}
 				// For boolean fields, only delete if state was true (presence container was set)
 				if !state.PccProfiles[i].SteeringInvalidationDrop.IsNull() && state.PccProfiles[i].SteeringInvalidationDrop.ValueBool() && data.PccProfiles[j].SteeringInvalidationDrop.IsNull() {
-					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pcc/profiles/profile%v/steering/invalidation-drop", predicates))
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v/steering/invalidation-drop", predicates))
 				}
 				break
 			}
 		}
 		if !found {
-			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/pcc/profiles/profile%v", predicates))
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profiles/profile%v", predicates))
 		}
 	}
 	for i := range state.PcePeersIpv6 {
@@ -8900,16 +8114,6 @@ func (data *SegmentRoutingTE) addDeletedItemsXML(ctx context.Context, state Segm
 
 func (data *SegmentRoutingTE) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
-	for i := range data.PccProfile {
-		keys := [...]string{"profile-id"}
-		keyValues := [...]string{strconv.FormatInt(data.PccProfile[i].ProfileId.ValueInt64(), 10)}
-		predicates := ""
-		for i := range keys {
-			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
-		}
-
-		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profiles/profile%v", predicates))
-	}
 	if !data.Srv6MaximumSidDepth.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/srv6/maximum-sid-depth")
 	}
@@ -9003,7 +8207,7 @@ func (data *SegmentRoutingTE) addDeletePathsXML(ctx context.Context, body string
 			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
 		}
 
-		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/pcc/profiles/profile%v", predicates))
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/profiles/profile%v", predicates))
 	}
 	for i := range data.PcePeersIpv6 {
 		keys := [...]string{"pce-address"}

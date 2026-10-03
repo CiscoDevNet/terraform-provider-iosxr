@@ -106,17 +106,15 @@ func TestAccIosxrSegmentRoutingTE(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pce_peers_ipv6.0.precedence", "120"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pce_peers_ipv6.0.tcp_ao_keychain", "KEY-2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pce_peers_ipv6.0.tcp_ao_include_tcp_options", "true"))
-	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.profile_id", "10"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.steering_invalidation_drop", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_include_all_ipv4", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_include_all_ipv6", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_force_sr_include", "true"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_forward_class", "1"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_metric_type", "relative"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_metric_relative_value", "-10"))
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_metric_constant_value", "100"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.profile_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.steering_invalidation_drop", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_include_all_ipv4", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_include_all_ipv6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_force_sr_include", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_forward_class", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_metric_type", "relative"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_metric_relative_value", "-10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profiles.0.auto_route_metric_constant_value", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_redundancy_pcc_centric", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_dead_timer", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_keepalive_timer", "60"))
@@ -141,35 +139,6 @@ func TestAccIosxrSegmentRoutingTE(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "srv6_locator_binding_sid_type", "srv6-dynamic"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "srv6_locator_behavior", "ub6-insert-reduced"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "srv6_maximum_sid_depth", "6"))
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profile.0.profile_id", "10"))
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profile.0.steering_invalidation_drop", "true"))
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profile.0.auto_route_include_all_ipv4", "true"))
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profile.0.auto_route_include_all_ipv6", "true"))
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profile.0.auto_route_force_sr_include", "true"))
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profile.0.auto_route_forward_class", "1"))
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profile.0.auto_route_metric_type", "relative"))
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profile.0.auto_route_metric_relative_value", "-10"))
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_profile.0.auto_route_metric_constant_value", "100"))
-		}
-	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -321,19 +290,17 @@ func testAccIosxrSegmentRoutingTEConfig_all() string {
 	config += `		tcp_ao_keychain = "KEY-2"` + "\n"
 	config += `		tcp_ao_include_tcp_options = true` + "\n"
 	config += `		}]` + "\n"
-	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	pcc_profiles = [{` + "\n"
-		config += `		profile_id = 10` + "\n"
-		config += `		steering_invalidation_drop = true` + "\n"
-		config += `		auto_route_include_all_ipv4 = true` + "\n"
-		config += `		auto_route_include_all_ipv6 = true` + "\n"
-		config += `		auto_route_force_sr_include = true` + "\n"
-		config += `		auto_route_forward_class = 1` + "\n"
-		config += `		auto_route_metric_type = "relative"` + "\n"
-		config += `		auto_route_metric_relative_value = -10` + "\n"
-		config += `		auto_route_metric_constant_value = 100` + "\n"
-		config += `		}]` + "\n"
-	}
+	config += `	pcc_profiles = [{` + "\n"
+	config += `		profile_id = 10` + "\n"
+	config += `		steering_invalidation_drop = true` + "\n"
+	config += `		auto_route_include_all_ipv4 = true` + "\n"
+	config += `		auto_route_include_all_ipv6 = true` + "\n"
+	config += `		auto_route_force_sr_include = true` + "\n"
+	config += `		auto_route_forward_class = 1` + "\n"
+	config += `		auto_route_metric_type = "relative"` + "\n"
+	config += `		auto_route_metric_relative_value = -10` + "\n"
+	config += `		auto_route_metric_constant_value = 100` + "\n"
+	config += `		}]` + "\n"
 	config += `	pcc_redundancy_pcc_centric = true` + "\n"
 	config += `	pcc_dead_timer = 60` + "\n"
 	config += `	pcc_keepalive_timer = 60` + "\n"
@@ -366,37 +333,6 @@ func testAccIosxrSegmentRoutingTEConfig_all() string {
 	config += `	srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
 	config += `	srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
 	config += `	srv6_maximum_sid_depth = 6` + "\n"
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	pcc_profile = [{` + "\n"
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			config += `		profile_id = 10` + "\n"
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			config += `		steering_invalidation_drop = true` + "\n"
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			config += `		auto_route_include_all_ipv4 = true` + "\n"
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			config += `		auto_route_include_all_ipv6 = true` + "\n"
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			config += `		auto_route_force_sr_include = true` + "\n"
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			config += `		auto_route_forward_class = 1` + "\n"
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			config += `		auto_route_metric_type = "relative"` + "\n"
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			config += `		auto_route_metric_relative_value = -10` + "\n"
-		}
-		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-			config += `		auto_route_metric_constant_value = 100` + "\n"
-		}
-		config += `		}]` + "\n"
-	}
 	config += `}` + "\n"
 	return config
 }

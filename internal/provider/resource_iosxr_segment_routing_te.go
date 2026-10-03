@@ -603,7 +603,7 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"pcc_profiles": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Path profile configuration").String + "\n  - **Not supported from version `25.4` and above**",
+				MarkdownDescription: helpers.NewAttributeDescription("Path profile configuration").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -852,65 +852,6 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
-				},
-			},
-			"pcc_profile": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Path profile configuration").String + "\n  - Supported from version: `25.4`",
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"profile_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Profile unique identifier").AddIntegerRangeDescription(1, 65534).String + "\n  - Supported from version: `25.4`",
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 65534),
-							},
-						},
-						"steering_invalidation_drop": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable path invalidation drop").String + "\n  - Supported from version: `25.4`",
-							Optional:            true,
-						},
-						"auto_route_include_all_ipv4": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Include all IPv4 prefixes to autoroute").String + "\n  - Supported from version: `25.4`",
-							Optional:            true,
-						},
-						"auto_route_include_all_ipv6": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Include all eligible IPv6 prefixes").String + "\n  - Supported from version: `25.4`",
-							Optional:            true,
-						},
-						"auto_route_force_sr_include": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Force SR traffic over autoroute policy").String + "\n  - Supported from version: `25.4`",
-							Optional:            true,
-						},
-						"auto_route_forward_class": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Forward class associated with the policy").AddIntegerRangeDescription(0, 7).String + "\n  - Supported from version: `25.4`",
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 7),
-							},
-						},
-						"auto_route_metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric type").AddStringEnumDescription("constant", "relative").String + "\n  - Supported from version: `25.4`",
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("constant", "relative"),
-							},
-						},
-						"auto_route_metric_relative_value": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Autoroute relative metric").AddIntegerRangeDescription(-10, 10).String + "\n  - Supported from version: `25.4`",
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(-10, 10),
-							},
-						},
-						"auto_route_metric_constant_value": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Autoroute constant metric").AddIntegerRangeDescription(1, 2147483647).String + "\n  - Supported from version: `25.4`",
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 2147483647),
-							},
-						},
-					},
 				},
 			},
 		},

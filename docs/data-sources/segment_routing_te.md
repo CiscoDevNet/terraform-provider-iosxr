@@ -10,14 +10,6 @@ description: |-
 
 This data source can read the Segment Routing TE configuration.
 
-## Version Compatibility
-
-### Removed from version
-
-| Attribute | Version |
-|-----------|:-------:|
-| `pcc_profiles` | `25.4` |
-
 ## Example Usage
 
 ```terraform
@@ -59,10 +51,7 @@ data "iosxr_segment_routing_te" "example" {
 - `pcc_initiated_orphan` (Number) Amount of time that PCE initiated policy remains delegated to a peer that has gone down
 - `pcc_initiated_state` (Number) Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up
 - `pcc_keepalive_timer` (Number) Maximum time between two consecutive PCEP messages sent by this node
-- `pcc_profile` (Attributes List) Path profile configuration
-  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--pcc_profile))
-- `pcc_profiles` (Attributes List) Path profile configuration
-  - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--pcc_profiles))
+- `pcc_profiles` (Attributes List) Path profile configuration (see [below for nested schema](#nestedatt--pcc_profiles))
 - `pcc_redundancy_pcc_centric` (Boolean) Enable PCC centric model, where PCC only allows the lowest precedence PCE to initiate policies. THIS COMMAND IS DEPRECATED
 - `pcc_redundancy_pce_centric` (Boolean) Enable PCE centric model
 - `pcc_report_all` (Boolean) Report all local SR policies to connected PCEP peers
@@ -159,31 +148,6 @@ Read-Only:
 
 - `area_id` (Number) Area identifier
 - `protocol` (String) IGP protocol
-
-
-<a id="nestedatt--pcc_profile"></a>
-### Nested Schema for `pcc_profile`
-
-Read-Only:
-
-- `auto_route_force_sr_include` (Boolean) Force SR traffic over autoroute policy
-  - Supported from version: `25.4`
-- `auto_route_forward_class` (Number) Forward class associated with the policy
-  - Supported from version: `25.4`
-- `auto_route_include_all_ipv4` (Boolean) Include all IPv4 prefixes to autoroute
-  - Supported from version: `25.4`
-- `auto_route_include_all_ipv6` (Boolean) Include all eligible IPv6 prefixes
-  - Supported from version: `25.4`
-- `auto_route_metric_constant_value` (Number) Autoroute constant metric
-  - Supported from version: `25.4`
-- `auto_route_metric_relative_value` (Number) Autoroute relative metric
-  - Supported from version: `25.4`
-- `auto_route_metric_type` (String) Metric type
-  - Supported from version: `25.4`
-- `profile_id` (Number) Profile unique identifier
-  - Supported from version: `25.4`
-- `steering_invalidation_drop` (Boolean) Enable path invalidation drop
-  - Supported from version: `25.4`
 
 
 <a id="nestedatt--pcc_profiles"></a>

@@ -436,7 +436,7 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 				},
 			},
 			"pcc_profiles": schema.ListNestedAttribute{
-				MarkdownDescription: "Path profile configuration" + "\n  - **Not supported from version `25.4` and above**",
+				MarkdownDescription: "Path profile configuration",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -610,50 +610,6 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 			"srv6_maximum_sid_depth": schema.Int64Attribute{
 				MarkdownDescription: "SRv6 Maximum SID Depth Configuration",
 				Computed:            true,
-			},
-			"pcc_profile": schema.ListNestedAttribute{
-				MarkdownDescription: "Path profile configuration" + "\n  - Supported from version: `25.4`",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"profile_id": schema.Int64Attribute{
-							MarkdownDescription: "Profile unique identifier" + "\n  - Supported from version: `25.4`",
-							Computed:            true,
-						},
-						"steering_invalidation_drop": schema.BoolAttribute{
-							MarkdownDescription: "Enable path invalidation drop" + "\n  - Supported from version: `25.4`",
-							Computed:            true,
-						},
-						"auto_route_include_all_ipv4": schema.BoolAttribute{
-							MarkdownDescription: "Include all IPv4 prefixes to autoroute" + "\n  - Supported from version: `25.4`",
-							Computed:            true,
-						},
-						"auto_route_include_all_ipv6": schema.BoolAttribute{
-							MarkdownDescription: "Include all eligible IPv6 prefixes" + "\n  - Supported from version: `25.4`",
-							Computed:            true,
-						},
-						"auto_route_force_sr_include": schema.BoolAttribute{
-							MarkdownDescription: "Force SR traffic over autoroute policy" + "\n  - Supported from version: `25.4`",
-							Computed:            true,
-						},
-						"auto_route_forward_class": schema.Int64Attribute{
-							MarkdownDescription: "Forward class associated with the policy" + "\n  - Supported from version: `25.4`",
-							Computed:            true,
-						},
-						"auto_route_metric_type": schema.StringAttribute{
-							MarkdownDescription: "Metric type" + "\n  - Supported from version: `25.4`",
-							Computed:            true,
-						},
-						"auto_route_metric_relative_value": schema.Int64Attribute{
-							MarkdownDescription: "Autoroute relative metric" + "\n  - Supported from version: `25.4`",
-							Computed:            true,
-						},
-						"auto_route_metric_constant_value": schema.Int64Attribute{
-							MarkdownDescription: "Autoroute constant metric" + "\n  - Supported from version: `25.4`",
-							Computed:            true,
-						},
-					},
-				},
 			},
 		},
 	}

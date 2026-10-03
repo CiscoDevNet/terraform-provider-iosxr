@@ -18,7 +18,6 @@ resource "iosxr_flow_exporter_map" "example" {
   destination_vrf                         = "VRF1"
   dfbit_set                               = true
   dscp                                    = 62
-  export_protocol                         = "gnpsi"
   name                                    = "exporter_map1"
   packet_length                           = 512
   source                                  = "GigabitEthernet0/0/0/1"

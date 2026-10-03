@@ -52,7 +52,9 @@ func TestAccDataSourceIosxrFlowExporterMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_options_class_table_timeout", "255"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "version_options_vrf_table_timeout", "122"))
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "export_protocol", "gnpsi"))
+		if os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "export_protocol", "gnpsi"))
+		}
 	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -120,7 +122,9 @@ func testAccDataSourceIosxrFlowExporterMapConfig() string {
 	config += `	version_options_class_table_timeout = 255` + "\n"
 	config += `	version_options_vrf_table_timeout = 122` + "\n"
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		config += `	export_protocol = "gnpsi"` + "\n"
+		if os.Getenv("C8000") != "" {
+			config += `	export_protocol = "gnpsi"` + "\n"
+		}
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,

@@ -8,6 +8,7 @@ attributes:
   # ===========================================================
   - yang_name: export/protocol
     tf_name: export_protocol
+    test_tags: [C8000]
     example: gnpsi
 
 test_prerequisites:

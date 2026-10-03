@@ -39,9 +39,6 @@ func TestAccIosxrHWModuleProfile(t *testing.T) {
 	}
 	var checks []resource.TestCheckFunc
 	if os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "profile_load_balance_algorithm_hash_polynomial_index", "5"))
-	}
-	if os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "profile_qos_max_classmap_size", "8"))
 	}
 	if os.Getenv("NCS") != "" {
@@ -157,11 +154,6 @@ func TestAccIosxrHWModuleProfile(t *testing.T) {
 			checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "fib_bgp_pic_level_3_l2services", "true"))
 		}
 	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		if os.Getenv("NCS") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "fib_mpls_php_dscp_preserve", "true"))
-		}
-	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -219,9 +211,6 @@ func testAccIosxrHWModuleProfileConfig_minimum() string {
 
 func testAccIosxrHWModuleProfileConfig_all() string {
 	config := `resource "iosxr_hw_module_profile" "test" {` + "\n"
-	if os.Getenv("NCS") != "" {
-		config += `	profile_load_balance_algorithm_hash_polynomial_index = 5` + "\n"
-	}
 	if os.Getenv("NCS") != "" {
 		config += `	profile_qos_max_classmap_size = "8"` + "\n"
 	}
@@ -346,11 +335,6 @@ func testAccIosxrHWModuleProfileConfig_all() string {
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		if os.Getenv("NCS") != "" {
 			config += `	fib_bgp_pic_level_3_l2services = true` + "\n"
-		}
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		if os.Getenv("NCS") != "" {
-			config += `	fib_mpls_php_dscp_preserve = true` + "\n"
 		}
 	}
 	config += `}` + "\n"

@@ -4,6 +4,12 @@ path: Cisco-IOS-XR-um-hw-module-profile-cfg:/hw-module
 doc_category: System
 attributes:
   # ===========================================================
+  # CHANGES — existing attributes
+  # ===========================================================
+    # 25.4.2 does not return profile-load-balance in the /hw-module GET (24.4.2 does)
+  - yang_name: profile-load-balance/algorithm/hash-polynomial-index
+    exclude_test: true
+  # ===========================================================
   # ADDITIONS — new in 25.4
   # ===========================================================
   - yang_name: profile-qos/ingress-fadt-sets/ingress-fadt-set
@@ -32,9 +38,11 @@ attributes:
     test_tags: [NCS]
     include_example: true
     example: true
+    # mutually exclusive with profile-segment-routing/srv6/mode/micro-segment/format/f3216
   - yang_name: fib/mpls/php/dscp-preserve
     tf_name: fib_mpls_php_dscp_preserve
     test_tags: [NCS]
+    exclude_test: true
     include_example: true
     example: true
   # mutually exclusive MDB scale profiles; change needs a reload

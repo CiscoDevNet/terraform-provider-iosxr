@@ -37,9 +37,6 @@ func TestAccDataSourceIosxrHWModuleProfile(t *testing.T) {
 	}
 	var checks []resource.TestCheckFunc
 	if os.Getenv("NCS") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_load_balance_algorithm_hash_polynomial_index", "5"))
-	}
-	if os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "profile_qos_max_classmap_size", "8"))
 	}
 	if os.Getenv("NCS") != "" {
@@ -155,11 +152,6 @@ func TestAccDataSourceIosxrHWModuleProfile(t *testing.T) {
 			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "fib_bgp_pic_level_3_l2services", "true"))
 		}
 	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		if os.Getenv("NCS") != "" {
-			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hw_module_profile.test", "fib_mpls_php_dscp_preserve", "true"))
-		}
-	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -183,9 +175,6 @@ func TestAccDataSourceIosxrHWModuleProfile(t *testing.T) {
 func testAccDataSourceIosxrHWModuleProfileConfig() string {
 	config := `resource "iosxr_hw_module_profile" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	if os.Getenv("NCS") != "" {
-		config += `	profile_load_balance_algorithm_hash_polynomial_index = 5` + "\n"
-	}
 	if os.Getenv("NCS") != "" {
 		config += `	profile_qos_max_classmap_size = "8"` + "\n"
 	}
@@ -310,11 +299,6 @@ func testAccDataSourceIosxrHWModuleProfileConfig() string {
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		if os.Getenv("NCS") != "" {
 			config += `	fib_bgp_pic_level_3_l2services = true` + "\n"
-		}
-	}
-	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
-		if os.Getenv("NCS") != "" {
-			config += `	fib_mpls_php_dscp_preserve = true` + "\n"
 		}
 	}
 	config += `}` + "\n"

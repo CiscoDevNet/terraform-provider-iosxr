@@ -430,6 +430,7 @@ attributes:
       - yang_name: traps/encrypted/encryption-aeses/encryption-aes
         tf_name: traps_encrypted_aes
         type: List
+        exclude_test: true
         attributes:
           - yang_name: community-string
             id: true
@@ -484,6 +485,7 @@ attributes:
       - yang_name: informs/encrypted/encryption-aeses/encryption-aes
         tf_name: informs_encrypted_aes
         type: List
+        exclude_test: true
         attributes:
           - yang_name: community-string
             id: true
@@ -681,11 +683,12 @@ attributes:
         sensitive: true
         write_only: true
         example: 073C05626E2A4841141D
+        exclude_test: true
       - yang_name: v3/auth/md5/encryption-default
         sensitive: true
         write_only: true
         example: 073C05626E2A4841141D
-        exclude_test: true
+        # exclude_test: true
       - yang_name: v3/auth/sha/encryption-aes
         sensitive: true
         write_only: true

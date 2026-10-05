@@ -68,13 +68,6 @@ resource "iosxr_snmp_server" "example" {
   hosts = [
     {
       address = "11.11.11.11"
-      informs_encrypted_aes = [
-        {
-          community_string = "06253E2C5A471E1C5E"
-          udp_port         = 1100
-          version_v2c      = true
-        }
-      ]
       informs_encrypted_default = [
         {
           community_string = "15021E0E082328"
@@ -87,13 +80,6 @@ resource "iosxr_snmp_server" "example" {
           community_string          = "COMMUNITY2"
           udp_port                  = 1100
           version_v3_security_level = "auth"
-        }
-      ]
-      traps_encrypted_aes = [
-        {
-          community_string = "06253E2C5A471E1C5E"
-          udp_port         = 1100
-          version_v2c      = true
         }
       ]
       traps_encrypted_default = [
@@ -227,13 +213,13 @@ resource "iosxr_snmp_server" "example" {
   traps_vrrp_events                                      = true
   users = [
     {
-      group_name                 = "GROUP1"
-      user_name                  = "USER1"
-      v3                         = true
-      v3_auth_md5_encryption_aes = "073C05626E2A4841141D"
-      v3_ipv4                    = "ACL1"
-      v3_ipv6                    = "ACL1"
-      v3_systemowner             = true
+      group_name                     = "GROUP1"
+      user_name                      = "USER1"
+      v3                             = true
+      v3_auth_md5_encryption_default = "073C05626E2A4841141D"
+      v3_ipv4                        = "ACL1"
+      v3_ipv6                        = "ACL1"
+      v3_systemowner                 = true
     }
   ]
   views = [

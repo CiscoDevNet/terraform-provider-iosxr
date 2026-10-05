@@ -215,6 +215,15 @@ func IsGnmiGetResponseEmpty(resp *gnmi.GetRes) bool {
 	return isGnmiGetResponseEmpty(resp)
 }
 
+// IsEmptyRespBody reports whether a raw JSON response body (as returned by
+// ReadConfig) represents "no data" (empty, "{}" or "[]"). This is the
+// []byte-based counterpart of IsGnmiGetResponseEmpty used by generated Read
+// logic downstream of the config cache, where callers only ever see the
+// extracted JSON bytes rather than the raw gnmi.GetRes.
+func IsEmptyRespBody(body []byte) bool {
+	return isEmptyJSONBytes(body)
+}
+
 // isGnmiGetResponseEmpty checks if a gNMI Get response is empty or has no data
 func isGnmiGetResponseEmpty(resp *gnmi.GetRes) bool {
 	if resp == nil {
@@ -235,7 +244,13 @@ func isGnmiGetResponseEmpty(resp *gnmi.GetRes) bool {
 		// node returns zero updates (handled above).
 		return false
 	}
-	jsonVal := val.GetJsonIetfVal()
-	jsonStr := strings.TrimSpace(string(jsonVal))
-	return jsonStr == "" || jsonStr == "{}" || jsonStr == "[]"
+	return isEmptyJSONBytes(val.GetJsonIetfVal())
+}
+
+// isEmptyJSONBytes reports whether raw JSON bytes represent "no data" (empty,
+// "{}" or "[]"). Shared by isGnmiGetResponseEmpty (gnmi.GetRes-based) and
+// IsEmptyRespBody (raw []byte-based, used downstream of the config cache).
+func isEmptyJSONBytes(raw []byte) bool {
+	s := strings.TrimSpace(string(raw))
+	return s == "" || s == "{}" || s == "[]"
 }

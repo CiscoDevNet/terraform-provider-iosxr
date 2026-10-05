@@ -457,6 +457,12 @@ func (r *RadiusServerResource) Create(ctx context.Context, req resource.CreateRe
 				return
 			}
 		}
+
+		// Invalidate this path in cache after write so next Read fetches fresh data
+		if r.data.EnableConfigCache {
+			device.Cache.Delete(plan.getPath())
+			tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Create", plan.getPath()))
+		}
 	}
 
 	plan.Id = types.StringValue(plan.getPath())
@@ -489,7 +495,8 @@ func (r *RadiusServerResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
+	resourcePath := state.Id.ValueString()
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", resourcePath))
 
 	// Check if we are being called after `terraform import`.
 	// During import we use fromBody/fromBodyXML (full overwrite from device).
@@ -513,10 +520,13 @@ func (r *RadiusServerResource) Read(ctx context.Context, req resource.ReadReques
 				return
 			}
 
-			// Use GetWithRetry to handle device sync delays
-			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			respBody, notFound, fetchErr := helpers.ReadConfig(
+				ctx, device.GnmiClient, device.Cache,
+				r.data.EnableConfigCache, r.data.ConfigCacheTTL,
+				device.EnsureCacheWarmed, resourcePath,
+			)
+			if fetchErr != nil {
+				resp.Diagnostics.AddError("Unable to fetch device configuration", fetchErr.Error())
 				return
 			}
 
@@ -529,10 +539,9 @@ func (r *RadiusServerResource) Read(ctx context.Context, req resource.ReadReques
 			// A successful but empty ({}) response means the element exists but the
 			// device returned no data (e.g. a keys-only list entry). Preserve state
 			// as-is instead of removing it, which would cause a perpetual recreate.
-			if helpers.IsGnmiGetResponseEmpty(&getResp) {
-				tflog.Warn(ctx, fmt.Sprintf("%s: gNMI returned empty response, preserving state as-is", state.Id.ValueString()))
+			if helpers.IsEmptyRespBody(respBody) {
+				tflog.Warn(ctx, fmt.Sprintf("%s: gNMI returned empty response, preserving state as-is", resourcePath))
 			} else {
-				respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
 				tflog.Debug(ctx, fmt.Sprintf("respBody : %s", respBody))
 				if imp {
 					// After `terraform import` we switch to a full read so all device
@@ -582,7 +591,7 @@ func (r *RadiusServerResource) Read(ctx context.Context, req resource.ReadReques
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", resourcePath))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
@@ -689,6 +698,12 @@ func (r *RadiusServerResource) Update(ctx context.Context, req resource.UpdateRe
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
+		}
+
+		// Invalidate this path in cache after write so next Read fetches fresh data
+		if r.data.EnableConfigCache {
+			device.Cache.Delete(plan.Id.ValueString())
+			tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Update", plan.Id.ValueString()))
 		}
 	}
 
@@ -858,6 +873,12 @@ func (r *RadiusServerResource) Delete(ctx context.Context, req resource.DeleteRe
 					resp.Diagnostics.AddError("Client Error", err.Error())
 					return
 				}
+			}
+
+			// Invalidate this path in cache after write so next Read fetches fresh data
+			if r.data.EnableConfigCache {
+				device.Cache.Delete(state.Id.ValueString())
+				tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Delete", state.Id.ValueString()))
 			}
 		}
 	}

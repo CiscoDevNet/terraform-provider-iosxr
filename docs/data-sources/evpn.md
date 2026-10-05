@@ -60,7 +60,6 @@ data "iosxr_evpn" "example" {
 - `ignore_mtu_mismatch` (Boolean) Ignore mismatch of local and remote MTUs
 - `load_balancing_flow_label_static` (Boolean) Static configuration of Flow Label
 - `logging_df_election` (Boolean) Enable Designated Forwarder election logging
-- `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function global knob
 - `source_interface` (String) Configure EVPN router-id implicitly through Loopback Interface
 - `srv6` (Boolean) SRv6 configuration for EVPN
 - `srv6_locator_name` (String) Default locator to use for EVPN SID allocation
@@ -69,6 +68,7 @@ data "iosxr_evpn" "example" {
   - Supported from version: `25.4`
 - `srv6_locators` (Attributes List) Default locator to use for EVPN SID allocation
   - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--srv6_locators))
+- `srv6_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function global knob
 - `staggered_bringup_timer` (Number) Staggered bringup timer delay timer
 - `startup_cost_in` (Number) Cost-in after reload timer
 - `timers_ac_debounce` (Number) Global AC Debounce timer

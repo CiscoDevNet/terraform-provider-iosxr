@@ -67,7 +67,7 @@ type EVPN struct {
 	Groups                                             []EVPNGroups            `tfsdk:"groups"`
 	Srv6                                               types.Bool              `tfsdk:"srv6"`
 	Srv6Locators                                       []EVPNSrv6Locators      `tfsdk:"srv6_locators"`
-	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock   types.Bool              `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
+	Srv6UsidAllocationWideLocalIdBlock                 types.Bool              `tfsdk:"srv6_usid_allocation_wide_local_id_block"`
 	IgnoreMtuMismatch                                  types.Bool              `tfsdk:"ignore_mtu_mismatch"`
 	EnforceMtuMatch                                    types.Bool              `tfsdk:"enforce_mtu_match"`
 	TransmitMtuZero                                    types.Bool              `tfsdk:"transmit_mtu_zero"`
@@ -118,7 +118,7 @@ type EVPNData struct {
 	Groups                                             []EVPNGroups            `tfsdk:"groups"`
 	Srv6                                               types.Bool              `tfsdk:"srv6"`
 	Srv6Locators                                       []EVPNSrv6Locators      `tfsdk:"srv6_locators"`
-	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock   types.Bool              `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
+	Srv6UsidAllocationWideLocalIdBlock                 types.Bool              `tfsdk:"srv6_usid_allocation_wide_local_id_block"`
 	IgnoreMtuMismatch                                  types.Bool              `tfsdk:"ignore_mtu_mismatch"`
 	EnforceMtuMatch                                    types.Bool              `tfsdk:"enforce_mtu_match"`
 	TransmitMtuZero                                    types.Bool              `tfsdk:"transmit_mtu_zero"`
@@ -294,8 +294,8 @@ func (data EVPN) toBody(ctx context.Context, providerVersion string) string {
 			body, _ = sjson.Set(body, "segment-routing.srv6", map[string]string{})
 		}
 	}
-	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsUnknown() {
-		if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
+	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.IsUnknown() {
+		if data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
 			body, _ = sjson.Set(body, "segment-routing.srv6.usid.allocation.wide-local-id-block", map[string]string{})
 		}
 	}
@@ -888,15 +888,15 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte, version string
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
 		if value.Exists() {
-			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 		} else {
 			// If config has false and device doesn't have the field, keep false (don't set to null)
-			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 		}
-	} else if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolNull()
+	} else if data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); !data.IgnoreMtuMismatch.IsNull() {
 		if value.Exists() {
@@ -1471,10 +1471,10 @@ func (data *EVPN) fromBody(ctx context.Context, res []byte, version string) {
 		})
 	}
 	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
-	} else if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
 		// Only set to false if it was previously set in state
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -1865,9 +1865,9 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte, version string) 
 		})
 	}
 	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -2385,7 +2385,7 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN, version strin
 	if !state.IgnoreMtuMismatch.IsNull() && data.IgnoreMtuMismatch.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "ignore-mtu-mismatch"))
 	}
-	if !state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/srv6/usid/allocation/wide-local-id-block"))
 	}
 	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
@@ -2667,8 +2667,8 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN, version 
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ignore-mtu-mismatch"))
 		}
 	}
-	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
-		if state != nil && !state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
+	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+		if state != nil && !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/srv6/usid/allocation/wide-local-id-block"))
 		}
 	}
@@ -2859,7 +2859,7 @@ func (data *EVPN) getDeletePaths(ctx context.Context, version string) []string {
 	if !data.IgnoreMtuMismatch.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "ignore-mtu-mismatch"))
 	}
-	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/srv6/usid/allocation/wide-local-id-block"))
 	}
 	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
@@ -3073,8 +3073,8 @@ func (data EVPN) toBodyXML(ctx context.Context, stateArg ...*EVPN) string {
 			}
 		}
 	}
-	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsUnknown() {
-		if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
+	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.IsUnknown() {
+		if data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block", "")
 		}
 	}
@@ -3573,13 +3573,13 @@ func (data *EVPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
-			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 		}
 	} else {
 		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
-			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolNull()
+		if data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+			data.Srv6UsidAllocationWideLocalIdBlock = types.BoolNull()
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
@@ -4152,9 +4152,9 @@ func (data *EVPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		})
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -4492,9 +4492,9 @@ func (data *EVPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		})
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block"); value.Exists() {
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
 	} else {
-		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		data.Srv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ignore-mtu-mismatch"); value.Exists() {
 		data.IgnoreMtuMismatch = types.BoolValue(true)
@@ -5239,7 +5239,7 @@ func (data *EVPN) addDeletedItemsXML(ctx context.Context, state EVPN, body strin
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
-	if !state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() && data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6UsidAllocationWideLocalIdBlock.ValueBool() && data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
 		deletePath := state.getXPath() + "/segment-routing/srv6/usid/allocation/wide-local-id-block"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -5754,7 +5754,7 @@ func (data *EVPN) addDeletePathsXML(ctx context.Context, body string) string {
 	if !data.IgnoreMtuMismatch.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ignore-mtu-mismatch")
 	}
-	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/srv6/usid/allocation/wide-local-id-block")
 	}
 	for i := range data.Srv6Locators {

@@ -189,7 +189,7 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 					},
 				},
 			},
-			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+			"srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
 				MarkdownDescription: "Enable uSID wide function global knob",
 				Computed:            true,
 			},

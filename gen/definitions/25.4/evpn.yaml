@@ -10,6 +10,7 @@ attributes:
     legacy: true
   # 25.4.2 device rejects Set on the global node (EDM 'not found'); CLI works.
   - yang_name: segment-routing/srv6/usid/allocation/wide-local-id-block
+    tf_name: srv6_usid_allocation_wide_local_id_block
     exclude_test: true
   # ===========================================================
   # ADDITIONS — new in 25.4

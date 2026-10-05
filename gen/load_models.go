@@ -232,7 +232,6 @@ var models244 = []string{
 }
 
 // models254 contains the YANG model URLs for IOS-XR 25.4.2 (delta from 24.4.2).
-// Add any 25.4-specific modules not present in models244 at the end of this slice.
 var models254 = []string{
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2542/Cisco-IOS-XR-types.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2542/Cisco-IOS-XR-um-hostname-cfg.yang",
@@ -414,11 +413,6 @@ var models254 = []string{
 }
 
 // models262 contains the YANG model URLs for IOS-XR 26.2.1 (delta from 25.4.2).
-// Mirrors models254 exactly (same module set, version directory swapped 2542->2621) —
-// verified against the live vendor/cisco/xr/2621 directory listing (YangModels/yang on
-// GitHub): all 167 unique modules from models254 exist unchanged at that path, so no
-// renames/removals are known yet between 25.4.2 and 26.2.1. Add any 26.2-specific modules
-// not present in models254 at the end of this slice once the delta analysis is done.
 var models262 = []string{
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2621/Cisco-IOS-XR-types.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2621/Cisco-IOS-XR-um-hostname-cfg.yang",

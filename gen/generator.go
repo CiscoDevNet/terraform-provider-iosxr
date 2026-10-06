@@ -155,6 +155,7 @@ type YamlConfigAttribute struct {
 	WriteOnly                bool                              `yaml:"write_only"`
 	Sensitive                bool                              `yaml:"sensitive"`
 	ExcludeTest              bool                              `yaml:"exclude_test"`
+	ExcludeTestFrom          string                            // computed during merge: delta version whose exclude_test applies from that version up (empty when not version-scoped)
 	ExcludeExample           bool                              `yaml:"exclude_example"`
 	IncludeExample           bool                              `yaml:"include_example"`
 	Description              string                            `yaml:"description"`
@@ -997,6 +998,21 @@ func FormatVersionExamples(m map[string]string) string {
 	return strings.Join(parts, ", ") + ","
 }
 
+// TestVersionGuardExpr returns the Go condition that gates an attribute's test checks and config
+// on IOSXR_VERSION: added in, removed in, and excluded from versions. Empty when none apply.
+func TestVersionGuardExpr(attr YamlConfigAttribute) string {
+	var conds []string
+	if attr.AddedInVersion != "" {
+		conds = append(conds, fmt.Sprintf(`iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), %q)`, attr.AddedInVersion))
+	}
+	for _, v := range []string{attr.RemovedInVersion, attr.ExcludeTestFrom} {
+		if v != "" {
+			conds = append(conds, fmt.Sprintf(`!iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), %q)`, v))
+		}
+	}
+	return strings.Join(conds, " && ")
+}
+
 // HasVersionExamples returns true if any attribute (recursively) has version-specific examples.
 func HasVersionExamples(attributes []YamlConfigAttribute) bool {
 	for _, attr := range attributes {
@@ -1408,6 +1424,7 @@ var functions = template.FuncMap{
 	"formatVersionEnums":                    FormatVersionEnums,
 	"hasVersionEnums":                       HasVersionEnums,
 	"formatVersionExamples":                 FormatVersionExamples,
+	"testVersionGuardExpr":                  TestVersionGuardExpr,
 	"formatVersionMinimumTestValues":        FormatVersionExamples,
 	"hasVersionExamples":                    HasVersionExamples,
 	"hasVersionMinimumTestValues":           HasVersionMinimumTestValues,
@@ -2038,8 +2055,9 @@ func mergeAttributes(base, override []YamlConfigAttribute, overrideVersion strin
 				if newAttr.Sensitive {
 					result[i].Sensitive = newAttr.Sensitive
 				}
-				if newAttr.ExcludeTest {
-					result[i].ExcludeTest = newAttr.ExcludeTest
+				// exclude_test in a delta applies from that version up; a base-level exclusion stays global.
+				if newAttr.ExcludeTest && !result[i].ExcludeTest && result[i].ExcludeTestFrom == "" {
+					result[i].ExcludeTestFrom = overrideVersion
 				}
 				if newAttr.ExcludeExample {
 					result[i].ExcludeExample = newAttr.ExcludeExample

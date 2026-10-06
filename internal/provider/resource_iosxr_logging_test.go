@@ -60,6 +60,9 @@ func TestAccIosxrLogging(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "buffered_discriminator_nomatch1", "BUFFERED_NOMATCH1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "buffered_discriminator_nomatch2", "BUFFERED_NOMATCH2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "buffered_discriminator_nomatch3", "BUFFERED_NOMATCH3"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "container_all", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "container_fetch_timestamp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "file.0.file_name", "logfile1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "file.0.path", "/disk0:"))
@@ -227,6 +230,9 @@ func testAccIosxrLoggingConfig_all() string {
 	config += `	buffered_discriminator_nomatch1 = "BUFFERED_NOMATCH1"` + "\n"
 	config += `	buffered_discriminator_nomatch2 = "BUFFERED_NOMATCH2"` + "\n"
 	config += `	buffered_discriminator_nomatch3 = "BUFFERED_NOMATCH3"` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	container_all = true` + "\n"
+	}
 	config += `	container_fetch_timestamp = true` + "\n"
 	config += `	file = [{` + "\n"
 	config += `		file_name = "logfile1"` + "\n"

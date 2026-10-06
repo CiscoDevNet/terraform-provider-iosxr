@@ -38,6 +38,11 @@ func TestAccIosxrHWModuleProfile(t *testing.T) {
 		t.Skip("skipping test, set environment variable NCS")
 	}
 	var checks []resource.TestCheckFunc
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "profile_load_balance_algorithm_hash_polynomial_index", "5"))
+		}
+	}
 	if os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_hw_module_profile.test", "profile_qos_max_classmap_size", "8"))
 	}
@@ -198,8 +203,10 @@ func iosxrHWModuleProfileImportStateIdFunc(resourceName string) resource.ImportS
 
 func testAccIosxrHWModuleProfileConfig_minimum() string {
 	config := `resource "iosxr_hw_module_profile" "test" {` + "\n"
-	if os.Getenv("NCS") != "" {
-		config += `	profile_load_balance_algorithm_hash_polynomial_index = 5` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			config += `	profile_load_balance_algorithm_hash_polynomial_index = 5` + "\n"
+		}
 	}
 	config += `}` + "\n"
 	return config
@@ -211,6 +218,11 @@ func testAccIosxrHWModuleProfileConfig_minimum() string {
 
 func testAccIosxrHWModuleProfileConfig_all() string {
 	config := `resource "iosxr_hw_module_profile" "test" {` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" {
+			config += `	profile_load_balance_algorithm_hash_polynomial_index = 5` + "\n"
+		}
+	}
 	if os.Getenv("NCS") != "" {
 		config += `	profile_qos_max_classmap_size = "8"` + "\n"
 	}

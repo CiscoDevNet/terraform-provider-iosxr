@@ -57,6 +57,9 @@ func TestAccIosxrEVPN(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locators.0.locator_name", "LOC1"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locators.0.usid_allocation_wide_local_id_block", "true"))
 	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_usid_allocation_wide_local_id_block", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "ignore_mtu_mismatch", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "transmit_mtu_zero", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv4_duplicate_detection_move_count", "10"))
@@ -211,6 +214,9 @@ func testAccIosxrEVPNConfig_all() string {
 		config += `		locator_name = "LOC1"` + "\n"
 		config += `		usid_allocation_wide_local_id_block = true` + "\n"
 		config += `		}]` + "\n"
+	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	srv6_usid_allocation_wide_local_id_block = true` + "\n"
 	}
 	config += `	ignore_mtu_mismatch = true` + "\n"
 	config += `	transmit_mtu_zero = true` + "\n"

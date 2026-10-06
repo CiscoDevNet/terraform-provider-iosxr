@@ -492,6 +492,50 @@ func TestMergeAttributes_NestedAttrsInheritAddedInVersion(t *testing.T) {
 	}
 }
 
+func TestMergeAttributes_ExcludeTestFromDeltaVersion(t *testing.T) {
+	base := []YamlConfigAttribute{
+		{YangName: "a", TfName: "a", Type: "String"},
+		{YangName: "b", TfName: "b", Type: "String", ExcludeTest: true},
+	}
+	override := []YamlConfigAttribute{
+		{YangName: "a", ExcludeTest: true},
+		{YangName: "b", ExcludeTest: true},
+		{YangName: "c", TfName: "c", Type: "String", ExcludeTest: true},
+	}
+
+	got := mergeAttributes(base, override, "26.2")
+
+	if got[0].ExcludeTest || got[0].ExcludeTestFrom != "26.2" {
+		t.Errorf("a: got ExcludeTest=%v ExcludeTestFrom=%q, want false and 26.2", got[0].ExcludeTest, got[0].ExcludeTestFrom)
+	}
+	if !got[1].ExcludeTest || got[1].ExcludeTestFrom != "" {
+		t.Errorf("b: base exclusion must stay global, got ExcludeTest=%v ExcludeTestFrom=%q", got[1].ExcludeTest, got[1].ExcludeTestFrom)
+	}
+	if !got[2].ExcludeTest || got[2].ExcludeTestFrom != "" {
+		t.Errorf("c: new attribute keeps ExcludeTest, got ExcludeTest=%v ExcludeTestFrom=%q", got[2].ExcludeTest, got[2].ExcludeTestFrom)
+	}
+}
+
+func TestTestVersionGuardExpr(t *testing.T) {
+	const added = `iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4")`
+	const removed = `!iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2")`
+	cases := []struct {
+		name string
+		attr YamlConfigAttribute
+		want string
+	}{
+		{"none", YamlConfigAttribute{}, ""},
+		{"added", YamlConfigAttribute{AddedInVersion: "25.4"}, added},
+		{"added and removed", YamlConfigAttribute{AddedInVersion: "25.4", RemovedInVersion: "26.2"}, added + " && " + removed},
+		{"exclude from", YamlConfigAttribute{ExcludeTestFrom: "26.2"}, removed},
+	}
+	for _, c := range cases {
+		if got := TestVersionGuardExpr(c.attr); got != c.want {
+			t.Errorf("%s: got %q, want %q", c.name, got, c.want)
+		}
+	}
+}
+
 func TestMergeAttributes_CompositeKeyPromotion(t *testing.T) {
 	// Reproduces the logging source_interfaces scenario:
 	// 24.4 key: source-interface-name (id:true)

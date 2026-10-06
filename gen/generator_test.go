@@ -516,6 +516,27 @@ func TestMergeAttributes_ExcludeTestFromDeltaVersion(t *testing.T) {
 	}
 }
 
+func TestMergeAttributes_ExcludeTestFromChain(t *testing.T) {
+	base := []YamlConfigAttribute{
+		{YangName: "a", TfName: "a", Type: "String"},
+		{YangName: "b", TfName: "b", Type: "String"},
+	}
+	d254 := []YamlConfigAttribute{{YangName: "a", ExcludeTest: true}}
+	d262 := []YamlConfigAttribute{
+		{YangName: "a", ExcludeTest: true},
+		{YangName: "b", ExcludeTest: true},
+	}
+
+	got := mergeAttributes(mergeAttributes(base, d254, "25.4"), d262, "26.2")
+
+	if got[0].ExcludeTestFrom != "25.4" || got[0].ExcludeTest {
+		t.Errorf("a: lowest version must win, got ExcludeTest=%v ExcludeTestFrom=%q, want false and 25.4", got[0].ExcludeTest, got[0].ExcludeTestFrom)
+	}
+	if got[1].ExcludeTestFrom != "26.2" || got[1].ExcludeTest {
+		t.Errorf("b: got ExcludeTest=%v ExcludeTestFrom=%q, want false and 26.2", got[1].ExcludeTest, got[1].ExcludeTestFrom)
+	}
+}
+
 func TestTestVersionGuardExpr(t *testing.T) {
 	const added = `iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4")`
 	const removed = `!iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2")`

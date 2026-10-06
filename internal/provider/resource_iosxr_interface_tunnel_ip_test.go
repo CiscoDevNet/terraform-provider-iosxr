@@ -190,63 +190,12 @@ resource "iosxr_yang" "PreReq2" {
 }
 
 `
-const testAccIosxrInterfaceTunnelIPPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
-	attributes = {
-		"vrf-name" = "VRF1"
-	}
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
-	attributes = {
-		"access-list-name" = "ACL1"
-	}
-	lists = [
-		{
-			name = "sequences/sequence"
-			key = "sequence-number"
-			items = [
-				{
-					"sequence-number" = "10"
-					"permit/protocol" = "ipv4"
-					"permit/source/host" = "10.1.1.1"
-					"permit/destination/host" = "10.1.1.2"
-				},
-			]
-		},
-	]
-}
-
-resource "iosxr_yang" "PreReq2" {
-	path = "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]"
-	attributes = {
-		"access-list-name" = "ACL2"
-	}
-	lists = [
-		{
-			name = "sequences/sequence"
-			key = "sequence-number"
-			items = [
-				{
-					"sequence-number" = "10"
-					"permit/protocol" = "ipv6"
-					"permit/source/host" = "2001::1"
-					"permit/destination/host" = "2001::2"
-				},
-			]
-		},
-	]
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrInterfaceTunnelIPPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrInterfaceTunnelIPPrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrInterfaceTunnelIPPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -264,7 +213,6 @@ func testAccIosxrInterfaceTunnelIPConfig_minimum() string {
 	config += `	tunnel_destination_ipv4 = "192.168.1.2"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -342,7 +290,6 @@ func testAccIosxrInterfaceTunnelIPConfig_all() string {
 	config += `	tunnel_vrf = "VRF1"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

@@ -209,39 +209,12 @@ resource "iosxr_yang" "PreReq1" {
 }
 
 `
-const testAccDataSourceIosxrRouterBGPAddressFamilyPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
-	attributes = {
-	}
-	lists = [
-		{
-			name = "route-policy"
-			key = "route-policy-name"
-			items = [
-				{
-					"route-policy-name" = "ROUTE_POLICY_1"
-					"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-				},
-			]
-		},
-	]
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-	attributes = {
-		"as-number" = "65001"
-	}
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccDataSourceIosxrRouterBGPAddressFamilyPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccDataSourceIosxrRouterBGPAddressFamilyPrerequisitesConfig_V24_4,
-			"25.4": testAccDataSourceIosxrRouterBGPAddressFamilyPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -407,7 +380,6 @@ func testAccDataSourceIosxrRouterBGPAddressFamilyConfig() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

@@ -237,39 +237,12 @@ resource "iosxr_yang" "PreReq1" {
 }
 
 `
-const testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
-	attributes = {
-	}
-	lists = [
-		{
-			name = "route-policy"
-			key = "route-policy-name"
-			items = [
-				{
-					"route-policy-name" = "ROUTE_POLICY_1"
-					"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-				},
-			]
-		},
-	]
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-	attributes = {
-		"as-number" = "65001"
-	}
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -284,7 +257,6 @@ func testAccIosxrRouterBGPAddressFamilyConfig_minimum() string {
 	config += `	af_name = "ipv4-unicast"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -450,7 +422,6 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

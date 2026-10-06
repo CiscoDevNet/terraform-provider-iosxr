@@ -69,19 +69,3 @@ attributes:
   - yang_name: fast-reroute/per-link
     exclude_test: true
     example: true
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies
-    lists:
-      - name: route-policy
-        key: route-policy-name
-        items:
-          - attributes:
-              - name: route-policy-name
-                value: ROUTE_POLICY_1
-              - name: rpl-route-policy
-                value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
-    attributes:
-      - name: as-number
-        value: 65001

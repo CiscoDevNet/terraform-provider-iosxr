@@ -155,20 +155,12 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
-const testAccIosxrEVPNPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
-	attributes = {
-	}
-}
 
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrEVPNPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrEVPNPrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrEVPNPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -181,7 +173,6 @@ func testAccIosxrEVPNConfig_minimum() string {
 	config := `resource "iosxr_evpn" "test" {` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -282,7 +273,6 @@ func testAccIosxrEVPNConfig_all() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

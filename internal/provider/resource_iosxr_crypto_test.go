@@ -150,28 +150,12 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
-const testAccIosxrCryptoPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=proxy.example.com]"
-	attributes = {
-		"host-name" = "proxy.example.com"
-	}
-	lists = [
-		{
-			name = "ip-address"
-			
-			values = ["1.1.1.1", ]
-		},
-	]
-}
 
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrCryptoPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrCryptoPrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrCryptoPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -192,7 +176,6 @@ func testAccIosxrCryptoConfig_minimum() string {
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -272,7 +255,6 @@ func testAccIosxrCryptoConfig_all() string {
 	config += `	fips_mode = true` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

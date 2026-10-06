@@ -80,21 +80,12 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
-const testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
-	attributes = {
-		"vrf-name" = "VRF1"
-	}
-}
 
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig_V24_4,
-			"25.4": testAccDataSourceIosxrFlowExporterMapPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -128,7 +119,6 @@ func testAccDataSourceIosxrFlowExporterMapConfig() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

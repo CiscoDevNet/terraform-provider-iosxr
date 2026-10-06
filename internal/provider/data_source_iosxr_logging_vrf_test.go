@@ -107,28 +107,12 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
-const testAccDataSourceIosxrLoggingVRFPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=server.cisco.com]"
-	attributes = {
-		"host-name" = "server.cisco.com"
-	}
-	lists = [
-		{
-			name = "ip-address"
-			
-			values = ["1.1.1.1", ]
-		},
-	]
-}
 
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccDataSourceIosxrLoggingVRFPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccDataSourceIosxrLoggingVRFPrerequisitesConfig_V24_4,
-			"25.4": testAccDataSourceIosxrLoggingVRFPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -188,7 +172,6 @@ func testAccDataSourceIosxrLoggingVRFConfig() string {
 	config += `	}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

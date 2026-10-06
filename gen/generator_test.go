@@ -247,12 +247,12 @@ func TestMergeConfigs_TestTagsThreeVersionChain(t *testing.T) {
 	}
 }
 
-// TestMergeConfigs_TestPrerequisitesNoInheritance covers F25's design: unlike every
-// other VersionXxx field, test_prerequisites must never cascade -- a version that
-// doesn't declare its own gets none, never a neighboring version's. Base declares one
-// prerequisite; 25.4 overrides with a different (two-prerequisite) list; 26.2 declares
-// none at all and must end up with no prerequisites, not 25.4's or 24.4's.
-func TestMergeConfigs_TestPrerequisitesNoInheritance(t *testing.T) {
+// TestMergeConfigs_TestPrerequisitesRecordsOnlyDeclaredVersions: the merge records a
+// version's test_prerequisites only when that version declares them. Base declares one
+// prerequisite; 25.4 overrides with a two-prerequisite list; 26.2 declares none and gets
+// no entry. Inheritance by higher versions happens at test time in
+// selectVersionPrerequisitesConfig, not here.
+func TestMergeConfigs_TestPrerequisitesRecordsOnlyDeclaredVersions(t *testing.T) {
 	prereq24 := []YamlTest{{Path: "module-a:/prereq"}}
 	prereq25 := []YamlTest{{Path: "module-a:/prereq"}, {Path: "module-b:/prereq"}}
 
@@ -267,7 +267,7 @@ func TestMergeConfigs_TestPrerequisitesNoInheritance(t *testing.T) {
 		t.Errorf("VersionTestPrerequisites[25.4]: got %d entries, want 2", len(after26.VersionTestPrerequisites["25.4"]))
 	}
 	if _, has26 := after26.VersionTestPrerequisites["26.2"]; has26 {
-		t.Error("VersionTestPrerequisites[26.2]: present, want absent (26.2 never declared its own test_prerequisites, and must not inherit 25.4's)")
+		t.Error("VersionTestPrerequisites[26.2]: present, want absent (26.2 never declared its own test_prerequisites; inheritance is resolved by the test selector, not recorded by the merge)")
 	}
 	if _, hasBase := after26.VersionTestPrerequisites["_base"]; hasBase {
 		t.Error("VersionTestPrerequisites[_base]: present, want absent (test_prerequisites never seeds a \"_base\" sentinel)")

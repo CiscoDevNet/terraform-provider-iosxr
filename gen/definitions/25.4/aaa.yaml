@@ -63,33 +63,3 @@ attributes:
             type: String
             description: "SNI extension to include in client hello"
             example: tacacs.example.com
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
-    attributes:
-      - name: vrf-name
-        value: VRF1
-  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius-server/hosts/host[ordering-index=1][address=10.1.1.1][auth-port=1812][acct-port=1813]
-    attributes:
-      - name: ordering-index
-        value: 1
-      - name: address
-        value: 10.1.1.1
-      - name: auth-port
-        value: 1812
-      - name: acct-port
-        value: 1813
-      - name: key/seven
-        value: 060506324F41584B
-    dependencies: [0]
-  - path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/hosts/host[ordering-index=1][address=9.0.1.68][port=49]
-    attributes:
-      - name: ordering-index
-        value: 1
-      - name: address
-        value: 9.0.1.68
-      - name: port
-        value: 49
-      - name: key/seven
-        value: 0235347225301B204F4F0A0A
-    dependencies: [1]

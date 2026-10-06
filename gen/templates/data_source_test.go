@@ -530,6 +530,7 @@ resource "iosxr_yang" "PreReq{{$index}}" {
 `
 {{- end}}
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccDataSourceIosxr{{camelCase .Name}}PrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{

@@ -521,104 +521,12 @@ resource "iosxr_yang" "PreReq4" {
 }
 
 `
-const testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Bundle-Ether100]"
-	delete = false
-	attributes = {
-		"interface-name" = "Bundle-Ether100"
-	}
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]"
-	attributes = {
-		"policy-map-name" = "PMAP-IN"
-	}
-	lists = [
-		{
-			name = "class"
-			key = "name,type"
-			items = [
-				{
-					"name" = "class-default"
-					"type" = "qos"
-					"set/qos-group" = "0"
-				},
-			]
-		},
-	]
-}
-
-resource "iosxr_yang" "PreReq2" {
-	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-OUT]"
-	attributes = {
-		"policy-map-name" = "PMAP-OUT"
-	}
-	lists = [
-		{
-			name = "class"
-			key = "name,type"
-			items = [
-				{
-					"name" = "class-default"
-					"type" = "qos"
-					"set/dscp" = "0"
-				},
-			]
-		},
-	]
-}
-
-resource "iosxr_yang" "PreReq3" {
-	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
-	attributes = {
-		"access-list-name" = "ACL1"
-	}
-	lists = [
-		{
-			name = "sequences/sequence"
-			key = "sequence-number"
-			items = [
-				{
-					"sequence-number" = "10"
-					"permit/protocol" = "ipv4"
-					"permit/source/host" = "10.1.1.1"
-					"permit/destination/host" = "10.1.1.2"
-				},
-			]
-		},
-	]
-}
-
-resource "iosxr_yang" "PreReq4" {
-	path = "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]"
-	attributes = {
-		"access-list-name" = "ACL2"
-	}
-	lists = [
-		{
-			name = "sequences/sequence"
-			key = "sequence-number"
-			items = [
-				{
-					"sequence-number" = "10"
-					"permit/protocol" = "ipv6"
-					"permit/source/host" = "2001::1"
-					"permit/destination/host" = "2001::2"
-				},
-			]
-		},
-	]
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -634,7 +542,6 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_minimum() string {
 	config += `	load_interval = 30` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -1041,7 +948,6 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

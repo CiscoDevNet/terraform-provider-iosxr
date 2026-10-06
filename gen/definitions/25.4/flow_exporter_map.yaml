@@ -10,9 +10,3 @@ attributes:
     tf_name: export_protocol
     test_tags: [C8000]
     example: gnpsi
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
-    attributes:
-      - name: vrf-name
-        value: VRF1

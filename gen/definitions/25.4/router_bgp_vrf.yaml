@@ -12,23 +12,3 @@ attributes:
     example: 150
   - yang_name: distance/bgp/local
     example: 200
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
-    attributes:
-      - name: as-number
-        value: 65001
-      - name: bgp/router-id
-        value: 22.22.22.22
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers
-    lists:
-      - name: server
-        key: server-number
-        items:
-          - attributes:
-              - name: server-number
-                value: 1
-              - name: host/host-name
-                value: 192.168.1.100
-              - name: host/port
-                value: 5000

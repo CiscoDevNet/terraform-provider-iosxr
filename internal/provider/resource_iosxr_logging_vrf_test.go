@@ -133,28 +133,12 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
-const testAccIosxrLoggingVRFPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=server.cisco.com]"
-	attributes = {
-		"host-name" = "server.cisco.com"
-	}
-	lists = [
-		{
-			name = "ip-address"
-			
-			values = ["1.1.1.1", ]
-		},
-	]
-}
 
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrLoggingVRFPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrLoggingVRFPrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrLoggingVRFPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -174,7 +158,6 @@ func testAccIosxrLoggingVRFConfig_minimum() string {
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -234,7 +217,6 @@ func testAccIosxrLoggingVRFConfig_all() string {
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

@@ -7,11 +7,3 @@ attributes:
   # ===========================================================
   - yang_name: liveness-detection/collect-hbh
     legacy: true
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
-    attributes:
-      - name: vrf-name
-        value: VRF1
-  - path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement
-    dependencies: [0]

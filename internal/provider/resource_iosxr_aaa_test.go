@@ -530,44 +530,12 @@ resource "iosxr_yang" "PreReq2" {
 }
 
 `
-const testAccIosxrAAAPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
-	attributes = {
-		"vrf-name" = "VRF1"
-	}
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius-server/hosts/host[ordering-index=1][address=10.1.1.1][auth-port=1812][acct-port=1813]"
-	attributes = {
-		"ordering-index" = "1"
-		"address" = "10.1.1.1"
-		"auth-port" = "1812"
-		"acct-port" = "1813"
-		"key/seven" = "060506324F41584B"
-	}
-	depends_on = [iosxr_yang.PreReq0, ]
-}
-
-resource "iosxr_yang" "PreReq2" {
-	path = "Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/hosts/host[ordering-index=1][address=9.0.1.68][port=49]"
-	attributes = {
-		"ordering-index" = "1"
-		"address" = "9.0.1.68"
-		"port" = "49"
-		"key/seven" = "0235347225301B204F4F0A0A"
-	}
-	depends_on = [iosxr_yang.PreReq1, ]
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrAAAPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrAAAPrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrAAAPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -585,7 +553,6 @@ func testAccIosxrAAAConfig_minimum() string {
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -1050,7 +1017,6 @@ func testAccIosxrAAAConfig_all() string {
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

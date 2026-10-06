@@ -150,41 +150,12 @@ resource "iosxr_yang" "PreReq1" {
 }
 
 `
-const testAccIosxrRouterBGPVRFPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-	attributes = {
-		"as-number" = "65001"
-		"bgp/router-id" = "22.22.22.22"
-	}
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
-	attributes = {
-	}
-	lists = [
-		{
-			name = "server"
-			key = "server-number"
-			items = [
-				{
-					"server-number" = "1"
-					"host/host-name" = "192.168.1.100"
-					"host/port" = "5000"
-				},
-			]
-		},
-	]
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrRouterBGPVRFPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrRouterBGPVRFPrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrRouterBGPVRFPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -199,7 +170,6 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -262,7 +232,6 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

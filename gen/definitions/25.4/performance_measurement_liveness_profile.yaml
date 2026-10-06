@@ -15,6 +15,3 @@ attributes:
     tf_name: endpoint_default_liveness_detection_npu_offload
     exclude_test: true
     example: true
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement

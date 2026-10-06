@@ -88,28 +88,12 @@ resource "iosxr_yang" "PreReq1" {
 }
 
 `
-const testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
-	attributes = {
-		"route-policy-name" = "EVI_POLICY_1"
-		"rpl-route-policy" = "route-policy EVI_POLICY_1\n  pass\nend-policy\n"
-	}
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
-	attributes = {
-	}
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V24_4,
-			"25.4": testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -154,7 +138,6 @@ func testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

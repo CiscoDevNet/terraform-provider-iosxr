@@ -14,6 +14,3 @@ attributes:
     tf_name: monitor_receiver
     test_tags: [C8000]
     example: true
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-ptp-cfg:/ptp

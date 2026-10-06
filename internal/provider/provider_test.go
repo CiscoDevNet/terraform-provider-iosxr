@@ -96,13 +96,25 @@ func selectVersionTestTags(byVersion map[string][]string, baseTags []string) []s
 }
 
 // selectVersionPrerequisitesConfig returns the prerequisite HCL config string for the
-// exact IOS-XR version in the environment -- unlike selectVersionTestTags/
-// selectVersionExample, there is no "highest version <= current wins" fallback.
-// test_prerequisites deliberately does not inherit across versions: a version not
-// present in configByVersion (including when IOSXR_VERSION is unset) has no
-// prerequisites at all.
+// IOSXR_VERSION in the environment. Keys in configByVersion are the versions whose
+// definition declares test_prerequisites; the highest key satisfied by IOSXR_VERSION
+// wins, so a version without its own prerequisites inherits from the nearest lower one.
+// Returns "" when IOSXR_VERSION is unset or below all keys.
 func selectVersionPrerequisitesConfig(configByVersion map[string]string) string {
-	return configByVersion[os.Getenv("IOSXR_VERSION")]
+	ver := os.Getenv("IOSXR_VERSION")
+	if ver == "" || len(configByVersion) == 0 {
+		return ""
+	}
+	bestVer := ""
+	for v := range configByVersion {
+		if iosxrVersionAtLeast(ver, v) && (bestVer == "" || iosxrVersionAtLeast(v, bestVer)) {
+			bestVer = v
+		}
+	}
+	if bestVer == "" {
+		return ""
+	}
+	return configByVersion[bestVer]
 }
 
 // selectVersionDependsOn returns the version-appropriate depends_on line (with leading
@@ -116,49 +128,42 @@ func selectVersionDependsOn(dependsByVersion map[string]string) string {
 	return "\tdepends_on = " + deps
 }
 
-// TestSelectVersionPrerequisitesConfig covers the exact-match-only behavior that
-// distinguishes this selector from selectVersionTestTags/selectVersionExample: no
-// "highest version <= current wins" fallback, and no default argument.
+// TestSelectVersionPrerequisitesConfig covers the highest-version-at-or-below inheritance:
+// a version without its own prerequisites uses the nearest lower version's.
 func TestSelectVersionPrerequisitesConfig(t *testing.T) {
 	byVersion := map[string]string{
 		"24.4": "base config",
 		"25.4": "delta config",
 	}
+	gapVersions := map[string]string{
+		"24.4": "base config",
+		"26.2": "newest config",
+	}
 
-	t.Run("empty map returns empty string", func(t *testing.T) {
-		t.Setenv("IOSXR_VERSION", "24.4")
-		if got := selectVersionPrerequisitesConfig(nil); got != "" {
-			t.Errorf("got %q, want empty string", got)
-		}
-	})
-
-	t.Run("exact match on lower version", func(t *testing.T) {
-		t.Setenv("IOSXR_VERSION", "24.4")
-		if got := selectVersionPrerequisitesConfig(byVersion); got != "base config" {
-			t.Errorf("got %q, want %q", got, "base config")
-		}
-	})
-
-	t.Run("exact match on higher version", func(t *testing.T) {
-		t.Setenv("IOSXR_VERSION", "25.4")
-		if got := selectVersionPrerequisitesConfig(byVersion); got != "delta config" {
-			t.Errorf("got %q, want %q", got, "delta config")
-		}
-	})
-
-	t.Run("version not in map returns empty string, not a fallback", func(t *testing.T) {
-		t.Setenv("IOSXR_VERSION", "26.2")
-		if got := selectVersionPrerequisitesConfig(byVersion); got != "" {
-			t.Errorf("got %q, want empty string (no fallback to a neighboring version)", got)
-		}
-	})
-
-	t.Run("version below all keys returns empty string, not a fallback", func(t *testing.T) {
-		t.Setenv("IOSXR_VERSION", "23.1")
-		if got := selectVersionPrerequisitesConfig(byVersion); got != "" {
-			t.Errorf("got %q, want empty string (no fallback to a neighboring version)", got)
-		}
-	})
+	tests := []struct {
+		name    string
+		version string
+		configs map[string]string
+		want    string
+	}{
+		{"empty map returns empty string", "24.4", nil, ""},
+		{"exact match on lower version", "24.4", byVersion, "base config"},
+		{"exact match on higher version", "25.4", byVersion, "delta config"},
+		{"version above all keys inherits the highest key", "26.2", byVersion, "delta config"},
+		{"gap: version between keys inherits the lower key", "25.4", gapVersions, "base config"},
+		{"gap: higher key still wins on its own version", "26.2", gapVersions, "newest config"},
+		{"3-part version resolves like major.minor", "26.2.1", byVersion, "delta config"},
+		{"unlisted version between keys inherits the lower key", "25.2", byVersion, "base config"},
+		{"version below all keys returns empty string", "23.1", byVersion, ""},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("IOSXR_VERSION", tt.version)
+			if got := selectVersionPrerequisitesConfig(tt.configs); got != tt.want {
+				t.Errorf("got %q, want %q", got, tt.want)
+			}
+		})
+	}
 
 	t.Run("IOSXR_VERSION unset returns empty string", func(t *testing.T) {
 		os.Unsetenv("IOSXR_VERSION")
@@ -168,29 +173,35 @@ func TestSelectVersionPrerequisitesConfig(t *testing.T) {
 	})
 }
 
-// TestSelectVersionDependsOn covers the same exact-match semantics as
+// TestSelectVersionDependsOn covers the same inheritance as
 // TestSelectVersionPrerequisitesConfig, plus the "\tdepends_on = " prefix and the
-// no-match/empty-string case, which must never leave a dangling "\tdepends_on = "
+// below-all-keys/empty-string case, which must never leave a dangling "\tdepends_on = "
 // with nothing after the "=" (invalid HCL).
 func TestSelectVersionDependsOn(t *testing.T) {
 	byVersion := map[string]string{
 		"24.4": `[iosxr_gnmi.PreReq0, ]`,
+		"26.2": `[iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]`,
 	}
 
-	t.Run("match returns prefixed depends_on line", func(t *testing.T) {
-		t.Setenv("IOSXR_VERSION", "24.4")
-		want := "\tdepends_on = [iosxr_gnmi.PreReq0, ]"
-		if got := selectVersionDependsOn(byVersion); got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
-	})
-
-	t.Run("no match returns empty string, not a dangling prefix", func(t *testing.T) {
-		t.Setenv("IOSXR_VERSION", "25.4")
-		if got := selectVersionDependsOn(byVersion); got != "" {
-			t.Errorf("got %q, want empty string", got)
-		}
-	})
+	tests := []struct {
+		name    string
+		version string
+		want    string
+	}{
+		{"match returns prefixed depends_on line", "24.4", "\tdepends_on = [iosxr_gnmi.PreReq0, ]"},
+		{"gap: version between keys inherits the lower key", "25.4", "\tdepends_on = [iosxr_gnmi.PreReq0, ]"},
+		{"higher key wins on its own version", "26.2", "\tdepends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]"},
+		{"3-part version resolves like major.minor", "26.2.1", "\tdepends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]"},
+		{"below all keys returns empty string, not a dangling prefix", "23.1", ""},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("IOSXR_VERSION", tt.version)
+			if got := selectVersionDependsOn(byVersion); got != tt.want {
+				t.Errorf("got %q, want %q", got, tt.want)
+			}
+		})
+	}
 
 	t.Run("IOSXR_VERSION unset returns empty string", func(t *testing.T) {
 		os.Unsetenv("IOSXR_VERSION")

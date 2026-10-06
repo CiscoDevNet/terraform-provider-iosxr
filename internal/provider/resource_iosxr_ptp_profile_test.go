@@ -169,20 +169,12 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
-const testAccIosxrPTPProfilePrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-ptp-cfg:/ptp"
-	attributes = {
-	}
-}
 
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrPTPProfilePrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrPTPProfilePrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrPTPProfilePrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -196,7 +188,6 @@ func testAccIosxrPTPProfileConfig_minimum() string {
 	config += `	profile_name = "Profile-1"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -310,7 +301,6 @@ func testAccIosxrPTPProfileConfig_all() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

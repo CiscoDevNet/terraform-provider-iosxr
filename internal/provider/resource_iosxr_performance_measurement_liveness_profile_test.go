@@ -109,20 +109,12 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
-const testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement"
-	attributes = {
-	}
-}
 
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V24_4,
-			"25.4": testAccIosxrPerformanceMeasurementLivenessProfilePrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -136,7 +128,6 @@ func testAccIosxrPerformanceMeasurementLivenessProfileConfig_minimum() string {
 	config += `	sr_policy_default_probe_tx_interval = "30000"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config
@@ -181,7 +172,6 @@ func testAccIosxrPerformanceMeasurementLivenessProfileConfig_all() string {
 	config += `		}]` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
-		"25.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 	return config

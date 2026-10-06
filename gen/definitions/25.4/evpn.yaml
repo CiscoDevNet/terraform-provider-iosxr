@@ -54,6 +54,3 @@ attributes:
         tf_name: ethernet_segment_convergence_nexthop_tracking
         exclude_test: true
         example: true
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn

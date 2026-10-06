@@ -2367,11 +2367,12 @@ func fixBaseVersionInRanges(config *YamlConfig, baseVersion string) {
 			config.VersionTestTags[baseVersion] = base
 		}
 	}
-	// test_prerequisites never cascades (see mergeConfigs), so there's no "_base"
-	// sentinel to resolve here. But if the base version declared its own
-	// test_prerequisites and this resource has other versions too, the base's entry
-	// must exist in the map under its own real key -- otherwise the single-constant
-	// template branch would apply the base's prerequisites to every version's test.
+	// test_prerequisites is recorded per declaring version only (see mergeConfigs), so
+	// there's no "_base" sentinel to resolve here. But if the base version declared its own
+	// test_prerequisites and this resource has other versions too, the base's entry must
+	// exist in the map under its own real key -- otherwise the single-constant template
+	// branch would apply the base's prerequisites to every version's test, ignoring any
+	// higher version's override.
 	if len(config.SupportedVersions) > 1 && len(config.TestPrerequisites) > 0 {
 		if config.VersionTestPrerequisites == nil {
 			config.VersionTestPrerequisites = make(map[string][]YamlTest)
@@ -2527,12 +2528,11 @@ func mergeConfigs(base, override YamlConfig) YamlConfig {
 	if override.DocCategory != "" {
 		merged.DocCategory = override.DocCategory
 	}
-	// test_prerequisites deliberately does not cascade -- unlike every other VersionXxx
-	// field, a later version's silence means "not needed for this version," not
-	// "unchanged," since these are real, version-specific YANG paths. Record only this
-	// version's own declared value, under its own real version key. No "_base" sentinel
-	// (nothing to resolve later) and no merged.TestPrerequisites carry-forward (there is
-	// no fallback that would ever read it).
+	// test_prerequisites is recorded only for the version that declares it, under its own
+	// real version key, with no "_base" sentinel and no merged.TestPrerequisites
+	// carry-forward. Inheritance by higher versions happens at test time, where
+	// selectVersionPrerequisitesConfig picks the highest declared version at or below
+	// IOSXR_VERSION.
 	if len(override.TestPrerequisites) > 0 {
 		if merged.VersionTestPrerequisites == nil {
 			merged.VersionTestPrerequisites = make(map[string][]YamlTest)

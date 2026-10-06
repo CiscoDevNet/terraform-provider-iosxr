@@ -184,107 +184,12 @@ resource "iosxr_yang" "PreReq5" {
 }
 
 `
-const testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]"
-	attributes = {
-		"vrf-name" = "VRF2"
-	}
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
-	attributes = {
-		"two-byte-as-number" = "65001"
-		"asn2-index" = "2"
-	}
-	depends_on = [iosxr_yang.PreReq0, ]
-}
-
-resource "iosxr_yang" "PreReq2" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-	attributes = {
-		"as-number" = "65001"
-		"bgp/router-id" = "22.22.22.22"
-	}
-	lists = [
-		{
-			name = "address-families/address-family"
-			key = "af-name"
-			items = [
-				{
-					"af-name" = "vpnv4-unicast"
-				},
-			]
-		},
-	]
-	depends_on = [iosxr_yang.PreReq1, ]
-}
-
-resource "iosxr_yang" "PreReq3" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-	attributes = {
-		"as-number" = "65001"
-	}
-	lists = [
-		{
-			name = "address-families/address-family"
-			key = "af-name"
-			items = [
-				{
-					"af-name" = "vpnv6-unicast"
-				},
-			]
-		},
-	]
-	depends_on = [iosxr_yang.PreReq1, ]
-}
-
-resource "iosxr_yang" "PreReq4" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF2]"
-	delete = false
-	attributes = {
-		"vrf-name" = "VRF2"
-	}
-	lists = [
-		{
-			name = "address-families/address-family"
-			key = "af-name"
-			items = [
-				{
-					"af-name" = "ipv4-unicast"
-				},
-			]
-		},
-		{
-			name = "neighbors/neighbor"
-			key = "address"
-			items = [
-				{
-					"address" = "10.1.1.2"
-					"remote-as" = "65002"
-				},
-			]
-		},
-	]
-	depends_on = [iosxr_yang.PreReq2, ]
-}
-
-resource "iosxr_yang" "PreReq5" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
-	attributes = {
-		"route-policy-name" = "ROUTE_POLICY_1"
-		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-	}
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig_V24_4,
-			"25.4": testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -343,7 +248,6 @@ func testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyConfig() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

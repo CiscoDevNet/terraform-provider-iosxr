@@ -144,68 +144,12 @@ resource "iosxr_yang" "PreReq2" {
 }
 
 `
-const testAccDataSourceIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-	attributes = {
-		"as-number" = "65001"
-	}
-	lists = [
-		{
-			name = "address-families/address-family"
-			key = "af-name"
-			items = [
-				{
-					"af-name" = "vpnv4-unicast"
-				},
-			]
-		},
-		{
-			name = "neighbors/neighbor"
-			key = "address"
-			items = [
-				{
-					"address" = "10.1.1.2"
-					"remote-as" = "65001"
-				},
-			]
-		},
-	]
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-	attributes = {
-		"as-number" = "65001"
-	}
-	lists = [
-		{
-			name = "address-families/address-family"
-			key = "af-name"
-			items = [
-				{
-					"af-name" = "vpnv6-unicast"
-				},
-			]
-		},
-	]
-}
-
-resource "iosxr_yang" "PreReq2" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
-	attributes = {
-		"route-policy-name" = "ROUTE_POLICY_1"
-		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-	}
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccDataSourceIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccDataSourceIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig_V24_4,
-			"25.4": testAccDataSourceIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -262,7 +206,6 @@ func testAccDataSourceIosxrRouterBGPNeighborAddressFamilyConfig() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

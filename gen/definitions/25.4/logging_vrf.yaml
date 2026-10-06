@@ -87,13 +87,3 @@ attributes:
         type: String
         description: Set UDP port for this remote host/vrf
         example: "510"
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=server.cisco.com]
-    attributes:
-      - name: host-name
-        value: server.cisco.com
-    lists:
-      - name: ip-address
-        values:
-          - "1.1.1.1"

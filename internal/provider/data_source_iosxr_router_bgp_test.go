@@ -232,70 +232,12 @@ resource "iosxr_yang" "PreReq1" {
 }
 
 `
-const testAccDataSourceIosxrRouterBGPPrerequisitesConfig_V25_4 = `
-resource "iosxr_yang" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-	attributes = {
-		"as-number" = "65001"
-	}
-	lists = [
-		{
-			name = "neighbor-groups/neighbor-group"
-			key = "neighbor-group-name"
-			items = [
-				{
-					"neighbor-group-name" = "GROUP1"
-					"remote-as" = "65002"
-				},
-			]
-		},
-		{
-			name = "session-groups/session-group"
-			key = "session-group-name"
-			items = [
-				{
-					"session-group-name" = "SGROUP1"
-				},
-			]
-		},
-		{
-			name = "address-families/address-family"
-			key = "af-name"
-			items = [
-				{
-					"af-name" = "ipv4-unicast"
-				},
-			]
-		},
-	]
-}
 
-resource "iosxr_yang" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
-	attributes = {
-	}
-	lists = [
-		{
-			name = "server"
-			key = "server-number"
-			items = [
-				{
-					"server-number" = "1"
-					"host/host-name" = "192.168.1.100"
-					"host/port" = "5000"
-				},
-			]
-		},
-	]
-}
-
-`
-
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
 func testAccDataSourceIosxrRouterBGPPrerequisitesConfig() string {
 	return selectVersionPrerequisitesConfig(
 		map[string]string{
 			"24.4": testAccDataSourceIosxrRouterBGPPrerequisitesConfig_V24_4,
-			"25.4": testAccDataSourceIosxrRouterBGPPrerequisitesConfig_V25_4,
 		},
 	)
 }
@@ -463,7 +405,6 @@ func testAccDataSourceIosxrRouterBGPConfig() string {
 	}
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
-		"25.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
 	}) + "\n"
 	config += `}` + "\n"
 

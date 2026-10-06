@@ -32,13 +32,3 @@ attributes:
     tf_name: ca_trustpoint_system_enrollment_local
     exclude_test: true
     example: true
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=proxy.example.com]
-    attributes:
-      - name: host-name
-        value: proxy.example.com
-    lists:
-      - name: ip-address
-        values:
-          - "1.1.1.1"

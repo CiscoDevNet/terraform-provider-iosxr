@@ -772,7 +772,7 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_tcam_format_og_compr_id_extension": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable wide compression result of OG ACL").String + "\n  - Supported from version: `25.4`",
+				MarkdownDescription: helpers.NewAttributeDescription("Enable wide compression result of OG ACL").String + "\n  - Supported from version: `25.4`" + "\n  - **Not supported from version `26.2` and above**",
 				Optional:            true,
 			},
 			"profile_qos_mode": schema.StringAttribute{
@@ -800,6 +800,14 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 			},
 			"profile_route_scale_lpm_full_scale": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable full scale for LPM").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_tcam_format_og_compr_id_extension_ingress": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable wide compression result of ingress OG ACL").String + "\n  - Supported from version: `26.2`",
+				Optional:            true,
+			},
+			"profile_tcam_format_og_compr_id_extension_egress": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable wide compression result of egress OG ACL").String + "\n  - Supported from version: `26.2`",
 				Optional:            true,
 			},
 		},

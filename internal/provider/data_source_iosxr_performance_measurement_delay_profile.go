@@ -520,7 +520,7 @@ func (d *PerformanceMeasurementDelayProfileDataSource) Schema(ctx context.Contex
 				},
 			},
 			"endpoint_default_histogram_delay_bins_explicit": schema.ListAttribute{
-				MarkdownDescription: "explicit list of 27 numbers to split 28 bins. All 27 entries must be configured" + "\n  - Supported from version: `25.4`",
+				MarkdownDescription: "explicit list of 27 numbers to split 28 bins. All 27 entries must be configured" + "\n  - Supported from version: `25.4`" + "\n  - **Not supported from version `26.2` and above**",
 				ElementType:         types.Int64Type,
 				Computed:            true,
 			},

@@ -143,6 +143,8 @@ type HWModuleProfile8000 struct {
 	ProfileL2fibEvpnAging                            types.Bool                                               `tfsdk:"profile_l2fib_evpn_aging"`
 	ProfileRouteScaleHostRoute                       types.Bool                                               `tfsdk:"profile_route_scale_host_route"`
 	ProfileRouteScaleLpmFullScale                    types.Bool                                               `tfsdk:"profile_route_scale_lpm_full_scale"`
+	ProfileTcamFormatOgComprIdExtensionIngress       types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension_ingress"`
+	ProfileTcamFormatOgComprIdExtensionEgress        types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension_egress"`
 }
 
 type HWModuleProfile8000Data struct {
@@ -246,6 +248,8 @@ type HWModuleProfile8000Data struct {
 	ProfileL2fibEvpnAging                            types.Bool                                               `tfsdk:"profile_l2fib_evpn_aging"`
 	ProfileRouteScaleHostRoute                       types.Bool                                               `tfsdk:"profile_route_scale_host_route"`
 	ProfileRouteScaleLpmFullScale                    types.Bool                                               `tfsdk:"profile_route_scale_lpm_full_scale"`
+	ProfileTcamFormatOgComprIdExtensionIngress       types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension_ingress"`
+	ProfileTcamFormatOgComprIdExtensionEgress        types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension_egress"`
 }
 type HWModuleProfile8000ProfileEncapExactInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -690,7 +694,7 @@ func (data HWModuleProfile8000) toBody(ctx context.Context, providerVersion stri
 			body, _ = sjson.Set(body, "profile.irb.throughput-optimized", map[string]string{})
 		}
 	}
-	if helpers.VersionAtLeast(providerVersion, "25.4") {
+	if helpers.VersionAtLeast(providerVersion, "25.4") && (providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "26.2")) {
 		if !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.IsUnknown() {
 			if data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
 				body, _ = sjson.Set(body, "profile.tcam.format.og-compr-id-extension", map[string]string{})
@@ -734,6 +738,20 @@ func (data HWModuleProfile8000) toBody(ctx context.Context, providerVersion stri
 		if !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.IsUnknown() {
 			if data.ProfileRouteScaleLpmFullScale.ValueBool() {
 				body, _ = sjson.Set(body, "profile.route.scale.lpm.full-scale", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsUnknown() {
+			if data.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
+				body, _ = sjson.Set(body, "profile.tcam.format.og-compr-id-extension.ingress", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsUnknown() {
+			if data.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
+				body, _ = sjson.Set(body, "profile.tcam.format.og-compr-id-extension.egress", map[string]string{})
 			}
 		}
 	}
@@ -922,6 +940,8 @@ func (data HWModuleProfile8000) GetVersionConstraints() []helpers.FieldVersionCo
 		{
 			FieldPath:      "profile_tcam_format_og_compr_id_extension",
 			AddedInVersion: "25.4",
+
+			RemovedInVersion: "26.2",
 		},
 		{
 			FieldPath:      "profile_qos_mode",
@@ -946,6 +966,14 @@ func (data HWModuleProfile8000) GetVersionConstraints() []helpers.FieldVersionCo
 		{
 			FieldPath:      "profile_route_scale_lpm_full_scale",
 			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_tcam_format_og_compr_id_extension_ingress",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "profile_tcam_format_og_compr_id_extension_egress",
+			AddedInVersion: "26.2",
 		},
 	}...)
 	if len(constraints) == 0 {
@@ -2021,7 +2049,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte,
 	} else if data.ProfileIrbThroughputOptimized.IsNull() {
 		data.ProfileIrbThroughputOptimized = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
 		if value.Exists() {
 			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
 		} else {
@@ -2085,6 +2113,26 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte,
 		}
 	} else if data.ProfileRouteScaleLpmFullScale.IsNull() {
 		data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.ingress"); helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		if value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+		}
+	} else if data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.egress"); helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		if value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
+		}
+	} else if data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolNull()
 	}
 }
 
@@ -2682,7 +2730,7 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res []byte, versi
 		// Only set to false if it was previously set in state
 		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
 	}
-	if helpers.VersionAtLeast(version, "25.4") {
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) {
 		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); value.Exists() {
 			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
 		} else if !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
@@ -2748,6 +2796,26 @@ func (data *HWModuleProfile8000) fromBody(ctx context.Context, res []byte, versi
 		}
 	} else {
 		data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.ingress"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+		} else if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.egress"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+		} else if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolNull()
 	}
 }
 
@@ -3293,7 +3361,7 @@ func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res []byte, v
 	} else {
 		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
 	}
-	if helpers.VersionAtLeast(version, "25.4") {
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) {
 		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); value.Exists() {
 			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
 		} else {
@@ -3354,6 +3422,24 @@ func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res []byte, v
 	} else {
 		data.ProfileRouteScaleLpmFullScale = types.BoolNull()
 	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.ingress"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+		} else {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.egress"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+		} else {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -3362,6 +3448,12 @@ func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res []byte, v
 
 func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWModuleProfile8000, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !state.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/og-compr-id-extension/egress"))
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !state.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/og-compr-id-extension/ingress"))
+	}
 	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileRouteScaleLpmFullScale.IsNull() && data.ProfileRouteScaleLpmFullScale.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/route/scale/lpm/full-scale"))
 	}
@@ -3380,7 +3472,7 @@ func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWMo
 	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileQosMode.IsNull() && data.ProfileQosMode.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/mode"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileTcamFormatOgComprIdExtension.IsNull() && data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !state.ProfileTcamFormatOgComprIdExtension.IsNull() && data.ProfileTcamFormatOgComprIdExtension.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/og-compr-id-extension"))
 	}
 	if !state.ProfileIrbThroughputOptimized.IsNull() && data.ProfileIrbThroughputOptimized.IsNull() {
@@ -3893,6 +3985,16 @@ func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWMo
 
 func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state *HWModuleProfile8000, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
+		if state != nil && !state.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && state.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/egress"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
+		if state != nil && !state.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && state.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/ingress"))
+		}
+	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.ValueBool() {
 		if state != nil && !state.ProfileRouteScaleLpmFullScale.IsNull() && state.ProfileRouteScaleLpmFullScale.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/route/scale/lpm/full-scale"))
@@ -3918,7 +4020,7 @@ func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state 
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/iptunnel/scale"))
 		}
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
 		if state != nil && !state.ProfileTcamFormatOgComprIdExtension.IsNull() && state.ProfileTcamFormatOgComprIdExtension.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension"))
 		}
@@ -4259,6 +4361,12 @@ func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *HWModuleProfile8000) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/egress"))
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/ingress"))
+	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleLpmFullScale.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/route/scale/lpm/full-scale"))
 	}
@@ -4277,7 +4385,7 @@ func (data *HWModuleProfile8000) getDeletePaths(ctx context.Context, version str
 	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileQosMode.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/mode"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension"))
 	}
 	if !data.ProfileIrbThroughputOptimized.IsNull() {
@@ -5143,6 +5251,16 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context, stateArg ...*HWMo
 	if !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.IsUnknown() {
 		if data.ProfileRouteScaleLpmFullScale.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/route/scale/lpm/full-scale", "")
+		}
+	}
+	if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsUnknown() {
+		if data.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress", "")
+		}
+	}
+	if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsUnknown() {
+		if data.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -6294,6 +6412,28 @@ func (data *HWModuleProfile8000) updateFromBodyXML(ctx context.Context, res xmld
 			data.ProfileRouteScaleLpmFullScale = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -6834,6 +6974,16 @@ func (data *HWModuleProfile8000) fromBodyXML(ctx context.Context, res xmldot.Res
 		data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
 	} else {
 		data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
 	}
 }
 
@@ -7376,6 +7526,16 @@ func (data *HWModuleProfile8000Data) fromBodyXML(ctx context.Context, res xmldot
 	} else {
 		data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -7387,6 +7547,38 @@ func (data *HWModuleProfile8000) addDeletedItemsXML(ctx context.Context, state H
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && state.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() && data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		deletePath := state.getXPath() + "/profile/tcam/format/og-compr-id-extension/egress"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && state.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() && data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		deletePath := state.getXPath() + "/profile/tcam/format/og-compr-id-extension/ingress"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ProfileRouteScaleLpmFullScale.IsNull() && state.ProfileRouteScaleLpmFullScale.ValueBool() && data.ProfileRouteScaleLpmFullScale.IsNull() {
 		deletePath := state.getXPath() + "/profile/route/scale/lpm/full-scale"
@@ -9994,6 +10186,12 @@ func (data *HWModuleProfile8000) addDeletedItemsXML(ctx context.Context, state H
 
 func (data *HWModuleProfile8000) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress")
+	}
+	if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress")
+	}
 	if !data.ProfileRouteScaleLpmFullScale.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/route/scale/lpm/full-scale")
 	}

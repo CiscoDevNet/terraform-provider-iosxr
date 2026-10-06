@@ -57,13 +57,21 @@ func TestAccDataSourceIosxrSegmentRoutingV6(t *testing.T) {
 	if os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "encapsulation_hop_limit_value", "1"))
 	}
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "encapsulation_source_address", "fccc:0:214::1"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "encapsulation_source_address", "fccc:0:214::1"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "encapsulation_source_address_option", "explicit-address"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "encapsulation_source_address_address", "fccc:0:214::1"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingV6PrerequisitesConfig + testAccDataSourceIosxrSegmentRoutingV6Config(),
+				Config: testAccDataSourceIosxrSegmentRoutingV6PrerequisitesConfig() + testAccDataSourceIosxrSegmentRoutingV6Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -73,7 +81,7 @@ func TestAccDataSourceIosxrSegmentRoutingV6(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrSegmentRoutingV6PrerequisitesConfig = `
+const testAccDataSourceIosxrSegmentRoutingV6PrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
 	attributes = {
@@ -82,6 +90,15 @@ resource "iosxr_yang" "PreReq0" {
 }
 
 `
+
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxrSegmentRoutingV6PrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrSegmentRoutingV6PrerequisitesConfig_V24_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -118,8 +135,18 @@ func testAccDataSourceIosxrSegmentRoutingV6Config() string {
 	if os.Getenv("XRV9K") != "" {
 		config += `	encapsulation_hop_limit_value = 1` + "\n"
 	}
-	config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		config += `	encapsulation_source_address_option = "explicit-address"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		config += `	encapsulation_source_address_address = "fccc:0:214::1"` + "\n"
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

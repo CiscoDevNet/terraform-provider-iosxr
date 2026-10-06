@@ -220,7 +220,18 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"encapsulation_source_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure a source address").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a source address").String + "\n  - **Not supported from version `26.2` and above**",
+				Optional:            true,
+			},
+			"encapsulation_source_address_option": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source address config option").AddStringEnumDescription("explicit-address", "locator-address-with-entropy-added").String + "\n  - Supported from version: `26.2`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("explicit-address", "locator-address-with-entropy-added"),
+				},
+			},
+			"encapsulation_source_address_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Explicit IPv6 address").String + "\n  - Supported from version: `26.2`",
 				Optional:            true,
 			},
 		},
@@ -252,6 +263,10 @@ func (r *SegmentRoutingV6Resource) Create(ctx context.Context, req resource.Crea
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -470,6 +485,10 @@ func (r *SegmentRoutingV6Resource) Update(ctx context.Context, req resource.Upda
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -563,6 +582,14 @@ func (r *SegmentRoutingV6Resource) Delete(ctx context.Context, req resource.Dele
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

@@ -652,18 +652,18 @@ func (r *SegmentRoutingTEPolicyResource) Schema(ctx context.Context, req resourc
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
-			"srv6_locator_binding_sid_type": schema.StringAttribute{
+			"srv6_options_locator_binding_sid_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("srv6-dynamic"),
 				},
 			},
-			"srv6_locator_behavior": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
+			"srv6_options_locator_behavior": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").String + "\n  - Choices: `ub6-encaps-reduced`, `ub6-insert-reduced` (v24.4), `ub6-encaps-reduced`, `ub6-insert-reduced`, `ub6-psp-usd-encaps-reduced`, `ub6-psp-usd-insert-reduced` (v26.2)",
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
+					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced", "ub6-psp-usd-encaps-reduced", "ub6-psp-usd-insert-reduced"),
 				},
 			},
 		},
@@ -695,6 +695,10 @@ func (r *SegmentRoutingTEPolicyResource) Create(ctx context.Context, req resourc
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -913,6 +917,10 @@ func (r *SegmentRoutingTEPolicyResource) Update(ctx context.Context, req resourc
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -1006,6 +1014,14 @@ func (r *SegmentRoutingTEPolicyResource) Delete(ctx context.Context, req resourc
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

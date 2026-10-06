@@ -22,6 +22,7 @@ This data source can read the HW Module Profile 8000 configuration.
 | `profile_gue_udp_dest_port_mpls` | `25.4` |
 | `profile_tcam_fib_ipv4_unicast_percent` | `25.4` |
 | `profile_tcam_fib_ipv6_unicast_percent` | `25.4` |
+| `profile_tcam_format_og_compr_id_extension` | `26.2` |
 
 ## Example Usage
 
@@ -151,6 +152,11 @@ data "iosxr_hw_module_profile_8000" "example" {
 - `profile_tcam_format_access_list_ipv6_udf8` (String) user defined filter
 - `profile_tcam_format_og_compr_id_extension` (Boolean) Enable wide compression result of OG ACL
   - Supported from version: `25.4`
+  - **Not supported from version `26.2` and above**
+- `profile_tcam_format_og_compr_id_extension_egress` (Boolean) Enable wide compression result of egress OG ACL
+  - Supported from version: `26.2`
+- `profile_tcam_format_og_compr_id_extension_ingress` (Boolean) Enable wide compression result of ingress OG ACL
+  - Supported from version: `26.2`
 
 <a id="nestedatt--profile_encap_exact_interfaces"></a>
 ### Nested Schema for `profile_encap_exact_interfaces`

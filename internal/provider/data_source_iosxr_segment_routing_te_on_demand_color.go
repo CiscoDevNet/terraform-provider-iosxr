@@ -297,11 +297,11 @@ func (d *SegmentRoutingTEOnDemandColorDataSource) Schema(ctx context.Context, re
 				MarkdownDescription: "SRv6 locator name",
 				Computed:            true,
 			},
-			"srv6_locator_binding_sid_type": schema.StringAttribute{
+			"srv6_options_locator_binding_sid_type": schema.StringAttribute{
 				MarkdownDescription: "Binding Segment ID type",
 				Computed:            true,
 			},
-			"srv6_locator_behavior": schema.StringAttribute{
+			"srv6_options_locator_behavior": schema.StringAttribute{
 				MarkdownDescription: "SRv6 USID Behavior",
 				Computed:            true,
 			},

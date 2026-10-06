@@ -56,9 +56,9 @@ resource "iosxr_segment_routing_te_on_demand_color" "example" {
   performance_measurement_reverse_path_segment_list             = "SEG-1"
   source_address                                                = "192.168.1.1"
   source_address_type                                           = "end-point-type-ipv4"
-  srv6_locator_behavior                                         = "ub6-insert-reduced"
-  srv6_locator_binding_sid_type                                 = "srv6-dynamic"
   srv6_locator_name                                             = "LOC1"
+  srv6_options_locator_behavior                                 = "ub6-insert-reduced"
+  srv6_options_locator_binding_sid_type                         = "srv6-dynamic"
   steering_invalidation_drop                                    = true
   steering_labeled_services_disable                             = true
 }
@@ -140,11 +140,11 @@ resource "iosxr_segment_routing_te_on_demand_color" "example" {
 - `source_address` (String) Source address
 - `source_address_type` (String) IP address type
   - Choices: `end-point-type-ipv4`, `end-point-type-ipv6`
-- `srv6_locator_behavior` (String) SRv6 USID Behavior
-  - Choices: `ub6-encaps-reduced`, `ub6-insert-reduced`
-- `srv6_locator_binding_sid_type` (String) Binding Segment ID type
-  - Choices: `srv6-dynamic`
 - `srv6_locator_name` (String) SRv6 locator name
+- `srv6_options_locator_behavior` (String) SRv6 USID Behavior
+  - Choices: `ub6-encaps-reduced`, `ub6-insert-reduced` (v24.4), `ub6-encaps-reduced`, `ub6-insert-reduced`, `ub6-psp-usd-encaps-reduced`, `ub6-psp-usd-insert-reduced` (v26.2)
+- `srv6_options_locator_binding_sid_type` (String) Binding Segment ID type
+  - Choices: `srv6-dynamic`
 - `steering_invalidation_drop` (Boolean) Enable path invalidation drop
 - `steering_labeled_services_disable` (Boolean) Disable all steering services
 

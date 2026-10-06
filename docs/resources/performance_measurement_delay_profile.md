@@ -10,6 +10,14 @@ description: |-
 
 This resource can manage the Performance Measurement Delay Profile configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `endpoint_default_histogram_delay_bins_explicit` | `26.2` |
+
 ## Example Usage
 
 ```terraform
@@ -156,6 +164,7 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
 - `endpoint_default_advertisement_threshold_check_minimum_delay` (Boolean) Enable minimum-delay threshold-check
 - `endpoint_default_histogram_delay_bins_explicit` (List of Number) explicit list of 27 numbers to split 28 bins. All 27 entries must be configured
   - Supported from version: `25.4`
+  - **Not supported from version `26.2` and above**
 - `endpoint_default_probe_collect_hbh` (Boolean) Collect hop by hop data for delay sessions
   - Supported from version: `25.4`
 - `endpoint_default_probe_computation_interval` (Number) Interval for metric computation

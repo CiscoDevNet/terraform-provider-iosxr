@@ -572,7 +572,7 @@ func (data PerformanceMeasurementDelayProfile) toBody(ctx context.Context, provi
 	if !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() && !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsUnknown() {
 		body, _ = sjson.Set(body, "endpoint.default.advertisement.anomaly-loss.upper-bound", strconv.FormatInt(data.EndpointDefaultAdvertisementAnomalyLossUpperBound.ValueInt64(), 10))
 	}
-	if helpers.VersionAtLeast(providerVersion, "25.4") {
+	if helpers.VersionAtLeast(providerVersion, "25.4") && (providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "26.2")) {
 		if !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() && !data.EndpointDefaultHistogramDelayBinsExplicit.IsUnknown() {
 			var values []int
 			data.EndpointDefaultHistogramDelayBinsExplicit.ElementsAs(ctx, &values, false)
@@ -788,6 +788,8 @@ func (data PerformanceMeasurementDelayProfile) GetVersionConstraints() []helpers
 		{
 			FieldPath:      "endpoint_default_histogram_delay_bins_explicit",
 			AddedInVersion: "25.4",
+
+			RemovedInVersion: "26.2",
 		},
 		{
 			FieldPath:      "endpoint_default_probe_collect_hbh",
@@ -1690,7 +1692,7 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 			}
 		}
 	}
-	if value := gjson.GetBytes(res, "endpoint.default.histogram.delay-bins.explicit"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.histogram.delay-bins.explicit"); helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && value.Exists() && !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
 		data.EndpointDefaultHistogramDelayBinsExplicit = helpers.GetInt64List(value.Array())
 	} else if data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
 		data.EndpointDefaultHistogramDelayBinsExplicit = types.ListNull(types.Int64Type)
@@ -2247,7 +2249,7 @@ func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, re
 			return true
 		})
 	}
-	if helpers.VersionAtLeast(version, "25.4") {
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) {
 		if value := gjson.GetBytes(res, "endpoint.default.histogram.delay-bins.explicit"); value.Exists() {
 			data.EndpointDefaultHistogramDelayBinsExplicit = helpers.GetInt64List(value.Array())
 		} else {
@@ -2763,7 +2765,7 @@ func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context
 			return true
 		})
 	}
-	if helpers.VersionAtLeast(version, "25.4") {
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) {
 		if value := gjson.GetBytes(res, "endpoint.default.histogram.delay-bins.explicit"); value.Exists() {
 			data.EndpointDefaultHistogramDelayBinsExplicit = helpers.GetInt64List(value.Array())
 		} else {
@@ -2852,7 +2854,7 @@ func (data *PerformanceMeasurementDelayProfile) getDeletedItems(ctx context.Cont
 	if helpers.VersionAtLeast(version, "25.4") && !state.EndpointDefaultProbeCollectHbh.IsNull() && data.EndpointDefaultProbeCollectHbh.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/collect-hbh"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !state.EndpointDefaultHistogramDelayBinsExplicit.IsNull() && data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !state.EndpointDefaultHistogramDelayBinsExplicit.IsNull() && data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/histogram/delay-bins/explicit"))
 	}
 	for i := range state.Profiles {
@@ -3510,7 +3512,7 @@ func (data *PerformanceMeasurementDelayProfile) getDeletePaths(ctx context.Conte
 	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeCollectHbh.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/collect-hbh"))
 	}
-	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/histogram/delay-bins/explicit"))
 	}
 	for i := range data.Profiles {

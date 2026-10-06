@@ -1,0 +1,21 @@
+---
+name: Segment Routing TE On Demand Color
+path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:on-demand-colors/Cisco-IOS-XR-infra-xtc-agent-cfg:on-demand-color[color=%d]
+doc_category: Segment Routing
+attributes:
+  # ===========================================================
+  # srv6/locator/* moved to srv6-options/locator/*
+  # 25.4: srv6/locator/{locator-name,binding-sid-type,behavior}
+  # 26.2: srv6-options/locator/{locator-name,binding-sid-type,behavior}
+  # ===========================================================
+  - yang_name: srv6-options/locator/locator-name
+    tf_name: srv6_locator_name
+    delete_parent: true
+    replaces_yang_name: srv6/locator/locator-name
+    example: LOC1
+  - yang_name: srv6-options/locator/binding-sid-type
+    replaces_yang_name: srv6/locator/binding-sid-type
+    example: srv6-dynamic
+  - yang_name: srv6-options/locator/behavior
+    replaces_yang_name: srv6/locator/behavior
+    example: ub6-insert-reduced

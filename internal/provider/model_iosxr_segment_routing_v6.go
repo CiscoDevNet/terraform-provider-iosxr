@@ -41,34 +41,38 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type SegmentRoutingV6 struct {
-	Device                          types.String               `tfsdk:"device"`
-	Id                              types.String               `tfsdk:"id"`
-	DeleteMode                      types.String               `tfsdk:"delete_mode"`
-	Enable                          types.Bool                 `tfsdk:"enable"`
-	SidHoldtime                     types.Int64                `tfsdk:"sid_holdtime"`
-	LoggingLocatorStatus            types.Bool                 `tfsdk:"logging_locator_status"`
-	Formats                         []SegmentRoutingV6Formats  `tfsdk:"formats"`
-	Locators                        []SegmentRoutingV6Locators `tfsdk:"locators"`
-	EncapsulationTrafficClassOption types.String               `tfsdk:"encapsulation_traffic_class_option"`
-	EncapsulationTrafficClassValue  types.Int64                `tfsdk:"encapsulation_traffic_class_value"`
-	EncapsulationHopLimitOption     types.String               `tfsdk:"encapsulation_hop_limit_option"`
-	EncapsulationHopLimitValue      types.Int64                `tfsdk:"encapsulation_hop_limit_value"`
-	EncapsulationSourceAddress      types.String               `tfsdk:"encapsulation_source_address"`
+	Device                            types.String               `tfsdk:"device"`
+	Id                                types.String               `tfsdk:"id"`
+	DeleteMode                        types.String               `tfsdk:"delete_mode"`
+	Enable                            types.Bool                 `tfsdk:"enable"`
+	SidHoldtime                       types.Int64                `tfsdk:"sid_holdtime"`
+	LoggingLocatorStatus              types.Bool                 `tfsdk:"logging_locator_status"`
+	Formats                           []SegmentRoutingV6Formats  `tfsdk:"formats"`
+	Locators                          []SegmentRoutingV6Locators `tfsdk:"locators"`
+	EncapsulationTrafficClassOption   types.String               `tfsdk:"encapsulation_traffic_class_option"`
+	EncapsulationTrafficClassValue    types.Int64                `tfsdk:"encapsulation_traffic_class_value"`
+	EncapsulationHopLimitOption       types.String               `tfsdk:"encapsulation_hop_limit_option"`
+	EncapsulationHopLimitValue        types.Int64                `tfsdk:"encapsulation_hop_limit_value"`
+	EncapsulationSourceAddress        types.String               `tfsdk:"encapsulation_source_address"`
+	EncapsulationSourceAddressOption  types.String               `tfsdk:"encapsulation_source_address_option"`
+	EncapsulationSourceAddressAddress types.String               `tfsdk:"encapsulation_source_address_address"`
 }
 
 type SegmentRoutingV6Data struct {
-	Device                          types.String               `tfsdk:"device"`
-	Id                              types.String               `tfsdk:"id"`
-	Enable                          types.Bool                 `tfsdk:"enable"`
-	SidHoldtime                     types.Int64                `tfsdk:"sid_holdtime"`
-	LoggingLocatorStatus            types.Bool                 `tfsdk:"logging_locator_status"`
-	Formats                         []SegmentRoutingV6Formats  `tfsdk:"formats"`
-	Locators                        []SegmentRoutingV6Locators `tfsdk:"locators"`
-	EncapsulationTrafficClassOption types.String               `tfsdk:"encapsulation_traffic_class_option"`
-	EncapsulationTrafficClassValue  types.Int64                `tfsdk:"encapsulation_traffic_class_value"`
-	EncapsulationHopLimitOption     types.String               `tfsdk:"encapsulation_hop_limit_option"`
-	EncapsulationHopLimitValue      types.Int64                `tfsdk:"encapsulation_hop_limit_value"`
-	EncapsulationSourceAddress      types.String               `tfsdk:"encapsulation_source_address"`
+	Device                            types.String               `tfsdk:"device"`
+	Id                                types.String               `tfsdk:"id"`
+	Enable                            types.Bool                 `tfsdk:"enable"`
+	SidHoldtime                       types.Int64                `tfsdk:"sid_holdtime"`
+	LoggingLocatorStatus              types.Bool                 `tfsdk:"logging_locator_status"`
+	Formats                           []SegmentRoutingV6Formats  `tfsdk:"formats"`
+	Locators                          []SegmentRoutingV6Locators `tfsdk:"locators"`
+	EncapsulationTrafficClassOption   types.String               `tfsdk:"encapsulation_traffic_class_option"`
+	EncapsulationTrafficClassValue    types.Int64                `tfsdk:"encapsulation_traffic_class_value"`
+	EncapsulationHopLimitOption       types.String               `tfsdk:"encapsulation_hop_limit_option"`
+	EncapsulationHopLimitValue        types.Int64                `tfsdk:"encapsulation_hop_limit_value"`
+	EncapsulationSourceAddress        types.String               `tfsdk:"encapsulation_source_address"`
+	EncapsulationSourceAddressOption  types.String               `tfsdk:"encapsulation_source_address_option"`
+	EncapsulationSourceAddressAddress types.String               `tfsdk:"encapsulation_source_address_address"`
 }
 type SegmentRoutingV6Formats struct {
 	Name                                  types.String `tfsdk:"name"`
@@ -141,8 +145,20 @@ func (data SegmentRoutingV6) toBody(ctx context.Context, providerVersion string)
 	if !data.EncapsulationHopLimitValue.IsNull() && !data.EncapsulationHopLimitValue.IsUnknown() {
 		body, _ = sjson.Set(body, "encapsulation.hop-limit.value", strconv.FormatInt(data.EncapsulationHopLimitValue.ValueInt64(), 10))
 	}
-	if !data.EncapsulationSourceAddress.IsNull() && !data.EncapsulationSourceAddress.IsUnknown() {
-		body, _ = sjson.Set(body, "encapsulation.source-address", data.EncapsulationSourceAddress.ValueString())
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.EncapsulationSourceAddress.IsNull() && !data.EncapsulationSourceAddress.IsUnknown() {
+			body, _ = sjson.Set(body, "encapsulation.source-address", data.EncapsulationSourceAddress.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.EncapsulationSourceAddressOption.IsNull() && !data.EncapsulationSourceAddressOption.IsUnknown() {
+			body, _ = sjson.Set(body, "encapsulation.source-address.option", data.EncapsulationSourceAddressOption.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.EncapsulationSourceAddressAddress.IsNull() && !data.EncapsulationSourceAddressAddress.IsUnknown() {
+			body, _ = sjson.Set(body, "encapsulation.source-address.address", data.EncapsulationSourceAddressAddress.ValueString())
+		}
 	}
 	if len(data.Formats) > 0 {
 		body, _ = sjson.Set(body, "formats.formats.format", []interface{}{})
@@ -207,6 +223,21 @@ func (data SegmentRoutingV6) toBody(ctx context.Context, providerVersion string)
 func (data SegmentRoutingV6) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "encapsulation_source_address",
+
+			RemovedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "encapsulation_source_address_option",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "encapsulation_source_address_address",
+			AddedInVersion: "26.2",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -430,10 +461,20 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte, ve
 	} else if data.EncapsulationHopLimitValue.IsNull() {
 		data.EncapsulationHopLimitValue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EncapsulationSourceAddress.IsNull() {
+	if value := gjson.GetBytes(res, "encapsulation.source-address"); (version == "" || !helpers.VersionAtLeast(version, "26.2")) && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EncapsulationSourceAddress.IsNull() {
 		data.EncapsulationSourceAddress = types.StringValue(value.String())
 	} else if data.EncapsulationSourceAddress.IsNull() {
 		data.EncapsulationSourceAddress = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.source-address.option"); helpers.VersionAtLeast(version, "26.2") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EncapsulationSourceAddressOption.IsNull() {
+		data.EncapsulationSourceAddressOption = types.StringValue(value.String())
+	} else if data.EncapsulationSourceAddressOption.IsNull() {
+		data.EncapsulationSourceAddressOption = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "encapsulation.source-address.address"); helpers.VersionAtLeast(version, "26.2") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EncapsulationSourceAddressAddress.IsNull() {
+		data.EncapsulationSourceAddressAddress = types.StringValue(value.String())
+	} else if data.EncapsulationSourceAddressAddress.IsNull() {
+		data.EncapsulationSourceAddressAddress = types.StringNull()
 	}
 }
 
@@ -530,8 +571,26 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res []byte, version 
 	if value := gjson.GetBytes(res, "encapsulation.hop-limit.value"); value.Exists() {
 		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	if version == "" || !helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.EncapsulationSourceAddress = types.StringValue(value.String())
+		}
+	} else {
+		data.EncapsulationSourceAddress = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "encapsulation.source-address.option"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.EncapsulationSourceAddressOption = types.StringValue(value.String())
+		}
+	} else {
+		data.EncapsulationSourceAddressOption = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "encapsulation.source-address.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.EncapsulationSourceAddressAddress = types.StringValue(value.String())
+		}
+	} else {
+		data.EncapsulationSourceAddressAddress = types.StringNull()
 	}
 }
 
@@ -623,8 +682,26 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte, vers
 	if value := gjson.GetBytes(res, "encapsulation.hop-limit.value"); value.Exists() {
 		data.EncapsulationHopLimitValue = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	if version == "" || !helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.EncapsulationSourceAddress = types.StringValue(value.String())
+		}
+	} else {
+		data.EncapsulationSourceAddress = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "encapsulation.source-address.option"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.EncapsulationSourceAddressOption = types.StringValue(value.String())
+		}
+	} else {
+		data.EncapsulationSourceAddressOption = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "encapsulation.source-address.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.EncapsulationSourceAddressAddress = types.StringValue(value.String())
+		}
+	} else {
+		data.EncapsulationSourceAddressAddress = types.StringNull()
 	}
 }
 
@@ -634,7 +711,13 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte, vers
 
 func (data *SegmentRoutingV6) getDeletedItems(ctx context.Context, state SegmentRoutingV6, version string) []string {
 	deletedItems := make([]string, 0)
-	if !state.EncapsulationSourceAddress.IsNull() && data.EncapsulationSourceAddress.IsNull() {
+	if helpers.VersionAtLeast(version, "26.2") && !state.EncapsulationSourceAddressAddress.IsNull() && data.EncapsulationSourceAddressAddress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "encapsulation/source-address/address"))
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !state.EncapsulationSourceAddressOption.IsNull() && data.EncapsulationSourceAddressOption.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "encapsulation/source-address/option"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !state.EncapsulationSourceAddress.IsNull() && data.EncapsulationSourceAddress.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "encapsulation/source-address"))
 	}
 	if !state.EncapsulationHopLimitValue.IsNull() && data.EncapsulationHopLimitValue.IsNull() {
@@ -806,7 +889,13 @@ func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context, state *Se
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *SegmentRoutingV6) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
-	if !data.EncapsulationSourceAddress.IsNull() {
+	if helpers.VersionAtLeast(version, "26.2") && !data.EncapsulationSourceAddressAddress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "encapsulation/source-address/address"))
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !data.EncapsulationSourceAddressOption.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "encapsulation/source-address/option"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.EncapsulationSourceAddress.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "encapsulation/source-address"))
 	}
 	if !data.EncapsulationHopLimitValue.IsNull() {
@@ -959,6 +1048,12 @@ func (data SegmentRoutingV6) toBodyXML(ctx context.Context, stateArg ...*Segment
 	}
 	if !data.EncapsulationSourceAddress.IsNull() && !data.EncapsulationSourceAddress.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/encapsulation/source-address", data.EncapsulationSourceAddress.ValueString())
+	}
+	if !data.EncapsulationSourceAddressOption.IsNull() && !data.EncapsulationSourceAddressOption.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/encapsulation/source-address/option", data.EncapsulationSourceAddressOption.ValueString())
+	}
+	if !data.EncapsulationSourceAddressAddress.IsNull() && !data.EncapsulationSourceAddressAddress.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/encapsulation/source-address/address", data.EncapsulationSourceAddressAddress.ValueString())
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -1175,6 +1270,16 @@ func (data *SegmentRoutingV6) updateFromBodyXML(ctx context.Context, res xmldot.
 	} else if data.EncapsulationSourceAddress.IsNull() {
 		data.EncapsulationSourceAddress = types.StringNull()
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address/option"); value.Exists() && !data.EncapsulationSourceAddressOption.IsNull() {
+		data.EncapsulationSourceAddressOption = types.StringValue(value.String())
+	} else if data.EncapsulationSourceAddressOption.IsNull() {
+		data.EncapsulationSourceAddressOption = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address/address"); value.Exists() && !data.EncapsulationSourceAddressAddress.IsNull() {
+		data.EncapsulationSourceAddressAddress = types.StringValue(value.String())
+	} else if data.EncapsulationSourceAddressAddress.IsNull() {
+		data.EncapsulationSourceAddressAddress = types.StringNull()
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -1267,6 +1372,12 @@ func (data *SegmentRoutingV6) fromBodyXML(ctx context.Context, res xmldot.Result
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address"); value.Exists() {
 		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address/option"); value.Exists() {
+		data.EncapsulationSourceAddressOption = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address/address"); value.Exists() {
+		data.EncapsulationSourceAddressAddress = types.StringValue(value.String())
 	}
 }
 
@@ -1361,6 +1472,12 @@ func (data *SegmentRoutingV6Data) fromBodyXML(ctx context.Context, res xmldot.Re
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address"); value.Exists() {
 		data.EncapsulationSourceAddress = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address/option"); value.Exists() {
+		data.EncapsulationSourceAddressOption = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/encapsulation/source-address/address"); value.Exists() {
+		data.EncapsulationSourceAddressAddress = types.StringValue(value.String())
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -1372,6 +1489,36 @@ func (data *SegmentRoutingV6) addDeletedItemsXML(ctx context.Context, state Segm
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	if !state.EncapsulationSourceAddressAddress.IsNull() && data.EncapsulationSourceAddressAddress.IsNull() {
+		deletePath := state.getXPath() + "/encapsulation/source-address/address"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EncapsulationSourceAddressOption.IsNull() && data.EncapsulationSourceAddressOption.IsNull() {
+		deletePath := state.getXPath() + "/encapsulation/source-address/option"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.EncapsulationSourceAddress.IsNull() && data.EncapsulationSourceAddress.IsNull() {
 		deletePath := state.getXPath() + "/encapsulation/source-address"
 		// Check if a parent path is already marked for deletion
@@ -1598,6 +1745,12 @@ func (data *SegmentRoutingV6) addDeletedItemsXML(ctx context.Context, state Segm
 
 func (data *SegmentRoutingV6) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.EncapsulationSourceAddressAddress.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/encapsulation/source-address/address")
+	}
+	if !data.EncapsulationSourceAddressOption.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/encapsulation/source-address/option")
+	}
 	if !data.EncapsulationSourceAddress.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/encapsulation/source-address")
 	}

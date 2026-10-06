@@ -31,7 +31,7 @@ resource "iosxr_key_chain" "example" {
       accept_lifetime_start_time_year         = 2023
       cryptographic_algorithm                 = "hmac-md5"
       key_name                                = "1"
-      key_string_password6                    = "00071A150754"
+      key_string_password                     = "03075218050061"
       send_lifetime_end_time_day_of_month     = 15
       send_lifetime_end_time_hour             = 8
       send_lifetime_end_time_minute           = 36

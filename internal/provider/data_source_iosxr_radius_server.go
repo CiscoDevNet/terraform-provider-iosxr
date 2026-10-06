@@ -254,6 +254,38 @@ func (d *RadiusServerDataSource) Schema(ctx context.Context, req datasource.Sche
 								},
 							},
 						},
+						"attribute_vendor_cisco_vendor_types": schema.ListNestedAttribute{
+							MarkdownDescription: "Vendor 9 vendor-type entry" + "\n  - Supported from version: `26.2`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vendor_type_id": schema.Int64Attribute{
+										MarkdownDescription: "Vendor 9 vendor-type id." + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+									},
+									"all_avpairs": schema.BoolAttribute{
+										MarkdownDescription: "Apply to all avpairs with vendor 9 type 1 special semantics." + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+									},
+									"all_attributes": schema.BoolAttribute{
+										MarkdownDescription: "Apply to all attributes for this vendor 9 vendor-type." + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+									},
+									"avpairs": schema.ListNestedAttribute{
+										MarkdownDescription: "Named Av-Pair entry for vendor 9 type 1." + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"avpair_name": schema.StringAttribute{
+													MarkdownDescription: "Av-Pair name for vendor 9 type 1." + "\n  - Supported from version: `26.2`",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},

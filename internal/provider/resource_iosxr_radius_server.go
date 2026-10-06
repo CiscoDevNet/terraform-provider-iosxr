@@ -348,6 +348,45 @@ func (r *RadiusServerResource) Schema(ctx context.Context, req resource.SchemaRe
 								},
 							},
 						},
+						"attribute_vendor_cisco_vendor_types": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Vendor 9 vendor-type entry").String + "\n  - Supported from version: `26.2`",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vendor_type_id": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Vendor 9 vendor-type id.").AddIntegerRangeDescription(1, 254).String + "\n  - Supported from version: `26.2`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 254),
+										},
+									},
+									"all_avpairs": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Apply to all avpairs with vendor 9 type 1 special semantics.").String + "\n  - Supported from version: `26.2`",
+										Optional:            true,
+									},
+									"all_attributes": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Apply to all attributes for this vendor 9 vendor-type.").String + "\n  - Supported from version: `26.2`",
+										Optional:            true,
+									},
+									"avpairs": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Named Av-Pair entry for vendor 9 type 1.").String + "\n  - Supported from version: `26.2`",
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"avpair_name": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Av-Pair name for vendor 9 type 1.").String + "\n  - Supported from version: `26.2`",
+													Optional:            true,
+													Validators: []validator.String{
+														stringvalidator.LengthBetween(1, 800),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},

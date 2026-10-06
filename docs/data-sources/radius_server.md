@@ -58,9 +58,35 @@ data "iosxr_radius_server" "example" {
 
 Read-Only:
 
+- `attribute_vendor_cisco_vendor_types` (Attributes List) Vendor 9 vendor-type entry
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types))
 - `attribute_vendor_ids` (Attributes List) vendor-id (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_ids))
 - `name` (String) List of Attribute Types
 - `radius_attributes` (String) Comma-delimited list of RADIUS attributes
+
+<a id="nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types"></a>
+### Nested Schema for `attribute_lists.attribute_vendor_cisco_vendor_types`
+
+Read-Only:
+
+- `all_attributes` (Boolean) Apply to all attributes for this vendor 9 vendor-type.
+  - Supported from version: `26.2`
+- `all_avpairs` (Boolean) Apply to all avpairs with vendor 9 type 1 special semantics.
+  - Supported from version: `26.2`
+- `avpairs` (Attributes List) Named Av-Pair entry for vendor 9 type 1.
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types--avpairs))
+- `vendor_type_id` (Number) Vendor 9 vendor-type id.
+  - Supported from version: `26.2`
+
+<a id="nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types--avpairs"></a>
+### Nested Schema for `attribute_lists.attribute_vendor_cisco_vendor_types.avpairs`
+
+Read-Only:
+
+- `avpair_name` (String) Av-Pair name for vendor 9 type 1.
+  - Supported from version: `26.2`
+
+
 
 <a id="nestedatt--attribute_lists--attribute_vendor_ids"></a>
 ### Nested Schema for `attribute_lists.attribute_vendor_ids`

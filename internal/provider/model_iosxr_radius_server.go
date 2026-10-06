@@ -118,16 +118,26 @@ type RadiusServerHosts struct {
 	AttributeMessageAuthenticatorOptional types.Bool   `tfsdk:"attribute_message_authenticator_optional"`
 }
 type RadiusServerAttributeLists struct {
-	Name               types.String                                   `tfsdk:"name"`
-	RadiusAttributes   types.String                                   `tfsdk:"radius_attributes"`
-	AttributeVendorIds []RadiusServerAttributeListsAttributeVendorIds `tfsdk:"attribute_vendor_ids"`
+	Name                            types.String                                                `tfsdk:"name"`
+	RadiusAttributes                types.String                                                `tfsdk:"radius_attributes"`
+	AttributeVendorIds              []RadiusServerAttributeListsAttributeVendorIds              `tfsdk:"attribute_vendor_ids"`
+	AttributeVendorCiscoVendorTypes []RadiusServerAttributeListsAttributeVendorCiscoVendorTypes `tfsdk:"attribute_vendor_cisco_vendor_types"`
 }
 type RadiusServerAttributeListsAttributeVendorIds struct {
 	Id          types.Int64                                               `tfsdk:"id"`
 	VendorTypes []RadiusServerAttributeListsAttributeVendorIdsVendorTypes `tfsdk:"vendor_types"`
 }
+type RadiusServerAttributeListsAttributeVendorCiscoVendorTypes struct {
+	VendorTypeId  types.Int64                                                        `tfsdk:"vendor_type_id"`
+	AllAvpairs    types.Bool                                                         `tfsdk:"all_avpairs"`
+	AllAttributes types.Bool                                                         `tfsdk:"all_attributes"`
+	Avpairs       []RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs `tfsdk:"avpairs"`
+}
 type RadiusServerAttributeListsAttributeVendorIdsVendorTypes struct {
 	VendorTypeId types.Int64 `tfsdk:"vendor_type_id"`
+}
+type RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs struct {
+	AvpairName types.String `tfsdk:"avpair_name"`
 }
 
 // End of section. //template:end types
@@ -333,6 +343,40 @@ func (data RadiusServer) toBody(ctx context.Context, providerVersion string) str
 					}
 				}
 			}
+			if (helpers.VersionAtLeast(providerVersion, "26.2")) && len(item.AttributeVendorCiscoVendorTypes) > 0 {
+				body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type", []interface{}{})
+				for cindex, citem := range item.AttributeVendorCiscoVendorTypes {
+					if helpers.VersionAtLeast(providerVersion, "26.2") {
+						if !citem.VendorTypeId.IsNull() && !citem.VendorTypeId.IsUnknown() {
+							body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"vendor-type-id", strconv.FormatInt(citem.VendorTypeId.ValueInt64(), 10))
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "26.2") {
+						if !citem.AllAvpairs.IsNull() && !citem.AllAvpairs.IsUnknown() {
+							if citem.AllAvpairs.ValueBool() {
+								body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"all-avpairs", map[string]string{})
+							}
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "26.2") {
+						if !citem.AllAttributes.IsNull() && !citem.AllAttributes.IsUnknown() {
+							if citem.AllAttributes.ValueBool() {
+								body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"all-attributes", map[string]string{})
+							}
+						}
+					}
+					if (helpers.VersionAtLeast(providerVersion, "26.2")) && len(citem.Avpairs) > 0 {
+						body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"avpairs", []interface{}{})
+						for ccindex, ccitem := range citem.Avpairs {
+							if helpers.VersionAtLeast(providerVersion, "26.2") {
+								if !ccitem.AvpairName.IsNull() && !ccitem.AvpairName.IsUnknown() {
+									body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"avpairs"+"."+strconv.Itoa(ccindex)+"."+"avpair-name", ccitem.AvpairName.ValueString())
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	return body
@@ -354,6 +398,30 @@ func (data RadiusServer) GetVersionConstraints() []helpers.FieldVersionConstrain
 		{
 			FieldPath:      "hosts.attribute_message_authenticator_optional",
 			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.vendor_type_id",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.all_avpairs",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.all_attributes",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.avpairs",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.avpairs.avpair_name",
+			AddedInVersion: "26.2",
 		},
 		{
 			FieldPath:      "attribute_message_authenticator",
@@ -727,6 +795,92 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte, versio
 				}
 			}
 		}
+		for ci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "26.2") {
+				keys = append(keys, "vendor-type-id")
+				keyValues = append(keyValues, strconv.FormatInt(data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10))
+			}
+
+			var cr gjson.Result
+			r.Get("attribute.vendor-cisco.vendor-type").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("vendor-type-id"); helpers.VersionAtLeast(version, "26.2") && value.Exists() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.IsNull() {
+				data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId = types.Int64Value(value.Int())
+			} else {
+				data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId = types.Int64Null()
+			}
+			if value := cr.Get("all-avpairs"); helpers.VersionAtLeast(version, "26.2") && value.Exists() {
+				if !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs = types.BoolNull()
+				}
+			}
+			if value := cr.Get("all-attributes"); helpers.VersionAtLeast(version, "26.2") && value.Exists() {
+				if !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes = types.BoolNull()
+				}
+			}
+			for cci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs {
+				var keys []string
+				var keyValues []string
+				if helpers.VersionAtLeast(version, "26.2") {
+					keys = append(keys, "avpair-name")
+					keyValues = append(keyValues, data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString())
+				}
+
+				var ccr gjson.Result
+				cr.Get("avpairs").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("avpair-name"); helpers.VersionAtLeast(version, "26.2") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName = types.StringValue(value.String())
+				} else {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName = types.StringNull()
+				}
+			}
+		}
 	}
 	if value := gjson.GetBytes(res, "attribute.acct-session-id.prepend-nas-port-id"); !data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
 		if value.Exists() {
@@ -935,6 +1089,54 @@ func (data *RadiusServer) fromBody(ctx context.Context, res []byte, version stri
 					return true
 				})
 			}
+			if cValue := v.Get("attribute.vendor-cisco.vendor-type"); cValue.Exists() {
+				item.AttributeVendorCiscoVendorTypes = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypes, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypes{}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("vendor-type-id"); ccValue.Exists() {
+							cItem.VendorTypeId = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.VendorTypeId = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("all-avpairs"); ccValue.Exists() {
+							cItem.AllAvpairs = types.BoolValue(true)
+						} else {
+							cItem.AllAvpairs = types.BoolValue(false)
+						}
+					} else {
+						cItem.AllAvpairs = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("all-attributes"); ccValue.Exists() {
+							cItem.AllAttributes = types.BoolValue(true)
+						} else {
+							cItem.AllAttributes = types.BoolValue(false)
+						}
+					} else {
+						cItem.AllAttributes = types.BoolNull()
+					}
+					if ccValue := cv.Get("avpairs"); ccValue.Exists() {
+						cItem.Avpairs = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs{}
+							if helpers.VersionAtLeast(version, "26.2") {
+								if cccValue := ccv.Get("avpair-name"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+									ccItem.AvpairName = types.StringValue(cccValue.String())
+								}
+							} else {
+								ccItem.AvpairName = types.StringNull()
+							}
+							cItem.Avpairs = append(cItem.Avpairs, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorCiscoVendorTypes = append(item.AttributeVendorCiscoVendorTypes, cItem)
+					return true
+				})
+			}
 			data.AttributeLists = append(data.AttributeLists, item)
 			return true
 		})
@@ -1127,6 +1329,54 @@ func (data *RadiusServerData) fromBody(ctx context.Context, res []byte, version 
 					return true
 				})
 			}
+			if cValue := v.Get("attribute.vendor-cisco.vendor-type"); cValue.Exists() {
+				item.AttributeVendorCiscoVendorTypes = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypes, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypes{}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("vendor-type-id"); ccValue.Exists() {
+							cItem.VendorTypeId = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.VendorTypeId = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("all-avpairs"); ccValue.Exists() {
+							cItem.AllAvpairs = types.BoolValue(true)
+						} else {
+							cItem.AllAvpairs = types.BoolValue(false)
+						}
+					} else {
+						cItem.AllAvpairs = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("all-attributes"); ccValue.Exists() {
+							cItem.AllAttributes = types.BoolValue(true)
+						} else {
+							cItem.AllAttributes = types.BoolValue(false)
+						}
+					} else {
+						cItem.AllAttributes = types.BoolNull()
+					}
+					if ccValue := cv.Get("avpairs"); ccValue.Exists() {
+						cItem.Avpairs = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs{}
+							if helpers.VersionAtLeast(version, "26.2") {
+								if cccValue := ccv.Get("avpair-name"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+									ccItem.AvpairName = types.StringValue(cccValue.String())
+								}
+							} else {
+								ccItem.AvpairName = types.StringNull()
+							}
+							cItem.Avpairs = append(cItem.Avpairs, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorCiscoVendorTypes = append(item.AttributeVendorCiscoVendorTypes, cItem)
+					return true
+				})
+			}
 			data.AttributeLists = append(data.AttributeLists, item)
 			return true
 		})
@@ -1196,6 +1446,84 @@ func (data *RadiusServer) getDeletedItems(ctx context.Context, state RadiusServe
 				found = false
 			}
 			if found {
+				if helpers.VersionAtLeast(version, "26.2") {
+					for ci := range state.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+						var ckeys []string
+						var cstateKeyValues []string
+						if helpers.VersionAtLeast(version, "26.2") {
+							ckeys = append(ckeys, "vendor-type-id")
+							cstateKeyValues = append(cstateKeyValues, strconv.FormatInt(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10))
+						}
+						ckeyString := ""
+						for cki := range ckeys {
+							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						}
+
+						cemptyKeys := true
+						if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64()).IsZero() {
+							cemptyKeys = false
+						}
+						if cemptyKeys {
+							continue
+						}
+
+						found := false
+						for cj := range data.AttributeLists[j].AttributeVendorCiscoVendorTypes {
+							found = true
+							if state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64() != data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].VendorTypeId.ValueInt64() {
+								found = false
+							}
+							if found {
+								if helpers.VersionAtLeast(version, "26.2") {
+									for cci := range state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs {
+										var cckeys []string
+										var ccstateKeyValues []string
+										if helpers.VersionAtLeast(version, "26.2") {
+											cckeys = append(cckeys, "avpair-name")
+											ccstateKeyValues = append(ccstateKeyValues, state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString())
+										}
+										cckeyString := ""
+										for ccki := range cckeys {
+											cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+										}
+
+										ccemptyKeys := true
+										if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString()).IsZero() {
+											ccemptyKeys = false
+										}
+										if ccemptyKeys {
+											continue
+										}
+
+										found := false
+										for ccj := range data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].Avpairs {
+											found = true
+											if state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString() != data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].Avpairs[ccj].AvpairName.ValueString() {
+												found = false
+											}
+											if found {
+												break
+											}
+										}
+										if !found {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString, "avpairs", cckeyString))
+										}
+									}
+								}
+								if helpers.VersionAtLeast(version, "26.2") && !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() && data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].AllAttributes.IsNull() {
+									deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-attributes"))
+								}
+								if helpers.VersionAtLeast(version, "26.2") && !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() && data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].AllAvpairs.IsNull() {
+									deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-avpairs"))
+								}
+								break
+							}
+						}
+						if !found {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString))
+						}
+					}
+				}
 				for ci := range state.AttributeLists[i].AttributeVendorIds {
 					ckeys := [...]string{"id"}
 					cstateKeyValues := [...]string{strconv.FormatInt(state.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64(), 10)}
@@ -1434,6 +1762,44 @@ func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *Radius
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "26.2") {
+			for ci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+				var ckeys []string
+				var ckeyValues []string
+				if helpers.VersionAtLeast(version, "26.2") {
+					ckeys = append(ckeys, "vendor-type-id")
+					ckeyValues = append(ckeyValues, strconv.FormatInt(data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10))
+				}
+				ckeyString := ""
+				for cki := range ckeys {
+					ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				}
+				if helpers.VersionAtLeast(version, "26.2") {
+					for cci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs {
+						var cckeys []string
+						var cckeyValues []string
+						if helpers.VersionAtLeast(version, "26.2") {
+							cckeys = append(cckeys, "avpair-name")
+							cckeyValues = append(cckeyValues, data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString())
+						}
+						cckeyString := ""
+						for ccki := range cckeys {
+							cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+						}
+					}
+				}
+				if helpers.VersionAtLeast(version, "26.2") && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.ValueBool() {
+					if state != nil && i < len(state.AttributeLists) && ci < len(state.AttributeLists[i].AttributeVendorCiscoVendorTypes) && !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() && state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-attributes"))
+					}
+				}
+				if helpers.VersionAtLeast(version, "26.2") && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.ValueBool() {
+					if state != nil && i < len(state.AttributeLists) && ci < len(state.AttributeLists[i].AttributeVendorCiscoVendorTypes) && !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() && state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-avpairs"))
+					}
+				}
+			}
 		}
 		for ci := range data.AttributeLists[i].AttributeVendorIds {
 			ckeys := [...]string{"id"}
@@ -1788,6 +2154,32 @@ func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServe
 					}
 				}
 			}
+			if len(item.AttributeVendorCiscoVendorTypes) > 0 {
+				for _, citem := range item.AttributeVendorCiscoVendorTypes {
+					cbasePath := basePath + "/attribute/vendor-cisco/vendor-type[vendor-type-id='" + strconv.FormatInt(citem.VendorTypeId.ValueInt64(), 10) + "']"
+					if !citem.VendorTypeId.IsNull() && !citem.VendorTypeId.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/vendor-type-id", strconv.FormatInt(citem.VendorTypeId.ValueInt64(), 10))
+					}
+					if !citem.AllAvpairs.IsNull() && !citem.AllAvpairs.IsUnknown() {
+						if citem.AllAvpairs.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/all-avpairs", "")
+						}
+					}
+					if !citem.AllAttributes.IsNull() && !citem.AllAttributes.IsUnknown() {
+						if citem.AllAttributes.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/all-attributes", "")
+						}
+					}
+					if len(citem.Avpairs) > 0 {
+						for _, ccitem := range citem.Avpairs {
+							ccbasePath := cbasePath + "/avpairs[avpair-name='" + ccitem.AvpairName.ValueString() + "']"
+							if !ccitem.AvpairName.IsNull() && !ccitem.AvpairName.IsUnknown() {
+								body = helpers.SetFromXPath(body, ccbasePath+"/avpair-name", ccitem.AvpairName.ValueString())
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() && !data.AttributeAcctSessionIdPrependNasPortId.IsUnknown() {
@@ -2136,6 +2528,55 @@ func (data *RadiusServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.AttributeLists[i].AttributeVendorIds[ci].Id = types.Int64Null()
 			}
 		}
+		for ci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+			keys := [...]string{"vendor-type-id"}
+			keyValues := [...]string{strconv.FormatInt(data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "attribute/vendor-cisco/vendor-type").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "vendor-type-id"); value.Exists() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.IsNull() {
+				data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId = types.Int64Value(value.Int())
+			} else if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.IsNull() {
+				data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "all-avpairs"); value.Exists() {
+				if !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "all-attributes"); value.Exists() {
+				if !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes = types.BoolNull()
+				}
+			}
+		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/acct-session-id/prepend-nas-port-id"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
@@ -2342,6 +2783,38 @@ func (data *RadiusServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					return true
 				})
 			}
+			if cValue := helpers.GetFromXPath(v, "attribute/vendor-cisco/vendor-type"); cValue.Exists() {
+				item.AttributeVendorCiscoVendorTypes = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypes{}
+					if ccValue := helpers.GetFromXPath(cv, "vendor-type-id"); ccValue.Exists() {
+						cItem.VendorTypeId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "all-avpairs"); ccValue.Exists() {
+						cItem.AllAvpairs = types.BoolValue(true)
+					} else {
+						cItem.AllAvpairs = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "all-attributes"); ccValue.Exists() {
+						cItem.AllAttributes = types.BoolValue(true)
+					} else {
+						cItem.AllAttributes = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "avpairs"); ccValue.Exists() {
+						cItem.Avpairs = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs, 0)
+						ccValue.ForEach(func(_ int, ccv xmldot.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs{}
+							if cccValue := helpers.GetFromXPath(ccv, "avpair-name"); cccValue.Exists() {
+								ccItem.AvpairName = types.StringValue(cccValue.String())
+							}
+							cItem.Avpairs = append(cItem.Avpairs, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorCiscoVendorTypes = append(item.AttributeVendorCiscoVendorTypes, cItem)
+					return true
+				})
+			}
 			data.AttributeLists = append(data.AttributeLists, item)
 			return true
 		})
@@ -2531,6 +3004,38 @@ func (data *RadiusServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 					return true
 				})
 			}
+			if cValue := helpers.GetFromXPath(v, "attribute/vendor-cisco/vendor-type"); cValue.Exists() {
+				item.AttributeVendorCiscoVendorTypes = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypes{}
+					if ccValue := helpers.GetFromXPath(cv, "vendor-type-id"); ccValue.Exists() {
+						cItem.VendorTypeId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "all-avpairs"); ccValue.Exists() {
+						cItem.AllAvpairs = types.BoolValue(true)
+					} else {
+						cItem.AllAvpairs = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "all-attributes"); ccValue.Exists() {
+						cItem.AllAttributes = types.BoolValue(true)
+					} else {
+						cItem.AllAttributes = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "avpairs"); ccValue.Exists() {
+						cItem.Avpairs = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs, 0)
+						ccValue.ForEach(func(_ int, ccv xmldot.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs{}
+							if cccValue := helpers.GetFromXPath(ccv, "avpair-name"); cccValue.Exists() {
+								ccItem.AvpairName = types.StringValue(cccValue.String())
+							}
+							cItem.Avpairs = append(cItem.Avpairs, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorCiscoVendorTypes = append(item.AttributeVendorCiscoVendorTypes, cItem)
+					return true
+				})
+			}
 			data.AttributeLists = append(data.AttributeLists, item)
 			return true
 		})
@@ -2650,6 +3155,44 @@ func (data *RadiusServer) addDeletedItemsXML(ctx context.Context, state RadiusSe
 				found = false
 			}
 			if found {
+				for ci := range state.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+					cstateKeys := [...]string{"vendor-type-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.AttributeLists[j].AttributeVendorCiscoVendorTypes {
+						found = true
+						if state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64() != data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].VendorTypeId.ValueInt64() {
+							found = false
+						}
+						if found {
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() && state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.ValueBool() && data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].AllAttributes.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/attribute/list%v/attribute/vendor-cisco/vendor-type%v/all-attributes", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() && state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.ValueBool() && data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].AllAvpairs.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/attribute/list%v/attribute/vendor-cisco/vendor-type%v/all-avpairs", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/attribute/list%v/attribute/vendor-cisco/vendor-type%v", predicates, cpredicates))
+					}
+				}
 				for ci := range state.AttributeLists[i].AttributeVendorIds {
 					cstateKeys := [...]string{"id"}
 					cstateKeyValues := [...]string{strconv.FormatInt(state.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64(), 10)}

@@ -4,14 +4,10 @@ resource "iosxr_radius_server" "example" {
   attribute_filter_id_11_default_direction                  = "inbound"
   attribute_lists = [
     {
-      attribute_vendor_ids = [
+      attribute_vendor_cisco_vendor_types = [
         {
-          id = 9
-          vendor_types = [
-            {
-              vendor_type_id = 1
-            }
-          ]
+          all_avpairs    = true
+          vendor_type_id = 1
         }
       ]
       name              = "ATTR-LIST-1"

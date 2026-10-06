@@ -19,14 +19,10 @@ resource "iosxr_radius_server" "example" {
   attribute_filter_id_11_default_direction                  = "inbound"
   attribute_lists = [
     {
-      attribute_vendor_ids = [
+      attribute_vendor_cisco_vendor_types = [
         {
-          id = 9
-          vendor_types = [
-            {
-              vendor_type_id = 1
-            }
-          ]
+          all_avpairs    = true
+          vendor_type_id = 1
         }
       ]
       name              = "ATTR-LIST-1"
@@ -125,8 +121,35 @@ Required:
 
 Optional:
 
+- `attribute_vendor_cisco_vendor_types` (Attributes List) Vendor 9 vendor-type entry
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types))
 - `attribute_vendor_ids` (Attributes List) vendor-id (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_ids))
 - `radius_attributes` (String) Comma-delimited list of RADIUS attributes
+
+<a id="nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types"></a>
+### Nested Schema for `attribute_lists.attribute_vendor_cisco_vendor_types`
+
+Optional:
+
+- `all_attributes` (Boolean) Apply to all attributes for this vendor 9 vendor-type.
+  - Supported from version: `26.2`
+- `all_avpairs` (Boolean) Apply to all avpairs with vendor 9 type 1 special semantics.
+  - Supported from version: `26.2`
+- `avpairs` (Attributes List) Named Av-Pair entry for vendor 9 type 1.
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types--avpairs))
+- `vendor_type_id` (Number) Vendor 9 vendor-type id.
+  - Range: `1`-`254`
+  - Supported from version: `26.2`
+
+<a id="nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types--avpairs"></a>
+### Nested Schema for `attribute_lists.attribute_vendor_cisco_vendor_types.avpairs`
+
+Optional:
+
+- `avpair_name` (String) Av-Pair name for vendor 9 type 1.
+  - Supported from version: `26.2`
+
+
 
 <a id="nestedatt--attribute_lists--attribute_vendor_ids"></a>
 ### Nested Schema for `attribute_lists.attribute_vendor_ids`

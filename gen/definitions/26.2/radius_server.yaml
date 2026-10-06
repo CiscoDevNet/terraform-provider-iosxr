@@ -1,0 +1,41 @@
+---
+name: Radius Server
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa/Cisco-IOS-XR-um-aaa-radius-server-cfg:radius-server
+doc_category: AAA
+test_tags: [AAA]
+attributes:
+  # ===========================================================
+  # attribute/list/attribute/vendor-cisco: new container in 26.2
+  # "vendor-cisco" (must not(../vendor-ids)) with list "vendor-type"
+  # Vendor-id 9 is now configured here, so id 9 is read back as vendor-cisco.
+  # vendor-cisco and vendor-ids are mutually exclusive in one attribute list entry.
+  # ===========================================================
+  - yang_name: attribute/list
+    tf_name: attribute_lists
+    type: List
+    attributes:
+      - yang_name: attribute/vendor-ids/vendor-id
+        tf_name: attribute_vendor_ids
+        type: List
+        exclude_test: true
+      - yang_name: attribute/vendor-cisco/vendor-type
+        tf_name: attribute_vendor_cisco_vendor_types
+        type: List
+        attributes:
+          - yang_name: vendor-type-id
+            id: true
+            example: 1
+          - yang_name: all-avpairs
+            tf_name: all_avpairs
+            example: true
+          - yang_name: all-attributes
+            tf_name: all_attributes
+            exclude_test: true
+          - yang_name: avpairs
+            tf_name: avpairs
+            type: List
+            exclude_test: true
+            attributes:
+              - yang_name: avpair-name
+                id: true
+                exclude_test: true

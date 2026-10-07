@@ -305,7 +305,15 @@ func (data EVPNRouteSyncStitchingEVI) GetVersionConstraints() []helpers.FieldVer
 
 // GetRangeConstraints returns the version-specific range constraints for integer fields
 func (data EVPNRouteSyncStitchingEVI) GetRangeConstraints() []helpers.FieldRangeConstraint {
-	return nil
+	return []helpers.FieldRangeConstraint{
+		{
+			FieldPath: "vpn_id",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 1, Max: 65534},
+				"26.2": {Min: 1, Max: 16777215},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getRangeConstraints

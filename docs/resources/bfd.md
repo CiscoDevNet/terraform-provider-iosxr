@@ -132,6 +132,22 @@ Required:
 - `destination_address` (String) IP address
 - `location_id` (String) Fully qualified location specification
 
+Optional:
+
+- `vrfs` (Attributes List) Enter the vrf-name in string
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--multipath_destinations--vrfs))
+
+<a id="nestedatt--multipath_destinations--vrfs"></a>
+### Nested Schema for `multipath_destinations.vrfs`
+
+Optional:
+
+- `location_id` (String) Specify a location
+  - Supported from version: `26.2`
+- `vrf_name` (String) vrf
+  - Supported from version: `26.2`
+
+
 
 <a id="nestedatt--multipath_locations"></a>
 ### Nested Schema for `multipath_locations`

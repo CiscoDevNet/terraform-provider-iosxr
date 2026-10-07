@@ -66,6 +66,7 @@ Required:
 Required:
 
 - `command` (String) Aliased config command
+  - Length: `1`-`800` (v24.4), `1`-`1014` (v26.2)
 - `name` (String) Config Alias name
 
 
@@ -75,6 +76,7 @@ Required:
 Required:
 
 - `command` (String) Aliased exec command
+  - Length: `1`-`800` (v24.4), `1`-`1014` (v26.2)
 - `name` (String) Exec Alias name
 
 ## Import

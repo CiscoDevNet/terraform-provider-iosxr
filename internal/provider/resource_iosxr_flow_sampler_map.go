@@ -92,11 +92,12 @@ func (r *FlowSamplerMapResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"out_of": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Sample one packet out of").AddIntegerRangeDescription(1, 262144).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Sample one packet out of").String + "\n  - Range: `1`-`262144` (v24.4), `1`-`8000000` (v26.2)",
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(1, 262144),
+					int64validator.Between(1, 8000000),
 				},
+				// Precise per-version range validation still done at runtime in Create/Update.
 			},
 		},
 	}
@@ -127,6 +128,10 @@ func (r *FlowSamplerMapResource) Create(ctx context.Context, req resource.Create
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -345,6 +350,10 @@ func (r *FlowSamplerMapResource) Update(ctx context.Context, req resource.Update
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -438,6 +447,14 @@ func (r *FlowSamplerMapResource) Delete(ctx context.Context, req resource.Delete
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

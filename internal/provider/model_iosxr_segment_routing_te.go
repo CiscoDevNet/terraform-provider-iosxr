@@ -754,7 +754,15 @@ func (data SegmentRoutingTE) GetRangeConstraints() []helpers.FieldRangeConstrain
 
 // GetEnumConstraints returns the version-specific enum constraints for string fields
 func (data SegmentRoutingTE) GetEnumConstraints() []helpers.FieldEnumConstraint {
-	return nil
+	return []helpers.FieldEnumConstraint{
+		{
+			FieldPath: "srv6_locator_behavior",
+			VersionEnums: map[string][]string{
+				"24.4": {"ub6-encaps-reduced", "ub6-insert-reduced"},
+				"26.2": {"ub6-encaps-reduced", "ub6-insert-reduced", "ub6-psp-usd-encaps-reduced", "ub6-psp-usd-insert-reduced"},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getEnumConstraints

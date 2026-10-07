@@ -58,7 +58,7 @@ func (d *HWModuleProfile8000DataSource) Metadata(_ context.Context, req datasour
 func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the HW Module Profile 8000 configuration.",
+		MarkdownDescription: "This data source can read the HW Module Profile configuration on Cisco 8000 series routers.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

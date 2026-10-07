@@ -59,7 +59,7 @@ func (r *HWModuleProfile8000Resource) Metadata(_ context.Context, req resource.M
 func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the HW Module Profile 8000 configuration.",
+		MarkdownDescription: "This resource can manage the HW Module Profile configuration on Cisco 8000 series routers.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

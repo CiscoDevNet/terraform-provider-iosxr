@@ -30,6 +30,7 @@ resource "iosxr_cef_load_balancing_8000" "example" {
   ]
   platform_load_balance_hash_rotate                          = 1
   platform_load_balance_mpls_hashing_inner_non_ip_label_only = true
+  platform_load_balance_nvgre_payload_exclude                = true
 }
 ```
 
@@ -50,6 +51,8 @@ resource "iosxr_cef_load_balancing_8000" "example" {
 - `platform_load_balance_hash_rotate` (Number) Router-ID is bypassed when hash rotate count is used
   - Range: `1`-`35`
 - `platform_load_balance_mpls_hashing_inner_non_ip_label_only` (Boolean) MPLS label stack and non-IP payload hash method to use labels only
+- `platform_load_balance_nvgre_payload_exclude` (Boolean) Exclude NVGRE payload from hash calculation (overlay hashing disabled)
+  - Supported from version: `26.2`
 
 ### Read-Only
 

@@ -428,14 +428,14 @@ func (r *SegmentRoutingTEOnDemandColorResource) Schema(ctx context.Context, req 
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
-			"srv6_options_locator_binding_sid_type": schema.StringAttribute{
+			"srv6_locator_binding_sid_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Binding Segment ID type").AddStringEnumDescription("srv6-dynamic").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("srv6-dynamic"),
 				},
 			},
-			"srv6_options_locator_behavior": schema.StringAttribute{
+			"srv6_locator_behavior": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").String + "\n  - Choices: `ub6-encaps-reduced`, `ub6-insert-reduced` (v24.4), `ub6-encaps-reduced`, `ub6-insert-reduced`, `ub6-psp-usd-encaps-reduced`, `ub6-psp-usd-insert-reduced` (v26.2)",
 				Optional:            true,
 				Validators: []validator.String{

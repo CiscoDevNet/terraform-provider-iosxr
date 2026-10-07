@@ -118,7 +118,15 @@ func (data FlowSamplerMap) GetVersionConstraints() []helpers.FieldVersionConstra
 
 // GetRangeConstraints returns the version-specific range constraints for integer fields
 func (data FlowSamplerMap) GetRangeConstraints() []helpers.FieldRangeConstraint {
-	return nil
+	return []helpers.FieldRangeConstraint{
+		{
+			FieldPath: "out_of",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 1, Max: 262144},
+				"26.2": {Min: 1, Max: 8000000},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getRangeConstraints

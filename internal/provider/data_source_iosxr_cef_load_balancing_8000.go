@@ -197,6 +197,10 @@ func (d *CEFLoadBalancing8000DataSource) Schema(ctx context.Context, req datasou
 				MarkdownDescription: "MPLS label stack and non-IP payload hash method to use labels only",
 				Computed:            true,
 			},
+			"platform_load_balance_nvgre_payload_exclude": schema.BoolAttribute{
+				MarkdownDescription: "Exclude NVGRE payload from hash calculation (overlay hashing disabled)" + "\n  - Supported from version: `26.2`",
+				Computed:            true,
+			},
 		},
 	}
 }

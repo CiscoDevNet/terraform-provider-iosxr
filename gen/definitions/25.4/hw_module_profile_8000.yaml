@@ -2,6 +2,8 @@
 name: HW Module Profile 8000
 path: Cisco-IOS-XR-um-8000-hw-module-profile-cfg:/hw-module
 doc_category: Cisco 8000 Series
+ds_description: "This data source can read the HW Module Profile configuration on Cisco 8000 series routers."
+res_description: "This resource can manage the HW Module Profile configuration on Cisco 8000 series routers."
 attributes:
   # ===========================================================
   # profile/priority-flow-control/locations/location: non-pfc-tcs added, buffer-internal ranges widened

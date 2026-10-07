@@ -126,6 +126,22 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							MarkdownDescription: "Fully qualified location specification",
 							Computed:            true,
 						},
+						"vrfs": schema.ListNestedAttribute{
+							MarkdownDescription: "Enter the vrf-name in string" + "\n  - Supported from version: `26.2`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vrf_name": schema.StringAttribute{
+										MarkdownDescription: "vrf" + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+									},
+									"location_id": schema.StringAttribute{
+										MarkdownDescription: "Specify a location" + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

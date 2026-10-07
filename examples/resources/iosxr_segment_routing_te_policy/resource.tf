@@ -81,9 +81,9 @@ resource "iosxr_segment_routing_te_policy" "example" {
   shutdown                                                      = false
   source_address                                                = "192.168.1.1"
   source_address_type                                           = "end-point-type-ipv4"
+  srv6_locator_behavior                                         = "ub6-insert-reduced"
+  srv6_locator_binding_sid_type                                 = "srv6-dynamic"
   srv6_locator_name                                             = "LOC1"
-  srv6_options_locator_behavior                                 = "ub6-insert-reduced"
-  srv6_options_locator_binding_sid_type                         = "srv6-dynamic"
   steering_invalidation_drop                                    = true
   steering_labeled_services_disable                             = true
   transit_eligible                                              = true

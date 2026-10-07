@@ -89,8 +89,8 @@ type SegmentRoutingTEPolicy struct {
 	EffectiveMetricValue                                    types.Int64                                       `tfsdk:"effective_metric_value"`
 	EffectiveMetricType                                     types.String                                      `tfsdk:"effective_metric_type"`
 	Srv6LocatorName                                         types.String                                      `tfsdk:"srv6_locator_name"`
-	Srv6OptionsLocatorBindingSidType                        types.String                                      `tfsdk:"srv6_options_locator_binding_sid_type"`
-	Srv6OptionsLocatorBehavior                              types.String                                      `tfsdk:"srv6_options_locator_behavior"`
+	Srv6LocatorBindingSidType                               types.String                                      `tfsdk:"srv6_locator_binding_sid_type"`
+	Srv6LocatorBehavior                                     types.String                                      `tfsdk:"srv6_locator_behavior"`
 }
 
 type SegmentRoutingTEPolicyData struct {
@@ -140,8 +140,8 @@ type SegmentRoutingTEPolicyData struct {
 	EffectiveMetricValue                                    types.Int64                                       `tfsdk:"effective_metric_value"`
 	EffectiveMetricType                                     types.String                                      `tfsdk:"effective_metric_type"`
 	Srv6LocatorName                                         types.String                                      `tfsdk:"srv6_locator_name"`
-	Srv6OptionsLocatorBindingSidType                        types.String                                      `tfsdk:"srv6_options_locator_binding_sid_type"`
-	Srv6OptionsLocatorBehavior                              types.String                                      `tfsdk:"srv6_options_locator_behavior"`
+	Srv6LocatorBindingSidType                               types.String                                      `tfsdk:"srv6_locator_binding_sid_type"`
+	Srv6LocatorBehavior                                     types.String                                      `tfsdk:"srv6_locator_behavior"`
 }
 type SegmentRoutingTEPolicyAutoRouteIncludePrefixes struct {
 	AfType  types.String `tfsdk:"af_type"`
@@ -389,11 +389,11 @@ func (data SegmentRoutingTEPolicy) toBody(ctx context.Context, providerVersion s
 	if !data.Srv6LocatorName.IsNull() && !data.Srv6LocatorName.IsUnknown() {
 		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "srv6.locator.locator-name", "26.2": "srv6-options.locator.locator-name"}, "srv6.locator.locator-name"), data.Srv6LocatorName.ValueString())
 	}
-	if !data.Srv6OptionsLocatorBindingSidType.IsNull() && !data.Srv6OptionsLocatorBindingSidType.IsUnknown() {
-		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type"), data.Srv6OptionsLocatorBindingSidType.ValueString())
+	if !data.Srv6LocatorBindingSidType.IsNull() && !data.Srv6LocatorBindingSidType.IsUnknown() {
+		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type"), data.Srv6LocatorBindingSidType.ValueString())
 	}
-	if !data.Srv6OptionsLocatorBehavior.IsNull() && !data.Srv6OptionsLocatorBehavior.IsUnknown() {
-		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior"), data.Srv6OptionsLocatorBehavior.ValueString())
+	if !data.Srv6LocatorBehavior.IsNull() && !data.Srv6LocatorBehavior.IsUnknown() {
+		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior"), data.Srv6LocatorBehavior.ValueString())
 	}
 	if len(data.AutoRouteIncludePrefixes) > 0 {
 		body, _ = sjson.Set(body, "auto-route.include-prefixes.include-prefix", []interface{}{})
@@ -601,7 +601,7 @@ func (data SegmentRoutingTEPolicy) GetRangeConstraints() []helpers.FieldRangeCon
 func (data SegmentRoutingTEPolicy) GetEnumConstraints() []helpers.FieldEnumConstraint {
 	return []helpers.FieldEnumConstraint{
 		{
-			FieldPath: "srv6_options_locator_behavior",
+			FieldPath: "srv6_locator_behavior",
 			VersionEnums: map[string][]string{
 				"24.4": {"ub6-encaps-reduced", "ub6-insert-reduced"},
 				"26.2": {"ub6-encaps-reduced", "ub6-insert-reduced", "ub6-psp-usd-encaps-reduced", "ub6-psp-usd-insert-reduced"},
@@ -1334,15 +1334,15 @@ func (data *SegmentRoutingTEPolicy) updateFromBody(ctx context.Context, res []by
 	} else if data.Srv6LocatorName.IsNull() {
 		data.Srv6LocatorName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Srv6OptionsLocatorBindingSidType.IsNull() {
-		data.Srv6OptionsLocatorBindingSidType = types.StringValue(value.String())
-	} else if data.Srv6OptionsLocatorBindingSidType.IsNull() {
-		data.Srv6OptionsLocatorBindingSidType = types.StringNull()
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Srv6LocatorBindingSidType.IsNull() {
+		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
+	} else if data.Srv6LocatorBindingSidType.IsNull() {
+		data.Srv6LocatorBindingSidType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Srv6OptionsLocatorBehavior.IsNull() {
-		data.Srv6OptionsLocatorBehavior = types.StringValue(value.String())
-	} else if data.Srv6OptionsLocatorBehavior.IsNull() {
-		data.Srv6OptionsLocatorBehavior = types.StringNull()
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Srv6LocatorBehavior.IsNull() {
+		data.Srv6LocatorBehavior = types.StringValue(value.String())
+	} else if data.Srv6LocatorBehavior.IsNull() {
+		data.Srv6LocatorBehavior = types.StringNull()
 	}
 }
 
@@ -1720,10 +1720,10 @@ func (data *SegmentRoutingTEPolicy) fromBody(ctx context.Context, res []byte, ve
 		data.Srv6LocatorName = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-		data.Srv6OptionsLocatorBindingSidType = types.StringValue(value.String())
+		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-		data.Srv6OptionsLocatorBehavior = types.StringValue(value.String())
+		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	}
 }
 
@@ -2081,10 +2081,10 @@ func (data *SegmentRoutingTEPolicyData) fromBody(ctx context.Context, res []byte
 		data.Srv6LocatorName = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-		data.Srv6OptionsLocatorBindingSidType = types.StringValue(value.String())
+		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
-		data.Srv6OptionsLocatorBehavior = types.StringValue(value.String())
+		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	}
 }
 
@@ -2094,10 +2094,10 @@ func (data *SegmentRoutingTEPolicyData) fromBody(ctx context.Context, res []byte
 
 func (data *SegmentRoutingTEPolicy) getDeletedItems(ctx context.Context, state SegmentRoutingTEPolicy, version string) []string {
 	deletedItems := make([]string, 0)
-	if !state.Srv6OptionsLocatorBehavior.IsNull() && data.Srv6OptionsLocatorBehavior.IsNull() {
+	if !state.Srv6LocatorBehavior.IsNull() && data.Srv6LocatorBehavior.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator/behavior", "26.2": "srv6-options/locator/behavior"}, "srv6/locator/behavior")))
 	}
-	if !state.Srv6OptionsLocatorBindingSidType.IsNull() && data.Srv6OptionsLocatorBindingSidType.IsNull() {
+	if !state.Srv6LocatorBindingSidType.IsNull() && data.Srv6LocatorBindingSidType.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator/binding-sid-type", "26.2": "srv6-options/locator/binding-sid-type"}, "srv6/locator/binding-sid-type")))
 	}
 	if !state.Srv6LocatorName.IsNull() && data.Srv6LocatorName.IsNull() {
@@ -2722,10 +2722,10 @@ func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context, sta
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *SegmentRoutingTEPolicy) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
-	if !data.Srv6OptionsLocatorBehavior.IsNull() {
+	if !data.Srv6LocatorBehavior.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator/behavior", "26.2": "srv6-options/locator/behavior"}, "srv6/locator/behavior")))
 	}
-	if !data.Srv6OptionsLocatorBindingSidType.IsNull() {
+	if !data.Srv6LocatorBindingSidType.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator/binding-sid-type", "26.2": "srv6-options/locator/binding-sid-type"}, "srv6/locator/binding-sid-type")))
 	}
 	if !data.Srv6LocatorName.IsNull() {
@@ -3230,11 +3230,11 @@ func (data SegmentRoutingTEPolicy) toBodyXML(ctx context.Context, stateArg ...*S
 	if !data.Srv6LocatorName.IsNull() && !data.Srv6LocatorName.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6-options/locator/locator-name", data.Srv6LocatorName.ValueString())
 	}
-	if !data.Srv6OptionsLocatorBindingSidType.IsNull() && !data.Srv6OptionsLocatorBindingSidType.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6-options/locator/binding-sid-type", data.Srv6OptionsLocatorBindingSidType.ValueString())
+	if !data.Srv6LocatorBindingSidType.IsNull() && !data.Srv6LocatorBindingSidType.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6-options/locator/binding-sid-type", data.Srv6LocatorBindingSidType.ValueString())
 	}
-	if !data.Srv6OptionsLocatorBehavior.IsNull() && !data.Srv6OptionsLocatorBehavior.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6-options/locator/behavior", data.Srv6OptionsLocatorBehavior.ValueString())
+	if !data.Srv6LocatorBehavior.IsNull() && !data.Srv6LocatorBehavior.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6-options/locator/behavior", data.Srv6LocatorBehavior.ValueString())
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -3954,15 +3954,15 @@ func (data *SegmentRoutingTEPolicy) updateFromBodyXML(ctx context.Context, res x
 	} else if data.Srv6LocatorName.IsNull() {
 		data.Srv6LocatorName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/binding-sid-type"); value.Exists() && !data.Srv6OptionsLocatorBindingSidType.IsNull() {
-		data.Srv6OptionsLocatorBindingSidType = types.StringValue(value.String())
-	} else if data.Srv6OptionsLocatorBindingSidType.IsNull() {
-		data.Srv6OptionsLocatorBindingSidType = types.StringNull()
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/binding-sid-type"); value.Exists() && !data.Srv6LocatorBindingSidType.IsNull() {
+		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
+	} else if data.Srv6LocatorBindingSidType.IsNull() {
+		data.Srv6LocatorBindingSidType = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/behavior"); value.Exists() && !data.Srv6OptionsLocatorBehavior.IsNull() {
-		data.Srv6OptionsLocatorBehavior = types.StringValue(value.String())
-	} else if data.Srv6OptionsLocatorBehavior.IsNull() {
-		data.Srv6OptionsLocatorBehavior = types.StringNull()
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/behavior"); value.Exists() && !data.Srv6LocatorBehavior.IsNull() {
+		data.Srv6LocatorBehavior = types.StringValue(value.String())
+	} else if data.Srv6LocatorBehavior.IsNull() {
+		data.Srv6LocatorBehavior = types.StringNull()
 	}
 }
 
@@ -4320,10 +4320,10 @@ func (data *SegmentRoutingTEPolicy) fromBodyXML(ctx context.Context, res xmldot.
 		data.Srv6LocatorName = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/binding-sid-type"); value.Exists() {
-		data.Srv6OptionsLocatorBindingSidType = types.StringValue(value.String())
+		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/behavior"); value.Exists() {
-		data.Srv6OptionsLocatorBehavior = types.StringValue(value.String())
+		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	}
 }
 
@@ -4681,10 +4681,10 @@ func (data *SegmentRoutingTEPolicyData) fromBodyXML(ctx context.Context, res xml
 		data.Srv6LocatorName = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/binding-sid-type"); value.Exists() {
-		data.Srv6OptionsLocatorBindingSidType = types.StringValue(value.String())
+		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/behavior"); value.Exists() {
-		data.Srv6OptionsLocatorBehavior = types.StringValue(value.String())
+		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	}
 }
 
@@ -4697,7 +4697,7 @@ func (data *SegmentRoutingTEPolicy) addDeletedItemsXML(ctx context.Context, stat
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
-	if !state.Srv6OptionsLocatorBehavior.IsNull() && data.Srv6OptionsLocatorBehavior.IsNull() {
+	if !state.Srv6LocatorBehavior.IsNull() && data.Srv6LocatorBehavior.IsNull() {
 		deletePath := state.getXPath() + "/srv6-options/locator/behavior"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -4712,7 +4712,7 @@ func (data *SegmentRoutingTEPolicy) addDeletedItemsXML(ctx context.Context, stat
 			deletedPaths[deletePath] = true
 		}
 	}
-	if !state.Srv6OptionsLocatorBindingSidType.IsNull() && data.Srv6OptionsLocatorBindingSidType.IsNull() {
+	if !state.Srv6LocatorBindingSidType.IsNull() && data.Srv6LocatorBindingSidType.IsNull() {
 		deletePath := state.getXPath() + "/srv6-options/locator/binding-sid-type"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
@@ -5715,10 +5715,10 @@ func (data *SegmentRoutingTEPolicy) addDeletedItemsXML(ctx context.Context, stat
 
 func (data *SegmentRoutingTEPolicy) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
-	if !data.Srv6OptionsLocatorBehavior.IsNull() {
+	if !data.Srv6LocatorBehavior.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/srv6-options/locator/behavior")
 	}
-	if !data.Srv6OptionsLocatorBindingSidType.IsNull() {
+	if !data.Srv6LocatorBindingSidType.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/srv6-options/locator/binding-sid-type")
 	}
 	if !data.Srv6LocatorName.IsNull() {

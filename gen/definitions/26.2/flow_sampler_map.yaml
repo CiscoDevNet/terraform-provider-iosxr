@@ -1,0 +1,11 @@
+---
+name: Flow Sampler Map
+path: Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]
+no_delete_attributes: true
+doc_category: Flow
+test_tags: [NCS, C8000]
+attributes:
+  # ===========================================================
+  # CONSTRAINT CHANGES — range/length widened in 26.2
+  # ===========================================================
+  - yang_name: out-of

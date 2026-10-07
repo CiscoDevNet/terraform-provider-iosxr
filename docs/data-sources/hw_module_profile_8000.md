@@ -3,12 +3,12 @@
 page_title: "iosxr_hw_module_profile_8000 Data Source - terraform-provider-iosxr"
 subcategory: "Cisco 8000 Series"
 description: |-
-  This data source can read the HW Module Profile 8000 configuration.
+  This data source can read the HW Module Profile configuration on Cisco 8000 series routers.
 ---
 
 # iosxr_hw_module_profile_8000 (Data Source)
 
-This data source can read the HW Module Profile 8000 configuration.
+This data source can read the HW Module Profile configuration on Cisco 8000 series routers.
 
 ## Version Compatibility
 

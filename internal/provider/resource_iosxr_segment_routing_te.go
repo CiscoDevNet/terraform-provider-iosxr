@@ -841,10 +841,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"srv6_locator_behavior": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").String + "\n  - Choices: `ub6-encaps-reduced`, `ub6-insert-reduced` (v24.4), `ub6-encaps-reduced`, `ub6-insert-reduced`, `ub6-psp-usd-encaps-reduced`, `ub6-psp-usd-insert-reduced` (v26.2)",
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
+					stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced", "ub6-psp-usd-encaps-reduced", "ub6-psp-usd-insert-reduced"),
 				},
 			},
 			"srv6_maximum_sid_depth": schema.Int64Attribute{

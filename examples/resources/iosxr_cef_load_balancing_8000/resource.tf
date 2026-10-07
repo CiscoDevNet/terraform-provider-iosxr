@@ -15,4 +15,5 @@ resource "iosxr_cef_load_balancing_8000" "example" {
   ]
   platform_load_balance_hash_rotate                          = 1
   platform_load_balance_mpls_hashing_inner_non_ip_label_only = true
+  platform_load_balance_nvgre_payload_exclude                = true
 }

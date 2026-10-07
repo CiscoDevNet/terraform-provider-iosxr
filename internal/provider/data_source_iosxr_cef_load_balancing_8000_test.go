@@ -44,6 +44,9 @@ func TestAccDataSourceIosxrCEFLoadBalancing8000(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_load_balancing_8000.test", "platform_load_balance_fields_userdata_ipv4_udp.0.ipv4_udp_hash_offset", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_load_balancing_8000.test", "platform_load_balance_fields_userdata_ipv4_udp.0.ipv4_udp_hash_size", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_load_balancing_8000.test", "platform_load_balance_mpls_hashing_inner_non_ip_label_only", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cef_load_balancing_8000.test", "platform_load_balance_nvgre_payload_exclude", "true"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -79,6 +82,9 @@ func testAccDataSourceIosxrCEFLoadBalancing8000Config() string {
 	config += `		ipv4_udp_hash_size = 3` + "\n"
 	config += `	}]` + "\n"
 	config += `	platform_load_balance_mpls_hashing_inner_non_ip_label_only = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		config += `	platform_load_balance_nvgre_payload_exclude = true` + "\n"
+	}
 	config += `}` + "\n"
 
 	config += `

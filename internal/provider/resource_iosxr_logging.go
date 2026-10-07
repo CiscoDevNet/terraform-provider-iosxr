@@ -694,7 +694,7 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 							},
 						},
 						"tls_hostname": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Hostname or FQDN of Secure Log server").String + "\n  - Supported from version: `25.4`",
+							MarkdownDescription: helpers.NewAttributeDescription("Hostname or FQDN of Secure Log server").String + "\n  - Length: `1`-`1024` (v24.4), `1`-`253` (v26.2)" + "\n  - Supported from version: `25.4`",
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),

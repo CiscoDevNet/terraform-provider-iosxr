@@ -171,7 +171,22 @@ func (data CLIAlias) GetEnumConstraints() []helpers.FieldEnumConstraint {
 
 // GetStringLengthConstraints returns the version-specific string length constraints
 func (data CLIAlias) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
-	return nil
+	return []helpers.FieldStringLengthConstraint{
+		{
+			FieldPath: "exec_aliases.command",
+			VersionStringLengths: map[string]helpers.StringLengthConstraint{
+				"24.4": {Min: 1, Max: 800},
+				"26.2": {Min: 1, Max: 1014},
+			},
+		},
+		{
+			FieldPath: "config_aliases.command",
+			VersionStringLengths: map[string]helpers.StringLengthConstraint{
+				"24.4": {Min: 1, Max: 800},
+				"26.2": {Min: 1, Max: 1014},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getStringLengthConstraints

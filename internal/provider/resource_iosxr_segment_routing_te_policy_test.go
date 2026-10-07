@@ -101,8 +101,8 @@ func TestAccIosxrSegmentRoutingTEPolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy.test", "effective_metric_value", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy.test", "effective_metric_type", "igp"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy.test", "srv6_locator_name", "LOC1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy.test", "srv6_options_locator_binding_sid_type", "srv6-dynamic"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy.test", "srv6_options_locator_behavior", "ub6-insert-reduced"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy.test", "srv6_locator_binding_sid_type", "srv6-dynamic"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy.test", "srv6_locator_behavior", "ub6-insert-reduced"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -260,8 +260,8 @@ func testAccIosxrSegmentRoutingTEPolicyConfig_all() string {
 	config += `	effective_metric_value = 1000` + "\n"
 	config += `	effective_metric_type = "igp"` + "\n"
 	config += `	srv6_locator_name = "LOC1"` + "\n"
-	config += `	srv6_options_locator_binding_sid_type = "srv6-dynamic"` + "\n"
-	config += `	srv6_options_locator_behavior = "ub6-insert-reduced"` + "\n"
+	config += `	srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
+	config += `	srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"

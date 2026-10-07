@@ -39,7 +39,7 @@ resource "iosxr_evpn_route_sync_evi" "example" {
 ### Required
 
 - `vpn_id` (Number) Configure EVPN Instance VPN ID
-  - Range: `1`-`65534`
+  - Range: `1`-`65534` (v24.4), `1`-`16777215` (v26.2)
 
 ### Optional
 

@@ -67,8 +67,8 @@ func TestAccDataSourceIosxrSegmentRoutingTEOnDemandColor(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_on_demand_color.test", "effective_metric_value", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_on_demand_color.test", "effective_metric_type", "igp"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_on_demand_color.test", "srv6_locator_name", "LOC1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_on_demand_color.test", "srv6_options_locator_binding_sid_type", "srv6-dynamic"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_on_demand_color.test", "srv6_options_locator_behavior", "ub6-insert-reduced"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_on_demand_color.test", "srv6_locator_binding_sid_type", "srv6-dynamic"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_on_demand_color.test", "srv6_locator_behavior", "ub6-insert-reduced"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -150,8 +150,8 @@ func testAccDataSourceIosxrSegmentRoutingTEOnDemandColorConfig() string {
 	config += `	effective_metric_value = 1000` + "\n"
 	config += `	effective_metric_type = "igp"` + "\n"
 	config += `	srv6_locator_name = "LOC1"` + "\n"
-	config += `	srv6_options_locator_binding_sid_type = "srv6-dynamic"` + "\n"
-	config += `	srv6_options_locator_behavior = "ub6-insert-reduced"` + "\n"
+	config += `	srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
+	config += `	srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
 	config += selectVersionDependsOn(map[string]string{
 		"24.4": `[iosxr_yang.PreReq0, ]`,
 	}) + "\n"

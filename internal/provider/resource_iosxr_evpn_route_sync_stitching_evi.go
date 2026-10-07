@@ -83,11 +83,12 @@ func (r *EVPNRouteSyncStitchingEVIResource) Schema(ctx context.Context, req reso
 				},
 			},
 			"vpn_id": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance VPN ID").AddIntegerRangeDescription(1, 65534).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance VPN ID").String + "\n  - Range: `1`-`65534` (v24.4), `1`-`16777215` (v26.2)",
 				Required:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(1, 65534),
+					int64validator.Between(1, 16777215),
 				},
+				// Precise per-version range validation still done at runtime in Create/Update.
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplace(),
 				},
@@ -378,6 +379,10 @@ func (r *EVPNRouteSyncStitchingEVIResource) Create(ctx context.Context, req reso
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -594,6 +599,10 @@ func (r *EVPNRouteSyncStitchingEVIResource) Update(ctx context.Context, req reso
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -687,6 +696,14 @@ func (r *EVPNRouteSyncStitchingEVIResource) Delete(ctx context.Context, req reso
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

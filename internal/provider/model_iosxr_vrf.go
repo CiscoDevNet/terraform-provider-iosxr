@@ -1086,7 +1086,15 @@ func (data VRF) GetVersionConstraints() []helpers.FieldVersionConstraint {
 
 // GetRangeConstraints returns the version-specific range constraints for integer fields
 func (data VRF) GetRangeConstraints() []helpers.FieldRangeConstraint {
-	return nil
+	return []helpers.FieldRangeConstraint{
+		{
+			FieldPath: "evpn_route_sync",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 1, Max: 65534},
+				"26.2": {Min: 1, Max: 16777215},
+			},
+		},
+	}
 }
 
 // End of section. //template:end getRangeConstraints

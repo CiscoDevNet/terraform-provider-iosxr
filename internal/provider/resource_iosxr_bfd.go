@@ -156,6 +156,29 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 								stringvalidator.RegexMatches(regexp.MustCompile(`([a-zA-Z0-9_]*\d+/){1,2}([a-zA-Z0-9_]*\d*)`), ""),
 							},
 						},
+						"vrfs": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enter the vrf-name in string").String + "\n  - Supported from version: `26.2`",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vrf_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("vrf").String + "\n  - Supported from version: `26.2`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 1024),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"location_id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify a location").String + "\n  - Supported from version: `26.2`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`([a-zA-Z0-9_]*\d+/){1,2}([a-zA-Z0-9_]*\d*)`), ""),
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -330,6 +353,10 @@ func (r *BFDResource) Create(ctx context.Context, req resource.CreateRequest, re
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -548,6 +575,10 @@ func (r *BFDResource) Update(ctx context.Context, req resource.UpdateRequest, re
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -641,6 +672,14 @@ func (r *BFDResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

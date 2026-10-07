@@ -73,9 +73,9 @@ data "iosxr_segment_routing_te_on_demand_color" "example" {
 - `performance_measurement_reverse_path_segment_list` (String) PM packets return to head-end using segment-list
 - `source_address` (String) Source address
 - `source_address_type` (String) IP address type
+- `srv6_locator_behavior` (String) SRv6 USID Behavior
+- `srv6_locator_binding_sid_type` (String) Binding Segment ID type
 - `srv6_locator_name` (String) SRv6 locator name
-- `srv6_options_locator_behavior` (String) SRv6 USID Behavior
-- `srv6_options_locator_binding_sid_type` (String) Binding Segment ID type
 - `steering_invalidation_drop` (Boolean) Enable path invalidation drop
 - `steering_labeled_services_disable` (Boolean) Disable all steering services
 

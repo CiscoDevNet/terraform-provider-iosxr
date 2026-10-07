@@ -915,6 +915,13 @@ func (data Logging) GetStringLengthConstraints() []helpers.FieldStringLengthCons
 				"25.4": {Min: 1, Max: 1024},
 			},
 		},
+		{
+			FieldPath: "tls_servers.tls_hostname",
+			VersionStringLengths: map[string]helpers.StringLengthConstraint{
+				"24.4": {Min: 1, Max: 1024},
+				"26.2": {Min: 1, Max: 253},
+			},
+		},
 	}
 }
 

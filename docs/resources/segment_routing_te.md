@@ -240,7 +240,7 @@ resource "iosxr_segment_routing_te" "example" {
 - `separate_next_hop` (Boolean) Use Next Hop Separation in Forwarding
 - `srv6_locator` (String) SRv6 locator name
 - `srv6_locator_behavior` (String) SRv6 USID Behavior
-  - Choices: `ub6-encaps-reduced`, `ub6-insert-reduced`
+  - Choices: `ub6-encaps-reduced`, `ub6-insert-reduced` (v24.4), `ub6-encaps-reduced`, `ub6-insert-reduced`, `ub6-psp-usd-encaps-reduced`, `ub6-psp-usd-insert-reduced` (v26.2)
 - `srv6_locator_binding_sid_type` (String) Binding Segment ID type
   - Choices: `srv6-dynamic`
 - `srv6_maximum_sid_depth` (Number) SRv6 Maximum SID Depth Configuration

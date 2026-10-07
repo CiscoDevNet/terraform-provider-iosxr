@@ -1,6 +1,5 @@
 resource "iosxr_vrf" "example" {
   description                        = "My VRF Description"
-  evpn_route_sync                    = 100
   fallback_vrf                       = "VRF2"
   ipv4_multicast_export_route_policy = "VRF_EXPORT_POLICY_1"
   ipv4_multicast_export_route_target_two_byte_as_format = [
@@ -10,13 +9,11 @@ resource "iosxr_vrf" "example" {
       two_byte_as_number = 65001
     }
   ]
-  ipv4_multicast_export_to_default_vrf_allow_imported_vpn   = true
   ipv4_multicast_export_to_default_vrf_route_policy         = "VRF_EXPORT_POLICY_1"
   ipv4_multicast_export_to_vrf_allow_backup                 = true
   ipv4_multicast_export_to_vrf_allow_best_external          = true
   ipv4_multicast_export_to_vrf_allow_imported_vpn           = true
   ipv4_multicast_import_from_bridge_domain_advertise_as_vpn = true
-  ipv4_multicast_import_from_default_vrf_advertise_as_vpn   = true
   ipv4_multicast_import_from_default_vrf_route_policy       = "VRF_IMPORT_POLICY_1"
   ipv4_multicast_import_from_vrf_advertise_as_vpn           = true
   ipv4_multicast_import_from_vrf_allow_backup               = true
@@ -40,13 +37,11 @@ resource "iosxr_vrf" "example" {
       two_byte_as_number = 65001
     }
   ]
-  ipv4_unicast_export_to_default_vrf_allow_imported_vpn   = true
   ipv4_unicast_export_to_default_vrf_route_policy         = "VRF_EXPORT_POLICY_1"
   ipv4_unicast_export_to_vrf_allow_backup                 = true
   ipv4_unicast_export_to_vrf_allow_best_external          = true
   ipv4_unicast_export_to_vrf_allow_imported_vpn           = true
   ipv4_unicast_import_from_bridge_domain_advertise_as_vpn = true
-  ipv4_unicast_import_from_default_vrf_advertise_as_vpn   = true
   ipv4_unicast_import_from_default_vrf_route_policy       = "VRF_IMPORT_POLICY_1"
   ipv4_unicast_import_from_vrf_advertise_as_vpn           = true
   ipv4_unicast_import_from_vrf_allow_backup               = true
@@ -69,13 +64,11 @@ resource "iosxr_vrf" "example" {
       two_byte_as_number = 65001
     }
   ]
-  ipv6_multicast_export_to_default_vrf_allow_imported_vpn   = true
   ipv6_multicast_export_to_default_vrf_route_policy         = "VRF_EXPORT_POLICY_1"
   ipv6_multicast_export_to_vrf_allow_backup                 = true
   ipv6_multicast_export_to_vrf_allow_best_external          = true
   ipv6_multicast_export_to_vrf_allow_imported_vpn           = true
   ipv6_multicast_import_from_bridge_domain_advertise_as_vpn = true
-  ipv6_multicast_import_from_default_vrf_advertise_as_vpn   = true
   ipv6_multicast_import_from_default_vrf_route_policy       = "VRF_IMPORT_POLICY_1"
   ipv6_multicast_import_from_vrf_advertise_as_vpn           = true
   ipv6_multicast_import_from_vrf_allow_backup               = true
@@ -99,13 +92,11 @@ resource "iosxr_vrf" "example" {
       two_byte_as_number = 65001
     }
   ]
-  ipv6_unicast_export_to_default_vrf_allow_imported_vpn   = true
   ipv6_unicast_export_to_default_vrf_route_policy         = "VRF_EXPORT_POLICY_1"
   ipv6_unicast_export_to_vrf_allow_backup                 = true
   ipv6_unicast_export_to_vrf_allow_best_external          = true
   ipv6_unicast_export_to_vrf_allow_imported_vpn           = true
   ipv6_unicast_import_from_bridge_domain_advertise_as_vpn = true
-  ipv6_unicast_import_from_default_vrf_advertise_as_vpn   = true
   ipv6_unicast_import_from_default_vrf_route_policy       = "VRF_IMPORT_POLICY_1"
   ipv6_unicast_import_from_vrf_advertise_as_vpn           = true
   ipv6_unicast_import_from_vrf_allow_backup               = true

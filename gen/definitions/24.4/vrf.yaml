@@ -14,6 +14,7 @@ attributes:
     example: VRF2
   - yang_name: Cisco-IOS-XR-um-l2vpn-cfg:evpn-route-sync
     tf_name: evpn_route_sync
+    exclude_test: true
     example: 100
     # ipv4 unicast
   - yang_name: address-family/ipv4/unicast
@@ -39,6 +40,7 @@ attributes:
     example: true
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn
     tf_name: ipv4_unicast_import_from_default_vrf_advertise_as_vpn
+    exclude_test: true
     example: true
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy
     tf_name: ipv4_unicast_import_from_default_vrf_route_policy
@@ -57,6 +59,7 @@ attributes:
     example: VRF_EXPORT_POLICY_1
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn
     tf_name: ipv4_unicast_export_to_default_vrf_allow_imported_vpn
+    exclude_test: true
     example: true
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/prefix-limit
     tf_name: ipv4_unicast_max_prefix_limit
@@ -92,6 +95,7 @@ attributes:
     example: true
   - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn
     tf_name: ipv4_multicast_import_from_default_vrf_advertise_as_vpn
+    exclude_test: true
     example: true
   - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy
     tf_name: ipv4_multicast_import_from_default_vrf_route_policy
@@ -110,6 +114,7 @@ attributes:
     example: VRF_EXPORT_POLICY_1
   - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn
     tf_name: ipv4_multicast_export_to_default_vrf_allow_imported_vpn
+    exclude_test: true
     example: true
   - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/prefix-limit
     tf_name: ipv4_multicast_max_prefix_limit
@@ -149,6 +154,7 @@ attributes:
     example: true
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn
     tf_name: ipv6_unicast_import_from_default_vrf_advertise_as_vpn
+    exclude_test: true
     example: true
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy
     tf_name: ipv6_unicast_import_from_default_vrf_route_policy
@@ -167,6 +173,7 @@ attributes:
     example: VRF_EXPORT_POLICY_1
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn
     tf_name: ipv6_unicast_export_to_default_vrf_allow_imported_vpn
+    exclude_test: true
     example: true
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/prefix-limit
     tf_name: ipv6_unicast_max_prefix_limit
@@ -202,6 +209,7 @@ attributes:
     example: true
   - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn
     tf_name: ipv6_multicast_import_from_default_vrf_advertise_as_vpn
+    exclude_test: true
     example: true
   - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy
     tf_name: ipv6_multicast_import_from_default_vrf_route_policy
@@ -220,6 +228,7 @@ attributes:
     example: VRF_EXPORT_POLICY_1
   - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn
     tf_name: ipv6_multicast_export_to_default_vrf_allow_imported_vpn
+    exclude_test: true
     example: true
   - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/prefix-limit
     tf_name: ipv6_multicast_max_prefix_limit

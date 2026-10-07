@@ -103,8 +103,9 @@ type BFDMultipathLocations struct {
 	LocationId types.String `tfsdk:"location_id"`
 }
 type BFDMultipathDestinations struct {
-	DestinationAddress types.String `tfsdk:"destination_address"`
-	LocationId         types.String `tfsdk:"location_id"`
+	DestinationAddress types.String                   `tfsdk:"destination_address"`
+	LocationId         types.String                   `tfsdk:"location_id"`
+	Vrfs               []BFDMultipathDestinationsVrfs `tfsdk:"vrfs"`
 }
 type BFDInterfaces struct {
 	InterfaceName       types.String `tfsdk:"interface_name"`
@@ -116,6 +117,10 @@ type BFDInterfaces struct {
 	TxInterval          types.Int64  `tfsdk:"tx_interval"`
 	RxInterval          types.Int64  `tfsdk:"rx_interval"`
 	Multiplier          types.Int64  `tfsdk:"multiplier"`
+}
+type BFDMultipathDestinationsVrfs struct {
+	VrfName    types.String `tfsdk:"vrf_name"`
+	LocationId types.String `tfsdk:"location_id"`
 }
 
 // End of section. //template:end types
@@ -243,6 +248,21 @@ func (data BFD) toBody(ctx context.Context, providerVersion string) string {
 			if !item.LocationId.IsNull() && !item.LocationId.IsUnknown() {
 				body, _ = sjson.Set(body, "multipath.destinations.destination"+"."+strconv.Itoa(index)+"."+"location-id", item.LocationId.ValueString())
 			}
+			if (helpers.VersionAtLeast(providerVersion, "26.2")) && len(item.Vrfs) > 0 {
+				body, _ = sjson.Set(body, "multipath.destinations.destination"+"."+strconv.Itoa(index)+"."+"vrfs.vrf", []interface{}{})
+				for cindex, citem := range item.Vrfs {
+					if helpers.VersionAtLeast(providerVersion, "26.2") {
+						if !citem.VrfName.IsNull() && !citem.VrfName.IsUnknown() {
+							body, _ = sjson.Set(body, "multipath.destinations.destination"+"."+strconv.Itoa(index)+"."+"vrfs.vrf"+"."+strconv.Itoa(cindex)+"."+"vrf-name", citem.VrfName.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "26.2") {
+						if !citem.LocationId.IsNull() && !citem.LocationId.IsUnknown() {
+							body, _ = sjson.Set(body, "multipath.destinations.destination"+"."+strconv.Itoa(index)+"."+"vrfs.vrf"+"."+strconv.Itoa(cindex)+"."+"location-id", citem.LocationId.ValueString())
+						}
+					}
+				}
+			}
 		}
 	}
 	if len(data.Interfaces) > 0 {
@@ -292,6 +312,20 @@ func (data BFD) toBody(ctx context.Context, providerVersion string) string {
 func (data BFD) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "multipath_destinations.vrfs",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "multipath_destinations.vrfs.vrf_name",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "multipath_destinations.vrfs.location_id",
+			AddedInVersion: "26.2",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -462,6 +496,44 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte, version string)
 			data.MultipathDestinations[i].LocationId = types.StringValue(value.String())
 		} else {
 			data.MultipathDestinations[i].LocationId = types.StringNull()
+		}
+		for ci := range data.MultipathDestinations[i].Vrfs {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "26.2") {
+				keys = append(keys, "vrf-name")
+				keyValues = append(keyValues, data.MultipathDestinations[i].Vrfs[ci].VrfName.ValueString())
+			}
+
+			var cr gjson.Result
+			r.Get("vrfs.vrf").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("vrf-name"); helpers.VersionAtLeast(version, "26.2") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MultipathDestinations[i].Vrfs[ci].VrfName.IsNull() {
+				data.MultipathDestinations[i].Vrfs[ci].VrfName = types.StringValue(value.String())
+			} else {
+				data.MultipathDestinations[i].Vrfs[ci].VrfName = types.StringNull()
+			}
+			if value := cr.Get("location-id"); helpers.VersionAtLeast(version, "26.2") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MultipathDestinations[i].Vrfs[ci].LocationId.IsNull() {
+				data.MultipathDestinations[i].Vrfs[ci].LocationId = types.StringValue(value.String())
+			} else {
+				data.MultipathDestinations[i].Vrfs[ci].LocationId = types.StringNull()
+			}
 		}
 	}
 	if value := gjson.GetBytes(res, "multihop.ttl-drop-threshold"); value.Exists() && !data.MultihopTtlDropThreshold.IsNull() {
@@ -696,6 +768,28 @@ func (data *BFD) fromBody(ctx context.Context, res []byte, version string) {
 			if cValue := v.Get("location-id"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.LocationId = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("vrfs.vrf"); cValue.Exists() {
+				item.Vrfs = make([]BFDMultipathDestinationsVrfs, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := BFDMultipathDestinationsVrfs{}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("vrf-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.VrfName = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.VrfName = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("location-id"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.LocationId = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.LocationId = types.StringNull()
+					}
+					item.Vrfs = append(item.Vrfs, cItem)
+					return true
+				})
+			}
 			data.MultipathDestinations = append(data.MultipathDestinations, item)
 			return true
 		})
@@ -851,6 +945,28 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte, version string) {
 			}
 			if cValue := v.Get("location-id"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.LocationId = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("vrfs.vrf"); cValue.Exists() {
+				item.Vrfs = make([]BFDMultipathDestinationsVrfs, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := BFDMultipathDestinationsVrfs{}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("vrf-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.VrfName = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.VrfName = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("location-id"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.LocationId = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.LocationId = types.StringNull()
+					}
+					item.Vrfs = append(item.Vrfs, cItem)
+					return true
+				})
 			}
 			data.MultipathDestinations = append(data.MultipathDestinations, item)
 			return true
@@ -1066,6 +1182,45 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD, version string)
 				found = false
 			}
 			if found {
+				if helpers.VersionAtLeast(version, "26.2") {
+					for ci := range state.MultipathDestinations[i].Vrfs {
+						var ckeys []string
+						var cstateKeyValues []string
+						if helpers.VersionAtLeast(version, "26.2") {
+							ckeys = append(ckeys, "vrf-name")
+							cstateKeyValues = append(cstateKeyValues, state.MultipathDestinations[i].Vrfs[ci].VrfName.ValueString())
+						}
+						ckeyString := ""
+						for cki := range ckeys {
+							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						}
+
+						cemptyKeys := true
+						if !reflect.ValueOf(state.MultipathDestinations[i].Vrfs[ci].VrfName.ValueString()).IsZero() {
+							cemptyKeys = false
+						}
+						if cemptyKeys {
+							continue
+						}
+
+						found := false
+						for cj := range data.MultipathDestinations[j].Vrfs {
+							found = true
+							if state.MultipathDestinations[i].Vrfs[ci].VrfName.ValueString() != data.MultipathDestinations[j].Vrfs[cj].VrfName.ValueString() {
+								found = false
+							}
+							if found {
+								if helpers.VersionAtLeast(version, "26.2") && !state.MultipathDestinations[i].Vrfs[ci].LocationId.IsNull() && data.MultipathDestinations[j].Vrfs[cj].LocationId.IsNull() {
+									deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "multipath/destinations/destination", keyString, "vrfs/vrf", ckeyString), "location-id"))
+								}
+								break
+							}
+						}
+						if !found {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "multipath/destinations/destination", keyString, "vrfs/vrf", ckeyString))
+						}
+					}
+				}
 				if !state.MultipathDestinations[i].LocationId.IsNull() && data.MultipathDestinations[j].LocationId.IsNull() {
 					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "multipath/destinations/destination", keyString), "location-id"))
 				}
@@ -1183,6 +1338,20 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context, state *BFD, version st
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "26.2") {
+			for ci := range data.MultipathDestinations[i].Vrfs {
+				var ckeys []string
+				var ckeyValues []string
+				if helpers.VersionAtLeast(version, "26.2") {
+					ckeys = append(ckeys, "vrf-name")
+					ckeyValues = append(ckeyValues, data.MultipathDestinations[i].Vrfs[ci].VrfName.ValueString())
+				}
+				ckeyString := ""
+				for cki := range ckeys {
+					ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				}
+			}
 		}
 	}
 	for i := range data.MultipathLocations {
@@ -1400,6 +1569,17 @@ func (data BFD) toBodyXML(ctx context.Context, stateArg ...*BFD) string {
 			}
 			if !item.LocationId.IsNull() && !item.LocationId.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/location-id", item.LocationId.ValueString())
+			}
+			if len(item.Vrfs) > 0 {
+				for _, citem := range item.Vrfs {
+					cbasePath := basePath + "/vrfs/vrf[vrf-name='" + citem.VrfName.ValueString() + "']"
+					if !citem.VrfName.IsNull() && !citem.VrfName.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/vrf-name", citem.VrfName.ValueString())
+					}
+					if !citem.LocationId.IsNull() && !citem.LocationId.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/location-id", citem.LocationId.ValueString())
+					}
+				}
 			}
 		}
 	}
@@ -1646,6 +1826,40 @@ func (data *BFD) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.MultipathDestinations[i].LocationId.IsNull() {
 			data.MultipathDestinations[i].LocationId = types.StringNull()
 		}
+		for ci := range data.MultipathDestinations[i].Vrfs {
+			keys := [...]string{"vrf-name"}
+			keyValues := [...]string{data.MultipathDestinations[i].Vrfs[ci].VrfName.ValueString()}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "vrfs/vrf").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "vrf-name"); value.Exists() && !data.MultipathDestinations[i].Vrfs[ci].VrfName.IsNull() {
+				data.MultipathDestinations[i].Vrfs[ci].VrfName = types.StringValue(value.String())
+			} else if data.MultipathDestinations[i].Vrfs[ci].VrfName.IsNull() {
+				data.MultipathDestinations[i].Vrfs[ci].VrfName = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "location-id"); value.Exists() && !data.MultipathDestinations[i].Vrfs[ci].LocationId.IsNull() {
+				data.MultipathDestinations[i].Vrfs[ci].LocationId = types.StringValue(value.String())
+			} else if data.MultipathDestinations[i].Vrfs[ci].LocationId.IsNull() {
+				data.MultipathDestinations[i].Vrfs[ci].LocationId = types.StringNull()
+			}
+		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/multihop/ttl-drop-threshold"); value.Exists() && !data.MultihopTtlDropThreshold.IsNull() {
 		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
@@ -1879,6 +2093,20 @@ func (data *BFD) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "location-id"); cValue.Exists() {
 				item.LocationId = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "vrfs/vrf"); cValue.Exists() {
+				item.Vrfs = make([]BFDMultipathDestinationsVrfs, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := BFDMultipathDestinationsVrfs{}
+					if ccValue := helpers.GetFromXPath(cv, "vrf-name"); ccValue.Exists() {
+						cItem.VrfName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "location-id"); ccValue.Exists() {
+						cItem.LocationId = types.StringValue(ccValue.String())
+					}
+					item.Vrfs = append(item.Vrfs, cItem)
+					return true
+				})
+			}
 			data.MultipathDestinations = append(data.MultipathDestinations, item)
 			return true
 		})
@@ -2028,6 +2256,20 @@ func (data *BFDData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 			if cValue := helpers.GetFromXPath(v, "location-id"); cValue.Exists() {
 				item.LocationId = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "vrfs/vrf"); cValue.Exists() {
+				item.Vrfs = make([]BFDMultipathDestinationsVrfs, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := BFDMultipathDestinationsVrfs{}
+					if ccValue := helpers.GetFromXPath(cv, "vrf-name"); ccValue.Exists() {
+						cItem.VrfName = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "location-id"); ccValue.Exists() {
+						cItem.LocationId = types.StringValue(ccValue.String())
+					}
+					item.Vrfs = append(item.Vrfs, cItem)
+					return true
+				})
 			}
 			data.MultipathDestinations = append(data.MultipathDestinations, item)
 			return true
@@ -2408,6 +2650,39 @@ func (data *BFD) addDeletedItemsXML(ctx context.Context, state BFD, body string)
 				found = false
 			}
 			if found {
+				for ci := range state.MultipathDestinations[i].Vrfs {
+					cstateKeys := [...]string{"vrf-name"}
+					cstateKeyValues := [...]string{state.MultipathDestinations[i].Vrfs[ci].VrfName.ValueString()}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.MultipathDestinations[i].Vrfs[ci].VrfName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.MultipathDestinations[j].Vrfs {
+						found = true
+						if state.MultipathDestinations[i].Vrfs[ci].VrfName.ValueString() != data.MultipathDestinations[j].Vrfs[cj].VrfName.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.MultipathDestinations[i].Vrfs[ci].LocationId.IsNull() && data.MultipathDestinations[j].Vrfs[cj].LocationId.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/multipath/destinations/destination%v/vrfs/vrf%v/location-id", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/multipath/destinations/destination%v/vrfs/vrf%v", predicates, cpredicates))
+					}
+				}
 				if !state.MultipathDestinations[i].LocationId.IsNull() && data.MultipathDestinations[j].LocationId.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/multipath/destinations/destination%v/location-id", predicates))
 				}

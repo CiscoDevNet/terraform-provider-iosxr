@@ -52,6 +52,7 @@ type CEFLoadBalancing8000 struct {
 	PlatformLoadBalanceFieldsUserdataIpv4Tcp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp       `tfsdk:"platform_load_balance_fields_userdata_ipv4_tcp"`
 	PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp    []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv4_non_tcp_udp"`
 	PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly types.Bool                                                           `tfsdk:"platform_load_balance_mpls_hashing_inner_non_ip_label_only"`
+	PlatformLoadBalanceNvgrePayloadExclude            types.Bool                                                           `tfsdk:"platform_load_balance_nvgre_payload_exclude"`
 }
 
 type CEFLoadBalancing8000Data struct {
@@ -65,6 +66,7 @@ type CEFLoadBalancing8000Data struct {
 	PlatformLoadBalanceFieldsUserdataIpv4Tcp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp       `tfsdk:"platform_load_balance_fields_userdata_ipv4_tcp"`
 	PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp    []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv4_non_tcp_udp"`
 	PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly types.Bool                                                           `tfsdk:"platform_load_balance_mpls_hashing_inner_non_ip_label_only"`
+	PlatformLoadBalanceNvgrePayloadExclude            types.Bool                                                           `tfsdk:"platform_load_balance_nvgre_payload_exclude"`
 }
 type CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp struct {
 	LocationString    types.String `tfsdk:"location_string"`
@@ -132,6 +134,13 @@ func (data CEFLoadBalancing8000) toBody(ctx context.Context, providerVersion str
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsUnknown() {
 		if data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
 			body, _ = sjson.Set(body, "platform-load-balance.mpls-hash-non-ip-lbl-only", []interface{}{nil})
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && !data.PlatformLoadBalanceNvgrePayloadExclude.IsUnknown() {
+			if data.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
+				body, _ = sjson.Set(body, "platform-load-balance.nvgre-payload-exclude", []interface{}{nil})
+			}
 		}
 	}
 	if len(data.PlatformLoadBalanceFieldsUserdataIpv6Udp) > 0 {
@@ -229,6 +238,12 @@ func (data CEFLoadBalancing8000) toBody(ctx context.Context, providerVersion str
 func (data CEFLoadBalancing8000) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "platform_load_balance_nvgre_payload_exclude",
+			AddedInVersion: "26.2",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -527,6 +542,16 @@ func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte
 	} else if data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "platform-load-balance.nvgre-payload-exclude"); helpers.VersionAtLeast(version, "26.2") && !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		if value.Exists() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
+		}
+	} else if data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -645,6 +670,16 @@ func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res []byte, vers
 		// Only set to false if it was previously set in state
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "platform-load-balance.nvgre-payload-exclude"); value.Exists() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+		} else if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+			// Only set to false if it was previously set in state
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
+		}
+	} else {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -762,6 +797,15 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res []byte, 
 	} else {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
 	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "platform-load-balance.nvgre-payload-exclude"); value.Exists() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+		} else {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
+		}
+	} else {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -770,6 +814,9 @@ func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res []byte, 
 
 func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEFLoadBalancing8000, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !state.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "platform-load-balance/nvgre-payload-exclude"))
+	}
 	if !state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "platform-load-balance/mpls-hash-non-ip-lbl-only"))
 	}
@@ -1001,6 +1048,11 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 
 func (data *CEFLoadBalancing8000) getEmptyLeafsDelete(ctx context.Context, state *CEFLoadBalancing8000, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && !data.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
+		if state != nil && !state.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && state.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "platform-load-balance/nvgre-payload-exclude"))
+		}
+	}
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
 		if state != nil && !state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "platform-load-balance/mpls-hash-non-ip-lbl-only"))
@@ -1062,6 +1114,9 @@ func (data *CEFLoadBalancing8000) getEmptyLeafsDelete(ctx context.Context, state
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *CEFLoadBalancing8000) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "26.2") && !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "platform-load-balance/nvgre-payload-exclude"))
+	}
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "platform-load-balance/mpls-hash-non-ip-lbl-only"))
 	}
@@ -1280,6 +1335,11 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context, stateArg ...*CEF
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsUnknown() {
 		if data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only", "")
+		}
+	}
+	if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && !data.PlatformLoadBalanceNvgrePayloadExclude.IsUnknown() {
+		if data.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/platform-load-balance/nvgre-payload-exclude", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -1566,6 +1626,17 @@ func (data *CEFLoadBalancing8000) updateFromBodyXML(ctx context.Context, res xml
 			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/platform-load-balance/nvgre-payload-exclude"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -1682,6 +1753,11 @@ func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Re
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
 	} else {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/platform-load-balance/nvgre-payload-exclude"); value.Exists() {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+	} else {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
 	}
 }
 
@@ -1800,6 +1876,11 @@ func (data *CEFLoadBalancing8000Data) fromBodyXML(ctx context.Context, res xmldo
 	} else {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/platform-load-balance/nvgre-payload-exclude"); value.Exists() {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+	} else {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -1811,6 +1892,22 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && state.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() && data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		deletePath := state.getXPath() + "/platform-load-balance/nvgre-payload-exclude"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() && data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
 		deletePath := state.getXPath() + "/platform-load-balance/mpls-hash-non-ip-lbl-only"
@@ -2069,6 +2166,9 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 
 func (data *CEFLoadBalancing8000) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/platform-load-balance/nvgre-payload-exclude")
+	}
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only")
 	}

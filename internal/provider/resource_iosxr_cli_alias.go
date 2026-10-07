@@ -113,10 +113,10 @@ func (r *CLIAliasResource) Schema(ctx context.Context, req resource.SchemaReques
 							},
 						},
 						"command": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Aliased exec command").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Aliased exec command").String + "\n  - Length: `1`-`800` (v24.4), `1`-`1014` (v26.2)",
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.LengthBetween(1, 1014),
 							},
 						},
 					},
@@ -135,10 +135,10 @@ func (r *CLIAliasResource) Schema(ctx context.Context, req resource.SchemaReques
 							},
 						},
 						"command": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Aliased config command").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Aliased config command").String + "\n  - Length: `1`-`800` (v24.4), `1`-`1014` (v26.2)",
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.LengthBetween(1, 1014),
 							},
 						},
 					},
@@ -173,6 +173,10 @@ func (r *CLIAliasResource) Create(ctx context.Context, req resource.CreateReques
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -391,6 +395,10 @@ func (r *CLIAliasResource) Update(ctx context.Context, req resource.UpdateReques
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -484,6 +492,14 @@ func (r *CLIAliasResource) Delete(ctx context.Context, req resource.DeleteReques
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

@@ -265,6 +265,10 @@ func (r *CEFLoadBalancing8000Resource) Schema(ctx context.Context, req resource.
 				MarkdownDescription: helpers.NewAttributeDescription("MPLS label stack and non-IP payload hash method to use labels only").String,
 				Optional:            true,
 			},
+			"platform_load_balance_nvgre_payload_exclude": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude NVGRE payload from hash calculation (overlay hashing disabled)").String + "\n  - Supported from version: `26.2`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -294,6 +298,10 @@ func (r *CEFLoadBalancing8000Resource) Create(ctx context.Context, req resource.
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -512,6 +520,10 @@ func (r *CEFLoadBalancing8000Resource) Update(ctx context.Context, req resource.
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -605,6 +617,14 @@ func (r *CEFLoadBalancing8000Resource) Delete(ctx context.Context, req resource.
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

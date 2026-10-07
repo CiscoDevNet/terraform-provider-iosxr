@@ -14,8 +14,10 @@ attributes:
     replaces_yang_name: srv6/locator/locator-name
     example: LOC1
   - yang_name: srv6-options/locator/binding-sid-type
+    tf_name: srv6_locator_binding_sid_type
     replaces_yang_name: srv6/locator/binding-sid-type
     example: srv6-dynamic
   - yang_name: srv6-options/locator/behavior
+    tf_name: srv6_locator_behavior
     replaces_yang_name: srv6/locator/behavior
     example: ub6-insert-reduced

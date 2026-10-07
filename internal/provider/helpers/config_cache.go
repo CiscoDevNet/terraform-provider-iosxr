@@ -138,10 +138,26 @@ var allCachePaths = []string{
 // DeviceCache holds cached gNMI Get responses keyed by the exact gNMI path.
 // Each entry is the raw JSON-IETF bytes returned by the device for that path.
 // Thread-safe via a single RWMutex.
+//
+// It also maintains a lazily-built, separate key->element index (listIndex)
+// for fast point lookups into keyed-list blobs (e.g. "as-path-sets" with
+// hundreds/thousands of "as-path-set" entries) -- see GetFromCache /
+// singleTrailingFilter / getListIndex below for why this exists.
 type DeviceCache struct {
 	mu        sync.RWMutex
 	data      map[string][]byte
 	fetchedAt map[string]int64
+
+	indexMu sync.RWMutex
+	// listIndex caches, per "rootPath|containerQuery|keyField" combination,
+	// a map from that keyed list's key VALUE to the matching element's raw
+	// JSON. This turns N repeated per-resource GetFromCache lookups into
+	// ONE array walk (O(n), done once) followed by N O(1) map lookups,
+	// instead of re-running gjson's linear "#(key==value)" scan from
+	// scratch on every single lookup (O(n) each -> O(n^2) total across n
+	// sibling list resources, e.g. 1000 iosxr_as_path_set instances on one
+	// device during a single `terraform plan`/`apply` refresh).
+	listIndex map[string]map[string][]byte
 }
 
 // NewDeviceCache allocates an empty DeviceCache.
@@ -167,20 +183,88 @@ func (c *DeviceCache) Get(path string, ttlSeconds int64) ([]byte, bool) {
 	return data, true
 }
 
-// Set stores bytes for path with the current timestamp.
+// Set stores bytes for path with the current timestamp. Invalidates the
+// list-lookup index since any cached blob it was built from may have just
+// changed (re-fetch after TTL expiry, cache miss fallback, etc.).
 func (c *DeviceCache) Set(path string, data []byte) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.data[path] = data
 	c.fetchedAt[path] = time.Now().Unix()
+	c.invalidateListIndex()
 }
 
 // Delete removes a single path from the cache (used after write operations).
+// Also invalidates the list-lookup index -- see Set.
+//
+// NOTE: c.data is keyed by "root" cache paths (one entry per
+// module:/first-path-segment, e.g. "...-route-policy-cfg:/routing-policy"),
+// as populated by FetchAndCache's batch warm -- NOT by the exact specific
+// resource path (e.g. ".../as-path-set[set-name='X']") that
+// Create/Update/Delete pass in here. ReadConfig's cache-miss fallback is the
+// only path that ever stores under the exact specific path (its
+// cache.Set(resourcePath, raw) call). So deleting only the literal `path`
+// key is a no-op for the (common) case where the resource was actually
+// served out of a root blob -- that stale blob would otherwise keep being
+// returned as a cache HIT for this resource (and all its siblings) until
+// the next full re-warm, contradicting the documented "cache is
+// automatically invalidated after any write operation" behavior. Resolve
+// and evict the root entry too so a write always forces a fresh fetch.
 func (c *DeviceCache) Delete(path string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	delete(c.data, path)
 	delete(c.fetchedAt, path)
+	if root := findRootPath(path); root != path {
+		delete(c.data, root)
+		delete(c.fetchedAt, root)
+	}
+	c.invalidateListIndex()
+}
+
+// invalidateListIndex drops the entire list-lookup index. Called whenever
+// underlying cached data changes; the index is rebuilt lazily (and cheaply,
+// one container at a time, only for containers actually queried) on the
+// next GetFromCache call that needs it. Caller need not (but may) hold c.mu.
+func (c *DeviceCache) invalidateListIndex() {
+	c.indexMu.Lock()
+	c.listIndex = nil
+	c.indexMu.Unlock()
+}
+
+// getListIndex returns the value->element-JSON index for the keyed list at
+// containerQuery (a dotted gjson path, e.g. "as-path-sets.as-path-set")
+// within cachedData, building it on first use and reusing it for every
+// subsequent lookup with the same indexKey until invalidated by a Set/Delete.
+func (c *DeviceCache) getListIndex(indexKey string, cachedData []byte, containerQuery, keyField string) map[string][]byte {
+	c.indexMu.RLock()
+	if c.listIndex != nil {
+		if idx, ok := c.listIndex[indexKey]; ok {
+			c.indexMu.RUnlock()
+			return idx
+		}
+	}
+	c.indexMu.RUnlock()
+
+	idx := make(map[string][]byte)
+	arr := gjson.GetBytes(cachedData, containerQuery)
+	if arr.IsArray() {
+		arr.ForEach(func(_, el gjson.Result) bool {
+			if keyVal := el.Get(keyField); keyVal.Exists() {
+				idx[keyVal.String()] = []byte(el.Raw)
+			}
+			return true
+		})
+	}
+
+	c.indexMu.Lock()
+	if c.listIndex == nil {
+		c.listIndex = make(map[string]map[string][]byte)
+	}
+	c.listIndex[indexKey] = idx
+	c.indexMu.Unlock()
+
+	return idx
 }
 
 // ---------------------------------------------------------------------------
@@ -222,15 +306,39 @@ func FilterPathsByCapabilities(ctx context.Context, client *gnmi.Client) []strin
 	return filtered
 }
 
+// FetchAndCache issues one batched gNMI Get across paths and stores each
+// returned root subtree in cache. Retries a few times with backoff on
+// transient errors (e.g. right after a large atomic batch commit, the
+// device's datastore may still be converging and briefly reject or fail the
+// very next Get) instead of giving up on the first attempt -- since this
+// runs behind EnsureCacheWarmed's sync.Once, a single transient failure here
+// would otherwise leave the cache permanently empty for the rest of this
+// provider process, forcing every subsequent Read() to miss and fall back
+// to individual live Gets (or, if those also race the same sync delay and
+// are misread as "not found", a spurious full recreate -- see GetWithRetry).
 func FetchAndCache(ctx context.Context, client *gnmi.Client, cache *DeviceCache, paths []string) error {
 	if len(paths) == 0 {
 		return nil
 	}
 
-	res, err := client.Get(ctx, paths)
-	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("device cache: batched Get for %d paths failed: %v", len(paths), err))
-		return err
+	const maxRetries = 2
+	baseDelay := 500 * time.Millisecond
+
+	var res gnmi.GetRes
+	var err error
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		res, err = client.Get(ctx, paths)
+		if err == nil {
+			break
+		}
+		if attempt == maxRetries {
+			tflog.Debug(ctx, fmt.Sprintf("device cache: batched Get for %d paths failed after %d attempt(s): %v", len(paths), attempt+1, err))
+			return err
+		}
+		delay := baseDelay * time.Duration(1<<uint(attempt))
+		tflog.Debug(ctx, fmt.Sprintf("device cache: batched Get for %d paths failed (attempt %d/%d): %v; retrying after %v in case device is still converging after a recent commit",
+			len(paths), attempt+1, maxRetries+1, err, delay))
+		time.Sleep(delay)
 	}
 
 	stored := 0
@@ -376,11 +484,46 @@ func pathToGjsonQuery(specificPath, rootPath string) string {
 	return q.String()
 }
 
+// trailingFilterRe matches a gjson query that ends in exactly one keyed-list
+// filter, e.g. "as-path-sets.as-path-set.#(set-name==\"FOO\")" ->
+// container="as-path-sets.as-path-set", key="set-name", value="FOO". Used by
+// singleTrailingFilter to recognize the common flat-list case that the
+// listIndex fast path (below) can serve in O(1) instead of O(n).
+var trailingFilterRe = regexp.MustCompile(`^(.+)\.#\(([^=]+)==\"([^\"]*)\"\)$`)
+
+// singleTrailingFilter reports whether query is EXACTLY ONE keyed-list
+// filter at the end (no other "#(...)" anywhere in the query, i.e. not a
+// nested keyed-list-within-keyed-list path). When true, it returns the
+// container's dotted gjson path, the key field name, and the target value.
+//
+// This intentionally only optimizes the common single-level case (as used
+// by as-path-sets, community-sets, prefix-lists, interfaces, etc.); nested
+// multi-level filters fall back to the original per-call gjson scan below,
+// which remains correct (just not accelerated) for those rarer paths.
+func singleTrailingFilter(query string) (container, keyField, keyValue string, ok bool) {
+	if strings.Count(query, "#(") != 1 {
+		return "", "", "", false
+	}
+	m := trailingFilterRe.FindStringSubmatch(query)
+	if m == nil {
+		return "", "", "", false
+	}
+	return m[1], m[2], m[3], true
+}
+
 // GetFromCache retrieves data for a specific resource path from the cache.
 //
 // It finds the matching root path (e.g. "…/interfaces"), fetches the cached
-// JSON blob for that root, then uses gjson to extract the exact resource
-// (e.g. interface[interface-name='Loopback100']) without any gNMI request.
+// JSON blob for that root, then extracts the exact resource (e.g.
+// interface[interface-name='Loopback100']) without any gNMI request.
+//
+// For the common case of a single trailing keyed-list filter, extraction
+// uses a key->element index built once per (root, container) and reused for
+// every sibling lookup (see DeviceCache.getListIndex) -- turning what would
+// otherwise be N independent O(list length) gjson "#(...)" scans (O(n^2)
+// total across n sibling resources, e.g. 1000 iosxr_as_path_set instances on
+// one device) into one O(n) index build plus N O(1) map lookups. Other
+// (nested/rarer) query shapes fall back to a direct gjson scan.
 //
 // Returns (nil, false) on cache miss.
 func GetFromCache(ctx context.Context, cache *DeviceCache, specificPath string, ttlSeconds int64) ([]byte, bool) {
@@ -398,6 +541,13 @@ func GetFromCache(ctx context.Context, cache *DeviceCache, specificPath string, 
 	query := pathToGjsonQuery(specificPath, rootPath)
 	if query == "" {
 		return cachedData, true
+	}
+
+	if container, keyField, keyValue, ok := singleTrailingFilter(query); ok {
+		indexKey := rootPath + "|" + container + "|" + keyField
+		idx := cache.getListIndex(indexKey, cachedData, container, keyField)
+		raw, found := idx[keyValue]
+		return raw, found
 	}
 
 	result := gjson.GetBytes(cachedData, query)

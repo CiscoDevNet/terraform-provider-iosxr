@@ -53,6 +53,31 @@ func New() provider.Provider {
 	}
 }
 
+// gnmiOperationTimeout overrides the go-gnmi client library's default
+// OperationTimeout (15s), which bounds BOTH each individual retry attempt
+// AND (via calculateTotalTimeout = OperationTimeout + sum of backoff delays)
+// the overall budget for every single gNMI Get/Set call made through this
+// client -- there is no way to raise it per-call (the library's per-request
+// gnmi.Timeout(...) option only affects the per-attempt context, not this
+// outer total-budget calculation, so it cannot be used to work around a too
+// -short client-level OperationTimeout).
+//
+// 15s is fine for a Get/Set against a single resource, but is routinely too
+// short for the batch manager's `iosxr_commit` action, which flushes EVERY
+// staged (auto_commit=false) Create/Update as ONE atomic gNMI Set -- e.g.
+// committing 1000 staged `iosxr_as_path_set` resources in one Set call.
+// Debugging a scale test against a real device showed this exact scenario
+// reliably hit "context canceled during backoff: context deadline exceeded"
+// on its first attempt (the device was still legitimately processing the
+// large Set past the 15s/~22s-with-backoff client budget) -- the retry then
+// "succeeded" near-instantly, which on closer inspection meant the original,
+// supposedly-failed attempt had in fact already durably committed everything
+// on the device; the client just gave up waiting for the (slow) ack. That
+// made every timing measurement AND the apply's reported success/failure
+// unreliable for larger batches. Raising this to a value generous enough for
+// large atomic batch commits avoids these spurious client-side timeouts.
+const gnmiOperationTimeout = 2 * time.Minute
+
 // provider satisfies the tfsdk.Provider interface and usually is included
 // with all Resource and DataSource implementations.
 type iosxrProvider struct{
@@ -801,6 +826,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				gnmi.TLS(tls),
 				gnmi.VerifyCertificate(verifyCertificate),
 				gnmi.MaxRetries(int(retries)),
+				gnmi.OperationTimeout(gnmiOperationTimeout),
 				gnmi.WithLogger(logger),
 			}
 
@@ -949,6 +975,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					gnmi.TLS(tls),
 					gnmi.VerifyCertificate(verifyCertificate),
 					gnmi.MaxRetries(int(retries)),
+					gnmi.OperationTimeout(gnmiOperationTimeout),
 					gnmi.WithLogger(logger),
 				}
 

@@ -34,12 +34,14 @@ import (
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
 )
@@ -49,6 +51,31 @@ func New() provider.Provider {
 		clientCache: make(map[string]*IosxrProviderDataDevice),
 	}
 }
+
+// gnmiOperationTimeout overrides the go-gnmi client library's default
+// OperationTimeout (15s), which bounds BOTH each individual retry attempt
+// AND (via calculateTotalTimeout = OperationTimeout + sum of backoff delays)
+// the overall budget for every single gNMI Get/Set call made through this
+// client -- there is no way to raise it per-call (the library's per-request
+// gnmi.Timeout(...) option only affects the per-attempt context, not this
+// outer total-budget calculation, so it cannot be used to work around a too
+// -short client-level OperationTimeout).
+//
+// 15s is fine for a Get/Set against a single resource, but is routinely too
+// short for the batch manager's `iosxr_commit` action, which flushes EVERY
+// staged (auto_commit=false) Create/Update as ONE atomic gNMI Set -- e.g.
+// committing 1000 staged `iosxr_as_path_set` resources in one Set call.
+// Debugging a scale test against a real device showed this exact scenario
+// reliably hit "context canceled during backoff: context deadline exceeded"
+// on its first attempt (the device was still legitimately processing the
+// large Set past the 15s/~22s-with-backoff client budget) -- the retry then
+// "succeeded" near-instantly, which on closer inspection meant the original,
+// supposedly-failed attempt had in fact already durably committed everything
+// on the device; the client just gave up waiting for the (slow) ack. That
+// made every timing measurement AND the apply's reported success/failure
+// unreliable for larger batches. Raising this to a value generous enough for
+// large atomic batch commits avoids these spurious client-side timeouts.
+const gnmiOperationTimeout = 2 * time.Minute
 
 // provider satisfies the tfsdk.Provider interface and usually is included
 // with all Resource and DataSource implementations.
@@ -70,22 +97,28 @@ type providerData struct {
 	CaCertificate      types.String         `tfsdk:"ca_certificate"`
 	Retries            types.Int64          `tfsdk:"retries"`
 	LockReleaseTimeout types.Int64          `tfsdk:"lock_release_timeout"`
+	AutoCommit         types.Bool           `tfsdk:"auto_commit"`
 	ReuseConnection    types.Bool           `tfsdk:"reuse_connection"`
 	ClientCache        types.Bool           `tfsdk:"client_cache"`
 	SelectedDevices    types.List           `tfsdk:"selected_devices"`
 	Devices            []providerDataDevice `tfsdk:"devices"`
+	EnableConfigCache  types.Bool           `tfsdk:"enable_config_cache"`
+	ConfigCacheTTL     types.Int64          `tfsdk:"config_cache_ttl"`
 }
 
 type providerDataDevice struct {
-	Name    types.String `tfsdk:"name"`
-	Host    types.String `tfsdk:"host"`
-	Managed types.Bool   `tfsdk:"managed"`
+	Name       types.String `tfsdk:"name"`
+	Host       types.String `tfsdk:"host"`
+	Managed    types.Bool   `tfsdk:"managed"`
+	AutoCommit types.Bool   `tfsdk:"auto_commit"`
 }
 
 type IosxrProviderData struct {
-	Devices         map[string]*IosxrProviderDataDevice
-	ReuseConnection bool
-	MaxRetries      int
+	Devices           map[string]*IosxrProviderDataDevice
+	ReuseConnection   bool
+	MaxRetries        int
+	EnableConfigCache bool
+	ConfigCacheTTL    int64
 }
 
 type IosxrProviderDataDevice struct {
@@ -95,12 +128,52 @@ type IosxrProviderDataDevice struct {
 	ReuseConnection bool
 	MaxRetries      int
 	Managed         bool
+	AutoCommit      bool
+	mu              sync.Mutex
+	CandidateStore  []gnmi.SetOperation
 	OpMutex         *sync.Mutex // Serializes operations on this device (pointer for sharing)
+	// Cache holds the full device configuration fetched once on the first Read
+	// call (lazy warm). Resources/data-sources use helpers.GetFromCache + gjson.
+	// Zero additional gNMI requests after the initial warm.
+	Cache        *helpers.DeviceCache
+	cacheEnabled bool      // mirrors IosxrProviderData.EnableConfigCache
+	cacheTTL     int64     // mirrors IosxrProviderData.ConfigCacheTTL
+	cacheOnce    sync.Once // guarantees cache warm runs exactly once per device
 }
 
 // GetOpMutex returns the mutex for serializing operations on this device
 func (d *IosxrProviderDataDevice) GetOpMutex() *sync.Mutex {
 	return d.OpMutex
+}
+
+// AppendCandidateOps safely appends gNMI operations to the device candidate store.
+func (d *IosxrProviderDataDevice) AppendCandidateOps(ops []gnmi.SetOperation) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	d.CandidateStore = append(d.CandidateStore, ops...)
+}
+
+// DrainCandidateOps atomically returns and clears the candidate store.
+func (d *IosxrProviderDataDevice) DrainCandidateOps() []gnmi.SetOperation {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	ops := d.CandidateStore
+	d.CandidateStore = nil
+	return ops
+}
+
+// HasPendingOps returns true if there are pending operations in the candidate store.
+func (d *IosxrProviderDataDevice) HasPendingOps() bool {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	return len(d.CandidateStore) > 0
+}
+
+// PendingOpsCount returns the number of pending operations in the candidate store.
+func (d *IosxrProviderDataDevice) PendingOpsCount() int {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	return len(d.CandidateStore)
 }
 
 // GetGnmiClient returns the gNMI client
@@ -121,6 +194,24 @@ func (d *IosxrProviderDataDevice) GetReuseConnection() bool {
 // GetMaxRetries returns the maximum number of retries
 func (d *IosxrProviderDataDevice) GetMaxRetries() int {
 	return d.MaxRetries
+}
+
+// EnsureCacheWarmed fills the per-device cache once, lazily on first read.
+func (d *IosxrProviderDataDevice) EnsureCacheWarmed(ctx context.Context) {
+	if d == nil || !d.cacheEnabled || d.GnmiClient == nil || d.Cache == nil {
+		return
+	}
+
+	d.cacheOnce.Do(func() {
+		tflog.Debug(ctx, "device cache: warming (first Read of this apply/refresh)")
+		start := time.Now()
+		paths := helpers.FilterPathsByCapabilities(ctx, d.GnmiClient)
+		err := helpers.FetchAndCache(ctx, d.GnmiClient, d.Cache, paths)
+		tflog.Debug(ctx, fmt.Sprintf(
+			"device cache: warm complete in %s, paths_requested=%d, err=%v",
+			time.Since(start), len(paths), err,
+		))
+	})
 }
 
 // Metadata returns the provider type name.
@@ -193,6 +284,18 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				MarkdownDescription: "Enable or disable client-side caching of device connections. This can improve performance by reusing existing connections. Defaults to `true`.",
 				Optional:            true,
 			},
+			"enable_config_cache": schema.BoolAttribute{
+				MarkdownDescription: "Enable configuration caching. When enabled, the provider fetches the full device configuration once and caches it for subsequent read operations, significantly improving performance during `terraform refresh` and `terraform plan` operations. Cache is automatically invalidated after any write operation. This can also be set as the IOSXR_ENABLE_CONFIG_CACHE environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
+			"config_cache_ttl": schema.Int64Attribute{
+				MarkdownDescription: "Configuration cache time-to-live in seconds. After this duration, the cache is automatically invalidated and the next read operation will fetch fresh configuration from the device. Set to 0 to disable TTL-based expiration. This can also be set as the IOSXR_CONFIG_CACHE_TTL environment variable. Defaults to `300` (5 minutes).",
+				Optional:            true,
+			},
+			"auto_commit": schema.BoolAttribute{
+				MarkdownDescription: "Automatically commit configuration changes after each resource operation. When `true` (default), each resource commits its changes immediately (gNMI only). When `false`, Create/Update operations are staged in an in-memory candidate store instead of being sent to the device, and must be explicitly flushed using the `iosxr_commit` resource. Delete operations always commit immediately regardless of this setting, so destroying/removing a resource never leaves a queued delete unflushed. This can also be set as the IOSXR_AUTO_COMMIT environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
 			"selected_devices": schema.ListAttribute{
 				MarkdownDescription: "This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.",
 				Optional:            true,
@@ -213,6 +316,10 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 						},
 						"managed": schema.BoolAttribute{
 							MarkdownDescription: "Enable or disable device management. This can be used to temporarily skip a device due to maintenance for example. Defaults to `true`.",
+							Optional:            true,
+						},
+						"auto_commit": schema.BoolAttribute{
+							MarkdownDescription: "Enable automatic commit of changes for this device (gNMI only). When `true` (default), changes are committed to the device immediately. When `false`, Create/Update changes are staged and must be explicitly flushed using the `iosxr_commit` resource; Delete always commits immediately regardless of this setting. Overrides the provider-level `auto_commit` for this device.",
 							Optional:            true,
 						},
 					},
@@ -542,7 +649,61 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 	} else {
 		clientCache = config.ClientCache.ValueBool()
 	}
+	var enableConfigCache bool
+	if config.EnableConfigCache.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as enable_config_cache",
+		)
+		return
+	}
 
+	if config.EnableConfigCache.IsNull() {
+		enableConfigCacheStr := os.Getenv("IOSXR_ENABLE_CONFIG_CACHE")
+		if enableConfigCacheStr == "" {
+			enableConfigCache = true
+		} else {
+			var err error
+			enableConfigCache, err = strconv.ParseBool(enableConfigCacheStr)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid enable_config_cache value",
+					"IOSXR_ENABLE_CONFIG_CACHE must be a valid boolean (true/false/1/0), got: "+enableConfigCacheStr,
+				)
+				return
+			}
+		}
+	} else {
+		enableConfigCache = config.EnableConfigCache.ValueBool()
+	}
+
+	var configCacheTTL int64
+	if config.ConfigCacheTTL.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as config_cache_ttl",
+		)
+		return
+	}
+
+	if config.ConfigCacheTTL.IsNull() {
+		configCacheTTLStr := os.Getenv("IOSXR_CONFIG_CACHE_TTL")
+		if configCacheTTLStr == "" {
+			configCacheTTL = 300 // Default 5 minutes
+		} else {
+			var err error
+			configCacheTTL, err = strconv.ParseInt(configCacheTTLStr, 10, 64)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid config_cache_ttl value",
+					"IOSXR_CONFIG_CACHE_TTL must be a valid integer, got: "+configCacheTTLStr,
+				)
+				return
+			}
+		}
+	} else {
+		configCacheTTL = config.ConfigCacheTTL.ValueInt64()
+	}
 	var selectedDevices []string
 	if config.SelectedDevices.IsUnknown() {
 		// Cannot connect to client with an unknown value
@@ -596,8 +757,41 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 	data := IosxrProviderData{}
 	data.Devices = make(map[string]*IosxrProviderDataDevice)
+	data.EnableConfigCache = enableConfigCache
+	data.ConfigCacheTTL = configCacheTTL
 	data.ReuseConnection = reuseConnection
 	data.MaxRetries = int(retries)
+
+	// Parse auto_commit at function scope so it is available in both the
+	// default-device block and the per-device loop below (gNMI only).
+	var autoCommit bool
+	if protocol == "gnmi" {
+		if config.AutoCommit.IsUnknown() {
+			resp.Diagnostics.AddWarning(
+				"Unable to create client",
+				"Cannot use unknown value as auto_commit",
+			)
+			return
+		}
+		if config.AutoCommit.IsNull() {
+			autoCommitStr := os.Getenv("IOSXR_AUTO_COMMIT")
+			if autoCommitStr == "" {
+				autoCommit = true
+			} else {
+				var err error
+				autoCommit, err = strconv.ParseBool(autoCommitStr)
+				if err != nil {
+					resp.Diagnostics.AddError(
+						"Invalid auto_commit value",
+						"IOSXR_AUTO_COMMIT must be a valid boolean (true/false/1/0), got: "+autoCommitStr,
+					)
+					return
+				}
+			}
+		} else {
+			autoCommit = config.AutoCommit.ValueBool()
+		}
+	}
 
 	// Create default device client based on protocol
 	if protocol == "gnmi" {
@@ -615,6 +809,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				ReuseConnection: reuseConnection,
 				MaxRetries:      int(retries),
 				Managed:         true,
+				AutoCommit:      cachedDevice.AutoCommit,
 				OpMutex:         cachedDevice.OpMutex, // Share the same mutex
 			}
 		} else {
@@ -628,6 +823,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				gnmi.TLS(tls),
 				gnmi.VerifyCertificate(verifyCertificate),
 				gnmi.MaxRetries(int(retries)),
+				gnmi.OperationTimeout(gnmiOperationTimeout),
 				gnmi.WithLogger(logger),
 			}
 
@@ -657,6 +853,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				ReuseConnection: reuseConnection,
 				MaxRetries:      int(retries),
 				Managed:         true,
+				AutoCommit:      autoCommit,
 				OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 			}
 			data.Devices[""] = deviceData
@@ -723,6 +920,11 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			}
 		}
 	}
+	if data.Devices[""] != nil {
+		data.Devices[""].Cache = helpers.NewDeviceCache()
+		data.Devices[""].cacheEnabled = data.EnableConfigCache
+		data.Devices[""].cacheTTL = data.ConfigCacheTTL
+	}
 
 	// Add all devices with their managed status
 	for _, device := range config.Devices {
@@ -759,6 +961,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					ReuseConnection: reuseConnection,
 					MaxRetries:      int(retries),
 					Managed:         managed,
+					AutoCommit:      cachedDevice.AutoCommit,
 					OpMutex:         cachedDevice.OpMutex, // Share the same mutex
 				}
 			} else {
@@ -769,6 +972,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					gnmi.TLS(tls),
 					gnmi.VerifyCertificate(verifyCertificate),
 					gnmi.MaxRetries(int(retries)),
+					gnmi.OperationTimeout(gnmiOperationTimeout),
 					gnmi.WithLogger(logger),
 				}
 
@@ -780,6 +984,12 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				}
 				if caCertificate != "" {
 					opts = append(opts, gnmi.TLSCA(caCertificate))
+				}
+
+				// auto_commit defaults to provider-level setting, per-device overrides it.
+				deviceAutoCommit := autoCommit
+				if !device.AutoCommit.IsNull() && !device.AutoCommit.IsUnknown() {
+					deviceAutoCommit = device.AutoCommit.ValueBool()
 				}
 
 				var deviceClient *gnmi.Client
@@ -800,6 +1010,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					ReuseConnection: reuseConnection,
 					MaxRetries:      int(retries),
 					Managed:         managed,
+					AutoCommit:      deviceAutoCommit,
 					OpMutex:         &sync.Mutex{}, // Create new mutex for new client
 				}
 				data.Devices[deviceName] = deviceData
@@ -871,16 +1082,27 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				}
 			}
 		}
+		if data.Devices[deviceName] != nil {
+			data.Devices[deviceName].Cache = helpers.NewDeviceCache()
+			data.Devices[deviceName].cacheEnabled = data.EnableConfigCache
+			data.Devices[deviceName].cacheTTL = data.ConfigCacheTTL
+		}
 	}
+
+	// Cache is warmed lazily on the first Read call per device (EnsureCacheWarmed).
+	// No gNMI requests are made here — this avoids unnecessary device fetches
+	// during `terraform plan` when there is no existing state to refresh.
 
 	resp.DataSourceData = &data
 	resp.ResourceData = &data
+	resp.ActionData = &data
 }
 
 func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewYangResource,
 		NewCliResource,
+		NewCommitTriggerResource,
 		NewAAAResource,
 		NewAAAAccountingResource,
 		NewAAAAuthenticationResource,
@@ -1083,6 +1305,12 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewVRFResource,
 		NewVTYPoolResource,
 		NewXMLAgentResource,
+	}
+}
+
+func (p *iosxrProvider) Actions(ctx context.Context) []func() action.Action {
+	return []func() action.Action{
+		NewCommitAction,
 	}
 }
 

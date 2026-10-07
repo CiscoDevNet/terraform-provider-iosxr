@@ -88,8 +88,10 @@ func EnsureGnmiConnection(ctx context.Context, client *gnmi.Client, reuseConnect
 		return gnmiHealthCheck(ctx, client)
 	}
 
-	// Fast path for reuse: do a quick health check
-	if err := gnmiHealthCheck(ctx, client); err != nil {
+	// Fast path for reuse: do a quick health check, but throttle it -- see
+	// gnmiHealthCheckThrottled's doc comment for why an unthrottled check
+	// here was a major, previously-undiagnosed performance bug.
+	if err := gnmiHealthCheckThrottled(ctx, client); err != nil {
 		// Connection has issues, need to reconnect
 		tflog.Warn(ctx, "gNMI connection unhealthy, reconnecting")
 		return reconnectGnmiWithRetries(ctx, client, maxRetries)
@@ -134,6 +136,60 @@ func gnmiHealthCheck(ctx context.Context, client *gnmi.Client) error {
 	return nil
 }
 
+// gnmiHealthCheckCooldown bounds how often gnmiHealthCheckThrottled will
+// actually perform a live Capabilities RPC per *gnmi.Client.
+const gnmiHealthCheckCooldown = 15 * time.Second
+
+var (
+	gnmiHealthCheckMu     sync.Mutex
+	gnmiHealthCheckLastOK = map[*gnmi.Client]time.Time{}
+)
+
+// gnmiHealthCheckThrottled is gnmiHealthCheck, memoized per *gnmi.Client for
+// gnmiHealthCheckCooldown.
+//
+// EnsureGnmiConnection's reuse_connection=true "fast path" used to call
+// gnmiHealthCheck() UNCONDITIONALLY on every single call -- and every one of
+// the ~1200 generated call sites across every resource/data-source's
+// Create/Read/Update/Delete calls EnsureGnmiConnection once per invocation.
+// That meant EVERY resource Read() during a plan/refresh paid for one full
+// gNMI Capabilities RPC round-trip (a real network call to the device,
+// typically 100-500ms over a WAN/VPN link), in addition to whatever the read
+// itself needed -- and this cost was completely outside of and unaffected by
+// enable_config_cache, since the cache only covers the data-fetching Get,
+// not this connection-health preamble.
+//
+// Debugging a `terraform plan` against 100 cached resources (TF_LOG=DEBUG)
+// showed 81 Capabilities request/response round trips consuming 10.6s of a
+// 14.8s total plan (~72%) -- by far the single largest cost, dwarfing the
+// cache warm itself (2.9s) and explaining why enable_config_cache barely
+// sped up plan/refresh/update-one-resource workloads despite eliminating N
+// separate Gets: the N separate (uncached, unthrottled) health-check RPCs
+// were never eliminated.
+//
+// Throttling to one real check per client per gnmiHealthCheckCooldown keeps
+// the intended behavior (detect & recover from a genuinely stale connection
+// within a bounded, short window) while collapsing the N-per-apply checks
+// down to ~1, mirroring the existing EnsureCacheWarmed sync.Once pattern.
+// reuse_connection=false deliberately bypasses this (see EnsureGnmiConnection)
+// since that setting is an explicit opt-out of connection-reuse behavior.
+func gnmiHealthCheckThrottled(ctx context.Context, client *gnmi.Client) error {
+	gnmiHealthCheckMu.Lock()
+	if last, ok := gnmiHealthCheckLastOK[client]; ok && time.Since(last) < gnmiHealthCheckCooldown {
+		gnmiHealthCheckMu.Unlock()
+		return nil
+	}
+	gnmiHealthCheckMu.Unlock()
+
+	err := gnmiHealthCheck(ctx, client)
+	if err == nil {
+		gnmiHealthCheckMu.Lock()
+		gnmiHealthCheckLastOK[client] = time.Now()
+		gnmiHealthCheckMu.Unlock()
+	}
+	return err
+}
+
 // IsGnmiConnectionError checks if an error is related to a broken/closed connection.
 func IsGnmiConnectionError(err error) bool {
 	if err == nil {
@@ -150,15 +206,25 @@ func IsGnmiConnectionError(err error) bool {
 }
 
 // GetWithRetry retrieves data from the device with retry logic.
-// gNMI Get may return empty/incomplete data immediately after Set due to device sync delay.
-// This function retries with exponential backoff to handle such cases.
+// gNMI Get may return empty/incomplete data -- or even a transient "not
+// found" error -- immediately after a Set due to device sync delay. This is
+// especially true after a large atomic batch commit (e.g. the batch
+// manager's `iosxr_commit` action flushing thousands of staged ops in one
+// gNMI Set): the device's datastore can take noticeably longer to converge
+// than after a single small commit, so a refresh that runs right after such
+// a commit can observe a still-converging device. This function retries
+// with exponential backoff to absorb both cases, rather than immediately
+// concluding "not found" (which would make Terraform remove the resource
+// from state and plan to recreate it on the very next apply -- turning a
+// transient sync delay into a full, spurious N-resource recreate).
 //
-// The returned bool reports whether the element was NOT FOUND (i.e. the device
-// responded with a "Requested element(s) not found" error), which is the only
-// signal that the element has been deleted. A successful but empty ({}) response
-// is NOT treated as not-found: it means the element exists but has no data to
-// return (e.g. a keys-only list entry) and must be kept in state. Callers can
-// use IsGnmiGetResponseEmpty on the returned response to detect that case.
+// The returned bool reports whether the element was NOT FOUND (i.e. the
+// device responded with a "Requested element(s) not found" error on the
+// FINAL attempt), which is the only signal that the element has been
+// deleted. A successful but empty ({}) response is NOT treated as
+// not-found: it means the element exists but has no data to return (e.g. a
+// keys-only list entry) and must be kept in state. Callers can use
+// IsGnmiGetResponseEmpty on the returned response to detect that case.
 //
 // Parameters:
 //   - ctx: context.Context
@@ -168,7 +234,7 @@ func IsGnmiConnectionError(err error) bool {
 //
 // Returns:
 //   - gnmi.GetRes: The response from Get (by value)
-//   - bool: true only if the element was not found (deleted)
+//   - bool: true only if the element was still not found after all retries
 //   - error: any error that occurred
 func GetWithRetry(ctx context.Context, client *gnmi.Client, paths []string, pathForLogging string) (gnmi.GetRes, bool, error) {
 	var getResp gnmi.GetRes
@@ -179,9 +245,20 @@ func GetWithRetry(ctx context.Context, client *gnmi.Client, paths []string, path
 	for attempt := 0; attempt <= maxRetries; attempt++ {
 		getResp, err = client.Get(ctx, paths)
 		if err != nil {
-			// A "not found" error is the only signal that the element was deleted.
+			// A "not found" error is the only signal that the element might have
+			// been deleted -- but it can also be a transient post-commit sync
+			// delay (see doc comment above), so retry it exactly like an empty
+			// response instead of concluding deletion on the very first attempt.
 			if strings.Contains(err.Error(), "Requested element(s) not found") {
-				return gnmi.GetRes{}, true, nil // notFound: element does not exist
+				if attempt == maxRetries {
+					return gnmi.GetRes{}, true, nil // notFound: element does not exist
+				}
+				delay := baseDelay * time.Duration(1<<uint(attempt))
+				tflog.Debug(ctx, fmt.Sprintf(
+					"gNMI Get for %s returned 'not found' (attempt %d/%d), retrying after %v in case this is a transient post-commit sync delay",
+					pathForLogging, attempt+1, maxRetries+1, delay))
+				time.Sleep(delay)
+				continue
 			}
 			return gnmi.GetRes{}, false, fmt.Errorf("failed to retrieve object (%s): %w", pathForLogging, err)
 		}
@@ -215,6 +292,15 @@ func IsGnmiGetResponseEmpty(resp *gnmi.GetRes) bool {
 	return isGnmiGetResponseEmpty(resp)
 }
 
+// IsEmptyRespBody reports whether a raw JSON response body (as returned by
+// ReadConfig) represents "no data" (empty, "{}" or "[]"). This is the
+// []byte-based counterpart of IsGnmiGetResponseEmpty used by generated Read
+// logic downstream of the config cache, where callers only ever see the
+// extracted JSON bytes rather than the raw gnmi.GetRes.
+func IsEmptyRespBody(body []byte) bool {
+	return isEmptyJSONBytes(body)
+}
+
 // isGnmiGetResponseEmpty checks if a gNMI Get response is empty or has no data
 func isGnmiGetResponseEmpty(resp *gnmi.GetRes) bool {
 	if resp == nil {
@@ -235,7 +321,13 @@ func isGnmiGetResponseEmpty(resp *gnmi.GetRes) bool {
 		// node returns zero updates (handled above).
 		return false
 	}
-	jsonVal := val.GetJsonIetfVal()
-	jsonStr := strings.TrimSpace(string(jsonVal))
-	return jsonStr == "" || jsonStr == "{}" || jsonStr == "[]"
+	return isEmptyJSONBytes(val.GetJsonIetfVal())
+}
+
+// isEmptyJSONBytes reports whether raw JSON bytes represent "no data" (empty,
+// "{}" or "[]"). Shared by isGnmiGetResponseEmpty (gnmi.GetRes-based) and
+// IsEmptyRespBody (raw []byte-based, used downstream of the config cache).
+func isEmptyJSONBytes(raw []byte) bool {
+	s := strings.TrimSpace(string(raw))
+	return s == "" || s == "{}" || s == "[]"
 }

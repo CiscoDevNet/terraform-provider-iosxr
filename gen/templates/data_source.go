@@ -205,41 +205,38 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
+	resourcePath := config.getPath()
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", resourcePath))
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-				// Ensure connection is healthy (reconnect if stale)
-				locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
-				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
-				if locked {
-					defer device.GetOpMutex().Unlock()
-				}
-				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
-					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
-					return
-				}
-
-				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
-				getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			// Ensure connection is healthy (reconnect if stale)
+			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
 				return
 			}
 
-			// Defensive bounds checking for response structure
-			if len(getResp.Notifications) == 0 {
-				resp.Diagnostics.AddError("Invalid gNMI response",
-					"Response contains no notifications")
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+
+			respBody, _, fetchErr := helpers.ReadConfig(
+				ctx, device.GnmiClient, device.Cache,
+				d.data.EnableConfigCache, d.data.ConfigCacheTTL,
+				device.EnsureCacheWarmed, resourcePath,
+			)
+			if fetchErr != nil {
+				resp.Diagnostics.AddError("Unable to fetch device configuration", fetchErr.Error())
 				return
 			}
-			if len(getResp.Notifications[0].Update) == 0 {
-				resp.Diagnostics.AddError("Invalid gNMI response",
-					"Response notification contains no updates")
+			if helpers.IsEmptyRespBody(respBody) {
+				resp.Diagnostics.AddError("Invalid gNMI response", "Response contains no data")
 				return
 			}
 
-			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
 			config.fromBody(ctx, gjson.ParseBytes(respBody))
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
@@ -266,9 +263,9 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 		}
 	}
 
-	config.Id = types.StringValue(config.getPath())
+	config.Id = types.StringValue(resourcePath)
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", resourcePath))
 
 	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)

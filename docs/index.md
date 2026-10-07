@@ -87,10 +87,13 @@ provider "iosxr" {
 
 ### Optional
 
+- `auto_commit` (Boolean) Automatically commit configuration changes after each resource operation. When `true` (default), each resource commits its changes immediately (gNMI only). When `false`, Create/Update operations are staged in an in-memory candidate store instead of being sent to the device, and must be explicitly flushed using the `iosxr_commit` resource. Delete operations always commit immediately regardless of this setting, so destroying/removing a resource never leaves a queued delete unflushed. This can also be set as the IOSXR_AUTO_COMMIT environment variable. Defaults to `true`.
 - `ca_certificate` (String) Path to the TLS CA certificate file. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
 - `certificate` (String) Path to the TLS certificate file. This can also be set as the IOSXR_CERTIFICATE environment variable.
 - `client_cache` (Boolean) Enable or disable client-side caching of device connections. This can improve performance by reusing existing connections. Defaults to `true`.
+- `config_cache_ttl` (Number) Configuration cache time-to-live in seconds. After this duration, the cache is automatically invalidated and the next read operation will fetch fresh configuration from the device. Set to 0 to disable TTL-based expiration. This can also be set as the IOSXR_CONFIG_CACHE_TTL environment variable. Defaults to `300` (5 minutes).
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
+- `enable_config_cache` (Boolean) Enable configuration caching. When enabled, the provider fetches the full device configuration once and caches it for subsequent read operations, significantly improving performance during `terraform refresh` and `terraform plan` operations. Cache is automatically invalidated after any write operation. This can also be set as the IOSXR_ENABLE_CONFIG_CACHE environment variable. Defaults to `true`.
 - `host` (String) Hostname or IP address of the Cisco IOS-XR device. Optionally a port can be added with `:port`. Default port is `57400` for gNMI and `830` for NETCONF. This can also be set as the IOSXR_HOST environment variable.
 - `key` (String) Path to the TLS private key file. This can also be set as the IOSXR_KEY environment variable.
 - `lock_release_timeout` (Number) Number of seconds to wait for the device database lock to be released. This can also be set as the IOSXR_LOCK_RELEASE_TIMEOUT environment variable. Defaults to `120`.
@@ -113,4 +116,5 @@ Required:
 
 Optional:
 
+- `auto_commit` (Boolean) Enable automatic commit of changes for this device (gNMI only). When `true` (default), changes are committed to the device immediately. When `false`, Create/Update changes are staged and must be explicitly flushed using the `iosxr_commit` resource; Delete always commits immediately regardless of this setting. Overrides the provider-level `auto_commit` for this device.
 - `managed` (Boolean) Enable or disable device management. This can be used to temporarily skip a device due to maintenance for example. Defaults to `true`.

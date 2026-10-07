@@ -937,10 +937,15 @@ func (r *RouterOSPFAreaInterfaceResource) Create(ctx context.Context, req resour
 				ops = append(ops, gnmi.Update(plan.getPath(), body))
 			}
 
-			_, err := device.GnmiClient.Set(ctx, ops)
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
+			if device.AutoCommit {
+				_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+			} else {
+				device.AppendCandidateOps(ops)
+				tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d operation(s) in candidate store (total pending: %d)", plan.getPath(), len(ops), device.PendingOpsCount()))
 			}
 		} else {
 			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
@@ -962,6 +967,12 @@ func (r *RouterOSPFAreaInterfaceResource) Create(ctx context.Context, req resour
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
+		}
+
+		// Invalidate this path in cache after write so next Read fetches fresh data
+		if r.data.EnableConfigCache {
+			device.Cache.Delete(plan.getPath())
+			tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Create", plan.getPath()))
 		}
 	}
 
@@ -995,7 +1006,8 @@ func (r *RouterOSPFAreaInterfaceResource) Read(ctx context.Context, req resource
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
+	resourcePath := state.Id.ValueString()
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", resourcePath))
 
 	// Check if we are being called after `terraform import`.
 	// During import we use fromBody/fromBodyXML (full overwrite from device).
@@ -1019,10 +1031,13 @@ func (r *RouterOSPFAreaInterfaceResource) Read(ctx context.Context, req resource
 				return
 			}
 
-			// Use GetWithRetry to handle device sync delays
-			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			respBody, notFound, fetchErr := helpers.ReadConfig(
+				ctx, device.GnmiClient, device.Cache,
+				r.data.EnableConfigCache, r.data.ConfigCacheTTL,
+				device.EnsureCacheWarmed, resourcePath,
+			)
+			if fetchErr != nil {
+				resp.Diagnostics.AddError("Unable to fetch device configuration", fetchErr.Error())
 				return
 			}
 
@@ -1035,10 +1050,9 @@ func (r *RouterOSPFAreaInterfaceResource) Read(ctx context.Context, req resource
 			// A successful but empty ({}) response means the element exists but the
 			// device returned no data (e.g. a keys-only list entry). Preserve state
 			// as-is instead of removing it, which would cause a perpetual recreate.
-			if helpers.IsGnmiGetResponseEmpty(&getResp) {
-				tflog.Warn(ctx, fmt.Sprintf("%s: gNMI returned empty response, preserving state as-is", state.Id.ValueString()))
+			if helpers.IsEmptyRespBody(respBody) {
+				tflog.Warn(ctx, fmt.Sprintf("%s: gNMI returned empty response, preserving state as-is", resourcePath))
 			} else {
-				respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
 				tflog.Debug(ctx, fmt.Sprintf("respBody : %s", respBody))
 				if imp {
 					// After `terraform import` we switch to a full read so all device
@@ -1088,7 +1102,7 @@ func (r *RouterOSPFAreaInterfaceResource) Read(ctx context.Context, req resource
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", resourcePath))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
@@ -1162,10 +1176,15 @@ func (r *RouterOSPFAreaInterfaceResource) Update(ctx context.Context, req resour
 				ops = append(ops, gnmi.Update(plan.getPath(), body))
 			}
 
-			_, err := device.GnmiClient.Set(ctx, ops)
-			if err != nil {
-				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-				return
+			if device.AutoCommit {
+				_, err := device.GnmiClient.Set(ctx, ops)
+				if err != nil {
+					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+					return
+				}
+			} else {
+				device.AppendCandidateOps(ops)
+				tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d operation(s) in candidate store (total pending: %d)", plan.Id.ValueString(), len(ops), device.PendingOpsCount()))
 			}
 		} else {
 			// Serialize NETCONF operations when reuse disabled, or writes when reuse enabled
@@ -1190,6 +1209,12 @@ func (r *RouterOSPFAreaInterfaceResource) Update(ctx context.Context, req resour
 				resp.Diagnostics.AddError("Client Error", err.Error())
 				return
 			}
+		}
+
+		// Invalidate this path in cache after write so next Read fetches fresh data
+		if r.data.EnableConfigCache {
+			device.Cache.Delete(plan.Id.ValueString())
+			tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Update", plan.Id.ValueString()))
 		}
 	}
 
@@ -1244,10 +1269,26 @@ func (r *RouterOSPFAreaInterfaceResource) Delete(ctx context.Context, req resour
 				var ops []gnmi.SetOperation
 				ops = append(ops, gnmi.Delete(state.Id.ValueString()))
 
-				_, err := device.GnmiClient.Set(ctx, ops)
-				if err != nil {
-					resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-					return
+				if device.AutoCommit {
+					// auto_commit=true: commit this delete immediately, exactly
+					// like every other operation on this device.
+					_, err := device.GnmiClient.Set(ctx, ops)
+					if err != nil {
+						resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+						return
+					}
+					tflog.Debug(ctx, fmt.Sprintf("%s: Committed delete operation immediately (auto_commit=true)", state.Id.ValueString()))
+				} else {
+					// auto_commit=false (batch mode): stage the delete alongside
+					// any other pending Create/Update/Delete operations. It is
+					// flushed together with them in one atomic gNMI Set, either
+					// by the `iosxr_commit` action (see action_iosxr_commit.go)
+					// or, on destroy, by `iosxr_commit_on_destroy`'s Delete()
+					// (see resource_iosxr_commit.go) -- Terraform Actions have
+					// no destroy-time action_trigger event, so that resource's
+					// own Delete() is the only reliable destroy-time flush hook.
+					device.AppendCandidateOps(ops)
+					tflog.Debug(ctx, fmt.Sprintf("%s: Queued delete operation in candidate store (total pending: %d)", state.Id.ValueString(), device.PendingOpsCount()))
 				}
 			} else {
 				// NETCONF - Serialize write operations
@@ -1300,12 +1341,26 @@ func (r *RouterOSPFAreaInterfaceResource) Delete(ctx context.Context, req resour
 					ops = append(ops, gnmi.Delete(i))
 				}
 
-				if len(ops) > 0 {
-					_, err := device.GnmiClient.Set(ctx, ops)
-					if err != nil {
-						resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-						return
+				if device.AutoCommit {
+					// auto_commit=true: commit these deletes immediately, exactly
+					// like every other operation on this device.
+					if len(ops) > 0 {
+						_, err := device.GnmiClient.Set(ctx, ops)
+						if err != nil {
+							resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+							return
+						}
 					}
+					tflog.Debug(ctx, fmt.Sprintf("%s: Committed %d delete operation(s) immediately (auto_commit=true)", state.Id.ValueString(), len(ops)))
+				} else {
+					// auto_commit=false (batch mode): stage the deletes alongside
+					// any other pending Create/Update/Delete operations -- see
+					// the "deleteMode == all" branch above for the flush
+					// mechanisms (iosxr_commit action / iosxr_commit_on_destroy).
+					if len(ops) > 0 {
+						device.AppendCandidateOps(ops)
+					}
+					tflog.Debug(ctx, fmt.Sprintf("%s: Queued %d delete operation(s) in candidate store (total pending: %d)", state.Id.ValueString(), len(ops), device.PendingOpsCount()))
 				}
 			} else {
 				// NETCONF - Serialize write operations
@@ -1329,6 +1384,12 @@ func (r *RouterOSPFAreaInterfaceResource) Delete(ctx context.Context, req resour
 					resp.Diagnostics.AddError("Client Error", err.Error())
 					return
 				}
+			}
+
+			// Invalidate this path in cache after write so next Read fetches fresh data
+			if r.data.EnableConfigCache {
+				device.Cache.Delete(state.Id.ValueString())
+				tflog.Debug(ctx, fmt.Sprintf("%s: Cache invalidated after Delete", state.Id.ValueString()))
 			}
 		}
 	}

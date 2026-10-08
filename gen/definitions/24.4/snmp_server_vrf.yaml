@@ -63,7 +63,7 @@ attributes:
             id: true
             sensitive: true
             write_only: true
-            example: 06253E2C5A471E1C5E
+            example: 604355564c464a544148664d4244476145634e474e45495f5a525f
           - yang_name: udp-port
             default_value: default
             example: 1100
@@ -122,7 +122,7 @@ attributes:
             id: true
             sensitive: true
             write_only: true
-            example: 06253E2C5A471E1C5E
+            example: 604355564c464a544148664d4244476145634e474e45495f5a525f
           - yang_name: udp-port
             default_value: default
             example: 1100

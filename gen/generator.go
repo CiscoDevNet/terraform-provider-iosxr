@@ -739,6 +739,11 @@ func hasVersionDifferences(config YamlConfig) bool {
 		return true
 	}
 
+	// A resource that only exists from a higher version is blocked on older devices
+	if config.IntroducedInVersion != "" {
+		return true
+	}
+
 	// Check if any attribute has version constraints or range differences
 	return hasAttributeVersionDifferences(config.Attributes)
 }

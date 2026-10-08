@@ -677,6 +677,13 @@ func (data {{camelCase .Name}}{{$versionSuffix}}) GetVersionConstraints() []help
 		RemovedInVersion: "{{.RemovedInVersion}}",
 	})
 	{{- end}}
+	{{- if .IntroducedInVersion}}
+	// Entire resource is introduced in version {{.IntroducedInVersion}}
+	constraints = append(constraints, helpers.FieldVersionConstraint{
+		FieldPath:      "",
+		AddedInVersion: "{{.IntroducedInVersion}}",
+	})
+	{{- end}}
 	{{- if hasVersionConstraints .Attributes}}
 	constraints = append(constraints, []helpers.FieldVersionConstraint{
 		{{- range collectVersionConstraints .Attributes "" .BaseVersion}}

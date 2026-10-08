@@ -29,8 +29,11 @@
 package main
 
 import (
+	"bytes"
+	"os"
 	"strings"
 	"testing"
+	"text/template"
 )
 
 // ---------------------------------------------------------------------------
@@ -1341,6 +1344,44 @@ func TestHasAttributeVersionDifferences_NestedListAttribute(t *testing.T) {
 	}
 	if !hasAttributeVersionDifferences(attrs) {
 		t.Error("hasAttributeVersionDifferences = false, want true for VersionEnums nested inside a List attribute")
+	}
+}
+
+// A resource whose first definition is above the global minimum must emit the generated
+// Validate/constraint code so older devices are rejected with a provider error.
+func TestHasVersionDifferences_IntroducedInVersionOnly_True(t *testing.T) {
+	if !hasVersionDifferences(YamlConfig{IntroducedInVersion: "26.2"}) {
+		t.Error("hasVersionDifferences = false, want true for a resource introduced in 26.2")
+	}
+	if hasVersionDifferences(YamlConfig{}) {
+		t.Error("hasVersionDifferences = true, want false for a resource with no version differences")
+	}
+}
+
+func TestGetVersionConstraintsTemplate_IntroducedInVersion(t *testing.T) {
+	raw, err := os.ReadFile("templates/model.go")
+	if err != nil {
+		t.Fatalf("read model template: %v", err)
+	}
+	tmpl, err := template.New("getVersionConstraints").Funcs(functions).Parse(getTemplateSection(string(raw), "getVersionConstraints"))
+	if err != nil {
+		t.Fatalf("parse getVersionConstraints section: %v", err)
+	}
+	render := func(cfg YamlConfig) string {
+		var out bytes.Buffer
+		if err := tmpl.Execute(&out, cfg); err != nil {
+			t.Fatalf("execute getVersionConstraints section: %v", err)
+		}
+		return out.String()
+	}
+
+	got := render(YamlConfig{Name: "Widget", IntroducedInVersion: "26.2"})
+	if !strings.Contains(got, `AddedInVersion: "26.2"`) || !strings.Contains(got, `FieldPath:      ""`) {
+		t.Errorf("want a resource-level AddedInVersion 26.2 constraint, got:\n%s", got)
+	}
+
+	if got := render(YamlConfig{Name: "Widget"}); strings.Contains(got, "AddedInVersion") {
+		t.Errorf("want no resource-level AddedInVersion constraint without IntroducedInVersion, got:\n%s", got)
 	}
 }
 

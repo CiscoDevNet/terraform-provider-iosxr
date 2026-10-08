@@ -22,13 +22,13 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"regexp"
 	"strconv"
 	"strings"
 	"sync"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
+	"github.com/tidwall/gjson"
 )
 
 // versionCache stores detected IOS-XR versions to avoid redundant queries
@@ -112,8 +112,8 @@ func SupportedVersionList() string {
 }
 
 // DetectIosxrVersion queries a device via gNMI to detect its IOS-XR version
-// and returns the normalized version string (e.g., "2442" for 24.4.2)
-// Uses Cisco IOS-XR unified YANG models (not OpenConfig)
+// and returns the normalized version string (e.g., "24.4" for 24.4.2)
+// Reads the label from Cisco-IOS-XR-install-oper:install/version
 // Results are cached per device to avoid redundant queries
 func DetectIosxrVersion(ctx context.Context, client *gnmi.Client, deviceName string) (string, error) {
 	if client == nil {
@@ -130,22 +130,11 @@ func DetectIosxrVersion(ctx context.Context, client *gnmi.Client, deviceName str
 
 	tflog.Debug(ctx, fmt.Sprintf("Attempting to auto-detect IOS-XR version for device '%s'", deviceName))
 
-	// Note: gNMI Capabilities Version field is skipped — IOS-XR returns the gNMI
-	// library version there, not the OS version. Uncomment the block below if a
-	// future IOS-XR release populates caps.Version with the OS version correctly.
-	//
-	// version, err := detectFromCapabilities(ctx, client)
-	// if err == nil && version != "" {
-	// 	if compact, ok := ParseVersion(version); ok {
-	// 		tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for device '%s' from gNMI capabilities: %s", deviceName, version))
-	// 		versionCache.Store(deviceName, compact)
-	// 		return compact, nil
-	// 	}
-	// }
-	// tflog.Debug(ctx, fmt.Sprintf("Failed to detect version from capabilities: %v", err))
+	// Note: gNMI Capabilities Version field is not used — IOS-XR returns the gNMI
+	// library version there, not the OS version.
 
-	// CLI configuration path - most reliable version source
-	result, err := client.Get(ctx, []string{"/Cisco-IOS-XR-cli-cfg:cli"})
+	// install-oper version - small payload, label holds the OS release
+	result, err := client.Get(ctx, []string{"/Cisco-IOS-XR-install-oper:install/version"})
 	if err != nil {
 		return "", fmt.Errorf("unable to auto-detect IOS-XR version from device: %w", err)
 	}
@@ -165,36 +154,8 @@ func DetectIosxrVersion(ctx context.Context, client *gnmi.Client, deviceName str
 	return compact, nil
 }
 
-// detectFromCapabilities tries to extract version from gNMI Capabilities response.
-// Commented out: IOS-XR returns the gNMI library version in caps.Version, not the
-// OS version. Uncomment if a future release populates it correctly.
-//
-// func detectFromCapabilities(ctx context.Context, client *gnmi.Client) (string, error) {
-// 	tflog.Debug(ctx, "Trying to detect version from gNMI Capabilities")
-//
-// 	caps, err := client.Capabilities(ctx)
-// 	if err != nil {
-// 		return "", fmt.Errorf("failed to get capabilities: %w", err)
-// 	}
-//
-// 	// Reject major == 0 — that is the gNMI protocol spec version (e.g. "0.10.0"),
-// 	// not the IOS-XR software version (always >= 6.x).
-// 	if caps.Version != "" {
-// 		if v := extractVersionString(caps.Version); v != "" {
-// 			major := strings.SplitN(v, ".", 2)[0]
-// 			if major != "0" {
-// 				tflog.Info(ctx, fmt.Sprintf("Found version in gNMI capabilities Version field: %s", v))
-// 				return v, nil
-// 			}
-// 			tflog.Debug(ctx, fmt.Sprintf("Ignoring gNMI protocol version '%s' from capabilities Version field", v))
-// 		}
-// 	}
-//
-// 	return "", fmt.Errorf("no version information found in capabilities")
-// }
-
 // extractVersionFromResponse attempts to extract version information from gNMI response
-// Handles Cisco IOS-XR CLI config which contains version in the header
+// Handles the Cisco IOS-XR install-oper version payload, which carries the release in its label field
 func extractVersionFromResponse(ctx context.Context, response interface{}) (string, error) {
 	// Convert response to JSON for easier parsing
 	jsonData, err := json.Marshal(response)
@@ -209,20 +170,20 @@ func extractVersionFromResponse(ctx context.Context, response interface{}) (stri
 		return "", fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	// Extract version from CLI configuration
-	version := tryExtractFromCLI(data)
+	// Extract version from the install-oper label
+	version := tryExtractFromDevice(data)
 	if version != "" {
-		tflog.Debug(ctx, fmt.Sprintf("Found version from CLI path: %s", version))
+		tflog.Debug(ctx, fmt.Sprintf("Found version from install/version label: %s", version))
 		return version, nil
 	}
 
-	return "", fmt.Errorf("no version information found in response")
+	return "", fmt.Errorf("no label in install/version response")
 }
 
-// tryExtractFromCLI tries to extract version from CLI config/output
-func tryExtractFromCLI(data map[string]interface{}) string {
-	// The CLI data is in the gNMI response under "Notifications"
-	// Navigate to the actual CLI content
+// tryExtractFromDevice tries to extract the version label from the install/version payload
+func tryExtractFromDevice(data map[string]interface{}) string {
+	// The payload is in the gNMI response under "Notifications"
+	// Navigate to the actual install/version content
 	if notifications, ok := data["Notifications"].([]interface{}); ok && len(notifications) > 0 {
 		if notif, ok := notifications[0].(map[string]interface{}); ok {
 			if updates, ok := notif["update"].([]interface{}); ok && len(updates) > 0 {
@@ -230,9 +191,9 @@ func tryExtractFromCLI(data map[string]interface{}) string {
 					if val, ok := update["val"].(map[string]interface{}); ok {
 						if value, ok := val["Value"].(map[string]interface{}); ok {
 							if jsonIetfVal, ok := value["JsonIetfVal"].(string); ok {
-								// Decode base64-encoded CLI output
-								if decoded := decodeBase64CLI(jsonIetfVal); decoded != "" {
-									if v := extractVersionFromCLIString(decoded); v != "" {
+								// Decode base64-encoded JSON payload
+								if decoded := decodeBase64Payload(jsonIetfVal); decoded != "" {
+									if v := extractVersionFromDevice(decoded); v != "" {
 										return v
 									}
 								}
@@ -247,27 +208,14 @@ func tryExtractFromCLI(data map[string]interface{}) string {
 	return ""
 }
 
-// extractVersionFromCLIString parses CLI output text to find version information
-// Example CLI output: "!! IOS XR Configuration 24.4.2"
-func extractVersionFromCLIString(cliOutput string) string {
-	// Split by newlines and search each line
-	lines := strings.Split(cliOutput, "\n")
-	for _, line := range lines {
-		line = strings.TrimSpace(line)
-
-		// Look for IOS XR Configuration line which reliably contains version
-		if strings.Contains(strings.ToLower(line), "ios xr configuration") {
-			if v := extractVersionString(line); v != "" {
-				return v
-			}
-		}
-	}
-
-	return ""
+// extractVersionFromDevice reads the release label from an install/version JSON payload
+// Example payload: {"label": "24.4.2", "hardware-info": "8000", ...}
+func extractVersionFromDevice(payload string) string {
+	return gjson.Get(payload, "label").String()
 }
 
-// decodeBase64CLI decodes base64-encoded CLI output
-func decodeBase64CLI(encoded string) string {
+// decodeBase64Payload decodes a base64-encoded JSON payload
+func decodeBase64Payload(encoded string) string {
 	// Try to decode as base64
 	decoded, err := base64.StdEncoding.DecodeString(encoded)
 	if err != nil {
@@ -283,27 +231,6 @@ func truncate(s string, maxLen int) string {
 		return s
 	}
 	return s[:maxLen] + "..."
-}
-
-// extractVersionString extracts version string from a text
-func extractVersionString(text string) string {
-	// Pattern to match version formats like:
-	// - 7.5.2.28I
-	// - 24.4.2
-	// - 25.2.2
-	patterns := []string{
-		`(\d+\.\d+\.\d+\.\d+[A-Za-z]*)`, // 7.5.2.28I
-		`(\d+\.\d+\.\d+)`,               // 24.4.2 or 25.2.2
-	}
-
-	for _, pattern := range patterns {
-		re := regexp.MustCompile(pattern)
-		if matches := re.FindStringSubmatch(text); len(matches) > 1 {
-			return matches[1]
-		}
-	}
-
-	return ""
 }
 
 // FormatVersionError creates a user-friendly error message for version detection failures

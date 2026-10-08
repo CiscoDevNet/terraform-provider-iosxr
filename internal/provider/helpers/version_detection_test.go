@@ -72,58 +72,33 @@ func TestValidateSupportedVersion(t *testing.T) {
 	}
 }
 
-func TestExtractVersionFromCLIString(t *testing.T) {
-	const cliConfig = `!! Building configuration...
-!! IOS XR Configuration 24.4.2
-!! Last configuration change at Sun Sep  6 21:52:11 2026 by cisco
-!
-hostname xrv9k-24-1
-!
-end
-`
+func TestExtractVersionFromDevice(t *testing.T) {
 	tests := []struct {
 		name  string
 		input string
 		want  string
 	}{
-		{name: "version_header", input: cliConfig, want: "24.4.2"},
-		{name: "no_version_header", input: "hostname R1\ninterface Loopback0\n!", want: ""},
+		{name: "c8000_25_4_2", input: `{"label": "25.4.2", "hardware-info": "8000", "chassis-pid": "8201-24H8FH"}`, want: "25.4.2"},
+		{name: "c8000_24_4_1", input: `{"label": "24.4.1", "hardware-info": "8000", "chassis-pid": "8201-24H8FH"}`, want: "24.4.1"},
+		{name: "ncs5500_24_4_2", input: `{"label": "24.4.2", "hardware-info": "cisco NCS-5500 () processor"}`, want: "24.4.2"},
+		{name: "xrv9k_25_4_2", input: `{"label": "25.4.2", "hardware-info": "cisco IOS-XRv 9000 () processor"}`, want: "25.4.2"},
+		{name: "no_label", input: `{"hardware-info": "8000"}`, want: ""},
 		{name: "empty_string", input: "", want: ""},
+		{name: "invalid_json", input: "not json", want: ""},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			got := extractVersionFromCLIString(tc.input)
+			got := extractVersionFromDevice(tc.input)
 			if got != tc.want {
-				t.Errorf("extractVersionFromCLIString(%q) = %q; want %q", tc.input, got, tc.want)
+				t.Errorf("extractVersionFromDevice(%q) = %q; want %q", tc.input, got, tc.want)
 			}
 		})
 	}
 }
 
-func TestExtractVersionString(t *testing.T) {
-	tests := []struct {
-		name  string
-		input string
-		want  string
-	}{
-		{name: "version_header", input: "!! IOS XR Configuration 25.4.1", want: "25.4.1"},
-		{name: "gnmi_version", input: "0.10.0", want: "0.10.0"},
-		{name: "no_version", input: "hostname R1", want: ""},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			got := extractVersionString(tc.input)
-			if got != tc.want {
-				t.Errorf("extractVersionString(%q) = %q; want %q", tc.input, got, tc.want)
-			}
-		})
-	}
-}
-
-func TestDecodeBase64CLI(t *testing.T) {
-	plaintext := "!! IOS XR Configuration 24.4.2\nhostname R1\n"
+func TestDecodeBase64Payload(t *testing.T) {
+	plaintext := `{"label": "24.4.2"}`
 	encoded := base64.StdEncoding.EncodeToString([]byte(plaintext))
 
 	tests := []struct {
@@ -138,9 +113,9 @@ func TestDecodeBase64CLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			got := decodeBase64CLI(tc.input)
+			got := decodeBase64Payload(tc.input)
 			if got != tc.want {
-				t.Errorf("decodeBase64CLI(%q) = %q; want %q", tc.input, got, tc.want)
+				t.Errorf("decodeBase64Payload(%q) = %q; want %q", tc.input, got, tc.want)
 			}
 		})
 	}

@@ -783,9 +783,6 @@ func (data HWModuleProfile) GetPatternConstraints() []helpers.FieldPatternConstr
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *HWModuleProfile) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "profile-load-balance.algorithm.layer2"); !data.ProfileLoadBalanceAlgorithmLayer2.IsNull() {

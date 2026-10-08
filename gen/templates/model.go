@@ -800,27 +800,6 @@ func (data {{camelCase .Name}}{{$versionSuffix}}) GetPatternConstraints() []help
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-{{- $versionSuffix := versionSuffix .Version}}
-{{- if hasVersionDefaults .Attributes}}
-
-// GetDefaultConstraints returns the version-specific default values for top-level attributes.
-func (data {{camelCase .Name}}{{$versionSuffix}}) GetDefaultConstraints() []helpers.FieldDefaultConstraint {
-	return []helpers.FieldDefaultConstraint{
-		{{- range .Attributes}}
-		{{- if len .VersionDefaults}}
-		{FieldPath: "{{.TfName}}", VersionDefaults: map[string]string{
-			{{- range $ver, $val := .VersionDefaults}}
-			"{{$ver}}": "{{$val}}",
-			{{- end}}
-		}},
-		{{- end}}
-		{{- end}}
-	}
-}
-{{- end}}
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 {{- $versionSuffix := versionSuffix .Version}}

@@ -162,9 +162,6 @@ func (data SegmentRouting) GetPatternConstraints() []helpers.FieldPatternConstra
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() && !data.LocalBlockLowerBound.IsNull() {

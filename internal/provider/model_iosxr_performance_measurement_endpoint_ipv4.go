@@ -243,9 +243,6 @@ func (data PerformanceMeasurementEndpointIPv4) GetPatternConstraints() []helpers
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *PerformanceMeasurementEndpointIPv4) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "source-address.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SourceAddressIpv4.IsNull() {

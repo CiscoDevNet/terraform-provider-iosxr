@@ -2152,9 +2152,6 @@ func (data RouterOSPF) GetPatternConstraints() []helpers.FieldPatternConstraint 
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ip-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {

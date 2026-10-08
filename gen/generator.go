@@ -173,7 +173,6 @@ type YamlConfigAttribute struct {
 	lastStringMinLength      int64                             // unexported: last delta's own explicit value, decoupled from the widened schema scalar above. Never read by templates, never part of any "_base" map — pure merge-time bookkeeping.
 	lastStringMaxLength      int64                             // same, for the max side.
 	DefaultValue             string                            `yaml:"default_value"`
-	lastDefaultValue         string                            // unexported: last delta's own explicit value, decoupled from the cleared "" sentinel above. Never read by templates.
 	RequiresReplace          bool                              `yaml:"requires_replace"`
 	NoAugmentConfig          bool                              `yaml:"no_augment_config"`
 	DeleteParent             bool                              `yaml:"delete_parent"`
@@ -191,7 +190,6 @@ type YamlConfigAttribute struct {
 	VersionEnums             map[string][]string               // Version-specific enum sets for String fields (nil if same across all versions)
 	VersionStringLengths     map[string]StringLengthConstraint // Version-specific string length constraints (nil if same across all versions)
 	VersionPatterns          map[string][]string               // Version-specific string patterns (nil if same across all versions)
-	VersionDefaults          map[string]string                 // Version-specific default values (nil if same across all versions)
 	ReplacesYangName         string                            `yaml:"replaces_yang_name"`
 	ReplacesXPath            string                            // preserved from base XPath before it is cleared
 	VersionYangNames         map[string]string                 // computed during merge: version → yang_name
@@ -1244,22 +1242,6 @@ func CollectVersionPatternConstraints(attributes []YamlConfigAttribute, prefix s
 	return result
 }
 
-// validateDefaultValue checks that val is parseable as the given attribute type.
-func validateDefaultValue(val, attrType string) error {
-	switch attrType {
-	case "Int64":
-		if _, err := strconv.ParseInt(val, 10, 64); err != nil {
-			return fmt.Errorf("not a valid int64")
-		}
-	case "Bool":
-		lo := strings.ToLower(val)
-		if lo != "true" && lo != "false" {
-			return fmt.Errorf("not a valid bool (expected true/false)")
-		}
-	}
-	return nil
-}
-
 // findNoAugmentConfigViolations returns a log.Fatalf-ready message for every case where acc
 // (the config merged through the immediately-preceding version) has NoAugmentConfig=true and
 // raw (this version's own, not-yet-merged delta) re-lists the same resource or attribute
@@ -1327,46 +1309,6 @@ func validateNoAugmentConfigCarryover(acc, raw YamlConfig, version string) {
 	for _, msg := range findNoAugmentConfigViolations(acc, raw, version) {
 		log.Fatalf("%s", msg)
 	}
-}
-
-// HasVersionDefaults returns true if any top-level attribute has VersionDefaults.
-func HasVersionDefaults(attributes []YamlConfigAttribute) bool {
-	for _, attr := range attributes {
-		if len(attr.VersionDefaults) > 0 {
-			return true
-		}
-	}
-	return false
-}
-
-// HasVersionDefaultsRecursive returns true if any attribute at any nesting level has VersionDefaults.
-func HasVersionDefaultsRecursive(attributes []YamlConfigAttribute) bool {
-	for _, attr := range attributes {
-		if len(attr.VersionDefaults) > 0 {
-			return true
-		}
-		if len(attr.Attributes) > 0 && HasVersionDefaultsRecursive(attr.Attributes) {
-			return true
-		}
-	}
-	return false
-}
-
-// FormatVersionDefaults formats per-version defaults for markdown description.
-func FormatVersionDefaults(versionDefaults map[string]string) string {
-	if len(versionDefaults) == 0 {
-		return ""
-	}
-	versions := make([]string, 0, len(versionDefaults))
-	for v := range versionDefaults {
-		versions = append(versions, v)
-	}
-	sort.Strings(versions)
-	parts := make([]string, 0, len(versions))
-	for _, v := range versions {
-		parts = append(parts, fmt.Sprintf("`%s` (v%s)", versionDefaults[v], FormatVersionDisplay(v)))
-	}
-	return strings.Join(parts, ", ")
 }
 
 // hclReserved contains HCL2 keywords that cause parse errors when unquoted
@@ -1437,9 +1379,6 @@ var functions = template.FuncMap{
 	"collectVersionStringLengthConstraints": CollectVersionStringLengthConstraints,
 	"hasVersionPatterns":                    HasVersionPatterns,
 	"collectVersionPatternConstraints":      CollectVersionPatternConstraints,
-	"formatVersionDefaults":                 FormatVersionDefaults,
-	"hasVersionDefaults":                    HasVersionDefaults,
-	"hasVersionDefaultsRecursive":           HasVersionDefaultsRecursive,
 	"collectRemovedAttrs":                   CollectRemovedAttrs,
 	"sortedAttrs":                           SortedAttrs,
 	"getIdAttributes":                       GetIdAttributes,
@@ -2222,39 +2161,8 @@ func mergeAttributes(base, override []YamlConfigAttribute, overrideVersion strin
 				if newMax != 0 {
 					result[i].lastStringMaxLength = newMax
 				}
-				defaultValueBaseline := result[i].lastDefaultValue
-				if defaultValueBaseline == "" {
-					// Never tracked yet -- result[i].DefaultValue is still the untouched base
-					// value at this point (it's only cleared to the "" sentinel inside this
-					// same block, which also always updates lastDefaultValue).
-					defaultValueBaseline = result[i].DefaultValue
-				}
-				if newAttr.DefaultValue != "" && newAttr.DefaultValue != defaultValueBaseline {
-					// Compared against defaultValueBaseline (the true immediately-preceding
-					// delta's own value), not result[i].DefaultValue, which is cleared to ""
-					// as a "use VersionDefaults at runtime" sentinel once it diverges.
-					if err := validateDefaultValue(newAttr.DefaultValue, result[i].Type); err != nil {
-						log.Fatalf("attribute %q (type %s): default_value %q in %s: %v",
-							result[i].TfName, result[i].Type, newAttr.DefaultValue, overrideVersion, err)
-					}
-					if result[i].VersionDefaults == nil {
-						result[i].VersionDefaults = make(map[string]string)
-					}
-					if _, exists := result[i].VersionDefaults["_base"]; !exists && result[i].DefaultValue != "" {
-						result[i].VersionDefaults["_base"] = result[i].DefaultValue
-					}
-					result[i].VersionDefaults[overrideVersion] = newAttr.DefaultValue
-					result[i].DefaultValue = ""
-				} else if newAttr.DefaultValue != "" && result[i].VersionDefaults == nil {
-					// Only update the scalar if we have not yet diverged into the map.
-					// Once the "" sentinel is set, leave it as-is.
-					result[i].DefaultValue = newAttr.DefaultValue
-				}
 				if newAttr.DefaultValue != "" {
-					// Track this delta's own explicit value unconditionally, decoupled from the
-					// cleared sentinel above, so the next fold's comparison is always against
-					// the true immediately-preceding version.
-					result[i].lastDefaultValue = newAttr.DefaultValue
+					result[i].DefaultValue = newAttr.DefaultValue
 				}
 				if newAttr.RequiresReplace {
 					result[i].RequiresReplace = newAttr.RequiresReplace
@@ -2434,12 +2342,6 @@ func fixAttributeBaseVersion(attr *YamlConfigAttribute, baseVersion string) {
 		if base, exists := attr.VersionXPath["_base"]; exists {
 			delete(attr.VersionXPath, "_base")
 			attr.VersionXPath[baseVersion] = base
-		}
-	}
-	if attr.VersionDefaults != nil {
-		if base, exists := attr.VersionDefaults["_base"]; exists {
-			delete(attr.VersionDefaults, "_base")
-			attr.VersionDefaults[baseVersion] = base
 		}
 	}
 	if attr.VersionDeleteMode != nil {

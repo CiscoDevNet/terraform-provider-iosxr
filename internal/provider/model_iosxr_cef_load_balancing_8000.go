@@ -288,9 +288,6 @@ func (data CEFLoadBalancing8000) GetPatternConstraints() []helpers.FieldPatternC
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "platform.load-balance.hash.rotate"); value.Exists() && !data.PlatformLoadBalanceHashRotate.IsNull() {

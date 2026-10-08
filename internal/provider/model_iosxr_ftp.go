@@ -169,9 +169,6 @@ func (data FTP) GetPatternConstraints() []helpers.FieldPatternConstraint {
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *FTP) updateFromBody(ctx context.Context, res []byte, version string) {
 	for i := range data.ClientVrfs {

@@ -221,9 +221,6 @@ func (data PerformanceMeasurementInterface) GetPatternConstraints() []helpers.Fi
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *PerformanceMeasurementInterface) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "delay-measurement"); !data.DelayMeasurement.IsNull() {

@@ -694,9 +694,6 @@ func (r *RouterMLDResource) Delete(ctx context.Context, req resource.DeleteReque
 
 // End of section. //template:end delete
 
-// Section below is generated&owned by "gen/generator.go". //template:begin modifyPlan
-// End of section. //template:end modifyPlan
-
 // Section below is generated&owned by "gen/generator.go". //template:begin import
 func (r *RouterMLDResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")

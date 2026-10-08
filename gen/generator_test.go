@@ -408,7 +408,7 @@ func TestMergeAttributes(t *testing.T) {
 				{YangName: "severity", TfName: "severity", Type: "String", Description: "old desc"},
 			},
 			override: []YamlConfigAttribute{
-				{YangName: "severity", Description: "new desc", DefaultValue: "informational"},
+				{YangName: "severity", Description: "new desc"},
 			},
 			check: func(t *testing.T, got []YamlConfigAttribute) {
 				if len(got) != 1 {
@@ -416,15 +416,6 @@ func TestMergeAttributes(t *testing.T) {
 				}
 				if got[0].Description != "new desc" {
 					t.Errorf("Description: got %q, want %q", got[0].Description, "new desc")
-				}
-				// DefaultValue introduced in an override becomes a versioned default (F17 VersionDefaults).
-				// The base had no default (""), so this is a version-scoped change: stored in
-				// VersionDefaults, DefaultValue is cleared to "".
-				if got[0].DefaultValue != "" {
-					t.Errorf("DefaultValue: got %q, want empty (versioned default stored in VersionDefaults)", got[0].DefaultValue)
-				}
-				if got[0].VersionDefaults["25.4"] != "informational" {
-					t.Errorf("VersionDefaults[25.4]: got %q, want %q", got[0].VersionDefaults["25.4"], "informational")
 				}
 				// Version not stamped on existing attrs
 				if got[0].AddedInVersion != "" {
@@ -900,40 +891,6 @@ func TestMergeAttributes_XPathVersionBleed_ThreeVersionChain(t *testing.T) {
 	}
 }
 
-// TestMergeAttributes_DefaultValueOverTriggering_ThreeVersionChain covers F23: once
-// DefaultValue diverges and is cleared to "" as the "use VersionDefaults" sentinel, a later
-// delta that restates the *same* value as the immediately-preceding version must not be
-// treated as a fresh divergence (comparing against the tracking field, not the cleared "").
-func TestMergeAttributes_DefaultValueOverTriggering_ThreeVersionChain(t *testing.T) {
-	// base "true" -> 25.4 "false" -> 26.2 "false" (unchanged from 25.4).
-	base := []YamlConfigAttribute{
-		{YangName: "flag", TfName: "flag", Type: "Bool", DefaultValue: "true"},
-	}
-	after25 := mergeAttributes(base, []YamlConfigAttribute{
-		{YangName: "flag", DefaultValue: "false"},
-	}, "25.4")
-	after26 := mergeAttributes(after25, []YamlConfigAttribute{
-		{YangName: "flag", DefaultValue: "false"},
-	}, "26.2")
-
-	if len(after26) != 1 {
-		t.Fatalf("len: got %d, want 1", len(after26))
-	}
-	attr := after26[0]
-	if _, has26 := attr.VersionDefaults["26.2"]; has26 {
-		t.Errorf("VersionDefaults[26.2]: got an entry (%q), want none (26.2 restates 25.4's unchanged value, not a fresh divergence)",
-			attr.VersionDefaults["26.2"])
-	}
-	if got := attr.VersionDefaults["25.4"]; got != "false" {
-		t.Errorf("VersionDefaults[25.4]: got %q, want %q", got, "false")
-	}
-	// The "" sentinel must still be in effect -- the guarded else-if branch must not have
-	// re-populated it once VersionDefaults exists.
-	if attr.DefaultValue != "" {
-		t.Errorf("DefaultValue (sentinel): got %q, want \"\" (must stay cleared once VersionDefaults exists)", attr.DefaultValue)
-	}
-}
-
 // ---------------------------------------------------------------------------
 // Regression tests: a delta that merely restates the base's own value on the very
 // FIRST fold must not be treated as a divergence. Found via real generated output
@@ -995,23 +952,6 @@ func TestMergeAttributes_TypeYangBoolFreezeReuse_RestatedBaseValueIsNotADivergen
 	attr := after25[0]
 	if attr.VersionTypeYangBool != nil {
 		t.Errorf("VersionTypeYangBool: got %v, want nil (25.4 restated the base's own \"presence\", not a real change)", attr.VersionTypeYangBool)
-	}
-}
-
-func TestMergeAttributes_DefaultValueOverTriggering_RestatedBaseValueIsNotADivergence(t *testing.T) {
-	base := []YamlConfigAttribute{
-		{YangName: "flag", TfName: "flag", Type: "Bool", DefaultValue: "true"},
-	}
-	after25 := mergeAttributes(base, []YamlConfigAttribute{
-		{YangName: "flag", DefaultValue: "true"}, // restates the base's own value
-	}, "25.4")
-
-	attr := after25[0]
-	if attr.VersionDefaults != nil {
-		t.Errorf("VersionDefaults: got %v, want nil (25.4 restated the base's own \"true\", not a real change)", attr.VersionDefaults)
-	}
-	if attr.DefaultValue != "true" {
-		t.Errorf("DefaultValue: got %q, want %q (unchanged, no divergence occurred)", attr.DefaultValue, "true")
 	}
 }
 
@@ -1387,18 +1327,6 @@ func TestHasAttributeVersionDifferences_VersionDeleteModeOnly_True(t *testing.T)
 	}
 	if !hasAttributeVersionDifferences(attrs) {
 		t.Error("hasAttributeVersionDifferences = false, want true for VersionDeleteMode-only divergence")
-	}
-}
-
-// VersionDefaults is deliberately NOT a trigger -- it's gated independently by
-// hasVersionDefaultsRecursive for ModifyPlan, unrelated to helpers.Validate(). This guards
-// against a future well-meaning contributor adding it back in by mistake.
-func TestHasAttributeVersionDifferences_VersionDefaultsOnly_False(t *testing.T) {
-	attrs := []YamlConfigAttribute{
-		{YangName: "level", VersionDefaults: map[string]string{"25.4": "informational"}},
-	}
-	if hasAttributeVersionDifferences(attrs) {
-		t.Error("hasAttributeVersionDifferences = true, want false -- VersionDefaults has its own unrelated gate")
 	}
 }
 

@@ -121,44 +121,6 @@ type FieldPatternConstraint struct {
 	VersionPatterns map[string][]string // version threshold → list of regex patterns (all must match)
 }
 
-// FieldDefaultConstraint records version-specific default values for one attribute.
-type FieldDefaultConstraint struct {
-	FieldPath       string
-	VersionDefaults map[string]string // version threshold → default value for that version and above
-}
-
-// GetVersionDefault returns the default value appropriate for currentVersion.
-// Uses highest-threshold-wins logic (same as GetPathVersion and VersionAtLeast).
-// Returns "" when currentVersion is empty or below all thresholds.
-func GetVersionDefault(currentVersion string, versionDefaults map[string]string) string {
-	if currentVersion == "" || len(versionDefaults) == 0 {
-		return ""
-	}
-	bestVersion := ""
-	bestDefault := ""
-	for threshold, def := range versionDefaults {
-		if VersionAtLeast(currentVersion, threshold) {
-			if bestVersion == "" || VersionAtLeast(threshold, bestVersion) {
-				bestVersion = threshold
-				bestDefault = def
-			}
-		}
-	}
-	return bestDefault
-}
-
-// ParseInt64 converts a string to int64; returns 0 on parse error.
-func ParseInt64(s string) int64 {
-	v, _ := strconv.ParseInt(s, 10, 64)
-	return v
-}
-
-// ParseBool converts a string to bool case-insensitively.
-// Handles Python-style "True" (capital T) used in YAML default_value fields.
-func ParseBool(s string) bool {
-	return strings.EqualFold(s, "true")
-}
-
 // Validatable is an interface for models that support version validation
 type Validatable interface {
 	GetVersionConstraints() []FieldVersionConstraint

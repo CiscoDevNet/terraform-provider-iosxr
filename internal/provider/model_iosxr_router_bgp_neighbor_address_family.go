@@ -830,9 +830,6 @@ func (data RouterBGPNeighborAddressFamily) GetPatternConstraints() []helpers.Fie
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "encapsulation-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EncapsulationType.IsNull() {

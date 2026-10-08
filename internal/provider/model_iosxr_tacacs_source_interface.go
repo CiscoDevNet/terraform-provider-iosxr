@@ -156,9 +156,6 @@ func (data TACACSSourceInterface) GetPatternConstraints() []helpers.FieldPattern
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *TACACSSourceInterface) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SourceInterface.IsNull() {

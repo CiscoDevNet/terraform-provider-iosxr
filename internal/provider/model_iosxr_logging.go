@@ -936,9 +936,6 @@ func (data Logging) GetPatternConstraints() []helpers.FieldPatternConstraint {
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *Logging) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "console", "25.4": "console.console-level"}, "console")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Console.IsNull() {

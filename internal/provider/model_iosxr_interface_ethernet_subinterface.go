@@ -1815,9 +1815,6 @@ func (data InterfaceEthernetSubinterface) GetPatternConstraints() []helpers.Fiel
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *InterfaceEthernetSubinterface) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); !data.L2transport.IsNull() {

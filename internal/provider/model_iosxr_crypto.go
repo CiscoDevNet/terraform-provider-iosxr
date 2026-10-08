@@ -591,9 +591,6 @@ func (data Crypto) GetPatternConstraints() []helpers.FieldPatternConstraint {
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *Crypto) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemDescription.IsNull() {

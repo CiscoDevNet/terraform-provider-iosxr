@@ -112,10 +112,6 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 					.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"
 					{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}
 					{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
-					{{- else if len .VersionDefaults -}}
-					.String + "\n  - Default: {{formatVersionDefaults .VersionDefaults}}"
-					{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}
-					{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 					{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
 					.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
 					{{- if .AddedInVersion}}.String + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},{{else if .RemovedInVersion}}.String + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**",{{else}}.String,{{end}}
@@ -139,7 +135,7 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 				{{- else}}
 				Optional:            true,
 				{{- end}}
-				{{- if or (len .DefaultValue) (len .VersionDefaults)}}
+				{{- if len .DefaultValue}}
 				Computed:            true,
 				{{- end}}
 				{{- if .Sensitive}}
@@ -201,15 +197,13 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 								.String + "\n  - Range: {{formatVersionRanges .VersionRanges}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 								{{- else if .VersionStringLengths -}}
 								.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
-								{{- else if len .VersionDefaults -}}
-								.String + "\n  - Default: {{formatVersionDefaults .VersionDefaults}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 								{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
 								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
 								{{- end -}}
 								{{- if len .DefaultValue -}}
 								.AddDefaultValueDescription("{{.DefaultValue}}")
 								{{- end -}}
-								{{- if and (not .VersionRanges) (not .VersionEnums) (not .VersionStringLengths) (not .VersionDefaults) -}}
+								{{- if and (not .VersionRanges) (not .VersionEnums) (not .VersionStringLengths) -}}
 								.String{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 								{{- end}}
 							{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
@@ -222,7 +216,7 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 							{{- else}}
 							Optional:            true,
 							{{- end}}
-							{{- if or (len .DefaultValue) (len .VersionDefaults)}}
+							{{- if len .DefaultValue}}
 							Computed:            true,
 							{{- end}}
 							{{- if .Sensitive}}
@@ -284,15 +278,13 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 											.String + "\n  - Range: {{formatVersionRanges .VersionRanges}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 											{{- else if .VersionStringLengths -}}
 											.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
-											{{- else if len .VersionDefaults -}}
-											.String + "\n  - Default: {{formatVersionDefaults .VersionDefaults}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 											{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
 											.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
 											{{- end -}}
 											{{- if len .DefaultValue -}}
 											.AddDefaultValueDescription("{{.DefaultValue}}")
 											{{- end -}}
-											{{- if and (not .VersionRanges) (not .VersionEnums) (not .VersionStringLengths) (not .VersionDefaults) -}}
+											{{- if and (not .VersionRanges) (not .VersionEnums) (not .VersionStringLengths) -}}
 											.String{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 											{{- end}}
 										{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
@@ -305,7 +297,7 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 										{{- else}}
 										Optional:            true,
 										{{- end}}
-										{{- if or (len .DefaultValue) (len .VersionDefaults)}}
+										{{- if len .DefaultValue}}
 										Computed:            true,
 										{{- end}}
 										{{- if .Sensitive}}
@@ -367,15 +359,13 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 													.String + "\n  - Range: {{formatVersionRanges .VersionRanges}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 													{{- else if .VersionStringLengths -}}
 													.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
-													{{- else if len .VersionDefaults -}}
-													.String + "\n  - Default: {{formatVersionDefaults .VersionDefaults}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 													{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
 													.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
 													{{- end -}}
 													{{- if len .DefaultValue -}}
 													.AddDefaultValueDescription("{{.DefaultValue}}")
 													{{- end -}}
-													{{- if and (not .VersionEnums) (not .VersionRanges) (not .VersionStringLengths) (not .VersionDefaults) -}}
+													{{- if and (not .VersionEnums) (not .VersionRanges) (not .VersionStringLengths) -}}
 													.String{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 													{{- end}}
 												{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
@@ -388,7 +378,7 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 												{{- else}}
 												Optional:            true,
 												{{- end}}
-												{{- if or (len .DefaultValue) (len .VersionDefaults)}}
+												{{- if len .DefaultValue}}
 												Computed:            true,
 												{{- end}}
 												{{- if .Sensitive}}
@@ -450,15 +440,13 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 																.String + "\n  - Range: {{formatVersionRanges .VersionRanges}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 																{{- else if .VersionStringLengths -}}
 																.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
-																{{- else if len .VersionDefaults -}}
-																.String + "\n  - Default: {{formatVersionDefaults .VersionDefaults}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 																{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
 																.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
 																{{- end -}}
 																{{- if len .DefaultValue -}}
 																.AddDefaultValueDescription("{{.DefaultValue}}")
 																{{- end -}}
-																{{- if and (not .VersionEnums) (not .VersionRanges) (not .VersionStringLengths) (not .VersionDefaults) -}}
+																{{- if and (not .VersionEnums) (not .VersionRanges) (not .VersionStringLengths) -}}
 																.String{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 																{{- end}}
 															{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
@@ -471,7 +459,7 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Conte
 															{{- else}}
 															Optional:            true,
 															{{- end}}
-															{{- if or (len .DefaultValue) (len .VersionDefaults)}}
+															{{- if len .DefaultValue}}
 															Computed:            true,
 															{{- end}}
 															{{- if .Sensitive}}
@@ -1057,149 +1045,6 @@ func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Delete(ctx context.Conte
 }
 
 // End of section. //template:end delete
-
-// Section below is generated&owned by "gen/generator.go". //template:begin modifyPlan
-{{- $versionSuffix := versionSuffix .Version}}
-{{- if hasVersionDefaultsRecursive .Attributes}}
-
-var _ resource.ResourceWithModifyPlan = &{{camelCase .Name}}{{$versionSuffix}}Resource{}
-
-func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
-	if req.Plan.Raw.IsNull() {
-		return
-	}
-	var plan {{camelCase .Name}}{{$versionSuffix}}
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	device, ok := r.data.Devices[plan.Device.ValueString()]
-	if !ok || device.Version == "" {
-		return
-	}
-	modified := false
-	{{- range $l0 := .Attributes}}
-	{{- if len $l0.VersionDefaults}}
-	if plan.{{toGoName $l0.TfName}}.IsNull() {
-		if def := helpers.GetVersionDefault(device.Version, map[string]string{
-			{{- range $ver, $val := $l0.VersionDefaults}}
-			"{{$ver}}": "{{$val}}",
-			{{- end}}
-		}); def != "" {
-			{{- if eq $l0.Type "Int64"}}
-			plan.{{toGoName $l0.TfName}} = types.Int64Value(helpers.ParseInt64(def))
-			{{- else if eq $l0.Type "Bool"}}
-			plan.{{toGoName $l0.TfName}} = types.BoolValue(helpers.ParseBool(def))
-			{{- else}}
-			plan.{{toGoName $l0.TfName}} = types.StringValue(def)
-			{{- end}}
-			modified = true
-		}
-	}
-	{{- end}}
-	{{- if and (or (eq $l0.Type "List") (eq $l0.Type "Set")) (hasVersionDefaultsRecursive $l0.Attributes)}}
-	for i := range plan.{{toGoName $l0.TfName}} {
-		{{- range $l1 := $l0.Attributes}}
-		{{- if len $l1.VersionDefaults}}
-		if plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}.IsNull() {
-			if def := helpers.GetVersionDefault(device.Version, map[string]string{
-				{{- range $ver, $val := $l1.VersionDefaults}}
-				"{{$ver}}": "{{$val}}",
-				{{- end}}
-			}); def != "" {
-				{{- if eq $l1.Type "Int64"}}
-				plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}} = types.Int64Value(helpers.ParseInt64(def))
-				{{- else if eq $l1.Type "Bool"}}
-				plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}} = types.BoolValue(helpers.ParseBool(def))
-				{{- else}}
-				plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}} = types.StringValue(def)
-				{{- end}}
-				modified = true
-			}
-		}
-		{{- end}}
-		{{- if and (or (eq $l1.Type "List") (eq $l1.Type "Set")) (hasVersionDefaultsRecursive $l1.Attributes)}}
-		for j := range plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}} {
-			{{- range $l2 := $l1.Attributes}}
-			{{- if len $l2.VersionDefaults}}
-			if plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}.IsNull() {
-				if def := helpers.GetVersionDefault(device.Version, map[string]string{
-					{{- range $ver, $val := $l2.VersionDefaults}}
-					"{{$ver}}": "{{$val}}",
-					{{- end}}
-				}); def != "" {
-					{{- if eq $l2.Type "Int64"}}
-					plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}} = types.Int64Value(helpers.ParseInt64(def))
-					{{- else if eq $l2.Type "Bool"}}
-					plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}} = types.BoolValue(helpers.ParseBool(def))
-					{{- else}}
-					plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}} = types.StringValue(def)
-					{{- end}}
-					modified = true
-				}
-			}
-			{{- end}}
-			{{- if and (or (eq $l2.Type "List") (eq $l2.Type "Set")) (hasVersionDefaultsRecursive $l2.Attributes)}}
-			for k := range plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}} {
-				{{- range $l3 := $l2.Attributes}}
-				{{- if len $l3.VersionDefaults}}
-				if plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}[k].{{toGoName $l3.TfName}}.IsNull() {
-					if def := helpers.GetVersionDefault(device.Version, map[string]string{
-						{{- range $ver, $val := $l3.VersionDefaults}}
-						"{{$ver}}": "{{$val}}",
-						{{- end}}
-					}); def != "" {
-						{{- if eq $l3.Type "Int64"}}
-						plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}[k].{{toGoName $l3.TfName}} = types.Int64Value(helpers.ParseInt64(def))
-						{{- else if eq $l3.Type "Bool"}}
-						plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}[k].{{toGoName $l3.TfName}} = types.BoolValue(helpers.ParseBool(def))
-						{{- else}}
-						plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}[k].{{toGoName $l3.TfName}} = types.StringValue(def)
-						{{- end}}
-						modified = true
-					}
-				}
-				{{- end}}
-				{{- if and (or (eq $l3.Type "List") (eq $l3.Type "Set")) (hasVersionDefaultsRecursive $l3.Attributes)}}
-				for l := range plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}[k].{{toGoName $l3.TfName}} {
-					{{- range $l4 := $l3.Attributes}}
-					{{- if len $l4.VersionDefaults}}
-					if plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}[k].{{toGoName $l3.TfName}}[l].{{toGoName $l4.TfName}}.IsNull() {
-						if def := helpers.GetVersionDefault(device.Version, map[string]string{
-							{{- range $ver, $val := $l4.VersionDefaults}}
-							"{{$ver}}": "{{$val}}",
-							{{- end}}
-						}); def != "" {
-							{{- if eq $l4.Type "Int64"}}
-							plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}[k].{{toGoName $l3.TfName}}[l].{{toGoName $l4.TfName}} = types.Int64Value(helpers.ParseInt64(def))
-							{{- else if eq $l4.Type "Bool"}}
-							plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}[k].{{toGoName $l3.TfName}}[l].{{toGoName $l4.TfName}} = types.BoolValue(helpers.ParseBool(def))
-							{{- else}}
-							plan.{{toGoName $l0.TfName}}[i].{{toGoName $l1.TfName}}[j].{{toGoName $l2.TfName}}[k].{{toGoName $l3.TfName}}[l].{{toGoName $l4.TfName}} = types.StringValue(def)
-							{{- end}}
-							modified = true
-						}
-					}
-					{{- end}}
-					{{- end}}
-				}
-				{{- end}}
-				{{- end}}
-			}
-			{{- end}}
-			{{- end}}
-		}
-		{{- end}}
-		{{- end}}
-	}
-	{{- end}}
-	{{- end}}
-	if modified {
-		resp.Diagnostics.Append(resp.Plan.Set(ctx, &plan)...)
-	}
-}
-{{- end}}
-// End of section. //template:end modifyPlan
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
 

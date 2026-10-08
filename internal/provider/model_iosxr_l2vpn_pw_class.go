@@ -369,9 +369,6 @@ func (data L2VPNPWClass) GetPatternConstraints() []helpers.FieldPatternConstrain
 
 // End of section. //template:end getPatternConstraints
 
-// Section below is generated&owned by "gen/generator.go". //template:begin getDefaultConstraints
-// End of section. //template:end getDefaultConstraints
-
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "encapsulation.mpls"); !data.EncapsulationMpls.IsNull() {
